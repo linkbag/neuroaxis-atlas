@@ -1,0 +1,177 @@
+[
+  {
+    "id": "syn-lateral-medullary",
+    "name": "Lateral medullary syndrome",
+    "eponym": "Wallenberg syndrome",
+    "structures": [
+      "nuc-spinal-trigeminal",
+      "tract-spinal-trigeminal",
+      "nuc-solitarius-caudal",
+      "nuc-ambiguus",
+      "nuc-dmv",
+      "tract-anterior-spinocerebellar",
+      "tract-spinothalamic",
+      "nuc-medullary-reticular"
+    ],
+    "vascularTerritory": "Posterior inferior cerebellar artery (PICA), usually occluded at its vertebral origin; occasionally the vertebral artery directly",
+    "presentation": "Ipsilateral loss of face pain-temperature (spinal trigeminal complex, onion-skin pattern) with CONTRALATERAL loss of body pain-temperature (spinothalamic tract) — the signature crossed sensory pattern. Ipsilateral palatal-paralysis hoarseness and depressed gag (nucleus ambiguus), vertigo-nystagmus (vestibular territory), ipsilateral limb ataxia and past-pointing (ICP/anterior spinocerebellar fibers), ipsilateral Horner ptosis-miosis-anhidrosis (descending sympathetic fibers in the reticular tegmentum), plus hiccups, nausea-vomiting (area postrema/solitary region) and acute blood-pressure lability with impaired baroreflex and ventilatory drive (solitary nucleus, ventrolateral medulla). Face is spared of weakness and limb corticospinal power is preserved.",
+    "cause": "Infarction of the dorsolateral medulla (and inferior cerebellar surface) in the PICA/vertebral distribution, most often from vertebral artery dissection, atherothrombosis or embolism",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)",
+      "Patten, Neurological Differential Diagnosis, 2nd ed., brainstem level plates"
+    ]
+  },
+  {
+    "id": "syn-medial-medullary",
+    "name": "Medial medullary syndrome",
+    "eponym": "Déjerine (anterior bulbar) syndrome",
+    "structures": [
+      "tract-pyramid",
+      "tract-medial-lemniscus",
+      "nuc-hypoglossal"
+    ],
+    "vascularTerritory": "Anterior spinal artery (paramedian branches of the vertebral artery)",
+    "presentation": "The crossed triad of the paramedian medulla: (1) contralateral face-sparing hemiparesis (pyramid — its fibers decussate just below this level, so the face is spared and the weakness is contralateral); (2) contralateral loss of vibration, proprioception and discriminative touch (medial lemniscus, with lower-limb fibers lateral); (3) ipsilateral tongue weakness with deviation of the protruded tongue toward the lesion, with wasting and fasciculations in chronic lesions (hypoglossal nucleus and rootlets). Larger paramedian infarcts may add an ipsilateral medial gaze weakness from involvement of the fascicles at the pontomedullary junction.",
+    "cause": "Occlusion of the anterior spinal artery or its vertebral medullary branches infarcting the paramedian medulla (pyramid, medial lemniscus, hypoglossal fascicles)",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  },
+  {
+    "id": "syn-hemimedullary",
+    "name": "Hemimedullary syndrome",
+    "eponym": "Reinhold syndrome",
+    "structures": [
+      "tract-pyramid",
+      "tract-medial-lemniscus",
+      "nuc-hypoglossal",
+      "nuc-spinal-trigeminal",
+      "nuc-ambiguus",
+      "nuc-dmv",
+      "tract-spinothalamic"
+    ],
+    "vascularTerritory": "Occlusion of the vertebral artery at the medullary foramina (conjoint ASA + PICA supply of one hemicord-half of the medulla)",
+    "presentation": "Combined medial + lateral medullary syndromes in one half of the medulla: ipsilateral tongue LMN palsy (XII), ipsilateral face pain-temperature loss (spinal V), ipsilateral palatal-pharyngeal-laryngeal paralysis with depressed gag (ambiguus, DMV vagal visceromotor failure), ipsilateral Horner syndrome and ataxia, against contralateral hemiplegia (pyramid) and contralateral loss of body vibration-proprioception (medial lemniscus) plus body pain-temperature loss (spinothalamic). The most devastating of the medullary stroke patterns — effectively a brainstem equivalent of a hemisection.",
+    "cause": "Rare occlusion of the extracranial-intracranial vertebral artery (dissection or athero-occlusion) devascularizing one full hemicircle of the medulla via ASA and PICA branches",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  },
+  {
+    "id": "syn-millard-gubler",
+    "name": "Millard-Gubler syndrome",
+    "structures": [
+      "nuc-facial",
+      "nuc-abducens",
+      "nuc-pprf",
+      "tract-corticospinal-lateral",
+      "tract-corticobulbar"
+    ],
+    "vascularTerritory": "Basilar artery paramedian perforators, or the AICA territory at the caudal-ventral pons",
+    "presentation": "Ventro-caudal pontine syndrome: IPSILATERAL complete LMN facial paralysis (entire hemiface including forehead) from the facial nucleus/fascicles, plus IPSILATERAL abducens failure — inability to abduct that eye with binocular horizontal diplopia, and if the nuclear complex or adjacent PPRF is involved, conjugate gaze palsy away from the intact side — combined with CONTRALATERAL hemiparesis of the body (corticospinal fibers before decussation) and frequently contralateral lower-facial and tongue UMN weakness (corticobulbar fibers). The crossed facial-plus-body pattern localizes to the caudal basis-pontis/tegmentum junction.",
+    "cause": "Infarct, hemorrhage, tumor or demyelinating lesion of the ventrocaudal pons damaging CN VI and CN VII fascicles/nuclei together with the corticospinal-corticobulbar bundles",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  },
+  {
+    "id": "syn-foville",
+    "name": "Foville syndrome",
+    "structures": [
+      "nuc-facial",
+      "nuc-abducens",
+      "nuc-pprf",
+      "tract-medial-lemniscus",
+      "tract-lateral-lemniscus"
+    ],
+    "vascularTerritory": "Paramedian perforating branches of the basilar artery (dorsal caudal pons), sometimes AICA",
+    "presentation": "Dorsal pontine tegmentum syndrome at the level of the facial colliculus: IPSILATERAL horizontal gaze palsy (PPRF and/or abducens nuclear complex — the eyes deviate away, gaze toward the lesion is impossible), IPSILATERAL complete LMN facial paralysis (facial nucleus and the internal genu looping over the abducens nucleus), often with loss of the ipsilateral blink, and contralateral loss of vibration-proprioception and light touch of the body (medial lemniscus); tinnitus or diminished hearing may appear with lateral spread into the lateral lemniscus. Contrasts with Millard-Gubler by the gaze-palsy emphasis (PPRF/nuclear VI) and dorsal location.",
+    "cause": "Infarction or mass lesion of the dorsal caudal pontine tegmentum around the facial colliculus (paramedian basilar perforators)",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  },
+  {
+    "id": "syn-locked-in",
+    "name": "Locked-in syndrome",
+    "structures": [
+      "tract-corticospinal-lateral",
+      "tract-corticobulbar",
+      "ctx-pontine-nuclei",
+      "ctx-pontine-fibers"
+    ],
+    "vascularTerritory": "Occlusion of the basilar artery (thrombotic or embolic) with sparing of the tegmentum",
+    "presentation": "Ventropontine disconnection: complete paralysis of all four limbs and of bulbar/speech musculature (quadriplegia, anarthria, inability to swallow or phonate) from bilateral destruction of the longitudinal corticospinal and corticobulbar fibers of the basis pontis — while consciousness, hearing, and vertical eye movements and blinking (oculomotor III nuclei, rostral and tegmental) are preserved. Patients communicate only through vertical eye movements/blinks; the EEG and imaging show an awake, aware mind in a motionless body. Somatosensory pathways in the tegmentum are variably spared.",
+    "cause": "Bilateral ventral pontine infarction/hemorrhage from basilar artery occlusion (also central pontine myelinolysis or pontine tumors in chronic variants)",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  },
+  {
+    "id": "syn-cpm",
+    "name": "Central pontine myelinolysis",
+    "eponym": "Osmotic demyelination syndrome",
+    "structures": [
+      "tract-corticospinal-lateral",
+      "tract-corticobulbar",
+      "ctx-pontine-nuclei"
+    ],
+    "vascularTerritory": "None — osmotic (metabolic) demyelination of the central basis pontis, not a vascular territory",
+    "presentation": "Subacutely evolving (2-4 days) spastic quadriparesis with pseudobulbar palsy — dysarthria, dysphagia, emotional incontinence — and characteristic mutism evolving to locked-in features in severe cases, from symmetric demyelination of the central basis pontis (longitudinal corticospinal-corticobulbar fibers and pontine gray) with relative axonal sparing; extrapontine myelinolysis may add parkinsonism or ataxia. MRI shows a trident-shaped central pontine T2/ADC lesion.",
+    "cause": "Osmotic stress — classically over-rapid correction of chronic hyponatremia (also severe burns, liver transplantation, malnutrition) killing oligodendrocytes of the central pontine white matter",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Fix, High-Yield Neuroanatomy, demyelinating disease section"
+    ]
+  },
+  {
+    "id": "syn-cerebellar",
+    "name": "Cerebellar syndrome (dentate/SCP)",
+    "structures": [
+      "nuc-dentate",
+      "nuc-interposed",
+      "nuc-fastigial",
+      "tract-scp"
+    ],
+    "vascularTerritory": "Superior cerebellar artery (SCA) for the dentate/SCP complex; AICA and PICA for the other deep-nucleus territories",
+    "presentation": "IPSILATERAL cerebellar deficits: intention (terminal) tremor, dysmetria (past-pointing), decomposition of movement and dysdiadochokinesia from dentate-SCP involvement; hypotonia with pendular reflexes from interposed/rubrospinal disruption; truncal ataxia, wide-based gait and nystagmus when the fastigial-vermal loop is caught. Speech becomes scanning/staccato (ataxic dysarthria); bilateral disease adds cerebellar cognitive-affective slowing. Signs are ipsilateral because cerebellar efferents cross twice (SCP decussation then cortical projections).",
+    "cause": "SCA infarction, demyelination, or mass lesions of the deep cerebellar nuclei and superior cerebellar peduncle; chronic variants include dentate degeneration in spinocerebellar ataxias and myelinolysis of the SCP",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  },
+  {
+    "id": "syn-lateral-pontine",
+    "name": "Lateral pontine syndrome",
+    "eponym": "AICA syndrome",
+    "structures": [
+      "nuc-facial",
+      "nuc-principal-sensory-v",
+      "nuc-spinal-trigeminal",
+      "tract-spinal-trigeminal",
+      "nuc-vestibular-superior",
+      "nuc-vestibular-medial",
+      "nuc-vestibular-lateral",
+      "nuc-vestibular-inferior",
+      "nuc-cochlear-ventral",
+      "nuc-cochlear-dorsal",
+      "surf-cn7-exit",
+      "surf-cn8-exit",
+      "tract-mcp"
+    ],
+    "vascularTerritory": "Anterior inferior cerebellar artery (AICA), including its internal auditory (labyrinthine) branches",
+    "presentation": "Ipsilateral LMN facial paralysis (facial nucleus/fascicles and nervus intermedius — eye will not close, hyperacusis), ipsilateral tinnitus, sensorineural hearing loss and vertigo with nystagmus (cochlear and vestibular nuclei/nerve roots — the only brainstem arterial territory where hearing is commonly lost), ipsilateral facial pain-temperature loss (spinal trigeminal complex) with diminished corneal reflex, ipsilateral limb ataxia (middle cerebellar peduncle), and contralateral loss of body pain-temperature if the lateral spinothalamic fibers are caught; Horner syndrome may appear. Nucleus/fascicle deficits combine at the caudolateral pons.",
+    "cause": "Occlusion (atherothrombotic, embolic or dissecting) of the anterior inferior cerebellar artery at the caudal lateral pons and cerebellopontine angle",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  }
+]

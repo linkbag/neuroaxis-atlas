@@ -1,0 +1,309 @@
+/*
+ * plates.css — 2D SVG plate rendering (plan §6) + the level ruler strip.
+ * The renderer injects the authored SVG (viewBox 0 0 800 800) into
+ * `.plate-root` and drives state classes on [data-structure] regions and
+ * .plate-label groups; this file owns their appearance. The plate keeps a
+ * light "paper" surface so the authored ink (#0f172a) stays readable inside
+ * the dark UI. Orientation badges (L/R/A/P/S/I) come from the SVG itself.
+ */
+
+/* ----------------------------------------------------------- level ruler */
+
+.level-ruler-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.level-ruler {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ruler-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  text-align: left;
+}
+
+.ruler-item:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: var(--border-subtle);
+}
+
+.ruler-item.is-current {
+  border-color: var(--accent);
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.ruler-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-muted);
+  flex: none;
+}
+
+.ruler-item.is-plate .ruler-dot {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.ruler-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
+.ruler-y {
+  flex: none;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+/* ------------------------------------------------------------ plates tab */
+
+.plates-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  padding: 12px;
+}
+
+.plates-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.plate-filter {
+  display: flex;
+  gap: 4px;
+}
+
+.plate-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.sync-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg-panel);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.sync-pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex: none;
+}
+
+.sync-pill.is-synced .dot {
+  background: var(--success);
+}
+
+.sync-pill.is-off .dot {
+  background: var(--warning);
+}
+
+.sync-pill .btn {
+  padding: 2px 8px;
+  font-size: 0.72rem;
+}
+
+.label-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.label-toggle input {
+  accent-color: var(--accent);
+}
+
+.plate-strip {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.plate-chip {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 118px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  text-align: left;
+}
+
+.plate-chip:hover {
+  border-color: var(--accent);
+}
+
+.plate-chip.is-active {
+  border-color: var(--accent);
+  background: rgba(56, 189, 248, 0.14);
+}
+
+.plate-chip-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.plate-chip-sub {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.plate-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.plate-headline h2 {
+  font-size: 1.02rem;
+}
+
+.plate-headline .meta {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.plate-stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: grid;
+  place-items: start center;
+  padding: 4px 0 16px;
+}
+
+/* ----------------------------------------------------- injected SVG host */
+
+.plate-root {
+  width: min(720px, 100%);
+  padding: 6px;
+  background: #f8fafc;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4);
+}
+
+.plate-root svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.plate-missing {
+  padding: 24px;
+  border-style: dashed;
+  background: var(--bg-panel);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Label text small-caps, per the plates design notes. */
+.plate-root svg .plate-label text {
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+}
+
+.plate-root.labels-hidden svg g.plate-label {
+  display: none;
+}
+
+/* Region states — dim first so selected/hover/highlight win the cascade. */
+.plate-region {
+  cursor: pointer;
+  transition: opacity 140ms ease, stroke-width 140ms ease;
+}
+
+.plate-region.is-dim {
+  opacity: 0.16;
+}
+
+.plate-region.is-highlight {
+  stroke: var(--accent);
+  stroke-width: 2.25;
+}
+
+.plate-region.is-hovered {
+  stroke: var(--accent-strong);
+  stroke-width: 2.25;
+}
+
+.plate-region.is-selected {
+  stroke: var(--selection);
+  stroke-width: 3;
+}
+
+.plate-label {
+  cursor: pointer;
+  transition: opacity 140ms ease;
+}
+
+.plate-label.is-dim {
+  opacity: 0.3;
+}
+
+.plate-label.is-hot line {
+  stroke: var(--accent-strong);
+}
+
+.plate-label.is-hot circle {
+  fill: var(--accent-strong);
+}
+
+.plate-label.is-hot text {
+  fill: #0c4a6e;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .plates-tab {
+    padding: 8px;
+  }
+
+  .plate-toolbar-right {
+    margin-left: 0;
+  }
+
+  .plate-chip {
+    min-width: 96px;
+  }
+}

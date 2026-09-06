@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Local npm cache (sandboxed installs redirect cache into the workspace)
+.npm-cache/
+
+# Task scratch space
+.plate-scratch/

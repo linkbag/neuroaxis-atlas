@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" font-family="'Segoe UI', Arial, sans-serif">
+  <g class="plate-frame">
+    <text class="plate-caption" x="400" y="32" text-anchor="middle" font-size="16" font-weight="600" fill="#334155">Pons - lower pons level, CN VI-VIII (y = -18)</text>
+    <circle cx="52" cy="52" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="52" y="57.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">R</text>
+    <circle cx="748" cy="52" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="748" y="57.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">L</text>
+    <circle cx="52" cy="748" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="52" y="753.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">P</text>
+    <circle cx="748" cy="748" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="748" y="753.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">A</text>
+  </g>
+  <path data-role="outline" d="M 400 248 C 470 252 560 264 606 284 C 612 330 618 400 614 452 C 610 520 596 580 560 620 C 528 652 480 664 400 664 C 320 664 272 652 240 620 C 204 580 190 520 186 452 C 182 400 188 330 194 284 C 240 264 330 252 400 248 Z" fill="none" stroke="#0f172a" stroke-width="1.5"/>
+  <g class="plate-midline"><line x1="400" y1="252" x2="400" y2="660" stroke="#0f172a" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="4 5"/></g>
+  <g class="plate-regions">
+    <ellipse data-structure="nuc-pontine-reticular" cx="330" cy="440" rx="34" ry="34" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-pontine-reticular" cx="470" cy="440" rx="34" ry="34" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-nuclei" cx="300" cy="585" rx="18" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-nuclei" cx="500" cy="585" rx="18" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-nuclei" cx="350" cy="560" rx="16" ry="10" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-nuclei" cx="450" cy="560" rx="16" ry="10" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-nuclei" cx="400" cy="610" rx="20" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-fibers" cx="270" cy="590" rx="6" ry="30" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-fibers" cx="530" cy="590" rx="6" ry="30" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-fibers" cx="320" cy="600" rx="6" ry="28" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-fibers" cx="480" cy="600" rx="6" ry="28" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-fibers" cx="312" cy="570" rx="22" ry="5" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-fibers" cx="488" cy="570" rx="22" ry="5" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-fibers" cx="360" cy="632" rx="24" ry="5" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-pontine-fibers" cx="440" cy="632" rx="24" ry="5" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-corticospinal-lateral" cx="366" cy="584" rx="11" ry="15" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-corticospinal-lateral" cx="434" cy="584" rx="11" ry="15" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-corticospinal-lateral" cx="384" cy="614" rx="10" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-corticospinal-lateral" cx="416" cy="614" rx="10" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-corticobulbar" cx="358" cy="540" rx="9" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-corticobulbar" cx="442" cy="540" rx="9" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="tract-mcp" d="M 204 356 C 196 412 198 472 212 526 C 226 574 254 606 294 626 C 268 592 248 560 238 524 C 226 486 222 442 226 404 C 229 380 234 366 242 358 C 230 354 214 354 204 356 Z" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="tract-mcp" d="M 596 356 C 602 472 604 412 588 526 C 546 606 574 574 506 626 C 552 560 532 592 562 524 C 578 442 574 486 574 404 C 566 366 571 380 558 358 C 586 354 570 354 596 356 Z" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="tract-trapezoid-body" d="M 240 498 L 560 498 L 566 522 L 234 522 Z" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="vent-fourth-ventricle" d="M 400 262 C 460 266 540 274 588 290 C 540 306 470 318 430 322 C 412 324 388 324 370 322 C 330 318 260 306 212 290 C 260 274 340 266 400 262 Z" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-facial-colliculus" cx="332" cy="318" rx="36" ry="18" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-facial-colliculus" cx="468" cy="318" rx="36" ry="18" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-abducens" cx="332" cy="368" rx="13" ry="18" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-abducens" cx="468" cy="368" rx="13" ry="18" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-mlf" cx="378" cy="356" rx="7" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-mlf" cx="422" cy="356" rx="7" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-pprf" cx="296" cy="388" rx="14" ry="16" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-pprf" cx="504" cy="388" rx="14" ry="16" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vestibular-inferior" cx="284" cy="326" rx="12" ry="11" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vestibular-inferior" cx="516" cy="326" rx="12" ry="11" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vestibular-medial" cx="262" cy="342" rx="16" ry="14" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vestibular-medial" cx="538" cy="342" rx="16" ry="14" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vestibular-lateral" cx="226" cy="322" rx="15" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vestibular-lateral" cx="574" cy="322" rx="15" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-cochlear-dorsal" cx="204" cy="332" rx="11" ry="10" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-cochlear-dorsal" cx="596" cy="332" rx="11" ry="10" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-cochlear-ventral" cx="240" cy="394" rx="13" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-cochlear-ventral" cx="560" cy="394" rx="13" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-icp" cx="242" cy="356" rx="13" ry="16" transform="rotate(20 242 356)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-icp" cx="558" cy="356" rx="13" ry="16" transform="rotate(-20 558 356)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-solitarius-rostral" cx="290" cy="438" rx="9" ry="11" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-solitarius-rostral" cx="510" cy="438" rx="9" ry="11" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-spinal-trigeminal" cx="246" cy="436" rx="10" ry="14" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-spinal-trigeminal" cx="554" cy="436" rx="10" ry="14" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-spinal-trigeminal" cx="270" cy="456" rx="11" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-spinal-trigeminal" cx="530" cy="456" rx="11" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-central-tegmental" cx="258" cy="400" rx="9" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-central-tegmental" cx="542" cy="400" rx="9" ry="13" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-lateral-lemniscus" cx="282" cy="492" rx="9" ry="16" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-lateral-lemniscus" cx="518" cy="492" rx="9" ry="16" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-superior-olivary" cx="300" cy="510" rx="12" ry="9" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-superior-olivary" cx="500" cy="510" rx="12" ry="9" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-medial-lemniscus" cx="376" cy="490" rx="15" ry="44" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="tract-medial-lemniscus" cx="424" cy="490" rx="15" ry="44" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-superior-salivatory" cx="310" cy="530" rx="9" ry="11" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-superior-salivatory" cx="490" cy="530" rx="9" ry="11" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-facial" cx="296" cy="548" rx="16" ry="18" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-facial" cx="504" cy="548" rx="16" ry="18" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="nuc-facial" d="M 306 540 C 314 500 316 440 314 388 C 312 366 312 352 314 344 C 318 336 334 336 342 344 C 350 370 348 430 342 470 C 334 510 318 532 306 540 Z" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="nuc-facial" d="M 494 540 C 482 532 466 510 458 470 C 452 430 450 370 458 344 C 466 336 482 336 486 344 C 488 352 488 366 486 388 C 484 440 486 500 494 540 Z" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-cn7-exit" cx="206" cy="376" rx="5" ry="10" transform="rotate(25 206 376)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-cn7-exit" cx="594" cy="376" rx="5" ry="10" transform="rotate(-25 594 376)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-cn8-exit" cx="216" cy="346" rx="5" ry="10" transform="rotate(10 216 346)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-cn8-exit" cx="584" cy="346" rx="5" ry="10" transform="rotate(-10 584 346)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-cn6-exit" cx="352" cy="656" rx="10" ry="5" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-cn6-exit" cx="448" cy="656" rx="10" ry="5" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-cn6-exit" cx="330" cy="659" rx="9" ry="5" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="surf-cn6-exit" cx="470" cy="659" rx="9" ry="5" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+  <g class="plate-labels" font-family="'Segoe UI', Arial, sans-serif">
+    <g class="plate-label" data-for="nuc-pprf"><line x1="180" y1="114" x2="296" y2="388" stroke="#475569" stroke-width="1"/><circle cx="296" cy="388" r="2.5" fill="#475569"/><text x="172" y="118" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">PPRF</tspan></text></g>
+    <g class="plate-label" data-for="tract-central-tegmental"><line x1="180" y1="157" x2="258" y2="400" stroke="#475569" stroke-width="1"/><circle cx="258" cy="400" r="2.5" fill="#475569"/><text x="172" y="161" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Central tegmental tract</tspan></text></g>
+    <g class="plate-label" data-for="tract-spinal-trigeminal"><line x1="180" y1="199" x2="246" y2="436" stroke="#475569" stroke-width="1"/><circle cx="246" cy="436" r="2.5" fill="#475569"/><text x="172" y="203" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Spinal trigeminal tract</tspan></text></g>
+    <g class="plate-label" data-for="nuc-solitarius-rostral"><line x1="180" y1="242" x2="290" y2="438" stroke="#475569" stroke-width="1"/><circle cx="290" cy="438" r="2.5" fill="#475569"/><text x="172" y="246" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Nucleus solitarius</tspan><tspan x="172" dy="13">(gustatory)</tspan></text></g>
+    <g class="plate-label" data-for="nuc-pontine-reticular"><line x1="180" y1="284" x2="330" y2="440" stroke="#475569" stroke-width="1"/><circle cx="330" cy="440" r="2.5" fill="#475569"/><text x="172" y="288" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Pontine reticular</tspan><tspan x="172" dy="13">formation</tspan></text></g>
+    <g class="plate-label" data-for="nuc-spinal-trigeminal"><line x1="180" y1="327" x2="270" y2="456" stroke="#475569" stroke-width="1"/><circle cx="270" cy="456" r="2.5" fill="#475569"/><text x="172" y="331" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Spinal trigeminal nucleus</tspan></text></g>
+    <g class="plate-label" data-for="tract-mcp"><line x1="180" y1="369" x2="230" y2="480" stroke="#475569" stroke-width="1"/><circle cx="230" cy="480" r="2.5" fill="#475569"/><text x="172" y="373" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Middle cerebellar peduncle</tspan></text></g>
+    <g class="plate-label" data-for="tract-medial-lemniscus"><line x1="180" y1="412" x2="376" y2="490" stroke="#475569" stroke-width="1"/><circle cx="376" cy="490" r="2.5" fill="#475569"/><text x="172" y="416" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Medial lemniscus</tspan></text></g>
+    <g class="plate-label" data-for="tract-lateral-lemniscus"><line x1="180" y1="455" x2="282" y2="492" stroke="#475569" stroke-width="1"/><circle cx="282" cy="492" r="2.5" fill="#475569"/><text x="172" y="459" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Lateral lemniscus</tspan></text></g>
+    <g class="plate-label" data-for="tract-trapezoid-body"><line x1="180" y1="497" x2="260" y2="510" stroke="#475569" stroke-width="1"/><circle cx="260" cy="510" r="2.5" fill="#475569"/><text x="172" y="501" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Trapezoid body</tspan></text></g>
+    <g class="plate-label" data-for="nuc-superior-olivary"><line x1="180" y1="540" x2="300" y2="510" stroke="#475569" stroke-width="1"/><circle cx="300" cy="510" r="2.5" fill="#475569"/><text x="172" y="544" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Superior olivary complex</tspan></text></g>
+    <g class="plate-label" data-for="nuc-superior-salivatory"><line x1="180" y1="582" x2="310" y2="530" stroke="#475569" stroke-width="1"/><circle cx="310" cy="530" r="2.5" fill="#475569"/><text x="172" y="586" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Superior salivatory nucleus</tspan></text></g>
+    <g class="plate-label" data-for="tract-corticobulbar"><line x1="180" y1="625" x2="358" y2="540" stroke="#475569" stroke-width="1"/><circle cx="358" cy="540" r="2.5" fill="#475569"/><text x="172" y="629" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Corticobulbar tract</tspan></text></g>
+    <g class="plate-label" data-for="nuc-facial"><line x1="180" y1="667" x2="296" y2="548" stroke="#475569" stroke-width="1"/><circle cx="296" cy="548" r="2.5" fill="#475569"/><text x="172" y="671" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Facial nucleus (CN VII)</tspan></text></g>
+    <g class="plate-label" data-for="tract-corticospinal-lateral"><line x1="180" y1="710" x2="366" y2="584" stroke="#475569" stroke-width="1"/><circle cx="366" cy="584" r="2.5" fill="#475569"/><text x="172" y="714" text-anchor="end" font-size="11.5" fill="#1e293b"><tspan x="172" dy="0">Corticospinal tract</tspan></text></g>
+    <g class="plate-label" data-for="vent-fourth-ventricle"><line x1="620" y1="114" x2="400" y2="292" stroke="#475569" stroke-width="1"/><circle cx="400" cy="292" r="2.5" fill="#475569"/><text x="628" y="118" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Fourth ventricle</tspan></text></g>
+    <g class="plate-label" data-for="surf-facial-colliculus"><line x1="620" y1="157" x2="468" y2="318" stroke="#475569" stroke-width="1"/><circle cx="468" cy="318" r="2.5" fill="#475569"/><text x="628" y="161" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Facial colliculus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-vestibular-lateral"><line x1="620" y1="199" x2="574" y2="322" stroke="#475569" stroke-width="1"/><circle cx="574" cy="322" r="2.5" fill="#475569"/><text x="628" y="203" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Lateral vestibular nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-vestibular-inferior"><line x1="620" y1="242" x2="516" y2="326" stroke="#475569" stroke-width="1"/><circle cx="516" cy="326" r="2.5" fill="#475569"/><text x="628" y="246" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Inferior vestibular nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-cochlear-dorsal"><line x1="620" y1="284" x2="596" y2="332" stroke="#475569" stroke-width="1"/><circle cx="596" cy="332" r="2.5" fill="#475569"/><text x="628" y="288" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Dorsal cochlear nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-vestibular-medial"><line x1="620" y1="327" x2="538" y2="342" stroke="#475569" stroke-width="1"/><circle cx="538" cy="342" r="2.5" fill="#475569"/><text x="628" y="331" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Medial vestibular nucleus</tspan></text></g>
+    <g class="plate-label" data-for="surf-cn8-exit"><line x1="620" y1="369" x2="584" y2="346" stroke="#475569" stroke-width="1"/><circle cx="584" cy="346" r="2.5" fill="#475569"/><text x="628" y="373" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">CN VIII root</tspan></text></g>
+    <g class="plate-label" data-for="tract-mlf"><line x1="620" y1="412" x2="422" y2="356" stroke="#475569" stroke-width="1"/><circle cx="422" cy="356" r="2.5" fill="#475569"/><text x="628" y="416" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Medial longitudinal</tspan><tspan x="628" dy="13">fasciculus (MLF)</tspan></text></g>
+    <g class="plate-label" data-for="tract-icp"><line x1="620" y1="455" x2="558" y2="356" stroke="#475569" stroke-width="1"/><circle cx="558" cy="356" r="2.5" fill="#475569"/><text x="628" y="459" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Inferior cerebellar peduncle</tspan></text></g>
+    <g class="plate-label" data-for="nuc-abducens"><line x1="620" y1="497" x2="468" y2="368" stroke="#475569" stroke-width="1"/><circle cx="468" cy="368" r="2.5" fill="#475569"/><text x="628" y="501" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Abducens nucleus</tspan></text></g>
+    <g class="plate-label" data-for="surf-cn7-exit"><line x1="620" y1="540" x2="594" y2="376" stroke="#475569" stroke-width="1"/><circle cx="594" cy="376" r="2.5" fill="#475569"/><text x="628" y="544" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">CN VII root</tspan></text></g>
+    <g class="plate-label" data-for="nuc-cochlear-ventral"><line x1="620" y1="582" x2="560" y2="394" stroke="#475569" stroke-width="1"/><circle cx="560" cy="394" r="2.5" fill="#475569"/><text x="628" y="586" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Ventral cochlear nucleus</tspan></text></g>
+    <g class="plate-label" data-for="ctx-pontine-nuclei"><line x1="620" y1="625" x2="500" y2="585" stroke="#475569" stroke-width="1"/><circle cx="500" cy="585" r="2.5" fill="#475569"/><text x="628" y="629" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Pontine nuclei</tspan></text></g>
+    <g class="plate-label" data-for="ctx-pontine-fibers"><line x1="620" y1="667" x2="530" y2="590" stroke="#475569" stroke-width="1"/><circle cx="530" cy="590" r="2.5" fill="#475569"/><text x="628" y="671" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">Longitudinal &amp;</tspan><tspan x="628" dy="13">transverse pontine fibers</tspan></text></g>
+    <g class="plate-label" data-for="surf-cn6-exit"><line x1="620" y1="710" x2="464" y2="658" stroke="#475569" stroke-width="1"/><circle cx="464" cy="658" r="2.5" fill="#475569"/><text x="628" y="714" text-anchor="start" font-size="11.5" fill="#1e293b"><tspan x="628" dy="0">CN VI root</tspan></text></g>
+  </g>
+</svg>

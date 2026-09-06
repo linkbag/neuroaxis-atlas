@@ -1,0 +1,15 @@
+[
+  { "id": "lvl-spinal-medulla", "name": "Cervicomedullary junction", "y": -50 },
+  { "id": "lvl-pyramid-decuss", "name": "Medulla — pyramidal decussation", "y": -46 },
+  { "id": "lvl-sensory-decuss", "name": "Medulla — sensory (internal arcuate) decussation", "y": -42 },
+  { "id": "lvl-olivary", "name": "Medulla — mid-olivary (open medulla)", "y": -34 },
+  { "id": "lvl-pontomedullary", "name": "Pontomedullary junction (CN VI–VII exits)", "y": -24 },
+  { "id": "lvl-pons-caudal", "name": "Pons — lower (CN VI, VII, VIII nuclei)", "y": -18 },
+  { "id": "lvl-pons-middle", "name": "Pons — midpontine (CN V)", "y": -8 },
+  { "id": "lvl-pons-rostral", "name": "Pons — upper (CN IV exit, ICP→SCP transition)", "y": 2 },
+  { "id": "lvl-midbrain-ic", "name": "Midbrain — inferior colliculus", "y": 8 },
+  { "id": "lvl-midbrain-sc", "name": "Midbrain — superior colliculus (CN III)", "y": 14 },
+  { "id": "lvl-post-comm", "name": "Posterior commissure / pretectal", "y": 19 },
+  { "id": "lvl-thalamus-mid", "name": "Diencephalon — mid-thalamus (mammillary bodies)", "y": 28 },
+  { "id": "lvl-thalamus-rostral", "name": "Diencephalon — rostral thalamus / hypothalamus (optic chiasm)", "y": 36 }
+]

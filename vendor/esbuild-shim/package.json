@@ -1,0 +1,10 @@
+{
+  "name": "esbuild-restricted-env-shim",
+  "version": "0.21.5",
+  "description": "Drop-in 'esbuild' replacement (installed via npm overrides). Delegates to real esbuild when child processes with piped stdio are allowed; otherwise falls back to a pipe-free TypeScript-transpile implementation so `vite build` can run inside restricted sandboxes (e.g. DSH workspace-write policy).",
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "esbuild-real": "npm:esbuild@0.21.5"
+  }
+}

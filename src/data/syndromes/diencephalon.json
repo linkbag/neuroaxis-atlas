@@ -1,0 +1,91 @@
+[
+  {
+    "id": "syn-dejerine-roussy",
+    "name": "Déjérine-Roussy thalamic pain syndrome",
+    "eponym": "Déjérine-Roussy",
+    "structures": ["nuc-vpl", "nuc-pulvinar"],
+    "vascularTerritory": "PCA — thalamogeniculate artery (inferolateral thalamic territory)",
+    "presentation": "Contralateral hemisensory loss affecting all modalities from a thalamogeniculate infarct, followed weeks to months later by severe, poorly localized burning or aching central post-stroke pain with allodynia and hyperpathia in the same distribution, often accompanied by proprioceptive ataxia, transient choreoathetosis and the 'thalamic hand' posture.",
+    "cause": "Infarction (less often hemorrhage or tumor) of the ventral posterolateral nucleus and pulvinar — the somatosensory relay — leaving deafferented thalamocortical nociceptive circuits hyperexcitable; only a minority of deep PCA-territory strokes develop the pain syndrome.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Somatosensory Pathways'"
+    ]
+  },
+  {
+    "id": "syn-percheron",
+    "name": "Artery-of-Percheron paramedian thalamic infarction",
+    "eponym": "Artery of Percheron",
+    "structures": ["nuc-intralaminar", "nuc-md", "nuc-midline-thalamic"],
+    "vascularTerritory": "PCA — paramedian thalamic (posterior thalamoperforating) territory supplied by a single artery of Percheron off one P1 segment",
+    "presentation": "Abrupt disturbance of consciousness (hypersomnia to coma) with vertical gaze palsy (upgaze predominates), dense anterograde amnesia, apathy/abulia and behavioral change — the classic triad of altered arousal, vertical gaze palsy and amnesia; MRI shows bilateral, often 'Y'-shaped paramedian thalamic and rostral midbrain DWI signal.",
+    "cause": "Occlusion (usually embolic) of a single artery of Percheron — the anatomic variant in which one paramedian trunk from P1 supplies both medial thalami and the rostral midbrain — injuring the intralaminar/midline arousal nuclei and the mediodorsal nucleus bilaterally.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "syn-tuberothalamic",
+    "name": "Tuberothalamic artery syndrome (aphasia-plus)",
+    "structures": ["nuc-thalamic-anterior", "nuc-va", "nuc-vl"],
+    "vascularTerritory": "PCA — tuberothalamic (anterior thalamoperforating) artery from the P1/posterior communicating junction",
+    "presentation": "Acute amnesia with apathy, abulia and executive dysfunction; left-sided lesions add 'aphasia-plus' (reduced spontaneous output with preserved repetition), right-sided lesions contralateral neglect; motor-programming deficits and transient vertical-gaze limitation occur with rostral spread — contralateral tremor/ataxia when VL is involved.",
+    "cause": "Infarction of the anterior thalamus — anterior nuclear group, VA/VL and the mammillothalamic tract — interrupting the Papez circuit and frontal-thalamic motor loops; the tuberothalamic artery is absent in roughly a third of hemispheres, compensated by paramedian branches.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "syn-korsakoff",
+    "name": "Wernicke-Korsakoff syndrome",
+    "eponym": "Wernicke-Korsakoff",
+    "structures": ["nuc-mammillary-body", "nuc-thalamic-anterior", "nuc-md"],
+    "vascularTerritory": "None — metabolic-toxic (thiamine deficiency), not a vascular territory",
+    "presentation": "Wernicke phase: confusion, ophthalmoplegia (CN VI palsy, nystagmus) and gait ataxia; Korsakoff phase: dense anterograde and retrograde amnesia with confabulation and apathy; MRI shows mammillary body atrophy and medial thalamic/anterior thalamic T2 signal change.",
+    "cause": "Thiamine (vitamin B1) deficiency — usually alcohol use disorder, hyperemesis or malnutrition — causing petechial hemorrhage, gliosis and neuronal loss in the mammillary bodies, mediodorsal and anterior thalamic nuclei (Papez-circuit failure).",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "syn-hypothalamic",
+    "name": "Hypothalamic syndrome — central DI, SIADH, and autonomic crises",
+    "structures": ["nuc-supraoptic", "nuc-paraventricular", "nuc-preoptic", "nuc-ventromedial"],
+    "vascularTerritory": "Circle-of-Willis hypothalamic perforators (anterior communicating/superior hypophyseal rostrally; posterior communicating and P1/PCA paramedially) — often sellar/suprasellar mass effect rather than stroke",
+    "presentation": "Water-balance failure (central diabetes insipidus with polyuria, polydipsia and hypernatremia, or SIADH with euvolemic hyponatremia), thermoregulatory failure (hypothalamic fever or poikilothermia), diencephalic autonomic crises — paroxysmal hypertension, tachycardia, sweating and hyperthermia ('hypothalamic storms') — plus hyperphagia/obesity and pituitary-endocrine deficits according to the nuclei involved.",
+    "cause": "Sellar/suprasellar tumors (craniopharyngioma, pituitary adenoma), hypothalamic glioma, trauma or surgery to the stalk and hypothalamic perforators, sarcoidosis/Langerhans-cell histiocytosis infiltration, or perforator ischemia injuring the supraoptic/paraventricular magnocellular neurons and the preoptic and ventromedial autonomic circuits.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "syn-pineal-region",
+    "name": "Pineal region tumor with gaze palsy",
+    "eponym": "Parinaud (dorsal midbrain syndrome)",
+    "structures": ["nuc-pineal-gland", "nuc-pretectal", "nuc-superior-colliculus", "nuc-edinger-westphal"],
+    "vascularTerritory": "None — mass effect (pineal region tumor compressing the pretectal plate, posterior commissure and cerebral aqueduct) with obstructive hydrocephalus",
+    "presentation": "Progressive vertical gaze palsy (upgaze first) with light-near dissociation, lid retraction (Collier sign), convergence-retraction nystagmus on attempted upgaze, and headache/papilledema from aqueductal hydrocephalus; children may add precocious puberty from germinoma hCG secretion.",
+    "cause": "Pineal parenchymal tumors or germ-cell tumors (germinoma) — also pineal cysts or hemorrhage — compressing the pretectal region, posterior commissure and aqueduct; hydrocephalus itself can reproduce the dorsal midbrain syndrome by distending the commissural plate.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brainstem II: Eye Movements and Pupillary Control'",
+      "RadioGraphics 2019 — 'Midbrain, Pons, and Medulla: Anatomy and Syndromes'"
+    ]
+  },
+  {
+    "id": "syn-hemiballismus",
+    "name": "Hemiballismus",
+    "structures": ["nuc-subthalamic"],
+    "vascularTerritory": "Perforating branches of the posterior communicating artery and anterior choroidal artery to the subthalamic nucleus (classically a small lacunar infarct)",
+    "presentation": "Violent, involuntary, poorly patterned flinging movements of the contralateral proximal arm and leg (sometimes face), often maximal at onset and frequently subsiding over weeks; no weakness or sensory loss is required — the limb may be flung into furniture, so protective measures matter.",
+    "cause": "Contralateral subthalamic nucleus infarction or hemorrhage (classically hypertensive lacune) removing the excitatory subthalamic drive to GPi and disinhibiting the motor thalamus; also produced by STN-region lesions in non-ketotic hyperglycemia and by current spread of STN deep-brain stimulation.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+    ]
+  }
+]

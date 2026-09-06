@@ -1,0 +1,62 @@
+/*
+ * tokens.css — design tokens (dark theme) for NeuroAxis.
+ * Palette hexes mirror ENGINEERING_PLAN §6 (kind palette + named overrides);
+ * structure colors from the taxonomy data win over these defaults at runtime.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Base surfaces */
+  --bg-page: #0b1220;
+  --bg-panel: #101827;
+  --bg-elevated: #16202f;
+  --bg-viewer: radial-gradient(1200px 800px at 50% 40%, #1b2436 0%, #0b1220 70%);
+
+  /* Lines & text */
+  --border-subtle: #1f2b3d;
+  --border-strong: #2c3a52;
+  --text-primary: #e5e7eb;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Accents & status */
+  --accent: #38bdf8;
+  --accent-strong: #0ea5e9;
+  --selection: #f59e0b;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
+
+  /* §6 kind palette (structure colors from taxonomy win) */
+  --kind-nucleus: #d97706; /* nuclei amber */
+  --kind-cn-nucleus: #14b8a6; /* cranial-nerve nuclei teal */
+  --kind-ascending: #3b82f6; /* ascending tracts blue */
+  --kind-descending: #8b5cf6; /* descending tracts violet */
+  --kind-mixed: #a78bfa; /* mixed tracts */
+  --kind-ventricle: #06b6d4; /* ventricle cyan */
+  --kind-surface: #64748b; /* surface slate */
+  --kind-context: #94a3b8; /* context gray */
+
+  /* §6 named overrides */
+  --ov-red-nucleus: #b91c1c;
+  --ov-substantia-nigra: #1f2937;
+  --ov-substantia-nigra-reticulata: #374151;
+  --ov-locus-coeruleus: #1d4ed8;
+
+  /* Plate ink (§6 SVG contract stroke color) */
+  --plate-ink: #0f172a;
+
+  /* Typography */
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* Spacing & shape */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}

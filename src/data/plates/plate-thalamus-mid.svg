@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" font-family="'Segoe UI', Arial, sans-serif">
+  <g class="plate-frame">
+    <text class="plate-caption" x="400" y="32" text-anchor="middle" font-size="16" font-weight="600" fill="#334155">Diencephalon - mid-thalamus level, mammillary bodies (y = +28)</text>
+    <circle cx="400" cy="62" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="400" y="67.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">P</text>
+    <circle cx="52" cy="400" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="52" y="405.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">R</text>
+    <circle cx="748" cy="400" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="748" y="405.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">L</text>
+    <circle cx="400" cy="738" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="400" y="743.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">A</text>
+  </g>
+  <path data-role="outline" d="M 186 330 C 186 254 230 206 310 198 C 368 192 432 192 490 198 C 570 206 614 254 614 330 C 618 402 618 472 604 532 C 590 596 548 634 470 644 C 428 649 372 649 330 644 C 252 634 210 596 196 532 C 182 472 182 402 186 330 Z" fill="none" stroke="#0f172a" stroke-width="1.5"/>
+  <g class="plate-midline"><line x1="400" y1="200" x2="400" y2="640" stroke="#0f172a" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="4 5"/></g>
+  <g class="plate-regions">
+    <ellipse data-structure="nuc-pulvinar" cx="322" cy="244" rx="54" ry="28" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-pulvinar" cx="478" cy="244" rx="54" ry="28" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-mgn" cx="254" cy="244" rx="15" ry="14" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-mgn" cx="546" cy="244" rx="15" ry="14" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-lgn" cx="232" cy="282" rx="17" ry="15" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-lgn" cx="568" cy="282" rx="17" ry="15" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-lateral-dorsal" cx="296" cy="300" rx="26" ry="24" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-lateral-dorsal" cx="504" cy="300" rx="26" ry="24" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-md" cx="362" cy="330" rx="24" ry="56" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-md" cx="438" cy="330" rx="24" ry="56" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-midline-thalamic" cx="388" cy="330" rx="5" ry="76" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-midline-thalamic" cx="412" cy="330" rx="5" ry="76" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="ctx-internal-medullary-lamina" d="M 337 466 C 335 430 333 390 331 350 M 331 350 C 325 322 313 305 299 293 M 331 350 C 337 318 345 298 357 285" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="ctx-internal-medullary-lamina" d="M 463 466 C 465 430 467 390 469 350 M 469 350 C 475 322 487 305 501 293 M 469 350 C 463 318 455 298 443 285" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-intralaminar" cx="372" cy="408" rx="9" ry="20" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-intralaminar" cx="428" cy="408" rx="9" ry="20" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-lateral-posterior" cx="272" cy="356" rx="22" ry="26" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-lateral-posterior" cx="528" cy="356" rx="22" ry="26" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-thalamic-reticular" cx="244" cy="396" rx="5" ry="72" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-thalamic-reticular" cx="556" cy="396" rx="5" ry="72" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-internal-capsule" cx="230" cy="410" rx="10" ry="92" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-internal-capsule" cx="570" cy="410" rx="10" ry="92" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vpl" cx="270" cy="430" rx="22" ry="24" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vpl" cx="530" cy="430" rx="22" ry="24" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-lenticular-nucleus" cx="206" cy="432" rx="18" ry="46" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-lenticular-nucleus" cx="594" cy="432" rx="18" ry="46" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vpm" cx="316" cy="440" rx="17" ry="19" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vpm" cx="484" cy="440" rx="17" ry="19" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vl" cx="280" cy="496" rx="25" ry="23" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-vl" cx="520" cy="496" rx="25" ry="23" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-va" cx="330" cy="512" rx="23" ry="17" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-va" cx="470" cy="512" rx="23" ry="17" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-caudate-nucleus" cx="250" cy="556" rx="25" ry="22" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-caudate-nucleus" cx="550" cy="556" rx="25" ry="22" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-thalamic-anterior" cx="320" cy="548" rx="20" ry="16" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-thalamic-anterior" cx="480" cy="548" rx="20" ry="16" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <path data-structure="vent-third-ventricle" d="M 393 258 C 393 250 407 250 407 258 L 407 540 C 407 548 393 548 393 540 Z" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-posterior-hypothalamus" cx="378" cy="568" rx="11" ry="14" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-posterior-hypothalamus" cx="422" cy="568" rx="11" ry="14" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-dorsomedial" cx="354" cy="562" rx="12" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-dorsomedial" cx="446" cy="562" rx="12" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-ventromedial" cx="340" cy="588" rx="16" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-ventromedial" cx="460" cy="588" rx="16" ry="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <circle data-structure="nuc-mammillary-body" cx="382" cy="616" r="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <circle data-structure="nuc-mammillary-body" cx="418" cy="616" r="12" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-subthalamic" cx="280" cy="610" rx="24" ry="10" transform="rotate(-10 280 610)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-subthalamic" cx="520" cy="610" rx="24" ry="10" transform="rotate(10 520 610)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-zona-incerta" cx="280" cy="582" rx="24" ry="6" transform="rotate(-10 280 582)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="nuc-zona-incerta" cx="520" cy="582" rx="24" ry="6" transform="rotate(10 520 582)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-fields-of-forel" cx="320" cy="572" rx="13" ry="5" transform="rotate(-10 320 572)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse data-structure="ctx-fields-of-forel" cx="480" cy="572" rx="13" ry="5" transform="rotate(10 480 572)" stroke="#0f172a" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+  <g class="plate-labels" font-family="'Segoe UI', Arial, sans-serif">
+    <g class="plate-label" data-for="nuc-pulvinar"><line x1="183" y1="114" x2="270" y2="240" stroke="#475569" stroke-width="1"/><circle cx="270" cy="240" r="2.5" fill="#475569"/><text x="175" y="118" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Pulvinar</tspan></text></g>
+    <g class="plate-label" data-for="nuc-mgn"><line x1="183" y1="160" x2="246" y2="246" stroke="#475569" stroke-width="1"/><circle cx="246" cy="246" r="2.5" fill="#475569"/><text x="175" y="164" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Medial geniculate</tspan><tspan x="175" dy="13">nucleus (MGN)</tspan></text></g>
+    <g class="plate-label" data-for="nuc-lateral-dorsal"><line x1="183" y1="206" x2="290" y2="286" stroke="#475569" stroke-width="1"/><circle cx="290" cy="286" r="2.5" fill="#475569"/><text x="175" y="210" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Lateral dorsal nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-lgn"><line x1="183" y1="252" x2="218" y2="292" stroke="#475569" stroke-width="1"/><circle cx="218" cy="292" r="2.5" fill="#475569"/><text x="175" y="256" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Lateral geniculate</tspan><tspan x="175" dy="13">nucleus (LGN)</tspan></text></g>
+    <g class="plate-label" data-for="nuc-lateral-posterior"><line x1="183" y1="298" x2="268" y2="356" stroke="#475569" stroke-width="1"/><circle cx="268" cy="356" r="2.5" fill="#475569"/><text x="175" y="302" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Lateral posterior</tspan><tspan x="175" dy="13">nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-thalamic-reticular"><line x1="183" y1="344" x2="242" y2="394" stroke="#475569" stroke-width="1"/><circle cx="242" cy="394" r="2.5" fill="#475569"/><text x="175" y="348" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Thalamic reticular</tspan><tspan x="175" dy="13">nucleus</tspan></text></g>
+    <g class="plate-label" data-for="ctx-internal-capsule"><line x1="183" y1="390" x2="228" y2="412" stroke="#475569" stroke-width="1"/><circle cx="228" cy="412" r="2.5" fill="#475569"/><text x="175" y="394" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Internal capsule</tspan></text></g>
+    <g class="plate-label" data-for="nuc-vpl"><line x1="183" y1="436" x2="266" y2="432" stroke="#475569" stroke-width="1"/><circle cx="266" cy="432" r="2.5" fill="#475569"/><text x="175" y="440" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">VPL nucleus</tspan></text></g>
+    <g class="plate-label" data-for="ctx-lenticular-nucleus"><line x1="183" y1="482" x2="202" y2="440" stroke="#475569" stroke-width="1"/><circle cx="202" cy="440" r="2.5" fill="#475569"/><text x="175" y="486" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Lentiform nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-vpm"><line x1="183" y1="528" x2="316" y2="442" stroke="#475569" stroke-width="1"/><circle cx="316" cy="442" r="2.5" fill="#475569"/><text x="175" y="532" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">VPM nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-vl"><line x1="183" y1="574" x2="274" y2="496" stroke="#475569" stroke-width="1"/><circle cx="274" cy="496" r="2.5" fill="#475569"/><text x="175" y="578" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">VL nucleus</tspan></text></g>
+    <g class="plate-label" data-for="ctx-caudate-nucleus"><line x1="183" y1="620" x2="228" y2="546" stroke="#475569" stroke-width="1"/><circle cx="228" cy="546" r="2.5" fill="#475569"/><text x="175" y="624" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Caudate nucleus (head)</tspan></text></g>
+    <g class="plate-label" data-for="nuc-va"><line x1="183" y1="666" x2="324" y2="514" stroke="#475569" stroke-width="1"/><circle cx="324" cy="514" r="2.5" fill="#475569"/><text x="175" y="670" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">VA nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-thalamic-anterior"><line x1="183" y1="710" x2="342" y2="556" stroke="#475569" stroke-width="1"/><circle cx="342" cy="556" r="2.5" fill="#475569"/><text x="175" y="714" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Anterior nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-midline-thalamic"><line x1="617" y1="162" x2="412" y2="372" stroke="#475569" stroke-width="1"/><circle cx="412" cy="372" r="2.5" fill="#475569"/><text x="625" y="166" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Midline thalamic</tspan><tspan x="625" dy="13">nuclei</tspan></text></g>
+    <g class="plate-label" data-for="nuc-md"><line x1="617" y1="114" x2="452" y2="304" stroke="#475569" stroke-width="1"/><circle cx="452" cy="304" r="2.5" fill="#475569"/><text x="625" y="118" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Mediodorsal nucleus</tspan><tspan x="625" dy="13">(MD)</tspan></text></g>
+    <g class="plate-label" data-for="ctx-internal-medullary-lamina"><line x1="617" y1="210" x2="464" y2="352" stroke="#475569" stroke-width="1"/><circle cx="464" cy="352" r="2.5" fill="#475569"/><text x="625" y="214" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Internal medullary</tspan><tspan x="625" dy="13">lamina</tspan></text></g>
+    <g class="plate-label" data-for="vent-third-ventricle"><line x1="617" y1="258" x2="402" y2="420" stroke="#475569" stroke-width="1"/><circle cx="402" cy="420" r="2.5" fill="#475569"/><text x="625" y="262" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Third ventricle</tspan></text></g>
+    <g class="plate-label" data-for="nuc-intralaminar"><line x1="617" y1="306" x2="430" y2="404" stroke="#475569" stroke-width="1"/><circle cx="430" cy="404" r="2.5" fill="#475569"/><text x="625" y="310" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">CM-PF (intralaminar)</tspan></text></g>
+    <g class="plate-label" data-for="nuc-posterior-hypothalamus"><line x1="617" y1="354" x2="426" y2="574" stroke="#475569" stroke-width="1"/><circle cx="426" cy="574" r="2.5" fill="#475569"/><text x="625" y="358" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Posterior hypothalamus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-dorsomedial"><line x1="617" y1="402" x2="452" y2="556" stroke="#475569" stroke-width="1"/><circle cx="452" cy="556" r="2.5" fill="#475569"/><text x="625" y="406" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Dorsomedial nucleus</tspan></text></g>
+    <g class="plate-label" data-for="ctx-fields-of-forel"><line x1="617" y1="450" x2="484" y2="570" stroke="#475569" stroke-width="1"/><circle cx="484" cy="570" r="2.5" fill="#475569"/><text x="625" y="454" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Fields of Forel (H1/H2)</tspan></text></g>
+    <g class="plate-label" data-for="nuc-ventromedial"><line x1="617" y1="498" x2="468" y2="590" stroke="#475569" stroke-width="1"/><circle cx="468" cy="590" r="2.5" fill="#475569"/><text x="625" y="502" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Ventromedial nucleus</tspan></text></g>
+    <g class="plate-label" data-for="nuc-zona-incerta"><line x1="617" y1="546" x2="530" y2="578" stroke="#475569" stroke-width="1"/><circle cx="530" cy="578" r="2.5" fill="#475569"/><text x="625" y="550" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Zona incerta</tspan></text></g>
+    <g class="plate-label" data-for="nuc-mammillary-body"><line x1="617" y1="594" x2="420" y2="614" stroke="#475569" stroke-width="1"/><circle cx="420" cy="614" r="2.5" fill="#475569"/><text x="625" y="598" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Mammillary body</tspan></text></g>
+    <g class="plate-label" data-for="nuc-subthalamic"><line x1="617" y1="642" x2="526" y2="608" stroke="#475569" stroke-width="1"/><circle cx="526" cy="608" r="2.5" fill="#475569"/><text x="625" y="646" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Subthalamic nucleus</tspan></text></g>
+  </g>
+</svg>

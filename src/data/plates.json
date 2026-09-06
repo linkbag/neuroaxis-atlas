@@ -1,0 +1,2447 @@
+[
+  {
+    "id": "plate-thalamus-mid",
+    "title": "Diencephalon - mid-thalamus (mammillary bodies)",
+    "orientation": "transverse",
+    "region": "diencephalon",
+    "levelId": "lvl-thalamus-mid",
+    "svg": "plates/plate-thalamus-mid.svg",
+    "regions": [
+      {
+        "slug": "nuc-pulvinar",
+        "label": "Pulvinar",
+        "labelPos": [
+          175,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-mgn",
+        "label": "Medial geniculate nucleus (MGN)",
+        "labelPos": [
+          175,
+          164
+        ]
+      },
+      {
+        "slug": "nuc-lateral-dorsal",
+        "label": "Lateral dorsal nucleus",
+        "labelPos": [
+          175,
+          210
+        ]
+      },
+      {
+        "slug": "nuc-lgn",
+        "label": "Lateral geniculate nucleus (LGN)",
+        "labelPos": [
+          175,
+          256
+        ]
+      },
+      {
+        "slug": "nuc-lateral-posterior",
+        "label": "Lateral posterior nucleus",
+        "labelPos": [
+          175,
+          302
+        ]
+      },
+      {
+        "slug": "nuc-thalamic-reticular",
+        "label": "Thalamic reticular nucleus",
+        "labelPos": [
+          175,
+          348
+        ]
+      },
+      {
+        "slug": "ctx-internal-capsule",
+        "label": "Internal capsule",
+        "labelPos": [
+          175,
+          394
+        ]
+      },
+      {
+        "slug": "nuc-vpl",
+        "label": "VPL nucleus",
+        "labelPos": [
+          175,
+          440
+        ]
+      },
+      {
+        "slug": "ctx-lenticular-nucleus",
+        "label": "Lentiform nucleus",
+        "labelPos": [
+          175,
+          486
+        ]
+      },
+      {
+        "slug": "nuc-vpm",
+        "label": "VPM nucleus",
+        "labelPos": [
+          175,
+          532
+        ]
+      },
+      {
+        "slug": "nuc-vl",
+        "label": "VL nucleus",
+        "labelPos": [
+          175,
+          578
+        ]
+      },
+      {
+        "slug": "ctx-caudate-nucleus",
+        "label": "Caudate nucleus (head)",
+        "labelPos": [
+          175,
+          624
+        ]
+      },
+      {
+        "slug": "nuc-va",
+        "label": "VA nucleus",
+        "labelPos": [
+          175,
+          670
+        ]
+      },
+      {
+        "slug": "nuc-thalamic-anterior",
+        "label": "Anterior nucleus",
+        "labelPos": [
+          175,
+          714
+        ]
+      },
+      {
+        "slug": "nuc-midline-thalamic",
+        "label": "Midline thalamic nuclei",
+        "labelPos": [
+          625,
+          166
+        ]
+      },
+      {
+        "slug": "nuc-md",
+        "label": "Mediodorsal nucleus (MD)",
+        "labelPos": [
+          625,
+          118
+        ]
+      },
+      {
+        "slug": "ctx-internal-medullary-lamina",
+        "label": "Internal medullary lamina",
+        "labelPos": [
+          625,
+          214
+        ]
+      },
+      {
+        "slug": "vent-third-ventricle",
+        "label": "Third ventricle",
+        "labelPos": [
+          625,
+          262
+        ]
+      },
+      {
+        "slug": "nuc-intralaminar",
+        "label": "CM-PF (intralaminar)",
+        "labelPos": [
+          625,
+          310
+        ]
+      },
+      {
+        "slug": "nuc-posterior-hypothalamus",
+        "label": "Posterior hypothalamus",
+        "labelPos": [
+          625,
+          358
+        ]
+      },
+      {
+        "slug": "nuc-dorsomedial",
+        "label": "Dorsomedial nucleus",
+        "labelPos": [
+          625,
+          406
+        ]
+      },
+      {
+        "slug": "ctx-fields-of-forel",
+        "label": "Fields of Forel (H1/H2)",
+        "labelPos": [
+          625,
+          454
+        ]
+      },
+      {
+        "slug": "nuc-ventromedial",
+        "label": "Ventromedial nucleus",
+        "labelPos": [
+          625,
+          502
+        ]
+      },
+      {
+        "slug": "nuc-zona-incerta",
+        "label": "Zona incerta",
+        "labelPos": [
+          625,
+          550
+        ]
+      },
+      {
+        "slug": "nuc-mammillary-body",
+        "label": "Mammillary body",
+        "labelPos": [
+          625,
+          598
+        ]
+      },
+      {
+        "slug": "nuc-subthalamic",
+        "label": "Subthalamic nucleus",
+        "labelPos": [
+          625,
+          646
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-midbrain-sc",
+    "title": "Midbrain - superior colliculus (CN III)",
+    "orientation": "transverse",
+    "region": "midbrain",
+    "levelId": "lvl-midbrain-sc",
+    "svg": "plates/plate-midbrain-sc.svg",
+    "regions": [
+      {
+        "slug": "nuc-pretectal",
+        "label": "Pretectal area",
+        "labelPos": [
+          228,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-superior-colliculus",
+        "label": "Superior colliculus",
+        "labelPos": [
+          228,
+          168
+        ]
+      },
+      {
+        "slug": "nuc-mesencephalic-v",
+        "label": "Mesencephalic V nucleus",
+        "labelPos": [
+          228,
+          218
+        ]
+      },
+      {
+        "slug": "tract-mesencephalic-v",
+        "label": "Mesencephalic V tract",
+        "labelPos": [
+          228,
+          268
+        ]
+      },
+      {
+        "slug": "nuc-edinger-westphal",
+        "label": "Edinger-Westphal nucleus",
+        "labelPos": [
+          228,
+          318
+        ]
+      },
+      {
+        "slug": "nuc-dorsal-raphe",
+        "label": "Dorsal raphe nucleus",
+        "labelPos": [
+          228,
+          368
+        ]
+      },
+      {
+        "slug": "nuc-oculomotor",
+        "label": "Oculomotor nucleus (CN III)",
+        "labelPos": [
+          228,
+          418
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "MLF",
+        "labelPos": [
+          228,
+          468
+        ]
+      },
+      {
+        "slug": "tract-tectospinal",
+        "label": "Tectospinal tract",
+        "labelPos": [
+          228,
+          518
+        ]
+      },
+      {
+        "slug": "tract-rubrospinal",
+        "label": "Rubrospinal fibers",
+        "labelPos": [
+          228,
+          568
+        ]
+      },
+      {
+        "slug": "tract-corticopontine",
+        "label": "Corticopontine fibers",
+        "labelPos": [
+          228,
+          618
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal fibers",
+        "labelPos": [
+          228,
+          666
+        ]
+      },
+      {
+        "slug": "tract-corticobulbar",
+        "label": "Corticobulbar fibers",
+        "labelPos": [
+          228,
+          714
+        ]
+      },
+      {
+        "slug": "nuc-pag",
+        "label": "Periaqueductal gray",
+        "labelPos": [
+          572,
+          142
+        ]
+      },
+      {
+        "slug": "vent-cerebral-aqueduct",
+        "label": "Cerebral aqueduct",
+        "labelPos": [
+          572,
+          190
+        ]
+      },
+      {
+        "slug": "tract-central-tegmental",
+        "label": "Central tegmental tract",
+        "labelPos": [
+          572,
+          286
+        ]
+      },
+      {
+        "slug": "nuc-red-nucleus",
+        "label": "Red nucleus",
+        "labelPos": [
+          572,
+          238
+        ]
+      },
+      {
+        "slug": "tract-medial-lemniscus",
+        "label": "Medial lemniscus",
+        "labelPos": [
+          572,
+          334
+        ]
+      },
+      {
+        "slug": "tract-spinothalamic",
+        "label": "Spinothalamic tract",
+        "labelPos": [
+          572,
+          382
+        ]
+      },
+      {
+        "slug": "nuc-snc",
+        "label": "Substantia nigra (compacta)",
+        "labelPos": [
+          572,
+          430
+        ]
+      },
+      {
+        "slug": "nuc-snr",
+        "label": "Substantia nigra (reticulata)",
+        "labelPos": [
+          572,
+          478
+        ]
+      },
+      {
+        "slug": "tract-crus-cerebri",
+        "label": "Crus cerebri",
+        "labelPos": [
+          572,
+          526
+        ]
+      },
+      {
+        "slug": "surf-cn3-exit",
+        "label": "CN III rootlets",
+        "labelPos": [
+          572,
+          574
+        ]
+      },
+      {
+        "slug": "surf-interpeduncular-fossa",
+        "label": "Interpeduncular fossa",
+        "labelPos": [
+          572,
+          622
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-midbrain-ic",
+    "title": "Midbrain - inferior colliculus",
+    "orientation": "transverse",
+    "region": "midbrain",
+    "levelId": "lvl-midbrain-ic",
+    "svg": "plates/plate-midbrain-ic.svg",
+    "regions": [
+      {
+        "slug": "ctx-cerebellum",
+        "label": "Cerebellum (superior surface)",
+        "labelPos": [
+          228,
+          118
+        ]
+      },
+      {
+        "slug": "surf-cn4-exit",
+        "label": "CN IV rootlets",
+        "labelPos": [
+          228,
+          166
+        ]
+      },
+      {
+        "slug": "nuc-inferior-colliculus",
+        "label": "Inferior colliculus",
+        "labelPos": [
+          228,
+          214
+        ]
+      },
+      {
+        "slug": "nuc-mesencephalic-v",
+        "label": "Mesencephalic V nucleus",
+        "labelPos": [
+          228,
+          262
+        ]
+      },
+      {
+        "slug": "tract-mesencephalic-v",
+        "label": "Mesencephalic V tract",
+        "labelPos": [
+          228,
+          310
+        ]
+      },
+      {
+        "slug": "nuc-cuneiform",
+        "label": "Cuneiform nucleus",
+        "labelPos": [
+          228,
+          358
+        ]
+      },
+      {
+        "slug": "nuc-trochlear",
+        "label": "Trochlear nucleus (CN IV)",
+        "labelPos": [
+          228,
+          406
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "MLF",
+        "labelPos": [
+          228,
+          454
+        ]
+      },
+      {
+        "slug": "nuc-dorsal-raphe",
+        "label": "Dorsal raphe nucleus",
+        "labelPos": [
+          228,
+          502
+        ]
+      },
+      {
+        "slug": "tract-tectospinal",
+        "label": "Tectospinal tract",
+        "labelPos": [
+          228,
+          550
+        ]
+      },
+      {
+        "slug": "tract-corticopontine",
+        "label": "Corticopontine fibers",
+        "labelPos": [
+          228,
+          598
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal fibers",
+        "labelPos": [
+          228,
+          646
+        ]
+      },
+      {
+        "slug": "tract-corticobulbar",
+        "label": "Corticobulbar fibers",
+        "labelPos": [
+          228,
+          694
+        ]
+      },
+      {
+        "slug": "nuc-pag",
+        "label": "Periaqueductal gray",
+        "labelPos": [
+          572,
+          118
+        ]
+      },
+      {
+        "slug": "vent-cerebral-aqueduct",
+        "label": "Cerebral aqueduct",
+        "labelPos": [
+          572,
+          166
+        ]
+      },
+      {
+        "slug": "tract-lateral-lemniscus",
+        "label": "Lateral lemniscus",
+        "labelPos": [
+          572,
+          262
+        ]
+      },
+      {
+        "slug": "tract-central-tegmental",
+        "label": "Central tegmental tract",
+        "labelPos": [
+          572,
+          214
+        ]
+      },
+      {
+        "slug": "tract-medial-lemniscus",
+        "label": "Medial lemniscus",
+        "labelPos": [
+          572,
+          310
+        ]
+      },
+      {
+        "slug": "tract-spinothalamic",
+        "label": "Spinothalamic tract",
+        "labelPos": [
+          572,
+          358
+        ]
+      },
+      {
+        "slug": "tract-scp",
+        "label": "Superior cerebellar peduncle",
+        "labelPos": [
+          572,
+          406
+        ]
+      },
+      {
+        "slug": "tract-scp-decussation",
+        "label": "SCP decussation",
+        "labelPos": [
+          572,
+          454
+        ]
+      },
+      {
+        "slug": "nuc-snc",
+        "label": "Substantia nigra (compacta)",
+        "labelPos": [
+          572,
+          502
+        ]
+      },
+      {
+        "slug": "nuc-snr",
+        "label": "Substantia nigra (reticulata)",
+        "labelPos": [
+          572,
+          550
+        ]
+      },
+      {
+        "slug": "tract-crus-cerebri",
+        "label": "Crus cerebri",
+        "labelPos": [
+          572,
+          598
+        ]
+      },
+      {
+        "slug": "surf-interpeduncular-fossa",
+        "label": "Interpeduncular fossa",
+        "labelPos": [
+          572,
+          646
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-pons-rostral",
+    "title": "Pons - upper (SCP, CN IV)",
+    "orientation": "transverse",
+    "region": "pons",
+    "levelId": "lvl-pons-rostral",
+    "svg": "plates/plate-pons-rostral.svg",
+    "regions": [
+      {
+        "slug": "vent-fourth-ventricle",
+        "label": "Fourth ventricle",
+        "labelPos": [
+          628,
+          118
+        ]
+      },
+      {
+        "slug": "surf-cn4-exit",
+        "label": "CN IV rootlets",
+        "labelPos": [
+          172,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-mesencephalic-v",
+        "label": "Mesencephalic V nucleus",
+        "labelPos": [
+          628,
+          184
+        ]
+      },
+      {
+        "slug": "tract-mesencephalic-v",
+        "label": "Mesencephalic V tract",
+        "labelPos": [
+          172,
+          193
+        ]
+      },
+      {
+        "slug": "nuc-locus-coeruleus",
+        "label": "Locus coeruleus",
+        "labelPos": [
+          628,
+          250
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "Medial longitudinal fasciculus (MLF)",
+        "labelPos": [
+          172,
+          267
+        ]
+      },
+      {
+        "slug": "tract-scp",
+        "label": "Superior cerebellar peduncle",
+        "labelPos": [
+          628,
+          317
+        ]
+      },
+      {
+        "slug": "tract-central-tegmental",
+        "label": "Central tegmental tract",
+        "labelPos": [
+          172,
+          342
+        ]
+      },
+      {
+        "slug": "nuc-vestibular-superior",
+        "label": "Superior vestibular nucleus",
+        "labelPos": [
+          628,
+          383
+        ]
+      },
+      {
+        "slug": "nuc-pontine-reticular",
+        "label": "Pontine reticular formation",
+        "labelPos": [
+          172,
+          416
+        ]
+      },
+      {
+        "slug": "tract-medial-lemniscus",
+        "label": "Medial lemniscus",
+        "labelPos": [
+          628,
+          449
+        ]
+      },
+      {
+        "slug": "tract-anterior-spinocerebellar",
+        "label": "Anterior spinocerebellar tract",
+        "labelPos": [
+          172,
+          491
+        ]
+      },
+      {
+        "slug": "tract-lateral-lemniscus",
+        "label": "Lateral lemniscus",
+        "labelPos": [
+          628,
+          515
+        ]
+      },
+      {
+        "slug": "tract-corticobulbar",
+        "label": "Corticobulbar tract",
+        "labelPos": [
+          172,
+          565
+        ]
+      },
+      {
+        "slug": "tract-mcp",
+        "label": "Middle cerebellar peduncle",
+        "labelPos": [
+          628,
+          582
+        ]
+      },
+      {
+        "slug": "tract-corticopontine",
+        "label": "Corticopontine tract",
+        "labelPos": [
+          172,
+          640
+        ]
+      },
+      {
+        "slug": "ctx-pontine-nuclei",
+        "label": "Pontine nuclei",
+        "labelPos": [
+          628,
+          648
+        ]
+      },
+      {
+        "slug": "ctx-pontine-fibers",
+        "label": "Longitudinal & transverse pontine fibers",
+        "labelPos": [
+          628,
+          714
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal tract",
+        "labelPos": [
+          172,
+          714
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-pons-middle",
+    "title": "Pons - mid (CN V)",
+    "orientation": "transverse",
+    "region": "pons",
+    "levelId": "lvl-pons-middle",
+    "svg": "plates/plate-pons-middle.svg",
+    "regions": [
+      {
+        "slug": "vent-fourth-ventricle",
+        "label": "Fourth ventricle",
+        "labelPos": [
+          628,
+          118
+        ]
+      },
+      {
+        "slug": "tract-mesencephalic-v",
+        "label": "Mesencephalic V tract",
+        "labelPos": [
+          172,
+          118
+        ]
+      },
+      {
+        "slug": "tract-central-tegmental",
+        "label": "Central tegmental tract",
+        "labelPos": [
+          172,
+          178
+        ]
+      },
+      {
+        "slug": "nuc-mesencephalic-v",
+        "label": "Mesencephalic V nucleus",
+        "labelPos": [
+          628,
+          184
+        ]
+      },
+      {
+        "slug": "nuc-trigeminal-motor",
+        "label": "Trigeminal motor nucleus",
+        "labelPos": [
+          172,
+          237
+        ]
+      },
+      {
+        "slug": "nuc-vestibular-superior",
+        "label": "Superior vestibular nucleus",
+        "labelPos": [
+          628,
+          250
+        ]
+      },
+      {
+        "slug": "nuc-pontine-reticular",
+        "label": "Pontine reticular formation",
+        "labelPos": [
+          172,
+          297
+        ]
+      },
+      {
+        "slug": "nuc-vestibular-medial",
+        "label": "Medial vestibular nucleus",
+        "labelPos": [
+          628,
+          317
+        ]
+      },
+      {
+        "slug": "tract-spinal-trigeminal",
+        "label": "Spinal trigeminal tract",
+        "labelPos": [
+          172,
+          356
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "Medial longitudinal fasciculus (MLF)",
+        "labelPos": [
+          628,
+          383
+        ]
+      },
+      {
+        "slug": "nuc-spinal-trigeminal",
+        "label": "Spinal trigeminal nucleus",
+        "labelPos": [
+          172,
+          416
+        ]
+      },
+      {
+        "slug": "surf-cn5-exit",
+        "label": "CN V root",
+        "labelPos": [
+          628,
+          449
+        ]
+      },
+      {
+        "slug": "tract-medial-lemniscus",
+        "label": "Medial lemniscus",
+        "labelPos": [
+          172,
+          476
+        ]
+      },
+      {
+        "slug": "nuc-principal-sensory-v",
+        "label": "Principal sensory nucleus (V)",
+        "labelPos": [
+          628,
+          515
+        ]
+      },
+      {
+        "slug": "tract-lateral-lemniscus",
+        "label": "Lateral lemniscus",
+        "labelPos": [
+          172,
+          535
+        ]
+      },
+      {
+        "slug": "tract-mcp",
+        "label": "Middle cerebellar peduncle",
+        "labelPos": [
+          628,
+          582
+        ]
+      },
+      {
+        "slug": "tract-corticobulbar",
+        "label": "Corticobulbar tract",
+        "labelPos": [
+          172,
+          595
+        ]
+      },
+      {
+        "slug": "ctx-pontine-nuclei",
+        "label": "Pontine nuclei",
+        "labelPos": [
+          628,
+          648
+        ]
+      },
+      {
+        "slug": "tract-corticopontine",
+        "label": "Corticopontine tract",
+        "labelPos": [
+          172,
+          654
+        ]
+      },
+      {
+        "slug": "ctx-pontine-fibers",
+        "label": "Longitudinal & transverse pontine fibers",
+        "labelPos": [
+          628,
+          714
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal tract",
+        "labelPos": [
+          172,
+          714
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-pons-caudal",
+    "title": "Pons - lower (CN VI-VIII)",
+    "orientation": "transverse",
+    "region": "pons",
+    "levelId": "lvl-pons-caudal",
+    "svg": "plates/plate-pons-caudal.svg",
+    "regions": [
+      {
+        "slug": "vent-fourth-ventricle",
+        "label": "Fourth ventricle",
+        "labelPos": [
+          628,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-pprf",
+        "label": "PPRF",
+        "labelPos": [
+          172,
+          118
+        ]
+      },
+      {
+        "slug": "surf-facial-colliculus",
+        "label": "Facial colliculus",
+        "labelPos": [
+          628,
+          161
+        ]
+      },
+      {
+        "slug": "tract-central-tegmental",
+        "label": "Central tegmental tract",
+        "labelPos": [
+          172,
+          161
+        ]
+      },
+      {
+        "slug": "nuc-vestibular-lateral",
+        "label": "Lateral vestibular nucleus",
+        "labelPos": [
+          628,
+          203
+        ]
+      },
+      {
+        "slug": "tract-spinal-trigeminal",
+        "label": "Spinal trigeminal tract",
+        "labelPos": [
+          172,
+          203
+        ]
+      },
+      {
+        "slug": "nuc-vestibular-inferior",
+        "label": "Inferior vestibular nucleus",
+        "labelPos": [
+          628,
+          246
+        ]
+      },
+      {
+        "slug": "nuc-solitarius-rostral",
+        "label": "Nucleus solitarius (gustatory)",
+        "labelPos": [
+          172,
+          246
+        ]
+      },
+      {
+        "slug": "nuc-cochlear-dorsal",
+        "label": "Dorsal cochlear nucleus",
+        "labelPos": [
+          628,
+          288
+        ]
+      },
+      {
+        "slug": "nuc-pontine-reticular",
+        "label": "Pontine reticular formation",
+        "labelPos": [
+          172,
+          288
+        ]
+      },
+      {
+        "slug": "nuc-vestibular-medial",
+        "label": "Medial vestibular nucleus",
+        "labelPos": [
+          628,
+          331
+        ]
+      },
+      {
+        "slug": "nuc-spinal-trigeminal",
+        "label": "Spinal trigeminal nucleus",
+        "labelPos": [
+          172,
+          331
+        ]
+      },
+      {
+        "slug": "surf-cn8-exit",
+        "label": "CN VIII root",
+        "labelPos": [
+          628,
+          373
+        ]
+      },
+      {
+        "slug": "tract-mcp",
+        "label": "Middle cerebellar peduncle",
+        "labelPos": [
+          172,
+          373
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "Medial longitudinal fasciculus (MLF)",
+        "labelPos": [
+          628,
+          416
+        ]
+      },
+      {
+        "slug": "tract-medial-lemniscus",
+        "label": "Medial lemniscus",
+        "labelPos": [
+          172,
+          416
+        ]
+      },
+      {
+        "slug": "tract-icp",
+        "label": "Inferior cerebellar peduncle",
+        "labelPos": [
+          628,
+          459
+        ]
+      },
+      {
+        "slug": "tract-lateral-lemniscus",
+        "label": "Lateral lemniscus",
+        "labelPos": [
+          172,
+          459
+        ]
+      },
+      {
+        "slug": "nuc-abducens",
+        "label": "Abducens nucleus",
+        "labelPos": [
+          628,
+          501
+        ]
+      },
+      {
+        "slug": "tract-trapezoid-body",
+        "label": "Trapezoid body",
+        "labelPos": [
+          172,
+          501
+        ]
+      },
+      {
+        "slug": "surf-cn7-exit",
+        "label": "CN VII root",
+        "labelPos": [
+          628,
+          544
+        ]
+      },
+      {
+        "slug": "nuc-superior-olivary",
+        "label": "Superior olivary complex",
+        "labelPos": [
+          172,
+          544
+        ]
+      },
+      {
+        "slug": "nuc-cochlear-ventral",
+        "label": "Ventral cochlear nucleus",
+        "labelPos": [
+          628,
+          586
+        ]
+      },
+      {
+        "slug": "nuc-superior-salivatory",
+        "label": "Superior salivatory nucleus",
+        "labelPos": [
+          172,
+          586
+        ]
+      },
+      {
+        "slug": "ctx-pontine-nuclei",
+        "label": "Pontine nuclei",
+        "labelPos": [
+          628,
+          629
+        ]
+      },
+      {
+        "slug": "tract-corticobulbar",
+        "label": "Corticobulbar tract",
+        "labelPos": [
+          172,
+          629
+        ]
+      },
+      {
+        "slug": "ctx-pontine-fibers",
+        "label": "Longitudinal & transverse pontine fibers",
+        "labelPos": [
+          628,
+          671
+        ]
+      },
+      {
+        "slug": "nuc-facial",
+        "label": "Facial nucleus (CN VII)",
+        "labelPos": [
+          172,
+          671
+        ]
+      },
+      {
+        "slug": "surf-cn6-exit",
+        "label": "CN VI root",
+        "labelPos": [
+          628,
+          714
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal tract",
+        "labelPos": [
+          172,
+          714
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-olivary",
+    "title": "Medulla - mid-olivary (open)",
+    "orientation": "transverse",
+    "region": "medulla",
+    "levelId": "lvl-olivary",
+    "svg": "plates/plate-olivary.svg",
+    "regions": [
+      {
+        "slug": "vent-fourth-ventricle",
+        "label": "Fourth ventricle",
+        "labelPos": [
+          572,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-solitarius-caudal",
+        "label": "Nucleus solitarius",
+        "labelPos": [
+          228,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-area-postrema",
+        "label": "Area postrema",
+        "labelPos": [
+          572,
+          172
+        ]
+      },
+      {
+        "slug": "tract-spinal-trigeminal",
+        "label": "Spinal trigeminal tract",
+        "labelPos": [
+          228,
+          178
+        ]
+      },
+      {
+        "slug": "tract-icp",
+        "label": "Inferior cerebellar peduncle",
+        "labelPos": [
+          572,
+          226
+        ]
+      },
+      {
+        "slug": "nuc-spinal-trigeminal",
+        "label": "Spinal trigeminal nucleus",
+        "labelPos": [
+          228,
+          237
+        ]
+      },
+      {
+        "slug": "nuc-dmv",
+        "label": "Dorsal motor nucleus X",
+        "labelPos": [
+          572,
+          281
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "Medial longitudinal fasciculus (MLF)",
+        "labelPos": [
+          228,
+          297
+        ]
+      },
+      {
+        "slug": "nuc-hypoglossal",
+        "label": "Hypoglossal nucleus",
+        "labelPos": [
+          572,
+          335
+        ]
+      },
+      {
+        "slug": "tract-anterior-spinocerebellar",
+        "label": "Anterior spinocerebellar tract",
+        "labelPos": [
+          228,
+          356
+        ]
+      },
+      {
+        "slug": "tract-posterior-spinocerebellar",
+        "label": "Posterior spinocerebellar tract",
+        "labelPos": [
+          572,
+          389
+        ]
+      },
+      {
+        "slug": "nuc-medullary-reticular",
+        "label": "Medullary reticular formation",
+        "labelPos": [
+          228,
+          416
+        ]
+      },
+      {
+        "slug": "tract-medial-lemniscus",
+        "label": "Medial lemniscus",
+        "labelPos": [
+          572,
+          443
+        ]
+      },
+      {
+        "slug": "nuc-ambiguus",
+        "label": "Nucleus ambiguus",
+        "labelPos": [
+          228,
+          476
+        ]
+      },
+      {
+        "slug": "nuc-inferior-olive-principal",
+        "label": "Inferior olive (principal)",
+        "labelPos": [
+          572,
+          497
+        ]
+      },
+      {
+        "slug": "tract-spinothalamic",
+        "label": "Spinothalamic tract",
+        "labelPos": [
+          228,
+          535
+        ]
+      },
+      {
+        "slug": "nuc-inferior-olive-medial",
+        "label": "Medial accessory olive",
+        "labelPos": [
+          572,
+          551
+        ]
+      },
+      {
+        "slug": "tract-reticulospinal",
+        "label": "Reticulospinal tract",
+        "labelPos": [
+          228,
+          595
+        ]
+      },
+      {
+        "slug": "surf-cn10-exit",
+        "label": "CN X rootlets",
+        "labelPos": [
+          572,
+          606
+        ]
+      },
+      {
+        "slug": "surf-cn9-exit",
+        "label": "CN IX rootlets",
+        "labelPos": [
+          228,
+          654
+        ]
+      },
+      {
+        "slug": "surf-cn12-exit",
+        "label": "CN XII rootlets",
+        "labelPos": [
+          572,
+          660
+        ]
+      },
+      {
+        "slug": "nuc-arcuate-medullary",
+        "label": "Arcuate nucleus",
+        "labelPos": [
+          572,
+          714
+        ]
+      },
+      {
+        "slug": "tract-pyramid",
+        "label": "Pyramid",
+        "labelPos": [
+          228,
+          714
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-sensory-decuss",
+    "title": "Medulla - sensory decussation",
+    "orientation": "transverse",
+    "region": "medulla",
+    "levelId": "lvl-sensory-decuss",
+    "svg": "plates/plate-sensory-decuss.svg",
+    "regions": [
+      {
+        "slug": "tract-fasciculus-gracilis",
+        "label": "Fasciculus gracilis",
+        "labelPos": [
+          562,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-solitarius-caudal",
+        "label": "Nucleus solitarius",
+        "labelPos": [
+          238,
+          118
+        ]
+      },
+      {
+        "slug": "tract-spinal-trigeminal",
+        "label": "Spinal trigeminal tract",
+        "labelPos": [
+          238,
+          172
+        ]
+      },
+      {
+        "slug": "tract-fasciculus-cuneatus",
+        "label": "Fasciculus cuneatus",
+        "labelPos": [
+          562,
+          184
+        ]
+      },
+      {
+        "slug": "tract-internal-arcuate",
+        "label": "Internal arcuate fibers",
+        "labelPos": [
+          238,
+          226
+        ]
+      },
+      {
+        "slug": "nuc-nucleus-gracilis",
+        "label": "Nucleus gracilis",
+        "labelPos": [
+          562,
+          250
+        ]
+      },
+      {
+        "slug": "nuc-spinal-trigeminal",
+        "label": "Spinal trigeminal nucleus",
+        "labelPos": [
+          238,
+          281
+        ]
+      },
+      {
+        "slug": "nuc-nucleus-cuneatus",
+        "label": "Nucleus cuneatus",
+        "labelPos": [
+          562,
+          317
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "Medial longitudinal fasciculus (MLF)",
+        "labelPos": [
+          238,
+          335
+        ]
+      },
+      {
+        "slug": "tract-posterior-spinocerebellar",
+        "label": "Posterior spinocerebellar tract",
+        "labelPos": [
+          562,
+          383
+        ]
+      },
+      {
+        "slug": "surf-cn11-exit",
+        "label": "CN XI rootlets",
+        "labelPos": [
+          238,
+          389
+        ]
+      },
+      {
+        "slug": "nuc-ambiguus",
+        "label": "Nucleus ambiguus",
+        "labelPos": [
+          238,
+          443
+        ]
+      },
+      {
+        "slug": "nuc-hypoglossal",
+        "label": "Hypoglossal nucleus",
+        "labelPos": [
+          562,
+          449
+        ]
+      },
+      {
+        "slug": "nuc-medullary-reticular",
+        "label": "Medullary reticular formation",
+        "labelPos": [
+          238,
+          497
+        ]
+      },
+      {
+        "slug": "nuc-dmv",
+        "label": "Dorsal motor nucleus X",
+        "labelPos": [
+          562,
+          515
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal tract (lateral)",
+        "labelPos": [
+          238,
+          551
+        ]
+      },
+      {
+        "slug": "tract-anterior-spinocerebellar",
+        "label": "Anterior spinocerebellar tract",
+        "labelPos": [
+          562,
+          582
+        ]
+      },
+      {
+        "slug": "tract-medial-lemniscus",
+        "label": "Medial lemniscus",
+        "labelPos": [
+          238,
+          606
+        ]
+      },
+      {
+        "slug": "tract-spinothalamic",
+        "label": "Spinothalamic tract",
+        "labelPos": [
+          562,
+          648
+        ]
+      },
+      {
+        "slug": "tract-reticulospinal",
+        "label": "Reticulospinal tract",
+        "labelPos": [
+          238,
+          660
+        ]
+      },
+      {
+        "slug": "nuc-arcuate-medullary",
+        "label": "Arcuate nucleus",
+        "labelPos": [
+          562,
+          714
+        ]
+      },
+      {
+        "slug": "tract-pyramid",
+        "label": "Pyramid",
+        "labelPos": [
+          238,
+          714
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-pyramid-decuss",
+    "title": "Medulla - pyramidal decussation",
+    "orientation": "transverse",
+    "region": "medulla",
+    "levelId": "lvl-pyramid-decuss",
+    "svg": "plates/plate-pyramid-decuss.svg",
+    "regions": [
+      {
+        "slug": "tract-fasciculus-gracilis",
+        "label": "Fasciculus gracilis",
+        "labelPos": [
+          560,
+          118
+        ]
+      },
+      {
+        "slug": "tract-spinal-trigeminal",
+        "label": "Spinal trigeminal tract",
+        "labelPos": [
+          240,
+          118
+        ]
+      },
+      {
+        "slug": "tract-fasciculus-cuneatus",
+        "label": "Fasciculus cuneatus",
+        "labelPos": [
+          560,
+          184
+        ]
+      },
+      {
+        "slug": "nuc-spinal-trigeminal",
+        "label": "Spinal trigeminal nucleus",
+        "labelPos": [
+          240,
+          193
+        ]
+      },
+      {
+        "slug": "nuc-nucleus-gracilis",
+        "label": "Nucleus gracilis",
+        "labelPos": [
+          560,
+          250
+        ]
+      },
+      {
+        "slug": "tract-internal-arcuate",
+        "label": "Internal arcuate fibers",
+        "labelPos": [
+          240,
+          267
+        ]
+      },
+      {
+        "slug": "nuc-nucleus-cuneatus",
+        "label": "Nucleus cuneatus",
+        "labelPos": [
+          560,
+          317
+        ]
+      },
+      {
+        "slug": "nuc-ambiguus",
+        "label": "Nucleus ambiguus",
+        "labelPos": [
+          240,
+          342
+        ]
+      },
+      {
+        "slug": "tract-posterior-spinocerebellar",
+        "label": "Posterior spinocerebellar tract",
+        "labelPos": [
+          560,
+          383
+        ]
+      },
+      {
+        "slug": "nuc-medullary-reticular",
+        "label": "Medullary reticular formation",
+        "labelPos": [
+          240,
+          416
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "Medial longitudinal fasciculus (MLF)",
+        "labelPos": [
+          560,
+          449
+        ]
+      },
+      {
+        "slug": "tract-reticulospinal",
+        "label": "Reticulospinal tract",
+        "labelPos": [
+          240,
+          491
+        ]
+      },
+      {
+        "slug": "surf-cn11-exit",
+        "label": "CN XI rootlets",
+        "labelPos": [
+          560,
+          515
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal tract (lateral)",
+        "labelPos": [
+          240,
+          565
+        ]
+      },
+      {
+        "slug": "tract-anterior-spinocerebellar",
+        "label": "Anterior spinocerebellar tract",
+        "labelPos": [
+          560,
+          582
+        ]
+      },
+      {
+        "slug": "tract-pyramidal-decussation",
+        "label": "Pyramidal decussation",
+        "labelPos": [
+          240,
+          640
+        ]
+      },
+      {
+        "slug": "tract-spinothalamic",
+        "label": "Spinothalamic tract",
+        "labelPos": [
+          560,
+          648
+        ]
+      },
+      {
+        "slug": "nuc-arcuate-medullary",
+        "label": "Arcuate nucleus",
+        "labelPos": [
+          560,
+          714
+        ]
+      },
+      {
+        "slug": "tract-pyramid",
+        "label": "Pyramid",
+        "labelPos": [
+          240,
+          714
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-sagittal-midline",
+    "title": "Midline sagittal - brainstem profile",
+    "orientation": "sagittal",
+    "region": "diencephalon",
+    "svg": "plates/plate-sagittal-midline.svg",
+    "regions": [
+      {
+        "slug": "ctx-corpus-callosum",
+        "label": "Corpus callosum",
+        "labelPos": [
+          140,
+          128
+        ]
+      },
+      {
+        "slug": "ctx-thalamus-envelope",
+        "label": "Thalamus (mass)",
+        "labelPos": [
+          314,
+          252
+        ]
+      },
+      {
+        "slug": "tract-stria-medullaris",
+        "label": "Stria medullaris",
+        "labelPos": [
+          420,
+          224
+        ]
+      },
+      {
+        "slug": "nuc-habenula",
+        "label": "Habenula",
+        "labelPos": [
+          560,
+          266
+        ]
+      },
+      {
+        "slug": "nuc-pineal-gland",
+        "label": "Pineal gland",
+        "labelPos": [
+          592,
+          310
+        ]
+      },
+      {
+        "slug": "tract-posterior-commissure",
+        "label": "Posterior commissure",
+        "labelPos": [
+          602,
+          362
+        ]
+      },
+      {
+        "slug": "vent-third-ventricle",
+        "label": "Third ventricle",
+        "labelPos": [
+          298,
+          372
+        ]
+      },
+      {
+        "slug": "ctx-hypothalamus-envelope",
+        "label": "Hypothalamus",
+        "labelPos": [
+          298,
+          458
+        ]
+      },
+      {
+        "slug": "surf-optic-chiasm",
+        "label": "Optic chiasm",
+        "labelPos": [
+          253,
+          552
+        ]
+      },
+      {
+        "slug": "surf-infundibulum",
+        "label": "Infundibulum",
+        "labelPos": [
+          283,
+          620
+        ]
+      },
+      {
+        "slug": "nuc-mammillary-body",
+        "label": "Mammillary body",
+        "labelPos": [
+          440,
+          645
+        ]
+      },
+      {
+        "slug": "nuc-pretectal",
+        "label": "Pretectal area (dashed)",
+        "labelPos": [
+          587,
+          420
+        ]
+      },
+      {
+        "slug": "nuc-superior-colliculus",
+        "label": "Superior colliculus",
+        "labelPos": [
+          587,
+          450
+        ]
+      },
+      {
+        "slug": "nuc-dorsal-raphe",
+        "label": "Dorsal raphe (dashed)",
+        "labelPos": [
+          587,
+          500
+        ]
+      },
+      {
+        "slug": "nuc-inferior-colliculus",
+        "label": "Inferior colliculus",
+        "labelPos": [
+          587,
+          545
+        ]
+      },
+      {
+        "slug": "nuc-pag",
+        "label": "Periaqueductal gray",
+        "labelPos": [
+          587,
+          590
+        ]
+      },
+      {
+        "slug": "vent-cerebral-aqueduct",
+        "label": "Cerebral aqueduct",
+        "labelPos": [
+          587,
+          635
+        ]
+      },
+      {
+        "slug": "vent-fourth-ventricle",
+        "label": "Fourth ventricle",
+        "labelPos": [
+          602,
+          728
+        ]
+      },
+      {
+        "slug": "nuc-fastigial",
+        "label": "Fastigial nucleus (dashed)",
+        "labelPos": [
+          587,
+          684
+        ]
+      },
+      {
+        "slug": "surf-obex",
+        "label": "Obex",
+        "labelPos": [
+          602,
+          768
+        ]
+      },
+      {
+        "slug": "ctx-cerebellum",
+        "label": "Cerebellum",
+        "labelPos": [
+          700,
+          615
+        ]
+      },
+      {
+        "slug": "surf-vermis",
+        "label": "Vermis",
+        "labelPos": [
+          667,
+          668
+        ]
+      },
+      {
+        "slug": "ctx-pontine-nuclei",
+        "label": "Basis pontis",
+        "labelPos": [
+          270,
+          700
+        ]
+      },
+      {
+        "slug": "ctx-pontine-fibers",
+        "label": "Pontine fibers",
+        "labelPos": [
+          238,
+          644
+        ]
+      },
+      {
+        "slug": "tract-pyramid",
+        "label": "Pyramid (medulla)",
+        "labelPos": [
+          270,
+          760
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "MLF (dashed)",
+        "labelPos": [
+          298,
+          585
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-coronal-midbrain",
+    "title": "Coronal - cerebral peduncles",
+    "orientation": "coronal",
+    "region": "midbrain",
+    "svg": "plates/plate-coronal-midbrain.svg",
+    "regions": [
+      {
+        "slug": "ctx-caudate-nucleus",
+        "label": "Caudate nucleus",
+        "labelPos": [
+          175,
+          118
+        ]
+      },
+      {
+        "slug": "ctx-thalamus-envelope",
+        "label": "Thalamus (cut edge)",
+        "labelPos": [
+          175,
+          166
+        ]
+      },
+      {
+        "slug": "ctx-internal-capsule",
+        "label": "Internal capsule",
+        "labelPos": [
+          175,
+          214
+        ]
+      },
+      {
+        "slug": "ctx-lenticular-nucleus",
+        "label": "Lentiform nucleus",
+        "labelPos": [
+          175,
+          262
+        ]
+      },
+      {
+        "slug": "nuc-zona-incerta",
+        "label": "Zona incerta",
+        "labelPos": [
+          175,
+          310
+        ]
+      },
+      {
+        "slug": "ctx-fields-of-forel",
+        "label": "Fields of Forel (H1/H2)",
+        "labelPos": [
+          175,
+          410
+        ]
+      },
+      {
+        "slug": "nuc-subthalamic",
+        "label": "Subthalamic nucleus",
+        "labelPos": [
+          175,
+          358
+        ]
+      },
+      {
+        "slug": "tract-scp",
+        "label": "SCP (dashed)",
+        "labelPos": [
+          175,
+          454
+        ]
+      },
+      {
+        "slug": "nuc-red-nucleus",
+        "label": "Red nucleus",
+        "labelPos": [
+          175,
+          502
+        ]
+      },
+      {
+        "slug": "tract-spinothalamic",
+        "label": "Spinothalamic tract",
+        "labelPos": [
+          175,
+          550
+        ]
+      },
+      {
+        "slug": "nuc-snc",
+        "label": "Substantia nigra (compacta)",
+        "labelPos": [
+          175,
+          598
+        ]
+      },
+      {
+        "slug": "nuc-snr",
+        "label": "Substantia nigra (reticulata)",
+        "labelPos": [
+          175,
+          646
+        ]
+      },
+      {
+        "slug": "tract-medial-lemniscus",
+        "label": "Medial lemniscus",
+        "labelPos": [
+          175,
+          694
+        ]
+      },
+      {
+        "slug": "vent-third-ventricle",
+        "label": "Third ventricle",
+        "labelPos": [
+          625,
+          118
+        ]
+      },
+      {
+        "slug": "tract-mlf",
+        "label": "MLF",
+        "labelPos": [
+          625,
+          166
+        ]
+      },
+      {
+        "slug": "tract-central-tegmental",
+        "label": "Central tegmental tract",
+        "labelPos": [
+          625,
+          214
+        ]
+      },
+      {
+        "slug": "tract-corticobulbar",
+        "label": "Corticobulbar fibers",
+        "labelPos": [
+          625,
+          406
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal fibers",
+        "labelPos": [
+          625,
+          454
+        ]
+      },
+      {
+        "slug": "tract-corticopontine",
+        "label": "Corticopontine fibers",
+        "labelPos": [
+          625,
+          502
+        ]
+      },
+      {
+        "slug": "surf-interpeduncular-fossa",
+        "label": "Interpeduncular fossa",
+        "labelPos": [
+          625,
+          262
+        ]
+      },
+      {
+        "slug": "surf-cn3-exit",
+        "label": "CN III rootlets",
+        "labelPos": [
+          625,
+          358
+        ]
+      },
+      {
+        "slug": "tract-crus-cerebri",
+        "label": "Crus cerebri",
+        "labelPos": [
+          625,
+          310
+        ]
+      },
+      {
+        "slug": "nuc-pontine-reticular",
+        "label": "Pontine reticular formation",
+        "labelPos": [
+          625,
+          550
+        ]
+      },
+      {
+        "slug": "ctx-pontine-nuclei",
+        "label": "Pontine nuclei",
+        "labelPos": [
+          625,
+          598
+        ]
+      },
+      {
+        "slug": "ctx-pontine-fibers",
+        "label": "Pontine fibers",
+        "labelPos": [
+          625,
+          646
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-coronal-thalamus",
+    "title": "Coronal - pulvinar and pineal",
+    "orientation": "coronal",
+    "region": "diencephalon",
+    "svg": "plates/plate-coronal-thalamus.svg",
+    "regions": [
+      {
+        "slug": "ctx-caudate-nucleus",
+        "label": "Caudate nucleus",
+        "labelPos": [
+          175,
+          158
+        ]
+      },
+      {
+        "slug": "nuc-thalamic-anterior",
+        "label": "Anterior nucleus",
+        "labelPos": [
+          175,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-lateral-dorsal",
+        "label": "Lateral dorsal nucleus",
+        "labelPos": [
+          175,
+          197
+        ]
+      },
+      {
+        "slug": "ctx-lenticular-nucleus",
+        "label": "Lentiform nucleus",
+        "labelPos": [
+          175,
+          237
+        ]
+      },
+      {
+        "slug": "nuc-lateral-posterior",
+        "label": "Lateral posterior nucleus",
+        "labelPos": [
+          175,
+          277
+        ]
+      },
+      {
+        "slug": "ctx-internal-capsule",
+        "label": "Internal capsule",
+        "labelPos": [
+          175,
+          316
+        ]
+      },
+      {
+        "slug": "nuc-thalamic-reticular",
+        "label": "Thalamic reticular nucleus",
+        "labelPos": [
+          175,
+          356
+        ]
+      },
+      {
+        "slug": "nuc-pulvinar",
+        "label": "Pulvinar",
+        "labelPos": [
+          175,
+          396
+        ]
+      },
+      {
+        "slug": "nuc-vl",
+        "label": "VL nucleus",
+        "labelPos": [
+          175,
+          435
+        ]
+      },
+      {
+        "slug": "nuc-mgn",
+        "label": "MGN",
+        "labelPos": [
+          175,
+          475
+        ]
+      },
+      {
+        "slug": "nuc-vpl",
+        "label": "VPL nucleus",
+        "labelPos": [
+          175,
+          515
+        ]
+      },
+      {
+        "slug": "nuc-zona-incerta",
+        "label": "Zona incerta",
+        "labelPos": [
+          175,
+          554
+        ]
+      },
+      {
+        "slug": "nuc-subthalamic",
+        "label": "Subthalamic nucleus",
+        "labelPos": [
+          175,
+          594
+        ]
+      },
+      {
+        "slug": "tract-corticopontine",
+        "label": "Corticopontine fibers",
+        "labelPos": [
+          175,
+          634
+        ]
+      },
+      {
+        "slug": "tract-corticospinal-lateral",
+        "label": "Corticospinal fibers",
+        "labelPos": [
+          175,
+          673
+        ]
+      },
+      {
+        "slug": "tract-corticobulbar",
+        "label": "Corticobulbar fibers",
+        "labelPos": [
+          175,
+          713
+        ]
+      },
+      {
+        "slug": "nuc-pineal-gland",
+        "label": "Pineal gland",
+        "labelPos": [
+          625,
+          118
+        ]
+      },
+      {
+        "slug": "nuc-habenula",
+        "label": "Habenula",
+        "labelPos": [
+          625,
+          159
+        ]
+      },
+      {
+        "slug": "tract-posterior-commissure",
+        "label": "Posterior commissure",
+        "labelPos": [
+          625,
+          200
+        ]
+      },
+      {
+        "slug": "nuc-md",
+        "label": "Mediodorsal nucleus (MD)",
+        "labelPos": [
+          625,
+          241
+        ]
+      },
+      {
+        "slug": "nuc-midline-thalamic",
+        "label": "Midline thalamic nuclei",
+        "labelPos": [
+          625,
+          282
+        ]
+      },
+      {
+        "slug": "vent-third-ventricle",
+        "label": "Third ventricle",
+        "labelPos": [
+          625,
+          323
+        ]
+      },
+      {
+        "slug": "nuc-intralaminar",
+        "label": "CM-PF (intralaminar)",
+        "labelPos": [
+          625,
+          364
+        ]
+      },
+      {
+        "slug": "ctx-thalamus-envelope",
+        "label": "Thalamus (mass outline)",
+        "labelPos": [
+          625,
+          405
+        ]
+      },
+      {
+        "slug": "ctx-internal-medullary-lamina",
+        "label": "Internal medullary lamina",
+        "labelPos": [
+          625,
+          446
+        ]
+      },
+      {
+        "slug": "nuc-lgn",
+        "label": "LGN",
+        "labelPos": [
+          625,
+          487
+        ]
+      },
+      {
+        "slug": "nuc-va",
+        "label": "VA nucleus",
+        "labelPos": [
+          625,
+          528
+        ]
+      },
+      {
+        "slug": "nuc-vpm",
+        "label": "VPM nucleus",
+        "labelPos": [
+          625,
+          569
+        ]
+      },
+      {
+        "slug": "ctx-fields-of-forel",
+        "label": "Fields of Forel (H1/H2)",
+        "labelPos": [
+          625,
+          610
+        ]
+      },
+      {
+        "slug": "tract-crus-cerebri",
+        "label": "Crus cerebri",
+        "labelPos": [
+          625,
+          651
+        ]
+      },
+      {
+        "slug": "nuc-mammillary-body",
+        "label": "Mammillary body",
+        "labelPos": [
+          625,
+          692
+        ]
+      }
+    ]
+  }
+]

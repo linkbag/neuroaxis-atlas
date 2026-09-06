@@ -1,0 +1,869 @@
+[
+  {
+    "id": "tract-pyramid",
+    "name": "Pyramid",
+    "synonyms": ["medullary pyramid"],
+    "region": "medulla",
+    "subdivision": "Pyramids & decussations",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#8b5cf6",
+    "function": "Ventral surface bundle of the medulla formed by corticospinal fibers descending from the basis pontis, flanking the anterior median fissure; at the cervicomedullary junction roughly 85-90 percent of its axons cross in the pyramidal decussation to become the lateral corticospinal tract, the remainder continuing as the anterior corticospinal tract.",
+    "connections": {
+      "afferent": ["Corticospinal fibers of the basis pontis (tract-corticospinal-lateral)"],
+      "efferent": ["Pyramidal decussation (tract-pyramidal-decussation) to the contralateral lateral corticospinal tract"]
+    },
+    "bloodSupply": "Anterior spinal artery (paramedian medullary branches)",
+    "clinical": [
+      {
+        "syndrome": "Contralateral hemiparesis",
+        "findings": "Unilateral pyramidal infarction (medial medullary syndrome) weakens the opposite body below the face; because decussation lies caudal to the medulla, deficits are contralateral and the face is typically spared.",
+        "vascular": "Anterior spinal artery"
+      }
+    ],
+    "levels": ["lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "origin3d": [3, -37, 8],
+    "size3d": [2.2, 9, 1.8],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+    ]
+  },
+  {
+    "id": "tract-pyramidal-decussation",
+    "name": "Pyramidal decussation",
+    "synonyms": ["motor decussation", "decussation of the pyramids"],
+    "region": "medulla",
+    "subdivision": "Pyramids & decussations",
+    "kind": "tract",
+    "laterality": "midline",
+    "color": "#8b5cf6",
+    "function": "The great motor crossover at the cervicomedullary junction: the majority of corticospinal axons sweep posteromedially across the midline, interrupting the anterior median fissure, so that each cerebral hemisphere commands the opposite half of the body. The crossing fibers remodel the internal architecture of the closed medulla, displacing the gray matter laterally.",
+    "connections": {
+      "afferent": ["Pyramids (tract-pyramid)"],
+      "efferent": ["Contralateral lateral corticospinal tract of the spinal cord (tract-corticospinal-lateral)"]
+    },
+    "bloodSupply": "Anterior spinal artery and vertebral branches",
+    "clinical": [
+      {
+        "syndrome": "Foramen magnum / cervicomedullary signs",
+        "findings": "Lesions at the decussation (Chiari malformation, foramen magnum tumors) produce a characteristic cruciate paralysis: arm-predominant weakness from damage to the crossing fibers of the hand area, which decussate most caudally.",
+        "note": "Leg fibers cross more rostrally, sparing the lower limbs in partial lesions."
+      }
+    ],
+    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss"],
+    "origin3d": [0, -46, 6],
+    "size3d": [3.5, 2.5, 3],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
+  },
+  {
+    "id": "tract-internal-arcuate",
+    "name": "Internal arcuate fibers",
+    "synonyms": ["sensory decussation", "internal arcuate decussation"],
+    "region": "medulla",
+    "subdivision": "Pyramids & decussations",
+    "kind": "tract",
+    "laterality": "midline",
+    "color": "#3b82f6",
+    "function": "The sensory decussation: second-order axons of the gracile and cuneate nuclei sweep ventromedially around the central gray, cross the midline as a broad sheet ventral to the central canal, and pivot rostrally to form the contralateral medial lemniscus — the handoff at which each medial lemniscus comes to represent the opposite half of the body.",
+    "connections": {
+      "afferent": ["Nucleus gracilis (nuc-nucleus-gracilis)", "Nucleus cuneatus (nuc-nucleus-cuneatus)"],
+      "efferent": ["Contralateral medial lemniscus (tract-medial-lemniscus) ascending to VPL"]
+    },
+    "bloodSupply": "Anterior spinal artery and vertebral perforators",
+    "levels": ["lvl-pyramid-decuss", "lvl-sensory-decuss"],
+    "origin3d": [0, -43, -2],
+    "size3d": [3.5, 3, 3],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+    ]
+  },
+  {
+    "id": "tract-fasciculus-gracilis",
+    "name": "Fasciculus gracilis",
+    "synonyms": ["column of Goll", "gracile fasciculus"],
+    "region": "medulla",
+    "subdivision": "Dorsal column nuclei",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#3b82f6",
+    "function": "Medial dorsal-column bundle conveying, uncrossed and somatotopically ordered, large-fiber touch, vibration, two-point discrimination and conscious proprioception from the lower limb and lower trunk (below about T6) up to the nucleus gracilis; medial in the dorsal funiculus at every cord and lower-medullary level.",
+    "connections": {
+      "afferent": ["Dorsal root (large-fiber) afferents of the lower trunk and lower limb ascending ipsilaterally"],
+      "efferent": ["Nucleus gracilis (nuc-nucleus-gracilis)"]
+    },
+    "bloodSupply": "Posterior spinal artery (dorsal medullary branches)",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral loss of leg vibration-proprioception",
+        "findings": "Transection abolishes ipsilateral vibration, joint-position sense and discriminative touch of the lower limb; the gait becomes stamping (sensory ataxia), Romberg sign is positive, and tabes dorsalis or dorsal cord lesions are classic causes.",
+        "note": "Deficits are ipsilateral below the lesion because the pathway does not cross until the internal arcuate fibers."
+      }
+    ],
+    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss"],
+    "origin3d": [1.2, -46, -6],
+    "size3d": [1.4, 6, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\""
+    ]
+  },
+  {
+    "id": "nuc-nucleus-gracilis",
+    "name": "Nucleus gracilis",
+    "synonyms": ["gracile nucleus", "gracile tubercle (surface)"],
+    "region": "medulla",
+    "subdivision": "Dorsal column nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "First synapse of the dorsal column-medial lemniscus pathway for the lower body: primary afferents of the fasciculus gracilis terminate in tonotopically leg-arranged columns, and the second-order neurons emit the internal arcuate fibers that decussate to form the contralateral medial lemniscus. Its dorsal bulge is the gracile tubercle of the closed medulla.",
+    "connections": {
+      "afferent": ["Fasciculus gracilis (tract-fasciculus-gracilis)"],
+      "efferent": ["Internal arcuate fibers (tract-internal-arcuate) to the contralateral medial lemniscus"]
+    },
+    "bloodSupply": "Posterior spinal artery; PICA medial branches",
+    "clinical": [
+      {
+        "syndrome": "Loss of discriminative sensation, leg (DCML)",
+        "findings": "Nuclear or fascicular involvement in medial/dorsal medullary lesions degrades two-point discrimination, vibration and position sense of the contralateral leg after decussation of the second-order axons.",
+        "vascular": "PICA / posterior spinal arteries"
+      }
+    ],
+    "levels": ["lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary"],
+    "origin3d": [1.5, -44, -5],
+    "size3d": [1.5, 3, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
+  },
+  {
+    "id": "tract-fasciculus-cuneatus",
+    "name": "Fasciculus cuneatus",
+    "synonyms": ["column of Burdach", "cuneate fasciculus"],
+    "region": "medulla",
+    "subdivision": "Dorsal column nuclei",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#3b82f6",
+    "function": "Lateral dorsal-column bundle conveying uncrossed large-fiber touch, vibration and proprioception from the upper trunk, upper limb and neck (above about T6) to the nucleus cuneatus; present only above midthoracic levels, lying lateral to the fasciculus gracilis throughout the upper cord and closed medulla.",
+    "connections": {
+      "afferent": ["Upper trunk, upper limb and neck dorsal-root large-fiber afferents"],
+      "efferent": ["Nucleus cuneatus (nuc-nucleus-cuneatus)"]
+    },
+    "bloodSupply": "Posterior spinal artery (dorsal medullary branches)",
+    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss"],
+    "origin3d": [3.5, -45, -6],
+    "size3d": [1.6, 5.5, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\""
+    ]
+  },
+  {
+    "id": "nuc-nucleus-cuneatus",
+    "name": "Nucleus cuneatus",
+    "synonyms": ["cuneate nucleus", "cuneate tubercle (surface)"],
+    "region": "medulla",
+    "subdivision": "Dorsal column nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "First synapse of the dorsal column-medial lemniscus pathway for the upper body: hand-arm-shoulder-ordered relay of the fasciculus cuneatus whose axons join the internal arcuate decussation; in addition, its rostral accessory (external cuneate) portion relays unconscious upper-limb proprioception to the cerebellum through the inferior cerebellar peduncle. Its dorsal bulge is the cuneate tubercle.",
+    "connections": {
+      "afferent": ["Fasciculus cuneatus (tract-fasciculus-cuneatus)"],
+      "efferent": ["Internal arcuate fibers (tract-internal-arcuate)", "Cuneocerebellar fibers via the inferior cerebellar peduncle (tract-icp)"]
+    },
+    "bloodSupply": "Posterior spinal artery; PICA medial branches",
+    "levels": ["lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary"],
+    "origin3d": [3.5, -43, -5],
+    "size3d": [1.7, 3, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\""
+    ]
+  },
+  {
+    "id": "nuc-inferior-olive-principal",
+    "name": "Principal inferior olivary nucleus",
+    "synonyms": ["principal olivary nucleus", "inferior olive (principal)"],
+    "region": "medulla",
+    "subdivision": "Olivary complex",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The elegantly folded gray lamella that bulges as the olive on the ventrolateral medulla: source of all olivocerebellar climbing fibers, which cross the midline, ascend in the inferior cerebellar peduncle and wrap Purkinje cell dendrites with powerful complex spikes — the teaching (error and timing) signal that drives cerebellar motor learning. Actively regulated by the dentato-rubro-olivary loop via the central tegmental tract.",
+    "connections": {
+      "afferent": ["Red nucleus via the central tegmental tract (tract-central-tegmental, rubro-olivary fibers)", "Nucleo-olivary fibers from the dentate and interposed nuclei", "Spino-olivary and trigeminal afferents"],
+      "efferent": ["Olivocerebellar climbing fibers crossing through the inferior cerebellar peduncle (tract-icp) to the contralateral cerebellar cortex"]
+    },
+    "bloodSupply": "Direct branches of the vertebral artery; ASA and PICA borderzone",
+    "clinical": [
+      {
+        "syndrome": "Hypertrophic olivary degeneration",
+        "findings": "Transsynaptic degeneration of the olive after a lesion of the Guillain-Mollaret triangle (dentate nucleus, superior cerebellar peduncle, or central tegmental tract), producing palatal (palatopharyngeal) myoclonus/tremor months after the index lesion.",
+        "note": "MRI shows T2 hyperintensity with enlargement of the olive (hypertrophic degeneration, not atrophy)."
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [5, -34, 3],
+    "size3d": [2, 4.5, 2],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\""
+    ]
+  },
+  {
+    "id": "nuc-inferior-olive-medial",
+    "name": "Medial accessory olivary nucleus",
+    "synonyms": ["medial accessory olive", "accessory olivary nucleus"],
+    "region": "medulla",
+    "subdivision": "Olivary complex",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Paramedian subdivision of the olivary complex projecting climbing fibers selectively to the vermis and vestibulocerebellum; a key node of the Guillain-Mollaret triangle, receiving rubro-olivary fibers of the central tegmental tract and giving the medial, most heavily myelinated olivocerebellar stream.",
+    "connections": {
+      "afferent": ["Central tegmental tract (tract-central-tegmental)", "Fastigial and interposed nucleo-olivary fibers"],
+      "efferent": ["Climbing fibers to the vermis and vestibulocerebellum via tract-icp"]
+    },
+    "bloodSupply": "Vertebral artery branches; ASA borderzone",
+    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [2.5, -34, 1],
+    "size3d": [1.2, 4, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+    ]
+  },
+  {
+    "id": "tract-medial-lemniscus",
+    "name": "Medial lemniscus",
+    "synonyms": ["ML", "lemniscus medialis"],
+    "region": "medulla",
+    "subdivision": "Tegmentum",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#3b82f6",
+    "function": "The great ascending band of conscious mechanosensation: formed at the sensory decussation by crossed internal arcuate fibers and ascending alongside the midline to the ventral posterolateral thalamus. In the medulla its fibers are stacked with the leg lateral and the arm medial; the bundle gradually swings laterally and ventrally as it climbs through pons toward its midbrain position.",
+    "connections": {
+      "afferent": ["Internal arcuate fibers (tract-internal-arcuate) from the gracile and cuneate nuclei"],
+      "efferent": ["Ventral posterolateral nucleus (nuc-vpl), thence S1 (tract-dcml composite pathway)"]
+    },
+    "bloodSupply": "Anterior spinal artery in the medulla; paramedian basilar perforators in the pons",
+    "clinical": [
+      {
+        "syndrome": "Contralateral loss of vibration-proprioception",
+        "findings": "Paramedian medullary infarcts (medial medullary syndrome) abolish contralateral vibration, joint-position sense and discriminative touch of the body, with sensory ataxia and positive Romberg; the face is spared because trigeminal modalities travel separately.",
+        "vascular": "Anterior spinal artery"
+      }
+    ],
+    "levels": ["lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [2, -37, 3],
+    "size3d": [1.2, 9, 1],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+    ]
+  },
+  {
+    "id": "tract-spinal-trigeminal",
+    "name": "Spinal trigeminal tract",
+    "synonyms": ["spinal tract of CN V"],
+    "region": "medulla",
+    "subdivision": "Cranial nerve nuclei",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#3b82f6",
+    "function": "Dorsolaterally descending bundle of CN V pain-temperature afferents (with contributions from CN VII, IX and X for the ear, pharynx and posterior tongue) running from the principal sensory nucleus to the upper cervical cord alongside the spinal trigeminal nucleus; fibers are somatotopically laminated so that V1 sits most ventral/rostral and V3 most dorsal/caudal — the substrate of the onion-skin pattern.",
+    "connections": {
+      "afferent": ["Pain-temperature primary afferents of CN V, VII, IX, X from the trigeminal, geniculate and superior-petrosal/inferior ganglia"],
+      "efferent": ["Spinal trigeminal nucleus (nuc-spinal-trigeminal)"]
+    },
+    "bloodSupply": "PICA and vertebral lateral medullary branches",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral facial pain-temperature loss",
+        "findings": "Lateral medullary (Wallenberg) infarcts abolish pain and temperature over the ipsilateral face with a characteristic onion-skin gradient, dissociated from facial touch (principal sensory nucleus, rostral pons) and from contralateral body pain loss (spinothalamic tract).",
+        "vascular": "PICA / vertebral"
+      }
+    ],
+    "levels": ["lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "origin3d": [6.5, -36, -2],
+    "size3d": [1.5, 16, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+    ]
+  },
+  {
+    "id": "nuc-spinal-trigeminal",
+    "name": "Spinal trigeminal nucleus",
+    "synonyms": ["spinal nucleus of CN V"],
+    "region": "medulla",
+    "subdivision": "Cranial nerve nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "function": "Long column of second-order facial pain-temperature neurons (subnuclei oralis, interpolaris and caudalis) extending from the caudal pons through the medulla into the upper cervical cord; subnucleus caudalis is the lamina-like pain relay (comparable to the spinal dorsal horn), while rostral parts gate corneal-blink and other trigeminal reflex arcs. Output rises through the ventral trigeminothalamic tract to contralateral VPM.",
+    "connections": {
+      "afferent": ["Spinal trigeminal tract (tract-spinal-trigeminal) afferents of CN V, VII, IX, X"],
+      "efferent": ["Ventral trigeminothalamic tract (tract-trigeminothalamic-ventral)", "Reflex interneurons to the facial motor nucleus (blink) and ambiguus (gag)"]
+    },
+    "bloodSupply": "PICA / vertebral lateral branches; AICA rostrally",
+    "clinical": [
+      {
+        "syndrome": "Afferent limb loss of the corneal reflex",
+        "findings": "Involvement of the nucleus/tract blunts ipsilateral facial nociception and the blink response to corneal stimulation; combined with ambiguus lesions it also removes the gag afferent-efferent arc components.",
+        "vascular": "PICA / AICA"
+      }
+    ],
+    "levels": ["lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "origin3d": [5.5, -36, -3.5],
+    "size3d": [1.6, 15, 1.8],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Snell, Clinical Neuroanatomy, trigeminal system sections"
+    ]
+  },
+  {
+    "id": "nuc-solitarius-caudal",
+    "name": "Nucleus solitarius (cardiorespiratory part)",
+    "synonyms": ["NTS", "solitary nucleus", "solitary tract nucleus"],
+    "region": "medulla",
+    "subdivision": "Cranial nerve nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "function": "The visceral afferent hub of the dorsomedial medulla: first synapse for CN IX and CN X general visceral afferents — carotid-body chemoreceptors and carotid-sinus baroreceptors, aortic arch receptors, pulmonary stretch fibers, laryngeal-pharyngeal sensation and gastrointestinal afferents. Its neurons compute the reflexes controlling blood pressure, respiration, swallowing and GI motility, and project to the dorsal motor vagal nucleus, nucleus ambiguus and the ventrolateral medullary vasomotor/respiratory columns.",
+    "connections": {
+      "afferent": ["CN IX carotid body/sinus and pharyngeal afferents", "CN X aortic, pulmonary, laryngeal and gastrointestinal afferents"],
+      "efferent": ["Dorsal motor nucleus of the vagus (nuc-dmv)", "Nucleus ambiguus (nuc-ambiguus) for swallow/gag motor arc", "Ventrolateral medulla (respiratory and vasomotor columns)", "Hypothalamus and parabrachial nuclei (visceral-limbic relay)"]
+    },
+    "bloodSupply": "PICA (dorsolateral medullary branches); vertebral artery",
+    "clinical": [
+      {
+        "syndrome": "Baroreflex failure and labile hypertension",
+        "findings": "Bilateral NTS or its afferent-nerve damage abolishes baroreceptor buffering, yielding volatile hypertension-tachycardia crises alternating with hypotension; unilateral lateral medullary infarcts acutely raise blood pressure and impair chemoreceptor (hypoxic) drive.",
+        "vascular": "PICA / vertebral"
+      },
+      {
+        "syndrome": "Dysphagia and impaired airway protection",
+        "findings": "Loss of pharyngolaryngeal afferent processing contributes to post-stroke dysphagia and aspiration in lateral medullary strokes, together with ambiguus efferent failure.",
+        "vascular": "PICA"
+      }
+    ],
+    "levels": ["lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [1.5, -32, -6],
+    "size3d": [1.3, 6, 1.3],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Fix, High-Yield Neuroanatomy, autonomic nervous system section"
+    ]
+  },
+  {
+    "id": "nuc-dmv",
+    "name": "Dorsal motor nucleus of the vagus (CN X)",
+    "synonyms": ["DMV", "dorsal vagal motor nucleus"],
+    "region": "medulla",
+    "subdivision": "Cranial nerve nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "function": "Preganglionic parasympathetic column lying under the vagal trigone of the fourth-ventricle floor: its fibers ride the vagus to terminal ganglia of the heart (slowing rate), airways and the enteric wall, driving visceral smooth-muscle motility, secretion and vagal cardiovascular reflexes; baroreceptor information reaches it from the solitary nucleus.",
+    "connections": {
+      "afferent": ["Nucleus solitarius (nuc-solitarius-caudal) baroreceptor-visceral input", "Hypothalamic autonomic descending fibers"],
+      "efferent": ["Vagal preganglionic parasympathetic fibers to cardiac, pulmonary and enteric ganglia"]
+    },
+    "bloodSupply": "PICA and ASA-vertebral branches (dorsomedial medulla)",
+    "clinical": [
+      {
+        "syndrome": "Vagal dysregulation after lateral medullary stroke",
+        "findings": "Involvement contributes to dysphagia, gastric stasis, bradyarrhythmias and impaired vagal reflexes in Wallenberg infarcts; bilateral dorsal medullary damage threatens vagal control of viscera.",
+        "vascular": "PICA"
+      }
+    ],
+    "levels": ["lvl-sensory-decuss", "lvl-olivary"],
+    "origin3d": [2, -32, -7],
+    "size3d": [1.2, 5, 1.2],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+    ]
+  },
+  {
+    "id": "nuc-ambiguus",
+    "name": "Nucleus ambiguus",
+    "synonyms": ["CN IX/X branchiomotor nucleus"],
+    "region": "medulla",
+    "subdivision": "Cranial nerve nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "function": "Branchiomotor column deep in the reticular formation sending LMNs through CN IX, CN X and the cranial root of CN XI to the striated muscles of the soft palate, pharynx and larynx — palatal elevation, pharyngeal constriction, vocal-fold abduction for airway protection and phonation. Solitarius afferents complete the swallow and gag reflex arcs through it.",
+    "connections": {
+      "afferent": ["Nucleus solitarius (nuc-solitarius-caudal) swallow/gag afferents", "Corticobulbar fibers (bilateral)", "Respiratory pattern-generator input"],
+      "efferent": ["CN IX to stylopharyngeus", "CN X to palate-pharynx-larynx muscles", "Cranial XI rootlets to laryngeal adductors"]
+    },
+    "bloodSupply": "PICA (lateral medullary branches)",
+    "clinical": [
+      {
+        "syndrome": "Hoarseness, dysphagia and depressed gag (efferent)",
+        "findings": "Unilateral ambiguityus failure droops the ipsilateral palate, paralyzes the ipsilateral vocal fold and destroys effective swallowing — the clinical core of the lateral medullary (Wallenberg) syndrome; aspiration pneumonia is the principal risk.",
+        "vascular": "PICA"
+      }
+    ],
+    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary"],
+    "origin3d": [3.5, -31, -4],
+    "size3d": [1.3, 7, 1.3],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  },
+  {
+    "id": "nuc-hypoglossal",
+    "name": "Hypoglossal nucleus (CN XII)",
+    "synonyms": ["CN XII nucleus", "tongue motor nucleus"],
+    "region": "medulla",
+    "subdivision": "Cranial nerve nuclei",
+    "kind": "nucleus",
+    "laterality": "midline",
+    "color": "#14b8a6",
+    "function": "Paramedian column of LMNs under the hypoglossal trigone of the ventricular floor innervating all intrinsic and extrinsic tongue muscles except the palatoglossus; its bulge helps shape the floor of the fourth ventricle. Corticobulbar input to hypoglossal motoneurons (notably genioglossus) is predominantly contralateral.",
+    "connections": {
+      "afferent": ["Corticobulbar fibers (contralateral-dominant, genioglossus)", "Solitary and reticular viscerosensory inputs (taste-driven feeding reflexes)"],
+      "efferent": ["CN XII rootlets through the preolivary sulcus (surf-cn12-exit) to tongue musculature"]
+    },
+    "bloodSupply": "Anterior spinal artery (paramedian branches of the vertebral artery)",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral tongue LMN palsy",
+        "findings": "Nuclear or rootlet destruction wastes the ipsilateral tongue, which fasciculates and deviates TOWARD the lesion on protrusion (the intact contralateral genioglossus pushes the tip across) — a feature of medial medullary syndrome.",
+        "vascular": "Anterior spinal artery",
+        "note": "UMN lesions deviate the tongue away from the cerebral lesion (toward the weak side) without wasting or fasciculations."
+      }
+    ],
+    "levels": ["lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [0, -31, -4],
+    "size3d": [1.2, 6, 1.3],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Patten, Neurological Differential Diagnosis, 2nd ed., cranial nerve examination sections"
+    ]
+  },
+  {
+    "id": "nuc-area-postrema",
+    "name": "Area postrema",
+    "synonyms": ["chemoreceptor trigger zone"],
+    "region": "medulla",
+    "subdivision": "Ventricular system",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Paired circumventricular organ flanking the obex at the caudal floor of the fourth ventricle; because it lacks a blood-brain barrier, it samples blood-borne toxins, drugs and circulating cytokines and triggers the vomiting reflex through the adjacent solitary nucleus and medullary reticular-vagal emetic circuitry — the neural chemoreceptor trigger zone.",
+    "connections": {
+      "afferent": ["Blood-borne and CSF-borne chemical signals (no blood-brain barrier)", "Vagal afferents via the solitary nucleus"],
+      "efferent": ["Nucleus solitarius (nuc-solitarius-caudal)", "Medullary reticular emetic pattern generators and dorsal vagal complex"]
+    },
+    "bloodSupply": "PICA inferior medial branches (permeable capillaries)",
+    "clinical": [
+      {
+        "syndrome": "Intractable nausea-vomiting",
+        "findings": "Irritation or infarction of the area postrema (PICA territory) produces severe vertigo with violent vomiting and hiccups, often mimicking vestibular neuritis or gastritis and delaying stroke diagnosis.",
+        "vascular": "PICA"
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [1.2, -33, -8],
+    "size3d": [0.8, 2.5, 0.7],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Fix, High-Yield Neuroanatomy, circumventricular organs table"
+    ]
+  },
+  {
+    "id": "tract-icp",
+    "name": "Inferior cerebellar peduncle",
+    "synonyms": ["ICP", "restiform body"],
+    "region": "medulla",
+    "subdivision": "Cerebellar connections",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "function": "The dominant afferent gateway of the cerebellum: the dorsolateral column formed in the upper medulla by olivocerebellar climbing fibers, cuneocerebellar and posterior spinocerebellar fibers, vestibulocerebellar fibers and reticulocerebellar fibers, all entering the vermis and hemispheres; the juxtarestiform body carries the vestibular portion.",
+    "connections": {
+      "afferent": ["Inferior olivary complex (nuc-inferior-olive-principal, nuc-inferior-olive-medial)", "Cuneocerebellar fibers from nuc-nucleus-cuneatus", "Posterior spinocerebellar tract (tract-posterior-spinocerebellar)", "Vestibular nuclei (nuc-vestibular-medial, nuc-vestibular-inferior)"],
+      "efferent": ["Cerebellar vermis and hemisphere cortex (ctx-cerebellum)"]
+    },
+    "bloodSupply": "PICA and vertebral circumferential branches",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral limb ataxia (Wallenberg)",
+        "findings": "Lateral medullary infarcts involving the restiform body yield ipsilateral dysmetria, intention tremor and past-pointing together with vertigo from the adjoining vestibular nuclei.",
+        "vascular": "PICA / vertebral"
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal"],
+    "origin3d": [7, -30, -3],
+    "size3d": [2, 6, 2],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\""
+    ]
+  },
+  {
+    "id": "nuc-arcuate-medullary",
+    "name": "Arcuate nucleus (medulla)",
+    "synonyms": ["ventral medullary arcuate nucleus"],
+    "region": "medulla",
+    "subdivision": "Pyramids & decussations",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Superficial paramedian cell groups astride the pyramids, homologous to the pontine nuclei: they receive descending cortical fibers and relay to the cerebellum through ventral external arcuate fibers that cross and join the inferior cerebellar peduncle; also described as a chemosensitive (CO2/pH) region of the ventral medullary surface.",
+    "connections": {
+      "afferent": ["Corticofugal descending fibers", "Medullary surface chemoreceptive afferents"],
+      "efferent": ["Ventral external arcuate fibers to the contralateral cerebellum via tract-icp"]
+    },
+    "bloodSupply": "Anterior spinal artery / vertebral branches",
+    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary"],
+    "origin3d": [2, -45, 8.5],
+    "size3d": [1.5, 5, 0.8],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
+  },
+  {
+    "id": "nuc-medullary-reticular",
+    "name": "Medullary reticular formation",
+    "synonyms": ["gigantocellular reticular nucleus", "central/medial reticular nuclei of the medulla"],
+    "region": "medulla",
+    "subdivision": "Reticular formation",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Gigantocellular and central-medial reticular nuclei filling the intermediate tegmentum: source of the medullary (lateral) reticulospinal tract that inhibits antigravity tone and refines posture, site of ventrolateral respiratory column and vasomotor (pressure) integration with the solitary nucleus, and upward continuation of the reticular activating system; premotor autonomic fibers descend to the spinal intermediolateral column.",
+    "connections": {
+      "afferent": ["Spinoreticular tract (tract-spinoreticular)", "Nucleus solitarius (nuc-solitarius-caudal)", "Fastigial nucleus (nuc-fastigial)", "Hypothalamic and periaqueductal descending fibers"],
+      "efferent": ["Medullary reticulospinal tract (tract-reticulospinal)", "Ascending arousal projections to the intralaminar thalamic nuclei", "Premotor autonomic fibers to spinal sympathetic neurons"]
+    },
+    "bloodSupply": "Vertebral and PICA branches; ASA paramedian branches",
+    "clinical": [
+      {
+        "syndrome": "Central (non-obstructive) sleep apnea / respiratory failure",
+        "findings": "Bilateral damage of the ventrolateral medullary respiratory columns (syringobulbia, lateral medullary extension, high cervical-medullary surgery) removes automatic breathing — patients breathe only when awake (Ondine curse), with apnea and hypercapnia during sleep.",
+        "vascular": "Vertebral / PICA territory"
+      },
+      {
+        "syndrome": "Neurogenic hypertension",
+        "findings": "Lateral medullary strokes that irritate the rostral ventrolateral pressor area acutely elevate blood pressure and mimic hypertensive emergencies at presentation.",
+        "vascular": "PICA / vertebral"
+      },
+      {
+        "syndrome": "Central Horner syndrome",
+        "findings": "Involvement of the descending hypothalamospinal sympathetic fibers coursing through the lateral reticular tegmentum yields ipsilateral ptosis and miosis as part of Wallenberg syndrome.",
+        "vascular": "PICA / vertebral"
+      }
+    ],
+    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [4, -38, -1],
+    "size3d": [2.5, 10, 2.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Fix, High-Yield Neuroanatomy, reticular formation and respiration sections"
+    ]
+  },
+  {
+    "id": "vent-fourth-ventricle",
+    "name": "Fourth ventricle",
+    "synonyms": ["ventriculus quartus"],
+    "region": "medulla",
+    "subdivision": "Ventricular system",
+    "kind": "ventricle",
+    "laterality": "midline",
+    "color": "#06b6d4",
+    "function": "Tent-shaped midline CSF cavity between the dorsal pons and medulla in front and the cerebellum behind, continuous rostrally with the cerebral aqueduct and caudally with the central canal at the obex; CSF leaves it through the lateral foramina of Luschka and the midline foramen of Magendie into the subarachnoid space. Its floor carries the facial colliculus, hypoglossal trigone and vagal trigone.",
+    "clinical": [
+      {
+        "syndrome": "Obstructive hydrocephalus",
+        "findings": "Tumors of the floor or roof (ependymoma, medulloblastoma) or outflow blockage of Luschka/Magendie trap CSF and raise intracranial pressure with headache, vomiting and papilledema.",
+        "note": "The choroid plexus of the roof (tela choroidea) is a principal CSF production site of the posterior fossa."
+      }
+    ],
+    "levels": ["lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary"],
+    "origin3d": [0, -21, -7.5],
+    "size3d": [4.5, 14, 1.8],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brain and Environs\" (ventricular system)"
+    ]
+  },
+  {
+    "id": "surf-cn9-exit",
+    "name": "Glossopharyngeal nerve (CN IX) exit",
+    "synonyms": ["postolivary sulcus rootlets"],
+    "region": "medulla",
+    "subdivision": "Surface landmarks",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "Rootlets of CN IX emerging from the postolivary sulcus just rostral to the vagal rows: motor fibers to stylopharyngeus (from the nucleus ambiguus), parasympathetic fibers to the parotid (inferior salivatory) and afferents for oropharyngeal sensation, tonsil-posterior tongue taste and carotid sinus-body baroreceptor-chemoreceptor information — the afferent limb of the gag reflex.",
+    "clinical": [
+      {
+        "syndrome": "Gag reflex loss (afferent limb)",
+        "findings": "Lateral medullary lesions or root-zone damage abolish ipsilateral pharyngeal sensation and the gag response, with loss of the carotid sinus reflex (swinging blood pressure).",
+        "vascular": "PICA / vertebral"
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [5, -31, 4.5],
+    "size3d": [1, 1.5, 1],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
+  },
+  {
+    "id": "surf-cn10-exit",
+    "name": "Vagus nerve (CN X) exit",
+    "synonyms": ["postolivary sulcus rootlets"],
+    "region": "medulla",
+    "subdivision": "Surface landmarks",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "Rows of vagal rootlets leaving the postolivary sulcus below CN IX, carrying fibers from the dorsal motor nucleus (parasympathetic viscera), nucleus ambiguus (palate-pharynx-larynx striated muscle) and returning visceral afferents from thoracic and abdominal viscera through the solitary complex.",
+    "clinical": [
+      {
+        "syndrome": "Vagus rootlet failure (lateral medullary)",
+        "findings": "Combined with ambiguus damage, produces hoarseness, depressed gag/efferent response, dysphagia and loss of cough reflex sensation on the ipsilateral side.",
+        "vascular": "PICA"
+      }
+    ],
+    "levels": ["lvl-olivary"],
+    "origin3d": [5, -34, 4.5],
+    "size3d": [1, 1.5, 1],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
+  },
+  {
+    "id": "surf-cn11-exit",
+    "name": "Accessory nerve (CN XI) exit",
+    "synonyms": ["cranial and spinal roots of CN XI"],
+    "region": "medulla",
+    "subdivision": "Surface landmarks",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "Cranial rootlets from the caudal ambiguus leave the postolivary sulcus and are joined by spinal rootlets ascending through the foramen magnum from C1-C5; the combined nerve exits the jugular foramen to innervate sternocleidomastoid and trapezius (with the cranial portion hitching onto the vagus for laryngeal adduction).",
+    "clinical": [
+      {
+        "syndrome": "Shoulder-head weakness",
+        "findings": "Unilateral CN XI damage wastes ipsilateral sternocleidomastoid (weak contralateral head rotation) and trapezius (shoulder droop, scapular winging); foramen magnum and jugular foramen lesions are the classic localizers.",
+        "note": "The spinal rootlets climbing the lateral medulla are tagged on the closed-medulla plates."
+      }
+    ],
+    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary"],
+    "origin3d": [6, -43, 2],
+    "size3d": [1, 5, 1],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
+  },
+  {
+    "id": "surf-cn12-exit",
+    "name": "Hypoglossal nerve (CN XII) exit",
+    "synonyms": ["preolivary sulcus rootlets"],
+    "region": "medulla",
+    "subdivision": "Surface landmarks",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "Rootlets of CN XII emerging between pyramid and olive at the preolivary sulcus and collecting into the hypoglossal nerve through the hypoglossal canal; these are the axons of the hypoglossal nucleus en route to all tongue muscles except palatoglossus.",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral tongue deviation",
+        "findings": "Medial medullary infarcts involving the exiting rootlets deviate the protruded tongue toward the lesion with eventual ipsilateral wasting — paired with contralateral hemiparesis and lemniscal sensory loss.",
+        "vascular": "Anterior spinal artery"
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [3.5, -32, 6.5],
+    "size3d": [0.9, 2, 0.9],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
+  },
+  {
+    "id": "surf-obex",
+    "name": "Obex",
+    "synonyms": ["caudal apex of the fourth ventricle"],
+    "region": "medulla",
+    "subdivision": "Surface landmarks",
+    "kind": "surface",
+    "laterality": "midline",
+    "color": "#64748b",
+    "function": "The caudal apex of the fourth ventricle where its roof narrows into the central canal; flanked by the area postrema and gracile tubercles, it marks the cervicomedullary transition on the dorsal surface and is the key surgical and radiologic landmark of the posterior fossa outlet.",
+    "clinical": [
+      {
+        "syndrome": "Foramen magnum / posterior fossa reference",
+        "findings": "Tonsillar herniation (Chiari I) is measured against the obex-foramen magnum line; lesions around the obex (syringobulbia, tumors) affect the area postrema and NTS with emesis and autonomic instability.",
+        "note": "Open-medulla plates key the ventricle apex to the obex (lvl-olivary)."
+      }
+    ],
+    "levels": ["lvl-olivary"],
+    "origin3d": [0, -35, -8],
+    "size3d": [1.2, 1, 0.8],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
+  },
+  {
+    "id": "ctx-cerebellum",
+    "name": "Cerebellar hemispheres and vermis (context)",
+    "synonyms": ["cerebellar envelope"],
+    "region": "cerebellum",
+    "subdivision": "Cerebellar context",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "Envelope of the cerebellum — two lateral hemispheres joined by the midline vermis dorsal to the pons and medulla. The lateral (neocerebellar) hemispheres plan skilled limb movements through the dentato-thalamo-cortical loop, the intermediate zone corrects ongoing limb trajectories via the interposed nuclei, and the vermis and flocculonodular lobe govern axial posture, gait and balance-eye coordination. Cerebellar output acts ipsilateral to the body because its efferents cross twice.",
+    "connections": {
+      "afferent": ["Middle cerebellar peduncle (tract-mcp) — crossed pontocerebellar fibers", "Inferior cerebellar peduncle (tract-icp) — climbing, spinocerebellar and vestibulocerebellar fibers"],
+      "efferent": ["Superior cerebellar peduncle (tract-scp) — dentate/interposed/fastigial output to contralateral thalamus, red nucleus and reticular formation"]
+    },
+    "bloodSupply": "Superior cerebellar artery (SCA) superiorly, anterior inferior cerebellar artery (AICA) anteriorly, posterior inferior cerebellar artery (PICA) inferiorly",
+    "clinical": [
+      {
+        "syndrome": "Cerebellar syndrome (hemisphere)",
+        "findings": "Hemisphere lesions produce ipsilateral dysmetria, intention (terminal) tremor, dysdiadochokinesia, hypotonia and rebound; gait is broad-based and veers toward the lesion.",
+        "vascular": "SCA / AICA / PICA by territory"
+      },
+      {
+        "syndrome": "Truncal ataxia (vermal)",
+        "findings": "Midline (vermal) involvement produces falling and staggering with relatively preserved limb coordination on the bed — typical of midline tumors and alcohol-related vermal atrophy.",
+        "vascular": "PICA (inferior vermis)"
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
+    "origin3d": [0, -22, -13],
+    "size3d": [10, 14, 7],
+    "contextNote": "Context envelope for the 3D scene and sagittal/coronal plates (two hemispheres plus vermis bar); the deep nuclei and vermis are separate records, and the peduncles are owned elsewhere: tract-mcp (pons), tract-icp (medulla), tract-scp (midbrain).",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
+      "Nolte, The Human Brain, cerebellum chapter"
+    ]
+  },
+  {
+    "id": "nuc-dentate",
+    "name": "Dentate nucleus",
+    "synonyms": [],
+    "region": "cerebellum",
+    "subdivision": "Deep cerebellar nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The largest deep cerebellar nucleus, a convoluted gray ribbon in the lateral (neocerebellar) white matter: it collects inhibitory Purkinje output from the lateral hemispheres and fires the dentato-thalamo-cortical loop through the superior cerebellar peduncle to the contralateral VL/VA thalamus and red nucleus — the efferent side of motor planning, movement timing and cognitive-linguistic sequencing.",
+    "connections": {
+      "afferent": ["Purkinje cell axons of the lateral cerebellar hemispheres", "Collaterals of the tract-mcp (pontocerebellar) and tract-scp systems"],
+      "efferent": ["Superior cerebellar peduncle (tract-scp) decussating to contralateral VL/VA thalamus and red nucleus"]
+    },
+    "bloodSupply": "Superior cerebellar artery (SCA)",
+    "clinical": [
+      {
+        "syndrome": "Intention tremor and dysmetria",
+        "findings": "SCA infarcts or lesions of the dentate/SCP system produce ipsilateral intention tremor, dysmetria and decomposition of movement; bilateral dentate disease (Ceroid-lipofuscinosis, metronomic injury) disturbs movement timing.",
+        "vascular": "SCA"
+      },
+      {
+        "syndrome": "Hypertrophic olivary degeneration (Guillain-Mollaret)",
+        "findings": "Dentate or SCP lesions interrupt the dentato-rubro-olivary triangle and secondarily degenerate the inferior olive, causing palatal myoclonus.",
+        "note": "Links the dentate to the medullary olive via the contralateral red nucleus."
+      }
+    ],
+    "levels": ["lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle"],
+    "origin3d": [6, -22, -11],
+    "size3d": [2.2, 2.8, 2],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
+      "Fix, High-Yield Neuroanatomy, deep cerebellar nuclei table"
+    ]
+  },
+  {
+    "id": "nuc-interposed",
+    "name": "Interposed nuclei (emboliform and globose)",
+    "synonyms": ["emboliform nucleus", "globose nucleus"],
+    "region": "cerebellum",
+    "subdivision": "Deep cerebellar nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Combined emboliform and globose nuclei of the intermediate (paravermal) spinocerebellum: they gate Purkinje output that compares intended with ongoing limb movement and fire the correction loop through the superior cerebellar peduncle to the magnocellular red nucleus (rubrospinal) and VL thalamus — the on-line limb stabilizer.",
+    "connections": {
+      "afferent": ["Purkinje axons of the paravermal intermediate zone", "Spinocerebellar collateral input (tract-posterior-spinocerebellar, tract-anterior-spinocerebellar)"],
+      "efferent": ["Superior cerebellar peduncle (tract-scp) to the red nucleus and VL thalamus"]
+    },
+    "bloodSupply": "Superior cerebellar artery (SCA)",
+    "levels": ["lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle"],
+    "origin3d": [4, -22, -11],
+    "size3d": [1.4, 1.8, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\""
+    ]
+  },
+  {
+    "id": "nuc-fastigial",
+    "name": "Fastigial nucleus",
+    "synonyms": [],
+    "region": "cerebellum",
+    "subdivision": "Deep cerebellar nuclei",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Medialmost deep nucleus of the vermis and vestibulocerebellum: receives vermal Purkinje output and drives axial posture and eye-position control through fibers that leave via the inferior cerebellar peduncle to vestibular and reticular nuclei and via the superior cerebellar peduncle to the contralateral VL and central tegmental tract — calibration of balance, gait and the vestibulo-ocular reflex.",
+    "connections": {
+      "afferent": ["Purkinje axons of the vermis (ctx-cerebellum midline) and flocculonodular lobe"],
+      "efferent": ["Vestibular and reticular nuclei via tract-icp", "Contralateral VL thalamus and red nucleus region via tract-scp"]
+    },
+    "bloodSupply": "PICA (inferior) and SCA (superior) medial branches",
+    "clinical": [
+      {
+        "syndrome": "Truncal and axial ataxia",
+        "findings": "Fastigial or vermal lesions give a wide-based staggering gait with truncal instability and nystagmus while limb coordination on the bed may be preserved; bilateral posterior fossa lesions therefore present predominantly as gait ataxia.",
+        "vascular": "PICA / SCA"
+      }
+    ],
+    "levels": ["lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle"],
+    "origin3d": [1.8, -22, -11.5],
+    "size3d": [1.2, 1.6, 1.3],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\""
+    ]
+  },
+  {
+    "id": "surf-vermis",
+    "name": "Vermis",
+    "synonyms": ["cerebellar vermis"],
+    "region": "cerebellum",
+    "subdivision": "Surface landmarks",
+    "kind": "surface",
+    "laterality": "midline",
+    "color": "#64748b",
+    "function": "The midline cerebellar strip separating the hemispheres on the dorsal surface, containing the vermal (axial body) representation of the spinocerebellum and, caudally, the uvula-nodulus of the vestibulocerebellum; governs trunk and proximal gait musculature and, with the nodulus-flocculus, gaze-holding and balance.",
+    "clinical": [
+      {
+        "syndrome": "Truncal (vermal) ataxia",
+        "findings": "Midline vermal damage — midline posterior fossa tumors (medulloblastoma), alcohol atrophy of the anterior vermis — causes staggering, wide-based gait with falls and impaired tandem walking, with little limb dysmetria; children with vermal tumors present with gait ataxia plus morning vomiting.",
+        "vascular": "PICA (inferior vermis), SCA (superior vermis)"
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
+    "origin3d": [0, -18, -16.5],
+    "size3d": [2, 12, 2],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
+      "Duke Neurobiology, Brainstem Sectional Anatomy Lab (brain.oit.duke.edu/lab03)"
+    ]
+  }
+]

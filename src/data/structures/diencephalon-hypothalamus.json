@@ -1,0 +1,523 @@
+[
+  {
+    "id": "nuc-preoptic",
+    "name": "Preoptic area",
+    "synonyms": ["preoptic region", "median preoptic nucleus"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "midline",
+    "color": "#d97706",
+    "function": "Anterior hypothalamic zone rostral to the optic chiasm containing the median preoptic, ventrolateral preoptic and sexually dimorphic nuclei: warm-sensitive neurons trigger heat-defense (vasodilation, sweating), GABAergic ventrolateral preoptic neurons actively promote sleep, and GnRH neurons generate the reproductive hormone pulse.",
+    "connections": {
+      "afferent": [
+        "Retina indirectly via the suprachiasmatic nucleus (day-length signal)",
+        "Brainstem noradrenergic (locus coeruleus) and serotonergic arousal systems",
+        "Limbic input from the septal nuclei and amygdala"
+      ],
+      "efferent": [
+        "Median eminence GnRH neurons to the hypophyseal portal system",
+        "Descending thermoregulatory projections to brainstem and spinal autonomic nuclei",
+        "Inhibitory (GABAergic/galaninergic) projections to the tuberomammillary nucleus and locus coeruleus (sleep induction)"
+      ]
+    },
+    "bloodSupply": "Anterior communicating and anterior cerebral artery perforators (rostral hypothalamus), with proximal posterior communicating contributions.",
+    "clinical": [
+      {
+        "syndrome": "Hypothalamic fever and poikilothermia",
+        "findings": "Anterior preoptic lesions abolish heat dissipation, producing hyperthermia unresponsive to antipyretics; larger lesions cause poikilothermia, with body temperature tracking the environment.",
+        "vascular": "Anterior communicating/ACA perforators"
+      },
+      {
+        "syndrome": "Severe (fatal familial-type) insomnia",
+        "findings": "Ventrolateral preoptic damage produces profound sleep-onset failure with autonomic activation, as after anterior hypothalamic trauma, prion disease or encephalitis.",
+        "note": "sleep-circuit lesion syndrome"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral"],
+    "origin3d": [0, 34, 9],
+    "size3d": [2.5, 2.2, 1.6],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "nuc-suprachiasmatic",
+    "name": "Suprachiasmatic nucleus",
+    "synonyms": ["SCN", "circadian pacemaker"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The master circadian pacemaker: retinohypothalamic glutamate/melanopsin input entrains an intrinsic ~24-hour transcriptional clock (BMAL1/CLOCK) that synchronizes pineal melatonin secretion, cortisol rhythm, and sleep timing through the paraventricular and dorsomedial nuclei.",
+    "connections": {
+      "afferent": [
+        "Retinal ganglion cells via the retinohypothalamic tract (fibers crossing in the optic chiasm)",
+        "Intergeniculate leaflet of the thalamus (photic and nonphotic entrainment)",
+        "Feedback from the pineal (melatonin, via the pars tuberalis axis)"
+      ],
+      "efferent": [
+        "Paraventricular nucleus, then intermediolateral column and superior cervical ganglion to the pineal (melatonin rhythm)",
+        "Dorsomedial hypothalamic nucleus and preoptic sleep-wake systems (behavioral rhythms)"
+      ]
+    },
+    "bloodSupply": "Anterior communicating artery perforators and proximal posterior communicating/PCA branches (rostral hypothalamic perforators).",
+    "clinical": [
+      {
+        "syndrome": "Circadian rhythm sleep-wake disorder",
+        "findings": "SCN damage or de-timing (suprasellar tumors, blindness, shift work) desynchronizes sleep phase, melatonin and temperature rhythms, producing insomnia or free-running sleep.",
+        "note": "bright light and timed melatonin are the chronotherapeutic levers"
+      },
+      {
+        "syndrome": "Loss of endocrine rhythms after suprasellar lesions",
+        "findings": "Chiasmal/hypothalamic tumors or their treatment abolish circadian melatonin and cortisol cycling, with inverted or arrhythmic sleep and altered symptom timing.",
+        "note": "mass effect or treatment injury"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral"],
+    "origin3d": [2.5, 31, 9],
+    "size3d": [1.4, 1.0, 1.2],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "nuc-supraoptic",
+    "name": "Supraoptic nucleus",
+    "synonyms": ["SON"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Magnocellular neurosecretory nucleus manufacturing vasopressin (ADH) — with some oxytocin neurons: axons run through the infundibulum to the posterior pituitary, where ADH released into blood acts on renal V2 receptors to conserve water; lamina-terminalis osmoreceptors and baroreceptor pathways set its firing rate.",
+    "connections": {
+      "afferent": [
+        "Organum vasculosum of the lamina terminalis and subfornical organ (osmolality and angiotensin II signals)",
+        "Nucleus solitarius baroreceptor afferents (volume status)"
+      ],
+      "efferent": [
+        "Posterior pituitary via the hypothalamo-hypophyseal tract of the infundibulum (vasopressin and oxytocin release)"
+      ]
+    },
+    "bloodSupply": "Superior hypophyseal and anterior communicating/ACA perforators (rostral hypothalamic group).",
+    "clinical": [
+      {
+        "syndrome": "Central diabetes insipidus",
+        "findings": "Destruction of supraoptic/paraventricular magnocellular neurons or their stalk axons (trauma, surgery, infiltrative disease) produces polyuria, polydipsia and hypernatremia that respond to desmopressin.",
+        "vascular": "Anterior communicating/superior hypophyseal perforators or stalk transection"
+      },
+      {
+        "syndrome": "SIADH (by contrast)",
+        "findings": "Excess, unregulated ADH release — hypothalamic dysregulation, drugs or ectopic tumor production — causes euvolemic hyponatremia with concentrated urine; the mirror failure of water balance to central DI.",
+        "note": "contrasting water-balance failure of the same magnocellular system"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral"],
+    "origin3d": [4, 30, 8],
+    "size3d": [1.4, 1.0, 1.6],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "nuc-paraventricular",
+    "name": "Paraventricular nucleus (hypothalamus)",
+    "synonyms": ["PVN", "PVH"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The hypothalamic autonomic-neuroendocrine integrator: magnocellular neurons release oxytocin and vasopressin from the posterior pituitary, parvocellular CRH and TRH neurons drive the HPA and thyroid axes, and descending projections to the intermediolateral column and dorsal vagal complex orchestrate sympathetic and parasympathetic outflow.",
+    "connections": {
+      "afferent": [
+        "Subfornical organ and organum vasculosum (angiotensin II, osmotic signals)",
+        "Nucleus solitarius visceral (baroreceptor, chemoreceptor) afferents",
+        "Suprachiasmatic nucleus (circadian timing) and limbic input"
+      ],
+      "efferent": [
+        "Posterior pituitary via the infundibulum (oxytocin, vasopressin)",
+        "Median eminence portal system (CRH to ACTH; TRH to TSH)",
+        "Intermediolateral cell column (T1-L2) and dorsal motor nucleus of the vagus (autonomic outflow)"
+      ]
+    },
+    "bloodSupply": "Superior hypophyseal/anterior communicating perforators rostrally and paramedian posterior communicating/PCA branches.",
+    "clinical": [
+      {
+        "syndrome": "Central diabetes insipidus",
+        "findings": "Loss of magnocellular PVN (with supraoptic) neurons or their axons causes ADH deficiency — polyuria, polydipsia, hypernatremia.",
+        "vascular": "Hypothalamic perforators or stalk/stem injury"
+      },
+      {
+        "syndrome": "Diencephalic autonomic instability",
+        "findings": "PVN damage or disconnection destabilizes sympathetic tone, HPA output and stress responsiveness — paroxysmal hypertension, temperature swings and failed counter-regulation.",
+        "vascular": "Hypothalamic perforators (anterior communicating and paramedian PCA)"
+      },
+      {
+        "syndrome": "Hypothalamic (central) hypothyroid-hypocortisolic failure",
+        "findings": "Injury to parvocellular TRH/CRH neurons (craniopharyngioma, surgery, infiltrates) produces secondary hypothyroidism and hypocortisolism with fatigue and hypotension.",
+        "note": "neuroendocrine (HPA/HPG/HPG-axis) failure"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral"],
+    "origin3d": [2, 35.5, 7],
+    "size3d": [1.2, 1.8, 1.6],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "nuc-arcuate-hypothalamic",
+    "name": "Arcuate nucleus (hypothalamus)",
+    "synonyms": ["infundibular nucleus", "feeding center"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Tuberal energy-balance and endocrine control center: NPY/AgRP (hunger) and POMC/CART (satiety) neurons sense leptin, ghrelin and insulin to drive feeding; GHRH and tuberoinfundibular dopamine neurons regulate growth-hormone and prolactin secretion through the median eminence.",
+    "connections": {
+      "afferent": [
+        "Leptin and insulin signals (humoral, via the semi-permeable median eminence)",
+        "Ghrelin from the stomach (direct and vagal)",
+        "Lateral hypothalamic orexin/MCH neurons"
+      ],
+      "efferent": [
+        "Paraventricular and dorsomedial nuclei (melanocortin and NPY projections)",
+        "Median eminence: GHRH and tuberoinfundibular dopamine (prolactin-inhibiting factor) to the portal system"
+      ]
+    },
+    "bloodSupply": "Superior hypophyseal artery (median eminence portal capillary bed) and paramedian hypothalamic perforators of the posterior communicating/PCA.",
+    "clinical": [
+      {
+        "syndrome": "Hypothalamic obesity",
+        "findings": "Arcuate/ventromedial damage (craniopharyngioma surgery, infiltrative disease) abolishes satiety signaling, causing hyperphagia and treatment-refractory weight gain.",
+        "note": "mass or surgical lesion"
+      },
+      {
+        "syndrome": "Hyperprolactinemia ('stalk effect')",
+        "findings": "Infundibular or tuberal compression interrupts tuberoinfundibular dopamine, releasing the pituitary lactotrophs from inhibition and moderately raising prolactin.",
+        "vascular": "Sellar/suprasellar mass effect on the stalk and tuberal perforators"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "origin3d": [2, 30, 6],
+    "size3d": [1.4, 1.0, 1.2],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "nuc-ventromedial",
+    "name": "Ventromedial nucleus (hypothalamus)",
+    "synonyms": ["VMH", "satiety center"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Satiety and defensive-behavior center: leptin/insulin-responsive neurons terminate feeding and regulate glucose metabolism (destruction yields hyperphagia and obesity), while stimulation triggers defensive rage and sympathetically mediated stress responses via the periaqueductal gray.",
+    "connections": {
+      "afferent": [
+        "Arcuate nucleus melanocortin/NPY projections (leptin-ghrelin signal)",
+        "Amygdala and hippocampus via the ventral amygdalofugal pathway",
+        "Lateral hypothalamic area"
+      ],
+      "efferent": [
+        "Lateral hypothalamic area and paraventricular nucleus (autonomic/endocrine coordination)",
+        "Periaqueductal gray (defensive behavior)",
+        "Brainstem and spinal autonomic centers (glucoregulation)"
+      ]
+    },
+    "bloodSupply": "Paramedian hypothalamic perforators (posterior communicating and P1/PCA branches); anterior choroidal contributions laterally.",
+    "clinical": [
+      {
+        "syndrome": "Hypothalamic (VMH) obesity-hyperphagia",
+        "findings": "Bilateral ventromedial destruction yields voracious appetite, obesity and endocrine dysregulation — the classical 'hypothalamic obesity' lesion of the satiety center.",
+        "note": "classical lesion syndrome (human and experimental)"
+      },
+      {
+        "syndrome": "Hypothalamic rage",
+        "findings": "Ventromedial/perifornical lesions release defensive aggression with autonomic discharge (piloerection, mydriasis, hypertension).",
+        "note": "rare; tumors, encephalitis, trauma"
+      },
+      {
+        "syndrome": "Diencephalic autonomic crises ('hypothalamic storms')",
+        "findings": "Episodic hypertension, tachycardia, sweating and hyperthermia after ventromedial/diencephalic injury — the pattern of post-traumatic paroxysmal sympathetic hyperactivity.",
+        "vascular": "Hypothalamic perforators; traumatic shearing injury"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "origin3d": [3.5, 31.5, 6],
+    "size3d": [1.6, 1.4, 1.4],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "nuc-dorsomedial",
+    "name": "Dorsomedial nucleus (hypothalamus)",
+    "synonyms": ["DMH"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Rhythm and stress-coordination nucleus linking the suprachiasmatic clock to feeding and sleep-wake cycles: DMH neurons generate anticipatory locomotor and feeding rhythms and recruit endocrine (paraventricular) and autonomic outputs during stress.",
+    "connections": {
+      "afferent": [
+        "Suprachiasmatic nucleus (daily timing signal)",
+        "Lateral hypothalamic orexin neurons",
+        "Paraventricular and arcuate nuclei"
+      ],
+      "efferent": [
+        "Paraventricular nucleus (HPA axis recruitment)",
+        "Preoptic sleep-wake systems and locus coeruleus",
+        "Brainstem autonomic nuclei"
+      ]
+    },
+    "bloodSupply": "Paramedian hypothalamic perforators (posterior communicating and P1) and posterior choroidal territory borders.",
+    "clinical": [
+      {
+        "syndrome": "Circadian feeding and sleep disorganization",
+        "findings": "DMH dysfunction blunts anticipatory and food-entrainable rhythms, contributing to night-eating and sleep-wake disorganization in hypothalamic disease.",
+        "note": "preclinical and human lesion correlates"
+      },
+      {
+        "syndrome": "Diencephalic hypersomnia with autonomic storms",
+        "findings": "Deep hypothalamic lesions involving the DMH territory (hemorrhage, trauma, sarcoid) combine hypersomnia with episodic autonomic discharge.",
+        "vascular": "Paramedian hypothalamic perforators"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "origin3d": [2.5, 34, 6],
+    "size3d": [1.4, 1.4, 1.4],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "nuc-posterior-hypothalamus",
+    "name": "Posterior hypothalamic nucleus",
+    "synonyms": ["posterior hypothalamus", "lateral hypothalamic area (caudal)"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Caudal hypothalamic zone — with the tuberomammillary histaminergic neurons — that defends core temperature by conserving heat (cutaneous vasoconstriction, shivering) and maintains wakefulness through histaminergic and orexin-linked arousal output.",
+    "connections": {
+      "afferent": [
+        "Preoptic/anterior hypothalamic warm-signal projections (thermoregulatory loop)",
+        "Limbic and reticular arousal inputs"
+      ],
+      "efferent": [
+        "Dorsal vagal complex and intermediolateral column (pressor and heat-conservation sympathetic drive)",
+        "Tuberomammillary histaminergic system, then widespread cortical arousal",
+        "Descending reticular formation projections"
+      ]
+    },
+    "bloodSupply": "Paramedian hypothalamic perforators of the P1/PCA and posterior communicating artery; anterior choroidal branches laterally.",
+    "clinical": [
+      {
+        "syndrome": "Poikilothermia / hypothermia",
+        "findings": "Posterior hypothalamic infarcts or tumors impair heat conservation — core temperature falls with ambient cooling; combined anterior-plus-posterior damage causes full poikilothermia.",
+        "vascular": "PCA — paramedian perforators"
+      },
+      {
+        "syndrome": "Kleine-Levin-type recurrent hypersomnia",
+        "findings": "Posterior hypothalamic (histaminergic/orexin-adjacent) dysfunction underlies recurrent episodes of hypersomnia with behavioral change; the posterior hypothalamus also modulates narcolepsy-cataplexy circuits.",
+        "note": "functional/imaging correlate"
+      },
+      {
+        "syndrome": "Episodic hypothermia (Shapiro-pattern)",
+        "findings": "Recurrent spontaneous hypothermia with corpus callosum agenesis maps to posterior hypothalamic thermoregulatory failure.",
+        "note": "rare dysautonomic syndrome"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid"],
+    "origin3d": [3, 32.5, 4.5],
+    "size3d": [1.6, 2.0, 1.6],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "nuc-mammillary-body",
+    "name": "Mammillary body",
+    "synonyms": ["corpus mammillare", "mammillary nuclei"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "Paired round nuclei at the caudal-ventral hypothalamus forming the relay of the Papez memory circuit: they receive the hippocampal fornix and project via the mammillothalamic tract to the anterior thalamus, consolidating episodic memory; the medial mammillary neurons are among the first structures to fail in thiamine deficiency.",
+    "connections": {
+      "afferent": [
+        "Hippocampal formation via the fornix (postcommissural fibers to the medial mammillary nuclei)",
+        "Gudden tegmental nuclei (mammillotegmental feedback loop)"
+      ],
+      "efferent": [
+        "Anterior thalamic nucleus via the mammillothalamic tract (tract of Vicq d'Azyr)",
+        "Midbrain tegmentum via the mammillotegmental tract"
+      ]
+    },
+    "bloodSupply": "Paramedian (posterior thalamoperforating) branches of the P1/PCA and posterior communicating artery perforators.",
+    "clinical": [
+      {
+        "syndrome": "Wernicke encephalopathy",
+        "findings": "Thiamine deficiency causes petechial hemorrhages of the mammillary bodies — confusion, ophthalmoplegia and ataxia; prompt thiamine replacement prevents the Korsakoff state.",
+        "note": "metabolic-toxic (thiamine deficiency)"
+      },
+      {
+        "syndrome": "Korsakoff amnestic syndrome",
+        "findings": "Mammillary body and anterior thalamic damage yields dense anterograde amnesia with confabulation; mammillary atrophy is the imaging signature.",
+        "note": "sequela of untreated Wernicke encephalopathy"
+      },
+      {
+        "syndrome": "Paramedian thalamic infarct with amnesia",
+        "findings": "Infarction isolating the mammillothalamic tract and anterior thalamus reproduces a Papez-circuit amnesia without thiamine deficiency.",
+        "vascular": "PCA — paramedian perforators"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid"],
+    "origin3d": [2.5, 28, 4],
+    "size3d": [1.6, 1.4, 1.4],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "ctx-hypothalamus-envelope",
+    "name": "Hypothalamus (context envelope)",
+    "synonyms": ["hypothalamic wedge"],
+    "region": "diencephalon",
+    "subdivision": "Hypothalamus",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "Silhouette of the hypothalamic wedge — the floor and lateral walls of the third ventricle from the optic chiasm to the mammillary bodies, bounding the tuber cinereum — used on the sagittal plate and in the 3D scene; the individual nuclei are separate records.",
+    "contextNote": "Envelope/block tag for the hypothalamic wedge silhouette on the sagittal plate and in the 3D scene; not a nucleus record (see the individual hypothalamic nucleus records).",
+    "connections": {
+      "afferent": [
+        "Limbic, viscerosensory and reticular inputs converging on the hypothalamus (see individual nuclei)"
+      ],
+      "efferent": [
+        "Pituitary (portal system and posterior lobe) and brainstem/spinal autonomic nuclei"
+      ]
+    },
+    "bloodSupply": "Circle-of-Willis perforators: anterior communicating and superior hypophyseal rostrally, posterior communicating paramedially, P1/PCA branches caudally.",
+    "clinical": [
+      {
+        "syndrome": "Diencephalic (hypothalamic) syndrome",
+        "findings": "Optic-chiasm and hypothalamic gliomas or craniopharyngiomas produce emaciation with normal intake (diencephalic cachexia), diabetes insipidus, growth failure and visual field loss in children.",
+        "note": "sellar/suprasellar mass syndrome"
+      },
+      {
+        "syndrome": "Post-surgical hypothalamic dysfunction",
+        "findings": "Transsphenoidal approaches can injure the stalk and hypothalamic perforators, causing triphasic DI-SIADH-DI responses, thermoregulatory and appetite disturbance.",
+        "vascular": "Superior hypophyseal and hypothalamic perforators"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "origin3d": [0, 31.5, 7],
+    "size3d": [5.0, 4.5, 4.0],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  },
+  {
+    "id": "surf-optic-chiasm",
+    "name": "Optic chiasm",
+    "synonyms": ["chiasma opticum", "CN II chiasm"],
+    "region": "diencephalon",
+    "subdivision": "Surface landmarks",
+    "kind": "surface",
+    "laterality": "midline",
+    "color": "#64748b",
+    "function": "The X-shaped crossing of the optic nerves on the hypothalamic floor: nasal retinal fibers decussate while temporal fibers continue ipsilaterally, so lesions here classically produce bitemporal hemianopia; it marks the rostral-ventral pole of the hypothalamus (supraoptic and arcuate nuclei flank it).",
+    "connections": {
+      "afferent": [
+        "Retinal ganglion cell axons from both optic nerves"
+      ],
+      "efferent": [
+        "Optic tracts to the lateral geniculate nuclei, pretectum and superior colliculi",
+        "Retinohypothalamic fibers to the suprachiasmatic nuclei"
+      ]
+    },
+    "bloodSupply": "Superior hypophyseal and anterior communicating branches superiorly; internal carotid and posterior communicating branches inferiorly (segmental supply underlies chiasmal infarction).",
+    "clinical": [
+      {
+        "syndrome": "Bitemporal hemianopia (chiasmal syndrome)",
+        "findings": "Compression by pituitary adenoma, craniopharyngioma or meningioma strikes the decussating nasal fibers — progressive loss of both temporal visual fields, often with endocrine signs.",
+        "note": "mass effect at the sellar/suprasellar junction"
+      },
+      {
+        "syndrome": "Chiasmal infarction / apoplexy mimic",
+        "findings": "Rare chiasmal infarction (or apoplectic pituitary tumor) presents with acute bitemporal field loss and headache.",
+        "vascular": "Superior hypophyseal and anterior communicating perforators"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral"],
+    "origin3d": [0, 29, 10],
+    "size3d": [3.5, 1.0, 1.2],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'"
+    ]
+  },
+  {
+    "id": "surf-infundibulum",
+    "name": "Infundibulum (pituitary stalk)",
+    "synonyms": ["pituitary stalk", "tuber cinereum region"],
+    "region": "diencephalon",
+    "subdivision": "Surface landmarks",
+    "kind": "surface",
+    "laterality": "midline",
+    "color": "#64748b",
+    "function": "The pituitary stalk carrying the hypothalamo-hypophyseal portal vessels and magnocellular axons from the tuber cinereum to the pituitary; transection or compression interrupts dopamine, CRH/TRH delivery and ADH axons — the basis of the 'stalk effect' and traumatic diabetes insipidus.",
+    "connections": {
+      "afferent": [
+        "Tuberoinfundibular dopamine fibers from the arcuate nucleus",
+        "Magnocellular supraoptic and paraventricular axons",
+        "Median eminence portal capillaries"
+      ],
+      "efferent": [
+        "Anterior pituitary (portal blood carrying releasing and inhibiting hormones)",
+        "Posterior pituitary (ADH and oxytocin nerve terminals)"
+      ]
+    },
+    "bloodSupply": "Superior hypophyseal artery (internal carotid/ACA origin) for the portal plexus; inferior hypophyseal artery supplies the posterior lobe.",
+    "clinical": [
+      {
+        "syndrome": "Stalk effect and stalk-section syndromes",
+        "findings": "Stalk compression or transection removes tonic dopamine inhibition (moderate hyperprolactinemia); complete section additionally causes permanent central diabetes insipidus and pituitary hormone failure.",
+        "vascular": "Superior hypophyseal branches; surgical or mass injury"
+      },
+      {
+        "syndrome": "Traumatic (triphasic) diabetes insipidus",
+        "findings": "Shearing of the stalk at the tuber cinereum causes the classic triphasic response: initial DI, then transient SIADH from released stored ADH, then permanent DI.",
+        "note": "head trauma or pituitary surgery"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "origin3d": [0, 27, 7],
+    "size3d": [0.9, 2.5, 0.9],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Pituitary and Hypothalamus'"
+    ]
+  }
+]

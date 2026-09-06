@@ -1,0 +1,111 @@
+[
+  {
+    "id": "syn-weber",
+    "name": "Weber syndrome",
+    "eponym": "Weber",
+    "structures": ["nuc-oculomotor", "tract-crus-cerebri", "tract-corticospinal-lateral", "tract-corticobulbar"],
+    "vascularTerritory": "Paramedian branches of the posterior cerebral artery (posterior thalamoperforating / midbrain perforators)",
+    "presentation": "Ipsilateral pupil-involving CN III palsy — ptosis, mydriasis, and a 'down and out' eye — combined with contralateral hemiplegia of face, arm, and leg and contralateral upper motor neuron facial weakness (crossed findings).",
+    "cause": "Infarction or hemorrhage of the ventral midbrain at the basis pedunculi, damaging the oculomotor fascicles as they traverse the substance of the midbrain and the corticospinal/corticobulbar fibers of the crus cerebri; classically from occlusion of paramedian PCA perforators, also reported with tumors, demyelination, and tuberculoma.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126",
+      "Patten, Neurological Differential Diagnosis — midbrain level plates"
+    ]
+  },
+  {
+    "id": "syn-benedikt",
+    "name": "Benedikt syndrome",
+    "eponym": "Benedikt",
+    "structures": ["nuc-oculomotor", "nuc-edinger-westphal", "nuc-red-nucleus", "tract-medial-lemniscus"],
+    "vascularTerritory": "Paramedian branches of the posterior cerebral artery (posterior thalamoperforating / paramedian midbrain)",
+    "presentation": "Ipsilateral CN III palsy with contralateral involuntary movements — rubral tremor, choreoathetosis, or hemiataxia — plus contralateral impairment of touch, vibration, and position sense when the medial lemniscus is involved.",
+    "cause": "Ventral tegmental lesion involving the CN III fascicles and the red nucleus / dentatorubrothalamic fibers with (variable) medial lemniscus extension; classically paramedian PCA perforator infarction, historically also tuberculosis and tumor.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+    ]
+  },
+  {
+    "id": "syn-claude",
+    "name": "Claude syndrome",
+    "eponym": "Claude",
+    "structures": ["nuc-red-nucleus", "nuc-oculomotor", "nuc-dentate", "tract-scp"],
+    "vascularTerritory": "Paramedian branches of the posterior cerebral artery",
+    "presentation": "Ipsilateral CN III palsy with pronounced contralateral cerebellar ataxia — dysmetria, intention tremor, and incoordination — typically out of proportion to any weakness.",
+    "cause": "Dorsal tegmental infarct in the paramedian PCA territory damaging the CN III fascicles together with the red nucleus and the dentatorubrothalamic (superior cerebellar peduncle) outflow; the ataxia reflects interruption of cerebellar output before its decussation.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
+      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+    ]
+  },
+  {
+    "id": "syn-nothnagel",
+    "name": "Nothnagel syndrome",
+    "eponym": "Nothnagel",
+    "structures": ["nuc-superior-colliculus", "nuc-oculomotor", "nuc-red-nucleus"],
+    "vascularTerritory": "Superior cerebellar artery and collicular/quadrigeminal branches of the posterior cerebral artery",
+    "presentation": "Ipsilateral CN III palsy with ipsilateral cerebellar ataxia; vertical gaze palsy and other dorsal midbrain (tectal) signs may accompany the syndrome when the superior colliculus and pretectal region are involved.",
+    "cause": "Lesion of the dorsal midbrain tectum and tegmentum — classically a quadrigeminal-plate tumor (pineal region) or an infarct in the SCA/PCA collicular territory — involving the CN III nucleus or fascicles, the superior colliculus, and the red nucleus.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+    ]
+  },
+  {
+    "id": "syn-parinaud",
+    "name": "Parinaud syndrome (dorsal midbrain)",
+    "eponym": "Parinaud (dorsal midbrain syndrome)",
+    "structures": ["nuc-pretectal", "nuc-superior-colliculus", "nuc-pineal-gland", "nuc-edinger-westphal"],
+    "vascularTerritory": "Collicular/quadrigeminal branches of the posterior cerebral artery; pineal region masses cause the syndrome by mass effect rather than ischemia",
+    "presentation": "Vertical gaze palsy (upgaze affected first, later downgaze), convergence-retraction nystagmus on attempted upgaze, eyelid retraction (Collier sign), light-near dissociation with large pupils that accommodate but do not react to light, and the setting-sun sign.",
+    "cause": "Compression or destruction of the dorsal midbrain and pretectal region: pineal region tumors, hydrocephalus with dilatation of the suprapineal recess, midbrain infarction (collicular/quadrigeminal branches), demyelination, or upper brainstem hemorrhage.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\" (supranuclear control of eye movements)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+    ]
+  },
+  {
+    "id": "syn-ino",
+    "name": "Internuclear ophthalmoplegia (MLF)",
+    "structures": ["tract-mlf", "nuc-abducens", "nuc-oculomotor"],
+    "vascularTerritory": "Paramedian branches of the basilar artery",
+    "presentation": "On attempted lateral gaze: impaired (slow or absent) adduction of the ipsilateral eye with abducting nystagmus of the contralateral eye; convergence is characteristically spared, distinguishing the lesion from a third-nerve palsy; diplopia occurs in lateral gaze.",
+    "cause": "Lesion of the medial longitudinal fasciculus interrupting the abducens internuclear fibers that ascend to the contralateral oculomotor medial rectus subnucleus; in young adults usually demyelination (often bilateral), in the elderly a small paramedian basilar perforator infarct (usually unilateral).",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
+      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126",
+      "Fix, High-Yield Neuroanatomy — brainstem sections"
+    ]
+  },
+  {
+    "id": "syn-parkinson",
+    "name": "Parkinson's disease",
+    "eponym": "Paralysis agitans",
+    "structures": ["nuc-snc", "nuc-snr"],
+    "vascularTerritory": "None (degenerative alpha-synucleinopathy, not vascular)",
+    "presentation": "Asymmetric resting 'pill-rolling' tremor, cogwheel rigidity, bradykinesia, and postural instability; later autonomic dysfunction, REM-sleep behavior disorder, hyposmia, and cognitive decline. Levodopa-responsive historically.",
+    "cause": "Progressive degeneration of the dopaminergic neurons of the substantia nigra pars compacta with alpha-synuclein (Lewy body) inclusions; striatal dopamine depletion unbalances basal ganglia circuitry — reduced direct-pathway facilitation with relatively increased GABAergic output of the SNr/GPi onto thalamus and superior colliculus.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Basal Ganglia\" (Parkinson's disease and related disorders)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+      "Snell, Clinical Neuroanatomy — basal ganglia sections"
+    ]
+  },
+  {
+    "id": "syn-peduncular-hallucinosis",
+    "name": "Peduncular hallucinosis",
+    "eponym": "Lhermitte peduncular hallucinosis",
+    "structures": ["tract-crus-cerebri", "nuc-snc", "nuc-red-nucleus", "nuc-md"],
+    "vascularTerritory": "Paramedian branches of the basilar tip / posterior cerebral artery (midbrain perforators and paramedian thalamic perforators, including artery-of-Percheron territory)",
+    "presentation": "Vivid, colorful, complex visual hallucinations — people, animals, and scenes — with preserved insight and otherwise intact mental status, often worse in the evening or low light and frequently accompanied by sleep-wake disturbance; hallucinations are typically welcomed rather than threatening.",
+    "cause": "Lesions of the rostral midbrain (cerebral peduncle, substantia nigra, red nucleus region) or the paramedian thalamus that disconnect ascending reticular and limbic visual circuitry from occipital association cortex; classically paramedian perforator infarcts, described by Lhermitte in 1922.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126",
+      "Nolte, The Human Brain: An Introduction to Its Functional Anatomy — thalamus and reticular systems"
+    ]
+  }
+]
