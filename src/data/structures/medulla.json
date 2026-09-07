@@ -120,7 +120,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "First synapse of the dorsal column-medial lemniscus pathway for the lower body: primary afferents of the fasciculus gracilis terminate in tonotopically leg-arranged columns, and the second-order neurons emit the internal arcuate fibers that decussate to form the contralateral medial lemniscus. Its dorsal bulge is the gracile tubercle of the closed medulla.",
+    "function": "First synapse of the dorsal column-medial lemniscus pathway for the lower body: primary afferents of the fasciculus gracilis terminate in somatotopically leg-arranged columns, and the second-order neurons emit the internal arcuate fibers that decussate to form the contralateral medial lemniscus. Its dorsal bulge is the gracile tubercle of the closed medulla.",
     "connections": {
       "afferent": ["Fasciculus gracilis (tract-fasciculus-gracilis)"],
       "efferent": ["Internal arcuate fibers (tract-internal-arcuate) to the contralateral medial lemniscus"]
@@ -246,7 +246,7 @@
     "kind": "tract",
     "laterality": "paired",
     "color": "#3b82f6",
-    "function": "The great ascending band of conscious mechanosensation: formed at the sensory decussation by crossed internal arcuate fibers and ascending alongside the midline to the ventral posterolateral thalamus. In the medulla its fibers are stacked with the leg lateral and the arm medial; the bundle gradually swings laterally and ventrally as it climbs through pons toward its midbrain position.",
+    "function": "The great ascending band of conscious mechanosensation: formed at the sensory decussation by crossed internal arcuate fibers and ascending alongside the midline to the ventral posterolateral thalamus. In the caudal medulla its fibers are stacked ventral-to-dorsal — leg (gracile-derived) fibers ventral, arm (cuneate-derived) fibers dorsal; through the pons the bundle rotates about 90°, ending in the midbrain with the leg fibers lateral and the arm medial, the face relayed separately in VPM.",
     "connections": {
       "afferent": ["Internal arcuate fibers (tract-internal-arcuate) from the gracile and cuneate nuclei"],
       "efferent": ["Ventral posterolateral nucleus (nuc-vpl), thence S1 (tract-dcml composite pathway)"]
@@ -409,7 +409,7 @@
     "clinical": [
       {
         "syndrome": "Hoarseness, dysphagia and depressed gag (efferent)",
-        "findings": "Unilateral ambiguityus failure droops the ipsilateral palate, paralyzes the ipsilateral vocal fold and destroys effective swallowing — the clinical core of the lateral medullary (Wallenberg) syndrome; aspiration pneumonia is the principal risk.",
+        "findings": "Unilateral ambiguus failure droops the ipsilateral palate, paralyzes the ipsilateral vocal fold and destroys effective swallowing — the clinical core of the lateral medullary (Wallenberg) syndrome; aspiration pneumonia is the principal risk.",
         "vascular": "PICA"
       }
     ],

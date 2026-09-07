@@ -12,16 +12,21 @@
  */
 import * as THREE from 'three'
 
-/** Canonical slider ranges (plan §2 axis ranges). */
+/**
+ * Canonical slider ranges. REALISM_PLAN §3 AMENDMENT A (integration-v2):
+ * the extended canonical bounds are x ∈ [−48, +48] (cerebellar context layer),
+ * z ∈ [−56, +26] (cerebellum dorsal of −56), y unchanged [−55, +45]. These
+ * are the ONLY UI range changes allowed by the amendment.
+ */
 export const CLIP_BOUNDS = {
-  x: { min: -22, max: 22 },
+  x: { min: -48, max: 48 },
   y: { min: -55, max: 45 },
-  z: { min: -18, max: 18 },
+  z: { min: -56, max: 26 },
 } as const
 
 /** Normals point toward the discarded half-space. */
-export const SAGITTAL_PLANE = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 22)
-export const CORONAL_PLANE = new THREE.Plane(new THREE.Vector3(0, 0, -1), 18)
+export const SAGITTAL_PLANE = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 48)
+export const CORONAL_PLANE = new THREE.Plane(new THREE.Vector3(0, 0, -1), 26)
 export const TRANSVERSE_PLANE = new THREE.Plane(new THREE.Vector3(0, -1, 0), 45)
 
 /** Stable array handed to every material's `clippingPlanes`. */

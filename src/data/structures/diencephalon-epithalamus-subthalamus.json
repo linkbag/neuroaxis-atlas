@@ -370,7 +370,7 @@
       }
     ],
     "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [0, 8, -2.5],
+    "origin3d": [0, 8, -6],
     "size3d": [0.9, 7.0, 0.9],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",

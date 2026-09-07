@@ -1,19 +1,29 @@
 /**
- * Viewer3D — the R3F canvas hosting the atlas scene (plan §5, viewer3d task).
+ * Viewer3D — the R3F canvas hosting the atlas scene (plan §5 viewer3d task,
+ * realism plan §1 Layer 3 render-pipeline task).
  *
- * Camera [30, 10, 55] looking at [0, −5, 0]; OrbitControls with damping;
- * ambient 0.7 + key/fill directional lights; the canvas is transparent so the
- * CSS radial-gradient backdrop (--bg-viewer) shows through; WebGL local
- * clipping is enabled for the sagittal/coronal/transverse planes shared by
- * every material. Mounts SceneLayers (all data-driven meshes), PlaneHelpers
- * (cut indicators), and the ClipControls / ExplodeSlider overlays.
+ * Camera [34.5, 11.5, 63.25] (default framing ×1.15, AMENDMENT A) looking at
+ * [0, −5, 0]; OrbitControls with damping;
+ * image-based lighting from three's bundled RoomEnvironment through a
+ * PMREMGenerator (no network/CDN), plus a soft warm key and a cool fill
+ * directional (no shadow maps yet); ACESFilmic tone mapping at exposure 1.1
+ * with sRGB output. The canvas stays transparent so the CSS radial-gradient
+ * backdrop (--bg-viewer) shows through. WebGL local clipping is enabled for
+ * the sagittal/coronal/transverse planes shared by every material — v2
+ * materials receive those same planes from src/geometry/materials.ts.
+ *
+ * Mounts SceneLayers (all data-driven meshes), PlaneHelpers (cut indicators),
+ * the ClipControls / ExplodeSlider overlays, and the PostFX composer
+ * (realism plan §1 Layer 3 post-fx task) when quality is 'high'.
  *
  * Exports: default Viewer3D plus the named pieces so integration (and tests)
  * can compose or mount them independently.
  */
 import { useEffect } from 'react'
-import { Canvas } from '@react-three/fiber'
+import * as THREE from 'three'
+import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import { useAtlasStore } from '../../state/store'
 import SceneLayers from './SceneLayers'
 import NucleusMesh from './NucleusMesh'
@@ -21,6 +31,7 @@ import TractTube from './TractTube'
 import ClipControls from './ClipControls'
 import ExplodeSlider from './ExplodeSlider'
 import PlaneHelpers from './PlaneHelpers'
+import PostFX from './PostFX'
 import { applyClipState } from './clipPlanes'
 
 /**
@@ -37,28 +48,69 @@ export function ClipSync(): null {
   return null
 }
 
+/**
+ * PBR environment (realism plan §1 Layer 3): bakes three's bundled
+ * RoomEnvironment into a PMREM texture once and assigns it as scene
+ * environment — soft studio IBL with zero network dependency. All factory
+ * materials modulate it through envMapIntensity; scene.environmentIntensity
+ * keeps the overall IBL contribution subtle next to the direct lights.
+ */
+function SceneEnvironment(): null {
+  const gl = useThree((state) => state.gl)
+  const scene = useThree((state) => state.scene)
+  useEffect(() => {
+    const pmrem = new THREE.PMREMGenerator(gl)
+    const room = new RoomEnvironment()
+    const renderTarget = pmrem.fromScene(room, 0.04)
+    scene.environment = renderTarget.texture
+    scene.environmentIntensity = 0.55
+    return () => {
+      scene.environment = null
+      renderTarget.dispose()
+      room.dispose()
+      pmrem.dispose()
+    }
+  }, [gl, scene])
+  return null
+}
+
 export default function Viewer3D() {
   const selectStructure = useAtlasStore((s) => s.selectStructure)
+  // Quality tier (post-fx task): 'high' runs the post composer at dpr ≤ 2;
+  // 'balanced' renders the plain canvas at dpr ≤ 1.5 with no composer.
+  const quality = useAtlasStore((s) => s.quality)
+  const dpr: [number, number] = quality === 'high' ? [1, 2] : [1, 1.5]
 
   return (
     <div className="viewer3d-root">
       <div className="viewer3d-canvas">
         <Canvas
-          dpr={[1, 2]}
-          flat
-          camera={{ position: [30, 10, 55], fov: 45, near: 0.5, far: 800 }}
+          dpr={dpr}
+          // Default framing ×1.15 (REALISM_PLAN §3 AMENDMENT A) for the
+          // extended v2 bounds: the wider cerebellar envelope must fit.
+          camera={{ position: [34.5, 11.5, 63.25], fov: 45, near: 0.5, far: 800 }}
           gl={{ alpha: true, antialias: true, localClippingEnabled: true }}
           onCreated={({ gl }) => {
             gl.localClippingEnabled = true
+            gl.toneMapping = THREE.ACESFilmicToneMapping
+            gl.toneMappingExposure = 1.1
+            gl.outputColorSpace = THREE.SRGBColorSpace
           }}
           onPointerMissed={() => selectStructure(null)}
         >
+          <SceneEnvironment />
           <ClipSync />
-          <ambientLight intensity={0.7} />
-          <directionalLight position={[40, 60, 40]} intensity={1.1} />
-          <directionalLight position={[-40, 20, -40]} intensity={0.35} />
+          {/* Soft key + fill over the IBL base (plan §1 Layer 3). Shadow
+              maps are intentionally off until the post-fx task. */}
+          <ambientLight intensity={0.22} />
+          <hemisphereLight args={['#dfe7f2', '#2b2f38', 0.35]} />
+          <directionalLight position={[40, 60, 40]} intensity={1.35} color="#fff3e2" castShadow={false} />
+          <directionalLight position={[-45, 20, -35]} intensity={0.45} color="#d8e6f8" />
           <SceneLayers />
           <PlaneHelpers />
+          {/* Post FX (realism plan §1 Layer 3): SSAO + subtle bloom + SMAA,
+              mounted after the scene; skipped entirely on 'balanced'. */}
+          <PostFX enabled={quality === 'high'} quality={quality} />
           <OrbitControls
             makeDefault
             enableDamping
@@ -80,4 +132,4 @@ export default function Viewer3D() {
 }
 
 /** Named re-exports for consumers that compose the pieces individually. */
-export { SceneLayers, NucleusMesh, TractTube, ClipControls, ExplodeSlider, PlaneHelpers }
+export { SceneLayers, NucleusMesh, TractTube, ClipControls, ExplodeSlider, PlaneHelpers, PostFX }

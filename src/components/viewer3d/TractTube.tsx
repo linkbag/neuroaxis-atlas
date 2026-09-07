@@ -1,12 +1,33 @@
 /**
- * TractTube — one ascending/descending pathway (plan §5 "Tracts"):
- * TubeGeometry(CatmullRomCurve3(waypoints), 64, tubeRadius, 10) with the
- * record's direction color (ascending blue family, descending violet, mixed
- * light violet — authored per tract in tracts.json). Slight emissive tint;
- * the selected tract pulses its emissiveIntensity via a useFrame lerp.
- * Tubes are clickable exactly like nuclei and share the clipping planes.
+ * TractTube — one ascending/descending pathway (realism plan §1 Layer 3
+ * "Tracts" + §7 tracts-upgrade; render-pipeline factory in materials.ts).
+ *
+ * Geometry is swept manually from the record's authored waypoints via
+ * CatmullRomCurve3 (src/geometry/curves.ts) instead of the v1 constant-radius
+ * TubeGeometry:
+ *  - TAPER — fascicles narrow toward both ends, down to a per-tract 45–60% of
+ *    the mid radius (deterministic hash of the tract id), held near full
+ *    radius through the middle via a sin^0.55 profile;
+ *  - ELLIPTICAL SECTION — flattened along the frame normal (white-matter
+ *    ribbons), minor/major ratio 0.72–0.84 per tract;
+ *  - GRADIENT — a subtle value gradient (0.9→1.0, sRGB-authored) along the
+ *    curve parameter via a vertex-color attribute (material.vertexColors).
+ *
+ * The material comes from the central factory createTractMaterial(color, dir):
+ * off-white tinted toward the pathway's direction color, fiber-striation
+ * normal map aligned to the tube tangent (our UVs keep the TubeGeometry
+ * convention u = along tube, v = around), anisotropy 4, and an around-axis
+ * repeat that scales with tubeRadius so striation density stays
+ * scale-consistent across tracts (quantized to whole periods — the loop seam
+ * must sample the same texture phase). Clipping planes ride in on the factory
+ * material, so updateClipping/ClipSync keeps working unchanged.
+ *
+ * Selection/hover keep the store-driven emissive with a per-frame lerp
+ * (softer targets than v1 — ACES + IBL read brighter); dimming (open
+ * syndrome highlight) lerps opacity toward the v1 end states. Tubes are
+ * clickable exactly like nuclei (click → selectStructure(tract.id)).
  */
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
@@ -14,29 +35,232 @@ import type { ThreeEvent } from '@react-three/fiber'
 import type { TractRecord } from '../../types'
 import { useAtlasStore } from '../../state/store'
 import { toCatmullRom } from '../../geometry/curves'
-import { ALL_CLIP_PLANES } from './clipPlanes'
+import { createTractMaterial } from '../../geometry/materials'
+import { getStriationNormalTexture } from '../../geometry/textures'
+
+/* ------------------------------------------------------------------ */
+/* Sweep parameters (tracts-upgrade caps + profiles)                   */
+/* ------------------------------------------------------------------ */
+
+/** 72 tubular × 10 radial segments per tract (task cap; thin tubes). */
+const TUBULAR_SEGMENTS = 72
+const RADIAL_SEGMENTS = 10
+const RADIAL_VERTS = RADIAL_SEGMENTS + 1
+
+/** End radius as a fraction of the mid radius — real fascicles taper. */
+const END_RATIO_MIN = 0.45
+const END_RATIO_MAX = 0.6
+/** Minor/major axis ratio — ribbons flattened along the frame normal. */
+const FLATTEN_MIN = 0.72
+const FLATTEN_MAX = 0.84
+/** Along-length vertex-color value range (authored in sRGB). */
+const VALUE_MIN = 0.9
+const VALUE_MAX = 1.0
+
+/** Exponent shaping the taper: >1 hugs full radius through the middle. */
+const TAPER_EXPONENT = 0.55
+
+/**
+ * Median authored tubeRadius (src/data/tracts.json). The striation texture is
+ * authored for the v1 look at (1,3) — 18 fibers × 3 periods around a r=0.5
+ * tube — so the around-axis repeat scales linearly from that reference.
+ */
+const STRIATION_REF_RADIUS = 0.5
+const STRIATION_REF_REPEAT = 3
+
+/* ------------------------------------------------------------------ */
+/* Deterministic per-tract variation (no Math.random — seeded style)   */
+/* ------------------------------------------------------------------ */
+
+/** FNV-1a over the tract id — same texture-seeding discipline as textures.ts. */
+function hashId(id: string): number {
+  let h = 0x811c9dc5
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i)
+    h = Math.imul(h, 0x01000193)
+  }
+  return h >>> 0
+}
+
+/** Pick a deterministic value in [min, max] from one byte of the id hash. */
+function hashRange(hash: number, byte: number, min: number, max: number): number {
+  const unit = (hash >>> (byte * 8)) & 0xff
+  return min + (unit / 0xff) * (max - min)
+}
+
+/* ------------------------------------------------------------------ */
+/* Tapered, elliptical tube geometry (cached per tract id)             */
+/* ------------------------------------------------------------------ */
 
 /** Tube geometries are cached module-level so layer toggles never rebuild. */
-const tubeCache = new Map<string, THREE.TubeGeometry>()
+const tubeCache = new Map<string, THREE.BufferGeometry>()
 
-/** 64 tubular segments × 10 radial segments per plan §5. */
-const TUBULAR_SEGMENTS = 64
-const RADIAL_SEGMENTS = 10
+/**
+ * Sweep the tract's Catmull-Rom centerline into a tapered, slightly
+ * elliptical tube. Frames come from curve.computeFrenetFrames — the same
+ * source TubeGeometry uses — sampled at uniform arc length (getPointAt), so
+ * segment density is length-independent. UVs keep the TubeGeometry layout
+ * (u along the tube, v around) so the striation normal map traces the fibers.
+ */
+function buildTractGeometry(tract: TractRecord): THREE.BufferGeometry {
+  const curve = toCatmullRom(tract.waypoints)
+  const frames = curve.computeFrenetFrames(TUBULAR_SEGMENTS, false)
 
-function tubeGeometryFor(tract: TractRecord): THREE.TubeGeometry {
+  const hash = hashId(tract.id)
+  const endRatio = hashRange(hash, 0, END_RATIO_MIN, END_RATIO_MAX)
+  const flatten = hashRange(hash, 1, FLATTEN_MIN, FLATTEN_MAX)
+
+  const vertexCount = (TUBULAR_SEGMENTS + 1) * RADIAL_VERTS
+  const positions = new Float32Array(vertexCount * 3)
+  const normals = new Float32Array(vertexCount * 3)
+  const colors = new Float32Array(vertexCount * 3)
+  const uvs = new Float32Array(vertexCount * 2)
+  const indices: number[] = []
+
+  const point = new THREE.Vector3()
+  const color = new THREE.Color()
+
+  for (let i = 0; i <= TUBULAR_SEGMENTS; i++) {
+    const t = i / TUBULAR_SEGMENTS
+    curve.getPointAt(t, point)
+    const frameN = frames.normals[i]
+    const frameB = frames.binormals[i]
+
+    // Radius profile: endRatio at t=0/1, full tubeRadius through the middle.
+    const taper = endRatio + (1 - endRatio) * Math.pow(Math.sin(Math.PI * t), TAPER_EXPONENT)
+    const semiMajor = tract.tubeRadius * taper // along the frame binormal
+    const semiMinor = semiMajor * flatten // along the frame normal (ribbon)
+
+    // Subtle value gradient along the length, authored in sRGB space.
+    color.setRGB(
+      VALUE_MIN + (VALUE_MAX - VALUE_MIN) * t,
+      VALUE_MIN + (VALUE_MAX - VALUE_MIN) * t,
+      VALUE_MIN + (VALUE_MAX - VALUE_MIN) * t,
+      THREE.SRGBColorSpace,
+    )
+
+    for (let j = 0; j < RADIAL_VERTS; j++) {
+      const theta = (j / RADIAL_SEGMENTS) * Math.PI * 2
+      const cosTheta = Math.cos(theta)
+      const sinTheta = Math.sin(theta)
+      const v = i * RADIAL_VERTS + j
+
+      // Ellipse point: B·(a·cosθ) + N·(b·sinθ).
+      const bx = frameB.x * cosTheta * semiMajor
+      const by = frameB.y * cosTheta * semiMajor
+      const bz = frameB.z * cosTheta * semiMajor
+      const nx = frameN.x * sinTheta * semiMinor
+      const ny = frameN.y * sinTheta * semiMinor
+      const nz = frameN.z * sinTheta * semiMinor
+      positions[v * 3] = point.x + bx + nx
+      positions[v * 3 + 1] = point.y + by + ny
+      positions[v * 3 + 2] = point.z + bz + nz
+
+      // Outward normal of the ellipse: B·(cosθ/a) + N·(sinθ/b), normalized.
+      let gx = frameB.x * (cosTheta / semiMajor) + frameN.x * (sinTheta / semiMinor)
+      let gy = frameB.y * (cosTheta / semiMajor) + frameN.y * (sinTheta / semiMinor)
+      let gz = frameB.z * (cosTheta / semiMajor) + frameN.z * (sinTheta / semiMinor)
+      const invLen = 1 / Math.hypot(gx, gy, gz)
+      normals[v * 3] = gx * invLen
+      normals[v * 3 + 1] = gy * invLen
+      normals[v * 3 + 2] = gz * invLen
+
+      colors[v * 3] = color.r
+      colors[v * 3 + 1] = color.g
+      colors[v * 3 + 2] = color.b
+      uvs[v * 2] = t
+      uvs[v * 2 + 1] = j / RADIAL_SEGMENTS
+    }
+  }
+
+  // Quad grid → triangles, wound CCW seen from outside. Note: this is the
+  // MIRROR of TubeGeometry's (a,b,d),(b,c,d) — three parameterizes its rings
+  // with cos = −cos(v) (opposite sweep direction), so with this ring
+  // parameterization (θ from +B toward +N) the outward-facing order is
+  // (a,d,c),(a,c,b). Verified empirically across all 19 tracts (winding
+  // agrees with authored normals everywhere; the authored
+  // trigeminothalamic-ventral hairpin folds any swept tube — the v1
+  // primitive folded 3× more triangles there).
+  for (let i = 0; i < TUBULAR_SEGMENTS; i++) {
+    for (let j = 0; j < RADIAL_SEGMENTS; j++) {
+      const a = i * RADIAL_VERTS + j
+      const b = i * RADIAL_VERTS + j + 1
+      const c = (i + 1) * RADIAL_VERTS + j + 1
+      const d = (i + 1) * RADIAL_VERTS + j
+      indices.push(a, d, c, a, c, b)
+    }
+  }
+
+  const geometry = new THREE.BufferGeometry()
+  geometry.setIndex(indices)
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+  geometry.setAttribute('normal', new THREE.BufferAttribute(normals, 3))
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+  geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
+  geometry.computeBoundingSphere()
+  return geometry
+}
+
+function tubeGeometryFor(tract: TractRecord): THREE.BufferGeometry {
   const cached = tubeCache.get(tract.id)
   if (cached) return cached
-  const curve = toCatmullRom(tract.waypoints)
-  const geometry = new THREE.TubeGeometry(curve, TUBULAR_SEGMENTS, tract.tubeRadius, RADIAL_SEGMENTS, false)
+  const geometry = buildTractGeometry(tract)
   tubeCache.set(tract.id, geometry)
   return geometry
 }
+
+/* ------------------------------------------------------------------ */
+/* Striation texture clones (repeat quantized per tubeRadius)          */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Whole-period around-axis repeat for a tube radius. The striation density
+ * stays scale-consistent because the repeat scales with the circumference;
+ * quantizing to whole periods keeps the closed loop's seam on one texture
+ * phase (a fractional repeat would visibly misalign the fibers there).
+ */
+function striationRepeatFor(tubeRadius: number): number {
+  return THREE.MathUtils.clamp(
+    Math.round((STRIATION_REF_REPEAT * tubeRadius) / STRIATION_REF_RADIUS),
+    2,
+    6,
+  )
+}
+
+/** One texture clone per distinct repeat (shared across tracts; ~5 total). */
+const striationClones = new Map<number, THREE.DataTexture>()
+
+function striationTextureFor(repeat: number): THREE.DataTexture {
+  const cached = striationClones.get(repeat)
+  if (cached) return cached
+  const texture = getStriationNormalTexture().clone()
+  texture.repeat.set(1, repeat)
+  texture.anisotropy = 4
+  texture.needsUpdate = true
+  striationClones.set(repeat, texture)
+  return texture
+}
+
+/* ------------------------------------------------------------------ */
+/* Component                                                           */
+/* ------------------------------------------------------------------ */
 
 export interface TractTubeProps {
   tract: TractRecord
   /** Ids kept lit while everything else dims (selection or open syndrome). */
   highlight: Set<string> | null
 }
+
+/**
+ * Emissive targets, softer than v1 (0.45±0.3 / 0.35 / 0.28 / 0.08): ACES tone
+ * mapping + IBL read emissive brighter, so the selected pulse rides lower
+ * (plan §1 Layer 3 "softer emissive, selected-pulse retained").
+ */
+const EMISSIVE_SELECTED_BASE = 0.3
+const EMISSIVE_SELECTED_PULSE = 0.16
+const EMISSIVE_SYNDROME = 0.22
+const EMISSIVE_HOVER = 0.14
+const EMISSIVE_IDLE = 0.05
 
 export default function TractTube({ tract, highlight }: TractTubeProps) {
   const hoveredId = useAtlasStore((s) => s.hoveredId)
@@ -45,32 +269,44 @@ export default function TractTube({ tract, highlight }: TractTubeProps) {
   const setHovered = useAtlasStore((s) => s.setHovered)
   const selectStructure = useAtlasStore((s) => s.selectStructure)
 
-  const geometry = useMemo(() => tubeGeometryFor(tract), [tract])
-  // If this component ever unmounts permanently the cache still holds the
-  // geometry for the next mount — disposal happens only at tube replacement,
-  // which the cache guards against. Nothing to clean per-mount.
-
   const isSelected = selectedId === tract.id
   const isHovered = hoveredId === tract.id
   const syndromeLit = highlight !== null && highlight.has(tract.id) && !isSelected
   const dimmed = highlight !== null && !highlight.has(tract.id)
 
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null)
+  // Geometry is memoized per tract id (module cache — layer toggles reuse it).
+  const geometry = useMemo(() => tubeGeometryFor(tract), [tract])
 
-  // Selected tubes breathe: emissiveIntensity lerps toward an oscillating
-  // target every frame (plan §5 hover/selection emphasis).
+  // Factory material per instance (direction-tinted white matter with the
+  // tangent striation normal map); vertex colors enable the length gradient,
+  // and the normal-map clone gets the radius-scaled repeat + anisotropy.
+  // three re-acquires disposed materials, so the StrictMode
+  // setup→cleanup→setup cycle is safe (same pattern as NucleusMesh).
+  const material = useMemo(() => {
+    const created = createTractMaterial(tract.color, { direction: tract.direction })
+    created.vertexColors = true
+    created.needsUpdate = true
+    created.normalMap = striationTextureFor(striationRepeatFor(tract.tubeRadius))
+    return created
+  }, [tract])
+  useEffect(() => () => material.dispose(), [material])
+
+  // Selected tubes breathe; dimming fades opacity. Both lerp toward the
+  // store-driven targets every frame (softer plan §1 Layer 3 emphasis);
+  // depthWrite flips off while translucent so dimmed tubes never occlude.
   useFrame((state, delta) => {
-    const material = materialRef.current
-    if (!material) return
+    const alpha = Math.min(1, delta * 8)
     const time = state.clock.elapsedTime
-    const target = isSelected
-      ? 0.45 + 0.3 * Math.sin(time * 4)
+    const emissiveTarget = isSelected
+      ? EMISSIVE_SELECTED_BASE + EMISSIVE_SELECTED_PULSE * Math.sin(time * 4)
       : syndromeLit
-        ? 0.35
+        ? EMISSIVE_SYNDROME
         : isHovered
-          ? 0.28
-          : 0.08
-    material.emissiveIntensity = THREE.MathUtils.lerp(material.emissiveIntensity, target, Math.min(1, delta * 8))
+          ? EMISSIVE_HOVER
+          : EMISSIVE_IDLE
+    material.emissiveIntensity = THREE.MathUtils.lerp(material.emissiveIntensity, emissiveTarget, alpha)
+    material.opacity = THREE.MathUtils.lerp(material.opacity, dimmed ? 0.15 : 1, alpha)
+    material.depthWrite = material.opacity > 0.99
   })
 
   const handleOver = (event: ThreeEvent<PointerEvent>) => {
@@ -96,22 +332,11 @@ export default function TractTube({ tract, highlight }: TractTubeProps) {
   return (
     <mesh
       geometry={geometry}
+      material={material}
       onPointerOver={handleOver}
       onPointerOut={handleOut}
       onPointerDown={handleDown}
     >
-      <meshStandardMaterial
-        ref={materialRef}
-        color={tract.color}
-        roughness={0.5}
-        metalness={0.1}
-        emissive={tract.color}
-        emissiveIntensity={0.08}
-        transparent
-        opacity={dimmed ? 0.15 : 1}
-        depthWrite={!dimmed}
-        clippingPlanes={ALL_CLIP_PLANES}
-      />
       {labelVisibility && (isSelected || isHovered) ? (
         <Html position={midpoint} zIndexRange={[30, 10]} style={{ pointerEvents: 'none' }}>
           <span className={`label3d${isSelected ? ' is-selected' : ' is-hovered'}`}>{tract.name}</span>
@@ -126,8 +351,13 @@ export function tubeCacheSize(): number {
   return tubeCache.size
 }
 
-/** Dispose every cached tube geometry (host app teardown only). */
+/**
+ * Dispose every cached tube geometry and striation texture clone (host app
+ * teardown only — factory materials dispose with their mesh instances).
+ */
 export function disposeTubeCache(): void {
   for (const geometry of tubeCache.values()) geometry.dispose()
   tubeCache.clear()
+  for (const texture of striationClones.values()) texture.dispose()
+  striationClones.clear()
 }

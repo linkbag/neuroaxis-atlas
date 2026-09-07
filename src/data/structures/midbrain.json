@@ -160,7 +160,7 @@
       },
       {
         "syndrome": "Autonomic stress responses",
-        "findings": "PAG activation coordinates stress hypergravity responses: tachycardia, hypertension, hyperventilation, and defensive freezing or flight behavior.",
+        "findings": "PAG activation coordinates autonomic stress responses: tachycardia, hypertension, hyperventilation, and defensive freezing or flight behavior.",
         "note": "Functional-imaging correlate of threat processing; discrete human lesions are rare."
       }
     ],
@@ -453,7 +453,7 @@
       },
       {
         "syndrome": "Vascular parkinsonism and nigral infarction",
-        "findings": "Infarcts or hemorrhages involving the substantia nigra cause contralateral parkinsonism or hemiparkinsonism, and acute nigral lesions may add hemiballistic or dystonic movements.",
+        "findings": "Infarcts or hemorrhages involving the substantia nigra cause contralateral parkinsonism or hemiparkinsonism, and acute nigral lesions may add hemiballismic or dystonic movements.",
         "vascular": "PCA paramedian perforators; anterior choroidal artery"
       }
     ],

@@ -3,10 +3,11 @@
 NeuroAxis — 3D Brainstem Atlas. This document records every external work that
 informed the project and the licensing/citation policy applied to it.
 
-**Summary: no external anatomy dataset, mesh, image, or plate artwork is used.
-All 3D geometry (ellipsoid nuclei, tube-geometry tracts, parametric envelopes),
-all 12 SVG cross-section plates, and all descriptive text are original schematic
-works authored for this project.** The works below are cited as the scholarly
+**Summary: all 2D plates, descriptive text, tract curves, and nucleus placement are
+original schematic works authored for this project. Starting with the v2 realism
+upgrade, the 3D *envelope* surfaces are derived from BodyParts3D 4.0 (CC BY 4.0 —
+see the dedicated section below); all other geometry (ellipsoid nuclei,
+tube-geometry tracts) remains original.** The works below are cited as the scholarly
 basis for the neuroanatomical descriptions and as UX inspiration.
 
 ## Textbook references (content authority)
@@ -50,6 +51,44 @@ chapters (surface anatomy and cranial nerves; internal organization);
   brainstem syndromes this atlas presents; the syndrome cards' vascular
   territories follow its tables.
 
+## 3D anatomy surfaces — BodyParts3D 4.0 (CC BY 4.0)
+
+Introduced with the v2 realism upgrade (see `docs/REALISM_PLAN.md`): the 3D
+envelope surfaces of the brainstem, diencephalon and cerebellum are **derived
+from [BodyParts3D](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/download.html)**,
+an anatomical structure database developed and provided by DBCLS. The required
+attribution, reproduced verbatim from the
+[license page](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html):
+
+> BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International.
+
+- **Dataset**: BodyParts3D 4.0, PART-OF tree OBJ archive
+  (`partof_BP3D_4.0_obj_99.zip`, 99% decimated meshes),
+  <https://dbarchive.biosciencedbc.jp/data/bodyparts3d/LATEST/partof_BP3D_4.0_obj_99.zip>;
+  plus thalamus (L/R) and lateral/medial geniculate bodies from the IS-A tree OBJ
+  archive (`isa_BP3D_4.0_obj_99.zip`, same license/version),
+  <https://dbarchive.biosciencedbc.jp/data/bodyparts3d/LATEST/isa_BP3D_4.0_obj_99.zip>.
+- **License**: [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+  Free access, redistribution, and creation/distribution of derivative works are
+  permitted with the attribution string above.
+- **Publication**: Mitsuhashi N., Fujieda K., Tamura T., Kawamoto S., Takagi T.,
+  Okubo K. "BodyParts3D: 3D structure database for anatomical concepts."
+  *Nucleic Acids Research* 2009;37:D782–5.
+  doi:[10.1093/nar/gkn613](https://doi.org/10.1093/nar/gkn613)
+- **Basis**: surfaces derived from adult male magnetic-resonance imaging
+  ("TARO") with illustration-based refinement; native units millimeters, Z-up,
+  whole-body coordinates.
+- **Adaptations applied by this project** (these make the used geometry a
+  derivative work): axis/unit conversion from BP3D millimeters/Z-up whole-body
+  coordinates into canonical atlas units, landmark-based registration (level
+  anchoring, centerline straightening), signed-distance-field resampling with
+  organic sculpting (SDF union/subtract/displacement), and further mesh
+  simplification. Derived assets are distributed under the same CC BY 4.0 terms
+  with the attribution string above. Per-part provenance is recorded in
+  `assets-src/bp3d/parts-report.json` (working files) and the `source` field of
+  the committed `src/assets/anatomy/anatomy-manifest.json` (`bp3d+sculpt` vs
+  `sculpt`).
+
 ## Nomenclature note — FreeSurfer
 
 Thalamic nuclear nomenclature (VA, VL, VPL, VPM, MD, pulvinar, LGN, MGN,
@@ -80,9 +119,11 @@ from — the wiki page was consulted as a naming reference only.
 - Every structure description, connection list, function summary, clinical
   note, and syndrome card is an **original paraphrase** written for this
   project, citing the sources above for scholarly grounding.
-- All 3D geometry is **procedurally generated at runtime** from hand-authored
-  canonical coordinates (`src/data/*.json`, `src/geometry/`); nothing is
-  scanned, segmented, or downloaded.
+- Through v1, all 3D geometry was **procedurally generated at runtime** from
+  hand-authored canonical coordinates (`src/data/*.json`, `src/geometry/`). With
+  the v2 realism upgrade, envelope-surface meshes are **derived from BodyParts3D
+  4.0 at build time** (see the section above); nuclei, tracts, plates, and text
+  remain original procedural/hand-authored works.
 - All 12 SVG plates (`src/data/plates/*.svg`) are **hand-drawn original
   schematic works** following textbook section *conventions* (dorsal top,
   patient-left-on-image-right for transverse sections, etc.); they are not

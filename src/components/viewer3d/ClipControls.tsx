@@ -44,8 +44,11 @@ export default function ClipControls() {
   )
 
   const onTransverseInput = (raw: number) => {
-    if (snapToPlate && nearestLevel !== null) {
-      setClip({ y: nearestLevel.y })
+    // Snap to the plate level nearest the DRAGGED value (not the current
+    // clip.y, or the slider would snap back to the level it starts on).
+    if (snapToPlate) {
+      const level = nearestLevelTo(raw)
+      setClip({ y: level !== null ? level.y : raw })
       return
     }
     setClip({ y: raw })

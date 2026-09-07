@@ -1,17 +1,32 @@
 /**
- * Header — product title, view presets (plan §1.1 feature 2), references
- * button (plan §1.1 feature 12). Rendered as the `.app-header` grid area;
- * the integration task places it inside `.app-shell`.
+ * Header — product title, view presets (plan §1.1 feature 2), rendering
+ * quality toggle (realism plan §1 Layer 3 post-fx task), references button
+ * (plan §1.1 feature 12). Rendered as the `.app-header` grid area; the
+ * integration task places it inside `.app-shell`.
  */
 
-import { useAtlasStore, viewPresetOf, VIEW_PRESETS, type ViewPreset } from '../state/store'
+import { useAtlasStore, viewPresetOf, VIEW_PRESETS, type RenderQuality, type ViewPreset } from '../state/store'
 
 const PRESET_ORDER: ViewPreset[] = ['all', 'nuclei', 'tracts', 'clinical-motor']
+
+const QUALITY_ORDER: RenderQuality[] = ['high', 'balanced']
+
+const QUALITY_LABELS: Record<RenderQuality, string> = {
+  high: 'High',
+  balanced: 'Balanced',
+}
+
+const QUALITY_HINTS: Record<RenderQuality, string> = {
+  high: 'Full quality: SSAO ambient shading, subtle bloom and SMAA antialiasing',
+  balanced: 'Faster: skips all post effects and caps the render resolution',
+}
 
 export default function Header() {
   const layers = useAtlasStore((s) => s.layers)
   const applyViewPreset = useAtlasStore((s) => s.applyViewPreset)
   const setReferencesOpen = useAtlasStore((s) => s.setReferencesOpen)
+  const quality = useAtlasStore((s) => s.quality)
+  const setQuality = useAtlasStore((s) => s.setQuality)
   const activePreset = viewPresetOf(layers)
 
   return (
@@ -41,6 +56,23 @@ export default function Header() {
       </div>
 
       <div className="header-actions">
+        <div className="quality-toggle" role="group" aria-label="Rendering quality" title="Rendering quality">
+          {QUALITY_ORDER.map((tier) => {
+            const active = quality === tier
+            return (
+              <button
+                key={tier}
+                type="button"
+                className={`btn${active ? ' is-active' : ''}`}
+                title={QUALITY_HINTS[tier]}
+                aria-pressed={active}
+                onClick={() => setQuality(tier)}
+              >
+                {QUALITY_LABELS[tier]}
+              </button>
+            )
+          })}
+        </div>
         <button
           type="button"
           className="btn"

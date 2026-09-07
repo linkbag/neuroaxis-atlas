@@ -161,7 +161,7 @@
       {
         "syndrome": "Hypothalamic (central) hypothyroid-hypocortisolic failure",
         "findings": "Injury to parvocellular TRH/CRH neurons (craniopharyngioma, surgery, infiltrates) produces secondary hypothyroidism and hypocortisolism with fatigue and hypotension.",
-        "note": "neuroendocrine (HPA/HPG/HPG-axis) failure"
+        "note": "neuroendocrine (HPA/HPG/HPT-axis) failure"
       }
     ],
     "levels": ["lvl-thalamus-rostral"],

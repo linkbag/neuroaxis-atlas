@@ -1,0 +1,866 @@
+{
+  "nuc-abducens": {
+    "tris": 1200,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 202,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-ambiguus": {
+    "tris": 1320,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 222,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface − vent-fourth-ventricle"
+  },
+  "nuc-arcuate-hypothalamic": {
+    "tris": 556,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 282,
+    "envelope": "ctx-hypothalamus-surface"
+  },
+  "nuc-arcuate-medullary": {
+    "tris": 1624,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 204,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface"
+  },
+  "nuc-area-postrema": {
+    "tris": 440,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 224,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface − vent-fourth-ventricle"
+  },
+  "nuc-cochlear-dorsal": {
+    "tris": 788,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 199,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-cochlear-ventral": {
+    "tris": 1300,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 218,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-cuneiform": {
+    "tris": 1328,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 223,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-dentate": {
+    "tris": 2208,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 185,
+    "envelope": "ctx-cerebellum-l+ctx-cerebellum-r+ctx-cerebellar-vermis"
+  },
+  "nuc-dmv": {
+    "tris": 1320,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 221,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface − vent-fourth-ventricle"
+  },
+  "nuc-dorsal-raphe": {
+    "tris": 696,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 175,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-dorsomedial": {
+    "tris": 436,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 220,
+    "envelope": "ctx-hypothalamus-surface"
+  },
+  "nuc-edinger-westphal": {
+    "tris": 660,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 166,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-facial": {
+    "tris": 1332,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 223,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-fastigial": {
+    "tris": 1152,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 193,
+    "envelope": "ctx-cerebellum-l+ctx-cerebellum-r+ctx-cerebellar-vermis"
+  },
+  "nuc-habenula": {
+    "tris": 816,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 206,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-hypoglossal": {
+    "tris": 1140,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 190,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface − vent-fourth-ventricle"
+  },
+  "nuc-inferior-colliculus": {
+    "tris": 1316,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 221,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-inferior-olive-medial": {
+    "tris": 1244,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 209,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface"
+  },
+  "nuc-inferior-olive-principal": {
+    "tris": 2176,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 218,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface"
+  },
+  "nuc-interposed": {
+    "tris": 1460,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 184,
+    "envelope": "ctx-cerebellum-l+ctx-cerebellum-r+ctx-cerebellar-vermis"
+  },
+  "nuc-intralaminar": {
+    "tris": 1288,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 216,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-lateral-dorsal": {
+    "tris": 2268,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 189,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-lateral-posterior": {
+    "tris": 2172,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 218,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-lgn": {
+    "tris": 2216,
+    "contained": 1,
+    "nudged": [
+      0.644,
+      0.213,
+      -0.73
+    ],
+    "scaled": false,
+    "samples": 220,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-locus-coeruleus": {
+    "tris": 480,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 244,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-mammillary-body": {
+    "tris": 924,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 233,
+    "envelope": "ctx-hypothalamus-surface"
+  },
+  "nuc-md": {
+    "tris": 1176,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 197,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-medullary-reticular": {
+    "tris": 1344,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 225,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface"
+  },
+  "nuc-mesencephalic-v": {
+    "tris": 1172,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 198,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-mgn": {
+    "tris": 1340,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 221,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-midline-thalamic": {
+    "tris": 1032,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 174,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r − vent-third-ventricle"
+  },
+  "nuc-nucleus-cuneatus": {
+    "tris": 1288,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 216,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface"
+  },
+  "nuc-nucleus-gracilis": {
+    "tris": 1288,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 215,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface"
+  },
+  "nuc-oculomotor": {
+    "tris": 1056,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 177,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-pag": {
+    "tris": 1220,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 205,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-paraventricular": {
+    "tris": 592,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 298,
+    "envelope": "ctx-hypothalamus-surface"
+  },
+  "nuc-pineal-gland": {
+    "tris": 356,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 180,
+    "envelope": "ctx-pineal − vent-third-ventricle"
+  },
+  "nuc-pontine-reticular": {
+    "tris": 1212,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 204,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface"
+  },
+  "nuc-posterior-hypothalamus": {
+    "tris": 324,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 164,
+    "envelope": "ctx-hypothalamus-surface"
+  },
+  "nuc-pprf": {
+    "tris": 1540,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 194,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface"
+  },
+  "nuc-preoptic": {
+    "tris": 888,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 215,
+    "envelope": "ctx-hypothalamus-surface − vent-third-ventricle"
+  },
+  "nuc-pretectal": {
+    "tris": 1264,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 212,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-principal-sensory-v": {
+    "tris": 1348,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 226,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface"
+  },
+  "nuc-pulvinar": {
+    "tris": 2196,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 219,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-red-nucleus": {
+    "tris": 2164,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 217,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-snc": {
+    "tris": 2292,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 192,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-snr": {
+    "tris": 2240,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 188,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-solitarius-caudal": {
+    "tris": 1152,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 194,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface − vent-fourth-ventricle"
+  },
+  "nuc-solitarius-rostral": {
+    "tris": 864,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 219,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-spinal-trigeminal": {
+    "tris": 1204,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 202,
+    "envelope": "ctx-medulla-surface+ctx-pons-surface"
+  },
+  "nuc-subthalamic": {
+    "tris": 1336,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 224,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r+ctx-hypothalamus-surface"
+  },
+  "nuc-superior-colliculus": {
+    "tris": 1240,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 208,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-superior-olivary": {
+    "tris": 1156,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 194,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface"
+  },
+  "nuc-superior-salivatory": {
+    "tris": 708,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 179,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-suprachiasmatic": {
+    "tris": 532,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 270,
+    "envelope": "ctx-hypothalamus-surface"
+  },
+  "nuc-supraoptic": {
+    "tris": 668,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 169,
+    "envelope": "ctx-hypothalamus-surface"
+  },
+  "nuc-thalamic-anterior": {
+    "tris": 2216,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 185,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-thalamic-reticular": {
+    "tris": 2360,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 196,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-trigeminal-motor": {
+    "tris": 1336,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 224,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface"
+  },
+  "nuc-trochlear": {
+    "tris": 796,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 200,
+    "envelope": "ctx-midbrain-surface+ctx-pons-surface"
+  },
+  "nuc-va": {
+    "tris": 2216,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 184,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-ventromedial": {
+    "tris": 764,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 193,
+    "envelope": "ctx-hypothalamus-surface"
+  },
+  "nuc-vestibular-inferior": {
+    "tris": 1312,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 220,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-vestibular-lateral": {
+    "tris": 1320,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 222,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-vestibular-medial": {
+    "tris": 1292,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 217,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-vestibular-superior": {
+    "tris": 1260,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 212,
+    "envelope": "ctx-pons-surface+ctx-medulla-surface − vent-fourth-ventricle"
+  },
+  "nuc-vl": {
+    "tris": 1288,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 213,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-vpl": {
+    "tris": 1272,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 211,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-vpm": {
+    "tris": 1288,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 215,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r"
+  },
+  "nuc-zona-incerta": {
+    "tris": 1316,
+    "contained": 1,
+    "nudged": [
+      0,
+      0,
+      0
+    ],
+    "scaled": false,
+    "samples": 221,
+    "envelope": "ctx-thalamus-l+ctx-thalamus-r+ctx-hypothalamus-surface"
+  },
+  "overall": {
+    "generatedBy": "scripts/build-anatomy-geometry.mjs + scripts/anatomy-recipes/nuclei.mjs (task nuclei-organic-v2b)",
+    "marginAu": 0.8,
+    "samplesPerNucleus": "~200 surface points",
+    "nuclei": 71,
+    "contained": 1,
+    "totalTris": 90088,
+    "nudgedCount": 1,
+    "scaledCount": 0,
+    "scaleRescue": "AMENDMENT A: size3d x/z × (1.2/0.7) about origin3d when nudging cannot contain a nucleus",
+    "gate": 0.98
+  }
+}

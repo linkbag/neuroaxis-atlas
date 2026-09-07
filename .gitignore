@@ -9,3 +9,12 @@ dist/
 
 # Task scratch space
 .plate-scratch/
+.scaffold-tmp/
+.selftest/
+build-output.txt
+check-output.txt
+
+# External anatomy downloads (BodyParts3D raw archives + extracted OBJs —
+# regenerable via scripts; derived GLBs in src/assets are committed)
+.bp3d-probe/
+assets-src/

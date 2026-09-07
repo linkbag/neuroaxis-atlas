@@ -1,0 +1,2106 @@
+{
+  "version": 2,
+  "generatedBy": "scripts/build-anatomy-geometry.mjs",
+  "parts": [
+    {
+      "slug": "ctx-cerebellar-vermis",
+      "file": "ctx-cerebellar-vermis.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 16836,
+      "centroid": [
+        -0.009,
+        -7.2,
+        -27.568
+      ],
+      "bbox": {
+        "min": [
+          -3.953,
+          -31.037,
+          -51.615
+        ],
+        "max": [
+          3.951,
+          16.238,
+          -5.986
+        ]
+      }
+    },
+    {
+      "slug": "ctx-cerebellum-l",
+      "file": "ctx-cerebellum-l.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 23208,
+      "centroid": [
+        16.549,
+        -12.632,
+        -24.558
+      ],
+      "bbox": {
+        "min": [
+          0.302,
+          -34.108,
+          -53.017
+        ],
+        "max": [
+          44.885,
+          14.881,
+          1.455
+        ]
+      }
+    },
+    {
+      "slug": "ctx-cerebellum-r",
+      "file": "ctx-cerebellum-r.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 23680,
+      "centroid": [
+        -16.017,
+        -12.702,
+        -24.221
+      ],
+      "bbox": {
+        "min": [
+          -44.325,
+          -34.053,
+          -52.997
+        ],
+        "max": [
+          -0.159,
+          14.829,
+          1.459
+        ]
+      }
+    },
+    {
+      "slug": "ctx-hypothalamus-surface",
+      "file": "ctx-hypothalamus-surface.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 17464,
+      "centroid": [
+        -0.588,
+        24.495,
+        12.04
+      ],
+      "bbox": {
+        "min": [
+          -6.804,
+          6.748,
+          -4.039
+        ],
+        "max": [
+          6.644,
+          37.886,
+          24.153
+        ]
+      }
+    },
+    {
+      "slug": "ctx-medulla-surface",
+      "file": "ctx-medulla-surface.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 18836,
+      "centroid": [
+        0.003,
+        -32.623,
+        1.662
+      ],
+      "bbox": {
+        "min": [
+          -11.087,
+          -50.79,
+          -8.547
+        ],
+        "max": [
+          11.1,
+          -18.738,
+          13.006
+        ]
+      }
+    },
+    {
+      "slug": "ctx-midbrain-surface",
+      "file": "ctx-midbrain-surface.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 14776,
+      "centroid": [
+        0.026,
+        11.453,
+        -0.946
+      ],
+      "bbox": {
+        "min": [
+          -12.126,
+          2.431,
+          -14.442
+        ],
+        "max": [
+          12.074,
+          20.263,
+          11.582
+        ]
+      }
+    },
+    {
+      "slug": "ctx-pineal",
+      "file": "ctx-pineal.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 5976,
+      "centroid": [
+        0.115,
+        19.392,
+        -13.866
+      ],
+      "bbox": {
+        "min": [
+          -3.328,
+          14.295,
+          -20.436
+        ],
+        "max": [
+          2.985,
+          24.068,
+          -7.881
+        ]
+      }
+    },
+    {
+      "slug": "ctx-pons-surface",
+      "file": "ctx-pons-surface.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 23776,
+      "centroid": [
+        0.079,
+        -9.322,
+        1.861
+      ],
+      "bbox": {
+        "min": [
+          -18.131,
+          -24.519,
+          -11.506
+        ],
+        "max": [
+          18.239,
+          5.849,
+          16.679
+        ]
+      }
+    },
+    {
+      "slug": "ctx-thalamus-l",
+      "file": "ctx-thalamus-l.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 17520,
+      "centroid": [
+        10.588,
+        27.872,
+        -2.482
+      ],
+      "bbox": {
+        "min": [
+          1.2,
+          10.87,
+          -16.363
+        ],
+        "max": [
+          21.565,
+          39.655,
+          14.178
+        ]
+      }
+    },
+    {
+      "slug": "ctx-thalamus-r",
+      "file": "ctx-thalamus-r.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 17248,
+      "centroid": [
+        -10.648,
+        28.039,
+        -2.416
+      ],
+      "bbox": {
+        "min": [
+          -20.076,
+          10.841,
+          -16.342
+        ],
+        "max": [
+          -1.2,
+          39.66,
+          14.081
+        ]
+      }
+    },
+    {
+      "slug": "nuc-abducens",
+      "file": "nuc-abducens.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1200,
+      "centroid": [
+        0.055,
+        -17.854,
+        -3.674
+      ],
+      "bbox": {
+        "min": [
+          -3.035,
+          -19.369,
+          -5.094
+        ],
+        "max": [
+          3.042,
+          -16.394,
+          -2.524
+        ]
+      }
+    },
+    {
+      "slug": "nuc-ambiguus",
+      "file": "nuc-ambiguus.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1320,
+      "centroid": [
+        -0.043,
+        -29.887,
+        -3.849
+      ],
+      "bbox": {
+        "min": [
+          -4.708,
+          -37.818,
+          -5.166
+        ],
+        "max": [
+          4.708,
+          -23.534,
+          -2.457
+        ]
+      }
+    },
+    {
+      "slug": "nuc-arcuate-hypothalamic",
+      "file": "nuc-arcuate-hypothalamic.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 556,
+      "centroid": [
+        -0.061,
+        28.836,
+        5.667
+      ],
+      "bbox": {
+        "min": [
+          -3.47,
+          28.184,
+          4.746
+        ],
+        "max": [
+          3.461,
+          29.499,
+          6.604
+        ]
+      }
+    },
+    {
+      "slug": "nuc-arcuate-medullary",
+      "file": "nuc-arcuate-medullary.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1624,
+      "centroid": [
+        -0.029,
+        -43.202,
+        7.009
+      ],
+      "bbox": {
+        "min": [
+          -3.59,
+          -46.538,
+          6.471
+        ],
+        "max": [
+          3.52,
+          -39.914,
+          7.619
+        ]
+      }
+    },
+    {
+      "slug": "nuc-area-postrema",
+      "file": "nuc-area-postrema.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 440,
+      "centroid": [
+        -0.041,
+        -31.623,
+        -6.435
+      ],
+      "bbox": {
+        "min": [
+          -2.276,
+          -32.819,
+          -6.879
+        ],
+        "max": [
+          2.255,
+          -30.321,
+          -6.041
+        ]
+      }
+    },
+    {
+      "slug": "nuc-cochlear-dorsal",
+      "file": "nuc-cochlear-dorsal.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 788,
+      "centroid": [
+        0.04,
+        -20.719,
+        -5.35
+      ],
+      "bbox": {
+        "min": [
+          -8.083,
+          -21.722,
+          -6.464
+        ],
+        "max": [
+          8.089,
+          -19.779,
+          -4.372
+        ]
+      }
+    },
+    {
+      "slug": "nuc-cochlear-ventral",
+      "file": "nuc-cochlear-ventral.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1300,
+      "centroid": [
+        -0.128,
+        -18.802,
+        -3.98
+      ],
+      "bbox": {
+        "min": [
+          -7.846,
+          -20.202,
+          -5.241
+        ],
+        "max": [
+          7.838,
+          -17.513,
+          -2.83
+        ]
+      }
+    },
+    {
+      "slug": "nuc-cuneiform",
+      "file": "nuc-cuneiform.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1328,
+      "centroid": [
+        -0.018,
+        11.024,
+        -3.975
+      ],
+      "bbox": {
+        "min": [
+          -8.84,
+          7.419,
+          -5.444
+        ],
+        "max": [
+          8.835,
+          14.772,
+          -2.57
+        ]
+      }
+    },
+    {
+      "slug": "nuc-dentate",
+      "file": "nuc-dentate.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2208,
+      "centroid": [
+        -0.049,
+        -22.016,
+        -11.02
+      ],
+      "bbox": {
+        "min": [
+          -8.124,
+          -24.688,
+          -12.964
+        ],
+        "max": [
+          8.085,
+          -19.288,
+          -9.119
+        ]
+      }
+    },
+    {
+      "slug": "nuc-dmv",
+      "file": "nuc-dmv.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1320,
+      "centroid": [
+        0.03,
+        -29.557,
+        -6.28
+      ],
+      "bbox": {
+        "min": [
+          -3.096,
+          -33.362,
+          -7.409
+        ],
+        "max": [
+          3.103,
+          -26.361,
+          -5.269
+        ]
+      }
+    },
+    {
+      "slug": "nuc-dorsal-raphe",
+      "file": "nuc-dorsal-raphe.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 696,
+      "centroid": [
+        -0.752,
+        10.767,
+        -4.191
+      ],
+      "bbox": {
+        "min": [
+          -1.344,
+          7.263,
+          -5.099
+        ],
+        "max": [
+          -0.185,
+          14.409,
+          -3.258
+        ]
+      }
+    },
+    {
+      "slug": "nuc-dorsomedial",
+      "file": "nuc-dorsomedial.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 436,
+      "centroid": [
+        -1.749,
+        34.991,
+        5.883
+      ],
+      "bbox": {
+        "min": [
+          -2.447,
+          33.78,
+          4.639
+        ],
+        "max": [
+          -0.869,
+          36.252,
+          7.13
+        ]
+      }
+    },
+    {
+      "slug": "nuc-edinger-westphal",
+      "file": "nuc-edinger-westphal.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 660,
+      "centroid": [
+        -0.906,
+        14.902,
+        -3.589
+      ],
+      "bbox": {
+        "min": [
+          -1.502,
+          14.032,
+          -4.585
+        ],
+        "max": [
+          -0.312,
+          15.842,
+          -2.604
+        ]
+      }
+    },
+    {
+      "slug": "nuc-facial",
+      "file": "nuc-facial.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1332,
+      "centroid": [
+        0.056,
+        -18.912,
+        -2.015
+      ],
+      "bbox": {
+        "min": [
+          -6.046,
+          -20.708,
+          -3.662
+        ],
+        "max": [
+          6.045,
+          -17.116,
+          -0.284
+        ]
+      }
+    },
+    {
+      "slug": "nuc-fastigial",
+      "file": "nuc-fastigial.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1152,
+      "centroid": [
+        -0.089,
+        -21.965,
+        -11.492
+      ],
+      "bbox": {
+        "min": [
+          -2.89,
+          -23.513,
+          -12.708
+        ],
+        "max": [
+          2.918,
+          -20.47,
+          -10.273
+        ]
+      }
+    },
+    {
+      "slug": "nuc-habenula",
+      "file": "nuc-habenula.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 816,
+      "centroid": [
+        0.242,
+        27.064,
+        -3.898
+      ],
+      "bbox": {
+        "min": [
+          -3.633,
+          25.896,
+          -5.372
+        ],
+        "max": [
+          3.631,
+          28.172,
+          -2.489
+        ]
+      }
+    },
+    {
+      "slug": "nuc-hypoglossal",
+      "file": "nuc-hypoglossal.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1140,
+      "centroid": [
+        -0.097,
+        -34.057,
+        -4.272
+      ],
+      "bbox": {
+        "min": [
+          -1.137,
+          -37.377,
+          -5.273
+        ],
+        "max": [
+          0.993,
+          -30.902,
+          -3.415
+        ]
+      }
+    },
+    {
+      "slug": "nuc-inferior-colliculus",
+      "file": "nuc-inferior-colliculus.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1316,
+      "centroid": [
+        0.076,
+        8.051,
+        -7.976
+      ],
+      "bbox": {
+        "min": [
+          -5.828,
+          6.204,
+          -10.377
+        ],
+        "max": [
+          5.813,
+          9.84,
+          -5.544
+        ]
+      }
+    },
+    {
+      "slug": "nuc-inferior-olive-medial",
+      "file": "nuc-inferior-olive-medial.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1244,
+      "centroid": [
+        -0.052,
+        -33.802,
+        0.855
+      ],
+      "bbox": {
+        "min": [
+          -3.168,
+          -36.952,
+          -0.234
+        ],
+        "max": [
+          3.166,
+          -30.668,
+          2.02
+        ]
+      }
+    },
+    {
+      "slug": "nuc-inferior-olive-principal",
+      "file": "nuc-inferior-olive-principal.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2176,
+      "centroid": [
+        -0.002,
+        -33.94,
+        2.991
+      ],
+      "bbox": {
+        "min": [
+          -7.004,
+          -37.88,
+          0.969
+        ],
+        "max": [
+          6.99,
+          -29.931,
+          5
+        ]
+      }
+    },
+    {
+      "slug": "nuc-interposed",
+      "file": "nuc-interposed.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1460,
+      "centroid": [
+        -0.031,
+        -21.983,
+        -11.03
+      ],
+      "bbox": {
+        "min": [
+          -5.335,
+          -23.647,
+          -12.418
+        ],
+        "max": [
+          5.395,
+          -20.296,
+          -9.634
+        ]
+      }
+    },
+    {
+      "slug": "nuc-intralaminar",
+      "file": "nuc-intralaminar.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1288,
+      "centroid": [
+        -0.04,
+        26.735,
+        -1.336
+      ],
+      "bbox": {
+        "min": [
+          -7.635,
+          21.683,
+          -7.12
+        ],
+        "max": [
+          7.561,
+          31.162,
+          3.325
+        ]
+      }
+    },
+    {
+      "slug": "nuc-lateral-dorsal",
+      "file": "nuc-lateral-dorsal.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2268,
+      "centroid": [
+        0.068,
+        35.49,
+        -0.721
+      ],
+      "bbox": {
+        "min": [
+          -15.295,
+          30.018,
+          -7.031
+        ],
+        "max": [
+          15.617,
+          39.48,
+          5.402
+        ]
+      }
+    },
+    {
+      "slug": "nuc-lateral-posterior",
+      "file": "nuc-lateral-posterior.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2172,
+      "centroid": [
+        -0.033,
+        33.185,
+        -5.897
+      ],
+      "bbox": {
+        "min": [
+          -18.778,
+          27.092,
+          -13.465
+        ],
+        "max": [
+          18.769,
+          39.255,
+          1.134
+        ]
+      }
+    },
+    {
+      "slug": "nuc-lgn",
+      "file": "nuc-lgn.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2216,
+      "centroid": [
+        0.786,
+        21.237,
+        -8.555
+      ],
+      "bbox": {
+        "min": [
+          -20.53,
+          11.735,
+          -16.603
+        ],
+        "max": [
+          21.541,
+          31.102,
+          -1.537
+        ]
+      }
+    },
+    {
+      "slug": "nuc-locus-coeruleus",
+      "file": "nuc-locus-coeruleus.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 480,
+      "centroid": [
+        -0.027,
+        -3.923,
+        -3.595
+      ],
+      "bbox": {
+        "min": [
+          -1.572,
+          -5.171,
+          -4.122
+        ],
+        "max": [
+          1.568,
+          -2.724,
+          -3.036
+        ]
+      }
+    },
+    {
+      "slug": "nuc-mammillary-body",
+      "file": "nuc-mammillary-body.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 924,
+      "centroid": [
+        -0.311,
+        27.979,
+        4.655
+      ],
+      "bbox": {
+        "min": [
+          -3.873,
+          26.771,
+          3.202
+        ],
+        "max": [
+          3.835,
+          29.113,
+          5.633
+        ]
+      }
+    },
+    {
+      "slug": "nuc-md",
+      "file": "nuc-md.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1176,
+      "centroid": [
+        0.027,
+        30.923,
+        4.282
+      ],
+      "bbox": {
+        "min": [
+          -9.899,
+          28.263,
+          0.43
+        ],
+        "max": [
+          9.836,
+          32.623,
+          9.198
+        ]
+      }
+    },
+    {
+      "slug": "nuc-medullary-reticular",
+      "file": "nuc-medullary-reticular.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1344,
+      "centroid": [
+        0.006,
+        -36.696,
+        -0.911
+      ],
+      "bbox": {
+        "min": [
+          -6.448,
+          -48.499,
+          -3.415
+        ],
+        "max": [
+          6.456,
+          -26.8,
+          1.427
+        ]
+      }
+    },
+    {
+      "slug": "nuc-mesencephalic-v",
+      "file": "nuc-mesencephalic-v.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1172,
+      "centroid": [
+        -0.018,
+        8.377,
+        -4.925
+      ],
+      "bbox": {
+        "min": [
+          -5.48,
+          1.93,
+          -5.888
+        ],
+        "max": [
+          5.478,
+          14.282,
+          -3.997
+        ]
+      }
+    },
+    {
+      "slug": "nuc-mgn",
+      "file": "nuc-mgn.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1340,
+      "centroid": [
+        0.044,
+        22.114,
+        -5.504
+      ],
+      "bbox": {
+        "min": [
+          -9.63,
+          20.664,
+          -9.46
+        ],
+        "max": [
+          9.625,
+          24.483,
+          -0.869
+        ]
+      }
+    },
+    {
+      "slug": "nuc-midline-thalamic",
+      "file": "nuc-midline-thalamic.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1032,
+      "centroid": [
+        -0.175,
+        27.766,
+        1.16
+      ],
+      "bbox": {
+        "min": [
+          -2.994,
+          23.478,
+          -3.364
+        ],
+        "max": [
+          2.884,
+          31.219,
+          4.271
+        ]
+      }
+    },
+    {
+      "slug": "nuc-nucleus-cuneatus",
+      "file": "nuc-nucleus-cuneatus.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1288,
+      "centroid": [
+        -0.166,
+        -43.591,
+        -2.808
+      ],
+      "bbox": {
+        "min": [
+          -4.308,
+          -46.359,
+          -4.199
+        ],
+        "max": [
+          4.299,
+          -40.784,
+          -1.544
+        ]
+      }
+    },
+    {
+      "slug": "nuc-nucleus-gracilis",
+      "file": "nuc-nucleus-gracilis.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1288,
+      "centroid": [
+        -0.028,
+        -44.305,
+        -3.689
+      ],
+      "bbox": {
+        "min": [
+          -2.494,
+          -46.809,
+          -4.998
+        ],
+        "max": [
+          2.42,
+          -41.415,
+          -2.6
+        ]
+      }
+    },
+    {
+      "slug": "nuc-oculomotor",
+      "file": "nuc-oculomotor.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1056,
+      "centroid": [
+        -0.958,
+        13.938,
+        -3.794
+      ],
+      "bbox": {
+        "min": [
+          -2.066,
+          12.601,
+          -5.388
+        ],
+        "max": [
+          0.731,
+          15.372,
+          -2.154
+        ]
+      }
+    },
+    {
+      "slug": "nuc-pag",
+      "file": "nuc-pag.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1220,
+      "centroid": [
+        0.046,
+        11.935,
+        -5.888
+      ],
+      "bbox": {
+        "min": [
+          -4.36,
+          7.971,
+          -7.852
+        ],
+        "max": [
+          4.365,
+          16.127,
+          -4.083
+        ]
+      }
+    },
+    {
+      "slug": "nuc-paraventricular",
+      "file": "nuc-paraventricular.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 592,
+      "centroid": [
+        -1.769,
+        35.309,
+        6.144
+      ],
+      "bbox": {
+        "min": [
+          -2.464,
+          33.687,
+          4.669
+        ],
+        "max": [
+          -0.873,
+          36.982,
+          7.597
+        ]
+      }
+    },
+    {
+      "slug": "nuc-pineal-gland",
+      "file": "nuc-pineal-gland.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 356,
+      "centroid": [
+        -0.247,
+        22.094,
+        -9.049
+      ],
+      "bbox": {
+        "min": [
+          -0.742,
+          21.355,
+          -9.88
+        ],
+        "max": [
+          0.192,
+          22.859,
+          -8.161
+        ]
+      }
+    },
+    {
+      "slug": "nuc-pontine-reticular",
+      "file": "nuc-pontine-reticular.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1212,
+      "centroid": [
+        0.007,
+        -7.352,
+        -0.863
+      ],
+      "bbox": {
+        "min": [
+          -5.494,
+          -16.893,
+          -3.456
+        ],
+        "max": [
+          5.525,
+          1.501,
+          1.44
+        ]
+      }
+    },
+    {
+      "slug": "nuc-posterior-hypothalamus",
+      "file": "nuc-posterior-hypothalamus.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 324,
+      "centroid": [
+        -2.042,
+        33.19,
+        4.254
+      ],
+      "bbox": {
+        "min": [
+          -2.441,
+          31.672,
+          3.25
+        ],
+        "max": [
+          -1.491,
+          34.576,
+          5.362
+        ]
+      }
+    },
+    {
+      "slug": "nuc-pprf",
+      "file": "nuc-pprf.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1540,
+      "centroid": [
+        0.01,
+        -18.001,
+        -1.961
+      ],
+      "bbox": {
+        "min": [
+          -3.378,
+          -19.831,
+          -3.271
+        ],
+        "max": [
+          3.375,
+          -16.129,
+          -0.677
+        ]
+      }
+    },
+    {
+      "slug": "nuc-preoptic",
+      "file": "nuc-preoptic.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 888,
+      "centroid": [
+        -0.944,
+        32.77,
+        8.27
+      ],
+      "bbox": {
+        "min": [
+          -2.331,
+          30.632,
+          6.95
+        ],
+        "max": [
+          0.531,
+          34.804,
+          9.725
+        ]
+      }
+    },
+    {
+      "slug": "nuc-pretectal",
+      "file": "nuc-pretectal.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1264,
+      "centroid": [
+        -0.04,
+        17.342,
+        -7.029
+      ],
+      "bbox": {
+        "min": [
+          -3.928,
+          16.014,
+          -8.795
+        ],
+        "max": [
+          3.893,
+          18.462,
+          -5.139
+        ]
+      }
+    },
+    {
+      "slug": "nuc-principal-sensory-v",
+      "file": "nuc-principal-sensory-v.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1348,
+      "centroid": [
+        0.08,
+        -7.983,
+        4.984
+      ],
+      "bbox": {
+        "min": [
+          -7.049,
+          -10.277,
+          3.335
+        ],
+        "max": [
+          7.042,
+          -5.668,
+          6.658
+        ]
+      }
+    },
+    {
+      "slug": "nuc-pulvinar",
+      "file": "nuc-pulvinar.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2196,
+      "centroid": [
+        0.01,
+        26.013,
+        -10.903
+      ],
+      "bbox": {
+        "min": [
+          -16.704,
+          18.368,
+          -16.196
+        ],
+        "max": [
+          16.707,
+          32.168,
+          -3.905
+        ]
+      }
+    },
+    {
+      "slug": "nuc-red-nucleus",
+      "file": "nuc-red-nucleus.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2164,
+      "centroid": [
+        0.011,
+        10.982,
+        -0.032
+      ],
+      "bbox": {
+        "min": [
+          -6.426,
+          9.083,
+          -2.342
+        ],
+        "max": [
+          6.438,
+          12.876,
+          2.426
+        ]
+      }
+    },
+    {
+      "slug": "nuc-snc",
+      "file": "nuc-snc.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2292,
+      "centroid": [
+        -0.107,
+        10.516,
+        8.612
+      ],
+      "bbox": {
+        "min": [
+          -9.149,
+          9.856,
+          7.42
+        ],
+        "max": [
+          9.048,
+          11.155,
+          9.418
+        ]
+      }
+    },
+    {
+      "slug": "nuc-snr",
+      "file": "nuc-snr.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2240,
+      "centroid": [
+        -0.05,
+        9.496,
+        8.998
+      ],
+      "bbox": {
+        "min": [
+          -9.098,
+          8.736,
+          7.894
+        ],
+        "max": [
+          9.135,
+          10.243,
+          9.716
+        ]
+      }
+    },
+    {
+      "slug": "nuc-solitarius-caudal",
+      "file": "nuc-solitarius-caudal.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1152,
+      "centroid": [
+        0.058,
+        -30.309,
+        -5.927
+      ],
+      "bbox": {
+        "min": [
+          -2.839,
+          -38.096,
+          -7.199
+        ],
+        "max": [
+          2.764,
+          -25.947,
+          -4.828
+        ]
+      }
+    },
+    {
+      "slug": "nuc-solitarius-rostral",
+      "file": "nuc-solitarius-rostral.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 864,
+      "centroid": [
+        -0.06,
+        -22.387,
+        -3.263
+      ],
+      "bbox": {
+        "min": [
+          -4.504,
+          -23.662,
+          -4.297
+        ],
+        "max": [
+          4.502,
+          -20.777,
+          -2.269
+        ]
+      }
+    },
+    {
+      "slug": "nuc-spinal-trigeminal",
+      "file": "nuc-spinal-trigeminal.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1204,
+      "centroid": [
+        -0.191,
+        -32.934,
+        -2.438
+      ],
+      "bbox": {
+        "min": [
+          -6.485,
+          -49.425,
+          -4.057
+        ],
+        "max": [
+          6.35,
+          -20.776,
+          -0.981
+        ]
+      }
+    },
+    {
+      "slug": "nuc-subthalamic",
+      "file": "nuc-subthalamic.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1336,
+      "centroid": [
+        0.022,
+        22.06,
+        3.498
+      ],
+      "bbox": {
+        "min": [
+          -9.557,
+          21.001,
+          0.807
+        ],
+        "max": [
+          9.492,
+          23.142,
+          6.443
+        ]
+      }
+    },
+    {
+      "slug": "nuc-superior-colliculus",
+      "file": "nuc-superior-colliculus.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1240,
+      "centroid": [
+        0.011,
+        14.001,
+        -8.029
+      ],
+      "bbox": {
+        "min": [
+          -6.436,
+          11.982,
+          -10.358
+        ],
+        "max": [
+          6.314,
+          15.905,
+          -5.607
+        ]
+      }
+    },
+    {
+      "slug": "nuc-superior-olivary",
+      "file": "nuc-superior-olivary.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1156,
+      "centroid": [
+        0.05,
+        -17.02,
+        0.002
+      ],
+      "bbox": {
+        "min": [
+          -4.912,
+          -18.405,
+          -1.157
+        ],
+        "max": [
+          4.913,
+          -15.615,
+          1.121
+        ]
+      }
+    },
+    {
+      "slug": "nuc-superior-salivatory",
+      "file": "nuc-superior-salivatory.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 708,
+      "centroid": [
+        -0.043,
+        -19.852,
+        -2.553
+      ],
+      "bbox": {
+        "min": [
+          -4.28,
+          -20.634,
+          -3.594
+        ],
+        "max": [
+          4.281,
+          -18.911,
+          -1.375
+        ]
+      }
+    },
+    {
+      "slug": "nuc-suprachiasmatic",
+      "file": "nuc-suprachiasmatic.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 532,
+      "centroid": [
+        -0.005,
+        28.541,
+        6.125
+      ],
+      "bbox": {
+        "min": [
+          -3.751,
+          27.751,
+          5.348
+        ],
+        "max": [
+          3.768,
+          29.352,
+          6.922
+        ]
+      }
+    },
+    {
+      "slug": "nuc-supraoptic",
+      "file": "nuc-supraoptic.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 668,
+      "centroid": [
+        -0.017,
+        28.547,
+        5.912
+      ],
+      "bbox": {
+        "min": [
+          -3.958,
+          27.803,
+          4.88
+        ],
+        "max": [
+          4.007,
+          29.352,
+          6.922
+        ]
+      }
+    },
+    {
+      "slug": "nuc-thalamic-anterior",
+      "file": "nuc-thalamic-anterior.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2216,
+      "centroid": [
+        -0.066,
+        35.82,
+        6.928
+      ],
+      "bbox": {
+        "min": [
+          -14.5,
+          31.642,
+          0.524
+        ],
+        "max": [
+          14.074,
+          39.387,
+          13.384
+        ]
+      }
+    },
+    {
+      "slug": "nuc-thalamic-reticular",
+      "file": "nuc-thalamic-reticular.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2360,
+      "centroid": [
+        0.003,
+        29.615,
+        1.829
+      ],
+      "bbox": {
+        "min": [
+          -18.716,
+          21.873,
+          -5.049
+        ],
+        "max": [
+          18.326,
+          37.283,
+          8.516
+        ]
+      }
+    },
+    {
+      "slug": "nuc-trigeminal-motor",
+      "file": "nuc-trigeminal-motor.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1336,
+      "centroid": [
+        -0.009,
+        -8.004,
+        3.964
+      ],
+      "bbox": {
+        "min": [
+          -5.837,
+          -10.323,
+          2.287
+        ],
+        "max": [
+          5.856,
+          -5.687,
+          5.652
+        ]
+      }
+    },
+    {
+      "slug": "nuc-trochlear",
+      "file": "nuc-trochlear.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 796,
+      "centroid": [
+        -0.56,
+        7.947,
+        -5.072
+      ],
+      "bbox": {
+        "min": [
+          -1.137,
+          6.88,
+          -6.417
+        ],
+        "max": [
+          -0.021,
+          9.004,
+          -3.652
+        ]
+      }
+    },
+    {
+      "slug": "nuc-va",
+      "file": "nuc-va.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2216,
+      "centroid": [
+        0.037,
+        28.146,
+        7.79
+      ],
+      "bbox": {
+        "min": [
+          -12.045,
+          21.769,
+          2.064
+        ],
+        "max": [
+          12.204,
+          33.276,
+          13.919
+        ]
+      }
+    },
+    {
+      "slug": "nuc-ventromedial",
+      "file": "nuc-ventromedial.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 764,
+      "centroid": [
+        -0.009,
+        28.655,
+        5.617
+      ],
+      "bbox": {
+        "min": [
+          -3.967,
+          27.78,
+          4.489
+        ],
+        "max": [
+          3.994,
+          29.509,
+          6.743
+        ]
+      }
+    },
+    {
+      "slug": "nuc-vestibular-inferior",
+      "file": "nuc-vestibular-inferior.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1312,
+      "centroid": [
+        -0.029,
+        -25.553,
+        -4.733
+      ],
+      "bbox": {
+        "min": [
+          -5.866,
+          -28.195,
+          -6.538
+        ],
+        "max": [
+          5.867,
+          -22.363,
+          -3.238
+        ]
+      }
+    },
+    {
+      "slug": "nuc-vestibular-lateral",
+      "file": "nuc-vestibular-lateral.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1320,
+      "centroid": [
+        -0.043,
+        -16.892,
+        -4.282
+      ],
+      "bbox": {
+        "min": [
+          -6.333,
+          -18.917,
+          -5.72
+        ],
+        "max": [
+          6.337,
+          -15.009,
+          -2.636
+        ]
+      }
+    },
+    {
+      "slug": "nuc-vestibular-medial",
+      "file": "nuc-vestibular-medial.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1292,
+      "centroid": [
+        0.06,
+        -14.007,
+        -4.812
+      ],
+      "bbox": {
+        "min": [
+          -5.305,
+          -18.122,
+          -6.131
+        ],
+        "max": [
+          5.339,
+          -9.969,
+          -3.447
+        ]
+      }
+    },
+    {
+      "slug": "nuc-vestibular-superior",
+      "file": "nuc-vestibular-superior.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1260,
+      "centroid": [
+        -0.13,
+        -5.917,
+        -5.44
+      ],
+      "bbox": {
+        "min": [
+          -6.364,
+          -7.65,
+          -7.235
+        ],
+        "max": [
+          6.371,
+          -4.328,
+          -3.806
+        ]
+      }
+    },
+    {
+      "slug": "nuc-vl",
+      "file": "nuc-vl.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1288,
+      "centroid": [
+        -0.124,
+        24.874,
+        4.047
+      ],
+      "bbox": {
+        "min": [
+          -11.729,
+          20.881,
+          -0.261
+        ],
+        "max": [
+          11.666,
+          29.878,
+          8.643
+        ]
+      }
+    },
+    {
+      "slug": "nuc-vpl",
+      "file": "nuc-vpl.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1272,
+      "centroid": [
+        0.086,
+        24.442,
+        -1.48
+      ],
+      "bbox": {
+        "min": [
+          -15.368,
+          20.816,
+          -4.505
+        ],
+        "max": [
+          15.195,
+          28.158,
+          1.852
+        ]
+      }
+    },
+    {
+      "slug": "nuc-vpm",
+      "file": "nuc-vpm.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1288,
+      "centroid": [
+        -0.016,
+        24.135,
+        -3.112
+      ],
+      "bbox": {
+        "min": [
+          -8.585,
+          20.647,
+          -7.858
+        ],
+        "max": [
+          8.591,
+          28.374,
+          1.528
+        ]
+      }
+    },
+    {
+      "slug": "nuc-zona-incerta",
+      "file": "nuc-zona-incerta.glb",
+      "kind": "nucleus",
+      "source": "sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1316,
+      "centroid": [
+        0.03,
+        23.502,
+        2.952
+      ],
+      "bbox": {
+        "min": [
+          -8.928,
+          22.639,
+          0.209
+        ],
+        "max": [
+          8.926,
+          24.39,
+          5.625
+        ]
+      }
+    },
+    {
+      "slug": "vent-cerebral-aqueduct",
+      "file": "vent-cerebral-aqueduct.glb",
+      "kind": "ventricle",
+      "source": "bp3d+sculpt",
+      "materialHint": "csf",
+      "triCount": 12344,
+      "centroid": [
+        0.098,
+        12.116,
+        -5.835
+      ],
+      "bbox": {
+        "min": [
+          -1.57,
+          1.886,
+          -9.275
+        ],
+        "max": [
+          1.638,
+          22.201,
+          -0.833
+        ]
+      }
+    },
+    {
+      "slug": "vent-fourth-ventricle",
+      "file": "vent-fourth-ventricle.glb",
+      "kind": "ventricle",
+      "source": "bp3d+sculpt",
+      "materialHint": "csf",
+      "triCount": 28668,
+      "centroid": [
+        0.065,
+        -15.922,
+        -7.899
+      ],
+      "bbox": {
+        "min": [
+          -11.579,
+          -31.579,
+          -19.709
+        ],
+        "max": [
+          11.729,
+          4.481,
+          -0.735
+        ]
+      }
+    },
+    {
+      "slug": "vent-third-ventricle",
+      "file": "vent-third-ventricle.glb",
+      "kind": "ventricle",
+      "source": "sculpt",
+      "materialHint": "csf",
+      "triCount": 9876,
+      "centroid": [
+        0.003,
+        29.036,
+        1.425
+      ],
+      "bbox": {
+        "min": [
+          -1.057,
+          21.234,
+          -6.177
+        ],
+        "max": [
+          1.039,
+          37.048,
+          8.736
+        ]
+      }
+    }
+  ]
+}

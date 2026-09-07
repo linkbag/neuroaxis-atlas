@@ -20,6 +20,46 @@ import {
 
 export type ActiveTab = '3d' | 'plates' | 'syndromes'
 export type ViewPreset = 'all' | 'nuclei' | 'tracts' | 'clinical-motor'
+/** Rendering-quality tier (realism plan §1 Layer 3 post section, post-fx task). */
+export type RenderQuality = 'high' | 'balanced'
+
+/** localStorage key persisting the rendering-quality toggle. */
+export const RENDER_QUALITY_STORAGE_KEY = 'neuroaxis.quality'
+
+/**
+ * Balanced fallback for weak setups (post-fx guard): no WebGL2 (the post
+ * composer requires it), or a >2.5 devicePixelRatio phone-class screen.
+ */
+function detectDefaultQuality(): RenderQuality {
+  try {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return 'high'
+    const probe = document.createElement('canvas')
+    const gl2 = probe.getContext('webgl2')
+    if (gl2 === null) return 'balanced'
+    // Release the probe context immediately; it was only a capability check.
+    const lose = gl2.getExtension('WEBGL_lose_context')
+    if (lose) lose.loseContext()
+    const dpr = window.devicePixelRatio || 1
+    const smallScreen = Math.min(window.innerWidth, window.innerHeight) <= 640
+    if (smallScreen && dpr > 2.5) return 'balanced'
+  } catch {
+    return 'balanced'
+  }
+  return 'high'
+}
+
+/** Persisted value wins; otherwise detect a device-appropriate default. */
+function initialQuality(): RenderQuality {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const stored = window.localStorage.getItem(RENDER_QUALITY_STORAGE_KEY)
+      if (stored === 'high' || stored === 'balanced') return stored
+    }
+  } catch {
+    /* private-mode / storage disabled — fall through to detection */
+  }
+  return detectDefaultQuality()
+}
 
 export interface ClipState {
   x: number // sagittal plane position (medial→lateral, +x = patient LEFT)
@@ -53,6 +93,8 @@ export interface AtlasState {
   labelVisibility: boolean
   syndromeId: string | null
   referencesOpen: boolean
+  /** Rendering-quality tier: 'high' mounts the post FX composer, 'balanced' renders the plain canvas. */
+  quality: RenderQuality
 }
 
 export interface AtlasActions {
@@ -71,6 +113,8 @@ export interface AtlasActions {
   /** Open (or close) a syndrome card; opening also highlights its structures everywhere. */
   openSyndrome: (id: string | null) => void
   setReferencesOpen: (value: boolean) => void
+  /** Switch the rendering-quality tier and persist it (neuroaxis.quality). */
+  setQuality: (quality: RenderQuality) => void
   /** Level-ruler / level-chip navigation: cut the plane + open the level's plate. */
   gotoLevel: (levelId: string) => void
 }
@@ -127,6 +171,7 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
   labelVisibility: true,
   syndromeId: null,
   referencesOpen: false,
+  quality: initialQuality(),
 
   selectStructure: (id, opts) =>
     set((s) => ({
@@ -191,6 +236,17 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
     })),
 
   setReferencesOpen: (value) => set({ referencesOpen: value }),
+
+  setQuality: (quality) => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(RENDER_QUALITY_STORAGE_KEY, quality)
+      }
+    } catch {
+      /* storage unavailable — the tier still applies for this session */
+    }
+    set({ quality })
+  },
 
   gotoLevel: (levelId) =>
     set((s) => {

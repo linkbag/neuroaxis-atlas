@@ -13,6 +13,19 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    // Scratch/tool directories hold transient downloads, edit-temp files, and
+    // generated assets that are written while the dev server runs; watching
+    // them crashes chokidar with EBUSY on Windows (locked mid-write files).
+    watch: {
+      ignored: [
+        '**/.bp3d-probe/**',
+        '**/.plate-scratch/**',
+        '**/.npm-cache/**',
+        '**/.scaffold-tmp/**',
+        '**/assets-src/**',
+        '**/node_modules/**',
+      ],
+    },
   },
   build: {
     // 'esnext' + minify:false skips vite's per-chunk esbuild transpile/minify

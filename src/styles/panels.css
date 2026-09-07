@@ -589,3 +589,29 @@
   color: var(--text-muted);
   font-size: 0.72rem;
 }
+
+/* --------------------------------------------- header rendering-quality toggle */
+
+/* Post-fx task: segmented High/Balanced pair in .header-actions. The buttons
+ * reuse the shared .btn / .btn.is-active primitives; this only groups them
+ * tightly and steps them down to header-action size. */
+.quality-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quality-toggle .btn {
+  padding: 4px 8px;
+  font-size: 0.78rem;
+}
+
+.quality-toggle .btn:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.quality-toggle .btn:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
