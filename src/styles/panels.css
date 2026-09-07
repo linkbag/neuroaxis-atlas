@@ -543,6 +543,63 @@
   font-family: var(--font-mono);
 }
 
+/* -------------------------------------------- web reference "Learn more" links */
+
+.webref-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.webref-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.webref-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--accent, #7dd3fc);
+  text-decoration: none;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.webref-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.webref-ext {
+  font-size: 0.72rem;
+  opacity: 0.7;
+  transform: translateY(-1px);
+}
+
+.webref-tag {
+  flex: none;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.3));
+  color: var(--text-secondary);
+  background: transparent;
+}
+
+.webref-tag--journal {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
 /* ---------------------------------------------------------------- legend */
 
 .legend {

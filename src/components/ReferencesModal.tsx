@@ -87,6 +87,12 @@ export default function ReferencesModal() {
         </div>
 
         <div className="modal-body">
+          <p className="hint">
+            Select any nucleus, tract, or region in the app and the <strong>Learn more</strong> section shows
+            curated external links (Wikipedia + journal) specific to that structure — in addition to the
+            scholarly citations below.
+          </p>
+
           <section>
             <h3>Core bibliography</h3>
             <ul className="bib-list">

@@ -25,6 +25,7 @@ import {
 } from '../data/load'
 import { useAtlasStore } from '../state/store'
 import { DIRECTION_GLYPH, KindGlyph } from './KindGlyph'
+import { getWebRefs, type WebRef } from '../data/webRefs'
 import type { StructureRecord, TaxonomyEntry, TractRecord } from '../types'
 
 function MetaChips({ record, entry }: { record?: AtlasRecord; entry?: TaxonomyEntry }) {
@@ -130,6 +131,39 @@ function RefList({ refs }: { refs?: string[] }) {
   )
 }
 
+const WebRefTag = ({ source }: { source: WebRef['source'] }) => {
+  const label = source === 'journal' ? 'Journal' : source === 'reference' ? 'Reference' : 'Wikipedia'
+  return <span className={`webref-tag webref-tag--${source}`}>{label}</span>
+}
+
+/** External, clickable reference links (Wikipedia + journal) for the selected record. */
+function WebRefList({ id, name, kind, region }: { id: string; name: string; kind?: string; region?: string }) {
+  const refs = getWebRefs(id, name, kind, region)
+  if (refs.length === 0) return null
+  return (
+    <section className="info-section">
+      <h3>Learn more</h3>
+      <ul className="webref-list">
+        {refs.map((ref, index) => (
+          <li key={index}>
+            <a
+              className="webref-link"
+              href={ref.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={`Open ${ref.label} in a new tab`}
+            >
+              <span className="webref-label">{ref.label}</span>
+              <span className="webref-ext" aria-hidden="true">↗</span>
+            </a>
+            <WebRefTag source={ref.source} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
 function StructureDetails({ record }: { record: StructureRecord }) {
   const connections = record.connections
   return (
@@ -185,6 +219,7 @@ function StructureDetails({ record }: { record: StructureRecord }) {
       )}
 
       <RefList refs={record.refs} />
+      <WebRefList id={record.id} name={record.name} kind={record.kind} region={record.region} />
     </>
   )
 }
@@ -233,6 +268,7 @@ function TractDetails({ record }: { record: TractRecord }) {
       <LevelChips record={record} />
       <SyndromeLinks recordId={record.id} />
       <RefList refs={record.refs} />
+      <WebRefList id={record.id} name={record.name} kind="tract" />
     </>
   )
 }
