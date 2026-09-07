@@ -60,10 +60,14 @@ const decussation = translate(ellipsoid(3.4, 3.0, 2.4), 0, -46.6, 4.6);
 field = smoothUnion(field, decussation, 1.6);
 
 // ---- olivary eminences (ventral-lateral, y within [-38, -29]) ------------
-const oliveL = translate(ellipsoid(3.1, 4.4, 2.9), 5.1, -33.6, 4.6);
-const oliveR = translate(ellipsoid(3.1, 4.4, 2.9), -5.1, -33.6, 4.6);
-field = smoothUnion(field, oliveL, 1.3);
-field = smoothUnion(field, oliveR, 1.3);
+// review-qa (task review-qa-v2): the k=1.3 / rx 3.1 sculpt was swallowed by the
+// base surface's rostral widening — zero-crossing profile showed no local peak at
+// the olive belly. Widened rx 3.1→3.6, center x 5.1→5.5, blend k 1.3→0.9 so the
+// eminence reads as a distinct lateral silhouette bulge (verified by profile).
+const oliveL = translate(ellipsoid(3.8, 4.4, 2.9), 5.6, -33.6, 4.6);
+const oliveR = translate(ellipsoid(3.8, 4.4, 2.9), -5.6, -33.6, 4.6);
+field = smoothUnion(field, oliveL, 0.8);
+field = smoothUnion(field, oliveR, 0.8);
 
 // ---- dorsal column tubercles ---------------------------------------------
 // gracile (medial, to y~-40) and cuneate (lateral, y in [-44, -41]).
