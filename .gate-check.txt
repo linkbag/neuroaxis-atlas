@@ -1,2 +1,0 @@
-npm notice run neuroaxis-brainstem-atlas@0.1.0 check
-npm notice run tsc --noEmit

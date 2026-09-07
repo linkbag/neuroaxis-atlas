@@ -13,6 +13,9 @@ dist/
 .selftest/
 build-output.txt
 check-output.txt
+# transient gate/inspection logs at the repo root
+.gate-*.txt
+.integration-*.txt
 
 # External anatomy downloads (BodyParts3D raw archives + extracted OBJs —
 # regenerable via scripts; derived GLBs in src/assets are committed)
