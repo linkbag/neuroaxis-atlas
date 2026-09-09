@@ -369,9 +369,15 @@ export default function PlatesTab() {
                 </a>
               ))}
             </div>
+            {sectionUnderlay.kind !== 'none' && (
+              <span className="section-alignment-note" role="note">
+                approximate alignment — real imagery is placed by a fixed fit, not registered to
+                the contours (plan §6); treat it as a reference underlay
+              </span>
+            )}
           </div>
           <div className="section-live-stage">
-            <SectionCanvas />
+            <SectionCanvas onOpenPlate={() => setMode('author')} />
           </div>
         </>
       )}

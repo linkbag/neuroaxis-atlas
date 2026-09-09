@@ -330,7 +330,22 @@ function isPartVisible(
   return layers.kinds.has(taxonomyKind)
 }
 
-export default function SectionCanvas() {
+/** Click/drag writes clamp to the canonical slider ranges (letterbox-safe). */
+function clampToBounds(axis: PlaneAxis, value: number): number {
+  const range = CLIP_BOUNDS[axis]
+  return Math.min(range.max, Math.max(range.min, value))
+}
+
+export interface SectionCanvasProps {
+  /**
+   * Called after the plate chip snaps the plane and selects the authored
+   * plate (§2.2 "one-click snap" — the host shows the plate, e.g. by
+   * switching the Plates tab out of live mode). Optional.
+   */
+  onOpenPlate?: () => void
+}
+
+export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const wrapRef = useRef<HTMLDivElement | null>(null)
 
@@ -860,13 +875,17 @@ export default function SectionCanvas() {
     const state = useAtlasStore.getState()
     const axis = state.sectionAxis
     // Click sets the OTHER two clip sliders (crosshair placement) and pins
-    // the section axis to this canvas' axis.
+    // the section axis to this canvas' axis. u/v are canonical world values
+    // recovered through the SAME transform the canvas draws with (§2.2
+    // mirrored mapping is baked into uToSx/vToSy, so the inverse needs no
+    // extra sign flip); clamped to the slider ranges so letterbox clicks
+    // cannot push a slider out of bounds.
     const partial: Partial<{ x: number; y: number; z: number }> =
       axis === 'y'
-        ? { x: point.u, z: point.v }
+        ? { x: clampToBounds('x', point.u), z: clampToBounds('z', point.v) }
         : axis === 'x'
-          ? { z: point.u, y: point.v }
-          : { x: point.u, y: point.v }
+          ? { z: clampToBounds('z', point.u), y: clampToBounds('y', point.v) }
+          : { x: clampToBounds('x', point.u), y: clampToBounds('y', point.v) }
     state.setClip(partial)
     state.setSectionAxis(axis)
   }
@@ -945,6 +964,9 @@ export default function SectionCanvas() {
             const level = getLevel(plateChip.levelId)
             if (level !== undefined) state.setClip({ y: level.y, showHelper: true })
             state.setPlate(plateChip.plateId)
+            // §2.2 "— open": hand the plate open to the host (the Plates tab
+            // switches to the authored-plate view); no-op when absent.
+            onOpenPlate?.()
           }}
           title={`Snap the plane to “${plateChip.label}” and open its authored plate`}
         >
