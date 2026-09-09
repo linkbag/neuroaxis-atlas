@@ -69,6 +69,74 @@ export interface ClipState {
   showHelper: boolean
 }
 
+/* --------------------------------------------- v3 2D live-section (G2) */
+
+/** Which canonical axis the live-section canvas cuts along. Default 'y'
+ *  (transverse) matches the authored-plate focus (plan §2.2). */
+export type SectionAxis = 'x' | 'y' | 'z'
+
+export type SectionUnderlayKind = 'none' | 'stain' | 'mri'
+
+/**
+ * Real-imaging underlay settings for the 2D section canvas (plan §2.3).
+ * `kind` picks which registered layer draws (G3 implements layer draws;
+ * the store only owns the knobs). windowMin/windowMax are the uint8
+ * grayscale window of the MRI grid layer.
+ */
+export interface SectionUnderlay {
+  kind: SectionUnderlayKind
+  /** 0..1 — blend of the real image under the simulated contours. */
+  opacity: number
+  windowMin: number
+  windowMax: number
+}
+
+/** localStorage key persisting underlay prefs (same pattern as quality). */
+export const SECTION_UNDERLAY_STORAGE_KEY = 'neuroaxis.sectionUnderlay'
+
+const DEFAULT_SECTION_UNDERLAY: SectionUnderlay = {
+  kind: 'none',
+  opacity: 0.6,
+  windowMin: 60,
+  windowMax: 180,
+}
+
+function isUnderlayKind(value: unknown): value is SectionUnderlayKind {
+  return value === 'none' || value === 'stain' || value === 'mri'
+}
+
+/** Persisted value wins; anything malformed falls back to the defaults. */
+function initialSectionUnderlay(): SectionUnderlay {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const raw = window.localStorage.getItem(SECTION_UNDERLAY_STORAGE_KEY)
+      if (raw !== null) {
+        const parsed: unknown = JSON.parse(raw)
+        if (parsed !== null && typeof parsed === 'object') {
+          const record = parsed as Record<string, unknown>
+          const kind = record.kind
+          const num = (value: unknown): number | null =>
+            typeof value === 'number' && Number.isFinite(value) ? value : null
+          const opacity = num(record.opacity)
+          const windowMin = num(record.windowMin)
+          const windowMax = num(record.windowMax)
+          if (isUnderlayKind(kind) && opacity !== null && windowMin !== null && windowMax !== null) {
+            return {
+              kind,
+              opacity: Math.min(1, Math.max(0, opacity)),
+              windowMin,
+              windowMax,
+            }
+          }
+        }
+      }
+    }
+  } catch {
+    /* private-mode / storage disabled or malformed JSON — use defaults */
+  }
+  return { ...DEFAULT_SECTION_UNDERLAY }
+}
+
 export interface AtlasLayers {
   regions: Set<Region>
   kinds: Set<Kind>
@@ -95,6 +163,10 @@ export interface AtlasState {
   referencesOpen: boolean
   /** Rendering-quality tier: 'high' mounts the post FX composer, 'balanced' renders the plain canvas. */
   quality: RenderQuality
+  /** v3: axis the live-section canvas cuts along ('y' = transverse default). */
+  sectionAxis: SectionAxis
+  /** v3: real-imaging underlay knobs for the section canvas (plan §2.3). */
+  sectionUnderlay: SectionUnderlay
 }
 
 export interface AtlasActions {
@@ -115,6 +187,12 @@ export interface AtlasActions {
   setReferencesOpen: (value: boolean) => void
   /** Switch the rendering-quality tier and persist it (neuroaxis.quality). */
   setQuality: (quality: RenderQuality) => void
+  /** v3: switch the live-section axis; the canvas follows the plane value on
+   *  the same clip slider (sectionAxis stays the single source of truth). */
+  setSectionAxis: (axis: SectionAxis) => void
+  /** v3: merge underlay settings and persist them (neuroaxis.sectionUnderlay),
+   *  mirroring the quality-toggle persistence pattern. */
+  setSectionUnderlay: (partial: Partial<SectionUnderlay>) => void
   /** Level-ruler / level-chip navigation: cut the plane + open the level's plate. */
   gotoLevel: (levelId: string) => void
 }
@@ -172,6 +250,8 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
   syndromeId: null,
   referencesOpen: false,
   quality: initialQuality(),
+  sectionAxis: 'y',
+  sectionUnderlay: initialSectionUnderlay(),
 
   selectStructure: (id, opts) =>
     set((s) => ({
@@ -247,6 +327,25 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
     }
     set({ quality })
   },
+
+  setSectionAxis: (axis) => set({ sectionAxis: axis }),
+
+  setSectionUnderlay: (partial) =>
+    set((s) => {
+      const merged: SectionUnderlay = {
+        ...s.sectionUnderlay,
+        ...partial,
+        opacity: Math.min(1, Math.max(0, partial.opacity ?? s.sectionUnderlay.opacity)),
+      }
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem(SECTION_UNDERLAY_STORAGE_KEY, JSON.stringify(merged))
+        }
+      } catch {
+        /* storage unavailable — the settings still apply for this session */
+      }
+      return { sectionUnderlay: merged }
+    }),
 
   gotoLevel: (levelId) =>
     set((s) => {

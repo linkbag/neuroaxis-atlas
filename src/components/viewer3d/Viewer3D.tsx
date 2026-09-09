@@ -13,13 +13,17 @@
  * materials receive those same planes from src/geometry/materials.ts.
  *
  * Mounts SceneLayers (all data-driven meshes), PlaneHelpers (cut indicators),
- * the ClipControls / ExplodeSlider overlays, and the PostFX composer
- * (realism plan §1 Layer 3 post-fx task) when quality is 'high'.
+ * the ClipControls / ExplodeSlider overlays, the PostFX composer
+ * (realism plan §1 Layer 3 post-fx task) when quality is 'high', and the
+ * SectionPiP GPU live-section picture-in-picture (v3 plan §2.1) — the
+ * in-canvas renderer inside the Canvas, the dockable bottom-right panel
+ * beside it (visible by default; hidden via the panel's hide button and
+ * persisted in localStorage under neuroaxis.sectionPip).
  *
  * Exports: default Viewer3D plus the named pieces so integration (and tests)
  * can compose or mount them independently.
  */
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
@@ -32,6 +36,7 @@ import ClipControls from './ClipControls'
 import ExplodeSlider from './ExplodeSlider'
 import PlaneHelpers from './PlaneHelpers'
 import PostFX from './PostFX'
+import { SectionPiP, SectionPiPPanel } from './SectionPiP'
 import { applyClipState } from './clipPlanes'
 
 /**
@@ -46,6 +51,26 @@ export function ClipSync(): null {
     })
   }, [])
   return null
+}
+
+/* ------------------------------------- v3 live-section PiP persistence */
+
+/** localStorage key persisting the live-section PiP visibility — same
+ *  pattern as the quality toggle's RENDER_QUALITY_STORAGE_KEY. */
+export const SECTION_PIP_STORAGE_KEY = 'neuroaxis.sectionPip'
+
+/** Persisted value wins; default is VISIBLE (plan §2.1 "visible by default"). */
+function initialSectionPipVisible(): boolean {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const stored = window.localStorage.getItem(SECTION_PIP_STORAGE_KEY)
+      if (stored === 'visible') return true
+      if (stored === 'hidden') return false
+    }
+  } catch {
+    /* private-mode / storage disabled — fall through to the default */
+  }
+  return true
 }
 
 /**
@@ -81,6 +106,25 @@ export default function Viewer3D() {
   const quality = useAtlasStore((s) => s.quality)
   const dpr: [number, number] = quality === 'high' ? [1, 2] : [1, 1.5]
 
+  // v3 live-section PiP (plan §2.1): visible by default, persisted in
+  // localStorage (neuroaxis.sectionPip) alongside the quality toggle; the
+  // panel's hide button flips the state and the choice survives reloads.
+  const [sectionPipVisible, setSectionPipVisible] = useState(initialSectionPipVisible)
+  const sectionPipWindowRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(
+          SECTION_PIP_STORAGE_KEY,
+          sectionPipVisible ? 'visible' : 'hidden',
+        )
+      }
+    } catch {
+      /* storage unavailable — the setting still applies for this session */
+    }
+  }, [sectionPipVisible])
+
   return (
     <div className="viewer3d-root">
       <div className="viewer3d-canvas">
@@ -111,6 +155,12 @@ export default function Viewer3D() {
           {/* Post FX (realism plan §1 Layer 3): SSAO + subtle bloom + SMAA,
               mounted after the scene; skipped entirely on 'balanced'. */}
           <PostFX enabled={quality === 'high'} quality={quality} />
+          {/* GPU live-section PiP (v3 plan §2.1): renders the scene from the
+              section-aligned orthographic camera after PostFX presents, and
+              only while the panel below is visible. */}
+          {sectionPipVisible ? (
+            <SectionPiP visible={sectionPipVisible} windowRef={sectionPipWindowRef} />
+          ) : null}
           <OrbitControls
             makeDefault
             enableDamping
@@ -126,10 +176,25 @@ export default function Viewer3D() {
         <ClipControls />
       </div>
       <ExplodeSlider />
+      <SectionPiPPanel
+        visible={sectionPipVisible}
+        onVisibleChange={setSectionPipVisible}
+        windowRef={sectionPipWindowRef}
+      />
       <p className="viewer-hint">drag to orbit · scroll to zoom · right-drag to pan · click any structure</p>
     </div>
   )
 }
 
 /** Named re-exports for consumers that compose the pieces individually. */
-export { SceneLayers, NucleusMesh, TractTube, ClipControls, ExplodeSlider, PlaneHelpers, PostFX }
+export {
+  SceneLayers,
+  NucleusMesh,
+  TractTube,
+  ClipControls,
+  ExplodeSlider,
+  PlaneHelpers,
+  PostFX,
+  SectionPiP,
+  SectionPiPPanel,
+}

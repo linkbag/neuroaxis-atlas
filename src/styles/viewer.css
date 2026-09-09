@@ -88,6 +88,21 @@
   color: var(--text-primary);
 }
 
+/* v3 section sync: the row of the axis the live-section surfaces (GPU PiP +
+   2D canvas) currently follow — the last-touched slider. Decorative "live"
+   marker; the label text itself is unchanged for assistive tech. */
+.slider-row.is-active-axis label {
+  color: var(--accent);
+}
+
+.slider-row.is-active-axis label::after {
+  content: '● live';
+  margin-left: 7px;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 .slider-row output,
 .slider-value {
   font-family: var(--font-mono);

@@ -1,0 +1,159 @@
+/*
+ * sectionPip.css — GPU live-section picture-in-picture (SECTION_SYNC_PLAN
+ * §2.1, section-pip-v3b task). Docked bottom-right over the 3D canvas:
+ * header bar (plane readout, axis override, size + hide) and the viewport
+ * window that stays fully transparent — the section pixels are blitted by
+ * SectionPiP into the canvas BENEATH this rect, so the window must not tint
+ * or blur them (no backdrop-filter here, unlike the other docks).
+ * Depends only on tokens.css variables.
+ */
+
+.pip-panel {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: transparent;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
+  overflow: hidden;
+}
+
+.pip-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  background: color-mix(in srgb, var(--bg-panel) 90%, transparent);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.pip-title {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.pip-readout {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.pip-spacer {
+  flex: 1;
+}
+
+.pip-axis-group {
+  display: flex;
+  gap: 2px;
+}
+
+.pip-btn {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  line-height: 1;
+  padding: 3px 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.pip-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pip-btn[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* The viewport window: transparent glass over the blitted canvas pixels. */
+.pip-window {
+  position: relative;
+  background: transparent;
+  pointer-events: none;
+}
+
+.pip-small .pip-window {
+  width: 224px;
+  height: 170px;
+}
+
+.pip-large .pip-window {
+  width: 348px;
+  height: 262px;
+}
+
+/* Orientation badges (§2.2: L/R/A/P/S/I per axis, patient-left convention). */
+.pip-orient {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  line-height: 1.5;
+  padding: 0 4px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--bg-panel) 80%, transparent);
+  user-select: none;
+}
+
+.pip-orient-n {
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pip-orient-s {
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pip-orient-w {
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.pip-orient-e {
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Shown when clipping is disabled: the plane value has no cut to show. */
+.pip-offnote {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--bg-panel) 85%, transparent);
+  user-select: none;
+}
+
+@media (max-width: 860px) {
+  .pip-small .pip-window {
+    width: 168px;
+    height: 128px;
+  }
+
+  .pip-title {
+    display: none;
+  }
+}

@@ -20,6 +20,13 @@
  *
  * Materials are plain THREE objects (no R3F JSX): consumers own disposal —
  * the registry self-cleans through the material 'dispose' event.
+ *
+ * v3 (SECTION_SYNC_PLAN §2.1/§4): the factory also carries the section-capping
+ * hook — `enableSectionCapping(material, capColor)` opts a material into the
+ * GPU live-section PiP's stencil clip-capping (filled cut faces). The five
+ * presets below opt in by default so every GLB + primitive participates;
+ * registering changes nothing about the material itself, and the shared
+ * ALL_CLIP_PLANES / ClipSync / updateAllClipping path is untouched.
  */
 import * as THREE from 'three'
 import { ALL_CLIP_PLANES } from '../components/viewer3d/clipPlanes'
@@ -75,6 +82,65 @@ export function updateClipping(materials: Iterable<THREE.Material>, planes: THRE
 export function updateAllClipping(planes: THREE.Plane[] = ALL_CLIP_PLANES): number {
   updateClipping(materialRegistry, planes)
   return materialRegistry.size
+}
+
+/* ------------------------------------------------------------------ */
+/* Section capping registry (v3 plan §2.1/§4 — section-pip task)       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Default filled cut-face color: warm tissue pink, the classic "sectioned
+ * tissue" look of the three.js clipping_stencil reference.
+ */
+export const DEFAULT_SECTION_CAP_COLOR = '#d7a58f'
+
+interface SectionCapEntry {
+  color: THREE.Color
+}
+
+/** Materials opted into stencil capping → their registered cap-face color. */
+const sectionCapRegistry = new Map<THREE.Material, SectionCapEntry>()
+
+/**
+ * Opt a material into section capping (plan §4 contract: the ONE new
+ * materials-factory hook). This is a pure registry write — the material's
+ * own rendering (clipping planes, presets, fresnel hook, program cache) is
+ * deliberately untouched, so existing clipping behavior cannot change. The
+ * GPU live-section PiP (viewer3d/SectionPiP.tsx) reads this registry to
+ * build its back/front stencil passes and colored cap plane.
+ *
+ * Safe to call repeatedly: a later call just recolors the cap face.
+ * Returns the same material for chaining.
+ */
+export function enableSectionCapping<T extends THREE.Material>(
+  material: T,
+  capColor: THREE.ColorRepresentation = DEFAULT_SECTION_CAP_COLOR,
+): T {
+  let entry = sectionCapRegistry.get(material)
+  if (entry === undefined) {
+    entry = { color: new THREE.Color() }
+    sectionCapRegistry.set(material, entry)
+    material.addEventListener('dispose', () => {
+      sectionCapRegistry.delete(material)
+    })
+  }
+  entry.color.set(capColor)
+  return material
+}
+
+/** True when the material participates in section capping (audits/tests). */
+export function isSectionCapped(material: THREE.Material): boolean {
+  return sectionCapRegistry.has(material)
+}
+
+/**
+ * The cap-face color of the FIRST capped material, or null when nothing has
+ * opted in yet. The PiP paints one shared tissue face (a cut face is cut
+ * tissue); per-material colors stay recorded here for finer renderers.
+ */
+export function firstSectionCapColor(): THREE.Color | null {
+  for (const entry of sectionCapRegistry.values()) return entry.color
+  return null
 }
 
 /* ------------------------------------------------------------------ */
@@ -161,6 +227,7 @@ export function createEnvelopeMaterial(color: string = DEFAULT_GRAY_MATTER): THR
   })
   material.normalScale.set(0.1, 0.1)
   applyFresnelOpacity(material, { boost: 2.2, power: 2.5 })
+  enableSectionCapping(material)
   return track(material)
 }
 
@@ -200,6 +267,7 @@ export function createTractMaterial(color: string, options: TractMaterialOptions
     clippingPlanes: ALL_CLIP_PLANES,
   })
   material.normalScale.set(0.22, 0.22)
+  enableSectionCapping(material)
   return track(material)
 }
 
@@ -226,6 +294,7 @@ export function createNucleusMaterial(color: string = DEFAULT_NUCLEUS): THREE.Me
     clippingPlanes: ALL_CLIP_PLANES,
   })
   material.normalScale.set(0.08, 0.08)
+  enableSectionCapping(material)
   return track(material)
 }
 
@@ -251,6 +320,7 @@ export function createCsfMaterial(color: string = CSF_COLOR): THREE.MeshPhysical
     clippingPlanes: ALL_CLIP_PLANES,
   })
   applyFresnelOpacity(material, { boost: 2.6, power: 2.2 })
+  enableSectionCapping(material)
   return track(material)
 }
 
@@ -278,6 +348,7 @@ export function createContextMaterial(color: string = CONTEXT_COLOR): THREE.Mesh
   })
   material.normalScale.set(0.05, 0.05)
   applyFresnelOpacity(material, { boost: 2.0, power: 2.8 })
+  enableSectionCapping(material)
   return track(material)
 }
 

@@ -307,3 +307,195 @@
     min-width: 96px;
   }
 }
+
+/* ------------------------------------- v3 live section (§2.2, [G2]) */
+
+.section-mode-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.section-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  padding: 6px 10px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+}
+
+.section-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.section-toolbar-label {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.section-opacity-slider {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.section-opacity-slider input {
+  width: 110px;
+  accent-color: var(--accent);
+}
+
+.section-opacity-slider output {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  min-width: 36px;
+  text-align: right;
+}
+
+/* "open source ↗" link chips (§2.3) — per-level image sources + atlases. */
+.section-link-chips {
+  margin-left: auto;
+}
+
+.section-link-chip {
+  padding: 3px 9px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.section-link-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.section-live-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.section-canvas-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #0d1526;
+}
+
+.section-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* Verbatim attribution line (plan §1) — always visible when a real image layer drew. */
+.section-credit {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  max-width: min(560px, 72%);
+  padding: 4px 8px;
+  background: rgba(13, 21, 38, 0.82);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: #cbd5e1;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.section-credit:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Nearest authored plate within 3 au (transverse) — one-click snap + open. */
+.section-plate-chip {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: rgba(13, 21, 38, 0.85);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.section-plate-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.section-plate-chip .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warning);
+  flex: none;
+}
+
+.section-structure-chip {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.section-structure-chip span {
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(13, 21, 38, 0.85);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.72rem;
+}
+
+.section-structure-chip .is-selected {
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.55);
+}
+
+.section-structure-chip .is-hovered {
+  color: #e0f2fe;
+  border-color: rgba(14, 165, 233, 0.55);
+}
+
+.section-overlay-note {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
+  background: rgba(13, 21, 38, 0.9);
+  color: var(--danger);
+  font-size: 0.78rem;
+}

@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "dims": [
+    45,
+    81,
+    67
+  ],
+  "originAu": [
+    -27,
+    -55,
+    -56
+  ],
+  "spacingAu": [
+    1.2273,
+    1.25,
+    1.2424
+  ],
+  "origin": [
+    -27,
+    -55,
+    -56
+  ],
+  "spacing": [
+    1.2273,
+    1.25,
+    1.2424
+  ],
+  "rowMajorAxisOrder": "xyz",
+  "axisOrder": "xyz",
+  "rowMajorAxesFastToSlow": [
+    "x",
+    "y",
+    "z"
+  ],
+  "unit": {
+    "auMm": 1.2,
+    "frame": "x=+patient-left, y=+superior, z=+anterior"
+  },
+  "patientLeft": "+x",
+  "intensity": {
+    "dtype": "uint8",
+    "windowPercentiles": [
+      1,
+      99.5
+    ],
+    "windowRawValues": [
+      65.8,
+      559.1
+    ],
+    "backgroundValue": 0
+  },
+  "registration": {
+    "frame": "sform RAS+ patient mm → canonical au (x=+left, y=+sup, z=+ant); 1 au = 1.2 mm",
+    "constants": {
+      "scale": [
+        1,
+        1.25,
+        1.6
+      ],
+      "rotDeg": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "translateAu": [
+        2.9,
+        -88.4,
+        -7.8
+      ],
+      "composeOrder": "p' = T · Rx·Ry·Rz · S · p (canonical au)",
+      "gridStepMm": 1.5
+    },
+    "residuals": {
+      "toleranceAu": 2,
+      "midlineMaxAbsAu": 0.75,
+      "midlineRowsAu": [
+        {
+          "y": -23.7,
+          "dx": -0.25
+        },
+        {
+          "y": -17.5,
+          "dx": -0.25
+        },
+        {
+          "y": -12.5,
+          "dx": -0.3
+        },
+        {
+          "y": -6.2,
+          "dx": -0.25
+        },
+        {
+          "y": 0,
+          "dx": -0.25
+        },
+        {
+          "y": 6.3,
+          "dx": -0.75
+        },
+        {
+          "y": 12.5,
+          "dx": -0.25
+        },
+        {
+          "y": 17.5,
+          "dx": -0.25
+        }
+      ],
+      "ponsSurface": {
+        "ventralMeanAbsDeltaAu": 1.13,
+        "ventralMaxAbsDeltaAu": 3.4,
+        "ventralDeltaAu": [
+          -3.4,
+          -1.8,
+          0.2,
+          0.2,
+          -0.2,
+          1.4,
+          1,
+          0.6,
+          -1,
+          -1.8,
+          -1.8,
+          -0.2
+        ],
+        "dorsalDeltaAu": [],
+        "rowsAu": [
+          {
+            "y": -22,
+            "glbVentral": 13.54,
+            "glbDorsal": -6.53,
+            "mriVentral": 10.14
+          },
+          {
+            "y": -20,
+            "glbVentral": 13.46,
+            "glbDorsal": -5.74,
+            "mriVentral": 11.66
+          },
+          {
+            "y": -18,
+            "glbVentral": 13.51,
+            "glbDorsal": -6.3,
+            "mriVentral": 13.71
+          },
+          {
+            "y": -16,
+            "glbVentral": 13.49,
+            "glbDorsal": -7.17,
+            "mriVentral": 13.69
+          },
+          {
+            "y": -14,
+            "glbVentral": 13.5,
+            "glbDorsal": -8.62,
+            "mriVentral": 13.3
+          },
+          {
+            "y": -12,
+            "glbVentral": 13.55,
+            "glbDorsal": -10.78,
+            "mriVentral": 14.95
+          },
+          {
+            "y": -10,
+            "glbVentral": 14.08,
+            "glbDorsal": -11.37,
+            "mriVentral": 15.08
+          },
+          {
+            "y": -8,
+            "glbVentral": 14.93,
+            "glbDorsal": -11.27,
+            "mriVentral": 15.53
+          },
+          {
+            "y": -6,
+            "glbVentral": 15.86,
+            "glbDorsal": -10.77,
+            "mriVentral": 14.86
+          },
+          {
+            "y": -4,
+            "glbVentral": 16.68,
+            "glbDorsal": -10.49,
+            "mriVentral": 14.88
+          },
+          {
+            "y": -2,
+            "glbVentral": 16.58,
+            "glbDorsal": -10.42,
+            "mriVentral": 14.78
+          },
+          {
+            "y": 0,
+            "glbVentral": 15.82,
+            "glbDorsal": -9.86,
+            "mriVentral": 15.62
+          },
+          {
+            "y": 2,
+            "glbVentral": 15.12,
+            "glbDorsal": -9.76
+          }
+        ],
+        "method": "max-descent of the smoothed x=0 intensity profile vs pons GLB ventral/dorsal z (|x|≤6 au band); dorsal rows unresolved where the ventricle boundary is gradual at the pons-top rows",
+        "note": "The atlas pons mesh is modelled deeper (AP) and taller (SI) than this subject's real pons (warped stylized atlas); the fixed affine (z-scale 1.6, y-scale 1.25) maps the real pontine column onto the atlas envelope so the ventral silhouette is within ±2 au except the single transitional PMJ-tip row; medulla/CM rows deviate more (atlas medulla is a compressed stylization) — see docs/SECTION_SYNC_PLAN.md §3 tolerance note."
+      }
+    }
+  },
+  "source": "ds007313 doi:10.18112/openneuro.ds007313.v1.0.0",
+  "license": "CC0",
+  "attribution": "OpenNeuro ds007313 (CC0 — no attribution required; provenance only). Dataset authors: Landelle, Kinany, St-Onge, Lungu, Van De Ville, Misic, Marchand-Pauvert, De Leener, Doyon. Volume: sub-A006/anat/sub-A006_T1w.nii.gz (t1_mprage_sag_p2_brainSpine_FOV375_1.3iso, 3T Siemens Prisma_fit).",
+  "generatedBy": "scripts/build-mri-grid.mjs"
+}

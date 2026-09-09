@@ -89,6 +89,71 @@ attribution, reproduced verbatim from the
   the committed `src/assets/anatomy/anatomy-manifest.json` (`bp3d+sculpt` vs
   `sculpt`).
 
+## Imaging data (v3 — section sync & multi-modality)
+
+Introduced with the v3 section-sync upgrade (see `docs/SECTION_SYNC_PLAN.md`
+§1; per-source evidence and fetch dates in `docs/IMAGING_SOURCES.md`). Two
+sources of real anatomical imagery are **embedded** in
+`src/assets/imaging/stains/` (referenced from `src/data/sectionImages.ts`),
+one MRI source is **linked out** (raw volume kept in gitignored
+`assets-src/imaging/mri/`). The exact credit lines below must be rendered
+verbatim in the UI whenever the corresponding image is displayed.
+
+### UBC Functional Neuroanatomy — Brain Micrographs (17 transverse sections, embedded)
+
+- **Source:** University of British Columbia, Functional Neuroanatomy,
+  Brain Micrographs (<https://www.neuroanatomy.ca/micrographs.html>; viewer
+  <https://www.neuroanatomy.ca/micrographviewer/>). 17 stained transverse
+  sections of the human spinal cord, brainstem, and diencephalon (`m1..m17`).
+- **License:** [Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  International](https://creativecommons.org/licenses/by-nc-sa/4.0/) (site
+  footer, verified 2026-09-08).
+- **Required credit, verbatim:**
+  > © University of British Columbia, CC BY-NC-SA 4.0
+- **Adaptations applied** (recorded to keep the license terms transparent):
+  the images are **content-verbatim re-encodes** — no crops, no editing, no
+  compositing. The source PNGs (800×700, already ≤1400 px) were re-encoded to
+  JPEG quality 80 at native size for payload (total 1,752 KB); any alpha was
+  flattened onto white (source pixels are opaque). Non-commercial educational
+  use satisfies the NC clause; unmodified copies satisfy the SA clause.
+
+### Michigan State University Human Brain Atlas / brainmuseum.org (10 coronal sections, embedded)
+
+- **Source:** MSU Human Brain Atlas — Coronal Sections, cell stains,
+  <https://brains.anatomy.msu.edu/brains/human/coronal/montage.html>
+  (a series of the Comparative Mammalian Brain Collections, with the National
+  Museum of Health and Medicine).
+- **License/policy:** site permission for educational/research use, no charge
+  (<https://brains.anatomy.msu.edu/copyright.html>; the site asks to be
+  notified of use — the notification e-mail is recorded as an open action in
+  `docs/IMAGING_SOURCES.md` §2.2). The credit line below is required and the
+  imagery must not be re-copyrighted.
+- **Required credit, verbatim:**
+  > University of Wisconsin and Michigan State Comparative Mammalian Brain Collections, and the National Museum of Health and Medicine; preparation funded by the National Science Foundation and the National Institutes of Health
+- **Adaptations applied:** content-verbatim re-encodes — no crops, no edits
+  (the in-image "10 mm" scale bar is preserved); JPEG quality 80 re-encode at
+  native 1050×700 (total 1,084 KB).
+
+### OpenNeuro ds007313 — T1w MRI (linked out; raw volume not redistributed)
+
+- **Dataset:** *Brain and spinal cord fMRI and qMRI - Single participant*,
+  OpenNeuro [ds007313](https://openneuro.org/datasets/ds007313/versions/1.0.0),
+  DOI [10.18112/openneuro.ds007313.v1.0.0](https://doi.org/10.18112/openneuro.ds007313.v1.0.0).
+- **License:** CC0 (verified in the dataset's `dataset_description.json`,
+  snapshot 1.0.0). No attribution required; recorded for provenance.
+- The raw `.nii.gz` is downloaded by the build pipeline into the gitignored
+  `assets-src/imaging/mri/`; the only derived, committed artifact will be the
+  resampled uint8 grid (`src/assets/imaging/mri-t1.bin`) produced by the
+  `mri-grid` task from a CC0 input (CC0 permits derivative redistribution;
+  provenance is still documented).
+
+### Link-out-only sources (nothing embedded)
+
+- **Harvard Whole Brain Atlas** — <https://www.med.harvard.edu/aanlib/> —
+  permission-gated/copyrighted; used as deep links only.
+- **BrainMaps.org** — <https://brainmaps.org/index.php?p=termsofuse> —
+  per-dataset copyright; used as links only.
+
 ## Nomenclature note — FreeSurfer
 
 Thalamic nuclear nomenclature (VA, VL, VPL, VPM, MD, pulvinar, LGN, MGN,
@@ -128,8 +193,12 @@ from — the wiki page was consulted as a naming reference only.
   schematic works** following textbook section *conventions* (dorsal top,
   patient-left-on-image-right for transverse sections, etc.); they are not
   tracings, reproductions, or derivatives of any copyrighted figure.
-- No MRI/photographic imagery is embedded, so no medical-image licensing
-  applies.
+- No unlicensed imagery is embedded: the stained micrographs and coronal
+  sections embedded for the v3 imaging layer are used under the licenses and
+  permissions recorded in the "Imaging data" section above and in
+  `docs/IMAGING_SOURCES.md` (CC BY-NC-SA 4.0 and the MSU site permission
+  policy, both with the required verbatim credit lines), and the MRI volume
+  is CC0 and not redistributed (raw file kept out of the repository).
 - Code is released under the MIT License (see [`LICENSE`](../LICENSE)). The
   textbooks cited above remain the property of their publishers; citing them
   does not imply endorsement.
