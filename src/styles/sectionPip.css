@@ -132,18 +132,51 @@
   transform: translateY(-50%);
 }
 
-/* Shown when clipping is disabled: the plane value has no cut to show. */
+/*
+ * Shown when clipping is disabled (PIP_FIX_PLAN §2, always-render): purely
+ * informational — the section still renders from the slider planes. Parked
+ * in the bottom-left corner so it never covers the live slice (the canvas
+ * beneath this transparent window carries the content).
+ */
 .pip-offnote {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.68rem;
+  bottom: 4px;
+  left: 4px;
+  max-width: calc(100% - 8px);
+  font-size: 0.62rem;
   padding: 2px 8px;
   border-radius: 999px;
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   background: color-mix(in srgb, var(--bg-panel) 85%, transparent);
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+ * ?pipdebug readout (PIP_FIX_PLAN §4): diagnostics overlay inside the panel
+ * window — top-left, mono font, semi-transparent, pointer-events none (the
+ * window is transparent glass; the overlay must not tint the section). The
+ * component renders null and costs nothing when the flag is absent.
+ */
+.pip-debug {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  line-height: 1.5;
+  text-align: left;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--bg-panel) 55%, transparent);
+  padding: 3px 6px;
+  border-radius: 4px;
+  white-space: pre;
+  pointer-events: none;
   user-select: none;
 }
 
