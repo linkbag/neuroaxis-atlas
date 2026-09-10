@@ -18,7 +18,11 @@
  * SectionPiP GPU live-section picture-in-picture (v3 plan §2.1) — the
  * in-canvas renderer inside the Canvas, the dockable bottom-right panel
  * beside it (visible by default; hidden via the panel's hide button and
- * persisted in localStorage under neuroaxis.sectionPip).
+ * persisted in localStorage under neuroaxis.sectionPip), plus the v5 restore
+ * control (`SectionPiPRestoreButton`, UX_FIXES_PLAN Feature 1) that takes the
+ * panel's place in that same bottom-right corner whenever the flag is false —
+ * so the hidden state is reversible instead of stranding the feature behind a
+ * cleared localStorage.
  *
  * Exports: default Viewer3D plus the named pieces so integration (and tests)
  * can compose or mount them independently.
@@ -66,7 +70,12 @@ import ClipControls from './ClipControls'
 import ExplodeSlider from './ExplodeSlider'
 import PlaneHelpers from './PlaneHelpers'
 import PostFX from './PostFX'
-import { SectionPiP, SectionPiPPanel, sectionPipDiagnostics } from './SectionPiP'
+import {
+  SectionPiP,
+  SectionPiPPanel,
+  SectionPiPRestoreButton,
+  sectionPipDiagnostics,
+} from './SectionPiP'
 import { applyClipState } from './clipPlanes'
 
 /**
@@ -323,6 +332,21 @@ export default function Viewer3D() {
         onVisibleChange={setSectionPipVisible}
         windowRef={sectionPipWindowRef}
       />
+      {/* v5 UX_FIXES_PLAN Feature 1 — restore control. A DIRECT sibling of the
+          panel in `.viewer3d-root` (position:relative), which is what makes it
+          land in the panel's own corner and, because it is absolutely
+          positioned chrome, guarantees no layout shift of the R3F canvas when
+          the panel and the pill swap (the canvas lives in `.viewer3d-canvas`,
+          also absolutely positioned in this block; nothing here is in flow).
+          Deliberately NOT inside `.viewer-overlay`: that is ClipControls'
+          top-right flex dock. No "has been hidden before" state — it renders on
+          `sectionPipVisible === false` alone, so it is also discoverable when a
+          persisted 'hidden' value is loaded on a first visit, and it disappears
+          the moment the panel is visible again (the spec's rule). `onShow` is
+          the very same setter the panel's × calls with `false`. */}
+      {sectionPipVisible ? null : (
+        <SectionPiPRestoreButton onShow={() => setSectionPipVisible(true)} />
+      )}
       {/* v4: the panel's own honest state line — only painted while the active
           modality genuinely has nothing to paint at this plane (see the file
           header). Nothing renders in the steady state. */}
@@ -343,5 +367,6 @@ export {
   PostFX,
   SectionPiP,
   SectionPiPPanel,
+  SectionPiPRestoreButton,
   SectionPipHint,
 }

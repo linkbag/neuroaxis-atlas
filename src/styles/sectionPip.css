@@ -180,7 +180,61 @@
   user-select: none;
 }
 
+/*
+ * Restore pill (UX_FIXES_PLAN Feature 1, PLAN §3.1.2): the way back once the
+ * panel above is hidden. SectionPiPPanel returns null while hidden and its ×
+ * used to be one-way, so without this control the persisted flag stranded the
+ * feature entirely.
+ *
+ * Docked EXACTLY where the panel sits — same containing block (the parent
+ * mounts it as a direct sibling of .pip-panel in `.viewer3d-root`,
+ * position:relative) and the same positioning tokens (right/bottom:
+ * var(--space-3)), so it reads as the collapsed state of that panel and the two
+ * never coexist (the parent renders the pill only while the panel is hidden,
+ * and the panel only while it is visible). It is absolutely positioned, so it
+ * adds no layout: the R3F canvas rect cannot shift when the two swap.
+ *
+ * z-index 7 sits above the panel (6) and above the bottom-centre explode dock
+ * (auto), so the pill can never be covered on a short or narrow viewport —
+ * which also keeps it clickable for automated probes. Bottom-right is not used
+ * by any other dock: ClipControls lives top-right (`.viewer-overlay`) and
+ * ExplodeSlider bottom-centre. Tokens only.
+ */
+.pip-restore {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 7;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border-strong));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-panel) 90%, transparent);
+  color: var(--text-primary);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 35%);
+  cursor: pointer;
+}
+
+.pip-restore:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pip-restore:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 @media (max-width: 860px) {
+  .pip-restore {
+    padding: 3px 7px;
+  }
+
   .pip-small .pip-window {
     width: 168px;
     height: 128px;

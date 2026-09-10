@@ -1227,6 +1227,60 @@ function PipAttribution() {
   )
 }
 
+/* ------------------------------------------------------------------ */
+/* SectionPiPRestoreButton — the way back from the hidden PiP          */
+/*                                                                     */
+/* WHY THIS EXISTS (UX_FIXES_PLAN Feature 1): SectionPiPPanel renders  */
+/* null when `visible === false` and its only visibility control is    */
+/* the × button, while the flag itself lives (persisted) in Viewer3D.  */
+/* Hiding the panel therefore used to strand the user: no affordance   */
+/* anywhere could bring it back — the flag had to be cleared by hand   */
+/* or the persisted value reset. This is that affordance.              */
+/*                                                                     */
+/* CONTRACT:                                                           */
+/*  - a real <button type="button"> (keyboard reachable, focusable),   */
+/*    labelled exactly `Live section ▸` with the actionable title      */
+/*    `Show the live synced 2D section`;                               */
+/*  - `aria-expanded={false}` — the region it discloses, the PiP       */
+/*    panel, is collapsed. Deliberately NOT also `aria-pressed`: a     */
+/*    show control is a disclosure, not a toggle, and two contradictory */
+/*    ARIA states on one control is an a11y defect (PLAN §3.1.1/D9).   */
+/*    Once the panel is back this button unmounts, so `aria-expanded`  */
+/*    never has to flip to true — the expanded state IS the panel.     */
+/*  - `onShow` is a one-way show callback (never a bidirectional       */
+/*    `onVisibleChange`), so this component cannot hide anything; the  */
+/*    mounting parent passes the very same setter the panel's × calls. */
+/*                                                                     */
+/* LAYOUT CONTRACT (no canvas shift): styled by `.pip-restore` in      */
+/* styles/sectionPip.css with the panel's own positioning tokens       */
+/* (`position:absolute; right/bottom: var(--space-3)`), so the parent  */
+/* must place it in the SAME positioned containing block as the panel  */
+/* (`.viewer3d-root`, `position:relative`) — Viewer3D mounts it as a   */
+/* direct sibling of <SectionPiPPanel>. Absolutely positioned chrome    */
+/* in a relative container cannot move the R3F canvas, which is an      */
+/* absolutely positioned sibling of `.viewer-overlay` in that same      */
+/* block, so toggling the panel ⇄ pill cannot cause layout shift.       */
+/* ------------------------------------------------------------------ */
+
+export interface SectionPiPRestoreButtonProps {
+  /** Called when the user asks for the live section back. One-way. */
+  onShow: () => void
+}
+
+export function SectionPiPRestoreButton({ onShow }: SectionPiPRestoreButtonProps) {
+  return (
+    <button
+      type="button"
+      className="pip-restore"
+      title="Show the live synced 2D section"
+      aria-expanded={false}
+      onClick={onShow}
+    >
+      Live section ▸
+    </button>
+  )
+}
+
 export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: SectionPiPPanelProps) {
   const sectionAxis = useAtlasStore((s) => s.sectionAxis)
   const setSectionAxis = useAtlasStore((s) => s.setSectionAxis)

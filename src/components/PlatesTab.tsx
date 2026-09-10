@@ -77,6 +77,9 @@ import ctManifestJson from '../assets/imaging/ct-manifest.json'
 import PlateRenderer from './PlateRenderer'
 import SectionCanvas from './section/SectionCanvas'
 import SectionErrorBoundary from './section/SectionErrorBoundary'
+// v5 (UX_FIXES_PLAN Feature 2): the plane sliders of the live section itself —
+// same store slice (clip{x,y,z} + sectionAxis + snapToPlate) as the 3D dock.
+import SectionSliderBar from './section/SectionSliderBar'
 // Module side effect: registers the 'stain' + 'mri' + 'ct' image layers on the
 // section-canvas registry (plan §4); getLayerLinks feeds the source chips,
 // ctWindowPresets() the CT window options and ctLayerStatus()/mriLayerStatus()
@@ -535,6 +538,13 @@ export default function PlatesTab() {
               ))}
             </div>
 
+            {/* v5 (UX_FIXES_PLAN Feature 2): continuous plane scrubbers for the
+                live section, one row per axis, directly under the axis/modality
+                controls they act on. Full toolbar row (flex-basis:100%) so the
+                strip reads as one unit with them and wraps on narrow widths.
+                Live mode only — the author-plate branch above is untouched. */}
+            <SectionSliderBar />
+
             <div className="section-toolbar-group" role="group" aria-label="Imagery modality">
               <span className="section-toolbar-label">Imagery</span>
               {SECTION_UNDERLAY_KINDS.map((kind) => {
@@ -659,10 +669,12 @@ export default function PlatesTab() {
 
             {activeCredit !== null ? (
               // Always-visible attribution of the modality the toolbar is
-              // requesting (plan §4). Inline styles only — this file's write
-              // scope excludes src/styles — and full text shown UNTRUNCATED:
-              // the credit lines are verbatim and must stay readable, so the
-              // caption wraps onto its own toolbar row instead of ellipsizing.
+              // requesting (plan §4). Inline styles only — the credit caption is
+              // laid out here rather than through a class, so it keeps working
+              // independently of the section v5 slider-strip rules in
+              // plates.css — and full text shown UNTRUNCATED: the credit lines
+              // are verbatim and must stay readable, so the caption wraps onto
+              // its own toolbar row instead of ellipsizing.
               <span
                 className="section-credit-line"
                 role="note"
