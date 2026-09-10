@@ -195,7 +195,18 @@ const FALLBACK_ASSET: AnatomyAsset = { status: 'fallback', url: null, part: unde
  * 'fallback' so the caller keeps the v1 primitive (§2 constraint 6).
  */
 export function useAnatomyAsset(slug: string | undefined, mirrored = false): AnatomyAsset {
-  const [asset, setAsset] = useState<AnatomyAsset>(FALLBACK_ASSET)
+  // Lazy initial state: a slug the manifest knows starts as 'loading', NOT
+  // 'fallback'. Consumers that treat 'fallback' as "permanently unavailable"
+  // (e.g. SectionCanvas deciding the contour registry is complete) would
+  // otherwise see every part as settled on the very first render — before any
+  // effect ran — and conclude that no geometry exists at all.
+  const [asset, setAsset] = useState<AnatomyAsset>(() => {
+    if (slug === undefined) return FALLBACK_ASSET
+    const known = partBySlug.get(slug)
+    return known === undefined
+      ? FALLBACK_ASSET
+      : { status: 'loading', url: null, part: known, geometry: null }
+  })
 
   useEffect(() => {
     if (!slug || !partBySlug.has(slug)) {

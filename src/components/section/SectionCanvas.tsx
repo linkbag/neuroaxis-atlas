@@ -557,6 +557,14 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const [workerError, setWorkerError] = useState<string | null>(null)
   const [credit, setCredit] = useState<ImageryCredit | null>(null)
   const [hint, setHint] = useState<string | null>(null)
+  /** Exception thrown inside the rAF draw (otherwise invisible: it would only
+   *  reach the browser console and the canvas would silently stay half-painted). */
+  const [drawError, setDrawError] = useState<string | null>(null)
+  /** `?sectiondebug` — compact live status block for field diagnosis. */
+  const [debugOn] = useState(() =>
+    typeof window !== 'undefined' && /[?&]sectiondebug\b/.test(window.location.search),
+  )
+  const [debugTick, setDebugTick] = useState(0)
 
   // Imperative render state.
   const transformRef = useRef<Transform | null>(null)
@@ -567,6 +575,12 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const workerAliveRef = useRef(false)
   const workerReadyRef = useRef(false)
   const registrySentRef = useRef(false)
+  /** Slugs actually transferred to the worker (diagnostics). */
+  const registryRefCountRef = useRef(0)
+  /** Last resolved layer frame (diagnostics): modality + status + draw result. */
+  const frameDebugRef = useRef<{ modality: string; status: string; drewReal: boolean } | null>(null)
+  /** Mirror of drawError for stale-closure-safe comparison inside rAF. */
+  const drawErrorRef = useRef<string | null>(null)
   const seqRef = useRef(0)
   const lastPostRef = useRef(0)
   const inFlightRef = useRef<{ seq: number; axis: PlaneAxis; value: number } | null>(null)
@@ -690,7 +704,23 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     drawNeededRef.current = true
     rafRef.current = requestAnimationFrame(() => {
       drawNeededRef.current = false
-      draw()
+      try {
+        draw()
+        if (drawErrorRef.current !== null) {
+          drawErrorRef.current = null
+          setDrawError(null)
+        }
+      } catch (error) {
+        // A throwing draw leaves the canvas half-painted with no other signal
+        // (rAF swallows it into the console) — surface it in the UI instead.
+        const message = error instanceof Error ? error.message : String(error)
+        if (drawErrorRef.current !== message) {
+          drawErrorRef.current = message
+          setDrawError(message)
+        }
+      } finally {
+        if (debugOn) setDebugTick((t) => t + 1)
+      }
     })
   }
 
@@ -784,6 +814,11 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     // real-first compositing is on; otherwise the simulated section IS the
     // base (v3 rendering, unchanged).
     const realBase = drewReal && underlay.realFirst
+    frameDebugRef.current = {
+      modality: String(frame.modality ?? 'none'),
+      status: String(frame.status ?? 'n/a'),
+      drewReal,
+    }
     const hint = imageryHint(underlay.kind, frame.modality, frame.status, drewReal)
     if (lastHintRef.current !== hint) {
       lastHintRef.current = hint
@@ -1052,9 +1087,20 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   /* --------------------------------------------------------- init registry */
 
   useEffect(() => {
-    if (registrySentRef.current || workerError !== null) return
+    if (registrySentRef.current) return
+    // Wait for every part to settle (ready or permanently-fallback)…
     if (geometryStatus.readyCount < geometryStatus.total) return
-    registrySentRef.current = true
+    // …and for any part that is still 'loading' to finish. 'fallback' counts
+    // as settled, so this only guards the transient pre-effect state: without
+    // it the registry could be built from an all-null geometry map.
+    let stillLoading = false
+    for (const status of geometryStatus.statuses.values()) {
+      if (status === 'loading') {
+        stillLoading = true
+        break
+      }
+    }
+    if (stillLoading) return
     const worker = workerRef.current
     if (worker === null || !workerAliveRef.current) return
     const registryParts: WorkerRegistryPart[] = []
@@ -1065,9 +1111,16 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       if (part !== null) registryParts.push(part)
     }
     if (registryParts.length === 0) {
+      // Nothing loaded and nothing pending: a real failure. Record it but let a
+      // later geometry arrival clear it (the worker/store subscription keeps
+      // re-running this effect while the registry has not been sent).
       setWorkerError('no anatomy geometry loaded')
       return
     }
+    // Geometry is available: clear any previous failure and send the registry.
+    registrySentRef.current = true
+    if (workerError !== null) setWorkerError(null)
+    registryRefCountRef.current = registryParts.length
     const transfer: Transferable[] = []
     for (const part of registryParts) {
       transfer.push(part.positions, part.indices)
@@ -1204,6 +1257,37 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       />
       {workerError !== null && (
         <div className="section-overlay-note is-error">Contour worker failed: {workerError}</div>
+      )}
+      {drawError !== null && (
+        <div className="section-overlay-note is-error">Section draw failed: {drawError}</div>
+      )}
+      {debugOn && (
+        <div className="section-overlay-note section-debug" aria-live="off">
+          {(() => {
+            const frame = frameDebugRef.current
+            const state = useAtlasStore.getState()
+            const debugPlane: PlaneSpec = { axis: state.sectionAxis, value: state.clip[state.sectionAxis] }
+            const debugLevel = levelIdForPlane(state.sectionAxis, state.clip[state.sectionAxis])
+            const kinds = new Map<string, string>()
+            for (const layer of getSectionImageLayerRegistry().list()) {
+              const status =
+                typeof layer.dataStatus === 'function'
+                  ? layer.dataStatus(debugPlane, debugLevel)
+                  : 'n/a'
+              kinds.set(layer.id, `${layer.modality ?? 'v3'}:${status}`)
+            }
+            return [
+              `geometry ${geometryStatus.readyCount}/${geometryStatus.total}`,
+              `registry ${registryRefCountRef.current} parts`,
+              `contours ${contoursRef.current.size} · loops ${loopsTotalRef.current}`,
+              `axis ${sectionAxis} @ ${clip[sectionAxis].toFixed(1)}`,
+              `kind ${useAtlasStore.getState().sectionUnderlay.kind}`,
+              frame ? `frame ${frame.modality}/${frame.status} drew=${frame.drewReal}` : 'frame n/a',
+              `layers ${[...kinds.values()].join(' ')}`,
+              `draw #${debugTick}`,
+            ].join(' · ')
+          })()}
+        </div>
       )}
       {credit !== null && (
         <a
