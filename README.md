@@ -9,7 +9,7 @@
 - **Region & system layers** — toggle diencephalon / midbrain / pons / medulla / cerebellum and nuclei / tracts / ventricles / surface / context; presets *All*, *Nuclei*, *Tracts*, *Clinical motor*.
 - **Exploded view** — slider fans nuclei radially off the brainstem axis while tracts and envelopes stay put.
 - **Clipping planes** — sagittal / coronal / transverse cuts over the full canonical range with a plane-helper toggle; the transverse slider snaps to plate levels.
-- **Live section sync (v3)** — every clip slider also drives a GPU picture-in-picture live section (bottom-right of the 3D view) and a worker-computed 2D live-section canvas in the *Plates* tab, both underlaid with real imagery (stained micrographs on mapped levels, continuous T1 MRI everywhere) — details below.
+- **Live section sync (v3/v4)** — every clip slider also drives a GPU picture-in-picture live section (bottom-right of the 3D view) and a worker-computed 2D live-section canvas in the *Plates* tab, both showing **real imagery as the base layer** — real section photographs on their anchored planes, a continuous real head CT volume, and a continuous T1 MRI at any plane, with a modality toolbar (Auto real-first / MRI / CT / Photo / Simulated only), CT brain–bone windows, and the active modality's credit always visible — details below.
 - **12 interactive 2D plates** — 9 transverse levels (pyramidal decussation → mid-thalamus), 1 midline sagittal profile, 2 coronal slices; every labeled region highlights on hover and selects everywhere on click; leader-line labels toggle on/off.
 - **2D ↔ 3D sync** — selecting a plate (or level-ruler entry) moves the 3D transverse clipping plane to that level and reveals the plane helper; dragging the plane keeps the level ruler and plate sync indicator in step.
 - **Structure browser** — region → subdivision → structure taxonomy tree plus case-insensitive search over names and synonyms (try "STN", "MLF", "pulvinar").
@@ -64,28 +64,67 @@ node scripts/build-anatomy-geometry.mjs --selftest                             #
 
 Note: recipe resolutions target anatomical fidelity; the committed payload above was fitted to the §2.7 budgets by re-baking the largest envelope/CSF parts coarser via `--part <slug> --resolution <au>`. After any bake, run `--manifest` so the manifest and the budget gate reflect the committed GLBs. Pipeline details: [docs/GEOMETRY_PIPELINE.md](docs/GEOMETRY_PIPELINE.md).
 
-## Section sync & multi-modality (v3)
+## Real imagery (v4) — real MRI, CT, and section photographs as the section view
 
-Moving **any** clipping slider updates three synced surfaces in real time (spec: [docs/SECTION_SYNC_PLAN.md](docs/SECTION_SYNC_PLAN.md)) — one `clip.x/y/z` value in the zustand store is the single source of truth for all of them:
+Spec: [docs/IMAGING_V4_PLAN.md](docs/IMAGING_V4_PLAN.md); licence verdicts, verbatim licence quotes and fetch dates: [docs/IMAGING_SOURCES_V4.md](docs/IMAGING_SOURCES_V4.md); every credit line: [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
-- **3D cut** — the shared clipping planes slice every mesh (unchanged v1/v2 behavior; the transverse slider still snaps to plate levels).
-- **GPU live-section PiP** (3D tab) — a second orthographic camera looking straight down the active plane's normal renders the same scene into a picture-in-picture panel docked bottom-right: stencil-capped "filled tissue" cut faces, orientation labels (L/R/A/P/S/I, patient-left convention), a `y = −24.0 au` plane readout, axis override + size/hide buttons. Visible by default; the hidden state persists in `localStorage` (`neuroaxis.sectionPip`, same pattern as the quality toggle).
+Since v4 the section surfaces are **real-imagery-first**: the real slice is the section's *base plate* wherever real data covers the plane, and the simulated structure contours are drawn over it as a translucent overlay. The simulated section remains the honest fallback at planes no modality covers (it is the only thing that exists at *every* plane, and it is what carries the labels).
+
+All three section surfaces move together — the 3D cut, the GPU PiP (3D tab) and the 2D live-section canvas (Plates tab → *Live section*) — from the same `clip.x/y/z` + `sectionUnderlay` store state:
+
+- **GPU live-section PiP** (3D tab) — a second orthographic camera looking straight down the active plane's normal renders the same scene into a picture-in-picture panel docked bottom-right: stencil-capped "filled tissue" cut faces, orientation labels (L/R/A/P/S/I, patient-left convention), a `y = −24.0 au` plane readout, axis override + size/hide buttons. Since v4 it paints the **real slice of the active modality** into its render target *behind* the 3D cut, so the panel composites real imagery with the anatomy cut. The sampled backdrop is redrawn at most once per plane/modality/size change (never per frame), the volume slice raster is cached per quantized plane + window, and the panel's visible/hidden state persists in `localStorage` (`neuroaxis.sectionPip`, same pattern as the quality toggle). When the active modality genuinely cannot paint at a plane, the panel stays the pure GPU cut and a line under it says so — naming the Plates tab, where the embedded modalities are listed — instead of showing an unexplained empty frame (`?pipdebug` adds the full diagnostics overlay).
 - **2D live-section canvas** (Plates tab → *Live section*) — a Web Worker clips every visible structure's triangles by the current plane, chains closed contours and fills them even-odd with taxonomy colors (transverse: anterior up, patient-left on image-right — matching the authored SVG plates). Click/drag inside sets the other two sliders (crosshair placement); a chip snaps to the nearest authored plate; selected/hovered structures highlight with labels. Perf-guarded: worker-only contour math, 15 Hz + 0.25 au plane quantization while dragging, painting skipped while the tab is hidden, canvas dpr ≤ 1.5, PiP skips entirely when hidden.
 
-Both live-section surfaces follow the **last-touched** clip slider (drag or keyboard focus — the active slider row is marked "live"); the PiP header's X/Y/Z buttons override manually. The PiP renders from its own slider-driven planes, so the section follows the sliders even when **Enable clipping** is off (that checkbox only cuts the main 3D model; `?pipdebug` adds a diagnostics overlay to the panel).
+### The modality toolbar (Plates tab → Live section)
 
-**Real-image layers** draw *under* the simulated contours, with opacity (and MRI window) sliders in the Live-section toolbar and the exact credit line always visible in-canvas whenever an image shows:
+| Control | What it does |
+| --- | --- |
+| **Auto (real-first)** — default | Picks the best real modality *that actually covers this plane*: anchored photograph (±1.5 au) → CT → MRI → none. The real slice becomes the base plate; contours are overlaid at 65 % with crisp outlines; selection/hover highlighting is unaffected. |
+| **MRI** | The continuous T1 grid only, with uint8 window low/high sliders. |
+| **CT** | The continuous CT grid only, with **brain / bone** window presets (Hounsfield windows from `ct-manifest.json`). |
+| **Photo** | Embedded photographs only (plane-anchored plates + the level-mapped micrographs) — never silently switches modality. |
+| **Simulated only** | No real imagery at all — the v3 schematic section, explicitly. |
+| **Opacity** | Alpha of the real image (100 % by default: it is the base plate, not an underlay). |
+| **Sources / credit** | "Open source ↗" chips (active imagery first, then the UBC / MSU / Harvard Whole Brain Atlas / BrainMaps references) and the **active modality's verbatim credit line**, always visible; the canvas prints the same line bottom-left over the image it actually drew. |
 
-- **Stain underlay** (level-mapped, ±1.5 au) — 17 UBC brainstem/spinal-cord micrographs, **CC BY-NC-SA 4.0**, © University of British Columbia, embedded verbatim (JPEG re-encode at native resolution); 10 MSU Human Brain Atlas coronal cell stains, embedded under the brainmuseum permission policy with the required credit line ("University of Wisconsin and Michigan State Comparative Mammalian Brain Collections, and the National Museum of Health and Medicine…").
-- **MRI underlay** (continuous) — a T1 volume resampled from OpenNeuro dataset **ds007313** (**CC0**, single subject, 1.3 mm iso) onto the canonical grid at ≈1.5 mm (`src/assets/imaging/mri-t1.bin` + `mri-manifest.json`, fixed documented affine); grayscale with window low/high sliders, available at **every** plane position on all three axes.
-- **Sources & licenses** — the live toolbar lists "open source ↗" chips (the mapped image's own page plus the UBC / MSU / Harvard Whole Brain Atlas / BrainMaps atlases; the latter two are link-out only). License verdicts and fetch evidence: [docs/IMAGING_SOURCES.md](docs/IMAGING_SOURCES.md); full provenance and verbatim credit lines: [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md). New committed imagery stays inside the ≤ 6 MB plan budget (`src/assets/imaging/` ≈ 3.0 MB: stains 2.77 MB + MRI grid 0.24 MB).
+A modality button is disabled — with the reason in its tooltip, e.g. *"no embeddable CT grid in this build — re-bake with: node scripts/build-ct-grid.mjs"* — only when the build cannot serve that modality at all. An empty plane *inside* a covered modality stays selectable and is explained by the canvas hint line ("no photograph is anchored at this plane — showing the simulated section"). Harvard and BrainMaps are link-out only and never embedded.
 
-Re-bake the MRI grid (deterministic, Node-only; the raw NIfTI stays in gitignored `assets-src/imaging/mri/`):
+### Modality availability, licences and credits
+
+| Modality | Coverage | Source | Licence | Verbatim credit |
+| --- | --- | --- | --- | --- |
+| **Stain / photograph** (54 plates) | per-plane: 9 UBC horizontal plates (y = +10 … −44) + 15 UBC coronal plates (z = +31 … −54) + 3 Commons CT plates, all ±1.5 au; plus the 17 UBC level-mapped micrographs on transverse planes (every authored level has one) | UBC `neuroanatomy.ca` micrograph / horizontal / coronal viewers; MSU Human Brain Atlas coronal cell stains | **CC BY-NC-SA 4.0** (UBC — non-commercial educational use, recorded in ATTRIBUTION); site permission with mandatory credit (brainmuseum.org); CC0 (Commons CT slices) | `© University of British Columbia, CC BY-NC-SA 4.0` · `University of Wisconsin and Michigan State Comparative Mammalian Brain Collections, and the National Museum of Health and Medicine; preparation funded by the National Science Foundation and the National Institutes of Health` · `CT of a normal brain — Mikael Häggström, M.D., via Wikimedia Commons, CC0 1.0 (public domain dedication)` |
+| **MRI** (continuous, all 3 axes) | every plane position on all three axes | OpenNeuro **ds007313** (3 T MPRAGE, head + cervical spine), resampled onto the canonical grid | **CC0** (no attribution required; credited for provenance) | `ds007313 doi:10.18112/openneuro.ds007313.v1.0.0, OpenNeuro CC0` |
+| **CT** (continuous, all 3 axes) | every plane position on all three axes | **NLM Visible Human Project** — "Additional Head Images" head CT (Brigham and Women's Hospital / Harvard Medical School head, 463 axial DICOM slices, 1.5 mm) | NLM Terms and Conditions (2019) — redistribution permitted with acknowledgement | `Courtesy of the U.S. National Library of Medicine` |
+
+Both grids are `uint8` volumes on the **same canonical box and spacing** (45 × 81 × 67, origin x −27 / y −55 / z −56 au), row-major x-fastest, ≈1.23 × 1.25 × 1.24 au per voxel, with a manifest recording dims/origin/spacing, the registration block (constants + measured residuals) and the source/licence/credit. CT is baked in Hounsfield units (`storedHU = stored16 · 1 − 1200`) with the `brain (−20…100 HU)` and `bone (200…1600 HU)` presets.
+
+### Honest limits (please read before quoting a plane position)
+
+- **Photographs are per-plane, not continuous.** Each plate is anchored to one canonical plane value with a ±1.5 au mount tolerance, so moving the slider between two photographs falls back to CT/MRI (Auto) or to the simulated section, and the canvas says which. Photo *sequence* coverage is deliberately denser through the brainstem than through the hemispheres.
+- **Registration is approximate and disclosed.** The photographs are photographs of physical slabs — there is no voxel registration. Their `planeValue` comes from the sources' own labels (UBC viewer landmark labels, the Commons 4 mm slice indices) plus per-image tissue measurements, and their `fit {scale, dx, dy, mirrorX}` is a first-pass affine; absolute plane error is on the order of ±1 step (≈5–6 au) for the photographs. The MRI and CT volumes are registered with measured, re-runnable corrections (midline residual ≤ 1.25 au; CT pons-face residual 2.04 au mean against the stylized atlas envelope) and both manifests report their residuals verbatim.
+- **MRI, CT and the photographs are different individuals.** The OpenNeuro subject, the NLM Visible Human donor and the UBC/MSU specimens are placed in the *same canonical atlas frame*; the atlas geometry is the common frame of reference, and each modality keeps its own documented affine rather than inheriting another subject's fit.
+- **This is a study aid.** NeuroAxis is not a medical device, and none of this imagery is for diagnosis (see *Educational disclaimer* below).
+
+### Committed payload & budgets
+
+`src/assets/imaging/` holds **6.12 MiB across 58 files** — 54 stain JPEG/PNG plates (5.64 MiB), `mri-t1.bin` (238 KiB) + `mri-manifest.json`, `ct.bin` (238 KiB) + `ct-manifest.json` — inside the plan §4 budget: **new committed assets ≤ 4 MiB this run** (v4 added `ct.bin` + 24 UBC plates + 3 Commons CT plates) and **≤ 8 MiB total imaging payload** (measured 6.12 MiB, so no photo re-encode was needed). Raw downloads stay in the gitignored `assets-src/imaging2/`; every embedded plate is a content-verbatim copy (no crops, no retouching) with only technical modifications (integer 2× downsampling, alpha flatten onto white, lossless filtered-PNG re-encode for the photographs; uint8 resampling for the grids) recorded per file in `assets-src/imaging2/processed-photos.json`.
+
+**Re-baking** (deterministic, Node-only, no clock/RNG — the committed artifacts are byte-identical across runs; raw inputs stay in gitignored `assets-src/`):
 
 ```bash
-node scripts/build-mri-grid.mjs          # → src/assets/imaging/mri-t1.bin + mri-manifest.json + QA previews (exit ≠ 0 on QA-gate violation)
+node scripts/build-mri-grid.mjs          # → src/assets/imaging/mri-t1.bin + mri-manifest.json + QA previews (exit ≠ 0 on a registration-QA violation)
 node scripts/build-mri-grid.mjs --probe  # inspect the source NIfTI header without writing
+node scripts/build-ct-grid.mjs           # → src/assets/imaging/ct.bin + ct-manifest.json + QA previews (exit ≠ 0 on QA violation)
+node scripts/build-ct-grid.mjs --tune    # re-run the CT↔MRI registration search and print the candidate table
+node scripts/build-ct-grid.mjs --probe   # inspect the source DICOM series header without writing
 ```
+
+A missing or failed CT bake is not fatal: `ct-manifest.json` carries `status: 'unavailable'` and the CT layer registers disabled — the toolbar then disables the CT button with that reason, the PiP hint says the same, and Auto simply falls through to MRI/photographs.
+
+### Credits and link-outs (v3 behaviour, unchanged)
+
+The live toolbar lists "open source ↗" chips for the section's level: the mapped image's own page plus the UBC, MSU, Harvard Whole Brain Atlas and BrainMaps.org references — the latter two link-out only. License verdicts and fetch evidence: [docs/IMAGING_SOURCES.md](docs/IMAGING_SOURCES.md) (v3 sources) and [docs/IMAGING_SOURCES_V4.md](docs/IMAGING_SOURCES_V4.md) (v4 sources); full provenance and verbatim credit lines: [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
 ## Scripts
 
@@ -97,6 +136,7 @@ node scripts/build-mri-grid.mjs --probe  # inspect the source NIfTI header witho
 | `npm run validate` | Data-integrity gate: JSON shape, canonical-coordinate bounds, id/slug uniqueness, plate↔SVG↔taxonomy referential integrity, syndrome id resolution, unique display names (`scripts/validate-data.mjs`) |
 | `node scripts/build-anatomy-geometry.mjs --manifest` | Anatomy asset gate: rebuilds the manifest from the committed GLBs and enforces the v2 perf budgets (exit 1 = over budget) |
 | `node scripts/build-mri-grid.mjs` | MRI bake gate: resamples the CC0 OpenNeuro T1w into the canonical uint8 grid + manifest + QA preview PNGs (exit ≠ 0 on registration-QA violation) |
+| `node scripts/build-ct-grid.mjs` | CT bake gate: resamples the NLM Visible Human head CT DICOM series into the canonical uint8 grid (HU) + manifest with `brain`/`bone` windows + QA previews; `--tune` re-runs the registration search (exit ≠ 0 on QA violation) |
 
 All three gates (`validate`, `check`, `build`) must exit 0; `npm run validate` is the pre-commit data authority (plan §9).
 
@@ -128,13 +168,15 @@ src/
   data/          taxonomy.json · levels.json · structures/ · tracts.json ·
                  syndromes/ · plates.json · plates/*.svg · sectionImages.ts
   assets/anatomy committed v2 GLBs + anatomy-manifest.json (+ nuclei-report.json)
-  assets/imaging committed v3 stain JPEGs + mri-t1.bin + mri-manifest.json
+  assets/imaging committed imaging payload (6.12 MiB): stain plates + mri-t1.bin
+                 + mri-manifest.json + ct.bin + ct-manifest.json
   components/    Header, SearchBox, TaxonomyTree, LevelRuler, InfoPanel,
                  PlatesTab, PlateRenderer, SyndromeBrowser, ReferencesModal, Legend
   components/viewer3d/   R3F canvas, GLB-backed meshes, tract tubes, clip
                  planes, post FX composer, live-section PiP
   components/section/    2D live-section canvas, contour worker, real-image
-                 layer implementations (stain + MRI)
+                 layer implementations (photographs + MRI + CT registries,
+                 modality resolution, canvas→texture sampler for the PiP)
   geometry/      anatomyAssets (GLB loader + manifest), generated (manifest
                  types), materials (PBR factory), envelope (v1 fallbacks),
                  textures (procedural normal maps), curves

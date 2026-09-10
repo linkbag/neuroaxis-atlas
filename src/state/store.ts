@@ -75,38 +75,147 @@ export interface ClipState {
  *  (transverse) matches the authored-plate focus (plan §2.2). */
 export type SectionAxis = 'x' | 'y' | 'z'
 
-export type SectionUnderlayKind = 'none' | 'stain' | 'mri'
+/**
+ * What the live-section canvas paints as real imagery (v3 SECTION_SYNC_PLAN
+ * §2.3 + v4 IMAGING_V4_PLAN §4 "real-first default", task `modality-layers`).
+ *
+ *  - `'auto'`  — **v4 default**: real-first. Draw the best real modality that
+ *                actually covers this plane: an anchored photograph inside its
+ *                tolerance window → else CT (when the grid is available) →
+ *                else MRI (when available) → else nothing, in which case the
+ *                simulated section stays and the canvas says so honestly.
+ *  - `'stain'` — embedded photographs only (level-mapped or plane-anchored);
+ *                a plane with no anchored plate falls back to the simulated
+ *                section with a hint (it never silently switches modality).
+ *  - `'ct'`    — the continuous CT grid only, windowed by `ctWindowPreset`.
+ *  - `'mri'`   — the continuous T1 grid only, windowed by
+ *                `windowMin`/`windowMax` (uint8).
+ *  - `'none'`  — explicit **"simulated only"**: no real imagery is ever drawn.
+ *
+ * v3 stored `'none' | 'stain' | 'mri'`; the two new values are additive, so a
+ * v3 payload still parses (see initialSectionUnderlay).
+ */
+export type SectionUnderlayKind = 'auto' | 'mri' | 'ct' | 'stain' | 'none'
+
+/** Modality-switcher button order for the UI (integration wires the buttons). */
+export const SECTION_UNDERLAY_KINDS: readonly SectionUnderlayKind[] = [
+  'auto',
+  'mri',
+  'ct',
+  'stain',
+  'none',
+]
+
+/** Button labels for the same order (real-first first, simulated-only last). */
+export const SECTION_UNDERLAY_KIND_LABELS: Record<SectionUnderlayKind, string> = {
+  auto: 'Auto (real-first)',
+  mri: 'MRI',
+  ct: 'CT',
+  stain: 'Photo',
+  none: 'Simulated only',
+}
+
+/** CT display-window presets baked into `ct-manifest.json` → `windows`. */
+export type CtWindowPreset = 'brain' | 'bone'
+
+/** Preset names the CT window selector offers, in display order. */
+export const CT_WINDOW_PRESETS: readonly CtWindowPreset[] = ['brain', 'bone']
+
+export const CT_WINDOW_PRESET_LABELS: Record<CtWindowPreset, string> = {
+  brain: 'Brain (soft tissue)',
+  bone: 'Bone',
+}
 
 /**
- * Real-imaging underlay settings for the 2D section canvas (plan §2.3).
- * `kind` picks which registered layer draws (G3 implements layer draws;
- * the store only owns the knobs). windowMin/windowMax are the uint8
- * grayscale window of the MRI grid layer.
+ * Real-imaging settings for the 2D section canvas (plan §2.3 + §4).
+ * `kind` picks which modality draws; the registry layers (see
+ * src/components/section/imageLayers.ts) own the actual painting.
+ * windowMin/windowMax are the uint8 grayscale window of the MRI grid layer;
+ * CT is windowed in HU through `ctWindowPreset` instead, because the CT grid
+ * is baked in Hounsfield units.
  */
 export interface SectionUnderlay {
   kind: SectionUnderlayKind
-  /** 0..1 — blend of the real image under the simulated contours. */
+  /** 0..1 — alpha of the real image (the section's BASE plate in real-first mode). */
   opacity: number
   windowMin: number
   windowMax: number
+  /**
+   * v4 real-first compositing (plan §4): when true (default) a drawn real
+   * image is the section's BASE layer and the simulated structure contours are
+   * painted over it as a translucent overlay (~65% of their normal fill
+   * strength, outlines kept crisp, selection highlight unaffected). When false
+   * the v3 look returns: the real image is a subdued underlay *beneath* the
+   * simulated contours. It has no effect when no real layer drew (the
+   * simulated section is then the base either way).
+   */
+  realFirst: boolean
+  /** v4: CT window preset name, resolved against ct-manifest.json `windows`. */
+  ctWindowPreset: CtWindowPreset
 }
 
 /** localStorage key persisting underlay prefs (same pattern as quality). */
 export const SECTION_UNDERLAY_STORAGE_KEY = 'neuroaxis.sectionUnderlay'
 
-const DEFAULT_SECTION_UNDERLAY: SectionUnderlay = {
-  kind: 'none',
-  opacity: 0.6,
+/**
+ * Version stamped into the persisted payload. A payload without it was written
+ * by v3 (kind/opacity/windowMin/windowMax only) and is migrated once — see
+ * initialSectionUnderlay.
+ */
+const SECTION_UNDERLAY_SCHEMA_VERSION = 2
+
+/** The two v3 defaults a stored payload may simply never have touched. */
+const V3_DEFAULT_KIND: SectionUnderlayKind = 'none'
+const V3_DEFAULT_OPACITY = 0.6
+
+/**
+ * v4 real-first defaults (plan §4). Two values change from v3 on purpose:
+ *  - `kind: 'auto'` — real imagery is the default look, with an honest hint
+ *    when a plane has none;
+ *  - `opacity: 1` — the image is now the section's BASE plate, not a subdued
+ *    underlay beneath opaque contour fills, so it renders at full strength by
+ *    default. (v3's 0.6 was calibrated for the underlay role.)
+ * A persisted value still wins over both (see initialSectionUnderlay).
+ */
+export const DEFAULT_SECTION_UNDERLAY: SectionUnderlay = {
+  kind: 'auto',
+  opacity: 1,
   windowMin: 60,
   windowMax: 180,
+  realFirst: true,
+  ctWindowPreset: 'brain',
 }
 
 function isUnderlayKind(value: unknown): value is SectionUnderlayKind {
-  return value === 'none' || value === 'stain' || value === 'mri'
+  return (
+    value === 'auto' ||
+    value === 'mri' ||
+    value === 'ct' ||
+    value === 'stain' ||
+    value === 'none'
+  )
 }
 
-/** Persisted value wins; anything malformed falls back to the defaults. */
+function isCtWindowPreset(value: unknown): value is CtWindowPreset {
+  return value === 'brain' || value === 'bone'
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value)
+}
+
+/**
+ * Persisted settings win **field by field**, so a v3 payload (no
+ * `schemaVersion`, no `realFirst`, no `ctWindowPreset`) restores its own values
+ * and takes the v4 defaults for the fields that did not exist yet. The single
+ * exception is a v3 payload that still holds both v3 defaults unchanged
+ * (`kind: 'none'`, `opacity: 0.6`): that is indistinguishable from "never
+ * touched the toggle", and the plan requires real-first to be the default
+ * experience, so it is migrated to the v4 defaults. Any other v3 value — e.g. a
+ * deliberate `kind: 'mri'` — is restored verbatim.
+ */
 function initialSectionUnderlay(): SectionUnderlay {
+  const next: SectionUnderlay = { ...DEFAULT_SECTION_UNDERLAY }
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       const raw = window.localStorage.getItem(SECTION_UNDERLAY_STORAGE_KEY)
@@ -114,19 +223,18 @@ function initialSectionUnderlay(): SectionUnderlay {
         const parsed: unknown = JSON.parse(raw)
         if (parsed !== null && typeof parsed === 'object') {
           const record = parsed as Record<string, unknown>
-          const kind = record.kind
-          const num = (value: unknown): number | null =>
-            typeof value === 'number' && Number.isFinite(value) ? value : null
-          const opacity = num(record.opacity)
-          const windowMin = num(record.windowMin)
-          const windowMax = num(record.windowMax)
-          if (isUnderlayKind(kind) && opacity !== null && windowMin !== null && windowMax !== null) {
-            return {
-              kind,
-              opacity: Math.min(1, Math.max(0, opacity)),
-              windowMin,
-              windowMax,
-            }
+          const kind = isUnderlayKind(record.kind) ? record.kind : null
+          const opacity = isFiniteNumber(record.opacity) ? record.opacity : null
+          const isV3Payload = record.schemaVersion !== SECTION_UNDERLAY_SCHEMA_VERSION
+          const untouchedV3Defaults =
+            isV3Payload && kind === V3_DEFAULT_KIND && opacity === V3_DEFAULT_OPACITY
+          if (!untouchedV3Defaults) {
+            if (kind !== null) next.kind = kind
+            if (opacity !== null) next.opacity = Math.min(1, Math.max(0, opacity))
+            if (isFiniteNumber(record.windowMin)) next.windowMin = record.windowMin
+            if (isFiniteNumber(record.windowMax)) next.windowMax = record.windowMax
+            if (typeof record.realFirst === 'boolean') next.realFirst = record.realFirst
+            if (isCtWindowPreset(record.ctWindowPreset)) next.ctWindowPreset = record.ctWindowPreset
           }
         }
       }
@@ -134,7 +242,21 @@ function initialSectionUnderlay(): SectionUnderlay {
   } catch {
     /* private-mode / storage disabled or malformed JSON — use defaults */
   }
-  return { ...DEFAULT_SECTION_UNDERLAY }
+  return next
+}
+
+/** Persist the merged settings under one key (quality-toggle pattern). */
+function persistSectionUnderlay(settings: SectionUnderlay): void {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(
+        SECTION_UNDERLAY_STORAGE_KEY,
+        JSON.stringify({ ...settings, schemaVersion: SECTION_UNDERLAY_SCHEMA_VERSION }),
+      )
+    }
+  } catch {
+    /* storage unavailable — the settings still apply for this session */
+  }
 }
 
 export interface AtlasLayers {
@@ -190,8 +312,13 @@ export interface AtlasActions {
   /** v3: switch the live-section axis; the canvas follows the plane value on
    *  the same clip slider (sectionAxis stays the single source of truth). */
   setSectionAxis: (axis: SectionAxis) => void
-  /** v3: merge underlay settings and persist them (neuroaxis.sectionUnderlay),
-   *  mirroring the quality-toggle persistence pattern. */
+  /**
+   * v3/v4: merge real-imagery settings and persist them
+   * (neuroaxis.sectionUnderlay), mirroring the quality-toggle persistence
+   * pattern. Accepts any subset: modality (`kind`), opacity, the MRI uint8
+   * window, the v4 `realFirst` compositing flag and the CT `ctWindowPreset`
+   * (brain/bone).
+   */
   setSectionUnderlay: (partial: Partial<SectionUnderlay>) => void
   /** Level-ruler / level-chip navigation: cut the plane + open the level's plate. */
   gotoLevel: (levelId: string) => void
@@ -332,18 +459,25 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
 
   setSectionUnderlay: (partial) =>
     set((s) => {
+      const previous = s.sectionUnderlay
+      // Field-by-field merge: an explicitly `undefined` field can never wipe a
+      // stored value, and the CT preset / real-first flag are validated here so
+      // a UI typo cannot put the store into an unrenderable state.
       const merged: SectionUnderlay = {
-        ...s.sectionUnderlay,
-        ...partial,
-        opacity: Math.min(1, Math.max(0, partial.opacity ?? s.sectionUnderlay.opacity)),
+        kind: isUnderlayKind(partial.kind) ? partial.kind : previous.kind,
+        opacity: Math.min(
+          1,
+          Math.max(0, isFiniteNumber(partial.opacity) ? partial.opacity : previous.opacity),
+        ),
+        windowMin: isFiniteNumber(partial.windowMin) ? partial.windowMin : previous.windowMin,
+        windowMax: isFiniteNumber(partial.windowMax) ? partial.windowMax : previous.windowMax,
+        realFirst:
+          typeof partial.realFirst === 'boolean' ? partial.realFirst : previous.realFirst,
+        ctWindowPreset: isCtWindowPreset(partial.ctWindowPreset)
+          ? partial.ctWindowPreset
+          : previous.ctWindowPreset,
       }
-      try {
-        if (typeof window !== 'undefined' && window.localStorage) {
-          window.localStorage.setItem(SECTION_UNDERLAY_STORAGE_KEY, JSON.stringify(merged))
-        }
-      } catch {
-        /* storage unavailable — the settings still apply for this session */
-      }
+      persistSectionUnderlay(merged)
       return { sectionUnderlay: merged }
     }),
 

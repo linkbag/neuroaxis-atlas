@@ -1,6 +1,6 @@
 /**
  * SectionCanvas — 2D live-section canvas (SECTION_SYNC_PLAN §2.2 + §4 [G2],
- * section-canvas task).
+ * section-canvas task; v4 real-first rendering, task `modality-layers`).
  *
  * Renders the simulated cross-section of every anatomy GLB at the current
  * clip plane: a worker (contourWorker.ts) slices the transferred geometry
@@ -19,11 +19,25 @@
  *    transverse axis and snaps the plane + opens the plate;
  *  - selection/hover: the selected group is drawn bright with a name label,
  *    hover identifies contours (shared store hoveredId → 3D sync);
- *  - real-imaging layers (plan §4): a window-level registry
+ *  - real-imaging layers (v3 §2.3 + v4 §4): a window-level registry
  *    (window.sectionImageLayers.registerImageLayer) lets other modules
- *    register underlays; the canvas calls appliesTo/draw each frame with
- *    the current plane + mapped levelId + store opacity, and renders the
- *    layer's credit line bottom-left whenever a layer drew.
+ *    register layers tagged with `modality` + `priority`. Each frame the
+ *    canvas resolves the store's `sectionUnderlay.kind` to ONE real modality
+ *    (resolveLayerFrame: 'auto' = anchored photo → CT → MRI), draws the
+ *    registry in ascending priority, and renders the drawn layer's verbatim
+ *    credit + source link bottom-left.
+ *
+ * v4 real-first draw order (plan §2 gap 1, §4):
+ *   1. background + grid;
+ *   2. the real base plate (store opacity) — or nothing, when no layer covers
+ *      this plane or `kind` is the explicit 'none' ("simulated only");
+ *   3. the simulated structure contours — translucent overlay over a real base
+ *      (CONTOUR_OVERLAY_ALPHA, crisp outlines, selection unaffected), or the
+ *      normal v3 rendering when the simulated section IS the base;
+ *   4. labels (selected-structure name + hover), then crosshair, orientation
+ *      badges and the plane readout.
+ * When no real layer drew, an honest hint replaces the credit line in the same
+ * bottom-left slot (imageryHint) — the panel is never silently blank.
  *
  * Performance: plane updates are quantized to 0.25 au and posted at
  * ≤ 15 Hz while dragging (trailing ack keeps the newest plane); draws are
@@ -40,6 +54,7 @@ import { getLevel, getTaxonomyEntry, levels, platesForLevel, shortLevelName } fr
 import {
   highlightIdSet,
   useAtlasStore,
+  type CtWindowPreset,
   type SectionUnderlayKind,
 } from '../../state/store'
 import { CLIP_BOUNDS } from '../viewer3d/clipPlanes'
@@ -70,6 +85,24 @@ const CANVAS_MAX_DPR = 1.5
 
 /** Nearest-level window for the stain layer's levelId mapping (§2.3: ±1.5 au). */
 const LEVEL_MAP_WINDOW = 1.5
+
+/**
+ * Real-first compositing (v4, plan §2 gap 1 + §4): when a real image drew and
+ * `sectionUnderlay.realFirst` is on, the image is the section's BASE and the
+ * simulated contours are painted over it as a translucent overlay —
+ *
+ *   fill   = SECTION_KIND_ALPHA[kind] × CONTOUR_OVERLAY_ALPHA   (65% strength)
+ *   stroke = CONTOUR_OVERLAY_STROKE_ALPHA (outlines stay crisp over a photo)
+ *   dim    = DIM_ALPHA (unchanged)
+ *   selected = SECTION_KIND_ALPHA[kind] + 0.2, orange stroke, label (unaffected)
+ *
+ * With no real base (or `realFirst: false`) every one of those values is the
+ * v3 one, i.e. the simulated section is drawn exactly as before.
+ */
+const CONTOUR_OVERLAY_ALPHA = 0.65
+
+/** Stroke alpha for non-selected/non-hovered contour outlines in overlay mode. */
+const CONTOUR_OVERLAY_STROKE_ALPHA = 0.9
 
 /** Nearest-plate chip window (§2.2: ±3 au, plate-backed levels only). */
 const PLATE_CHIP_WINDOW = 3
@@ -130,26 +163,63 @@ export interface SectionView {
 }
 
 export interface SectionLayerContext {
-  /** Store underlay opacity 0..1 (blend under the simulated contours). */
+  /** Store underlay opacity 0..1 — alpha of the real image (the section's
+   *  BASE plate when real-first compositing is on). */
   opacity: number
-  /** Nearest level id within ±1.5 au (stain mapping), else null. */
+  /** Nearest level id within ±1.5 au (stain level mapping), else null. */
   levelId: string | null
-  /** Active underlay kind (stain | mri | none). */
+  /** Store-requested underlay kind: 'auto' | 'mri' | 'ct' | 'stain' | 'none'. */
   kind: SectionUnderlayKind
+  /**
+   * v4: the ONE real modality resolved for THIS frame — `kind` with 'auto'
+   * already resolved through the plan §4 order (anchored photo → CT → MRI →
+   * none) by this module's resolveLayerFrame() (the PiP backdrop sampler
+   * resolves the same order through imageLayers.resolveSliceModality). A layer
+   * paints only when this equals its own `modality`, so at most one real layer
+   * draws per frame and the credit shown names the image actually drawn.
+   * `'none'` means no real imagery at this plane (or an explicit "simulated
+   * only" request).
+   */
+  modality: SectionLayerModality | 'none'
   windowMin: number
   windowMax: number
+  /** v4: CT window preset from the store (ct-manifest.json `windows`). */
+  ctWindowPreset: CtWindowPreset
 }
 
+/** Real modality a registered image layer paints (plan §4 layer registry). */
+export type SectionLayerModality = 'mri' | 'ct' | 'stain'
+
 /**
- * One registered real-image layer. Draw order: underlays (in registration
- * order) → simulated contours → overlay labels. `draw` returns false when
- * it painted nothing (its credit is then not shown).
+ * One registered real-image layer. Draw order: registered layers in ascending
+ * `priority` (the real base plate) → simulated contours → overlay labels.
+ * `draw` returns false when it painted nothing (its credit is then not shown).
  */
 export interface SectionImageLayer {
   id: string
+  /**
+   * v4: which real modality this layer paints (plan §4). The canvas passes the
+   * frame's resolved modality in `SectionLayerContext.modality` and a layer
+   * must return false unless it matches.
+   */
+  modality?: SectionLayerModality
+  /**
+   * v4: draw priority (plan §4 "add `priority` so modality order is explicit").
+   * Lower paints first; every registered layer paints before the simulated
+   * contours and labels, so real imagery is always the BASE. Layers without a
+   * priority sort last (DEFAULT_LAYER_PRIORITY).
+   */
+  priority?: number
   /** Whether this layer has content at the current plane/level. */
   appliesTo(plane: PlaneSpec, levelId: string | null): boolean
-  /** Paint the underlay in screen space; false = nothing drawn. */
+  /**
+   * v4: readiness of a layer with async data (the MRI/CT grids, a photo still
+   * decoding), queried BEFORE `draw` so the canvas can tell "still loading"
+   * from "nothing here" when draw() paints nothing. Omitted = always 'ready'.
+   * draw() is called even while 'loading', because that call starts the fetch.
+   */
+  dataStatus?(plane: PlaneSpec, levelId: string | null): 'ready' | 'loading' | 'unavailable'
+  /** Paint this layer's real imagery in screen space; false = nothing drawn. */
   draw(
     ctx: CanvasRenderingContext2D,
     view: SectionView,
@@ -160,6 +230,9 @@ export interface SectionImageLayer {
   credit: string
   sourceLink?: string
 }
+
+/** Sort key for layers that do not declare a priority (they paint last). */
+export const DEFAULT_LAYER_PRIORITY = 50
 
 export interface SectionImageLayerRegistry {
   registerImageLayer(layer: SectionImageLayer): void
@@ -208,6 +281,126 @@ export function registerSectionImageLayer(layer: SectionImageLayer): () => void 
   const registry = getSectionImageLayerRegistry()
   registry.registerImageLayer(layer)
   return () => registry.unregisterImageLayer(layer.id)
+}
+
+/* ------------------------------------------- real-first layer resolution */
+
+/**
+ * Readiness of a layer BEFORE it draws, as reported by its optional
+ * `dataStatus` hook: 'ready' = draw() will paint at this plane, 'loading' =
+ * its async data is still on the way, 'unavailable' = there is nothing to
+ * draw here (no data in this build, fetch failed, or no image mapped to this
+ * plane). Only used to phrase the honest hint — draw() is always called even
+ * while 'loading', because that call is what starts the fetch.
+ */
+export type LayerFrameStatus = 'ready' | 'loading' | 'unavailable'
+
+/**
+ * Modality precedence for `kind: 'auto'` (plan §4 "real-first default"):
+ * an anchored photograph inside its tolerance window → else CT → else MRI →
+ * else nothing. The canvas resolves this from the REGISTRY (each layer's own
+ * `appliesTo` + `dataStatus`), not by importing the layer implementations:
+ * src/components/section/imageLayers.ts registers itself on this module, so
+ * importing it back would be a module cycle. imageLayers.resolveSliceModality()
+ * is the PiP sampler's equivalent and implements the same documented order.
+ */
+export const AUTO_MODALITY_ORDER: readonly SectionLayerModality[] = ['stain', 'ct', 'mri']
+
+/** Short labels for the modalities (hint text + credit badge). */
+export const MODALITY_LABELS: Record<SectionLayerModality, string> = {
+  stain: 'photograph',
+  ct: 'CT',
+  mri: 'MRI',
+}
+
+/** Credit shown bottom-left whenever a real layer drew (unchanged contract). */
+export interface ImageryCredit {
+  /** Verbatim attribution line — rendered character for character. */
+  text: string
+  /** Source page for the credit's "open source ↗" link (optional). */
+  link?: string
+  /** Which modality drew (rendered as a small badge before the credit text). */
+  modality: SectionLayerModality
+}
+
+/** The layer frame this canvas paints: which modality, which layer, how ready. */
+export interface LayerFrame {
+  /** The real modality this frame shows; 'none' = simulated only. */
+  modality: SectionLayerModality | 'none'
+  /** Layer to draw, or null when no layer covers this modality. */
+  layer: SectionImageLayer | null
+  /** Readiness of `layer` measured before draw() (see LayerFrameStatus). */
+  status: LayerFrameStatus
+}
+
+/**
+ * Resolve the real layer for one frame (pure — exported for QA). `kind` is the
+ * store request; 'auto' walks AUTO_MODALITY_ORDER and takes the first modality
+ * that can actually draw (a grid whose fetch failed is skipped, so 'auto'
+ * degrades to the next modality rather than to a blank panel). Explicit kinds
+ * never fall through: a missing/inapplicable layer is reported with its own
+ * status so the canvas can name the reason.
+ */
+export function resolveLayerFrame(
+  layers: readonly SectionImageLayer[],
+  kind: SectionUnderlayKind,
+  plane: PlaneSpec,
+  levelId: string | null,
+): LayerFrame {
+  if (kind === 'none') return { modality: 'none', layer: null, status: 'unavailable' }
+  const find = (modality: SectionLayerModality): SectionImageLayer | null =>
+    layers.find((layer) => layer.modality === modality) ?? null
+  const statusOf = (layer: SectionImageLayer | null): LayerFrameStatus => {
+    if (layer === null) return 'unavailable'
+    if (!layer.appliesTo(plane, levelId)) return 'unavailable'
+    return layer.dataStatus?.(plane, levelId) ?? 'ready'
+  }
+  if (kind === 'auto') {
+    let fallback: LayerFrame | null = null
+    for (const modality of AUTO_MODALITY_ORDER) {
+      const layer = find(modality)
+      const status = statusOf(layer)
+      if (status !== 'unavailable') return { modality, layer, status }
+      if (layer !== null && fallback === null) fallback = { modality, layer, status }
+    }
+    // Nothing can paint: keep the best candidate so the hint can name it.
+    return fallback ?? { modality: 'none', layer: null, status: 'unavailable' }
+  }
+  const layer = find(kind)
+  return { modality: kind, layer, status: statusOf(layer) }
+}
+
+/**
+ * The honest one-line state shown whenever no real layer drew (plan §6: "no
+ * real data at this plane" states are honest and never blank). Pure and
+ * exported for QA. Returns null exactly when real imagery painted — then the
+ * layer's verbatim credit is shown in the same bottom-left slot instead.
+ */
+export function imageryHint(
+  kind: SectionUnderlayKind,
+  modality: SectionLayerModality | 'none',
+  status: LayerFrameStatus,
+  drew: boolean,
+): string | null {
+  if (drew) return null
+  if (kind === 'none') return 'simulated only — real imagery is switched off'
+  if (status === 'loading' && modality !== 'none') {
+    return `loading the real ${MODALITY_LABELS[modality]} imagery… showing the simulated section`
+  }
+  if (modality === 'stain') {
+    return 'no photograph is anchored at this plane — showing the simulated section'
+  }
+  if (modality === 'ct' || modality === 'mri') {
+    return `no real ${MODALITY_LABELS[modality]} imagery at this plane — showing the simulated section`
+  }
+  return 'no real imagery at this plane — showing the simulated section'
+}
+
+/** Registry layers in draw order: ascending priority (plan §4). */
+export function layersInDrawOrder(layers: readonly SectionImageLayer[]): SectionImageLayer[] {
+  return [...layers].sort(
+    (a, b) => (a.priority ?? DEFAULT_LAYER_PRIORITY) - (b.priority ?? DEFAULT_LAYER_PRIORITY),
+  )
 }
 
 /* --------------------------------------------------- mapping helpers */
@@ -362,7 +555,8 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const geometryStatusRef = useRef(geometryStatus)
   geometryStatusRef.current = geometryStatus
   const [workerError, setWorkerError] = useState<string | null>(null)
-  const [credit, setCredit] = useState<{ text: string; link?: string } | null>(null)
+  const [credit, setCredit] = useState<ImageryCredit | null>(null)
+  const [hint, setHint] = useState<string | null>(null)
 
   // Imperative render state.
   const transformRef = useRef<Transform | null>(null)
@@ -384,6 +578,7 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const rafRef = useRef(0)
   const drawNeededRef = useRef(false)
   const lastCreditRef = useRef<string | null>(null)
+  const lastHintRef = useRef<string | null>(null)
 
   /* ------------------------------------------------------------- worker */
 
@@ -530,27 +725,69 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
 
     drawGrid(ctx, view, transform)
 
-    /* ---- underlays: registered real-image layers (§2.3) ---- */
-    let drawnCredit: { text: string; link?: string } | null = null
-    if (state.sectionUnderlay.kind !== 'none') {
-      const levelId = levelIdForPlane(axis, planeValue)
-      for (const layer of getSectionImageLayerRegistry().list()) {
-        if (!layer.appliesTo(plane, levelId)) continue
-        const painted = layer.draw(ctx, view, plane, {
-          opacity: state.sectionUnderlay.opacity,
-          levelId,
-          kind: state.sectionUnderlay.kind,
-          windowMin: state.sectionUnderlay.windowMin,
-          windowMax: state.sectionUnderlay.windowMax,
-        })
-        if (painted !== false && drawnCredit === null) {
-          drawnCredit = { text: layer.credit, link: layer.sourceLink }
+    /* ---- real imagery: the section's BASE layer (v4 real-first, plan §4) ----
+     * ONE modality per frame: `kind` is the store request, resolveLayerFrame()
+     * turns it into a single layer (auto = anchored photo → CT → MRI — see
+     * AUTO_MODALITY_ORDER) and the layers in turn paint only when
+     * `layerCtx.modality` matches their own tag. Layers are visited in
+     * ascending `priority`; the first one that reports having painted supplies
+     * the credit shown bottom-left. */
+    const underlay = state.sectionUnderlay
+    const levelId = levelIdForPlane(axis, planeValue)
+    const orderedLayers = layersInDrawOrder(getSectionImageLayerRegistry().list())
+    const frame = resolveLayerFrame(orderedLayers, underlay.kind, plane, levelId)
+    const layerCtx: SectionLayerContext = {
+      opacity: underlay.opacity,
+      levelId,
+      kind: underlay.kind,
+      modality: frame.modality,
+      windowMin: underlay.windowMin,
+      windowMax: underlay.windowMax,
+      ctWindowPreset: underlay.ctWindowPreset,
+    }
+    let drewReal = false
+    let drawnCredit: ImageryCredit | null = null
+    if (underlay.kind !== 'none') {
+      const paint = (
+        layer: SectionImageLayer,
+      ): { painted: boolean; credit: ImageryCredit | null } => {
+        if (!layer.appliesTo(plane, levelId)) return { painted: false, credit: null }
+        const painted = layer.draw(ctx, view, plane, layerCtx) !== false
+        return {
+          painted,
+          credit: painted
+            ? { text: layer.credit, link: layer.sourceLink, modality: layer.modality ?? 'stain' }
+            : null,
         }
+      }
+      // v3 registrants predate the modality tag: they cannot be named by the
+      // switcher, so they paint first (their own appliesTo/draw still gate
+      // them) — the v3 registry contract keeps working unchanged. Then the
+      // frame's resolved modality layer, in ascending priority order; the first
+      // layer that reports a paint supplies the credit rendered bottom-left.
+      const candidates: SectionImageLayer[] = [
+        ...orderedLayers.filter((layer) => layer.modality === undefined),
+        ...(frame.layer !== null ? [frame.layer] : []),
+      ]
+      for (const layer of candidates) {
+        const result = paint(layer)
+        if (!result.painted) continue
+        drewReal = true
+        if (drawnCredit === null) drawnCredit = result.credit
       }
     }
     if (lastCreditRef.current !== (drawnCredit === null ? '' : drawnCredit.text)) {
       lastCreditRef.current = drawnCredit === null ? '' : drawnCredit.text
       setCredit(drawnCredit)
+    }
+    // Real imagery is the base plate only when it actually painted AND the
+    // real-first compositing is on; otherwise the simulated section IS the
+    // base (v3 rendering, unchanged).
+    const realBase = drewReal && underlay.realFirst
+    const hint = imageryHint(underlay.kind, frame.modality, frame.status, drewReal)
+    if (lastHintRef.current !== hint) {
+      lastHintRef.current = hint
+      setHint(hint)
     }
 
     /* ---- simulated contours: context → ventricle → nucleus ---- */
@@ -565,10 +802,18 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       const inHighlight = highlight === null || highlight.has(meta.group)
       drawPart(ctx, meta, part, transform, {
         strokeOnly,
+        overlay: realBase,
         dim: highlight !== null && !inHighlight,
         selected: meta.group === state.selectedId,
         hovered: meta.group === state.hoveredId,
       })
+    }
+
+    /* ---- labels last: over the base plate AND the contour fills ---- */
+    for (const meta of visibleParts) {
+      if (meta.group !== state.selectedId) continue
+      const part = contoursRef.current.get(meta.slug) as SectionContourPart
+      if (part.loops.length > 0) drawSelectedLabel(ctx, meta, part, transform)
     }
 
     /* ---- crosshair at the other two sliders ---- */
@@ -612,6 +857,8 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
 
   interface DrawStyle {
     strokeOnly: boolean
+    /** Real-first: a real image is the base, contours are a translucent overlay. */
+    overlay: boolean
     dim: boolean
     selected: boolean
     hovered: boolean
@@ -625,27 +872,40 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     style: DrawStyle,
   ): void {
     if (part.loops.length === 0) return
-    const alpha = style.dim
+    // Overlay mode keeps the kind hierarchy (context < ventricle < nucleus) and
+    // scales the whole contour layer down so the photo underneath stays the
+    // primary content; the selected part is deliberately NOT scaled (plan §4
+    // "selection highlight unaffected").
+    const fillAlpha = style.dim
       ? DIM_ALPHA
       : style.selected
         ? Math.min(1, SECTION_KIND_ALPHA[meta.kind] + 0.2)
-        : SECTION_KIND_ALPHA[meta.kind]
+        : style.overlay
+          ? SECTION_KIND_ALPHA[meta.kind] * CONTOUR_OVERLAY_ALPHA
+          : SECTION_KIND_ALPHA[meta.kind]
+    const strokeAlpha = style.dim
+      ? 0.4
+      : style.selected || style.hovered
+        ? 1
+        : style.overlay
+          ? CONTOUR_OVERLAY_STROKE_ALPHA
+          : 0.75
     const path = new Path2D()
     buildPartPath(path, part, transform)
 
     ctx.save()
     if (!style.strokeOnly) {
-      ctx.globalAlpha = alpha
+      ctx.globalAlpha = fillAlpha
       ctx.fillStyle = meta.color
       ctx.fill(path, 'evenodd')
     }
-    ctx.globalAlpha = style.dim ? 0.4 : style.selected ? 1 : style.hovered ? 1 : 0.75
+    ctx.globalAlpha = strokeAlpha
     ctx.strokeStyle = style.selected ? SELECTION_STROKE : style.hovered ? HOVER_STROKE : meta.color
     ctx.lineWidth = style.selected ? 2.2 : style.hovered ? 1.8 : 0.9
     ctx.stroke(path)
     ctx.restore()
-
-    if (style.selected) drawSelectedLabel(ctx, meta, part, transform)
+    // Labels are drawn in a second pass over every part (see draw()), so a
+    // later-painted fill can never cover the selected structure's name.
   }
 
   function buildPartPath(path: Path2D, part: SectionContourPart, transform: Transform): void {
@@ -951,9 +1211,44 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
           href={credit.link ?? undefined}
           target={credit.link !== undefined ? '_blank' : undefined}
           rel="noreferrer"
+          title={
+            credit.link !== undefined
+              ? `Verbatim attribution of the imagery shown — open source in a new tab: ${credit.link}`
+              : 'Verbatim attribution of the imagery shown'
+          }
         >
+          {/* Modality badge + the EXACT credit line, which stays verbatim and
+              contiguous so it can be copied/checked character for character. */}
+          <span className="section-credit-modality" style={{ color: '#94a3b8' }}>
+            {MODALITY_LABELS[credit.modality]} ·{' '}
+          </span>
           {credit.text}
+          {credit.link !== undefined && <span aria-hidden="true"> ↗</span>}
         </a>
+      )}
+      {credit === null && hint !== null && (
+        // Honest imagery state (plan §6): shown in the credit's bottom-left
+        // slot whenever no real layer drew, so the panel is never blank about
+        // why the simulated section is the only thing on screen.
+        <div
+          className="section-imagery-hint"
+          role="note"
+          style={{
+            position: 'absolute',
+            left: 8,
+            bottom: 8,
+            maxWidth: 'min(560px, 72%)',
+            padding: '4px 8px',
+            background: 'rgba(13, 21, 38, 0.82)',
+            border: '1px solid rgba(148, 163, 184, 0.35)',
+            borderRadius: 6,
+            color: '#94a3b8',
+            fontSize: '0.7rem',
+            lineHeight: 1.35,
+          }}
+        >
+          {hint}
+        </div>
       )}
       {plateChip !== null && (
         <button

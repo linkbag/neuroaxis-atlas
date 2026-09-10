@@ -22,8 +22,38 @@
  *
  * Exports: default Viewer3D plus the named pieces so integration (and tests)
  * can compose or mount them independently.
+ *
+ * ── v4 PiP real-imagery state (IMAGING_V4_PLAN §2 gap 4 + §4, task
+ *    `integration-v4`) ─────────────────────────────────────────────────────
+ * `pip-backdrop` DID land the GPU backdrop path (the evidence-based decision is
+ * documented in SectionPiP's header and in the FALLBACK section below), so the
+ * plan §4 fallback — "PiP unchanged + a note in the panel that the real-imagery
+ * view lives in the Plates tab" — is not the shipping path and there is no
+ * permanent "see the Plates tab" banner on a healthy build.
+ *
+ * What this file DOES surface is the honest state of that backdrop, because the
+ * panel is otherwise silent about it: `SectionPipHint` below reads the live
+ * diagnostics (`sectionPipDiagnostics.backdropReason`, written by the renderer
+ * every frame) and shows, only while the PiP is visible and only while the
+ * active modality genuinely cannot paint at the current plane, one line under
+ * the panel saying what the panel is showing instead — the pure GPU cut.
+ *   • 'unavailable' — an explicit modality with no data in this build (e.g. a
+ *     CT grid that was never baked): the hint names the Plates tab, where the
+ *     modality buttons are disabled with the same reason and the live-section
+ *     canvas renders the full-resolution real slice for every modality that IS
+ *     embedded.
+ *   • 'loading'     — the volume/plate is still arriving; the hint says so and
+ *     disappears on its own when the sampler's next redraw paints it.
+ *   • 'no-anchor'   — a requested photograph has no plate anchored at this
+ *     plane; the hint states it rather than leaving an unexplained black panel.
+ * The element is fed through requestAnimationFrame with a textContent compare
+ * and a `hidden` flip, so it costs no React render and never touches the GL
+ * frame; it is empty (and unpainted) in the steady state, where the real slice
+ * IS in the render target and the panel's own credit line is the visible
+ * attribution (SectionPiPPanel's PipAttribution).
  */
 import { useEffect, useRef, useState } from 'react'
+import type { ReactElement } from 'react'
 import * as THREE from 'three'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
@@ -36,7 +66,7 @@ import ClipControls from './ClipControls'
 import ExplodeSlider from './ExplodeSlider'
 import PlaneHelpers from './PlaneHelpers'
 import PostFX from './PostFX'
-import { SectionPiP, SectionPiPPanel } from './SectionPiP'
+import { SectionPiP, SectionPiPPanel, sectionPipDiagnostics } from './SectionPiP'
 import { applyClipState } from './clipPlanes'
 
 /**
@@ -97,6 +127,118 @@ function SceneEnvironment(): null {
     }
   }, [gl, scene])
   return null
+}
+
+/* ------------------------------- v4 PiP real-imagery state hint */
+
+/** Modality names for the hint sentence (indexed by the sampler's union). */
+const MODALITY_WORDS: Record<string, string> = {
+  auto: 'real',
+  mri: 'MRI',
+  ct: 'CT',
+  stain: 'photograph',
+  none: '',
+}
+
+/** Live input for the hint: exactly the fields the renderer publishes. */
+export interface PipBackdropState {
+  /** Modality the store asked for ('none' = "simulated only"). */
+  requested: string
+  /** Modality that actually painted ('none' when nothing did). */
+  modality: string
+  /** '' = painted (or 'none'); 'unavailable' | 'no-anchor' | 'loading' otherwise. */
+  reason: string
+}
+
+/**
+ * The honest one-line state of the PiP backdrop, or null when the panel is
+ * showing real imagery (or is explicitly in "simulated only" mode). Pure and
+ * exported so QA can check every branch without a GL context — this is the
+ * PiP-side counterpart of SectionCanvas' `imageryHint`.
+ *
+ * It is deliberately NOT a permanent "see the Plates tab" banner: the panel
+ * carries the real slice whenever a modality covers the plane, and a banner in
+ * that state would be the opposite of honest. See the file header for the
+ * fallback decision.
+ */
+export function pipBackdropHint(state: PipBackdropState): string | null {
+  if (!(state.reason.length > 0)) return null
+  if (state.requested === 'none') return null
+  // `modality` is what the sampler RESOLVED even when it could not paint, so
+  // 'auto' can still name the modality it was waiting on.
+  const resolved = state.modality !== 'none' ? state.modality : state.requested
+  const word = MODALITY_WORDS[resolved] ?? resolved
+  if (state.reason === 'loading') {
+    return resolved === 'auto'
+      ? 'real imagery for this plane is still loading'
+      : `the real ${word} imagery for this plane is still loading`
+  }
+  if (state.reason === 'no-anchor') {
+    return 'no photograph is anchored at this plane — see the Plates tab for the anchored series and the other modalities'
+  }
+  if (state.reason === 'unavailable') {
+    // The grid/plate data is not in this build at all: the panel is showing the
+    // pure GPU cut, the Plates tab is where the embedded modalities are listed
+    // (disabled buttons carry the same reason) and the live section renders.
+    return resolved === 'auto'
+      ? 'no embeddable real imagery in this build — see the Plates tab for the modality list and the live section'
+      : `no embeddable ${word} imagery in this build — see the Plates tab for the modalities that are embedded`
+  }
+  return `real imagery unavailable at this plane (${state.reason}${resolved === 'auto' ? '' : `; ${word}`})`
+}
+
+/**
+ * Renders `pipBackdropHint()` under the panel, live. Reads the module-level
+ * diagnostics singleton the in-canvas renderer writes every frame (no store
+ * round-trip, no React render): one textContent compare per animation frame,
+ * and the node stays `hidden` — zero layout work — while real imagery shows.
+ */
+function SectionPipHint({ visible }: { visible: boolean }): ReactElement | null {
+  const ref = useRef<HTMLParagraphElement>(null)
+  useEffect(() => {
+    const node = ref.current
+    if (node === null) return
+    if (!visible) {
+      node.hidden = true
+      return
+    }
+    if (typeof requestAnimationFrame === 'undefined') return
+    let raf = 0
+    let stopped = false
+    const tick = () => {
+      if (stopped) return
+      const d = sectionPipDiagnostics
+      const hint = pipBackdropHint({
+        requested: d.backdropRequested,
+        modality: d.backdropModality,
+        reason: d.backdropReason,
+      })
+      const text = hint ?? ''
+      if (node.textContent !== text) node.textContent = text
+      if (node.hidden !== (hint === null)) node.hidden = hint === null
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => {
+      stopped = true
+      cancelAnimationFrame(raf)
+    }
+  }, [visible])
+  if (!visible) return null
+  return (
+    <p
+      className="pip-backdrop-hint"
+      ref={ref}
+      role="note"
+      hidden
+      style={{
+        margin: '4px 6px 0',
+        fontSize: '0.68rem',
+        lineHeight: 1.35,
+        color: '#94a3b8',
+      }}
+    />
+  )
 }
 
 export default function Viewer3D() {
@@ -181,6 +323,10 @@ export default function Viewer3D() {
         onVisibleChange={setSectionPipVisible}
         windowRef={sectionPipWindowRef}
       />
+      {/* v4: the panel's own honest state line — only painted while the active
+          modality genuinely has nothing to paint at this plane (see the file
+          header). Nothing renders in the steady state. */}
+      <SectionPipHint visible={sectionPipVisible} />
       <p className="viewer-hint">drag to orbit · scroll to zoom · right-drag to pan · click any structure</p>
     </div>
   )
@@ -197,4 +343,5 @@ export {
   PostFX,
   SectionPiP,
   SectionPiPPanel,
+  SectionPipHint,
 }

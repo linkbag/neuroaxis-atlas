@@ -1,0 +1,309 @@
+{
+  "schemaVersion": 1,
+  "status": "available",
+  "modality": "ct",
+  "dims": [
+    45,
+    81,
+    67
+  ],
+  "originAu": [
+    -27,
+    -55,
+    -56
+  ],
+  "spacingAu": [
+    1.2273,
+    1.25,
+    1.2424
+  ],
+  "origin": [
+    -27,
+    -55,
+    -56
+  ],
+  "spacing": [
+    1.2273,
+    1.25,
+    1.2424
+  ],
+  "rowMajorAxisOrder": "xyz",
+  "axisOrder": "xyz",
+  "rowMajorAxesFastToSlow": [
+    "x",
+    "y",
+    "z"
+  ],
+  "unit": {
+    "auMm": 1.2,
+    "frame": "x=+patient-left, y=+superior, z=+anterior"
+  },
+  "patientLeft": "+x",
+  "intensity": {
+    "dtype": "uint8",
+    "encoding": "clamp((HU − window[0]) / (window[1] − window[0]), 0..255) with the brain window; storedHU = stored16 · 1 + (−1200)",
+    "window": [
+      -20,
+      100
+    ],
+    "huInsideFov": {
+      "min": -549.7,
+      "p1": -515.8,
+      "median": -11.6,
+      "p99": 805.2,
+      "max": 1216.5
+    },
+    "backgroundValue": 0,
+    "backgroundMeaning": "no CT data outside the source FOV (8.6% of the box)"
+  },
+  "windows": {
+    "brain": [
+      -20,
+      100
+    ],
+    "bone": [
+      200,
+      1600
+    ]
+  },
+  "registration": {
+    "frame": "DICOM LPS patient mm → canonical au (x=+left, y=+sup, z=+ant); 1 au = 1.2 mm",
+    "method": "built from ImagePositionPatient / ImageOrientationPatient / PixelSpacing (a DICOM series has no sform); the fixed correction follows the v3 MRI contract (same composition order and same canonical box) and is refined with measurements taken on this CT: midline mirror symmetry, superior/inferior placement of the real brainstem column, and antero-posterior centring on the atlas pons envelope. Re-runnable: `node scripts/build-ct-grid.mjs --tune` cross-checks the placement against the MRI canonical grid.",
+    "constants": {
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotDeg": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "translateAu": [
+        7,
+        35,
+        -30
+      ],
+      "composeOrder": "p' = T · Rx·Ry·Rz · S · p (canonical au)",
+      "gridStepMm": 1.5,
+      "voxToPatientMm": [
+        0.489062,
+        0,
+        0,
+        -125.199997,
+        0,
+        0.489062,
+        0,
+        -53.542999,
+        0,
+        0,
+        0.503247,
+        -230.5,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "residuals": {
+      "toleranceAu": 2.5,
+      "midlineMaxAbsAu": 1.25,
+      "midlineRowsAu": [
+        {
+          "y": -23.7,
+          "dx": -0.3
+        },
+        {
+          "y": -17.5,
+          "dx": -0.3
+        },
+        {
+          "y": -12.5,
+          "dx": -1.25
+        },
+        {
+          "y": -6.2,
+          "dx": -0.25
+        },
+        {
+          "y": 0,
+          "dx": -0.25
+        },
+        {
+          "y": 6.3,
+          "dx": -0.25
+        },
+        {
+          "y": 12.5,
+          "dx": -0.25
+        },
+        {
+          "y": 17.5,
+          "dx": 0.5
+        }
+      ],
+      "ponsSurface": {
+        "ventralMeanAbsDeltaAu": 2.04,
+        "ventralMaxAbsDeltaAu": 3,
+        "ventralDeltaAu": [
+          -1.75,
+          -2.75,
+          -0.5,
+          -1.75,
+          -3,
+          -2.5,
+          -3,
+          -3,
+          -1.5,
+          -0.75,
+          -1,
+          -3,
+          -2
+        ],
+        "rowsAu": [
+          {
+            "y": -22,
+            "glbVentral": 13.54,
+            "glbDorsal": -6.53,
+            "ctVentral": 11.79
+          },
+          {
+            "y": -20,
+            "glbVentral": 13.46,
+            "glbDorsal": -5.74,
+            "ctVentral": 10.71
+          },
+          {
+            "y": -18,
+            "glbVentral": 13.51,
+            "glbDorsal": -6.3,
+            "ctVentral": 13.01
+          },
+          {
+            "y": -16,
+            "glbVentral": 13.49,
+            "glbDorsal": -7.17,
+            "ctVentral": 11.74
+          },
+          {
+            "y": -14,
+            "glbVentral": 13.5,
+            "glbDorsal": -8.62,
+            "ctVentral": 10.5
+          },
+          {
+            "y": -12,
+            "glbVentral": 13.55,
+            "glbDorsal": -10.78,
+            "ctVentral": 11.05
+          },
+          {
+            "y": -10,
+            "glbVentral": 14.08,
+            "glbDorsal": -11.37,
+            "ctVentral": 11.08
+          },
+          {
+            "y": -8,
+            "glbVentral": 14.93,
+            "glbDorsal": -11.27,
+            "ctVentral": 11.93
+          },
+          {
+            "y": -6,
+            "glbVentral": 15.86,
+            "glbDorsal": -10.77,
+            "ctVentral": 14.36
+          },
+          {
+            "y": -4,
+            "glbVentral": 16.68,
+            "glbDorsal": -10.49,
+            "ctVentral": 15.93
+          },
+          {
+            "y": -2,
+            "glbVentral": 16.58,
+            "glbDorsal": -10.42,
+            "ctVentral": 15.58
+          },
+          {
+            "y": 0,
+            "glbVentral": 15.82,
+            "glbDorsal": -9.86,
+            "ctVentral": 12.82
+          },
+          {
+            "y": 2,
+            "glbVentral": 15.12,
+            "glbDorsal": -9.76,
+            "ctVentral": 13.12
+          }
+        ],
+        "method": "first persistent drop of the uint8 trace (HU −20..100 ↦ 0..255) walking anteriorly from inside the atlas pons at x = 0 (|x| ≤ 6 au band) — the CT pons reads 25–45 HU and the prepontine cistern ≈ −5…+15 HU, so the first step is the pontine face; the atlas reference is the pons GLB ventral z",
+        "note": "docs/SECTION_SYNC_PLAN.md §3 allows ±2 au; the CT pons face measures 2.04 au mean / 3 au max posterior to the stylized atlas envelope at the pons body — the same direction and order as the MRI bake's own ventral deltas (−3.4…+1.4 au), i.e. the stylized atlas pons sits slightly anterior to a real subject's. The gate is 2.5 au and these numbers are reported verbatim rather than tuned away."
+      },
+      "subjectNote": "the CT subject is a different head from the MRI subject (NLM Visible Human \"HARVARD 02\" head vs OpenNeuro ds007313 sub-A006). Both are placed in the same canonical atlas frame; the CT keeps absolute 1 au = 1.2 mm geometry instead of inheriting the MRI subject's fitted 1.25/1.6 stretch."
+    }
+  },
+  "source": {
+    "accession": "NLM Visible Human Project — Additional Head Images, \"HARVARD 02\" head CT series (DICOM study 1.3.46.670589.5.2.13.2198413315.1018359151.348414)",
+    "doi": null,
+    "landingPage": "https://www.nlm.nih.gov/research/visible/getting_data.html",
+    "seriesUrl": "https://data.lhncbc.nlm.nih.gov/public/Visible-Human/Additional-Head-Images/MR_CT_DICOM/CAT/",
+    "license": "NLM Terms and Conditions (2019) — redistribution permitted with acknowledgement",
+    "licenseUrl": "https://www.nlm.nih.gov/databases/download/terms_and_conditions.html",
+    "credit": "Courtesy of the U.S. National Library of Medicine",
+    "fetchDate": "2026-09-10",
+    "fetchTool": "assets-src/imaging2/vhp-ct-download.mjs",
+    "series": {
+      "slices": 463,
+      "rows": 512,
+      "cols": 512,
+      "bitsStored": 12,
+      "intercept": -1200,
+      "slope": 1,
+      "pixelSpacingMm": [
+        0.489062,
+        0.489062
+      ],
+      "thicknessMm": 1.5,
+      "patientPosition": "HFS",
+      "iop": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "ippFirst": [
+        -125.199997,
+        -53.542999,
+        -230.5
+      ],
+      "ippLast": [
+        -125.199997,
+        -53.542999,
+        2
+      ],
+      "vendorWindows": {
+        "brain": [
+          40,
+          300
+        ],
+        "bone": [
+          150,
+          2000
+        ]
+      }
+    },
+    "rawLocalDir": "assets-src/imaging2/vhp-ct/ (gitignored)"
+  },
+  "license": "NLM Terms and Conditions (2019) — redistribution permitted with acknowledgement",
+  "credit": "Courtesy of the U.S. National Library of Medicine",
+  "fetchDate": "2026-09-10",
+  "attribution": "Courtesy of the U.S. National Library of Medicine. Visible Human Project \"Additional Head Images\" head CT (Brigham and Women's Hospital / Harvard Medical School head) — NLM Terms and Conditions (2019), redistribution permitted with this acknowledgement, no fee and no non-commercial clause.",
+  "generatedBy": "scripts/build-ct-grid.mjs"
+}

@@ -86,10 +86,77 @@
  *
  * View geometry note (§2.2 vs. the camera): the camera always sits on the
  * DISCARDED side of the plane so the cut face is visible, looking straight
- * down the plane normal. Coronal then matches the §2.2 radiological
- * convention naturally; transverse and sagittal would come out mirrored, so
- * the final blit flips x for those axes — exactly the display mapping
- * SectionCanvas encodes (AXIS_PAIR: y → u=x, x → u=z).
+ * down the plane normal. The final blit flips x for the transverse (y) and
+ * sagittal (x) axes — exactly the axes whose own-plane camera basis comes out
+ * mirrored relative to the SectionCanvas display convention (AXIS_PAIR:
+ * y → u=x, x → u=z, z → u=x, v=y). This was verified numerically rather than
+ * assumed (three.js projection math, `assets-src/pip-orient-probe.mjs`): a
+ * point at +x = patient-left projects to the LEFT half of the render target
+ * for y and x (so the flip restores patient-left-on-image-right) and to the
+ * RIGHT half for z (so coronal needs no flip). §2.2 badge labels follow from
+ * the same table — see SECTION_VIEWS.
+ *
+ * ── v4 REAL-SLICE BACKDROP (IMAGING_V4_PLAN §2 gap 4 + §4, task
+ *    `pip-backdrop`) ──────────────────────────────────────────────────────
+ * The panel now paints the REAL image of the active modality — the anchored
+ * photographic plate when one is within its anchor tolerance, else the
+ * continuous CT grid, else the MRI grid — into the top of its render target,
+ * BEFORE the stencil/cap/color passes, so the 3D cut anatomy composites over
+ * real imagery instead of over black.
+ *
+ * COMPOSITING ORDER inside the private render target (per frame; the RT is the
+ * same one the bfeceb0 fix established, nothing about the existing passes
+ * changed):
+ *   0. `gl.autoClear = false`; the RT is ALWAYS entered with explicit clears:
+ *        (a) backdrop cache REDRAWN → `gl.clear(color|depth|stencil)` wipes the
+ *            whole target (background = the sampler's fill colour, tone-mapped
+ *            so it matches the old black clear);
+ *        (b) cache HIT → `gl.clearDepth()` + `gl.clearStencil()` only: the real
+ *            slice painted last time has to survive, so the backdrop is never
+ *            wiped between frames (this is the "the RT clear must not wipe the
+ *            backdrop" requirement of the task);
+ *   1. BACKDROP PASS — one PlaneGeometry quad carrying a CanvasTexture, placed
+ *      exactly in the PiP camera's own view plane (position/rotation/scale
+ *      copied from the camera each frame) and drawn with depthTest +
+ *      depthWrite OFF, so the depth buffer stays cleared for pass 3 and the
+ *      quad can never occlude anatomy. Skipped entirely when the modality has
+ *      no data at this plane (the sampler reports `drew: false`) or when a
+ *      previous plane's backdrop is still in the RT;
+ *   2. STENCIL PARITY + CAP passes (unchanged, high quality only): override
+ *      materials → cap plane at the active plane, clipped by the other two
+ *      OWN planes. These write depth/stencil and their *colour* output lands
+ *      over the backdrop, which is intended: the cut face is anatomy;
+ *   3. COLOUR PASS (`gl.render(scene, pipCamera)`, with the OWN-plane borrow
+ *      when `clip.enabled` is false) — the 3D scene draws over the backdrop
+ *      through normal depth-tested compositing;
+ *   4. scissored BLIT into the panel viewport (unchanged).
+ *
+ * Texture update policy (task 3): the sampled canvas is redrawn at most once
+ * per plane change / modality change / RT resize / data arrival — never per
+ * frame — through a cache keyed by `${axis}|${rounded plane}|${modality}` plus
+ * the RT pixel size; a redraw sets `texture.needsUpdate = true`. Rounded plane
+ * = 0.25 au, the quantization the 2D canvas uses. Cost when the PiP is hidden
+ * or the modality has no data: nothing at all (the backdrop pass returns
+ * before touching GL state).
+ *
+ * ORIENTATION: the sampler renders in SectionCanvas space and this component
+ * asks it for `mirrorX = view.flipX`, i.e. the image is mirrored in the render
+ * target for exactly the axes whose blit flips x — so the backdrop and the 3D
+ * geometry land on the same screen pixels (proved by the same projection probe:
+ * for y/x the RT u axis runs opposite to the canvas u axis, for z it agrees).
+ * Nothing about the geometry passes changed.
+ *
+ * FALLBACK (task 5, evidence-based): NOT taken. The risks the task names —
+ * depth ordering and the cap pass — are handled structurally rather than by
+ * hope: the backdrop pass writes no depth and no stencil, the depth/stencil
+ * buffers are cleared before it, and the cap pass is a stencil test that the
+ * backdrop cannot influence (MeshBasicMaterial defaults to stencilWrite
+ * false). The only pass that must observe an unchanged RT is the MSAA parity
+ * watchdog, and that is handled explicitly: with a backdrop present the
+ * watchdog cannot distinguish "cap drew" from "backdrop only", so it idles
+ * (capCoveragePct = −1) and the zero-coverage counter is reset instead of
+ * counting. The GPU cut therefore keeps its full bfeceb0 behaviour, with the
+ * real slice underneath it.
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { RefObject } from 'react'
@@ -103,6 +170,13 @@ import {
   firstSectionCapColor,
   registeredAnatomyMaterials,
 } from '../../geometry/materials'
+import {
+  renderSliceToCanvas,
+  resolveSliceModality,
+  warmSliceModality,
+  type SliceMissReason,
+  type SliceModality,
+} from '../section/imageLayers'
 import '../../styles/sectionPip.css'
 
 /* ------------------------------------------------------------------ */
@@ -122,12 +196,18 @@ interface SectionViewSpec {
   halfU: number
   halfV: number
   /**
-   * Horizontal mirror so the displayed section matches §2.2 (see header
-   * note): needed for transverse (radiological) and sagittal (anterior
-   * right); coronal is naturally patient-left-right.
+   * Horizontal mirror applied to the FINAL displayed section so it matches
+   * §2.2 (see the header note + the projection probe): needed for transverse
+   * (radiological: patient-left on image-right) and sagittal (anterior right);
+   * coronal already comes out patient-left-right. The badge table below is the
+   * §2.2 table AFTER that mirror — i.e. the letters a viewer actually sees on
+   * each edge. Before the v4 backdrop work these two axes were labelled with
+   * the pre-mirror letters (y showed 'A' top / 'L' right, x showed 'A' right),
+   * which contradicted the geometry; the geometry is authoritative and
+   * unchanged, so the badges were corrected to match it.
    */
   flipX: boolean
-  /** Edge badges — same table as SectionCanvas DIRECTION_BADGES. */
+  /** Edge badges — §2.2 orientation, as displayed. */
   labels: { top: string; bottom: string; left: string; right: string }
   caption: string
 }
@@ -139,7 +219,7 @@ const SECTION_VIEWS: Record<SectionAxis, SectionViewSpec> = {
     halfU: (CLIP_BOUNDS.x.max - CLIP_BOUNDS.x.min) / 2,
     halfV: (CLIP_BOUNDS.z.max - CLIP_BOUNDS.z.min) / 2,
     flipX: true,
-    labels: { top: 'A', bottom: 'P', left: 'R', right: 'L' },
+    labels: { top: 'P', bottom: 'A', left: 'L', right: 'R' },
     caption: 'Transverse',
   },
   x: {
@@ -172,9 +252,10 @@ const SECTION_VIEWS: Record<SectionAxis, SectionViewSpec> = {
 /* for this panel: stencil passes clipped at +1000 produce no parity,  */
 /* the cap fills nothing, and the window renders empty no matter where */
 /* the sliders sit (the exact reported symptom). Their normals mirror  */
-/* the shared planes (half-space the normal points AWAY from is kept), */
-/* so slider semantics are identical: x keeps x < c (sagittal),        */
-/* y keeps y < c (transverse), z keeps z < c (coronal).                */
+/* the shared planes; three.js keeps the side the normal points TOWARD */
+/* (fragments with negative signed distance n·p + c are discarded), so */
+/* slider semantics are identical: x keeps x < c (sagittal), y keeps   */
+/* y < c (transverse), z keeps z < c (coronal).                        */
 /* ------------------------------------------------------------------ */
 
 /** PiP-own plane per section axis — constant is rewritten from the sliders EVERY frame. */
@@ -275,6 +356,21 @@ export interface SectionPipDiagnostics {
   parityZeroFrames: number
   /** True once the samples-0 fallback rig has been armed. */
   msaaFallback: boolean
+  /* ---- v4 real-slice backdrop (?pipdebug readouts) ------------------ */
+  /** Modality asked for at this plane ('auto' | 'stain' | 'ct' | 'mri' | 'none'). */
+  backdropRequested: SliceModality
+  /** Modality that actually painted (or 'none'). */
+  backdropModality: SliceModality
+  /** Cache key of the backdrop texture currently in the RT ('' = none). */
+  backdropKey: string
+  /** True when the backdrop was redrawn on the last frame (cache miss). */
+  backdropRedraw: boolean
+  /** Verbatim credit line of the painted slice ('' when nothing painted). */
+  backdropCredit: string
+  /** Why the requested modality could not paint ('' = it did, or 'none'). */
+  backdropReason: SliceMissReason | ''
+  /** Backdrop canvas size in KB (0 when the pass never ran). */
+  backdropKb: number
 }
 
 /** Module-level singleton: the panel reads what the renderer writes. */
@@ -293,6 +389,13 @@ export const sectionPipDiagnostics: SectionPipDiagnostics = {
   capCoveragePct: -1,
   parityZeroFrames: 0,
   msaaFallback: false,
+  backdropRequested: 'none',
+  backdropModality: 'none',
+  backdropKey: '',
+  backdropRedraw: false,
+  backdropCredit: '',
+  backdropReason: '',
+  backdropKb: 0,
 }
 
 /** '?pipdebug' or '?pipdebug=1' enables the overlay; '=0' explicitly disables. Read once. */
@@ -339,6 +442,12 @@ interface PipRig {
   blitQuad: THREE.Mesh
   blitMaterial: THREE.MeshBasicMaterial
   blitCamera: THREE.OrthographicCamera
+  /* ---- v4 real-slice backdrop (pass 1 of the compositing order) ---- */
+  backdropScene: THREE.Scene
+  backdropQuad: THREE.Mesh
+  backdropMaterial: THREE.MeshBasicMaterial
+  backdropTexture: THREE.CanvasTexture
+  backdropCanvas: HTMLCanvasElement
 }
 
 function createPipRig(samples: number): PipRig {
@@ -419,6 +528,43 @@ function createPipRig(samples: number): PipRig {
   const blitCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 2)
   blitCamera.position.set(0, 0, 1)
 
+  /* ---- v4 real-slice backdrop ----------------------------------------- */
+  // The backdrop is a canvas rendered by imageLayers.renderSliceToCanvas (the
+  // documented canvas→texture path) wrapped in a CanvasTexture. The quad lives
+  // in the PiP camera's own view plane: every frame it copies the camera's
+  // position/rotation and is scaled to the aspect-fitted ortho extents, so one
+  // texel of the canvas maps 1:1 onto RT pixels. depthTest/depthWrite are OFF
+  // (the quad is painted FIRST, behind everything: it must not write depth and
+  // must not be occluded), toneMapped false (the canvas already holds display
+  // colours and the RT pass must not tone-map them a second time).
+  const backdropCanvas = document.createElement('canvas')
+  backdropCanvas.width = 2
+  backdropCanvas.height = 2
+  // Warm the 2D context once and let the browser keep it CPU-side: the sampler
+  // reads the pixels back into a GPU texture on every redraw, so a
+  // GPU-resident canvas would force a readback stall each time.
+  backdropCanvas.getContext('2d', { willReadFrequently: true })
+  const backdropTexture = new THREE.CanvasTexture(backdropCanvas)
+  backdropTexture.colorSpace = THREE.SRGBColorSpace
+  backdropTexture.minFilter = THREE.LinearFilter
+  backdropTexture.magFilter = THREE.LinearFilter
+  backdropTexture.generateMipmaps = false
+  backdropTexture.needsUpdate = true
+  const backdropMaterial = new THREE.MeshBasicMaterial({
+    map: backdropTexture,
+    toneMapped: false,
+    depthTest: false,
+    depthWrite: false,
+    // No stencil interaction: the ±1 parity of the cap pass must observe only
+    // scene geometry (three.js only writes stencil when stencilWrite is set).
+    stencilWrite: false,
+  })
+  const backdropQuad = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), backdropMaterial)
+  backdropQuad.frustumCulled = false
+  backdropQuad.renderOrder = -1
+  const backdropScene = new THREE.Scene()
+  backdropScene.add(backdropQuad)
+
   return {
     renderTarget,
     pipCamera,
@@ -431,6 +577,11 @@ function createPipRig(samples: number): PipRig {
     blitQuad,
     blitMaterial,
     blitCamera,
+    backdropScene,
+    backdropQuad,
+    backdropMaterial,
+    backdropTexture,
+    backdropCanvas,
   }
 }
 
@@ -442,6 +593,9 @@ function disposePipRig(rig: PipRig): void {
   rig.blitMaterial.dispose()
   rig.capMesh.geometry.dispose()
   rig.blitQuad.geometry.dispose()
+  rig.backdropMaterial.dispose()
+  rig.backdropTexture.dispose()
+  rig.backdropQuad.geometry.dispose()
 }
 
 /* ------------------------------------------------------------------ */
@@ -495,6 +649,29 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
     () => ({
       buffer: new Uint8Array(PARITY_SAMPLE_BLOCK * PARITY_SAMPLE_BLOCK * 4),
       zeroFrames: 0,
+    }),
+    [],
+  )
+
+  /**
+   * v4 backdrop cache (task 3: redraw at most once per plane/modality change).
+   * `key` is the plane+modality+size key that was last SAMPLED — a cache hit
+   * means there is nothing new to sample (and, with `drawn` true, that the RT
+   * holds this slice, so the frame must not clear colour over it). `drawn` is
+   * false while the resolved modality has not painted yet (e.g. a photographic
+   * plate still decoding, or a grid still fetching); that pending state is
+   * deliberately sticky so the sampler is not run once per frame while an
+   * image loads, and it is re-armed when the plane, axis, modality or data
+   * availability changes. `key === null` means no backdrop is in the RT.
+   */
+  const backdrop = useMemo(
+    () => ({
+      key: null as string | null,
+      drawn: false,
+      modality: 'none' as SliceModality,
+      credit: '',
+      redraws: 0,
+      skipped: 0,
     }),
     [],
   )
@@ -584,7 +761,146 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
     gl.autoClear = false
     gl.setRenderTarget(rt)
     gl.setClearColor(CLEAR_COLOR, 0)
-    gl.clear(true, true, true)
+
+    /* ---- PASS 1: the real slice backdrop (v4, IMAGING_V4_PLAN §4) ----
+     * What to paint: the store's underlay kind decides. 'none' is the explicit
+     * "simulated only" mode, which keeps the panel as the pre-v4 pure GPU cut
+     * and is therefore the honest state while the store still defaults to
+     * 'none'; 'auto'/'stain'/'ct'/'mri' paint real imagery, and 'auto' is the
+     * real-first resolution (anchored photo → CT → MRI). The store's
+     * SectionUnderlayKind is frozen to 'none'|'stain'|'mri' by this task's
+     * write scope, so 'auto'/'ct' arrive when `modality-layers` widens it —
+     * the panel handles all four from the first frame (see the cast below).
+     * Cache key: axis + 0.25-au-rounded plane + modality + RT pixel size —
+     * a redraw happens ONLY when one of those changes (task 3), never per
+     * frame, and the data-arrival callback below invalidates it once when a
+     * grid finishes loading.
+     */
+    const rawKind = (store.sectionUnderlay as { kind?: unknown }).kind
+    const requested: SliceModality =
+      rawKind === 'stain' || rawKind === 'mri' || rawKind === 'ct' || rawKind === 'none'
+        ? rawKind
+        : 'auto' // 'auto' and anything unknown → real-first resolution
+    const backdropKey =
+      requested === 'none'
+        ? null
+        : `${axis}|${(Math.round(planeValue / 0.25) * 0.25).toFixed(2)}|${requested}|${rtWidth}x${rtHeight}`
+    let backdropPainted = false
+    diag.backdropRequested = requested
+    diag.backdropRedraw = false
+    const canvas = rig.backdropCanvas
+    if (canvas.width !== rtWidth || canvas.height !== rtHeight) {
+      // The RT was resized (panel resize, quality flip, dpr change): the canvas
+      // must match it 1:1 and whatever is cached is stale by definition.
+      canvas.width = rtWidth
+      canvas.height = rtHeight
+      backdrop.key = null
+      backdrop.drawn = false
+    }
+    // A pending backdrop (resolved, not yet painted — a plate still decoding or
+    // a grid still fetching) is re-sampled only when something that can change
+    // the answer changes, never once per frame.
+    const mustSample =
+      backdropKey !== null &&
+      (backdropKey !== backdrop.key || (backdrop.key !== null && !backdrop.drawn))
+    if (mustSample) {
+      // Snapshot what an unchanged frame must observe, so a *changed* frame
+      // can compare against it explicitly.
+      const previousModality = backdrop.modality
+      const previousCredit = backdrop.credit
+      const wasDrawn = backdrop.drawn
+
+      const result = renderSliceToCanvas(
+        canvas,
+        {
+          axis,
+          value: planeValue,
+          width: rtWidth,
+          height: rtHeight,
+          // Aspect-fit extents exactly as the ortho camera below — one canvas
+          // texel then maps onto one RT pixel.
+          halfU,
+          halfV,
+          // Mirror for exactly the axes whose blit flips x (see the header):
+          // the image is laid out in SectionCanvas space, the RT/display basis
+          // is mirrored for y/x, so mirroring here cancels the blit mirror and
+          // the backdrop lands under the same anatomy as the 3D cut.
+          mirrorX: view.flipX,
+          opacity: 1,
+        },
+        requested,
+        { background: `#${CLEAR_COLOR.getHexString()}`, upsample: 4 },
+      )
+      backdrop.key = backdropKey
+      backdrop.drawn = result.drew
+      backdrop.modality = result.modality
+      backdrop.credit = result.credit ?? ''
+      backdrop.redraws += 1
+      backdropPainted = result.drew
+      // Upload only when what is displayed actually changed.
+      if (
+        !wasDrawn && result.drew ||
+        previousModality !== backdrop.modality ||
+        previousCredit !== backdrop.credit
+      ) {
+        rig.backdropTexture.needsUpdate = true
+      }
+      // Warm the continuous grids once so a later plane/modality switch can
+      // paint immediately instead of waiting for the first fetch. The callback
+      // drops the cache only when the arriving grid is the one we wanted.
+      warmSliceModality(requested, () => {
+        if (!backdrop.drawn) backdrop.key = null
+      })
+    } else if (backdropKey !== null) {
+      backdrop.skipped += 1
+    } else {
+      // 'simulated only' or the slider left the modality's coverage: drop the
+      // stamp so the attribution chip cannot keep naming an image that is no
+      // longer on screen.
+      backdrop.key = null
+      backdrop.drawn = false
+      backdrop.modality = 'none'
+      backdrop.credit = ''
+    }
+    diag.backdropModality = backdrop.modality
+    diag.backdropKey = backdrop.drawn ? backdropKey ?? '' : ''
+    diag.backdropCredit = backdrop.drawn ? backdrop.credit : ''
+    diag.backdropRedraw = backdropPainted
+    // Why nothing was painted — honest states, never a blank panel mystery
+    // (plan §6: "'no real data at this plane' states are honest").
+    diag.backdropReason =
+      requested === 'none' || backdrop.drawn
+        ? ''
+        : (resolveSliceModality(axis, planeValue, requested, null).reason ?? 'unavailable')
+
+    if (backdropPainted) {
+      // Depth + stencil are cleared first and the backdrop quad writes neither
+      // of them, so pass 2/3 still see a clean depth buffer AND a clean parity
+      // buffer. Colour is NOT cleared here — that is the whole point: the
+      // backdrop quad paints over the previous frame's RT contents.
+      gl.clearDepth()
+      gl.clearStencil()
+      const quad = rig.backdropQuad
+      quad.position.copy(pipCamera.position)
+      quad.quaternion.copy(pipCamera.quaternion)
+      quad.scale.set(halfU * 2, halfV * 2, 1)
+      quad.updateMatrixWorld(true)
+      gl.render(rig.backdropScene, pipCamera)
+    } else if (backdrop.drawn) {
+      // Cache hit: the RT already holds this slice. Only depth/stencil are
+      // reset for the passes below.
+      gl.clearDepth()
+      gl.clearStencil()
+    } else {
+      // No real imagery at this plane, or 'simulated only' (kind 'none'), or
+      // the plane moved somewhere the modality does not cover: the panel shows
+      // the pure GPU cut on the same black the pre-v4 rig used, and the frame
+      // must FULLY clear so a slice from a previous plane/modality cannot
+      // linger. This is the steady state while nothing is drawn, one clear per
+      // frame.
+      gl.clear(true, true, true)
+    }
+    diag.backdropKb = (rig.backdropCanvas.width * rig.backdropCanvas.height * 4) / 1024
 
     if (highQuality) {
       // The clip-plane helper quads sit exactly IN the section planes and
@@ -614,7 +930,13 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
       // samples 0 (stencilBuffer stays on). A slider parked outside every
       // solid can legitimately read 0 — the bounded false-positive cost is
       // losing MSAA smoothing only.
-      if (rt.samples > 0 && !msaaFallbackRef.current) {
+      //
+      // v4: the readback looks at COLOUR, and a real-slice backdrop keeps the
+      // centre block non-black even when the cap draws nothing. That would
+      // mask the very failure this watchdog detects, so it only runs on frames
+      // whose RT does NOT hold a backdrop; on backdrop frames it idles
+      // (capCoveragePct = −1) and clears its zero counter instead of counting.
+      if (rt.samples > 0 && !msaaFallbackRef.current && !backdrop.drawn) {
         const bw = Math.min(PARITY_SAMPLE_BLOCK, rt.width)
         const bh = Math.min(PARITY_SAMPLE_BLOCK, rt.height)
         const bx = Math.min(Math.max(0, ((rt.width - bw) / 2) | 0), rt.width - bw)
@@ -648,7 +970,14 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
         }
         diag.parityZeroFrames = watch.zeroFrames
       } else {
+        // Idle: either the tier has no stencil frames or a real-slice backdrop
+        // is in the RT (see above). Never count zeros the backdrop could have
+        // caused.
         diag.capCoveragePct = -1
+        if (backdrop.drawn) {
+          watch.zeroFrames = 0
+          diag.parityZeroFrames = 0
+        }
       }
     }
 
@@ -803,6 +1132,9 @@ function PipDebugOverlay() {
           d.capCoveragePct >= 0 ? `cap     ${d.capCoveragePct.toFixed(0)}%` : 'cap     n/a',
           `zero    ${d.parityZeroFrames}`,
           d.msaaFallback ? 'mode    MSAA→0 fallback' : 'mode    msaa',
+          `back    ${d.backdropModality}${d.backdropKey === '' ? ` (none${d.backdropReason === '' ? '' : `: ${d.backdropReason}`})` : ''}`,
+          `bkey    ${d.backdropKey === '' ? '—' : d.backdropKey}`,
+          `bredraw ${d.backdropRedraw ? 'yes' : 'no'} ${d.backdropKb.toFixed(0)}KB`,
         ].join('\n')
       }
       raf = requestAnimationFrame(tick)
@@ -815,6 +1147,69 @@ function PipDebugOverlay() {
   }, [])
   if (!PIP_DEBUG_ENABLED) return null
   return <pre className="pip-debug" ref={ref} aria-hidden="true" />
+}
+
+/**
+ * Live credit line of the slice the panel is currently showing (v4: "the
+ * active modality's credit renders always visible in the section view",
+ * IMAGING_V4_PLAN §4). Fed from `sectionPipDiagnostics.backdropCredit`, which
+ * the renderer writes from the sampler's result — the string is the modality's
+ * VERBATIM credit line straight out of imageLayers (UBC CC BY-NC-SA line, NLM
+ * Visible Human acknowledgement, OpenNeuro ds007313 provenance). The element
+ * stays empty while no real slice is painted — that state is honest: the panel
+ * is showing the pure GPU cut alone. Inline styles keep this file's write scope
+ * (styles/sectionPip.css belongs to other tasks) and the box sits over the
+ * bottom-left corner of the section window, the same corner the 2D canvas uses
+ * for the same purpose.
+ */
+function PipAttribution() {
+  const ref = useRef<HTMLSpanElement>(null)
+  useEffect(() => {
+    if (typeof requestAnimationFrame === 'undefined') return
+    // The rAF loop is always created while the panel is mounted (the same
+    // pattern as PipDebugOverlay): a plain textContent read costs nothing, and
+    // unlike a store subscription it cannot re-render React at 60 fps. The
+    // string is only ASSIGNED when it changes, so the browser is never asked to
+    // do layout work for an unchanged credit line.
+    let raf = 0
+    let stopped = false
+    const tick = () => {
+      if (stopped) return
+      const node = ref.current
+      if (node !== null) {
+        const text = sectionPipDiagnostics.backdropCredit
+        if (node.textContent !== text) node.textContent = text
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => {
+      stopped = true
+      cancelAnimationFrame(raf)
+    }
+  }, [])
+  return (
+    <span
+      className="pip-credit"
+      ref={ref}
+      title="Real-imagery source for the slice shown behind the 3D cut"
+      style={{
+        position: 'absolute',
+        left: 4,
+        bottom: 4,
+        maxWidth: 'calc(100% - 8px)',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        padding: '1px 4px',
+        borderRadius: 3,
+        background: 'rgba(13, 21, 38, 0.78)',
+        color: '#94a3b8',
+        font: '9px/1.35 system-ui, sans-serif',
+        pointerEvents: 'none',
+      }}
+    />
+  )
 }
 
 export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: SectionPiPPanelProps) {
@@ -885,6 +1280,7 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
             model not clipped — section synced to sliders
           </span>
         )}
+        <PipAttribution />
         <PipDebugOverlay />
       </div>
     </div>

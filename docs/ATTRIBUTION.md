@@ -154,6 +154,165 @@ verbatim in the UI whenever the corresponding image is displayed.
 - **BrainMaps.org** — <https://brainmaps.org/index.php?p=termsofuse> —
   per-dataset copyright; used as links only.
 
+## Imaging data (v4 — real cross-section imagery)
+
+Introduced with the v4 real-imagery upgrade (**authoritative spec
+`docs/IMAGING_V4_PLAN.md`; per-source licence evidence, verbatim licence quotes
+and fetch dates in `docs/IMAGING_SOURCES_V4.md`; machine-readable record in
+`assets-src/imaging2/sources.json`**). The v4 additions extend the same two
+already-embedded photographic sources (UBC, brainmuseum) with a third, CC0
+source, and add **no new NC source beyond the existing UBC precedent**. Every
+licence below was verified **at the source page** on **2026-09-08**.
+
+v4 also adds a **continuous CT volume**, `src/assets/imaging/ct.bin` +
+`ct-manifest.json` (the `ct-grid` task, built after the research pass and
+therefore split out as its own licensed source below): NLM Visible Human
+Project head CT, redistributed under the NLM Terms and Conditions (2019) with
+the verbatim acknowledgement `Courtesy of the U.S. National Library of
+Medicine`. It is the only v4 addition that is not a photograph and the only one
+from a source outside the research verdict matrix's "taken" list.
+
+The v3 entries above remain valid and unchanged: all 27 v3 plates keep their ids,
+files, credits and behaviour.
+
+### UBC Functional Neuroanatomy — sectional viewers (24 new plates, embedded)
+
+- **Source:** University of British Columbia, Functional Neuroanatomy —
+  **horizontal (transverse) sections** (<https://www.neuroanatomy.ca/horizontals.html>,
+  viewer `/horizontalviewer/`) and **coronal sections**
+  (<https://www.neuroanatomy.ca/coronals.html>, viewer `/coronalviewer/`).
+  9 transverse plates (`ubc-h12..h20`) and 15 coronal plates (`ubc-c07..c24`)
+  are embedded as `src/assets/imaging/stains/ubc-h*.png` and `ubc-c*.png`.
+- **License:** [Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  International](https://creativecommons.org/licenses/by-nc-sa/4.0/) — the site
+  footer on every page, verified 2026-09-08. **Non-commercial note:** this
+  software is a non-commercial educational atlas, which is why embedding
+  CC BY-NC-SA material is acceptable; the same precedent governs the 17 v3 UBC
+  micrographs. No other NC-licensed source was added in v4.
+- **Required credit, verbatim:**
+  > © University of British Columbia, CC BY-NC-SA 4.0
+- **Adaptations applied:** content-verbatim copies — **no crops, no retouching,
+  no compositing**. Technical modifications only, as the licence permits
+  (§2(a)(4)): integer 2× box downsampling (800×700 → 400×350, 800×600 →
+  400×300), alpha flattened onto white (the source PNGs mark tissue with real
+  transparency), and a **lossless** filtered-PNG re-encode. No EXIF/ICC or other
+  metadata is written. Per-file SHA-256 and measurements are recorded in
+  `assets-src/imaging2/processed-photos.json`.
+
+### Wikimedia Commons — "CT of a normal brain" (3 axial CT slices, embedded, CC0)
+
+- **Source:** Wikimedia Commons, *CT of a normal brain* series by **Mikael
+  Häggström, M.D.** — three axial head-CT slices
+  (`File:CT of a normal brain, axial 10/14/18.png`), embedded as
+  `src/assets/imaging/stains/wikict-axial-{10,14,18}.png`.
+- **License:** **CC0 1.0 Universal (Public Domain Dedication)**, verified per
+  FILE on each File: page on 2026-09-08 (`LicenseShortName: CC0`,
+  `AttributionRequired: false`). CC0 requires **no** attribution; the credit line
+  below is displayed anyway so the provenance of the CT plates stays visible,
+  and the author's consent note ("Written informed consent was obtained from the
+  individual, including online publication") is recorded in the source record.
+- **Credit shown in-UI (not legally required):**
+  > CT of a normal brain — Mikael Häggström, M.D., via Wikimedia Commons, CC0 1.0 (public domain dedication)
+- **Adaptations applied:** 2× integer box downsample (646×468 → 323×234),
+  lossless filtered-PNG re-encode, no crop, no metadata.
+
+### NLM Visible Human Project — "Additional Head Images" head CT (grid embedded, CT modality)
+
+Introduced with the v4 real-imagery work as the continuous CT modality
+(`src/assets/imaging/ct.bin` + `ct-manifest.json`, task `ct-grid`). This is the
+VHP product that *is* redistributable under the terms recorded below — distinct
+from the VHP **cryosections**, which stay uncommitted (next section).
+
+- **Source:** U.S. National Library of Medicine, **Visible Human Project —
+  "Additional Head Images" head CT**, accession *"HARVARD 02"* head CT series
+  (Brigham and Women's Hospital / Harvard Medical School head, donor #2;
+  DICOM study `1.3.46.670589.5.2.13.2198413315.1018359151.348414`),
+  463 axial slices, Philips Medical Systems, 512×512, 12-bit stored in 16-bit
+  (`RescaleSlope 1`, `RescaleIntercept −1200`), 1.5 mm thickness / 0.5032 mm
+  slice spacing, `HFS`, whole head through the upper neck.
+  Landing page <https://www.nlm.nih.gov/research/visible/getting_data.html>;
+  series <https://data.lhncbc.nlm.nih.gov/public/Visible-Human/Additional-Head-Images/MR_CT_DICOM/CAT/>.
+- **License:** **NLM Terms and Conditions (2019)** —
+  <https://www.nlm.nih.gov/databases/download/terms_and_conditions.html>
+  (verified at source 2026-09-08, re-verified 2026-09-10). Redistribution is
+  expressly contemplated with the acknowledgement below; **no fee and no
+  non-commercial clause**, so this is the permissive counterpart to the NC UBC
+  precedent. The licence string recorded verbatim in `ct-manifest.json`
+  (`license` / `source.license`) is:
+  > NLM Terms and Conditions (2019) — redistribution permitted with acknowledgement
+  Fetch dates: 2026-09-10 (DICOM series; downloader
+  `assets-src/imaging2/vhp-ct-download.mjs`, raw slices in gitignored
+  `assets-src/imaging2/vhp-ct/`).
+- **Required acknowledgement, verbatim (shown in-UI as the CT modality's credit
+  line):**
+  > Courtesy of the U.S. National Library of Medicine
+- **Full attribution string recorded in `ct-manifest.json`:**
+  > Courtesy of the U.S. National Library of Medicine. Visible Human Project "Additional Head Images" head CT (Brigham and Women's Hospital / Harvard Medical School head) — NLM Terms and Conditions (2019), redistribution permitted with this acknowledgement, no fee and no non-commercial clause.
+- **Adaptations applied (everything the bake does):** the DICOM series is
+  resampled into the canonical atlas box (x ∈ [−27, 27], y ∈ [−55, 45],
+  z ∈ [−56, 26] au at 1 au = 1.2 mm) onto a 45 × 81 × 67 **uint8** grid
+  (≈0.24 MB), stored as Hounsfield units via
+  `storedHU = stored16 · 1 − 1200` and encoded through the `brain` window
+  (−20…100 HU) with the `bone` window (200…1600 HU) recorded as a preset; the
+  voxel→canonical affine is built from `ImagePositionPatient` /
+  `ImageOrientationPatient` / `PixelSpacing` and refined by measured
+  midline-symmetry and CT↔MRI agreement (constants + residuals recorded verbatim
+  in the manifest's `registration` block). Re-runnable and deterministic:
+  `node scripts/build-ct-grid.mjs` (`--tune` re-runs the registration search).
+  No image is cropped, retouched, or composited; QA preview renders stay in the
+  gitignored `assets-src/imaging2/preview-ct/`.
+
+### Visible Human Project (NLM) — cryosection photographs: licence cleared, not committed
+
+- **Source:** NLM Visible Human Project, *Additional Head Images* cryosections
+  (Brigham and Women's Hospital / Harvard Medical School; P. Ratiu et al.),
+  <https://data.lhncbc.nlm.nih.gov/public/Visible-Human/Additional-Head-Images/>.
+- **License:** **NLM Terms and Conditions (2019)** —
+  <https://www.nlm.nih.gov/databases/download/terms_and_conditions.html>. The
+  pre-2019 licence agreement was **replaced** in July 2019; the current terms
+  expressly contemplate redistribution and require one acknowledgement
+  (NLM describes the VHP as a public-domain image library).
+- **Required acknowledgement, verbatim:**
+  > Courtesy of the U.S. National Library of Medicine
+- **Status in v4:** the licence is cleared and 125 half-size cryosections were
+  downloaded to the gitignored `assets-src/imaging2/vhp-cryo/`, but **no
+  cryosection photograph is committed or displayed**: mapping slice indices to
+  atlas levels needs a visual pass that this run could not perform, so the
+  plates are held back rather than shipped mis-anchored. If a later run commits
+  them, the credit line above must be rendered verbatim. (The **CT** series from
+  the same VHP product *is* committed as the CT grid — see the section above.)
+
+### Sources verified, not embedded (v4)
+
+- **OpenNeuro** — CC0 per dataset (licence read from each dataset's metadata
+  through the public GraphQL API). No CT dataset suitable for a head/neck volume
+  was found; nothing new taken. *Not embedded*: **no embeddable CC0 head CT
+  volume was located.**
+- **The Cancer Imaging Archive (TCIA)** — per-collection licences; the inspected
+  head/neck collections grant CC BY 3.0, but downloads require the TCIA Data
+  Retriever and exceed this run's size budget. Nothing taken; link-out only.
+- **BigBrain (McGill/MNI)** — CC BY-NC-SA 4.0. **Not embedded**: NC clause plus a
+  multi-hundred-GB volume (the plan forbids downloading it).
+- **Allen Human Brain Atlas** — CC BY 4.0 for the 2020 reference atlas per
+  Allen's terms; served through a web API with no small brainstem-level plates
+  carrying a stated plane position. Nothing taken.
+- **brainmuseum.org / MSU** — already embedded in v3 under the site permission
+  policy (credit mandatory, no re-copyrighting); **no new levels added in v4**
+  (the site's level listing stays behind bot protection). The 10 v3 plates are
+  unchanged.
+
+### Plane anchoring & image registration caveat (v4)
+
+The embedded photographs are **photographs of physical slabs, not registered
+volumes**. `src/data/sectionImages.ts` records a `planeValue` (canonical au) and
+a first-pass `fit {scale, dx, dy, mirrorX}` per plate; both are derived from the
+**sources' own text labels** (UBC's viewer overlay labels, Commons' slice index
+and stated 4 mm thickness) and from per-image tissue measurements, **not** from a
+landmark-based registration. Plane values are ordered correctly but carry roughly
+±1 step (≈5–6 au) of absolute uncertainty; `scale` is a per-family constant.
+This is documented in `docs/IMAGING_SOURCES_V4.md` §5 so the UI never claims more
+registration than exists.
+
 ## Nomenclature note — FreeSurfer
 
 Thalamic nuclear nomenclature (VA, VL, VPL, VPM, MD, pulvinar, LGN, MGN,
@@ -199,6 +358,19 @@ from — the wiki page was consulted as a naming reference only.
   `docs/IMAGING_SOURCES.md` (CC BY-NC-SA 4.0 and the MSU site permission
   policy, both with the required verbatim credit lines), and the MRI volume
   is CC0 and not redistributed (raw file kept out of the repository).
+- The v4 real-imagery additions follow the same rule: the 24 new UBC section
+  plates are CC BY-NC-SA 4.0 with the verbatim UBC credit and the
+  non-commercial educational framing recorded, the 3 CT *plates* are CC0 (no
+  attribution required; credited anyway), the continuous **CT grid** is NLM
+  Visible Human Project material redistributed under the NLM Terms and
+  Conditions (2019) with the verbatim acknowledgement
+  `Courtesy of the U.S. National Library of Medicine`, and **no link-out-only
+  source was embedded**. Licence evidence, verbatim licence quotes and fetch
+  dates for every v4 source are in `docs/IMAGING_SOURCES_V4.md` and
+  `assets-src/imaging2/sources.json`; the NLM Visible Human Project CT series
+  was verified embeddable and is shipped as `src/assets/imaging/ct.bin`, while
+  the VHP *cryosection photographs* remain uncommitted pending the plane-mapping
+  pass described above.
 - Code is released under the MIT License (see [`LICENSE`](../LICENSE)). The
   textbooks cited above remain the property of their publishers; citing them
   does not imply endorsement.
