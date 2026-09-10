@@ -4,9 +4,29 @@
  * the RSNA RadioGraphics 2019 brainstem review with DOI link, and the
  * Duke/Neurotorium online references) with every refs entry authored in the
  * data files (deduplicated, alphabetical).
+ *
+ * ── A11Y: real dialog behaviour (QUALITY_PLAN §4 item 15 / AUDIT §2.19) ────
+ * The dialog already declared `role="dialog"` + `aria-modal`, but it opened
+ * with focus left wherever it was (so the first Tab landed on the page BEHIND
+ * the overlay), Tab could walk out of the dialog into that page, and closing it
+ * dropped focus on <body> — the user lost their place in a long info panel.
+ * A11Y-CONTRACT:
+ *  1. on open, focus moves into the dialog — the close button if it is
+ *     focusable, else the dialog itself (`tabindex={-1}`, a programmatic-only
+ *     focus target);
+ *  2. Tab/Shift+Tab cycle inside the dialog (focus trap) — the page behind an
+ *     `aria-modal` dialog is not reachable while it is open;
+ *  3. on close (button, Escape or backdrop click) focus returns to the element
+ *     that opened it, captured when the dialog opened and only if it is still
+ *     connected to the document;
+ *  4. Escape closes it (kept from the previous revision, now handled inside the
+ *     dialog's own key listener so it shares the trap's element list).
+ * The close button is the autofocus target (`autoFocus`), which also gives the
+ * audit's AX-tree pass a named `button` node exactly as before.
  */
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { allReferences } from '../data/load'
 import { useAtlasStore } from '../state/store'
 
@@ -46,18 +66,70 @@ const CORE_REFERENCES: CoreReference[] = [
   },
 ]
 
+/** Everything the browser will let a Tab press land on inside the dialog. */
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+function focusableIn(dialog: HTMLElement): HTMLElement[] {
+  return Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+    (el) => el.offsetParent !== null || el === document.activeElement,
+  )
+}
+
 export default function ReferencesModal() {
   const open = useAtlasStore((s) => s.referencesOpen)
   const setReferencesOpen = useAtlasStore((s) => s.setReferencesOpen)
+  const dialogRef = useRef<HTMLDivElement | null>(null)
+  const openerRef = useRef<HTMLElement | null>(null)
 
+  // A11Y-CONTRACT 1/3: capture the opener when the dialog mounts and give
+  // focus back to it when the dialog unmounts (never to a detached node).
   useEffect(() => {
-    if (!open) return
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setReferencesOpen(false)
+    openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const dialog = dialogRef.current
+    if (dialog !== null && !dialog.contains(document.activeElement)) {
+      const close = dialog.querySelector<HTMLElement>('.modal-close')
+      const first = close ?? focusableIn(dialog)[0] ?? dialog
+      first.focus({ preventScroll: true })
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [open, setReferencesOpen])
+    return () => {
+      const opener = openerRef.current
+      openerRef.current = null
+      if (opener !== null && opener.isConnected) opener.focus({ preventScroll: true })
+    }
+  }, [])
+
+  const onDialogKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') {
+      event.stopPropagation()
+      setReferencesOpen(false)
+      return
+    }
+    if (event.key !== 'Tab') return
+
+    // A11Y-CONTRACT 2: the trap. It re-queries on every Tab press, so it keeps
+    // working if the bibliography grows, and it wraps in both directions.
+    const dialog = dialogRef.current
+    if (dialog === null) return
+    const nodes = focusableIn(dialog)
+    if (nodes.length === 0) {
+      event.preventDefault()
+      dialog.focus({ preventScroll: true })
+      return
+    }
+    const first = nodes[0]
+    const last = nodes[nodes.length - 1]
+    const active = document.activeElement
+    if (event.shiftKey) {
+      if (active === first || !dialog.contains(active)) {
+        event.preventDefault()
+        last.focus()
+      }
+    } else if (active === last || !dialog.contains(active)) {
+      event.preventDefault()
+      first.focus()
+    }
+  }
 
   if (!open) return null
 
@@ -68,10 +140,13 @@ export default function ReferencesModal() {
       onClick={() => setReferencesOpen(false)}
     >
       <div
+        ref={dialogRef}
         className="modal-dialog"
         role="dialog"
         aria-modal="true"
         aria-label="References and bibliography"
+        tabIndex={-1}
+        onKeyDown={onDialogKeyDown}
         onClick={(event) => event.stopPropagation()}
       >
         <div className="modal-header">
@@ -80,6 +155,7 @@ export default function ReferencesModal() {
             type="button"
             className="modal-close"
             aria-label="Close references"
+            autoFocus
             onClick={() => setReferencesOpen(false)}
           >
             ✕

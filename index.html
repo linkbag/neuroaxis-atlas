@@ -7,6 +7,14 @@
       name="description"
       content="NeuroAxis — interactive schematic 3D atlas of the diencephalon, mesencephalon, and rhombencephalon with 2D cross-section plates."
     />
+    <!-- Favicon (P2 a11y/polish, AUDIT §2.21): without a <link rel="icon"> the
+         browser probes /favicon.ico, which the dev server answers with a 404 —
+         the app's last console noise. A committed SVG (public/favicon.svg) is
+         served from the site root in dev and copied verbatim by `vite build`,
+         so the icon resolves in both. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="mask-icon" href="/favicon.svg" color="#38bdf8" />
     <title>NeuroAxis — 3D Brainstem Atlas: Diencephalon · Mesencephalon · Rhombencephalon</title>
     <!-- Pre-JS dark paint; full theme lives in src/styles/tokens.css -->
     <style>

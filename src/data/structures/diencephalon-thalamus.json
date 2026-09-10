@@ -110,6 +110,12 @@
         "findings": "VL infarction disconnects the dentatothalamocortical loop, producing contralateral intention tremor, dysmetria and ataxic gait; the same circuit is the target of VIM thalamotomy/DBS for Parkinsonian and essential tremor.",
         "vascular": "PCA — thalamogeniculate artery",
         "note": "cerebellar-type signs from a thalamic lesion: the dentatothalamic relay, not the cerebellum itself, is interrupted"
+      },
+      {
+        "syndrome": "Ataxic hemiparesis from a thalamic lacune",
+        "findings": "A small thalamogeniculate infarct can involve VL together with the adjacent posterior-limb fibres of the internal capsule, giving mild contralateral weakness with out-of-proportion limb ataxia, and trunk instability severe enough to prevent standing (thalamic astasia); at the bedside the picture is indistinguishable from a pontine or capsular lacune.",
+        "vascular": "PCA — thalamogeniculate artery",
+        "note": "Ataxic hemiparesis is a syndrome of site, not of cause: identical presentations arise from lacunes in the internal capsule, basis pontis and thalamus, so imaging decides the level."
       }
     ],
     "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
@@ -436,6 +442,12 @@
         "syndrome": "Paramedian thalamic syndrome",
         "findings": "Midline nuclear involvement in Percheron-territory infarcts contributes to hypersomnia, apathy, memory deficits and autonomic instability.",
         "vascular": "PCA — paramedian thalamic (artery of Percheron)"
+      },
+      {
+        "syndrome": "Disorders of consciousness from bilateral paramedian thalamic damage",
+        "findings": "The midline and intralaminar nuclei form the thalamic arm of the ascending arousal system, so bilateral injury — Percheron-territory infarction, thalamic haemorrhage or Wernicke encephalopathy — can leave coma, hypersomnia, akinetic mutism or a 'thalamic dementia' with severe anterograde amnesia and apathy, while the EEG shows diffuse slowing and the cortex looks structurally intact on imaging.",
+        "vascular": "PCA — paramedian (posterior thalamoperforating) branches, including a shared artery of Percheron",
+        "note": "One Percheron trunk can supply both medial thalami, so a single small-vessel occlusion produces bilateral disease — the reason the thalamus must be inspected in any undiagnosed coma or hypersomnia."
       }
     ],
     "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],

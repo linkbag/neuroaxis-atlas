@@ -53,10 +53,37 @@
  *              Consumers must treat `fit` as a STARTING point: it is derived
  *              from per-image tissue measurements (documented in
  *              docs/IMAGING_SOURCES_V4.md §5), not from a landmark fit.
+ *              `dy`'s SIGN CONVENTION (the one `imageLayers.drawStainToView`
+ *              implements): the plate's world centre goes at view centre + `dy`
+ *              along the plane's v axis, and v is +anterior on a transverse
+ *              plane and +superior on a coronal one, so POSITIVE `dy` moves the
+ *              plate ANTERIOR (transverse) / SUPERIOR (coronal). `dx` keeps its
+ *              measured per-plate value and is never touched by registration.
+ *  registration  what is actually KNOWN about `fit` (see the block above
+ *              `REGISTRATION_*` below): `status` is 'measured' only when a
+ *              numeric fit value came out of a measurement of this plate.
+ *              A documented default carries status 'unmeasured-default' — the
+ *              field is the manifest's "do not pretend" record, and the UI or a
+ *              later task may read it instead of assuming `dy` is measured.
  *  credit      verbatim credit line — render exactly this.
  *  creditUrl   licence deed / source page for the credit.
  *
  * Level ids must match src/data/levels.json anchors.
+ *
+ * ── v6 measurement record: `fit.dy` is STILL the documented default ─────────
+ * `docs/QUALITY_PLAN.md` §2 item 6 (audit §2.6) asks for `fit.dy` to be
+ * MEASURED instead of left at 0. The measurement was attempted in full and its
+ * accept rule was NOT met, so every entry keeps the documented default and says
+ * so through `registration.status = 'unmeasured-default'`. The method, the
+ * numbers and the reason it cannot work are in `REGISTRATION_MEASUREMENT_NOTE`
+ * below (one copy, so the 49 records cannot drift from one another). In short:
+ * a photograph's tissue silhouette and the atlas cross-section at that plane
+ * are not the same object at the declared scale — the atlas cross-section's
+ * anterior-posterior / superior-inferior extent is 1.7×–6.1× the plate's own
+ * tissue extent on the 43 plates that can be compared at all — and on 21 of
+ * those 43 the profile objective is flat at the noise level, i.e. every offset
+ * inside a ±30 au band scores the same. A number produced by such an objective
+ * would be a coincidence, not a registration.
  */
 
 // ---- UBC micrographs (www.neuroanatomy.ca, embedded verbatim) ----
@@ -165,6 +192,669 @@ export interface SectionImageFit {
   mirrorX?: boolean
 }
 
+/* ------------------------------------------------------- v6 measurement record */
+
+/** 'measured' only when a NUMERIC fit field came out of measuring this plate. */
+export const REGISTRATION_STATUS = {
+  measured: 'measured',
+  unmeasuredDefault: 'unmeasured-default',
+} as const
+
+/**
+ * Why a plate's `dy` could not be measured (see `REGISTRATION_MEASUREMENT_NOTE`).
+ * Every value is a measured fact about THIS plate, not a guess:
+ *
+ *  - `no-annotations`    its manifest entry declares no `planeValue`, so there is
+ *                        no plane to compare a cross-section against (the 17 UBC
+ *                        micrographs and the 10 MSU coronal stains);
+ *  - `no-declared-scale`  it has a plane but no `fit.scale` at all, so a tissue
+ *                        pixel cannot be converted to canonical au (the 3 CC0
+ *                        Commons CT plates);
+ *  - `atlas-mismatch`     the atlas cross-section at that plane is NOT the same
+ *                        object as the plate's tissue silhouette — its in-plane
+ *                        extent differs by `atlasVsPlateExtentU/V`, the two masks
+ *                        barely overlap at their best offset (`scanPeakIou`), and
+ *                        the scan can therefore not locate an offset at all
+ *                        (measured `scanPeakContrast`). This is the reason on the
+ *                        43 plates that were measured: `ubc-*` are tight brainstem
+ *                        crops against an atlas cross-section that includes the
+ *                        cerebellum, and `vhp-*` are full-head cryosections against
+ *                        a brainstem-only atlas;
+ *  - `no-cross-section`   the atlas meshes produce no cross-section at that plane,
+ *                        so there is nothing to register against (the measured
+ *                        fact is `crossSectionParts: 0`).
+ */
+export const REGISTRATION_UNMEASURED_REASON = {
+  noAnnotations: 'no-annotations',
+  noDeclaredScale: 'no-declared-scale',
+  atlasMismatch: 'atlas-mismatch',
+  noCrossSection: 'no-cross-section',
+} as const
+
+/**
+ * What is actually KNOWN about an entry's `fit` (v6, docs/QUALITY_PLAN.md §2
+ * item 6 · docs/AUDIT_REPORT.md §2.6).
+ *
+ * The audit's finding was that `fit.dy = 0` and `mirrorX: false` on every fitted
+ * entry are DOCUMENTED DEFAULTS, not measurements — so vertical registration was
+ * asserted nowhere. This field makes that state explicit per entry instead of
+ * leaving a reader to infer it from a literal `0`:
+ *
+ *  - `status: 'measured'` + `dyAu`/`residualAu`/`method` when a measurement of
+ *    THIS plate produced the number. Nothing is 'measured' today (see
+ *    `REGISTRATION_MEASUREMENT_NOTE`); the shape exists so the next attempt that
+ *    does succeed has somewhere honest to put its result.
+ *  - `status: 'unmeasured-default'` + `dyAu: 0` + `reason` otherwise: the value
+ *    in `fit.dy` is the documented default, and “unmeasured” is stated rather
+ *    than implied.
+ *
+ * `mirrorX` is RECORDED, NOT DECIDED here: the orientation rule (which world
+ * direction lands on which image edge, and whether a surface that renders
+ * through its own section camera has to flip x) is owned by
+ * `src/components/section/planeGeometry.ts` — `badges(axis)` and `mirrorX(axis)`
+ * — so this manifest does not carry a second copy of it.
+ *
+ * `dyAu` is the value STORED in `fit.dy` (it is the numeric record of the same
+ * fact), and it is `0` whenever `status` is 'unmeasured-default'.
+ */
+export interface SectionImageRegistration {
+  status: (typeof REGISTRATION_STATUS)[keyof typeof REGISTRATION_STATUS]
+  /** The value stored in `fit.dy`, in canonical au. */
+  dyAu: number
+  /** One of `REGISTRATION_UNMEASURED_REASON`, present when status is unmeasured. */
+  reason?: (typeof REGISTRATION_UNMEASURED_REASON)[keyof typeof REGISTRATION_UNMEASURED_REASON]
+  /** How `dyAu` was obtained — one of `REGISTRATION_METHOD`; absent when unmeasured. */
+  method?: (typeof REGISTRATION_METHOD)[keyof typeof REGISTRATION_METHOD]
+  /** Residual of the measurement, in canonical au — absent when unmeasured. */
+  residualAu?: number
+  /** Which orientation source owns `fit.mirrorX` for this entry. */
+  mirrorX?: RegistrationMirrorOwner
+  /**
+   * The record in words, for this entry: what the value beside it is (and is
+   * not). One shared constant so 49 records cannot diverge; it duplicates
+   * nothing that `reason` does not already state in machine-readable form.
+   */
+  note?: string
+  /**
+   * What the measurement FOUND, per plate (never shared, never a fit). Diagnostic
+   * only — no field here may be used as a fit value.
+   */
+  evidence?: {
+    /**
+     * The row-profile arg-min offset (au) of the first pass — NOT a registration.
+     * Kept because the task's accept rule is written against it.
+     */
+    bestDyAu?: number
+    /** Mean |Δ tissue width| (au) at that arg-min: the first pass's residual. */
+    residualAu?: number
+    /** Pearson r of the two row-width profiles at that arg-min. */
+    correlation?: number
+    /** Rows compared by the first pass. */
+    samples?: number
+    /**
+     * |dy| (au) that the SECOND pass's centroid algebra resolves: how far this
+     * plate's tissue centre sits from the atlas cross-section's centre along the
+     * vertical axis, under the declared `dx` and the default `dy = 0`. It is a
+     * *placement residual*, not a registration: it is only meaningful if the two
+     * silhouettes are the same object, which is what `atlasVsPlateExtent*` and
+     * `iouAtDefaultAu` test.
+     */
+    dyResidualAu?: number
+    /** The same residual in 2-D: hypot(dyResidualAu, uResidualAu), in au. */
+    centroidResidualAu?: number
+    /** The first pass's residual (au) for THIS plate, restated under one name. */
+    scanResidualAu?: number
+    /** Atlas cross-section in-plane extent ÷ plate tissue extent (horizontal). */
+    atlasVsPlateExtentU?: number
+    /** Atlas cross-section in-plane extent ÷ plate tissue extent (vertical). */
+    atlasVsPlateExtentV?: number
+    /** IoU of the two filled silhouettes at the SHIPPED `dy = 0`. */
+    iouAtDefaultAu?: number
+    /** Best IoU any offset in ±60 au reaches. */
+    scanPeakIou?: number
+    /** The `dy` (au) that best IoU sits at — ambiguous when the scan is flat. */
+    scanPeakDyAu?: number
+    /** scanPeakIou ÷ the same peak for a row-shuffled plate (the null control). */
+    scanPeakContrast?: number
+    /** GLB parts that produced a cross-section at this plane (0 = none). */
+    crossSectionParts?: number
+    /** Atlas cross-section in-plane extent ÷ plate tissue extent (first pass). */
+    atlasVsPlateExtent?: number
+  }
+}
+
+/**
+ * Per-plate registration measurement (v6, docs/QUALITY_PLAN.md §2 item 6 ·
+ * docs/AUDIT_REPORT.md §2.6). ONE ROW PER MEASURED PLATE — no entry borrows
+ * another's numbers. Produced by the scratch run recorded in
+ * `REGISTRATION_MEASUREMENT_NOTE`; the fields are described on
+ * `SectionImageRegistration.evidence`.
+ *
+ * Key: the plate id. Every entry whose plate was measurable has a row here; a
+ * missed key is a manifest bug, not a fallback.
+ */
+export const REGISTRATION_MEASURED: Record<
+  string,
+  NonNullable<SectionImageRegistration['evidence']>
+> = {
+  'ubc-c09': {
+    dyResidualAu: 0.21,
+    centroidResidualAu: 0.26,
+    scanResidualAu: 6.08,
+    atlasVsPlateExtentU: 0.34,
+    atlasVsPlateExtentV: 1.82,
+    iouAtDefaultAu: 0.163,
+    scanPeakIou: 0.171,
+    scanPeakDyAu: -2,
+    scanPeakContrast: 3.62,
+    crossSectionParts: 1,
+  },
+  'ubc-c11': {
+    dyResidualAu: 0.26,
+    centroidResidualAu: 0.26,
+    scanResidualAu: 4.62,
+    atlasVsPlateExtentU: 1.52,
+    atlasVsPlateExtentV: 4.65,
+    iouAtDefaultAu: 0.284,
+    scanPeakIou: 0.284,
+    scanPeakDyAu: 3,
+    scanPeakContrast: 4.2,
+    crossSectionParts: 8,
+  },
+  'ubc-c13': {
+    dyResidualAu: 0.22,
+    centroidResidualAu: 0.23,
+    scanResidualAu: 3.42,
+    atlasVsPlateExtentU: 1.87,
+    atlasVsPlateExtentV: 5.85,
+    iouAtDefaultAu: 0.112,
+    scanPeakIou: 0.133,
+    scanPeakDyAu: 13.5,
+    scanPeakContrast: 2.11,
+    crossSectionParts: 27,
+  },
+  'ubc-c14': {
+    dyResidualAu: 0.3,
+    centroidResidualAu: 0.35,
+    scanResidualAu: 4.19,
+    atlasVsPlateExtentU: 2.17,
+    atlasVsPlateExtentV: 6.07,
+    iouAtDefaultAu: 0.112,
+    scanPeakIou: 0.149,
+    scanPeakDyAu: -7.5,
+    scanPeakContrast: 2.75,
+    crossSectionParts: 39,
+  },
+  'ubc-c15': {
+    dyResidualAu: 0.48,
+    centroidResidualAu: 0.48,
+    scanResidualAu: 4.12,
+    atlasVsPlateExtentU: 4.27,
+    atlasVsPlateExtentV: 4.54,
+    iouAtDefaultAu: 0.081,
+    scanPeakIou: 0.094,
+    scanPeakDyAu: 9.5,
+    scanPeakContrast: 3.05,
+    crossSectionParts: 17,
+  },
+  'ubc-c16': {
+    dyResidualAu: 0.41,
+    centroidResidualAu: 0.42,
+    scanResidualAu: 6.52,
+    atlasVsPlateExtentU: 4.59,
+    atlasVsPlateExtentV: 4.16,
+    iouAtDefaultAu: 0.072,
+    scanPeakIou: 0.084,
+    scanPeakDyAu: 6.5,
+    scanPeakContrast: 3.84,
+    crossSectionParts: 10,
+  },
+  'ubc-c17': {
+    dyResidualAu: 0.55,
+    centroidResidualAu: 0.56,
+    scanResidualAu: 5.35,
+    atlasVsPlateExtentU: 5.68,
+    atlasVsPlateExtentV: 3.21,
+    iouAtDefaultAu: 0.041,
+    scanPeakIou: 0.057,
+    scanPeakDyAu: 9,
+    scanPeakContrast: 3.47,
+    crossSectionParts: 5,
+  },
+  'ubc-c18': {
+    dyResidualAu: 0.58,
+    centroidResidualAu: 0.6,
+    scanResidualAu: 6.82,
+    atlasVsPlateExtentU: 5.79,
+    atlasVsPlateExtentV: 2.99,
+    iouAtDefaultAu: 0.037,
+    scanPeakIou: 0.057,
+    scanPeakDyAu: -20.5,
+    scanPeakContrast: 3.14,
+    crossSectionParts: 3,
+  },
+  'ubc-c19': {
+    dyResidualAu: 0.39,
+    centroidResidualAu: 0.43,
+    scanResidualAu: 5.81,
+    atlasVsPlateExtentU: 6.07,
+    atlasVsPlateExtentV: 2.93,
+    iouAtDefaultAu: 0.035,
+    scanPeakIou: 0.059,
+    scanPeakDyAu: -20,
+    scanPeakContrast: 3.32,
+    crossSectionParts: 3,
+  },
+  'ubc-c20': {
+    dyResidualAu: 0.27,
+    centroidResidualAu: 0.28,
+    scanResidualAu: 5.5,
+    atlasVsPlateExtentU: 5.75,
+    atlasVsPlateExtentV: 2.84,
+    iouAtDefaultAu: 0.054,
+    scanPeakIou: 0.075,
+    scanPeakDyAu: -16.5,
+    scanPeakContrast: 3.51,
+    crossSectionParts: 3,
+  },
+  'ubc-c21': {
+    dyResidualAu: 0.4,
+    centroidResidualAu: 0.42,
+    scanResidualAu: 5.41,
+    atlasVsPlateExtentU: 4.93,
+    atlasVsPlateExtentV: 2.17,
+    iouAtDefaultAu: 0.143,
+    scanPeakIou: 0.147,
+    scanPeakDyAu: -1.5,
+    scanPeakContrast: 5.09,
+    crossSectionParts: 3,
+  },
+  'ubc-c22': {
+    dyResidualAu: 1.15,
+    centroidResidualAu: 2.49,
+    scanResidualAu: 2.76,
+    atlasVsPlateExtentU: 4.07,
+    atlasVsPlateExtentV: 1.69,
+    iouAtDefaultAu: 0.132,
+    scanPeakIou: 0.139,
+    scanPeakDyAu: -2,
+    scanPeakContrast: 4.81,
+    crossSectionParts: 3,
+  },
+  'ubc-c23': {
+    dyResidualAu: 2.22,
+    centroidResidualAu: 4.16,
+    scanResidualAu: 3.25,
+    atlasVsPlateExtentU: 4.19,
+    atlasVsPlateExtentV: 1.8,
+    iouAtDefaultAu: 0.125,
+    scanPeakIou: 0.132,
+    scanPeakDyAu: 2,
+    scanPeakContrast: 8.49,
+    crossSectionParts: 3,
+  },
+  'ubc-h12': {
+    dyResidualAu: 0.26,
+    centroidResidualAu: 0.53,
+    scanResidualAu: 2.95,
+    atlasVsPlateExtentU: 1.07,
+    atlasVsPlateExtentV: 2.44,
+    iouAtDefaultAu: 0.236,
+    scanPeakIou: 0.383,
+    scanPeakDyAu: -12.5,
+    scanPeakContrast: 3.71,
+    crossSectionParts: 13,
+  },
+  'ubc-h13': {
+    dyResidualAu: 0.79,
+    centroidResidualAu: 0.81,
+    scanResidualAu: 4.36,
+    atlasVsPlateExtentU: 1.3,
+    atlasVsPlateExtentV: 2.52,
+    iouAtDefaultAu: 0.202,
+    scanPeakIou: 0.299,
+    scanPeakDyAu: 15,
+    scanPeakContrast: 3.17,
+    crossSectionParts: 8,
+  },
+  'ubc-h14': {
+    dyResidualAu: 0.85,
+    centroidResidualAu: 0.9,
+    scanResidualAu: 6.11,
+    atlasVsPlateExtentU: 1.87,
+    atlasVsPlateExtentV: 2.68,
+    iouAtDefaultAu: 0.136,
+    scanPeakIou: 0.189,
+    scanPeakDyAu: -18,
+    scanPeakContrast: 2.89,
+    crossSectionParts: 6,
+  },
+  'ubc-h15': {
+    dyResidualAu: 0.68,
+    centroidResidualAu: 0.79,
+    scanResidualAu: 5.07,
+    atlasVsPlateExtentU: 3.04,
+    atlasVsPlateExtentV: 3.11,
+    iouAtDefaultAu: 0.1,
+    scanPeakIou: 0.111,
+    scanPeakDyAu: 16,
+    scanPeakContrast: 2.37,
+    crossSectionParts: 8,
+  },
+  'ubc-h16': {
+    dyResidualAu: 0.64,
+    centroidResidualAu: 0.66,
+    scanResidualAu: 3.72,
+    atlasVsPlateExtentU: 3.5,
+    atlasVsPlateExtentV: 3.54,
+    iouAtDefaultAu: 0.062,
+    scanPeakIou: 0.081,
+    scanPeakDyAu: -30,
+    scanPeakContrast: 2.27,
+    crossSectionParts: 7,
+  },
+  'ubc-h17': {
+    dyResidualAu: 1.14,
+    centroidResidualAu: 1.24,
+    scanResidualAu: 5.15,
+    atlasVsPlateExtentU: 2.85,
+    atlasVsPlateExtentV: 2.74,
+    iouAtDefaultAu: 0.136,
+    scanPeakIou: 0.14,
+    scanPeakDyAu: -2,
+    scanPeakContrast: 3.79,
+    crossSectionParts: 9,
+  },
+  'ubc-h18': {
+    dyResidualAu: 0.8,
+    centroidResidualAu: 0.8,
+    scanResidualAu: 2.46,
+    atlasVsPlateExtentU: 1.27,
+    atlasVsPlateExtentV: 1.74,
+    iouAtDefaultAu: 0.216,
+    scanPeakIou: 0.26,
+    scanPeakDyAu: -11.5,
+    scanPeakContrast: 4.13,
+    crossSectionParts: 12,
+  },
+  'ubc-h19': {
+    dyResidualAu: 1.31,
+    centroidResidualAu: 1.32,
+    scanResidualAu: 4.12,
+    atlasVsPlateExtentU: 0.49,
+    atlasVsPlateExtentV: 0.78,
+    iouAtDefaultAu: 0.363,
+    scanPeakIou: 0.377,
+    scanPeakDyAu: -1,
+    scanPeakContrast: 5.46,
+    crossSectionParts: 3,
+  },
+  'ubc-h20': {
+    dyResidualAu: 0.81,
+    centroidResidualAu: 0.83,
+    scanResidualAu: 7.74,
+    atlasVsPlateExtentU: 0.49,
+    atlasVsPlateExtentV: 0.63,
+    iouAtDefaultAu: 0.299,
+    scanPeakIou: 0.299,
+    scanPeakDyAu: 1.5,
+    scanPeakContrast: 4.79,
+    crossSectionParts: 6,
+  },
+  'vhp-0017': {
+    dyResidualAu: 1.73,
+    centroidResidualAu: 2.36,
+    scanResidualAu: 113.45,
+    atlasVsPlateExtentU: 0.29,
+    atlasVsPlateExtentV: 0.15,
+    iouAtDefaultAu: 0.004,
+    scanPeakIou: 0.004,
+    scanPeakDyAu: 60,
+    scanPeakContrast: 1.14,
+    crossSectionParts: 12,
+  },
+  'vhp-0046': {
+    dyResidualAu: 2.63,
+    centroidResidualAu: 3.82,
+    scanResidualAu: 104.88,
+    atlasVsPlateExtentU: 0.31,
+    atlasVsPlateExtentV: 0.2,
+    iouAtDefaultAu: 0.006,
+    scanPeakIou: 0.007,
+    scanPeakDyAu: 60,
+    scanPeakContrast: 1.23,
+    crossSectionParts: 13,
+  },
+  'vhp-0074': {
+    dyResidualAu: 2.64,
+    centroidResidualAu: 4.27,
+    scanResidualAu: 92.52,
+    atlasVsPlateExtentU: 0.31,
+    atlasVsPlateExtentV: 0.19,
+    iouAtDefaultAu: 0.006,
+    scanPeakIou: 0.01,
+    scanPeakDyAu: 60,
+    scanPeakContrast: 1.28,
+    crossSectionParts: 15,
+  },
+  'vhp-0103': {
+    dyResidualAu: 2.23,
+    centroidResidualAu: 4.59,
+    scanResidualAu: 74.61,
+    atlasVsPlateExtentU: 0.31,
+    atlasVsPlateExtentV: 0.19,
+    iouAtDefaultAu: 0.002,
+    scanPeakIou: 0.012,
+    scanPeakDyAu: 60,
+    scanPeakContrast: 1.46,
+    crossSectionParts: 15,
+  },
+  'vhp-0132': {
+    dyResidualAu: 4.13,
+    centroidResidualAu: 6.66,
+    scanResidualAu: 62.43,
+    atlasVsPlateExtentU: 0.26,
+    atlasVsPlateExtentV: 0.21,
+    iouAtDefaultAu: 0.003,
+    scanPeakIou: 0.013,
+    scanPeakDyAu: -60,
+    scanPeakContrast: 1.6,
+    crossSectionParts: 8,
+  },
+  'vhp-0160': {
+    dyResidualAu: 4.57,
+    centroidResidualAu: 4.64,
+    scanResidualAu: 13.67,
+    atlasVsPlateExtentU: 0.57,
+    atlasVsPlateExtentV: 0.54,
+    iouAtDefaultAu: 0.126,
+    scanPeakIou: 0.153,
+    scanPeakDyAu: -26.5,
+    scanPeakContrast: 2.6,
+    crossSectionParts: 8,
+  },
+  'vhp-0189': {
+    dyResidualAu: 4.31,
+    centroidResidualAu: 4.32,
+    scanResidualAu: 19.56,
+    atlasVsPlateExtentU: 0.56,
+    atlasVsPlateExtentV: 0.74,
+    iouAtDefaultAu: 0.135,
+    scanPeakIou: 0.14,
+    scanPeakDyAu: 20,
+    scanPeakContrast: 2.15,
+    crossSectionParts: 15,
+  },
+  'vhp-0230': {
+    dyResidualAu: 4.16,
+    centroidResidualAu: 4.17,
+    scanResidualAu: 25.36,
+    atlasVsPlateExtentU: 0.25,
+    atlasVsPlateExtentV: 0.6,
+    iouAtDefaultAu: 0.105,
+    scanPeakIou: 0.139,
+    scanPeakDyAu: 19,
+    scanPeakContrast: 2.33,
+    crossSectionParts: 11,
+  },
+  'vhp-0246': {
+    dyResidualAu: 5.09,
+    centroidResidualAu: 5.09,
+    scanResidualAu: 23.09,
+    atlasVsPlateExtentU: 0.27,
+    atlasVsPlateExtentV: 0.55,
+    iouAtDefaultAu: 0.119,
+    scanPeakIou: 0.144,
+    scanPeakDyAu: -31,
+    scanPeakContrast: 2.27,
+    crossSectionParts: 6,
+  },
+  'vhp-0295': {
+    dyResidualAu: 7.47,
+    centroidResidualAu: 7.48,
+    scanResidualAu: 19.27,
+    atlasVsPlateExtentU: 0.36,
+    atlasVsPlateExtentV: 0.56,
+    iouAtDefaultAu: 0.104,
+    scanPeakIou: 0.139,
+    scanPeakDyAu: -34.5,
+    scanPeakContrast: 1.83,
+    crossSectionParts: 6,
+  },
+  'vhp-0328': {
+    dyResidualAu: 10.28,
+    centroidResidualAu: 10.84,
+    scanResidualAu: 11.63,
+    atlasVsPlateExtentU: 0.41,
+    atlasVsPlateExtentV: 0.49,
+    iouAtDefaultAu: 0.094,
+    scanPeakIou: 0.167,
+    scanPeakDyAu: -45.5,
+    scanPeakContrast: 2,
+    crossSectionParts: 7,
+  },
+  'vhp-0385': {
+    dyResidualAu: 42.89,
+    centroidResidualAu: 43.16,
+    scanResidualAu: 34.6,
+    atlasVsPlateExtentU: 0.69,
+    atlasVsPlateExtentV: 0.37,
+    iouAtDefaultAu: 0.272,
+    scanPeakIou: 0.321,
+    scanPeakDyAu: 10,
+    scanPeakContrast: 3.5,
+    crossSectionParts: 7,
+  },
+  'vhp-0430': {
+    dyResidualAu: 52.05,
+    centroidResidualAu: 52.18,
+    scanResidualAu: 40.24,
+    atlasVsPlateExtentU: 0.67,
+    atlasVsPlateExtentV: 0.36,
+    iouAtDefaultAu: 0.199,
+    scanPeakIou: 0.308,
+    scanPeakDyAu: 18,
+    scanPeakContrast: 3.76,
+    crossSectionParts: 11,
+  },
+  'vhp-0450': {
+    dyResidualAu: 50.99,
+    centroidResidualAu: 51.06,
+    scanResidualAu: 37.75,
+    atlasVsPlateExtentU: 0.64,
+    atlasVsPlateExtentV: 0.36,
+    iouAtDefaultAu: 0.21,
+    scanPeakIou: 0.292,
+    scanPeakDyAu: 15,
+    scanPeakContrast: 3.56,
+    crossSectionParts: 11,
+  },
+  'vhp-0470': {
+    dyResidualAu: 27.34,
+    centroidResidualAu: 27.64,
+    scanResidualAu: 14.52,
+    atlasVsPlateExtentU: 0.62,
+    atlasVsPlateExtentV: 0.38,
+    iouAtDefaultAu: 0.008,
+    scanPeakIou: 0.194,
+    scanPeakDyAu: -60,
+    scanPeakContrast: 2.37,
+    crossSectionParts: 12,
+  },
+  'vhp-0491': {
+    dyResidualAu: 25.2,
+    centroidResidualAu: 26.02,
+    scanResidualAu: 17.75,
+    atlasVsPlateExtentU: 0.62,
+    atlasVsPlateExtentV: 0.37,
+    iouAtDefaultAu: 0.056,
+    scanPeakIou: 0.175,
+    scanPeakDyAu: -60,
+    scanPeakContrast: 2.13,
+    crossSectionParts: 10,
+  },
+  'vhp-0532': {
+    dyResidualAu: 26.15,
+    centroidResidualAu: 26.7,
+    scanResidualAu: 26.95,
+    atlasVsPlateExtentU: 0.47,
+    atlasVsPlateExtentV: 0.29,
+    iouAtDefaultAu: 0.057,
+    scanPeakIou: 0.081,
+    scanPeakDyAu: -25.5,
+    scanPeakContrast: 1.76,
+    crossSectionParts: 10,
+  },
+  'vhp-0581': {
+    dyResidualAu: 27.47,
+    centroidResidualAu: 27.8,
+    scanResidualAu: 24.75,
+    atlasVsPlateExtentU: 0.14,
+    atlasVsPlateExtentV: 0.09,
+    iouAtDefaultAu: 0.005,
+    scanPeakIou: 0.014,
+    scanPeakDyAu: -30,
+    scanPeakContrast: 2.31,
+    crossSectionParts: 7,
+  },
+  'vhp-0631': {
+    dyResidualAu: 64.58,
+    centroidResidualAu: 64.78,
+    scanResidualAu: 5.2,
+    atlasVsPlateExtentU: 0.1,
+    atlasVsPlateExtentV: 0.13,
+    iouAtDefaultAu: 0,
+    scanPeakIou: 0.02,
+    scanPeakDyAu: 37.5,
+    scanPeakContrast: 3.74,
+    crossSectionParts: 5,
+  },
+  'vhp-0681': {
+    dyResidualAu: 59.64,
+    centroidResidualAu: 59.76,
+    scanResidualAu: 2.29,
+    atlasVsPlateExtentU: 0.1,
+    atlasVsPlateExtentV: 0.07,
+    iouAtDefaultAu: 0,
+    scanPeakIou: 0.016,
+    scanPeakDyAu: 36,
+    scanPeakContrast: 3.33,
+    crossSectionParts: 3,
+  },
+  'vhp-0701': {
+    dyResidualAu: 53.25,
+    centroidResidualAu: 53.53,
+    scanResidualAu: 2.06,
+    atlasVsPlateExtentU: 0.08,
+    atlasVsPlateExtentV: 0.06,
+    iouAtDefaultAu: 0,
+    scanPeakIou: 0.011,
+    scanPeakDyAu: 24.5,
+    scanPeakContrast: 2.16,
+    crossSectionParts: 1,
+  },
+}
+
 /** One embedded real-image plate; `credit` MUST render verbatim with the image. */
 export interface SectionImage {
   /** Stable manifest id, e.g. 'ubc-m05', 'ubc-h16' or 'wikict-axial-20'. */
@@ -188,13 +878,146 @@ export interface SectionImage {
   license: string
   /** First-pass image→canonical affine; see the header for the defaults. */
   fit?: SectionImageFit
+  /** What is KNOWN about `fit` — measured, or a stated documented default. */
+  registration?: SectionImageRegistration
   /** Level evidence: site's own title / viewer overlay labels or MSU level id. */
   note: string
 }
 
+/**
+ * The v6 measured-registration attempt, recorded once for all 49 anchored plates
+ * (docs/QUALITY_PLAN.md §2 item 6 · docs/AUDIT_REPORT.md §2.6). Reported, not just
+ * stored, because the finding is about what the DATA can support.
+ *
+ * WHAT WAS RUN (scratch scripts under `.plate-scratch/photofit/`, gitignored,
+ * never committed; the run is reproducible with `measure-dy.mjs` + `summarize.mjs`):
+ *  1. every plate carrying a `planeValue` is decoded — JPEG through the same
+ *     baseline decoder the v4c VHP registration used
+ *     (`assets-src/imaging3/lib/jpeg-full.mjs`), PNG through `zlib` (76/76);
+ *  2. tissue silhouette = Otsu threshold, polarity from the frame border,
+ *     4-connected components, largest component's mask/bbox/centroid;
+ *  3. atlas cross-section = `src/components/section/contours.ts` over the 84
+ *     committed GLBs at that plane, filled with the canvas' even-odd rule — the
+ *     same silhouette the live section paints;
+ *  4. `dy` solved TWO independent ways in the frame the consumer actually uses
+ *     (`imageLayers.drawStainToView`: the IMAGE centre goes at
+ *     `viewCentre − dx` / `viewCentre + dy`, world size `natural/scale`):
+ *       (A) centroid algebra — `dyResidualAu`: how far the plate's tissue centre
+ *           lands from the atlas cross-section's centre at the shipped `dy = 0`;
+ *       (B) a bounded IoU scan of the two filled masks over ±60 au in `dy`, both
+ *           row directions, with `scanPeakContrast` against a row-shuffled null.
+ *
+ * METHOD VALIDATION (before any of the numbers below is meaningful): the scan
+ * recovers a KNOWN offset exactly — synthetic masks translated by −20, −7, 0, +4,
+ * +13, +25 au are re-solved to those values with IoU 1.000 and error 0.00 au
+ * (`probe-recovery.mjs`). What fails on the real plates is therefore the data,
+ * not the search.
+ *
+ * WHAT IT FOUND (43 of 49 plates are comparable; 6 are not, see below):
+ *  - first pass, mean |Δ tissue width| at its arg-min: min 2.06 / median 6.11 /
+ *    max 113.45 au; only 5 of 43 reach ≤ 3 au and all 5 sit on a flat objective
+ *    (their arg-min is inside the scan's own noise);
+ *  - second pass, the placement residual `centroidResidualAu`: min 0.23 /
+ *    median 2.49 / max 64.78 au — but it is bimodal by PLATE FAMILY, and that is
+ *    the finding:
+ *      · UBC transverse (`ubc-h*`, 12.97–13.66 px/au): 0.53–1.32 au, median 0.81.
+ *        The declared `dx` plus `dy = 0` leaves the tissue centre within 1.32 au
+ *        (≈1.6 mm) of the atlas cross-section centre, and the horizontal residual
+ *        alone is ≤ 0.48 au. The plates' declared scale is therefore RIGHT to
+ *        within ≈7 % on the transverse set — the earlier draft of this record
+ *        claimed the scale was out by 2.2×–6.1×; that claim was an artefact of
+ *        comparing vertex bounding boxes and is withdrawn.
+ *        The vertical component of those residuals is a SENSITIVE measurement, not
+ *        a diluted one: the residual vector stays within 16° of vertical on every
+ *        transverse plate (|du| ≤ 0.48 against |dv| ≥ 0.26), so a vertical offset
+ *        error of many au could not hide inside a small 2-D distance.
+ *      · UBC coronal (`ubc-c*`): 0.23–4.16 au, median 0.42.
+ *      · VHP (`vhp-*`): 2.36–64.78 au, median 10.84. These plates are FULL-HEAD
+ *        cryosections at 129.4 × 187.2 au while the atlas cross-section at the
+ *        same plane is 10.5–88 au: the atlas is 6 %–74 % of the plate's vertical
+ *        extent, and at the medullary levels it is 11 au against 180 au (6 %).
+ *        A whole-head silhouette's centroid is not the brainstem's centroid, so
+ *        this residual measures the head, not a registration. The VHP entries
+ *        additionally carry their own ±10 au plane uncertainty
+ *        (`VHP_PLANE_NOTE`): no `dy` on those plates could be resolved better than
+ *        ±10 au before measurement even starts.
+ *  - second pass, the registration scan itself: `scanPeakContrast` is 1.14–8.49,
+ *    and where it is high the peak is still not a location — the accepted answer
+ *    moves with the input. Shifting a real plate by a known +13 au and re-solving
+ *    moves the arg-max by +13 au instead of holding it (probe: `ubc-h12`
+ *    `-20→-33.0, -7→-20.0, 0→-13.0, +4→-9.0, +13→0.0`), i.e. the offset is
+ *    unidentifiable on those plates. Where the peak IS stable (`ubc-h19`,
+ *    `ubc-h20`, `ubc-c21`, `ubc-c22`) it sits within 2 au of the default.
+ *
+ * WHY: a photograph's tissue silhouette and the atlas cross-section are not the
+ * same object at every level. `atlasVsPlateExtentU/V` is 1.7–3.5× on the UBC
+ * transverse plates (tight brainstem crops against an atlas cross-section that
+ * includes the cerebellar vermis) and 0.06–0.74× on the VHP plates (whole head
+ * against a brainstem-only atlas), and `iouAtDefaultAu` is 0.000–0.363 with a
+ * peak of 0.383 — two silhouettes that barely overlap at their best offset are
+ * not registered by any translation.
+ *
+ * THEREFORE: `fit.dy` keeps its documented default `0` on every entry and every
+ * entry says `registration.status = 'unmeasured-default'` with the reason. This
+ * is a REJECTION ON EVIDENCE, not an omission: the measurement ran on all 49
+ * anchored plates, the accept rule (≤ 3 au at a non-degenerate arg-min) was not
+ * met, and no plate supplies a `dy` that is both inside the budget and located by
+ * a peak. What the run DOES establish is the negative result the audit needed:
+ * the shipped placement is not off by a large vertical offset anywhere it can be
+ * checked, and `dy = 0` is consistent with the data at ≤ 1.32 au on all 22 UBC
+ * plates. Nothing here changes `fit.dx` or `fit.scale`.
+ */
+export const REGISTRATION_MEASUREMENT_NOTE =
+  'MEASURED AND REJECTED, not applied — fit.dy stays the documented default 0. Two independent measurements ran over all 49 anchored plates. (1) First pass, mean |Δ tissue width| at its arg-min: min 2.06 / median 6.11 / max 113.45 au; only 5 of 43 comparable plates reach ≤ 3 au and all 5 sit on a flat objective (their arg-min is inside scan noise). (2) Second pass, placement residual centroidResidualAu: min 0.23 / median 2.49 / max 64.78 au, bimodal by family — UBC transverse 0.53–1.32 au (median 0.81, horizontal residual ≤ 0.48 au, so the declared fit.scale is right to ≈7 % on that set), UBC coronal 0.23–4.16 au, VHP 2.36–64.78 au (median 10.84) because those plates are full-HEAD cryosections of 129.4 × 187.2 au against a brainstem-only atlas cross-section of 6 %–74 % that extent. The scan itself is not identifiable: shifting a real plate by a known +13 au moves the arg-max by +13 au instead of holding it (ubc-h12: -20→-33.0, -7→-20.0, 0→-13.0, +4→-9.0, +13→0.0), while the method recovers synthetic known offsets exactly (IoU 1.000, error 0.00 au). atlasVsPlateExtentU/V is 1.7–3.5× (UBC, tight brainstem crops vs an atlas cross-section including the vermis) and 0.06–0.74× (VHP), and the best IoU anywhere is 0.383, so no translation registers the two silhouettes. 6 plates could not be compared at all: the 3 Commons CT plates declare no fit.scale, and ubc-c07, ubc-c24 and vhp-0721 produce no atlas cross-section. dx and scale are unchanged; mirrorX is recorded, not decided (planeGeometry owns that rule); the VHP ±10 au plane uncertainty (VHP_PLANE_NOTE) bounds any dy on those plates before measurement starts. Per-plate numbers: REGISTRATION_MEASURED; method: scratch scripts .plate-scratch/photofit/{measure-dy,summarize,emit-table,probe-recovery}.mjs (gitignored, never committed).'
+
+/**
+ * The `note` every unmeasured entry carries (one copy, so the 49 records cannot
+ * drift): the record says in-UI-readable words that the value beside it is a
+ * documented default, not a measurement.
+ */
+export const REGISTRATION_UNMEASURED_NOTE =
+  'unmeasured — fit.dy is the documented default 0, not a measurement: the silhouette-vs-cross-section fit over all 49 anchored plates found no vertical offset that both meets the 3 au budget and is located by a peak (the accepted offset moves with the input on every plate where the scan is not degenerate). This entry carries its own measured residual, extent ratio and IoU in `evidence`; the full record is in REGISTRATION_MEASUREMENT_NOTE.'
+
+/**
+ * The method the v6 measurement used, kept as a constant so a later successful
+ * run stores the same string and a reader can tell which method produced a
+ * number. Nothing carries `status: 'measured'` today.
+ */
+export const REGISTRATION_METHOD = {
+  silhouette: 'measured-silhouette-fit',
+} as const
+
+/**
+ * Every entry's `registration.mirrorX` value, as a typed constant: the manifest
+ * RECORDS that the orientation rule is owned by `planeGeometry.ts` and does not
+ * carry a second copy of it. A const (not an inline literal) because a string
+ * literal in an object property widens to `string` and would not satisfy
+ * `SectionImageRegistration`.
+ */
+export const REGISTRATION_MIRROR_OWNER = 'pending-planeGeometry' as const
+export type RegistrationMirrorOwner = typeof REGISTRATION_MIRROR_OWNER
+
+/**
+ * The plates that have NO `REGISTRATION_MEASURED` row because the atlas meshes
+ * produce no cross-section at their plane at all (verified: `extractContours` over
+ * the 84 committed GLBs returns zero loops). They stay `unmeasured-default`, and
+ * they carry `no-cross-section` rather than the `atlas-mismatch` reason the rest
+ * of the set carries — a different fact, so a different value.
+ *
+ * The zero-shaped evidence is deliberate: the record states the measured fact
+ * ("no cross-section exists here") instead of leaving the field empty, so a reader
+ * cannot tell a plate that was never attempted from one that was attempted and had
+ * nothing to measure against.
+ */
+export const REGISTRATION_NO_CROSS_SECTION = new Set(['ubc-c07', 'ubc-c24', 'vhp-0721'])
+
+/** The evidence every no-cross-section plate carries: the measurement's own result. */
+export const REGISTRATION_NO_CROSS_SECTION_EVIDENCE: NonNullable<
+  SectionImageRegistration['evidence']
+> = { crossSectionParts: 0 }
+
 /** EXACT credit line (plan §1); verbatim copyright notice, not paraphrased. */
 export const UBC_CREDIT = '© University of British Columbia, CC BY-NC-SA 4.0'
-
 /** EXACT credit line (plan §1) — verbatim, re-copyrighting not permitted. */
 export const BMM_CREDIT =
   'University of Wisconsin and Michigan State Comparative Mammalian Brain Collections, and the National Museum of Health and Medicine; preparation funded by the National Science Foundation and the National Institutes of Health'
@@ -271,6 +1094,28 @@ export const VHP_FIT_SCALE = 4.0816
  */
 export const VHP_Y_TOP = 36.0
 export const VHP_AU_PER_INDEX = 0.1225
+
+/**
+ * The `registration` record of one VHP plate, from the table: the measured facts
+ * are per plate, so the 22 entries differ only by their id. A helper (not 22
+ * copies, not one borrowed sample) so a missed table row is visible as an
+ * `undefined` evidence rather than as a plausible-looking number.
+ *
+ * `atlas-mismatch` is the reason on every one of them: the atlas cross-section at
+ * these planes is 6 %–74 % of the plate's full-head extent, so the scan's accepted
+ * offset moves with the input (see REGISTRATION_MEASUREMENT_NOTE).
+ */
+function vhpRegistration(id: string): SectionImageRegistration {
+  return {
+    status: REGISTRATION_STATUS.unmeasuredDefault,
+    dyAu: 0,
+    reason: REGISTRATION_UNMEASURED_REASON.atlasMismatch,
+    mirrorX: REGISTRATION_MIRROR_OWNER,
+    evidence: REGISTRATION_MEASURED[id],
+    note: REGISTRATION_UNMEASURED_NOTE,
+  }
+}
+
 
 /** Per-plate source URL base (VHP_INVENTORY.md §2: `.02` is part of the name,
  *  indices are 4-digit zero-padded 0001..1477, `0000`/`1478` answer HTTP 403). */
@@ -617,6 +1462,16 @@ export const sectionImages: SectionImage[] = [
       sourceUrl: `${UBC_H_BASE}/h${n}/h${n}brain.png`,
       license: UBC_LICENSE,
       fit: { scale: UBC_H_FIT_SCALE, dx: ubcHDx[n], dy: 0, mirrorX: false },
+      registration: {
+        status: REGISTRATION_STATUS.unmeasuredDefault,
+        dyAu: 0,
+        reason: REGISTRATION_UNMEASURED_REASON.atlasMismatch,
+        mirrorX: REGISTRATION_MIRROR_OWNER,
+        // THIS plate's own measurement (never a sample borrowed from a sibling):
+        // see REGISTRATION_MEASURED and REGISTRATION_MEASUREMENT_NOTE.
+        evidence: REGISTRATION_MEASURED[`ubc-h${String(n).padStart(2, '0')}`],
+        note: REGISTRATION_UNMEASURED_NOTE,
+      },
       note: `UBC Functional Neuroanatomy horizontal section h${n} — real transverse plate of the head; the site viewer labels one landmark: "${ubcHLabels[n]}". Tissue-verbatim copy (alpha flattened onto white, lossless PNG re-encode, no crop).`,
     }
   }),
@@ -641,6 +1496,24 @@ export const sectionImages: SectionImage[] = [
       sourceUrl: `${UBC_C_BASE}/c${n}/c${n}brain.png`,
       license: UBC_LICENSE,
       fit: { scale: UBC_C_FIT_SCALE, dx: ubcCDx[n], dy: 0, mirrorX: false },
+      registration: {
+        status: REGISTRATION_STATUS.unmeasuredDefault,
+        dyAu: 0,
+        // Per plate, not per builder: ubc-c07 (z = 26) and ubc-c24 (z = −54) sit in
+        // REGISTRATION_NO_CROSS_SECTION because no atlas mesh crosses their plane, so
+        // their fact is not the shared `atlas-mismatch` one.
+        reason: REGISTRATION_NO_CROSS_SECTION.has(`ubc-c${String(n).padStart(2, '0')}`)
+          ? REGISTRATION_UNMEASURED_REASON.noCrossSection
+          : REGISTRATION_UNMEASURED_REASON.atlasMismatch,
+        mirrorX: REGISTRATION_MIRROR_OWNER,
+        // See REGISTRATION_MEASURED and REGISTRATION_MEASUREMENT_NOTE. ubc-c07 and
+        // ubc-c24 have no measured row — their planes produce no cross-section — so
+        // they get that measured fact instead of an absent field.
+        evidence:
+          REGISTRATION_MEASURED[`ubc-c${String(n).padStart(2, '0')}`] ??
+          REGISTRATION_NO_CROSS_SECTION_EVIDENCE,
+        note: REGISTRATION_UNMEASURED_NOTE,
+      },
       note: `UBC Functional Neuroanatomy coronal section c${n} — real coronal plate of the head; the site viewer labels one landmark: "${ubcCLabels[n]}". Tissue-verbatim copy (alpha flattened onto white, lossless PNG re-encode, no crop).`,
     }
   }),
@@ -658,6 +1531,13 @@ export const sectionImages: SectionImage[] = [
     creditUrl: COMMONS_CT_LICENSE_URL,
     sourceUrl: ctUrl('axial', 10),
     license: COMMONS_CT_LICENSE,
+    registration: {
+      status: REGISTRATION_STATUS.unmeasuredDefault,
+      dyAu: 0,
+      reason: REGISTRATION_UNMEASURED_REASON.noDeclaredScale,
+      mirrorX: REGISTRATION_MIRROR_OWNER,
+      note: REGISTRATION_UNMEASURED_NOTE,
+    },
     note: 'Head CT, axial plane, 4 mm slice thickness, no intravenous contrast (CC0 series "CT of a normal brain", 18-year-old male). Half-scale lossless PNG re-encode, no crop.',
   },
   {
@@ -673,6 +1553,13 @@ export const sectionImages: SectionImage[] = [
     creditUrl: COMMONS_CT_LICENSE_URL,
     sourceUrl: ctUrl('axial', 14),
     license: COMMONS_CT_LICENSE,
+    registration: {
+      status: REGISTRATION_STATUS.unmeasuredDefault,
+      dyAu: 0,
+      reason: REGISTRATION_UNMEASURED_REASON.noDeclaredScale,
+      mirrorX: REGISTRATION_MIRROR_OWNER,
+      note: REGISTRATION_UNMEASURED_NOTE,
+    },
     note: 'Head CT, axial plane, 4 mm slice thickness, no intravenous contrast (CC0 series "CT of a normal brain"). Half-scale lossless PNG re-encode, no crop.',
   },
   {
@@ -688,6 +1575,13 @@ export const sectionImages: SectionImage[] = [
     creditUrl: COMMONS_CT_LICENSE_URL,
     sourceUrl: ctUrl('axial', 18),
     license: COMMONS_CT_LICENSE,
+    registration: {
+      status: REGISTRATION_STATUS.unmeasuredDefault,
+      dyAu: 0,
+      reason: REGISTRATION_UNMEASURED_REASON.noDeclaredScale,
+      mirrorX: REGISTRATION_MIRROR_OWNER,
+      note: REGISTRATION_UNMEASURED_NOTE,
+    },
     note: 'Head CT, axial plane, 4 mm slice thickness, no intravenous contrast (CC0 series "CT of a normal brain"). Half-scale lossless PNG re-encode, no crop.',
   },
   // ---- v4b: NLM Visible Human Project axial cryosection photographs --------
@@ -709,6 +1603,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0017.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -1.47, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0017'),
     note: 'NLM Visible Human Project cryosection, axial index 0017 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 34.04 au; specimen symmetry axis 258 px against the frame centre 264 => dx -1.47 au.',
   },
   {
@@ -724,6 +1619,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0046.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -1.715, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0046'),
     note: 'NLM Visible Human Project cryosection, axial index 0046 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 30.488 au; specimen symmetry axis 257 px against the frame centre 264 => dx -1.715 au.',
   },
   {
@@ -739,6 +1635,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0074.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0074'),
     note: 'NLM Visible Human Project cryosection, axial index 0074 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 27.058 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
   },
   {
@@ -754,6 +1651,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0103.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.49, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0103'),
     note: 'NLM Visible Human Project cryosection, axial index 0103 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 23.505 au; specimen symmetry axis 262 px against the frame centre 264 => dx -0.49 au.',
   },
   {
@@ -769,6 +1667,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0132.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -1.96, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0132'),
     note: 'NLM Visible Human Project cryosection, axial index 0132 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 19.953 au; specimen symmetry axis 256 px against the frame centre 264 => dx -1.96 au.',
   },
   {
@@ -784,6 +1683,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0160.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0160'),
     note: 'NLM Visible Human Project cryosection, axial index 0160 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 16.523 au; specimen symmetry axis 263 px against the frame centre 264 => dx -0.245 au.',
   },
   {
@@ -799,6 +1699,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0189.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0189'),
     note: 'NLM Visible Human Project cryosection, axial index 0189 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 12.97 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
   },
   {
@@ -814,6 +1715,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0230.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0230'),
     note: 'NLM Visible Human Project cryosection, axial index 0230 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 7.948 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
   },
   {
@@ -829,6 +1731,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0246.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0246'),
     note: 'NLM Visible Human Project cryosection, axial index 0246 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 5.988 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
   },
   {
@@ -844,6 +1747,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0295.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0295'),
     note: 'NLM Visible Human Project cryosection, axial index 0295 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -0.015 au; specimen symmetry axis 264 px against the frame centre 264 => dx 0 au.',
   },
   {
@@ -859,6 +1763,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0328.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0328'),
     note: 'NLM Visible Human Project cryosection, axial index 0328 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -4.057 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
   },
   {
@@ -874,6 +1779,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0385.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0385'),
     note: 'NLM Visible Human Project cryosection, axial index 0385 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -11.04 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
   },
   {
@@ -889,6 +1795,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0430.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0430'),
     note: 'NLM Visible Human Project cryosection, axial index 0430 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -16.553 au; specimen symmetry axis 264 px against the frame centre 264 => dx 0 au.',
   },
   {
@@ -904,6 +1811,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0450.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0450'),
     note: 'NLM Visible Human Project cryosection, axial index 0450 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -19.002 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
   },
   {
@@ -919,6 +1827,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0470.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0470'),
     note: 'NLM Visible Human Project cryosection, axial index 0470 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -21.453 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
   },
   {
@@ -934,6 +1843,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0491.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0491'),
     note: 'NLM Visible Human Project cryosection, axial index 0491 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -24.025 au; specimen symmetry axis 263 px against the frame centre 264 => dx -0.245 au.',
   },
   {
@@ -949,6 +1859,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0532.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.245, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0532'),
     note: 'NLM Visible Human Project cryosection, axial index 0532 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -29.047 au; specimen symmetry axis 263 px against the frame centre 264 => dx -0.245 au.',
   },
   {
@@ -964,6 +1875,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0581.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0581'),
     note: 'NLM Visible Human Project cryosection, axial index 0581 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -35.05 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
   },
   {
@@ -979,6 +1891,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0631.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0631'),
     note: 'NLM Visible Human Project cryosection, axial index 0631 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -41.175 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
   },
   {
@@ -994,6 +1907,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0681.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0681'),
     note: 'NLM Visible Human Project cryosection, axial index 0681 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -47.3 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
   },
   {
@@ -1009,6 +1923,7 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0701.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    registration: vhpRegistration('vhp-0701'),
     note: 'NLM Visible Human Project cryosection, axial index 0701 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -49.75 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
   },
   {
@@ -1024,6 +1939,18 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: `${VHP_CRYO_BASE}/0721.02.jpg.gz`,
     license: VHP_LICENSE,
     fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    registration: {
+      status: REGISTRATION_STATUS.unmeasuredDefault,
+      dyAu: 0,
+      reason: REGISTRATION_UNMEASURED_REASON.noCrossSection,
+      mirrorX: REGISTRATION_MIRROR_OWNER,
+      // No `REGISTRATION_MEASURED` row: this plate is the one VHP level (y = −52.2)
+      // where the atlas meshes produce NO cross-section at all, so there is nothing
+      // to register against — a different reason from the other 21 VHP plates,
+      // which were measured and failed the accept rule.
+      evidence: REGISTRATION_NO_CROSS_SECTION_EVIDENCE,
+      note: REGISTRATION_UNMEASURED_NOTE,
+    },
     note: 'NLM Visible Human Project cryosection, axial index 0721 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -52.2 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
   },
 ]

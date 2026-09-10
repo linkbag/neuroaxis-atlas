@@ -148,8 +148,19 @@
   white-space: nowrap;
 }
 
+/*
+ * Snap-to-plate button. Hit target ≥24 px in BOTH axes (QUALITY_PLAN §4 item 15
+ * / AUDIT §2.20 measured ~21 px): the min-height carries the vertical size, and
+ * inline-flex centring keeps the label optically centred inside the taller box
+ * instead of drifting to the top. Icon-size typography is unchanged.
+ */
 .btn-snap {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  min-width: 24px;
   font-size: 0.7rem;
   padding: 2px 8px;
   border-radius: var(--radius-sm);

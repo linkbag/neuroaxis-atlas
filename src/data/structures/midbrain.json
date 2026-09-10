@@ -494,6 +494,12 @@
         "syndrome": "Basal ganglia output lesions",
         "findings": "SNr infarcts or hemorrhages disinhibit thalamic and collicular targets, producing contralateral dystonia, chorea, or hemiballism-like involuntary movements.",
         "vascular": "PCA paramedian perforators; anterior choroidal artery"
+      },
+      {
+        "syndrome": "Saccadic distractibility from collicular disinhibition",
+        "findings": "SNr neurons fire tonically and hold the superior colliculus under GABAergic inhibition, so loss of nigral output removes the brake on reflexive visually guided saccades: patients make unwanted, short-latency saccades towards novel stimuli and are visually distractible, a pattern also described in progressive supranuclear palsy, in which SNr cell loss is a pathological hallmark.",
+        "vascular": "PCA paramedian perforators; anterior choroidal artery",
+        "note": "The mirror image of Parkinson's disease: here the dopaminergic pars compacta is spared while the GABAergic output nucleus fails, so the picture is hyperkinetic and saccade-happy rather than bradykinetic."
       }
     ],
     "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc"],
@@ -610,6 +616,12 @@
         "findings": "SCP or dentate outflow lesions produce ipsilateral dysmetria, intention tremor, and limb ataxia; SCA-territory infarcts classically combine these with vertigo and nystagmus.",
         "vascular": "Superior cerebellar artery",
         "note": "Adult-onset lesions may later develop contralateral (double-crossed) dystonia or choreoathetosis."
+      },
+      {
+        "syndrome": "Holmes (rubral) tremor after peduncular injury",
+        "findings": "Damage to the dentato-rubro-thalamic route at or above the peduncular decussation — the midbrain tegmentum, the red nucleus or the thalamic VL — leaves a coarse, slow (2-5 Hz) tremor of the contralateral limbs that is present at rest, worsens with posture and explodes on goal-directed movement, often with mild accompanying ataxia.",
+        "vascular": "Superior cerebellar artery / paramedian basilar tip perforators",
+        "note": "The delay of weeks to months between the stroke and the tremor, its contralateral side, and its partial response to levodopa or to VIM/subthalamic deep-brain stimulation separate it from acute cerebellar ataxia."
       }
     ],
     "levels": ["lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc"],

@@ -47,17 +47,23 @@ const PLATE_ID_RE = /^plate-[a-z0-9-]+$/;
 const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const HEX_RE = /^#[0-9a-f]{6}$/;
 
-const REGIONS = ['diencephalon', 'midbrain', 'pons', 'medulla', 'cerebellum'];
+const REGIONS = ['telencephalon', 'diencephalon', 'midbrain', 'pons', 'medulla', 'cerebellum'];
 const KINDS = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context'];
 const LATERALITIES = ['midline', 'paired'];
 const DIRECTIONS = ['ascending', 'descending', 'mixed'];
 const ORIENTATIONS = ['transverse', 'sagittal', 'coronal'];
 
-/** Canonical atlas-space bounds, plan §2: |x| ≤ 22, −55 ≤ y ≤ 45, |z| ≤ 18. */
+/**
+ * Canonical atlas-space bounds. AMENDMENT A (REALISM_PLAN §3) set the
+ * brainstem/diencephalon extents; AMENDMENT B (TELENCEPHALON_PLAN §2) widened
+ * them for the cerebral hemispheres: measured telencephalon extent is
+ * x ±37.4, y −7.8…+80.6, z −72.6…+54.4 au, so y reaches +85 and z −75…+55.
+ * Nothing below y = +45 moved — the brainstem contract is unchanged.
+ */
 const AXIS_BOUNDS = [
-  { axis: 'x', min: -22, max: 22 },
-  { axis: 'y', min: -55, max: 45 },
-  { axis: 'z', min: -18, max: 18 },
+  { axis: 'x', min: -48, max: 48 },
+  { axis: 'y', min: -55, max: 85 },
+  { axis: 'z', min: -75, max: 55 },
 ];
 
 /* ---------------------------------------------------- diagnostics record */
@@ -331,8 +337,9 @@ function validateLevels(list, file) {
     }
     checkString(file, `${at}.name`, l.name, true);
     checkNumber(file, `${at}.y`, l.y);
-    if (typeof l.y === 'number' && Number.isFinite(l.y) && (l.y < -55 || l.y > 45)) {
-      err(file, `${at}.y`, `y=${l.y} outside canonical y range [−55, 45] (plan §2)`);
+    const yBound = AXIS_BOUNDS.find((b) => b.axis === 'y');
+    if (typeof l.y === 'number' && Number.isFinite(l.y) && (l.y < yBound.min || l.y > yBound.max)) {
+      err(file, `${at}.y`, `y=${l.y} outside canonical y range [${yBound.min}, ${yBound.max}] (AMENDMENT A/B)`);
     }
   });
 

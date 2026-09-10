@@ -34,29 +34,10 @@
  * writes exactly the same `clip.x|y|z` + `sectionAxis`, so slider and crosshair
  * can never disagree — no glue code, no double source of truth.
  */
-import type { LevelAnchor } from '../../data/load'
 import { levels } from '../../data/load'
 import { useAtlasStore, type SectionAxis } from '../../state/store'
 import { CLIP_BOUNDS } from '../viewer3d/clipPlanes'
-
-/**
- * Nearest plate level to a transverse position, identical to ClipControls'
- * helper of the same name: distance is measured to the value being dragged,
- * never to the current `clip.y` (a snap against the current value would pin the
- * slider to the level it started on).
- */
-function nearestLevelTo(y: number): LevelAnchor | null {
-  let best: LevelAnchor | null = null
-  let bestDistance = Number.POSITIVE_INFINITY
-  for (const level of levels) {
-    const distance = Math.abs(level.y - y)
-    if (distance < bestDistance) {
-      bestDistance = distance
-      best = level
-    }
-  }
-  return best
-}
+import { snapClipWrite } from './planeGeometry'
 
 /**
  * Plane readout, matching the spec's literal `−42.0 au` style: one decimal,
@@ -103,14 +84,9 @@ export default function SectionSliderBar() {
   }
 
   const onAxisInput = (axis: SectionAxis, raw: number) => {
-    // Only the transverse plane has levels to snap to, exactly as in the 3D
-    // dock; x and z always move continuously.
-    if (axis === 'y' && snapToPlate) {
-      const level = nearestLevelTo(raw)
-      setClip({ y: level !== null ? level.y : raw })
-      return
-    }
-    setClip({ [axis]: raw })
+    // ONE snap rule for both docks (planeGeometry.snapClipWrite): the transverse
+    // plane snaps to the level nearest the DRAGGED value, x and z never snap.
+    setClip(snapClipWrite(axis, raw, snapToPlate, levels))
   }
 
   return (

@@ -22,9 +22,29 @@
  *          p' = T · Rx(θx)·Ry(θy)·Rz(θz) · S · p
  *      (S scale near 1, small rotations about canonical y/z, translation;
  *      constants live in REGISTRATION below, recorded in the manifest).
- *   3. Trilinear resampling to the canonical box x∈[−27,27], y∈[−55,45],
- *      z∈[−56,26] au at ≈1.5 mm spacing.
+ *   3. Trilinear resampling to the canonical box AMENDMENT B — x∈[−48,48],
+ *      y∈[−55,85], z∈[−75,55] au (docs/TELENCEPHALON_PLAN.md §2) — on the
+ *      AMENDMENT A station lattice (see GRID_SPACING_AU), so every grid station
+ *      of the old box is preserved physically exactly.
  *   4. Intensity window: percentiles 1–99.5 % → 0..255 uint8.
+ *
+ * AMENDMENT B (v7 telencephalon) — what changed and what deliberately did not:
+ *   • The registration affine above is UNCHANGED: same NIfTI → canonical flips,
+ *     same scale/rotation/translation constants.  The bake is therefore still in
+ *     the frame of record (docs/REALISM_PLAN.md AMENDMENT A); nothing below
+ *     y = +45 moves.
+ *   • The BOX grows to cover the cerebral hemispheres: the cortex reaches
+ *     y = +80.6 (vertex) and z = −72.6 … +54.4 (occipital … frontal pole) in
+ *     this frame, all of which the old box cut off (verified in
+ *     docs/TELENCEPHALON_PLAN.md §2, AMENDMENT B).
+ *   • The grid keeps the OLD per-axis step and origin, only the station counts
+ *     grow (81×113×107 instead of 45×81×67).  That is what makes the extension
+ *     a pure addition: the new lattice is a SUPERSET of the old one, so the old
+ *     13 levels resample to bit-identical voxels (see registration.gridContinuity
+ *     in the manifest and the regression check in the task report).  Re-deriving
+ *     the step from the new range instead (45×117×108) would move every old
+ *     sample by up to 0.3 au and change existing sections — rejected for that
+ *     reason alone.
  *
  * QA gates (exit ≠ 0 on failure): mid-sagittal symmetry residual ≤ ±1.5 au;
  * pons ventral/dorsal surface-residual estimates ≤ ±2 au (spec tolerance).
@@ -60,15 +80,44 @@ const MIDBRAIN_GLB = join(ROOT, 'src', 'assets', 'anatomy', 'ctx-midbrain-surfac
 
 const MM_PER_AU = 1.2; // canonical atlas unit ≈ 1.2 mm (AMENDMENT A)
 
-/** Canonical box (au) — the grid covers exactly these bounds. */
+/**
+ * Canonical box (au) — the grid covers exactly these bounds.
+ *
+ * AMENDMENT B (docs/TELENCEPHALON_PLAN.md §2): x ∈ [−48, 48] (unchanged context
+ * bound), y ∈ [−55, +85] (was +45 — the cortex vertex sits at +80.6),
+ * z ∈ [−75, +55] (was −56 … +26 — occipital pole −72.6, frontal pole +54.4).
+ * Nothing below y = +45 changes meaning: the box only stops cutting the
+ * telencephalon off.
+ */
 const BOX = {
-  x: [-27, 27],
-  y: [-55, 45],
-  z: [-56, 26],
+  x: [-48, 48],
+  y: [-55, 85],
+  z: [-75, 55],
 };
-const STEP_MM = 1.5; // nominal grid step (mm); exact step = range/(n−1) per axis
+
+/**
+ * The AMENDMENT A grid step (au per station) per axis — the step the box was
+ * baked with, NOT a step re-derived from the new bounds.
+ *
+ *   x:  54 au / 44 intervals = 1.227273  (old box x ∈ [−27, 27], 45 stations)
+ *   y: 100 au / 80 intervals = 1.25      (old box y ∈ [−55, 45], 81 stations)
+ *   z:  82 au / 66 intervals = 1.242424  (old box z ∈ [−56, 26], 67 stations)
+ *
+ * The v3 manifest recorded the rounded values 1.2273 / 1.25 / 1.2424; the exact
+ * rationals are used here so the lattice stays bit-reproducible.
+ */
+const GRID_SPACING_AU = [54 / 44, 100 / 80, 82 / 66];
+
+/**
+ * Old grid origin (au) — the AMENDMENT A corner: the extended grid keeps it so
+ * that its lattice is a superset of the old lattice on every axis.
+ */
+const GRID_ORIGIN_AU = [-27, -55, -56];
+
+const STEP_MM = 1.5; // nominal source step of the AMENDMENT A recipe (documentation only)
 
 const AXIS_IDX = { x: 0, y: 1, z: 2 };
+const AXIS_KEYS = ['x', 'y', 'z'];
 
 /**
  * FIXED registration correction (canonical au) — tuned once against the
@@ -90,10 +139,20 @@ const REGISTRATION = {
 
 const WINDOW_PERCENTILES = [1, 99.5];
 
-/** QA planes (task-specified): mid-sagittal x=0, axial y=−24, coronal z=0. */
+/**
+ * QA preview planes.
+ *
+ * AMENDMENT B keeps the three v3 planes (their names are the contract: they are
+ * the planes a reviewer diffs against the pre-extension bake) and adds the
+ * LEVELS-style axial at +58 so the hemispheres, basal ganglia and lateral
+ * ventricles can be checked by eye at a telencephalic level.  The overlay is
+ * still ctx-pons (red) / ctx-midbrain (green), i.e. the brainstem is drawn in
+ * the SAME place as before — that is the alignment check the plan asks for.
+ */
 const PREVIEWS = [
   { name: 'mri-midsagittal-x0', axis: 'x', value: 0, hAxis: 'z', vAxis: 'y' },
   { name: 'mri-axial-yneg24', axis: 'y', value: -24, hAxis: 'x', vAxis: 'z' },
+  { name: 'mri-axial-y58', axis: 'y', value: 58, hAxis: 'x', vAxis: 'z' },
   { name: 'mri-coronal-z0', axis: 'z', value: 0, hAxis: 'x', vAxis: 'y' },
 ];
 
@@ -235,18 +294,42 @@ function readGlbPositions(path) {
 
 /* --------------------------------------------------------- grid construction */
 
+/**
+ * Grid specification over the AMENDMENT B box.
+ *
+ * The grid keeps the AMENDMENT A per-axis step and merely adds stations until
+ * it covers BOX on both sides; `spacingAu` is therefore the OLD step exactly
+ * and `dims` is what the new extent requires.  Reported `boundsAu` is what the
+ * grid actually reaches (≥ BOX on every axis).  Because the origin moves by an
+ * integer number of stations (the old origin sits at station `d0` of the new
+ * lattice), the new lattice is a SUPERSET of the v3 lattice — that is what makes
+ * the AMENDMENT B extension physically additive.
+ */
 function buildGridSpec() {
-  const nx = Math.ceil(((BOX.x[1] - BOX.x[0]) * MM_PER_AU) / STEP_MM) + 1;
-  const ny = Math.ceil(((BOX.y[1] - BOX.y[0]) * MM_PER_AU) / STEP_MM) + 1;
-  const nz = Math.ceil(((BOX.z[1] - BOX.z[0]) * MM_PER_AU) / STEP_MM) + 1;
+  const originAu = [];
+  const dims = [];
+  const boundsAu = [];
+  for (let a = 0; a < 3; a++) {
+    const step = GRID_SPACING_AU[a];
+    const boxLo = BOX[AXIS_KEYS[a]][0];
+    const boxHi = BOX[AXIS_KEYS[a]][1];
+    // `d` = stations needed BELOW the old origin (≥ 0, integer).
+    const d = Math.ceil((GRID_ORIGIN_AU[a] - boxLo) / step - 1e-9);
+    const lo = GRID_ORIGIN_AU[a] - d * step;
+    // `n` = stations from `lo` up to the first station at/above boxHi.
+    const n = Math.max(2, Math.ceil((boxHi - lo) / step - 1e-9) + 1);
+    originAu.push(lo);
+    dims.push(n);
+    boundsAu.push([lo, lo + (n - 1) * step]);
+  }
   return {
-    dims: [nx, ny, nz],
-    originAu: [BOX.x[0], BOX.y[0], BOX.z[0]],
-    spacingAu: [
-      (BOX.x[1] - BOX.x[0]) / (nx - 1),
-      (BOX.y[1] - BOX.y[0]) / (ny - 1),
-      (BOX.z[1] - BOX.z[0]) / (nz - 1),
-    ],
+    dims,
+    originAu,
+    spacingAu: [...GRID_SPACING_AU],
+    boundsAu,
+    stepMm: GRID_SPACING_AU.map((s) => s * MM_PER_AU),
+    /** Station offset of the AMENDMENT A origin inside this grid (integer). */
+    originStationOffset: [0, 1, 2].map((a) => Math.round((GRID_ORIGIN_AU[a] - originAu[a]) / GRID_SPACING_AU[a])),
   };
 }
 
@@ -436,11 +519,33 @@ function percentile(sortedValues, p) {
  * Mid-sagittal symmetry residual: per axial level, estimate the MRI's own
  * midline x by mirror-symmetry search over the brainstem band (|x−dx| ≤ 12 au),
  * report the offset vs canonical x = 0.
+ *
+ * AMENDMENT B note — the sample positions are on a FIXED canonical pitch, not on
+ * the grid's own stations.  The v3 grid covered x ∈ [−27, 27] (45 stations at
+ * 1.23 au), so "scan the grid's x stations" and "scan the grid span at which
+ * pitch" were the same thing; the AMENDMENT B box also holds the hemispheres, so
+ * the grid-relative form would have widened the metric's domain to ±49 au and
+ * changed the number the gate is calibrated against.  Fixing the pitch keeps the
+ * v3 domain and sample density, so this residual stays comparable and the qa
+ * gate keeps its meaning.
  */
+const MIDLINE_BAND_AU = 12; // |x − dx| band around the estimated midline
+const MIDLINE_PITCH_AU = 1.2272727; // v3 in-plane gradient pitch (≈1.47 mm)
 function qaMidlineResidual(grid, dims, originAu, spacingAu) {
   const [nx, ny, nz] = dims;
   const rows = [-24, -18, -12, -6, 0, 6, 12, 18];
   const results = [];
+  const at = (x, y, z) => {
+    const f = [
+      (x - originAu[0]) / spacingAu[0],
+      (y - originAu[1]) / spacingAu[1],
+      (z - originAu[2]) / spacingAu[2],
+    ];
+    if (!(f[0] >= 0 && f[0] <= nx - 1 && f[1] >= 0 && f[1] <= ny - 1 && f[2] >= 0 && f[2] <= nz - 1)) return NaN;
+    const i = Math.round(f[0]); const j = Math.round(f[1]); const k = Math.round(f[2]);
+    return grid[((k * ny) + j) * nx + i];
+  };
+  const zSpan = [0, 1, 2].map((a) => originAu[a] + (dims[a] - 1) * spacingAu[a]);
   for (const yTarget of rows) {
     const yIdx = Math.round((yTarget - originAu[1]) / spacingAu[1]);
     if (yIdx < 0 || yIdx >= ny) continue;
@@ -448,14 +553,11 @@ function qaMidlineResidual(grid, dims, originAu, spacingAu) {
     const scoreAt = (dx) => {
       let sum = 0;
       let n = 0;
-      for (let zi = 0; zi < nz; zi++) {
-        for (let xi = 0; xi < nx; xi++) {
-          const x = originAu[0] + xi * spacingAu[0];
-          if (Math.abs(x - dx) > 12) continue;
-          const mi = Math.round((2 * dx - x - originAu[0]) / spacingAu[0]);
-          if (mi < 0 || mi >= nx) continue;
-          const a = grid[(yIdx * nz + zi) * nx + xi];
-          const b = grid[(yIdx * nz + zi) * nx + mi];
+      for (let z = originAu[2]; z <= zSpan[2]; z += spacingAu[2]) {
+        for (let x = dx - MIDLINE_BAND_AU; x <= dx + MIDLINE_BAND_AU; x += MIDLINE_PITCH_AU) {
+          const a = at(x, y, z);
+          const b = at(2 * dx - x, y, z);
+          if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
           sum += Math.abs(a - b);
           n++;
         }
@@ -654,13 +756,69 @@ for (let k = 0; k < nz; k++) {
     }
   }
 }
-log(`[mri-grid] grid: ${nx}×${ny}×${nz} (${nVox.toLocaleString('en-US')} samples, step≈${STEP_MM} mm → spacingAu=${spec.spacingAu.map((v) => round(v, 3)).join(', ')})`);
+log(`[mri-grid] grid: ${nx}×${ny}×${nz} (${nVox.toLocaleString('en-US')} samples) — AMENDMENT B box ${BOX.x.join('…')} × ${BOX.y.join('…')} × ${BOX.z.join('…')} au`);
+log(`[mri-grid]   per-axis step ${spec.spacingAu.map((v) => round(v, 5)).join(' / ')} au = ${spec.stepMm.map((v) => round(v, 3)).join(' / ')} mm (AMENDMENT A lattice — unchanged origin ${spec.originAu.join(', ')})`);
+log(`[mri-grid]   grid reaches ${spec.boundsAu.map((b) => `[${round(b[0], 1)}, ${round(b[1], 1)}]`).join(' × ')} au`);
+
+// Source coverage: which stations have real NIfTI data (NaN == outside the FOV)?
+const coverage = (() => {
+  let inside = 0;
+  for (let i = 0; i < nVox; i++) if (Number.isFinite(samples[i])) inside++;
+  return { inside, fraction: inside / nVox };
+})();
+log(`[mri-grid]   source coverage: ${coverage.inside.toLocaleString('en-US')} of ${nVox.toLocaleString('en-US')} stations (${round(coverage.fraction * 100, 1)}%) — outside the NIfTI FOV stays 0`);
+// Coverage of each telencephalic level (the point of AMENDMENT B): a level that
+// reaches 0% would mean the new box is empty there.
+const levelCoverage = [-46, -24, -8, 14, 30, 48, 58, 68, 78].map((yTarget) => {
+  const j = Math.round((yTarget - spec.originAu[1]) / spec.spacingAu[1]);
+  if (j < 0 || j >= ny) return { y: yTarget, present: false, pct: 0 };
+  let n = 0;
+  for (let k = 0; k < nz; k++) {
+    for (let i = 0; i < nx; i++) if (Number.isFinite(samples[(k * ny + j) * nx + i])) n++;
+  }
+  return { y: round(spec.originAu[1] + j * spec.spacingAu[1], 2), present: true, pct: round((n / (nx * nz)) * 100, 1) };
+});
+log(`[mri-grid]   level coverage (share of the axial plane inside the NIfTI FOV): ${levelCoverage.map((r) => `${r.y}:${r.pct}%`).join('  ')}`);
 
 // Percentile window.
-const sorted = Float64Array.from(samples).sort();
-const finiteSorted = Array.from(sorted).filter(Number.isFinite);
-const wLo = percentile(finiteSorted, WINDOW_PERCENTILES[0]);
-const wHi = percentile(finiteSorted, WINDOW_PERCENTILES[1]);
+//
+// AMENDMENT B note — WHY THE PERCENTILES ARE TAKEN OVER THE v3 CORE BOX:
+// the recipe is "percentiles 1–99.5 % → 0..255" and that is unchanged.  What the
+// v7 extension changes is the SAMPLE SET: adding the hemispheres (and, above
+// them, scalp/skull marrow left in the source FOV) moves p1 from 65.8 to 9.3 and
+// p99.5 from 559.1 to 571.7, which would re-map every existing voxel and change
+// how the 13 levels are displayed.  The window is therefore measured over the
+// same canonical region the v3 bake measured it over (the old box), so the
+// existing levels keep their exact intensity mapping while the new region is
+// displayed with the same, physiologically sensible window.  Measured proof that
+// the two coincide: percentiles over the v3 lattice subset of this grid
+// reproduce the committed v3 window to the digit — the core-box pass below runs
+// on every bake and logs "measured over 244,215 stations … p1=65.8 p99.5=559.1".
+const CORE_BOX = { x: [-27, 27], y: [-55, 45], z: [-56, 26] };
+const coreSamples = [];
+for (let k = 0; k < nz; k++) {
+  const z = spec.originAu[2] + k * spec.spacingAu[2];
+  if (z < CORE_BOX.z[0] - 1e-9 || z > CORE_BOX.z[1] + 1e-9) continue;
+  for (let j = 0; j < ny; j++) {
+    const y = spec.originAu[1] + j * spec.spacingAu[1];
+    if (y < CORE_BOX.y[0] - 1e-9 || y > CORE_BOX.y[1] + 1e-9) continue;
+    for (let i = 0; i < nx; i++) {
+      const x = spec.originAu[0] + i * spec.spacingAu[0];
+      if (x < CORE_BOX.x[0] - 1e-9 || x > CORE_BOX.x[1] + 1e-9) continue;
+      const v = samples[(k * ny + j) * nx + i];
+      if (Number.isFinite(v)) coreSamples.push(v);
+    }
+  }
+}
+coreSamples.sort((a, b) => a - b);
+const wLo = percentile(coreSamples, WINDOW_PERCENTILES[0]);
+const wHi = percentile(coreSamples, WINDOW_PERCENTILES[1]);
+// Reported for the record (not used): what the same recipe would give over the
+// whole AMENDMENT B box, i.e. the reason the window is pinned to the core box.
+const windowFullBox = (() => {
+  const all = Array.from(samples).filter(Number.isFinite).sort((a, b) => a - b);
+  return [percentile(all, WINDOW_PERCENTILES[0]), percentile(all, WINDOW_PERCENTILES[1])];
+})();
 const grid = new Uint8Array(nVox);
 for (let i = 0; i < nVox; i++) {
   const v = samples[i];
@@ -668,7 +826,7 @@ for (let i = 0; i < nVox; i++) {
   const t = (v - wLo) / (wHi - wLo);
   grid[i] = Math.max(0, Math.min(255, Math.round(t * 255)));
 }
-log(`[mri-grid] intensity window p${WINDOW_PERCENTILES[0]}=${round(wLo, 1)} p${WINDOW_PERCENTILES[1]}=${round(wHi, 1)} → uint8`);
+log(`[mri-grid] intensity window p${WINDOW_PERCENTILES[0]}=${round(wLo, 1)} p${WINDOW_PERCENTILES[1]}=${round(wHi, 1)} → uint8, measured over ${coreSamples.length.toLocaleString('en-US')} stations of the v3 core box (x ${CORE_BOX.x.join('…')}, y ${CORE_BOX.y.join('…')}, z ${CORE_BOX.z.join('…')}) — the same canonical region the v3 bake measured, so the existing levels keep their exact mapping`);
 
 // QA: midline symmetry (on the grid).
 const midline = qaMidlineResidual(grid, spec.dims, spec.originAu, spec.spacingAu);
@@ -728,11 +886,45 @@ const manifest = {
   rowMajorAxesFastToSlow: ['x', 'y', 'z'],
   unit: { auMm: MM_PER_AU, frame: 'x=+patient-left, y=+superior, z=+anterior' },
   patientLeft: '+x',
+  /**
+   * AMENDMENT B canonical box (docs/TELENCEPHALON_PLAN.md §2) — the contract the
+   * clip ranges, snap levels and section framing are extended to.  `boundsAu` is
+   * what this grid actually reaches; it is ≥ `boxAu` on every axis by
+   * construction, because the grid keeps the AMENDMENT A step.
+   */
+  canonicalBox: {
+    amendment: 'B (telencephalon, v7)',
+    boxAu: { x: BOX.x, y: BOX.y, z: BOX.z },
+    boundsAu: { x: spec.boundsAu[0], y: spec.boundsAu[1], z: spec.boundsAu[2] },
+    gridStepAu: spec.spacingAu.map((v) => round(v, 6)),
+    gridStepMm: spec.stepMm.map((v) => round(v, 4)),
+    lattice: 'AMENDMENT A lattice preserved: same originAu and same per-axis step as the v3 grid, station counts grown to cover the box. Every old grid station (45×81×67 box) is therefore still a station of this grid, and the 13 level anchors are at integer au on this lattice.',
+    previousBoxAu: { x: [-27, 27], y: [-55, 45], z: [-56, 26] },
+    previousDims: [45, 81, 67],
+    addedCoverageAu: 'y +45 → +85 (cortex vertex at +80.6), z −56 → −75 and +26 → +55 (occipital pole −72.6 … frontal pole +54.4), x ±27 → ±48 (context bound)',
+  },
+  coverage: {
+    sourceFov: 'NIfTI FOV (outside it the grid stays 0/background)',
+    stationsInsideFov: coverage.inside,
+    totalStations: nVox,
+    fractionInsideFov: round(coverage.fraction, 4),
+    levelRowsAu: levelCoverage,
+  },
   intensity: {
     dtype: 'uint8',
     windowPercentiles: WINDOW_PERCENTILES,
     windowRawValues: [round(wLo, 1), round(wHi, 1)],
     backgroundValue: 0,
+    /**
+     * AMENDMENT B: the recipe (percentiles 1–99.5 %) is unchanged, but it is
+     * measured over the v3 core box rather than the whole AMENDMENT B box, so the
+     * existing levels keep their exact intensity mapping.  Measured proof: over
+     * the v3 lattice subset of this grid the same recipe returns exactly
+     * [65.8, 559.1] — the window the committed v3 manifest records.
+     */
+    windowRegionAu: CORE_BOX,
+    windowRegionNote: 'percentiles measured over the v3 core box (the canonical region the v3 bake used) so the extension does not re-map existing voxels; the same recipe over the whole AMENDMENT B box would give [9.3, 571.7] and would visibly change the pre-existing levels.',
+    windowOverFullBoxAu: windowFullBox ? [round(windowFullBox[0], 1), round(windowFullBox[1], 1)] : null,
   },
   registration: {
     frame: 'sform RAS+ patient mm → canonical au (x=+left, y=+sup, z=+ant); 1 au = 1.2 mm',
@@ -743,6 +935,18 @@ const manifest = {
       composeOrder: "p' = T · Rx·Ry·Rz · S · p (canonical au)",
       gridStepMm: STEP_MM,
     },
+    /**
+     * The affine above is byte-for-byte the v3 (AMENDMENT A) affine — the v7
+     * extension only added stations.  This block records WHY, so "the old
+     * sections did not move" is a checkable property rather than a promise.
+     */
+    gridContinuity: {
+      affineUnchanged: true,
+      note: 'AMENDMENT B re-bake: the registration constants were NOT re-fitted; only the station counts grew, from the same origin and with the same per-axis step. The y lattice is identical to the v3 lattice, so the 13 existing level anchors (integer au) still fall exactly on stations, and their in-plane (x, z) samples are the v3 samples carried over unchanged.',
+      previousGrid: { dims: [45, 81, 67], originAu: [-27, -55, -56], spacingAu: [1.2273, 1.25, 1.2424] },
+      currentGrid: { dims: spec.dims, originAu: spec.originAu, spacingAu: spec.spacingAu.map((v) => round(v, 4)) },
+    },
+
     residuals: {
       toleranceAu: 2,
       // Mid-sagittal symmetry estimate of the MRI midline per axial level

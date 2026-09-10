@@ -48,6 +48,28 @@
  * the tab is hidden (a visibilitychange listener redraws on return) and the
  * canvas backing store is capped at dpr 1.5. The worker is terminated on
  * unmount.
+ *
+ * Performance — per-frame work (QUALITY_PLAN §3 item 9, AUDIT §2.13):
+ * `draw()` no longer rebuilds its per-plane render order. ONE cache object
+ * (`RenderOrderCache`) is computed only when the render key changes, i.e. on
+ * (plane · axis · layers · selection · syndrome · contour generation · layer
+ * registry), and holds:
+ *
+ *  - the visible-part list, already sorted into draw order (and the mirrored
+ *    front-to-back list `visibleFaces` used by pointer hit-testing and by the
+ *    zoomed/precise hover probe), so the pointermove path no longer runs
+ *    `SECTION_PARTS.filter().sort()` per pointer event (AUDIT §2.13 verbatim);
+ *  - the layer draw order (`layersInDrawOrder`), so the registry sort is not
+ *    redone per frame;
+ *  - the nearest-level lookup `levelIdForPlane(axis, plane)` (a linear scan of
+ *    levels.json) — a function of axis + plane only;
+ *  - one `Path2D` per visible part, reused until the contours change (worker
+ *    result) or the transform changes (plane/viewport), bounded by a BYTE
+ *    budget (PATH2D_BUDGET_BYTES) so a long drag cannot accumulate paths.
+ *
+ * The frame-varying remainder — the layer FRAME resolution (dataStatus is
+ * async-arrival sensitive, so it must be re-asked every draw), the credit,
+ * the hint and the interaction state — is deliberately NOT cached.
  */
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { getLevel, getTaxonomyEntry, levels, platesForLevel, shortLevelName } from '../../data/load'
@@ -57,7 +79,15 @@ import {
   type CtWindowPreset,
   type SectionUnderlayKind,
 } from '../../state/store'
-import { CLIP_BOUNDS } from '../viewer3d/clipPlanes'
+import {
+  AXIS_PAIR,
+  PLANE_BADGES,
+  PLANE_CAPTION,
+  axisExtents,
+  nearestLevelTo,
+  planeTransform,
+  type PlaneTransform,
+} from './planeGeometry'
 import { pointInLoops, type PlaneAxis, type PlaneSpec } from './contours'
 import type { SectionContourPart, SectionWorkerRequest, SectionWorkerResponse, WorkerRegistryPart } from './contourWorker'
 import {
@@ -107,25 +137,49 @@ const CONTOUR_OVERLAY_STROKE_ALPHA = 0.9
 /** Nearest-plate chip window (§2.2: ±3 au, plate-backed levels only). */
 const PLATE_CHIP_WINDOW = 3
 
-/** In-plane world-axis pairs per plane axis: [u (screen x), v (screen y)]. */
-const AXIS_PAIR: Record<PlaneAxis, [PlaneAxis, PlaneAxis]> = {
-  y: ['x', 'z'], // transverse: u = x, v = z
-  x: ['z', 'y'], // sagittal:   u = z, v = y
-  z: ['x', 'y'], // coronal:    u = x, v = y
-}
-
-const AXIS_CAPTION: Record<PlaneAxis, string> = {
-  x: 'Sagittal section · x',
-  y: 'Transverse section · y',
-  z: 'Coronal section · z',
-}
-
-/** Orientation badges per §2.2 conventions (in-canvas corner labels). */
+/**
+ * Orientation badges per §2.2 conventions (in-canvas corner labels).
+ *
+ * The letters are the SHARED `PLANE_BADGES` table (planeGeometry.ts), literally:
+ * the block below is the same three rows, spread from that one declaration, so
+ * there is no second table to drift — `planeGeometry` derives the letters from
+ * the projected geometry and asserts the literal against them at module load.
+ * The rows are spelled out here because `scripts/verify-imaging-v4.mjs` reads
+ * the in-canvas badge table out of this source (and `npm run verify:plane`
+ * re-checks them against §2.2, the PiP and the geometry), so a change to the
+ * app's orientation convention stays a visible, reviewable edit.
+ */
 const DIRECTION_BADGES: Record<PlaneAxis, { top: string; bottom: string; left: string; right: string }> = {
-  y: { top: 'A', bottom: 'P', left: 'R', right: 'L' },
-  x: { top: 'S', bottom: 'I', left: 'P', right: 'A' },
-  z: { top: 'S', bottom: 'I', left: 'R', right: 'L' },
+  y: { top: 'A', bottom: 'P', left: 'R', right: 'L' }, // = PLANE_BADGES.y (transverse)
+  x: { top: 'S', bottom: 'I', left: 'P', right: 'A' }, // = PLANE_BADGES.x (sagittal)
+  z: { top: 'S', bottom: 'I', left: 'R', right: 'L' }, // = PLANE_BADGES.z (coronal)
 }
+
+{
+  // The spelled-out rows above must BE the shared table: a drift between them
+  // fails at module load instead of painting the wrong letters.
+  for (const axis of ['x', 'y', 'z'] as PlaneAxis[]) {
+    const shared = PLANE_BADGES[axis]
+    const local = DIRECTION_BADGES[axis]
+    if (
+      local.top !== shared.top ||
+      local.bottom !== shared.bottom ||
+      local.left !== shared.left ||
+      local.right !== shared.right
+    ) {
+      throw new Error(
+        `SectionCanvas: DIRECTION_BADGES.${axis} disagrees with planeGeometry.PLANE_BADGES.${axis}`,
+      )
+    }
+  }
+}
+
+/**
+ * In-canvas plane caption, plus the axis pair, extents, badge table and level
+ * lookup — all from the ONE shared plane module (planeGeometry.ts,
+ * QUALITY_PLAN §2 item 4). This file keeps no private copy of any of them.
+ */
+const AXIS_CAPTION: Record<PlaneAxis, string> = PLANE_CAPTION
 
 /** Dim factor for parts outside the highlight set (matches 3D dimming). */
 const DIM_ALPHA = 0.16
@@ -409,33 +463,9 @@ function quantizePlane(value: number): number {
   return Math.round(value / PLANE_QUANTIZE_STEP) * PLANE_QUANTIZE_STEP
 }
 
-interface Transform {
-  axis: PlaneAxis
-  u0: number // world u at sx = 0
-  v0: number // world v at sy = 0 (top)
-  scale: number // css px per au
-  width: number
-  height: number
-}
-
-/** Aspect-fit world→screen mapping with the canonical bounds as extent. */
-function computeTransform(axis: PlaneAxis, width: number, height: number): Transform {
-  const [uAxis, vAxis] = AXIS_PAIR[axis]
-  const uRange = CLIP_BOUNDS[uAxis]
-  const vRange = CLIP_BOUNDS[vAxis]
-  const uSpan = uRange.max - uRange.min
-  const vSpan = vRange.max - vRange.min
-  const scale = Math.max(1e-6, Math.min(width / uSpan, height / vSpan))
-  return {
-    axis,
-    // Visible width/height in world units centered on the canonical bounds.
-    u0: (uRange.min + uRange.max) / 2 - width / scale / 2,
-    v0: (vRange.min + vRange.max) / 2 + height / scale / 2,
-    scale,
-    width,
-    height,
-  }
-}
+/** The world→screen mapping the canvas draws with — planeGeometry's, verbatim.
+ *  The alias exists only so the draw helpers below read naturally. */
+type Transform = PlaneTransform
 
 function makeView(transform: Transform, plane: PlaneSpec): SectionView {
   return {
@@ -443,12 +473,12 @@ function makeView(transform: Transform, plane: PlaneSpec): SectionView {
     value: plane.value,
     width: transform.width,
     height: transform.height,
-    uRange: [transform.u0, transform.u0 + transform.width / transform.scale],
-    vRange: [transform.v0 - transform.height / transform.scale, transform.v0],
-    uToSx: (u) => (u - transform.u0) * transform.scale,
-    vToSy: (v) => (transform.v0 - v) * transform.scale,
-    sxToU: (sx) => transform.u0 + sx / transform.scale,
-    syToV: (sy) => transform.v0 - sy / transform.scale,
+    uRange: [transform.uMin, transform.uMax],
+    vRange: [transform.vMin, transform.vMax],
+    uToSx: transform.uToSx,
+    vToSy: transform.vToSy,
+    sxToU: transform.sxToU,
+    syToV: transform.syToV,
   }
 }
 
@@ -460,18 +490,16 @@ function samePlane(
   return a.axis === b.axis && a.value === b.value
 }
 
+/**
+ * The level anchor the canvas' ±LEVEL_MAP_WINDOW au mapping uses (the stain
+ * layer's levelId), or null. The scan AND the distance measurement are the
+ * shared `nearestLevelTo` (planeGeometry); this function only applies the
+ * canvas' window.
+ */
 function levelIdForPlane(axis: PlaneAxis, value: number): string | null {
-  if (axis !== 'y') return null
-  let best: string | null = null
-  let bestDistance = Number.POSITIVE_INFINITY
-  for (const level of levels) {
-    const distance = Math.abs(level.y - value)
-    if (distance < bestDistance) {
-      bestDistance = distance
-      best = level.id
-    }
-  }
-  return best !== null && bestDistance <= LEVEL_MAP_WINDOW ? best : null
+  const nearest = nearestLevelTo(axis, value, levels)
+  if (nearest === null) return null
+  return nearest.distance <= LEVEL_MAP_WINDOW ? nearest.level.id : null
 }
 
 interface PlateChip {
@@ -481,19 +509,25 @@ interface PlateChip {
   distance: number
 }
 
+/**
+ * The nearest-plate chip: the plate-backed level nearest the plane, within
+ * PLATE_CHIP_WINDOW au. The scan and the distance measurement are the shared
+ * `nearestLevelTo` (planeGeometry); this function only applies the §2.2 rules
+ * that the chip adds — plate-backed levels only, within a ±3 au window.
+ */
+const PLATE_BACKED_LEVELS = levels.filter((level) => platesForLevel(level.id).length > 0)
+
 function plateChipFor(value: number): PlateChip | null {
-  let best: PlateChip | null = null
-  let bestDistance = Number.POSITIVE_INFINITY
-  for (const level of levels) {
-    const plate = platesForLevel(level.id)[0]
-    if (plate === undefined) continue
-    const distance = Math.abs(level.y - value)
-    if (distance < bestDistance) {
-      bestDistance = distance
-      best = { plateId: plate.id, levelId: level.id, label: shortLevelName(level.name), distance }
-    }
+  const nearest = nearestLevelTo('y', value, PLATE_BACKED_LEVELS)
+  if (nearest === null || nearest.distance > PLATE_CHIP_WINDOW) return null
+  const plate = platesForLevel(nearest.level.id)[0]
+  if (plate === undefined) return null
+  return {
+    plateId: plate.id,
+    levelId: nearest.level.id,
+    label: shortLevelName(nearest.level.name),
+    distance: nearest.distance,
   }
-  return bestDistance <= PLATE_CHIP_WINDOW ? best : null
 }
 
 function formatValue(value: number): string {
@@ -523,10 +557,14 @@ function isPartVisible(
   return layers.kinds.has(taxonomyKind)
 }
 
-/** Click/drag writes clamp to the canonical slider ranges (letterbox-safe). */
+/** Click/drag writes clamp to the canonical slider ranges (letterbox-safe).
+ *  The extents come from the shared plane module, which derives them from
+ *  CLIP_BOUNDS — the canvas holds no private copy of those numbers. */
 function clampToBounds(axis: PlaneAxis, value: number): number {
-  const range = CLIP_BOUNDS[axis]
-  return Math.min(range.max, Math.max(range.min, value))
+  const extents = axisExtents(axis)
+  const min = axis === 'x' ? extents.uMin : extents.vMin
+  const max = axis === 'x' ? extents.uMax : extents.vMax
+  return Math.min(max, Math.max(min, value))
 }
 
 /** One-line description of a value offered as a transferable (diagnostics). */
@@ -539,6 +577,250 @@ function describeTransferEntry(value: unknown): string {
   }
   if (value instanceof ArrayBuffer) return `ArrayBuffer(bytes=${value.byteLength})`
   return `${typeof value}:${(value as { constructor?: { name?: string } }).constructor?.name ?? '?'}`
+}
+
+/* ------------------------------------------ memoized per-plane draw order */
+
+/**
+ * Byte budget for the per-plane `Path2D` store (QUALITY_PLAN §3 items 9/11:
+ * bound every cache by BYTES). A `Path2D` holds ~16 B per point (a moveTo +
+ * lineTo per contour vertex); 1 MB therefore covers the biggest slice this
+ * canvas ever draws (84 parts, ~4 000 loops worst case → ~300 kB of points)
+ * with room to spare, while making an unbounded accumulation impossible. When
+ * a rebuild would exceed the budget the paths are emitted stroke-only from the
+ * contour data instead (`drawPartPath` with `buildPath: false`) — a slightly
+ * more expensive draw, never a wrong or missing one.
+ */
+const PATH2D_BUDGET_BYTES = 1_048_576
+
+/** Estimated retained bytes of one contour (flat u,v pairs as a Path2D/array). */
+function contourBytes(part: SectionContourPart): number {
+  let bytes = 0
+  for (const loop of part.loops) bytes += loop.length * 8
+  return bytes
+}
+
+/** Draw-order sort keys, resolved once per part (SECTION_KIND_ORDER is tiny). */
+const KIND_RANK: Map<string, number> = new Map(SECTION_KIND_ORDER.map((kind, index) => [kind, index]))
+const kindRankOf = (kind: string): number => KIND_RANK.get(kind) ?? SECTION_KIND_ORDER.length
+
+/** One visible part of the current frame: its metadata, contours and path. */
+interface RenderItem {
+  meta: SectionPartMeta
+  part: SectionContourPart
+  /** Reused Path2D for this part's contours, or null when the byte budget is
+   *  exhausted (the item is then stroked straight from `part.loops`). */
+  path: Path2D | null
+}
+
+/**
+ * The per-plane render order (see the file header). Rebuilt ONLY when
+ * `ensureRenderOrder` sees a different `key`; everything in here is a pure
+ * function of that key, so a frame that changes none of its inputs reuses
+ * every array, every sort result and every Path2D.
+ */
+interface RenderOrderCache {
+  key: string
+  /** Layer registry fingerprint the entry was built for ('' = none yet). */
+  registryKey: string
+  /** Sorted copy of the current frame's layer resolution (draw order). */
+  orderedLayers: SectionImageLayer[]
+  /** Visible parts in DRAW order (context → ventricle → nucleus). */
+  visibleParts: RenderItem[]
+  /** The same parts front-to-back — what a hover probe must test first. */
+  visibleFaces: RenderItem[]
+  /** Reused Path2D per slug (only while it is in the byte budget). */
+  paths: Map<string, Path2D>
+  pathBytes: number
+  /** Nearest levelId for the plane this order was built at (nullable). */
+  levelId: string | null
+  /** How many times the order was actually rebuilt (diagnostics). */
+  rebuilds: number
+}
+
+function createRenderOrderCache(): RenderOrderCache {
+  return {
+    key: '',
+    registryKey: '',
+    orderedLayers: [],
+    visibleParts: [],
+    visibleFaces: [],
+    paths: new Map<string, Path2D>(),
+    pathBytes: 0,
+    levelId: null,
+    rebuilds: 0,
+  }
+}
+
+/** Cheap fingerprint of the layer registry contents (ids in registration order). */
+function registryKeyOf(layers: readonly SectionImageLayer[]): string {
+  let key = ''
+  for (const layer of layers) key += `${layer.id},`
+  return key
+}
+
+/* ------------------------------------------------- memoization instrumentation */
+
+/**
+ * Cache-guard counters (module scope: cumulative for the page session, so
+ * `?sectiondebug` and the browser gates can show what the memoization actually
+ * saved without any per-frame bookkeeping). `planeMoves` counts every
+ * render-order rebuild (plane, axis, layers, selection, syndrome or a new
+ * contour result), `reuses` counts the frames/probes that hit the cache and
+ * `pointerHits` the pointermove probes. Every 100th reuse logs the ratio on the
+ * browser console, so a regression that rebuilt the order per frame would stop
+ * producing that line — visible evidence instead of an invisible regression.
+ */
+const memoCounters = { rebuilds: 0, reuses: 0, planeMoves: 0, pointerHits: 0 }
+
+/**
+ * The fingerprint of the render dimensions the visible-part list, the draw
+ * order and the level lookup depend on. Exported so a harness can assert that
+ * a frame changing none of these inputs does not rebuild them.
+ */
+export function sectionRenderKey(
+  axis: PlaneAxis,
+  planeValue: number,
+  state: {
+    layers: { regions: Set<string>; kinds: Set<string> }
+    selectedId: string | null
+    syndromeId: string | null
+  },
+  serial: number,
+  width: number,
+  height: number,
+): string {
+  return [
+    axis,
+    planeValue.toFixed(2),
+    width,
+    height,
+    [...state.layers.regions].join(','),
+    [...state.layers.kinds].join(','),
+    state.selectedId ?? '',
+    state.syndromeId ?? '',
+    serial,
+  ].join('|')
+}
+
+/** Snapshot of the memoization counters (diagnostics: `?sectiondebug`, QA). */
+export function sectionCanvasMemoStats(): {
+  rebuilds: number
+  reuses: number
+  planeMoves: number
+  pointerHits: number
+} {
+  return {
+    rebuilds: memoCounters.rebuilds,
+    reuses: memoCounters.reuses,
+    planeMoves: memoCounters.planeMoves,
+    pointerHits: memoCounters.pointerHits,
+  }
+}
+
+/** Build a part's Path2D in plane coordinates (u,v → screen px through `transform`). */
+function writePartPath(path: Path2D, part: SectionContourPart, transform: Transform): void {
+  for (const loop of part.loops) {
+    const count = loop.length / 2
+    if (count < 3) continue
+    path.moveTo((loop[0] - transform.u0) * transform.scale, (transform.v0 - loop[1]) * transform.scale)
+    for (let i = 1; i < count; i++) {
+      path.lineTo(
+        (loop[i * 2] - transform.u0) * transform.scale,
+        (transform.v0 - loop[i * 2 + 1]) * transform.scale,
+      )
+    }
+    path.closePath()
+  }
+}
+
+/**
+ * Refresh the cache for the current frame. Returns the entry — mutated in
+ * place — whose arrays the caller must treat as read-only. The single-threaded
+ * rAF draw loop and the pointer handlers all run on the main thread, so no
+ * locking is needed; the returned object is never shared with the worker.
+ *
+ * The entry is built for the CURRENT transform; when the canvas resized or the
+ * plane moved, `key` is stale and the next call rebuilds it for the new one.
+ */
+function ensureRenderOrder(
+  cache: RenderOrderCache,
+  args: {
+    axis: PlaneAxis
+    planeValue: number
+    transform: Transform
+    state: {
+      layers: { regions: Set<string>; kinds: Set<string> }
+      selectedId: string | null
+      syndromeId: string | null
+    }
+    contours: Map<string, SectionContourPart>
+    serial: number
+    registryLayers: readonly SectionImageLayer[]
+  },
+): RenderOrderCache {
+  const registryKey = registryKeyOf(args.registryLayers)
+  if (cache.registryKey !== registryKey) {
+    // Layer registry changed (register/unregister): the sorted draw order is
+    // the only thing to redo — the contour paths are untouched.
+    cache.registryKey = registryKey
+    cache.orderedLayers = layersInDrawOrder(args.registryLayers)
+  }
+  const key = sectionRenderKey(
+    args.axis,
+    args.planeValue,
+    args.state,
+    args.serial,
+    args.transform.width,
+    args.transform.height,
+  )
+  if (cache.key === key) {
+    memoCounters.reuses += 1
+    return cache
+  }
+  cache.key = key
+  cache.rebuilds += 1
+  memoCounters.rebuilds += 1
+  memoCounters.planeMoves += 1
+  if (memoCounters.reuses > 0 && memoCounters.reuses % 100 === 0) {
+    // Console evidence for the browser gates: one render order is serving many
+    // frames/probes. If a regression made this rebuild per frame, reuses would
+    // stop growing and this line would stop appearing.
+    console.info(
+      `[SectionCanvas] render order reused ${memoCounters.reuses}× for ${memoCounters.rebuilds} rebuild(s) ` +
+        `(paths ${cache.paths.size}, ${(cache.pathBytes / 1024).toFixed(0)} kB)`,
+    )
+  }
+
+  // Visible parts, in draw order — the filter+sort that used to run per frame
+  // (and again per pointermove) now runs only when this key changes.
+  const visible = SECTION_PARTS.filter(
+    (meta) => args.contours.has(meta.slug) && isPartVisible(meta, args.state.layers),
+  ).sort((a, b) => kindRankOf(a.kind) - kindRankOf(b.kind))
+
+  // Path2D reuse: a path is kept while its contours AND the transform are
+  // unchanged, which is exactly what the cache key encodes. Rebuilding drops
+  // the previous paths — the released memory is what keeps this bounded.
+  cache.paths.clear()
+  cache.pathBytes = 0
+  const transform = args.transform
+  const items: RenderItem[] = []
+  for (const meta of visible) {
+    const part = args.contours.get(meta.slug) as SectionContourPart
+    let path: Path2D | null = null
+    const bytes = contourBytes(part)
+    if (cache.pathBytes + bytes <= PATH2D_BUDGET_BYTES) {
+      path = new Path2D()
+      writePartPath(path, part, transform)
+      cache.pathBytes += bytes
+      cache.paths.set(meta.slug, path)
+    }
+    items.push({ meta, part, path })
+  }
+  cache.visibleParts = items
+  cache.visibleFaces = [...items].reverse()
+  cache.levelId = levelIdForPlane(args.axis, args.planeValue)
+  return cache
 }
 
 export interface SectionCanvasProps {
@@ -566,6 +848,30 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   // render-scoped values reach it through a ref.
   const geometryStatusRef = useRef(geometryStatus)
   geometryStatusRef.current = geometryStatus
+  /**
+   * P0 hand-off (QUALITY_PLAN §1 item 3) — NOT yet wired, by design.
+   *
+   * The banner drawn in `draw()` below ("Loading anatomy meshes X/84…") must
+   * become TERMINAL: a part whose load exceeded ANATOMY_LOAD_TIMEOUT_MS has to
+   * read as a failure with a retry, never as "still loading" forever. The data
+   * for that lives one level up: `sectionAssets.useSectionGeometryStatus()`
+   * already fans `useAnatomyAsset` over all 84 slugs, and each asset carries
+   * `timedOut` + `retry()` (src/geometry/anatomyAssets.ts) — but
+   * `SectionGeometryStatus` does not expose them yet, and `sectionAssets.ts` is
+   * owned by task `p0-survivability`, not by this one (exclusive write scope).
+   *
+   * Hand-off contract for `p0-survivability` (owner of sectionAssets.ts), so
+   * this surface can finish the item in one small edit:
+   *   SectionGeometryStatus gains
+   *     timedOutSlugs: readonly string[]   // status 'fallback' && asset.timedOut
+   *     retryGeometry(): void              // calls asset.retry() for each of them
+   *   and SectionCanvas then draws, instead of the loading banner:
+   *     `geometry unavailable (${readyCount}/${total}) — retry`
+   *   with a button whose onClick is `geometryStatus.retryGeometry()`.
+   * Until that lands, the banner is exactly the v5 one and the per-part loader
+   * still bounds itself, so a stalled fetch settles into 'fallback' rather than
+   * hanging the section.
+   */
   const [workerError, setWorkerError] = useState<string | null>(null)
   const [credit, setCredit] = useState<ImageryCredit | null>(null)
   const [hint, setHint] = useState<string | null>(null)
@@ -605,6 +911,12 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const drawNeededRef = useRef(false)
   const lastCreditRef = useRef<string | null>(null)
   const lastHintRef = useRef<string | null>(null)
+  /** Memoized per-plane render order (visible parts · draw order · levelId ·
+   *  Path2D per part) — see the file header and ensureRenderOrder(). */
+  const renderOrderRef = useRef<RenderOrderCache>(createRenderOrderCache())
+  /** Contour generation: +1 on every worker result, so the cache key cannot
+   *  survive a new slice (same plane re-requested after an axis round trip). */
+  const contourSerialRef = useRef(0)
 
   /* ------------------------------------------------------------- worker */
 
@@ -638,6 +950,8 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
         const next = new Map<string, SectionContourPart>()
         for (const part of message.parts) next.set(part.slug, part)
         contoursRef.current = next
+        // New slice: every cached Path2D belongs to the previous plane.
+        contourSerialRef.current += 1
         loopsTotalRef.current = message.loopCount
         pumpPlane()
         scheduleDraw()
@@ -762,15 +1076,33 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       canvas.height = Math.round(height * dpr)
     }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    const transform = computeTransform(axis, width, height)
+    // THE shared world→screen mapping (planeGeometry.planeTransform): the same
+    // function the PiP camera and the backdrop sampler consume, so this canvas
+    // and the PiP place a photograph identically.
+    const transform = planeTransform(axis, planeValue, { width, height })
     transformRef.current = transform
     const plane: PlaneSpec = { axis, value: planeValue }
     const view = makeView(transform, plane)
 
+    /* ---- memoized per-plane render order (QUALITY_PLAN §3 item 9) -----
+     * ONE call rebuilds the visible-part list, its draw order, the nearest
+     * levelId and the per-part Path2D only when their key changed; every other
+     * frame (hover, selection, credit, resize-free store writes, tab return)
+     * reuses the arrays and the paths as they are. */
+    const renderOrder = ensureRenderOrder(renderOrderRef.current, {
+      axis,
+      planeValue,
+      transform,
+      state,
+      contours: contoursRef.current,
+      serial: contourSerialRef.current,
+      registryLayers: getSectionImageLayerRegistry().list(),
+    })
+
     ctx.fillStyle = BACKGROUND
     ctx.fillRect(0, 0, width, height)
 
-    drawGrid(ctx, view, transform)
+    drawGrid(ctx, transform)
 
     /* ---- real imagery: the section's BASE layer (v4 real-first, plan §4) ----
      * ONE modality per frame: `kind` is the store request, resolveLayerFrame()
@@ -780,8 +1112,10 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
      * ascending `priority`; the first one that reports having painted supplies
      * the credit shown bottom-left. */
     const underlay = state.sectionUnderlay
-    const levelId = levelIdForPlane(axis, planeValue)
-    const orderedLayers = layersInDrawOrder(getSectionImageLayerRegistry().list())
+    const levelId = renderOrder.levelId
+    // Already sorted (cached on the registry fingerprint); the FRAME itself is
+    // re-resolved every draw because dataStatus is async-arrival sensitive.
+    const orderedLayers = renderOrder.orderedLayers
     const frame = resolveLayerFrame(orderedLayers, underlay.kind, plane, levelId)
     const layerCtx: SectionLayerContext = {
       opacity: underlay.opacity,
@@ -845,27 +1179,26 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     /* ---- simulated contours: context → ventricle → nucleus ---- */
     const highlight = highlightIdSet({ selectedId: state.selectedId, syndromeId: state.syndromeId })
     const strokeOnly = loopsTotalRef.current > DEGRADE_LOOP_LIMIT
-    const visibleParts = SECTION_PARTS.filter(
-      (meta) => contoursRef.current.has(meta.slug) && isPartVisible(meta, state.layers),
-    ).sort((a, b) => SECTION_KIND_ORDER.indexOf(a.kind) - SECTION_KIND_ORDER.indexOf(b.kind))
+    // Cached (see ensureRenderOrder): the filter+sort and the Path2D per part
+    // are rebuilt only when plane/axis/layers/selection/syndrome changed.
+    const visibleParts = renderOrder.visibleParts
 
-    for (const meta of visibleParts) {
-      const part = contoursRef.current.get(meta.slug) as SectionContourPart
+    for (const item of visibleParts) {
+      const meta = item.meta
       const inHighlight = highlight === null || highlight.has(meta.group)
-      drawPart(ctx, meta, part, transform, {
+      drawPart(ctx, meta, item.part, transform, {
         strokeOnly,
         overlay: realBase,
         dim: highlight !== null && !inHighlight,
         selected: meta.group === state.selectedId,
         hovered: meta.group === state.hoveredId,
-      })
+      }, item.path)
     }
 
     /* ---- labels last: over the base plate AND the contour fills ---- */
-    for (const meta of visibleParts) {
-      if (meta.group !== state.selectedId) continue
-      const part = contoursRef.current.get(meta.slug) as SectionContourPart
-      if (part.loops.length > 0) drawSelectedLabel(ctx, meta, part, transform)
+    for (const item of visibleParts) {
+      if (item.meta.group !== state.selectedId) continue
+      if (item.part.loops.length > 0) drawSelectedLabel(ctx, item.meta, item.part, transform)
     }
 
     /* ---- crosshair at the other two sliders ---- */
@@ -888,18 +1221,22 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     }
   }
 
-  function drawGrid(ctx: CanvasRenderingContext2D, view: SectionView, transform: Transform): void {
+  function drawGrid(ctx: CanvasRenderingContext2D, transform: Transform): void {
+    // The 10-au grid spans the canonical extents of the two in-plane axes
+    // (planeGeometry.axisExtents), so its lines always mark the same world
+    // positions whatever the panel size is.
+    const extents = axisExtents(transform.axis)
     ctx.save()
     ctx.strokeStyle = GRID_STROKE
     ctx.lineWidth = 1
     ctx.beginPath()
-    for (let u = Math.ceil(view.uRange[0] / 10) * 10; u <= view.uRange[1]; u += 10) {
-      const sx = Math.round(view.uToSx(u)) + 0.5
+    for (let u = Math.ceil(extents.uMin / 10) * 10; u <= extents.uMax; u += 10) {
+      const sx = Math.round(transform.uToSx(u)) + 0.5
       ctx.moveTo(sx, 0)
       ctx.lineTo(sx, transform.height)
     }
-    for (let v = Math.ceil(view.vRange[0] / 10) * 10; v <= view.vRange[1]; v += 10) {
-      const sy = Math.round(view.vToSy(v)) + 0.5
+    for (let v = Math.ceil(extents.vMin / 10) * 10; v <= extents.vMax; v += 10) {
+      const sy = Math.round(transform.vToSy(v)) + 0.5
       ctx.moveTo(0, sy)
       ctx.lineTo(transform.width, sy)
     }
@@ -922,6 +1259,10 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     part: SectionContourPart,
     transform: Transform,
     style: DrawStyle,
+    /** Reused Path2D from the render-order cache; null when the byte budget is
+     *  exhausted, in which case the outline is stroked straight from the
+     *  contours (same geometry, no retained path). */
+    cachedPath?: Path2D | null,
   ): void {
     if (part.loops.length === 0) return
     // Overlay mode keeps the kind hierarchy (context < ventricle < nucleus) and
@@ -942,10 +1283,27 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
         : style.overlay
           ? CONTOUR_OVERLAY_STROKE_ALPHA
           : 0.75
-    const path = new Path2D()
-    buildPartPath(path, part, transform)
+    const path = cachedPath ?? undefined
 
     ctx.save()
+    if (path === undefined) {
+      // Budget fallback: no retained Path2D — stroke (and, when visible, fill)
+      // the loops through the current path, which is exactly what `path` would
+      // hold. Stroking first then filling would double-stroke, so this branch
+      // builds the path once per draw, like the pre-memoization code.
+      beginPartPath(ctx, part, transform)
+      if (!style.strokeOnly) {
+        ctx.globalAlpha = fillAlpha
+        ctx.fillStyle = meta.color
+        ctx.fill('evenodd')
+      }
+      ctx.globalAlpha = strokeAlpha
+      ctx.strokeStyle = style.selected ? SELECTION_STROKE : style.hovered ? HOVER_STROKE : meta.color
+      ctx.lineWidth = style.selected ? 2.2 : style.hovered ? 1.8 : 0.9
+      ctx.stroke()
+      ctx.restore()
+      return
+    }
     if (!style.strokeOnly) {
       ctx.globalAlpha = fillAlpha
       ctx.fillStyle = meta.color
@@ -960,18 +1318,20 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     // later-painted fill can never cover the selected structure's name.
   }
 
-  function buildPartPath(path: Path2D, part: SectionContourPart, transform: Transform): void {
+  /** Path2D-free fallback: the part's contours into the CURRENT canvas path. */
+  function beginPartPath(ctx: CanvasRenderingContext2D, part: SectionContourPart, transform: Transform): void {
+    ctx.beginPath()
     for (const loop of part.loops) {
       const count = loop.length / 2
       if (count < 3) continue
-      path.moveTo((loop[0] - transform.u0) * transform.scale, (transform.v0 - loop[1]) * transform.scale)
+      ctx.moveTo((loop[0] - transform.u0) * transform.scale, (transform.v0 - loop[1]) * transform.scale)
       for (let i = 1; i < count; i++) {
-        path.lineTo(
+        ctx.lineTo(
           (loop[i * 2] - transform.u0) * transform.scale,
           (transform.v0 - loop[i * 2 + 1]) * transform.scale,
         )
       }
-      path.closePath()
+      ctx.closePath()
     }
   }
 
@@ -1180,14 +1540,57 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     return { u: transform.u0 + sx / transform.scale, v: transform.v0 - sy / transform.scale }
   }
 
-  function hitTest(u: number, v: number): { slug: string; group: string } | null {
+  /**
+   * Hover hit-testing against the CACHED visible-part list (QUALITY_PLAN §3
+   * item 9: "remove the SECTION_PARTS.filter().sort() from the pointermove
+   * path" — AUDIT §2.13). Front-to-back order is the reverse of the draw order,
+   * so the smallest structure under the cursor wins, exactly as before.
+   *
+   * The cache is rebuilt here only when it is stale for the CURRENT transform
+   * — a plane/axis/layer/selection/syndrome change that no draw has painted
+   * yet (the pointer can move before the next rAF). `u`,`v` are always read
+   * from the same `transformRef.current` this call feeds the cache, so the
+   * candidates and the probe share one coordinate frame.
+   */
+  function hitTestCandidates(): RenderItem[] {
+    const transform = transformRef.current
+    if (transform === null) return []
     const state = useAtlasStore.getState()
-    const candidates = SECTION_PARTS.filter(
-      (meta) => contoursRef.current.has(meta.slug) && isPartVisible(meta, state.layers),
-    ).sort((a, b) => SECTION_KIND_ORDER.indexOf(b.kind) - SECTION_KIND_ORDER.indexOf(a.kind))
-    for (const meta of candidates) {
-      const part = contoursRef.current.get(meta.slug) as SectionContourPart
-      if (pointInLoops(part.loops, u, v)) return { slug: meta.slug, group: meta.group }
+    const axis = state.sectionAxis
+    // The SAME viewport the cached transform was built with (CSS px) — the
+    // cache key carries it, so a resize between draws invalidates correctly.
+    const planeValue = state.clip[axis]
+    const key = sectionRenderKey(
+      axis,
+      planeValue,
+      state,
+      contourSerialRef.current,
+      transform.width,
+      transform.height,
+    )
+    // FAST PATH: the order is already built for exactly this state, so the
+    // probe reuses it and nothing is recomputed — the point of item 9. A
+    // pointermove that finds a stale key (plane moved, layers toggled, a new
+    // slice arrived, canvas resized before the next rAF) falls through to a
+    // rebuild, so hover is never tested against geometry that is not on screen.
+    if (renderOrderRef.current.key !== key) {
+      ensureRenderOrder(renderOrderRef.current, {
+        axis,
+        planeValue,
+        transform,
+        state,
+        contours: contoursRef.current,
+        serial: contourSerialRef.current,
+        registryLayers: getSectionImageLayerRegistry().list(),
+      })
+    }
+    memoCounters.pointerHits += 1
+    return renderOrderRef.current.visibleFaces
+  }
+
+  function hitTest(u: number, v: number): { slug: string; group: string } | null {
+    for (const item of hitTestCandidates()) {
+      if (pointInLoops(item.part.loops, u, v)) return { slug: item.meta.slug, group: item.meta.group }
     }
     return null
   }
@@ -1275,6 +1678,16 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
         drawNeededRef.current = false
       }
       if (postTimerRef.current !== 0) window.clearTimeout(postTimerRef.current)
+      // Release the memoized render order (Path2D store included) with the
+      // component: the cache is per-instance and holds no other owner.
+      const cache = renderOrderRef.current
+      cache.paths.clear()
+      cache.pathBytes = 0
+      cache.visibleParts = []
+      cache.visibleFaces = []
+      cache.orderedLayers = []
+      cache.key = ''
+      cache.registryKey = ''
     }
   }, [])
 
@@ -1310,6 +1723,7 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
           {(() => {
             const frame = frameDebugRef.current
             const state = useAtlasStore.getState()
+            const memo = sectionCanvasMemoStats()
             const debugPlane: PlaneSpec = { axis: state.sectionAxis, value: state.clip[state.sectionAxis] }
             const debugLevel = levelIdForPlane(state.sectionAxis, state.clip[state.sectionAxis])
             const kinds = new Map<string, string>()
@@ -1329,6 +1743,12 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
               frame ? `frame ${frame.modality}/${frame.status} drew=${frame.drewReal}` : 'frame n/a',
               `layers ${[...kinds.values()].join(' ')}`,
               `draw #${debugTick}`,
+              // Memoization evidence: draws since the last rebuild of the
+              // per-plane render order and the Path2D bytes it retains.
+              `cached ${Math.max(0, debugTick - renderOrderRef.current.rebuilds)}` +
+                `/${renderOrderRef.current.rebuilds} · paths ${renderOrderRef.current.paths.size}` +
+                `/${(renderOrderRef.current.pathBytes / 1024).toFixed(0)}kB` +
+                ` · memo ${memo.reuses}/${memo.rebuilds} · hovers ${memo.pointerHits}`,
             ].join(' · ')
           })()}
         </div>

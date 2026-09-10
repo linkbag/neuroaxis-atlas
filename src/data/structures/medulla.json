@@ -19,6 +19,12 @@
         "syndrome": "Contralateral hemiparesis",
         "findings": "Unilateral pyramidal infarction (medial medullary syndrome) weakens the opposite body below the face; because decussation lies caudal to the medulla, deficits are contralateral and the face is typically spared.",
         "vascular": "Anterior spinal artery"
+      },
+      {
+        "syndrome": "Crossed hemiparesis — the brainstem signature of a pre-decussation lesion",
+        "findings": "Above the decussation every corticospinal lesion is crossed relative to the accompanying cranial-nerve deficit, which is what generates the brainstem syndrome families: ipsilateral CN III palsy with contralateral hemiparesis (Weber), ipsilateral CN VI and VII palsies with contralateral hemiparesis (Millard-Gubler), and ipsilateral tongue weakness with contralateral hemiparesis (Déjerine). The pyramid is the last station at which the bundle is still uncrossed, and therefore the level at which the pattern reverses.",
+        "vascular": "Anterior spinal artery / basilar paramedian perforators",
+        "note": "The face is spared by a pyramid lesion because corticobulbar fibres cross separately — a useful discriminator from a capsular stroke, in which face and limbs weaken together."
       }
     ],
     "levels": ["lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
@@ -74,6 +80,14 @@
       "efferent": ["Contralateral medial lemniscus (tract-medial-lemniscus) ascending to VPL"]
     },
     "bloodSupply": "Anterior spinal artery and vertebral perforators",
+    "clinical": [
+      {
+        "syndrome": "Side-of-deficit flip at the sensory decussation",
+        "findings": "Because the internal arcuate fibers cross here, the laterality of a dorsal-column lesion flips at exactly this point: injury of the fasciculus or of the gracile/cuneate nucleus at or below the decussation (foramen magnum tumor, Chiari malformation, high cervical fracture-dislocation) removes vibration, joint-position sense and discriminative touch on the SAME side as the lesion, whereas damage to the medial lemniscus just above it produces the contralateral loss of the medial medullary syndrome. Midline involvement of the crossing sheet gives bilateral loss with sensory ataxia, pseudoathetosis and a positive Romberg sign.",
+        "vascular": "Anterior spinal artery and vertebral perforators",
+        "note": "The most examinable fact about this structure: the side of the sensory deficit tells you whether the lesion sits in the dorsal columns, in the decussation itself, or in the medial lemniscus above it."
+      }
+    ],
     "levels": ["lvl-pyramid-decuss", "lvl-sensory-decuss"],
     "origin3d": [0, -43, -2],
     "size3d": [3.5, 3, 3],
@@ -156,6 +170,14 @@
       "efferent": ["Nucleus cuneatus (nuc-nucleus-cuneatus)"]
     },
     "bloodSupply": "Posterior spinal artery (dorsal medullary branches)",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral upper-limb sensory loss below the decussation",
+        "findings": "The cuneate fasciculus carries uncrossed fibres from the arm and hand, so a lesion beneath the sensory decussation — a high cervical fracture-dislocation, a foramen magnum tumour or a Chiari malformation pressing on the dorsal medulla — removes vibration, joint-position sense and discriminative touch from the ipsilateral arm and hand, with pseudoathetosis of the fingers and a positive Romberg sign. Because the cuneate bundle lies lateral to the gracilis, a partial lesion spares the leg.",
+        "vascular": "Posterior spinal artery (dorsal medullary branches)",
+        "note": "The bundle exists only above about T6: below that level the upper-limb fibres have not yet entered the cord, so the same lesion cannot produce this pattern."
+      }
+    ],
     "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss"],
     "origin3d": [3.5, -45, -6],
     "size3d": [1.6, 5.5, 1.5],
@@ -178,6 +200,14 @@
       "efferent": ["Internal arcuate fibers (tract-internal-arcuate)", "Cuneocerebellar fibers via the inferior cerebellar peduncle (tract-icp)"]
     },
     "bloodSupply": "Posterior spinal artery; PICA medial branches",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral limb ataxia without conscious sensory loss (cuneocerebellar relay)",
+        "findings": "The rostral accessory (external cuneate) part of the nucleus relays unconscious upper-limb proprioception to the cerebellum through the inferior cerebellar peduncle, so its involvement in a dorsolateral medullary lesion adds ipsilateral dysmetria and past-pointing of the arm. Destruction of the principal part instead removes conscious vibration and joint-position sense from the ipsilateral arm and hand, because the internal arcuate fibres have not yet crossed.",
+        "vascular": "Posterior spinal artery; PICA medial branches",
+        "note": "A hyperintense dorsal medullary signal on MRI (subacute combined degeneration of the cord) or an enlarged cuneate tubercle is the imaging correlate of this nucleus failing."
+      }
+    ],
     "levels": ["lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary"],
     "origin3d": [3.5, -43, -5],
     "size3d": [1.7, 3, 1.5],
@@ -230,6 +260,14 @@
       "efferent": ["Climbing fibers to the vermis and vestibulocerebellum via tract-icp"]
     },
     "bloodSupply": "Vertebral artery branches; ASA borderzone",
+    "clinical": [
+      {
+        "syndrome": "Palatal tremor from hypertrophic olivary degeneration (Guillain-Mollaret triangle)",
+        "findings": "When the triangle is interrupted — by a lesion of the central tegmental tract, the dentate nucleus or the superior cerebellar peduncle — the medial accessory olive loses its climbing-fibre target and undergoes trans-synaptic hypertrophy, producing rhythmic 1-3 Hz palatal tremor that persists during sleep, often with synchronous ocular (pendular) and laryngeal movement. The tremor appears weeks to months after the causative stroke.",
+        "vascular": "Vertebral artery branches; ASA borderzone",
+        "note": "The olive is disinhibited and hypertrophied rather than destroyed, so MRI shows a swollen, T2-hyperintense inferior olive — the imaging signature of the triangle's interruption."
+      }
+    ],
     "levels": ["lvl-olivary", "lvl-pontomedullary"],
     "origin3d": [2.5, -34, 1],
     "size3d": [1.2, 4, 1.5],
@@ -257,6 +295,12 @@
         "syndrome": "Contralateral loss of vibration-proprioception",
         "findings": "Paramedian medullary infarcts (medial medullary syndrome) abolish contralateral vibration, joint-position sense and discriminative touch of the body, with sensory ataxia and positive Romberg; the face is spared because trigeminal modalities travel separately.",
         "vascular": "Anterior spinal artery"
+      },
+      {
+        "syndrome": "Ataxic hemiparesis from a paramedian pontine lacune",
+        "findings": "A small lacunar infarct in the paramedian basis pontis or internal capsule can catch the medial lemniscus together with the corticospinal fibres, giving weakness with disproportionate limb ataxia (ataxic hemiparesis, dysarthria-clumsy hand); the mild loss of joint-position sense is easily missed unless vibration and finger-nose testing are performed carefully.",
+        "vascular": "Basilar paramedian perforators (lacunar)",
+        "note": "Because the lemniscus hugs the midline throughout the brainstem it is involved in most paramedian brainstem strokes — medullary (Déjerine), pontine and midbrain variants differ only in the accompanying cranial-nerve signs."
       }
     ],
     "levels": ["lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary"],
@@ -287,6 +331,12 @@
         "syndrome": "Ipsilateral facial pain-temperature loss",
         "findings": "Lateral medullary (Wallenberg) infarcts abolish pain and temperature over the ipsilateral face with a characteristic onion-skin gradient, dissociated from facial touch (principal sensory nucleus, rostral pons) and from contralateral body pain loss (spinothalamic tract).",
         "vascular": "PICA / vertebral"
+      },
+      {
+        "syndrome": "Dissociated facial sensory loss (tract vs principal nucleus)",
+        "findings": "The descending tract and its nucleus subserve only pain and temperature, so an incomplete lateral medullary infarct can remove those modalities from the face while light touch and trigeminal motor function stay intact; the same dissociated pattern is produced deliberately by a tractotomy at the obex for intractable facial pain, and the preserved touch is the signature that separates a spinal-tract lesion from a lesion of the principal sensory nucleus in the mid-pons.",
+        "vascular": "PICA / vertebral lateral medullary branches",
+        "note": "Afferents of CN V, VII, IX and X all run here, so lesions can also numb the external ear canal and the posterior tongue and pharynx."
       }
     ],
     "levels": ["lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
@@ -317,6 +367,12 @@
         "syndrome": "Afferent limb loss of the corneal reflex",
         "findings": "Involvement of the nucleus/tract blunts ipsilateral facial nociception and the blink response to corneal stimulation; combined with ambiguus lesions it also removes the gag afferent-efferent arc components.",
         "vascular": "PICA / AICA"
+      },
+      {
+        "syndrome": "Onion-skin facial sensory gradient (subnucleus caudalis topography)",
+        "findings": "Subnucleus caudalis is laminated like the dorsal horn, with perioral fibres ending most rostrally, so a lesion of its caudal and dorsal laminae numbs the outer face, ear and scalp while sparing the nose and mouth — the onion-skin pattern of lateral medullary infarction. Because the tract and the nucleus are functionally coupled, a lesion of either is clinically indistinguishable.",
+        "vascular": "PICA / vertebral lateral medullary branches",
+        "note": "The blink (corneal) and gag reflexes are relayed through the rostral subnuclei, which is why a lateral medullary lesion can blunt the corneal reflex as well as pain-temperature sensation."
       }
     ],
     "levels": ["lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
@@ -382,6 +438,12 @@
         "syndrome": "Vagal dysregulation after lateral medullary stroke",
         "findings": "Involvement contributes to dysphagia, gastric stasis, bradyarrhythmias and impaired vagal reflexes in Wallenberg infarcts; bilateral dorsal medullary damage threatens vagal control of viscera.",
         "vascular": "PICA"
+      },
+      {
+        "syndrome": "Vagal dysautonomia (bradyarrhythmias, gastroparesis, neurogenic vomiting)",
+        "findings": "Vagal preganglionic neurons here slow the heart, drive bronchial secretion and run the enteric motor programme, so dorsal medullary lesions — syringobulbia, Chiari malformation, posterior-fossa surgery, or paramedian extension of a lateral medullary infarct — remove beat-to-beat cardiac modulation, producing bradycardia or asystole, delayed gastric emptying and vomiting; bilateral involvement is needed for the full picture.",
+        "vascular": "PICA / ASA-vertebral dorsomedial branches",
+        "note": "Cough syncope and swallowing-induced bradycardia appearing after posterior-fossa surgery are the practical warning signs of dorsal vagal nuclear injury."
       }
     ],
     "levels": ["lvl-sensory-decuss", "lvl-olivary"],
@@ -411,6 +473,11 @@
         "syndrome": "Hoarseness, dysphagia and depressed gag (efferent)",
         "findings": "Unilateral ambiguityus failure droops the ipsilateral palate, paralyzes the ipsilateral vocal fold and destroys effective swallowing — the clinical core of the lateral medullary (Wallenberg) syndrome; aspiration pneumonia is the principal risk.",
         "vascular": "PICA"
+      },
+      {
+        "syndrome": "Progressive bulbar palsy (bulbar-onset motor neuron disease)",
+        "findings": "Selective degeneration of the branchiomotor neurons of the nucleus ambiguus — together with the hypoglossal and facial nuclei — produces progressive flaccid dysarthria, nasal regurgitation, choking on liquids and tongue wasting with fasciculations, whereas the pseudobulbar variant instead gives spastic dysarthria with emotional lability. Swallowing failure and aspiration are the leading causes of death in amyotrophic lateral sclerosis.",
+        "note": "The nucleus sits deep in the lateral tegmentum, so bilateral involvement — motor neuron disease, a brainstem glioma or vascular disease on both sides — is needed for complete laryngeal paralysis."
       }
     ],
     "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary"],
@@ -442,6 +509,12 @@
         "findings": "Nuclear or rootlet destruction wastes the ipsilateral tongue, which fasciculates and deviates TOWARD the lesion on protrusion (the intact contralateral genioglossus pushes the tip across) — a feature of medial medullary syndrome.",
         "vascular": "Anterior spinal artery",
         "note": "UMN lesions deviate the tongue away from the cerebral lesion (toward the weak side) without wasting or fasciculations."
+      },
+      {
+        "syndrome": "Bilateral hypoglossal palsy — immobile, wasted tongue",
+        "findings": "Bilateral nuclear or rootlet lesions — motor neuron disease, syringobulbia, a midline medullary lesion or bilateral medial medullary infarcts — leave a tongue that can neither be protruded nor moved side to side, with severe dysarthria, pooling of saliva and inability to propel a food bolus; wasting and fasciculations separate it from the spastic, non-wasted tongue of pseudobulbar palsy.",
+        "vascular": "Anterior spinal artery (paramedian medullary branches)",
+        "note": "The nucleus bulges into the fourth-ventricle floor as the hypoglossal trigone, the surface landmark used to find it on the medullary plate."
       }
     ],
     "levels": ["lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary"],
@@ -502,6 +575,12 @@
         "syndrome": "Ipsilateral limb ataxia (Wallenberg)",
         "findings": "Lateral medullary infarcts involving the restiform body yield ipsilateral dysmetria, intention tremor and past-pointing together with vertigo from the adjoining vestibular nuclei.",
         "vascular": "PICA / vertebral"
+      },
+      {
+        "syndrome": "Partial lateral medullary syndrome — isolated vertigo and ataxia",
+        "findings": "A small PICA or vertebral branch infarct confined to the dorsolateral medulla can involve the restiform body and the adjacent vestibular nuclei alone, so the patient presents with acute vertigo, nausea, nystagmus and ipsilateral limb-trunk ataxia that mimics vestibular neuritis. The discriminators are the ipsilateral dysmetria and past-pointing plus lateropulsion, which a peripheral lesion does not produce; HINTS bedside testing (normal head impulse, direction-changing nystagmus, skew deviation) identifies the central cause.",
+        "vascular": "PICA / vertebral artery (dorsolateral medullary branches)",
+        "note": "This 'vestibular pseudo-neuritis' presentation is one of the commonest reasons a posterior-circulation stroke is missed in the emergency department."
       }
     ],
     "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal"],
@@ -527,6 +606,14 @@
       "efferent": ["Ventral external arcuate fibers to the contralateral cerebellum via tract-icp"]
     },
     "bloodSupply": "Anterior spinal artery / vertebral branches",
+    "clinical": [
+      {
+        "syndrome": "Central hypoventilation from ventral medullary chemoreceptor damage",
+        "findings": "The superficial arcuate (chemo-sensitive) region on the ventral medullary surface detects CO2 and pH, so damage over it — surgery for a foramen magnum or vertebral lesion, subarachnoid haemorrhage, or a ventral medullary infarct — flattens the CO2 ventilatory response: the patient hypoventilates and sleeps apnoeically with a normal chest examination. Congenital loss of these neurons underlies central congenital hypoventilation (Ondine's curse).",
+        "vascular": "Anterior spinal artery / vertebral branches",
+        "note": "The arcuate nucleus is the medullary homologue of the pontine nuclei: its crossed ventral external arcuate fibres carry cortical copies of movement to the cerebellum through the inferior cerebellar peduncle."
+      }
+    ],
     "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary"],
     "origin3d": [2, -45, 8.5],
     "size3d": [1.5, 5, 0.8],
@@ -805,6 +892,14 @@
       "efferent": ["Superior cerebellar peduncle (tract-scp) to the red nucleus and VL thalamus"]
     },
     "bloodSupply": "Superior cerebellar artery (SCA)",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral limb dysmetria from interposed-nucleus loss",
+        "findings": "The interposed (emboliform and globose) nuclei are the output of the intermediate spinocerebellum, so their destruction removes the on-line correction of ongoing limb movement: the ipsilateral arm overshoots and oscillates on finger-to-nose testing, with dysdiadochokinesia, hypotonia and a coarse intention tremor, while trunk control and gait are comparatively spared because the vermis and fastigial loop are intact.",
+        "vascular": "Superior cerebellar artery (SCA)",
+        "note": "Signs are ipsilateral because cerebellar outflow crosses twice (SCP decussation, then the cortical projection); the interposed output reaches the magnocellular red nucleus through the superior cerebellar peduncle."
+      }
+    ],
     "levels": ["lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle"],
     "origin3d": [4, -22, -11],
     "size3d": [1.4, 1.8, 1.5],

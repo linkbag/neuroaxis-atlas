@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "dims": [
-    45,
     81,
-    67
+    113,
+    107
   ],
   "originAu": [
-    -27,
+    -49.09090909090909,
     -55,
-    -56
+    -75.87878787878788
   ],
   "spacingAu": [
     1.2273,
@@ -16,9 +16,9 @@
     1.2424
   ],
   "origin": [
-    -27,
+    -49.09090909090909,
     -55,
-    -56
+    -75.87878787878788
   ],
   "spacing": [
     1.2273,
@@ -37,6 +37,121 @@
     "frame": "x=+patient-left, y=+superior, z=+anterior"
   },
   "patientLeft": "+x",
+  "canonicalBox": {
+    "amendment": "B (telencephalon, v7)",
+    "boxAu": {
+      "x": [
+        -48,
+        48
+      ],
+      "y": [
+        -55,
+        85
+      ],
+      "z": [
+        -75,
+        55
+      ]
+    },
+    "boundsAu": {
+      "x": [
+        -49.09090909090909,
+        49.09090909090909
+      ],
+      "y": [
+        -55,
+        85
+      ],
+      "z": [
+        -75.87878787878788,
+        55.81818181818181
+      ]
+    },
+    "gridStepAu": [
+      1.227273,
+      1.25,
+      1.242424
+    ],
+    "gridStepMm": [
+      1.4727,
+      1.5,
+      1.4909
+    ],
+    "lattice": "AMENDMENT A lattice preserved: same originAu and same per-axis step as the v3 grid, station counts grown to cover the box. Every old grid station (45×81×67 box) is therefore still a station of this grid, and the 13 level anchors are at integer au on this lattice.",
+    "previousBoxAu": {
+      "x": [
+        -27,
+        27
+      ],
+      "y": [
+        -55,
+        45
+      ],
+      "z": [
+        -56,
+        26
+      ]
+    },
+    "previousDims": [
+      45,
+      81,
+      67
+    ],
+    "addedCoverageAu": "y +45 → +85 (cortex vertex at +80.6), z −56 → −75 and +26 → +55 (occipital pole −72.6 … frontal pole +54.4), x ±27 → ±48 (context bound)"
+  },
+  "coverage": {
+    "sourceFov": "NIfTI FOV (outside it the grid stays 0/background)",
+    "stationsInsideFov": 979371,
+    "totalStations": 979371,
+    "fractionInsideFov": 1,
+    "levelRowsAu": [
+      {
+        "y": -46.25,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "y": -23.75,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "y": -7.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "y": 13.75,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "y": 30,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "y": 47.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "y": 57.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "y": 67.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "y": 77.5,
+        "present": true,
+        "pct": 100
+      }
+    ]
+  },
   "intensity": {
     "dtype": "uint8",
     "windowPercentiles": [
@@ -47,7 +162,26 @@
       65.8,
       559.1
     ],
-    "backgroundValue": 0
+    "backgroundValue": 0,
+    "windowRegionAu": {
+      "x": [
+        -27,
+        27
+      ],
+      "y": [
+        -55,
+        45
+      ],
+      "z": [
+        -56,
+        26
+      ]
+    },
+    "windowRegionNote": "percentiles measured over the v3 core box (the canonical region the v3 bake used) so the extension does not re-map existing voxels; the same recipe over the whole AMENDMENT B box would give [9.3, 571.7] and would visibly change the pre-existing levels.",
+    "windowOverFullBoxAu": [
+      9.3,
+      571.7
+    ]
   },
   "registration": {
     "frame": "sform RAS+ patient mm → canonical au (x=+left, y=+sup, z=+ant); 1 au = 1.2 mm",
@@ -70,6 +204,44 @@
       "composeOrder": "p' = T · Rx·Ry·Rz · S · p (canonical au)",
       "gridStepMm": 1.5
     },
+    "gridContinuity": {
+      "affineUnchanged": true,
+      "note": "AMENDMENT B re-bake: the registration constants were NOT re-fitted; only the station counts grew, from the same origin and with the same per-axis step. The y lattice is identical to the v3 lattice, so the 13 existing level anchors (integer au) still fall exactly on stations, and their in-plane (x, z) samples are the v3 samples carried over unchanged.",
+      "previousGrid": {
+        "dims": [
+          45,
+          81,
+          67
+        ],
+        "originAu": [
+          -27,
+          -55,
+          -56
+        ],
+        "spacingAu": [
+          1.2273,
+          1.25,
+          1.2424
+        ]
+      },
+      "currentGrid": {
+        "dims": [
+          81,
+          113,
+          107
+        ],
+        "originAu": [
+          -49.09090909090909,
+          -55,
+          -75.87878787878788
+        ],
+        "spacingAu": [
+          1.2273,
+          1.25,
+          1.2424
+        ]
+      }
+    },
     "residuals": {
       "toleranceAu": 2,
       "midlineMaxAbsAu": 0.75,
@@ -84,11 +256,11 @@
         },
         {
           "y": -12.5,
-          "dx": -0.3
+          "dx": -0.75
         },
         {
           "y": -6.2,
-          "dx": -0.25
+          "dx": -0.75
         },
         {
           "y": 0,
@@ -96,7 +268,7 @@
         },
         {
           "y": 6.3,
-          "dx": -0.75
+          "dx": -0.25
         },
         {
           "y": 12.5,

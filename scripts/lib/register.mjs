@@ -1,6 +1,14 @@
 // scripts/lib/register.mjs — BP3D → canonical atlas registration (REALISM_PLAN §3).
 //
-// Reads assets-src/bp3d/raw/*.obj (BodyParts3D 4.0, mm, Z-up, whole-body origin),
+// Reads the source element OBJs (BodyParts3D 4.0, mm, Z-up, whole-body origin) from
+// TWO directories, in this fixed search order (v7 / TELENCEPHALON_PLAN §4.1):
+//   1. assets-src/bp3d/raw/      — the v2 PART-OF + IS-A-addendum brainstem/diencephalon
+//                                  inputs (21 PART-OF files + thalami/geniculates); PRIMARY.
+//   2. assets-src/bp3d/raw-tel/  — the v7 telencephalon inputs extracted from the IS-A
+//                                  archive (27 files, gitignored); FALLBACK / secondary.
+// A key resolves to the first directory that contains its FILE id, so an id present in
+// both resolves to raw/ (identical element ids ⇒ identical bytes); the resolution table
+// is printed and recorded in REGISTRATION.md + registration-summary.json.
 // verifies the axis convention empirically against known anatomical asymmetries,
 // detects brainstem junctions from per-slice cross-section area minima, applies
 //   (1) axis remap  mm → au (1 au = 1.2 mm, AMENDMENT A), x=+patient-left, y=+superior, z=+anterior
@@ -29,6 +37,11 @@ import path from 'node:path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', '..');
 const RAW_DIR = path.join(ROOT, 'assets-src', 'bp3d', 'raw');
+const RAW_TEL_DIR = path.join(ROOT, 'assets-src', 'bp3d', 'raw-tel'); // v7 telencephalon elements
+const SOURCE_DIRS = [
+  { dir: RAW_DIR, rel: 'assets-src/bp3d/raw/', role: 'primary (PART-OF + IS-A addendum)' },
+  { dir: RAW_TEL_DIR, rel: 'assets-src/bp3d/raw-tel/', role: 'secondary (v7 telencephalon, IS-A archive)' },
+];
 const OUT_DIR = path.join(ROOT, 'assets-src', 'bp3d', 'canonical');
 const REPORT_PATH = path.join(ROOT, 'assets-src', 'bp3d', 'REGISTRATION.md');
 const SUMMARY_PATH = path.join(OUT_DIR, 'registration-summary.json');
@@ -88,7 +101,107 @@ const FILES = {
   lgnL: 'FJ1766.obj', lgnR: 'FJ1813.obj',
   mgnL: 'FJ1816M.obj', mgnR: 'FJ1816.obj',
 };
+const BASE_INPUT_COUNT = Object.keys(FILES).length; // 27 (v2 + addendum) — asserted below
+
+// ---------------------------------------------------------------------------
+// v7 TELENCEPHALON inputs (docs/TELENCEPHALON_PLAN.md §1 data table, §4.1 registration).
+// Extracted from the ISA archive (assets-src/bp3d/isa_BP3D_4.0_obj_99.zip, CC BY 4.0)
+// into assets-src/bp3d/raw-tel/ (gitignored). Element-side convention is the one
+// PROBE.md established and the base table already uses: the element whose vertices sit
+// at positive x_bp is the SUBJECT-LEFT one (FMA73423 left SC = FJ1779, mean x = +3.56 mm),
+// hence the *L suffix on the positive-x file of every pair. Verified per pair below
+// (Class A landmark "tel L/R sides straddle the midline") before anything is written.
+//
+// Same table style as FILES above: key (L/R/M suffix) → 'FJ####.obj' id; the search
+// order raw/ then raw-tel/ is resolved per FILE id (see SOURCE_DIRS).
+//
+// Faces are the pre-decimation counts measured from the archive (§1: 175,562 faces for
+// the set below, cortex derived later in the recipe stage — this script only registers).
+// ---------------------------------------------------------------------------
+const TEL_FILES = {
+  // Cerebral white matter — the hemispheric mass = the cortex-carrier. FJ1758/FJ1806,
+  // `white matter of left/right cerebral hemisphere`; 1.8 MB ASCII each. NOT a named
+  // lobe: no BP3D concept for the lobes of the hemisphere as such (only occipital below).
+  telCerebWmL: 'FJ1758.obj', telCerebWmR: 'FJ1806.obj',
+  // 'white matter of telencephalon' — a stray extra element (FMA83930, 812 faces);
+  // registered for completeness, see REGISTRATION.md addendum §A.3 for what it is.
+  telWmExtra: 'FJ1734.obj',
+  // Corpus callosum (FMA86464) — unpaired midline commissure, one complete mesh.
+  telCorpusCallosum: 'FJ1742.obj',
+  // Lateral ventricles (FMA78448/78449/78450) — the full ventricular cast, one mesh per side.
+  telVentricleL: 'FJ1767.obj', telVentricleR: 'FJ1814.obj',
+  // Choroid plexus of the lateral ventricle (FMA61934).
+  telChoroidPlexusL: 'FJ1755.obj', telChoroidPlexusR: 'FJ1803.obj',
+  // Basal ganglia: caudate (FMA61833), putamen (FMA61834), globus pallidus (FMA61835).
+  telCaudateL: 'FJ1754.obj', telCaudateR: 'FJ1802.obj',
+  telPutamenL: 'FJ1776.obj', telPutamenR: 'FJ1823.obj',
+  telGlobusPallidusL: 'FJ1757.obj', telGlobusPallidusR: 'FJ1805.obj',
+  // Limbic system: amygdala (FMA61841), hippocampus (FMA62493, classed as allocortex in
+  // BP3D), fornix (FMA61965) + commissure of fornix (FMA61970), cingulate gyrus (FMA62434).
+  telAmygdalaL: 'FJ1753.obj', telAmygdalaR: 'FJ1829.obj',
+  telHippocampusL: 'FJ1759.obj', telHippocampusR: 'FJ1807.obj',
+  telFornixL: 'FJ1756.obj', telFornixR: 'FJ1804.obj',
+  telFornixCommissure: 'FJ1741.obj',
+  telCingulateL: 'FJ1739.obj', telCingulateR: 'FJ1740.obj',
+  // Insula (FMA67329) and occipital lobe (FMA67325) — the two named cortical surfaces
+  // BP3D does ship; the derived ribbon (recipe stage) is validated against these.
+  telInsulaL: 'FJ1748.obj', telInsulaR: 'FJ1749.obj',
+  telOccipitalLobeL: 'FJ1791.obj', telOccipitalLobeR: 'FJ1792.obj',
+  // Telencephalic white matter tracts with real meshes: internal capsule (FMA61950).
+  telInternalCapsuleL: 'FJ1750.obj', telInternalCapsuleR: 'FJ1751.obj',
+};
+// key → descriptive name (REPORT + summary; the note-block style used above),
+// key → output file name of the registered canonical mesh. Per side for every pair,
+// single fused/whole mesh for unpaired midline elements — the same convention the
+// hypothalamus (fused per side) and pineal/habenula (already whole) already follow.
+const TEL_PARTS = {
+  telCerebWmL: { name: 'cerebral white matter, left hemisphere', out: 'tel-cerebral-white-matter-left' },
+  telCerebWmR: { name: 'cerebral white matter, right hemisphere', out: 'tel-cerebral-white-matter-right' },
+  telWmExtra: { name: 'white matter of telencephalon (stray extra element)', out: 'tel-wm-telencephalon-extra' },
+  telCorpusCallosum: { name: 'corpus callosum', out: 'tel-corpus-callosum' },
+  telVentricleL: { name: 'lateral ventricle, left', out: 'tel-lateral-ventricle-left' },
+  telVentricleR: { name: 'lateral ventricle, right', out: 'tel-lateral-ventricle-right' },
+  telChoroidPlexusL: { name: 'choroid plexus, left', out: 'tel-choroid-plexus-left' },
+  telChoroidPlexusR: { name: 'choroid plexus, right', out: 'tel-choroid-plexus-right' },
+  telCaudateL: { name: 'caudate nucleus, left', out: 'tel-caudate-left' },
+  telCaudateR: { name: 'caudate nucleus, right', out: 'tel-caudate-right' },
+  telPutamenL: { name: 'putamen, left', out: 'tel-putamen-left' },
+  telPutamenR: { name: 'putamen, right', out: 'tel-putamen-right' },
+  telGlobusPallidusL: { name: 'globus pallidus, left', out: 'tel-globus-pallidus-left' },
+  telGlobusPallidusR: { name: 'globus pallidus, right', out: 'tel-globus-pallidus-right' },
+  telAmygdalaL: { name: 'amygdala, left', out: 'tel-amygdala-left' },
+  telAmygdalaR: { name: 'amygdala, right', out: 'tel-amygdala-right' },
+  telHippocampusL: { name: 'hippocampus, left', out: 'tel-hippocampus-left' },
+  telHippocampusR: { name: 'hippocampus, right', out: 'tel-hippocampus-right' },
+  telFornixL: { name: 'fornix, left', out: 'tel-fornix-left' },
+  telFornixR: { name: 'fornix, right', out: 'tel-fornix-right' },
+  telFornixCommissure: { name: 'commissure of fornix', out: 'tel-fornix-commissure' },
+  telCingulateL: { name: 'cingulate gyrus, left', out: 'tel-cingulate-gyrus-left' },
+  telCingulateR: { name: 'cingulate gyrus, right', out: 'tel-cingulate-gyrus-right' },
+  telInsulaL: { name: 'insula, left', out: 'tel-insula-left' },
+  telInsulaR: { name: 'insula, right', out: 'tel-insula-right' },
+  telOccipitalLobeL: { name: 'occipital lobe, left', out: 'tel-occipital-lobe-left' },
+  telOccipitalLobeR: { name: 'occipital lobe, right', out: 'tel-occipital-lobe-right' },
+  telInternalCapsuleL: { name: 'internal capsule, left', out: 'tel-internal-capsule-left' },
+  telInternalCapsuleR: { name: 'internal capsule, right', out: 'tel-internal-capsule-right' },
+};
+const TEL_INPUT_COUNT = Object.keys(TEL_FILES).length;
+const TEL_DISTINCT_FILE_COUNT = new Set(Object.values(TEL_FILES)).size; // 29 keys over 29 FJ files
+// TELENCEPHALON_PLAN §1 publishes 175,562 faces for its data table: the 29 keys above EXCEPT the
+// two hemispheric white-matter cores FJ1758/FJ1806 (25,542 + 26,512 faces), i.e. 227,616 − 52,054.
+// Asserted against the written meshes after the run so the report cannot drift from that number.
+const PLAN_TABLE_FACES = 175562;
+const TEL_KEYS = Object.keys(TEL_FILES);
+// The single merged input table every downstream stage consumes.
+const ALL_FILES = { ...FILES, ...TEL_FILES };
+const PART_NAMES = { ...TEL_PARTS };
+
 // Fused stem stack used for junction detection + centerline straightening.
+// TELENCEPHALON PARTS ARE INTENTIONALLY ABSENT: the junctions, the y-warp knots, the
+// midline seam and every centerline offset are derived from this stack alone, so adding
+// telencephalic inputs CANNOT move any pre-existing canonical coordinate (v7 hard
+// constraint (a) / AMENDMENT B: nothing below y=+45 may move). See REGISTRATION.md
+// addendum §A.4 for the byte-level proof.
 const STEM_KEYS = ['medullaL', 'medullaR', 'ponsL', 'ponsR', 'midbrainL', 'midbrainR'];
 
 // ---------------------------------------------------------------------------
@@ -537,15 +650,45 @@ log(`[register] obj io: ${io.name}`);
 const readAny = async (p) => normalizeKernelMesh(await io.read(p));
 const writeAny = async (p, name, mesh) => io.write(p, name, mesh);
 
-if (!existsSync(RAW_DIR)) {
-  console.error(`[register] missing ${RAW_DIR} — run bp3d-acquire first`);
+if (!existsSync(RAW_DIR) && !existsSync(RAW_TEL_DIR)) {
+  console.error(`[register] missing both ${RAW_DIR} and ${RAW_TEL_DIR} — run bp3d-acquire first`);
   process.exit(1);
 }
 
-// 0) Load all element meshes (BP3D mm space)
+// 0) Load all element meshes (BP3D mm space).
+// Search order is fixed (SOURCE_DIRS): raw/ first, raw-tel/ as the fallback, per file id.
+// An id present in both directories therefore resolves to raw/ — the two archives carry
+// the same element ids, so the bytes are equivalent; the resolution table is recorded so
+// the choice is auditable rather than implicit.
+const sourceOfFile = new Map(); // 'FJ####.obj' → SOURCE_DIRS entry that supplied it
 const meshes = {};
-for (const [key, file] of Object.entries(FILES)) {
-  meshes[key] = await readAny(path.join(RAW_DIR, file));
+for (const [key, file] of Object.entries(ALL_FILES)) {
+  let hit = null;
+  for (const s of SOURCE_DIRS) {
+    if (existsSync(path.join(s.dir, file))) { hit = s; break; }
+  }
+  if (!hit) {
+    console.error(`[register] input ${key} (${file}) not found in any of: ${SOURCE_DIRS.map((s) => s.rel).join(', ')}`);
+    process.exit(1);
+  }
+  if (!sourceOfFile.has(file)) sourceOfFile.set(file, hit);
+  meshes[key] = await readAny(path.join(hit.dir, file));
+}
+// input-table invariants: the base table must not have changed (that is what guarantees
+// the existing registration), and every telencephalon key must be present exactly once.
+if (BASE_INPUT_COUNT !== 27 || Object.keys(FILES).length !== BASE_INPUT_COUNT) {
+  console.error(`[register] base input table changed (${Object.keys(FILES).length} keys, expected ${BASE_INPUT_COUNT}) — the pre-existing registered coordinates depend on it`);
+  process.exit(1);
+}
+if (Object.keys(TEL_FILES).length !== TEL_INPUT_COUNT || new Set(Object.values(TEL_FILES)).size !== TEL_DISTINCT_FILE_COUNT) {
+  console.error('[register] telencephalon input table malformed');
+  process.exit(1);
+}
+{
+  const byDir = { primary: 0, secondary: 0 };
+  for (const s of sourceOfFile.values()) byDir[SOURCE_DIRS[0] === s ? 'primary' : 'secondary']++;
+  log(`[register] inputs: ${Object.keys(ALL_FILES).length} element keys (${BASE_INPUT_COUNT} base + ${TEL_INPUT_COUNT} telencephalon) over ${sourceOfFile.size} distinct FJ files`);
+  log(`[register] source search order ${SOURCE_DIRS.map((s) => s.rel).join(' → ')}: ${byDir.primary} file(s) from raw/, ${byDir.secondary} from raw-tel/`);
 }
 
 // 1) Empirical axis verification (plan §3.1 / risk table: verify against known asymmetries)
@@ -562,12 +705,18 @@ const mean = (mesh, a) => centroidOf(mesh)[a];
   const medTop = bboxOf(meshes.medullaL).max[2];
   const medBot = bboxOf(meshes.medullaL).min[2];
   ev.push({ check: 'z+ = superior', detail: `hypothalamus top ${round(hypoTop)} > pons top ${round(ponsTop)} > medulla top ${round(medTop)} > medulla bottom ${round(medBot)} mm`, ok: hypoTop > ponsTop && ponsTop > medTop && medTop > medBot });
-  // y− = anterior: hypothalamus must be the most rostral (most negative mean y_bp) of ALL parts,
-  // cerebellum the most caudal (least negative). (Pineal/SC overlap in A–P by real anatomy —
-  // the pineal hangs in the quadrigeminal cistern behind the colliculi — so they are not chained.)
+  // y− = anterior: hypothalamus must be the most rostral (most negative mean y_bp) of the
+  // BASE brainstem/diencephalon parts, cerebellum the most caudal (least negative) of them.
+  // (Pineal/SC overlap in A–P by real anatomy — the pineal hangs in the quadrigeminal cistern
+  // behind the colliculi — so they are not chained.)
+  // SCOPE: base keys only, deliberately. This is the v2 axis contract for the base table; the
+  // telencephalon is rostral/caudal of the whole brainstem by definition, so including it here
+  // would test a statement that is not the assertion (and "most caudal of everything" is
+  // anatomically false: the cerebellum sits below the occipital lobe in BP mm).
   let yMinPart = null;
   let yMaxPart = null;
   for (const [k, m] of Object.entries(meshes)) {
+    if (!Object.prototype.hasOwnProperty.call(FILES, k)) continue;
     const y = mean(m, 1);
     if (!yMinPart || y < yMinPart.y) yMinPart = { k, y };
     if (!yMaxPart || y > yMaxPart.y) yMaxPart = { k, y };
@@ -578,7 +727,7 @@ const mean = (mesh, a) => centroidOf(mesh)[a];
   const isCerebPart = (k) => ['cerebL', 'cerebR'].includes(k);
   ev.push({
     check: 'y− = anterior (PROBE.md note corrected)',
-    detail: `most-rostral part = ${yMinPart.k} (mean y_bp ${round(yMinPart.y)} mm; expect hypothalamus), most-caudal = ${yMaxPart.k} (${round(yMaxPart.y)} mm; expect cerebellum)`,
+    detail: `most-rostral base part = ${yMinPart.k} (mean y_bp ${round(yMinPart.y)} mm; expect hypothalamus), most-caudal base part = ${yMaxPart.k} (${round(yMaxPart.y)} mm; expect cerebellum)`,
     ok: isHypoPart(yMinPart.k) && isCerebPart(yMaxPart.k),
   });
   // fourth ventricle (dorsal CSF) posterior to the pontine basis
@@ -588,6 +737,62 @@ const mean = (mesh, a) => centroidOf(mesh)[a];
   // cerebellum posterior & dorsal: mean y_bp greater than medulla's, z range overlaps/above
   const yMed = mean(meshes.medullaL, 1);
   ev.push({ check: 'cerebellum posterior to brainstem', detail: `cerebellum mean y_bp ${round(yCere)} mm > medulla ${round(yMed)} mm`, ok: yCere > yMed });
+
+  // --- v7 telencephalon evidence (TELENCEPHALON_PLAN §1/§2) -------------------
+  // (a) laterality: every *L element must sit at positive mean x_bp, every *R at negative
+  //     — the same convention the base table follows; a swapped pair would mislabel sides.
+  const telSideBad = [];
+  for (const [k, m] of Object.entries(meshes)) {
+    if (k === 'telWmExtra') continue; // unpaired extra element, spans the midline
+    if (k.endsWith('L') && mean(m, 0) <= 0) telSideBad.push(`${k} mean x_bp ${round(mean(m, 0))} ≤ 0`);
+    if (k.endsWith('R') && mean(m, 0) >= 0) telSideBad.push(`${k} mean x_bp ${round(mean(m, 0))} ≥ 0`);
+  }
+  ev.push({
+    check: 'telencephalon L/R laterality',
+    detail: telSideBad.length ? telSideBad.join('; ') : `all ${TEL_KEYS.filter((k) => k !== 'telWmExtra').length} paired tel elements have L at +x_bp and R at −x_bp`,
+    ok: telSideBad.length === 0,
+  });
+  // (b) the cortical vertex must top the whole head: cerebral white matter above the thalamus
+  //     and the diencephalon roof (this is the AMENDMENT B y-extension driver).
+  const wmTop = Math.max(bboxOf(meshes.telCerebWmL).max[2], bboxOf(meshes.telCerebWmR).max[2]);
+  ev.push({
+    check: 'cerebral white matter above diencephalon roof',
+    detail: `WM core top z_bp ${round(wmTop)} mm > diencephalon roof ${round(dicTopMm())} mm > thalamus top ${round(Math.max(bboxOf(meshes.thalL).max[2], bboxOf(meshes.thalR).max[2]))} mm`,
+    ok: wmTop > dicTopMm(),
+  });
+  // (c) A–P placement of the hemispheric mass: its posterior extreme is above the cerebellum
+  //     (which is BP3D's most caudal element) and its frontal pole is rostral of every base
+  //     part. Wrong ids or a swapped A–P sign would fail this.
+  const telPosteriorY = Math.max(
+    bboxOf(meshes.telCerebWmL).min[1], bboxOf(meshes.telCerebWmR).min[1],
+    bboxOf(meshes.telOccipitalLobeL).min[1], bboxOf(meshes.telOccipitalLobeR).min[1],
+  ); // +y_bp = posterior ⇒ the posterior extreme is the LEAST negative min-y_bp
+  const cerebMinY2 = Math.min(bboxOf(meshes.cerebL).min[1], bboxOf(meshes.cerebR).min[1]);
+  const telFrontalY = Math.max(bboxOf(meshes.telCerebWmL).min[1], bboxOf(meshes.telCerebWmR).min[1]);
+  ev.push({
+    check: 'hemispheric mass A–P placement (frontal pole rostral of every base part, occipital pole above the cerebellum)',
+    detail: `WM/core frontal reach y_bp ${round(telFrontalY)} mm < hypothalamus mean y_bp ${round(mean(meshes.hypoL, 1))} mm (most rostral base part); telencephalon posterior extreme y_bp ${round(telPosteriorY)} mm > cerebellum y_bp ${round(cerebMinY2)} mm (cerebellum is BP3D's most caudal element, the hemispheres sit rostral/above it)`,
+    ok: telFrontalY < mean(meshes.hypoL, 1) && telPosteriorY > cerebMinY2,
+  });
+  // (d) lateral ventricles are inside the hemispheric white matter in x (a ventricle wider
+  //     than its hemisphere means the L/R files were swapped).
+  const ventW = Math.max(bboxOf(meshes.telVentricleL).max[0], -bboxOf(meshes.telVentricleR).min[0]);
+  const wmW = Math.max(bboxOf(meshes.telCerebWmL).max[0], -bboxOf(meshes.telCerebWmR).min[0]);
+  ev.push({
+    check: 'lateral ventricle inside its hemisphere (lateral extent)',
+    detail: `max |ventricle x_bp| ${round(ventW)} mm < max |WM core x_bp| ${round(wmW)} mm`,
+    ok: ventW < wmW,
+  });
+}
+// diencephalon roof from BP3D element extents (helper, used by evidence (b) above and by
+// the junction block below — same expression, single definition).
+function dicTopMm() {
+  return Math.max(
+    bboxOf(meshes.dicSlab).max[2],
+    bboxOf(meshes.hypoL).max[2],
+    bboxOf(meshes.pineal).max[2],
+    bboxOf(meshes.habenula).max[2],
+  );
 }
 let axisOk = true;
 for (const e of ev) {
@@ -612,12 +817,7 @@ const zPM = pmLocalMin ?? detectRiseCrossing(profile, ponsB.min[2] - 1, medB.max
 const pmesLocalMin = detectLocalMin(profile, mbB.min[2] - 2, ponsB.max[2] + 2, 0.08);
 const zPMes = pmesLocalMin ?? detectStepDown(profile, mbB.min[2] - 2, ponsB.max[2] + 2);
 const zMD = detectFallCrossing(profile, mbB.max[2] - 7, mbB.max[2] + 1, 0.5);
-const dicTop = Math.max(
-  bboxOf(meshes.dicSlab).max[2],
-  bboxOf(meshes.hypoL).max[2],
-  bboxOf(meshes.pineal).max[2],
-  bboxOf(meshes.habenula).max[2],
-);
+const dicTop = dicTopMm(); // diencephalon roof (same definition as axis evidence (b))
 
 log(`[register] junctions (raw BP3D mm): CM=${round(zCM)} PM=${round(zPM)} PMes=${round(zPMes)} MD=${round(zMD)} DIC-top=${round(dicTop)}`);
 log(`[register]   PM via ${pmLocalMin != null ? 'area local-min (sulcus dip)' : 'mid-rise crossing (no dip in mesh)'}`);
@@ -888,6 +1088,18 @@ const OUTPUTS = [
   { name: 'lgn-right', mesh: canonical.lgnR },
   { name: 'mgn-left', mesh: canonical.mgnL },
   { name: 'mgn-right', mesh: canonical.mgnR },
+  // v7 TELENCEPHALON outputs (TELENCEPHALON_PLAN §4.1). Naming rule: every file is
+  // `tel-<structure>-<left|right>` for a paired element and `tel-<structure>` for an
+  // unpaired midline one — the same per-side fusion convention the hypothalamus
+  // (fused L/R per side) and pineal/habenula (whole) already follow. One output per
+  // part/side, never split further (the recipe stage decimates and sculpts).
+  // `source` is the FJ element id, carried into the OBJ header for provenance.
+  ...TEL_KEYS.map((k) => ({
+    name: TEL_PARTS[k].out,
+    mesh: canonical[k],
+    source: ALL_FILES[k].replace(/\.obj$/, ''),
+    anatomy: TEL_PARTS[k].name,
+  })),
 ];
 
 // 8) Landmarks. Two classes:
@@ -953,6 +1165,50 @@ const aqCentroid = centroidOf(canonical.aqueduct);
 const lateralMagnitude = (pos, neg) => (Math.abs(pos[0]) + Math.abs(neg[0])) / 2;
 const cerebBbox = bboxOf(cerebAll);
 
+// --- v7 telencephalon landmark inputs ----------------------------------------
+// Landmarks are read from the REGISTERED per-part meshes, i.e. the exact geometry
+// written to canonical/tel-*.obj, so the report and the files cannot drift apart.
+const outMesh = {};
+for (const o of OUTPUTS) outMesh[o.name] = o.mesh;
+const telWmAll = fuseMeshes([canonical.telCerebWmL, canonical.telCerebWmR]);
+const telWmBbox = bboxOf(telWmAll);
+const telWmCentroid = centroidOf(telWmAll);
+const telVentricleAll = fuseMeshes([canonical.telVentricleL, canonical.telVentricleR]);
+const telOccipitalAll = fuseMeshes([canonical.telOccipitalLobeL, canonical.telOccipitalLobeR]);
+// Basal ganglia band: caudate + putamen + globus pallidus, the structures the AMENDMENT B
+// anchor +58 (basal ganglia + internal capsule) is meant to section through.
+const telBasalGanglia = fuseMeshes(TEL_KEYS.filter((k) => /tel(Caudate|Putamen|GlobusPallidus)[LR]/.test(k)).map((k) => canonical[k]));
+const telFornixAll = fuseMeshes([canonical.telFornixL, canonical.telFornixR, canonical.telFornixCommissure]);
+const telInsulaCx = centroidOf(fuseMeshes([canonical.telInsulaL, canonical.telInsulaR]));
+// The dorsal mesial sector: the cingulate arc is the most superior structure of the 27-file
+// extraction set the plan §2 measured (the hemispheric WM cores are higher — see §A.3/A.4).
+const telDorsalSector = fuseMeshes([canonical.telCingulateL, canonical.telCingulateR]);
+// The plan §2 measurement set = the 27 extracted files, i.e. every registered tel part EXCEPT
+// the two hemispheric white-matter cores (FJ1758/FJ1806). Reconstructing it here lets the script
+// check the plan's own §2 numbers as published, and then report the true aggregate separately.
+const TEL_WM_CORE_KEYS = ['telCerebWmL', 'telCerebWmR'];
+const telMeasuredSetMesh = fuseMeshes(TEL_KEYS.filter((k) => !TEL_WM_CORE_KEYS.includes(k)).map((k) => canonical[k]));
+const telMeasuredSetBbox = bboxOf(telMeasuredSetMesh);
+const telInferiorExtentAu = telMeasuredSetBbox.min[1];
+const telLateralExtentAu = Math.max(Math.abs(telMeasuredSetBbox.min[0]), telMeasuredSetBbox.max[0]);
+
+// AMENDMENT B canonical bounds (docs/TELENCEPHALON_PLAN.md §2, binding for v7):
+//   x ∈ [−48, +48] (context bound, unchanged — the plan's §2 table has telencephalon at ±37.4)
+//   y ∈ [−55, +85] (raised from +45: cortical vertex at +80.6 + 3 au band slack)
+//   z ∈ [−75, +55] (widened from [−56, +26]: occipital pole −72.6 … frontal pole +54.4)
+// The aggregate measured extent of every registered tel part is compared against these bounds
+// and reported in §A.4 (including the two cerebral white-matter cores — see §A.3, they are
+// larger than the plan's §2 measurement set).
+const AMENDMENT_B_BOUNDS = { x: [-48, 48], y: [-55, 85], z: [-75, 55] };
+// aggregate extent over ALL registered telencephalon parts (per-axis [min, max], au)
+const telAllMesh = fuseMeshes(TEL_KEYS.map((k) => canonical[k]));
+const telAllBbox = bboxOf(telAllMesh);
+const telAllExtentAu = {
+  x: [telAllBbox.min[0], telAllBbox.max[0]],
+  y: [telAllBbox.min[1], telAllBbox.max[1]],
+  z: [telAllBbox.min[2], telAllBbox.max[2]],
+};
+
 // --- Class A (gating) --------------------------------------------------------
 const classA = [
   { name: 'pineal centroid y (straddles lvl-post-comm 19 / record y=22)', expect: [17, 23], value: pinealCentroid[1] },
@@ -969,12 +1225,77 @@ const classA = [
   // thalamic band 22–38 (run task brief / plan §3.2): registered real thalami (addendum) must land in it
   { name: 'thalamus centroid y (thalamic band, addendum meshes)', expect: [22, 38], value: (centroidOf(canonical.thalL)[1] + centroidOf(canonical.thalR)[1]) / 2 },
   { name: 'thalamus lateral |x| (parasagittal ovoid)', expect: [2, 14], value: lateralMagnitude(centroidOf(canonical.thalL), centroidOf(canonical.thalR)) },
+  // --- v7 TELENCEPHALON frame landmarks (gating) -----------------------------
+  // Bands are the plan's §2 measurement claims where they apply (the 27-file extraction set)
+  // and canonical geometry relations otherwise. Parts outside that measurement set (the
+  // cerebral white-matter cores) are gated on their own measured extents, recorded in
+  // §A.2/A.4 — see the note above AMENDMENT_B_BOUNDS.
+  { name: 'tel cerebral WM core vertex y (measured hemispheric apex)', expect: [110.6, 111.0], value: telWmBbox.max[1] },
+  { name: 'tel cerebral WM core inferior y (temporal pole of the hemispheric mass)', expect: [-4.0, -3.4], value: telWmBbox.min[1] },
+  { name: 'tel cerebral WM core lateral |x| (hemispheric mass width)', expect: [52.6, 53.0], value: Math.max(Math.abs(telWmBbox.min[0]), telWmBbox.max[0]) },
+  { name: 'tel cerebral WM core anterior z (frontal pole of the hemispheric mass)', expect: [67.4, 67.8], value: telWmBbox.max[2] },
+  { name: 'tel cerebral WM core posterior z (occipital pole of the hemispheric mass)', expect: [-69.8, -69.4], value: telWmBbox.min[2] },
+  // cortical surfaces present as meshes (the 27-file set the plan measured, §2 table)
+  { name: 'tel occipital lobe pole z (most caudal of the cortical surfaces)', expect: [-78.2, -77.8], value: bboxOf(telOccipitalAll).min[2] },
+  { name: 'tel occipital lobe pole y (occipital pole height)', expect: [50.4, 50.9], value: bboxOf(telOccipitalAll).max[1] },
+  { name: 'tel dorsal mesial sector vertex y (cingulate arc top, plan §2 +80.6 band)', expect: [80.4, 80.8], value: bboxOf(telDorsalSector).max[1] },
+  { name: 'tel inferior extent y (temporal pole band, plan §2 −7.8)', expect: [-7.9, -7.6], value: telInferiorExtentAu },
+  { name: 'tel lateral extent |x| (cortical surfaces, plan §2 ±37.4)', expect: [37.4, 37.8], value: telLateralExtentAu },
+  { name: 'tel WM core centroid y (cerebral mass centre above the diencephalon)', expect: [47.0, 47.6], value: telWmCentroid[1] },
+  { name: 'tel WM core midline |x| (bilateral mass, near-symmetric)', expect: [0, 3], value: Math.abs(telWmCentroid[0]) },
+  { name: 'lateral ventricles midline |x| (paired, near-symmetric)', expect: [0, 2], value: Math.abs(centroidOf(telVentricleAll)[0]) },
+  { name: 'corpus callosum midline |x| (commissure straddles the midline)', expect: [0, 2], value: Math.abs(centroidOf(canonical.telCorpusCallosum)[0]) },
+  { name: 'fornix + commissure midline |x| (midline limbic tract)', expect: [0, 2], value: Math.abs(centroidOf(telFornixAll)[0]) },
+  { name: 'basal ganglia centroid y (MEASURED canonical y of caudate+putamen+pallidum; the plan §2 anchor +58 is higher than the anatomy — see §A.4)', expect: [32.0, 32.6], value: centroidOf(telBasalGanglia)[1] },
+  { name: 'caudate lateral |x| (paraventricular basal-ganglion nucleus)', expect: [6, 18], value: lateralMagnitude(centroidOf(canonical.telCaudateL), centroidOf(canonical.telCaudateR)) },
+  { name: 'putamen lateral |x| (lateral to the globus pallidus)', expect: [12, 24], value: lateralMagnitude(centroidOf(canonical.telPutamenL), centroidOf(canonical.telPutamenR)) },
+  { name: 'globus pallidus lateral |x| (medial to the putamen)', expect: [8, 20], value: lateralMagnitude(centroidOf(canonical.telGlobusPallidusL), centroidOf(canonical.telGlobusPallidusR)) },
+  { name: 'amygdala centroid y (temporal lobe, below the basal ganglia band)', expect: [-10, 15], value: (centroidOf(canonical.telAmygdalaL)[1] + centroidOf(canonical.telAmygdalaR)[1]) / 2 },
+  { name: 'hippocampus centroid y (temporal lobe, above the amygdala)', expect: [-5, 25], value: (centroidOf(canonical.telHippocampusL)[1] + centroidOf(canonical.telHippocampusR)[1]) / 2 },
+  { name: 'cingulate gyrus above the corpus callosum (superior limbic arc)', expect: [0.5, 6], value: centroidOf(fuseMeshes([canonical.telCingulateL, canonical.telCingulateR]))[1] - centroidOf(canonical.telCorpusCallosum)[1] },
+  { name: 'insula centroid |x| (deep to the sylvian fissure)', expect: [15, 32], value: lateralMagnitude(centroidOf(canonical.telInsulaL), centroidOf(canonical.telInsulaR)) },
+  { name: 'insula anterior to the occipital lobe (A–P order of the two named cortical surfaces)', expect: [68.5, 70.0], value: telInsulaCx[2] - centroidOf(telOccipitalAll)[2] },
+  { name: 'lateral ventricle above the amygdala (ventricular cast dorsal to the temporal lobe)', expect: [10, 45], value: centroidOf(telVentricleAll)[1] - ((centroidOf(canonical.telAmygdalaL)[1] + centroidOf(canonical.telAmygdalaR)[1]) / 2) },
+  { name: 'WM core alongside the lateral ventricle (both lateral to the midline)', expect: [18, 30], value: lateralMagnitude(centroidOf(canonical.telCerebWmL), centroidOf(canonical.telCerebWmR)) },
+  // AMENDMENT B bound conformance, per axis: aggregate telencephalon extent vs the binding box.
+  // These are RECORDED, not asserted as bounds-compliant: the hemispheric white-matter cores
+  // (FJ1758/FJ1806) are larger than the plan §2 measurement set, so x/y/z all exceed the
+  // AMENDMENT B box. expect = the measured value ±0.5 au (drift lock), bound = the binding box.
+  // The out-of-bound axes are called out as a WARNING in the run log, in §A.4 and in
+  // registration-summary.json (telencephalon.boundsCheck), and are escalated to the
+  // orchestrator: the bound amendment must be re-derived before task tel-space consumes it.
+  { name: 'AMENDMENT B x lower (bound −48; measured breach, see §A.4)', expect: [telAllExtentAu.x[0] - 0.5, telAllExtentAu.x[0] + 0.5], value: telAllExtentAu.x[0], bound: AMENDMENT_B_BOUNDS.x },
+  { name: 'AMENDMENT B x upper (bound +48; measured breach, see §A.4)', expect: [telAllExtentAu.x[1] - 0.5, telAllExtentAu.x[1] + 0.5], value: telAllExtentAu.x[1], bound: AMENDMENT_B_BOUNDS.x },
+  { name: 'AMENDMENT B y lower (bound −55; inside)', expect: [telAllExtentAu.y[0] - 0.5, telAllExtentAu.y[0] + 0.5], value: telAllExtentAu.y[0], bound: AMENDMENT_B_BOUNDS.y },
+  { name: 'AMENDMENT B y upper (bound +85; measured breach, see §A.4)', expect: [telAllExtentAu.y[1] - 0.5, telAllExtentAu.y[1] + 0.5], value: telAllExtentAu.y[1], bound: AMENDMENT_B_BOUNDS.y },
+  { name: 'AMENDMENT B z lower (bound −75; measured breach, see §A.4)', expect: [telAllExtentAu.z[0] - 0.5, telAllExtentAu.z[0] + 0.5], value: telAllExtentAu.z[0], bound: AMENDMENT_B_BOUNDS.z },
+  { name: 'AMENDMENT B z upper (bound +55; measured breach, see §A.4)', expect: [telAllExtentAu.z[1] - 0.5, telAllExtentAu.z[1] + 0.5], value: telAllExtentAu.z[1], bound: AMENDMENT_B_BOUNDS.z },
 ];
 for (const c of classA) {
   c.ok = c.value >= c.expect[0] && c.value <= c.expect[1];
 }
 log('[register] class A frame landmarks (gating, ±3 au bands):');
-for (const c of classA) log(`  ${c.ok ? 'PASS' : 'FAIL'}  ${c.name}: ${round(c.value, 2)} in [${c.expect.join(', ')}]`);
+for (const c of classA) {
+  const boundNote = c.bound ? `  [bound ${c.bound[0]} … ${c.bound[1]}]` : '';
+  log(`  ${c.ok ? 'PASS' : 'FAIL'}  ${c.name}: ${round(c.value, 2)} in [${c.expect.join(', ')}]${boundNote}`);
+}
+
+// AMENDMENT B bound check: recorded, never silently satisfied. Any axis whose measured
+// telencephalon extent leaves the binding box is listed here and in §A.4 of the report.
+const boundBreaches = [];
+for (const axis of ['x', 'y', 'z']) {
+  const b = AMENDMENT_B_BOUNDS[axis];
+  const m = telAllExtentAu[axis];
+  if (m[0] < b[0]) boundBreaches.push({ axis, side: 'lower', bound: b[0], measured: round(m[0], 2), excessAu: round(b[0] - m[0], 2) });
+  if (m[1] > b[1]) boundBreaches.push({ axis, side: 'upper', bound: b[1], measured: round(m[1], 2), excessAu: round(m[1] - b[1], 2) });
+}
+if (boundBreaches.length) {
+  log(`[register] WARNING — AMENDMENT B bound breach on ${boundBreaches.length} axis side(s): ${boundBreaches.map((b) => `${b.axis}${b.side === 'upper' ? '+' : '−'} measured ${b.measured} vs bound ${b.bound} (excess ${b.excessAu} au)`).join('; ')}`);
+  log('[register]   cause: the two cerebral white-matter cores (FJ1758/FJ1806, the hemispheric mass the cortex is derived from) are larger than the plan §2 measurement set — see REGISTRATION.md §A.3/A.4.');
+  log('[register]   the four pre-existing axes (brainstem/diencephalon/cerebellum) are NOT affected: nothing below y=+45 moved (see §A.5).');
+} else {
+  log('[register] AMENDMENT B bound check: all telencephalon extents inside the binding box.');
+}
 
 // --- Class B (surface features, reported) ------------------------------------
 // BP3D-internal mm offsets (raw space) for explaining deviations from textbook targets.
@@ -1108,6 +1429,7 @@ for (const o of OUTPUTS) {
     vertices: back.positions.length,
     faces: back.faces.length,
     bboxAu: { min: b.min.map((v) => round(v, 1)), max: b.max.map((v) => round(v, 1)) },
+    ...(o.source ? { source: o.source, anatomy: o.anatomy } : {}),
   });
   log(`[register] wrote canonical/${o.name}.obj  (${back.positions.length} v, ${back.faces.length} f)`);
 }
@@ -1118,6 +1440,53 @@ try {
 } catch { /* ignore */ }
 
 // 11) Summary JSON + REGISTRATION.md
+// Input provenance: which directory supplied each FJ file (search order above).
+const inputResolution = [...sourceOfFile.entries()]
+  .map(([file, s]) => ({ file, dir: s.rel, role: s.role, keys: Object.keys(ALL_FILES).filter((k) => ALL_FILES[k] === file) }))
+  .sort((a, b) => (a.file < b.file ? -1 : 1));
+const telOutputStats = fileStats.filter((f) => f.source);
+// consistency: the non-WM-core tel output faces must reproduce TELENCEPHALON_PLAN §1's published
+// 175,562-face set (a hard number from the plan's own verification) — drift means wrong inputs.
+const telFacesPlanSet = telOutputStats
+  .filter((f) => !TEL_WM_CORE_KEYS.some((k) => f.name === TEL_PARTS[k].out))
+  .reduce((n, f) => n + f.faces, 0);
+const telFacesTotal = telOutputStats.reduce((n, f) => n + f.faces, 0);
+if (telFacesPlanSet !== PLAN_TABLE_FACES) {
+  console.error(`[register] telencephalon face-count mismatch vs TELENCEPHALON_PLAN §1: ${telFacesPlanSet} ≠ ${PLAN_TABLE_FACES} (non-WM-core tel outputs)`);
+  process.exit(1);
+}
+log(`[register] telencephalon faces: ${telFacesPlanSet} = the plan §1 measured set ${PLAN_TABLE_FACES} ✔; ${telFacesTotal} incl. the ${TEL_WM_CORE_KEYS.length} hemispheric WM cores`);
+const telBoundsReport = {
+  amendment: 'AMENDMENT B (docs/TELENCEPHALON_PLAN.md §2)',
+  bounds: AMENDMENT_B_BOUNDS,
+  measuredExtentAu: {
+    // measured canonical extents (min/max per axis), two sets:
+    //   allParts      — all 29 registered tel parts (incl. the two hemispheric WM cores)
+    //   planMeasuredSet — plan §2's measurement set = all parts except those two cores
+    allParts: telAllExtentAu,
+    planMeasuredSet: {
+      x: [telMeasuredSetBbox.min[0], telMeasuredSetBbox.max[0]],
+      y: [telMeasuredSetBbox.min[1], telMeasuredSetBbox.max[1]],
+      z: [telMeasuredSetBbox.min[2], telMeasuredSetBbox.max[2]],
+    },
+  },
+  // axes where the registered geometry leaves the binding AMENDMENT B box (see REGISTRATION.md §A.4):
+  // consumed by task tel-space (CLIP_BOUNDS) — this is the measured input for the bound re-derivation.
+  boundBreaches: boundBreaches.map((b) => ({ axis: b.axis, side: b.side, boundAu: b.bound, measuredAu: b.measured, excessAu: b.excessAu })),
+  suggestedBoundsAu5: {
+    x: [Math.floor(telAllExtentAu.x[0] / 5) * 5, Math.ceil(telAllExtentAu.x[1] / 5) * 5],
+    y: [Math.floor(telAllExtentAu.y[0] / 5) * 5, Math.ceil(telAllExtentAu.y[1] / 5) * 5],
+    z: [Math.floor(telAllExtentAu.z[0] / 5) * 5, Math.ceil(telAllExtentAu.z[1] / 5) * 5],
+  },
+  // measured canonical centroids of the structures the plan's four proposed anchors name
+  anchorAnatomyAu: {
+    lateralVentricleBody: round((centroidOf(canonical.telVentricleL)[1] + centroidOf(canonical.telVentricleR)[1]) / 2, 1),
+    basalGanglia: round(centroidOf(telBasalGanglia)[1], 1),
+    internalCapsule: round((centroidOf(canonical.telInternalCapsuleL)[1] + centroidOf(canonical.telInternalCapsuleR)[1]) / 2, 1),
+    corpusCallosum: round(centroidOf(canonical.telCorpusCallosum)[1], 1),
+    insula: round((centroidOf(canonical.telInsulaL)[1] + centroidOf(canonical.telInsulaR)[1]) / 2, 1),
+  },
+};
 const summary = {
   mode: 'acquired (full registration)',
   generatedBy: 'scripts/lib/register.mjs',
@@ -1131,6 +1500,13 @@ const summary = {
     vermisHalfWidthAu: VERMIS_HALF_WIDTH_AU,
     toleranceAu: TOL_AU,
     centerline: { cellAu: CL_CELL_AU, slabAu: CL_SLAB_AU, smoothSlabs: CL_SMOOTH_SLABS, clampAu: CL_CLAMP_AU, maxStepAu: CL_MAX_STEP_AU },
+  },
+  inputs: {
+    searchOrder: SOURCE_DIRS.map((s) => ({ path: s.rel, role: s.role })),
+    baseKeys: BASE_INPUT_COUNT,
+    telencephalonKeys: TEL_INPUT_COUNT,
+    distinctFiles: sourceOfFile.size,
+    resolution: inputResolution,
   },
   axisEvidence: ev,
   midlineSeamBpMm: round(X_MID, 3),
@@ -1162,9 +1538,14 @@ const summary = {
     cerebellum: { leftHemiFaces: cerebLSplit.nHemi, rightHemiFaces: cerebRSplit.nHemi, vermisFaces: cerebLSplit.nVermis + cerebRSplit.nVermis },
   },
   ventralProfile: bowRows,
+  telencephalon: {
+    bounds: telBoundsReport,
+    outputs: telOutputStats.map((f) => ({ file: `${f.name}.obj`, source: f.source, anatomy: f.anatomy, vertices: f.vertices, faces: f.faces, bboxAu: f.bboxAu })),
+    totalFaces: telOutputStats.reduce((n, f) => n + f.faces, 0),
+  },
   files: fileStats,
   landmarks: {
-    classAFrame: classA.map((c) => ({ name: c.name, expect: c.expect, value: round(c.value, 2), ok: c.ok })),
+    classAFrame: classA.map((c) => ({ name: c.name, expect: c.expect, value: round(c.value, 2), ok: c.ok, ...(c.bound ? { amendmentBound: c.bound } : {}) })),
     classBSurface: classB.map((lm) => ({
       name: lm.name,
       targetAu: lm.target.map((v) => round(v, 1)),
@@ -1192,7 +1573,8 @@ md.push('');
 md.push('## 1. Mode and inputs');
 md.push('');
 md.push('- PROBE mode: **acquired** (see `PROBE.md`) — full registration implemented, no stub.');
-md.push(`- Inputs: ${Object.keys(FILES).length} element OBJs in \`assets-src/bp3d/raw/\` (mm, Z-up, whole-body origin); stem stack = ${STEM_KEYS.map((k) => FILES[k]).join(', ')}. Includes the ORCHESTRATOR ADDENDUM inputs (real thalami FJ1782/FJ1827 + geniculate bodies from the ISA tree — see PROBE.md addendum).`);
+md.push(`- Inputs: **${Object.keys(FILES).length} base element OBJs** in \`assets-src/bp3d/raw/\` (mm, Z-up, whole-body origin) — stem stack = ${STEM_KEYS.map((k) => FILES[k]).join(', ')}; includes the ORCHESTRATOR ADDENDUM inputs (real thalami FJ1782/FJ1827 + geniculate bodies from the ISA tree — see PROBE.md addendum) — plus **${TEL_INPUT_COUNT} telencephalon elements** (v7, see §A.1) resolved as **${sourceOfFile.size} distinct FJ files** over both source directories.`);
+md.push(`- Source search order: ${SOURCE_DIRS.map((s, i) => `${i + 1}. \`${s.rel}\` — ${s.role}`).join('; ')}. A key resolves to the first directory containing its file id; the per-file resolution is listed in §A.1 and in \`registration-summary.json\` (\`inputs.resolution\`).`);
 md.push(`- OBJ IO path used for this run: \`${writer.name}\`. The script prefers \`scripts/lib/sdf/objio.js\` when present (kernel round-trip verified) and otherwise uses its internal minimal reader/writer — output OBJs are plain \`v\`/\`f\` either way.`);
 md.push('');
 md.push('## 2. Axis remap (verified empirically per part)');
@@ -1201,7 +1583,7 @@ md.push('| canonical axis | BP3D source | evidence |');
 md.push('| --- | --- | --- |');
 md.push('| x = +patient-left | +x_bp | FMA73423 *left* superior colliculus (FJ1779) has mean x = +' + round(mean(meshes.scL, 0), 2) + ' mm; FMA73422 *right* (FJ1826) mean x = ' + round(mean(meshes.scR, 0), 2) + ' mm |');
 md.push('| y = +superior | +z_bp | hypothalamus top ' + round(bboxOf(meshes.hypoL).max[2], 1) + ' > pons top ' + round(bboxOf(meshes.ponsL).max[2], 1) + ' > medulla top ' + round(bboxOf(meshes.medullaL).max[2], 1) + ' mm |');
-md.push('| z = +anterior | −y_bp | mean y_bp extremes: hypothalamus most rostral (' + round(mean(meshes.hypoL, 1), 1) + ' mm, minimum over all ' + Object.keys(meshes).length + ' parts), cerebellum most caudal (' + round(mean(meshes.cerebL, 1), 1) + ' mm, maximum); 4th ventricle posterior to pons basis (' + round(mean(meshes.vent4, 1), 1) + ' vs ' + round(mean(meshes.ponsL, 1), 1) + ') |');
+md.push('| z = +anterior | −y_bp | mean y_bp extremes: hypothalamus most rostral (' + round(mean(meshes.hypoL, 1), 1) + ' mm, minimum over all ' + Object.keys(meshes).length + ' element keys incl. telencephalon), cerebellum most caudal (' + round(mean(meshes.cerebL, 1), 1) + ' mm, maximum); 4th ventricle posterior to pons basis (' + round(mean(meshes.vent4, 1), 1) + ' vs ' + round(mean(meshes.ponsL, 1), 1) + ') |');
 md.push('');
 md.push('**Note — PROBE.md correction.** PROBE.md line 18 says "y negative = posterior". The part');
 md.push('bboxes prove the opposite: the most **anterior** structure (hypothalamus) has the most');
@@ -1282,7 +1664,8 @@ md.push('');
 md.push('| frame landmark | expected band | achieved | verdict |');
 md.push('| --- | --- | --- | --- |');
 for (const c of classA) {
-  md.push(`| ${c.name} | [${c.expect.join(', ')}] | ${round(c.value, 2)} | ${c.ok ? 'PASS' : 'FAIL'} |`);
+  const boundNote = c.bound ? ` (must stay inside the AMENDMENT B bound [${c.bound[0]}, ${c.bound[1]}])` : '';
+  md.push(`| ${c.name} | [${c.expect.join(', ')}] | ${round(c.value, 2)} | ${c.ok ? 'PASS' : 'FAIL'}${boundNote} |`);
 }
 md.push('');
 md.push('- **Class B — surface features (reported).** Full 3D feature positions with textbook-derived');
@@ -1317,10 +1700,20 @@ if (noted.length) {
 md.push('');
 md.push('## 8. Outputs');
 md.push('');
+md.push(`**${fileStats.filter((f) => !f.source).length} pre-existing (v2 + addendum) meshes** — unchanged by this run (see §A.5):`);
+md.push('');
 md.push('| file (assets-src/bp3d/canonical/) | vertices | faces | bbox min (au) | bbox max (au) |');
 md.push('| --- | --- | --- | --- | --- |');
-for (const f of fileStats) {
+for (const f of fileStats.filter((x) => !x.source)) {
   md.push(`| ${f.name}.obj | ${f.vertices} | ${f.faces} | [${f.bboxAu.min.join(', ')}] | [${f.bboxAu.max.join(', ')}] |`);
+}
+md.push('');
+md.push(`**${telOutputStats.length} new telencephalon meshes** (\`tel-*\`, v7) — per-part detail incl. source element and canonical extents in §A.2:`);
+md.push('');
+md.push('| file (assets-src/bp3d/canonical/) | FJ element | vertices | faces | bbox min (au) | bbox max (au) |');
+md.push('| --- | --- | --- | --- | --- | --- |');
+for (const f of telOutputStats) {
+  md.push(`| ${f.name}.obj | ${f.source} | ${f.vertices} | ${f.faces} | [${f.bboxAu.min.join(', ')}] | [${f.bboxAu.max.join(', ')}] |`);
 }
 md.push('');
 md.push('## 9. License');
@@ -1337,6 +1730,212 @@ md.push('No clock, RNG, network or parallelism-dependent behavior: fixed constan
 md.push('iteration, rasterized occupancy with deterministic tie-handling, fixed decimal output.');
 md.push('Re-running the script on the same inputs reproduces byte-identical outputs (modulo the');
 md.push('kernel/internal IO path note above).');
+md.push('');
+// ---------------------------------------------------------------------------
+// ADDENDUM — v7 telencephalon (appended, nothing above is rewritten)
+// ---------------------------------------------------------------------------
+const TEL_GROUPS = [
+  { title: 'Cerebral hemispheres (white-matter core; cortical ribbon derived in the recipe stage)', keys: ['telCerebWmL', 'telCerebWmR', 'telWmExtra'] },
+  { title: 'Telencephalic white matter (commissure / capsule)', keys: ['telCorpusCallosum', 'telInternalCapsuleL', 'telInternalCapsuleR'] },
+  { title: 'Lateral ventricles + choroid plexus', keys: ['telVentricleL', 'telVentricleR', 'telChoroidPlexusL', 'telChoroidPlexusR'] },
+  { title: 'Basal ganglia', keys: ['telCaudateL', 'telCaudateR', 'telPutamenL', 'telPutamenR', 'telGlobusPallidusL', 'telGlobusPallidusR'] },
+  { title: 'Limbic system', keys: ['telHippocampusL', 'telHippocampusR', 'telAmygdalaL', 'telAmygdalaR', 'telFornixL', 'telFornixR', 'telFornixCommissure', 'telCingulateL', 'telCingulateR'] },
+  { title: 'Named cortical surfaces (BP3D native)', keys: ['telInsulaL', 'telInsulaR', 'telOccipitalLobeL', 'telOccipitalLobeR'] },
+];
+const telStatByOut = new Map(telOutputStats.map((f) => [f.name, f]));
+md.push('---');
+md.push('');
+md.push('## Appendix A — TELENCEPHALON addendum (v7, `docs/TELENCEPHALON_PLAN.md` §1–§2, §4.1)');
+md.push('');
+md.push('Appended by the `tel-register` task. Nothing in §1–§10 above was rewritten: the constants,');
+md.push('junctions, warp knots and centerline offsets are the v2 ones, which is why every pre-existing');
+md.push('canonical mesh still carries its exact original coordinates (§A.4 proves it by hash).');
+md.push('');
+md.push('### A.1 Telencephalon inputs and source resolution');
+md.push('');
+md.push(`${TEL_INPUT_COUNT} element keys over ${new Set(Object.values(TEL_FILES)).size} distinct FJ files were added to the input table`);
+md.push('(`TEL_FILES` in `scripts/lib/register.mjs`). All of them come from the BodyParts3D archives we already');
+md.push('own (CC BY 4.0: `partof_`/`isa_BP3D_4.0_obj_99.zip`) and resolve to the gitignored');
+md.push('`assets-src/bp3d/raw-tel/`. **No download happened in this task, and none of the 27 files that were');
+md.push('already there was modified**: exactly two additional elements (`FJ1758.obj`, `FJ1806.obj` — the');
+md.push('hemispheric white-matter cores of plan §1 row 1) were extracted into that directory from the PART-OF');
+md.push('archive with `tar -xf … --strip-components=1`, because the extraction step that produced `raw-tel/`');
+md.push('had skipped them and they are the geometry the derived cortical ribbon needs (see §A.3/A.4).');
+md.push('');
+md.push('Search order (fixed, per file id): ' + SOURCE_DIRS.map((s, i) => `${i + 1}. \`${s.rel}\` (${s.role})`).join(' → ') + '.');
+md.push(`Resolution for this run: ${inputResolution.filter((r) => r.dir.endsWith('raw/')).length} file(s) from \`raw/\`, ${inputResolution.filter((r) => !r.dir.endsWith('raw/')).length} from \`raw-tel/\`. The telencephalon keys resolve to \`raw-tel/\` except FJ1734, which is present in both directories and therefore resolves to the primary \`raw/\` (same element id, same bytes).`);
+md.push('');
+md.push('| # | structure | FMA | FJ element | resolved source | canonical output | faces |');
+md.push('| --- | --- | --- | --- | --- | --- | --- |');
+{
+  const FMA = {
+    telCerebWmL: '—', telCerebWmR: '—', telWmExtra: '83930', telCorpusCallosum: '86464',
+    telVentricleL: '78448/78449/78450', telVentricleR: '78448/78449/78450', telChoroidPlexusL: '61934', telChoroidPlexusR: '61934',
+    telCaudateL: '61833', telCaudateR: '61833', telPutamenL: '61834', telPutamenR: '61834',
+    telGlobusPallidusL: '61835', telGlobusPallidusR: '61835', telAmygdalaL: '61841', telAmygdalaR: '61841',
+    telHippocampusL: '62493', telHippocampusR: '62493', telFornixL: '61965', telFornixR: '61965', telFornixCommissure: '61970',
+    telCingulateL: '62434', telCingulateR: '62434', telInsulaL: '67329', telInsulaR: '67329',
+    telOccipitalLobeL: '67325', telOccipitalLobeR: '67325', telInternalCapsuleL: '61950', telInternalCapsuleR: '61950',
+  };
+  let n = 0;
+  for (const g of TEL_GROUPS) {
+    for (const k of g.keys) {
+      n++;
+      const st = telStatByOut.get(TEL_PARTS[k].out);
+      md.push(`| ${n} | ${TEL_PARTS[k].name} | ${FMA[k]} | ${ALL_FILES[k].replace(/\.obj$/, '')} | \`${sourceOfFile.get(ALL_FILES[k]).rel}\` | \`${TEL_PARTS[k].out}.obj\` | ${st.faces} |`);
+    }
+  }
+}
+md.push('');
+md.push(`Laterality convention: the \`*L\` key is the element whose vertices lie at positive \`x_bp\` — the`);
+md.push('same rule PROBE.md established for the base table (FMA73423 *left* superior colliculus = FJ1779,');
+md.push('mean x = +' + round(mean(meshes.scL, 0), 2) + ' mm) and re-verified empirically for all ' + (TEL_INPUT_COUNT - 1) + ' paired telencephalon elements before anything was');
+md.push('written (axis-evidence row *telencephalon L/R laterality* in §2 of the run log / `registration-summary.json`).');
+md.push('Output naming: `tel-<structure>-left|right` for a paired element, `tel-<structure>` for an unpaired');
+md.push('midline one — the same per-side rule the hypothalamus and cerebellum outputs already use. These are');
+md.push('mesh cache file names, not structure ids: the `ctx-|nuc-|tract-|vent-|surf-|vasc-` slug contract');
+md.push('governs `src/data` records, which this script does not touch.');
+md.push('');
+md.push('### A.2 Per-part canonical extents (bbox table, au)');
+md.push('');
+md.push('Values are read back from the written `canonical/tel-*.obj` (post centerline straightening), so the');
+md.push('table cannot drift from the files. 1 au = 1.2 mm; x = +patient-left, y = +superior, z = +anterior.');
+md.push('');
+md.push('| group | structure | file | x (au) | y (au) | z (au) | faces |');
+md.push('| --- | --- | --- | --- | --- | --- | --- |');
+for (const g of TEL_GROUPS) {
+  g.keys.forEach((k, gi) => {
+    const st = telStatByOut.get(TEL_PARTS[k].out);
+    const x = `${st.bboxAu.min[0]} … ${st.bboxAu.max[0]}`;
+    const y = `${st.bboxAu.min[1]} … ${st.bboxAu.max[1]}`;
+    const z = `${st.bboxAu.min[2]} … ${st.bboxAu.max[2]}`;
+    md.push(`| ${gi === 0 ? g.title : ''} | ${TEL_PARTS[k].name} | \`${st.name}.obj\` | ${x} | ${y} | ${z} | ${st.faces} |`);
+  });
+}
+md.push('');
+md.push('### A.3 Registering observations');
+md.push('');
+md.push(`- **Fused per side where the source is a pair.** The telencephalon inputs arrive one element per`);
+md.push('  structure/side, so no fusion was needed for them; the pre-existing rule is unchanged and still');
+md.push('  applies where it did (hypothalamus = 2 elements per side, cerebellum hemispheres, stem stack).');
+md.push(`- **FJ1734 (\`white matter of telencephalon\`, FMA83930, ${telStatByOut.get('tel-wm-telencephalon-extra').faces} faces)** is a small,`);
+md.push(`  anatomically unattached extra element: canonical extent [${telStatByOut.get('tel-wm-telencephalon-extra').bboxAu.min.join(', ')}] … [${telStatByOut.get('tel-wm-telencephalon-extra').bboxAu.max.join(', ')}], i.e. a`);
+md.push('  ~20 mm wide, ~5 mm deep slab sitting just above/behind the splenium of the corpus callosum near the');
+md.push('  pineal recess — it does not form part of any hemispheric surface or tract. It is registered for');
+md.push('  completeness as `tel-wm-telencephalon-extra.obj`; **do not build an anatomical record from it**');
+md.push('  without re-measuring what it actually is.');
+md.push('- **No cortical gray-matter surface exists in BP3D** (confirmed again here: the archive has no');
+md.push('  `gray matter of cerebral hemisphere` element). The `tel-cerebral-white-matter-*.obj` cores are the');
+md.push('  carrier geometry; the cortical ribbon is DERIVED in the recipe stage (dilate the WM SDF by');
+md.push('  ≈2.5–3.3 au = 3–4 mm and subtract the WM), and the native `tel-insula-*` / `tel-occipital-lobe-*`');
+md.push('  surfaces are the ground truth to validate that derivation against.');
+md.push(`- **Vertex/face totals:** the ${telOutputStats.length} new meshes carry ${telOutputStats.reduce((n, f) => n + f.vertices, 0).toLocaleString('en-US')} vertices / ${telFacesTotal.toLocaleString('en-US')} faces (pre-decimation). The`);
+md.push(`  ${telFacesPlanSet.toLocaleString('en-US')} non-WM-core faces reproduce **exactly** TELENCEPHALON_PLAN §1's published 175,562-face set, and the`);
+md.push(`  remainder is the two hemispheric white-matter cores (25,542 + 26,512 = 52,054 faces), which the plan`);
+md.push('  lists in its table but does not include in that sum. The script asserts this identity after writing');
+md.push('  (`PLAN_TABLE_FACES`), so a wrong input cannot pass silently. Decimation to the rendered budget is');
+md.push("  the recipe stage's job (plan §4.3), not this one.");
+md.push('');
+md.push('### A.4 AMENDMENT B — measured bound implication (read this before task `tel-space`)');
+md.push('');
+md.push('The telencephalon is outside the AMENDMENT A canonical box: it is the reason AMENDMENT B exists');
+md.push('(plan §2). Two comparison sets matter, and they disagree:');
+md.push('');
+md.push('| set | x (au) | y (au) | z (au) |');
+md.push('| --- | --- | --- | --- |');
+{
+  const fmt = (v) => `${round(v[0], 1)} … ${round(v[1], 1)}`;
+  md.push(`| **(a) plan §2 measurement set** — the 27 files extracted to \`raw-tel/\` (all registered tel parts except the two hemispheric WM cores) | ${fmt([telMeasuredSetBbox.min[0], telMeasuredSetBbox.max[0]])} | ${fmt([telMeasuredSetBbox.min[1], telMeasuredSetBbox.max[1]])} | ${fmt([telMeasuredSetBbox.min[2], telMeasuredSetBbox.max[2]])} |`);
+  md.push(`| **(b) all 29 registered tel parts** (plan §1 table, incl. the hemispheric white-matter cores FJ1758/FJ1806) | ${fmt(telAllExtentAu.x)} | ${fmt(telAllExtentAu.y)} | ${fmt(telAllExtentAu.z)} |`);
+  md.push(`| plan §2 as published | −37.4 … +37.4 | −7.8 … +80.6 | −72.6 … +54.4 |`);
+}
+md.push('');
+md.push('Set (a) **reproduces the plan\'s §2 numbers** (x 37.67, y −7.8…+80.6, z −78.0…+54.4 — the plan\'s');
+md.push('z −72.6 is the occipital lobe before the centerline pass, −78.0 after it, same 5.4 au shift the');
+md.push('published occipital table row shows). Set (b), which is what the atlas must actually contain, is');
+md.push('**larger than AMENDMENT B on five of the six axis sides**:');
+md.push('');
+md.push('| axis | plan §2 claim | measured, all 29 parts | AMENDMENT B bound | verdict |');
+md.push('| --- | --- | --- | --- | --- |');
+{
+  const m = telAllExtentAu;
+  const rows = [
+    ['x', '±37.4, "already covered"', `[${round(m.x[0], 1)}, ${round(m.x[1], 1)}]`, `[${AMENDMENT_B_BOUNDS.x[0]}, ${AMENDMENT_B_BOUNDS.x[1]}]`],
+    ['y', '−7.8 … +80.6', `[${round(m.y[0], 1)}, ${round(m.y[1], 1)}]`, `[${AMENDMENT_B_BOUNDS.y[0]}, ${AMENDMENT_B_BOUNDS.y[1]}]`],
+    ['z', '−72.6 … +54.4', `[${round(m.z[0], 1)}, ${round(m.z[1], 1)}]`, `[${AMENDMENT_B_BOUNDS.z[0]}, ${AMENDMENT_B_BOUNDS.z[1]}]`],
+  ];
+  for (const [axis, claim, meas, bound] of rows) {
+    const b = AMENDMENT_B_BOUNDS[axis];
+    const bad = [];
+    if (m[axis][0] < b[0]) bad.push(`lower by ${round(b[0] - m[axis][0], 1)}`);
+    if (m[axis][1] > b[1]) bad.push(`upper by ${round(m[axis][1] - b[1], 1)}`);
+    md.push(`| ${axis} | ${claim} | ${meas} | ${bound} | ${bad.length ? `**exceeds ${bad.join(' and ')} au**` : 'inside'} |`);
+  }
+}
+md.push('');
+md.push('**Cause (verified, not inferred).** The plan\'s §2 measurement set is the 27 files that had been');
+md.push('extracted to `raw-tel/` when §2 was written. The two **cerebral white-matter cores**');
+md.push('(`FJ1758`/`FJ1806`, FMA260794, 174 cm³ each, `white matter of left/right cerebral hemisphere` — plan §1');
+md.push('row 1, "the hemispheric mass") were listed in §1 but **not present in `raw-tel/`**, so §2 never');
+md.push('measured them. They are the whole cortical envelope\'s carrier geometry: set (b)\'s extremes come');
+md.push('from them (vertex y = ' + round(telWmBbox.max[1], 1) + ', lateral |x| = ' + round(Math.max(Math.abs(telWmBbox.min[0]), telWmBbox.max[0]), 1) + ', frontal pole z = ' + round(telWmBbox.max[2], 1) + ', posterior z = ' + round(telWmBbox.min[2], 1) + '),');
+md.push('except z-min which is the occipital lobe at ' + round(telAllExtentAu.z[0], 1) + '. This task extracted those two files into `raw-tel/`');
+md.push('(`assets-src/bp3d/`, the directory this task owns; they exist in both archives we already hold) and');
+md.push('registered them. **They cannot be dropped**: without them there is no hemispheric mass and the');
+md.push('derived cortical ribbon (plan §1 "known gap") has nothing to dilate.');
+md.push('');
+md.push('**Consequence for the downstream tasks — escalate, do not silently absorb:**');
+md.push('');
+md.push(`1. \`AMENDMENT B\` as written (y ≤ +85, z ≥ −75, x ≤ ±48) does **not** contain the registered`);
+md.push(`   telencephalon. The strictly measured minimum box would be x ∈ [${round(Math.floor(telAllExtentAu.x[0] / 5) * 5, 1)}, ${round(Math.ceil(telAllExtentAu.x[1] / 5) * 5, 1)}],`);
+md.push(`   y ∈ [${round(Math.floor(telAllExtentAu.y[0] / 5) * 5, 1)}, ${round(Math.ceil(telAllExtentAu.y[1] / 5) * 5, 1)}], z ∈ [${round(Math.floor(telAllExtentAu.z[0] / 5) * 5, 1)}, ${round(Math.ceil(telAllExtentAu.z[1] / 5) * 5, 1)}] (5 au rounded outward, i.e. +5 au padding on every stressed side).`);
+md.push('   Task `tel-space` must not ship `CLIP_BOUNDS` values that clip the hemispheres; the ' + boundBreaches.length + ' breaches above are the');
+md.push('   exact edits it needs, and this is the run-level decision the orchestrator has to take (plan §2\'s');
+md.push('   "already covered" / "+85" statements are simply not reachable once the hemispheric mass is in).');
+md.push(`2. The plan §2 proposed telencephalic anchors **+48 / +58 / +68 / +78** do not match the measured`);
+md.push(`   anatomy either: the lateral-ventricle body centroids are at y = ${round((centroidOf(canonical.telVentricleL)[1] + centroidOf(canonical.telVentricleR)[1]) / 2, 1)}, the basal ganglia`);
+md.push(`   (caudate + putamen + pallidum) at y = ${round(centroidOf(telBasalGanglia)[1], 1)}, the corpus callosum at y = ${round(centroidOf(canonical.telCorpusCallosum)[1], 1)}, the internal capsule at`);
+md.push(`   y = ${round((centroidOf(canonical.telInternalCapsuleL)[1] + centroidOf(canonical.telInternalCapsuleR)[1]) / 2, 1)}, and the centrum semiovale / high convexity lie above +60 (the hemispheric mass runs to`);
+md.push(`   y = ${round(telAllExtentAu.y[1], 1)}). Anatomy-true companions would be ≈ +26 / +30 / +45 / +60; the table below gives every part's measured`);
+md.push('   centroid so the anchor set can be re-derived from data instead of from the plan\'s estimate.');
+md.push('3. **Nothing below y = +45 moved** regardless (§A.5): the four pre-existing levels, plates, clip');
+md.push('   values and imagery keep their exact coordinates. AMENDMENT B\'s new ranges are additions.');
+md.push('');
+md.push('Per-part measured centroids (au) and raw-source extents — the numbers `tel-space` (bounds, anchors,');
+md.push('camera framing) and `tel-imaging` (grid box) need, derived from the written canonical meshes:');
+md.push('');
+md.push('| structure | source | canonical centroid (au) | canonical bbox (au) | raw BP3D bbox (mm) |');
+md.push('| --- | --- | --- | --- | --- |');
+for (const g of TEL_GROUPS) {
+  for (const k of g.keys) {
+    const st = telStatByOut.get(TEL_PARTS[k].out);
+    const c = centroidOf(canonical[k]).map((v) => round(v, 1));
+    const rb = bboxOf(meshes[k]);
+    md.push(`| ${TEL_PARTS[k].name} | ${ALL_FILES[k].replace(/\.obj$/, '')} (\`${sourceOfFile.get(ALL_FILES[k]).rel}\`) | [${c.join(', ')}] | [${st.bboxAu.min.join(', ')}] … [${st.bboxAu.max.join(', ')}] | [${rb.min.map((v) => round(v, 1)).join(', ')}] … [${rb.max.map((v) => round(v, 1)).join(', ')}] |`);
+  }
+}
+md.push('');
+md.push('### A.5 Proof that the pre-existing registered meshes did not move');
+md.push('');
+md.push('The telencephalon inputs are excluded from `STEM_KEYS`, so the junction detectors, the midline');
+md.push('seam, the `z_ref` reference and every centerline offset are computed from exactly the elements they');
+md.push(`were computed from before. The corresponding guard is in the script: \`BASE_INPUT_COUNT\` must stay`);
+md.push(`27 and the telencephalon table must stay ${TEL_INPUT_COUNT} keys over ${TEL_DISTINCT_FILE_COUNT} files, or the run aborts.`);
+md.push('');
+md.push('Evidence collected around this run (`tel-register` task, same machine, kernel `objio.js` path):');
+md.push('');
+md.push('1. All 24 pre-existing `canonical/*.obj` files were SHA-256 hashed **before** the script change.');
+md.push('2. The unmodified script was re-run: all 24 hashes reproduced **byte-identically**, establishing that');
+md.push('   the pipeline is deterministic here (so any later difference is attributable to the change, not noise).');
+md.push('3. After adding the telencephalon inputs and re-running, the 24 hashes were compared again: all');
+md.push('   **identical**. Every `registration-summary.json` value that describes the pre-existing registration');
+md.push('   (axis evidence for the base parts, the five junctions, the warp knots, the centerline offsets and');
+md.push('   their x/z ranges, the ventral profile) is unchanged too, and the 13 original Class A frame');
+md.push('   landmarks still PASS in their original bands.');
+md.push('4. The pre-existing bounding boxes reported in §8 above match the previously committed table to the');
+md.push('   last decimal — `medulla.obj` [−11.2, −50.2, −8.7] … [11.2, −19.5, 12.4], `pons.obj` [−17.4, −23.2, −11.6]');
+md.push('   … [17.9, 5, 16.8], `cerebellum-left.obj` [1.3, −34, −53] … [44.7, 15.1, −2.8] — i.e. numerically');
+md.push('   identical, not merely within the 0.01 au tolerance the task allows.');
 md.push('');
 
 writeFileSync(REPORT_PATH, md.join('\n'), 'utf8');

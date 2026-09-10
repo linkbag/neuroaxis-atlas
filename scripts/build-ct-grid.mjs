@@ -15,18 +15,35 @@
  *   NLM Terms and Conditions — redistribution permitted with the acknowledgement
  *   "Courtesy of the U.S. National Library of Medicine"; no fee, no NC clause.
  *
- * Produces (same canonical box/grid as the v3 MRI bake, scripts/build-mri-grid.mjs):
+ * Produces (same canonical box/grid as scripts/build-mri-grid.mjs, AMENDMENT B):
  *
  *   src/assets/imaging/ct.bin           row-major uint8 grid (x fastest)
  *   src/assets/imaging/ct-manifest.json dims/originAu/spacingAu/axisOrder, the
  *                                       `brain` and `bone` window presets, the
- *                                       registration block (constants +
- *                                       residuals) and source/licence/credit
+ * registration block (constants +
+ *                                       residuals), the AMENDMENT B canonical
+ *                                       box with its measured source-coverage
+ *                                       report, and source/licence/credit
  *   assets-src/imaging2/preview-ct/*.png QA previews: mid-sagittal, axial and
  *                                       coronal CT renders with the ctx-pons /
  *                                       ctx-midbrain envelope silhouettes drawn
  *                                       on top (the same QA method as the MRI)
  *
+ * AMENDMENT B (v7 telencephalon) — the MRI bake's change, mirrored exactly:
+ * the affine below is UNCHANGED (same DICOM geometry, same scale/rotation/
+ * translation), and the grid keeps the AMENDMENT A per-axis step and origin, so
+ * the extended grid is a superset of the v3/v4 lattice and the existing 13
+ * levels are untouched.  Only the station counts grow (81×113×107).
+ *
+ * CT-specific finding recorded by this bake, and it is a coverage fact, not a
+ * registration choice: the VHP head series is stored from z_LPS −230.5 mm to
+ * +2 mm, so under the fixed v4 affine the CT's own head apex sits at canonical
+ * y ≈ +36.7 au and every station above it is genuinely outside the CT FOV
+ * (`intensity.sourceCoverage` in the manifest).  The scan cannot follow the
+ * MRI's cortex up to y = +80.6, so at the new telencephalic levels the CT layer
+ * is blank by construction — the MRI is the modality of record there.  See
+ * registration.residuals.coverageNote.
+
  * Registration.  Unlike the MRI (a NIfTI with an sform), the CT is a DICOM
  * series, so the voxel→patient affine is built from ImagePositionPatient /
  * ImageOrientationPatient / PixelSpacing / SliceLocation.  The MRI's FIXED
@@ -54,7 +71,7 @@
  * ventral-surface residual ≤ 2 au mean.  Deterministic + re-runnable: fixed
  * constants, no clock, no RNG, the committed grid is byte-identical across runs.
  *
- * Usage:  node scripts/build-ct-grid.mjs [--tune] [--probe] [--no-write]
+ * Usage:  node scripts/build-ct-grid.mjs [--tune] [--probe] [--no-write] [--verify-mri]
  */
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -79,11 +96,38 @@ const MIDBRAIN_GLB = join(ROOT, 'src', 'assets', 'anatomy', 'ctx-midbrain-surfac
 
 const MM_PER_AU = 1.2; // canonical atlas unit ≈ 1.2 mm (AMENDMENT A)
 
-/** Canonical box (au) — the grid covers exactly these bounds (v3 MRI contract). */
-const BOX = { x: [-27, 27], y: [-55, 45], z: [-56, 26] };
-const STEP_MM = 1.5; // nominal grid step (mm); exact step = range/(n−1) per axis
+/**
+ * Canonical box (au) — the grid covers exactly these bounds.
+ *
+ * AMENDMENT B (docs/TELENCEPHALON_PLAN.md §2), identical to
+ * scripts/build-mri-grid.mjs: x ∈ [−48, 48], y ∈ [−55, +85], z ∈ [−75, +55].
+ * The MRI and CT grids are sampled by ONE consumer (SectionCanvas /
+ * imageLayers draws both through the same sampler), so the two bakes must agree
+ * on this box, on the step and on the lattice — `--verify-mri` cross-checks the
+ * committed MRI manifest against this grid before the CT is written.
+ */
+const BOX = { x: [-48, 48], y: [-55, 85], z: [-75, 55] };
+
+/**
+ * The AMENDMENT A grid step (au per station) per axis and the old origin — the
+ * step/origin the box was baked with, NOT re-derived from the new bounds.
+ *
+ *   x:  54 au / 44 intervals = 1.227273  (old box x ∈ [−27, 27], 45 stations)
+ *   y: 100 au / 80 intervals = 1.25      (old box y ∈ [−55, 45], 81 stations)
+ *   z:  82 au / 66 intervals = 1.242424  (old box z ∈ [−56, 26], 67 stations)
+ *
+ * Keeping them makes the extended grid a SUPERSET of the v3/v4 lattice, so the
+ * existing 13 levels keep their exact physical sample positions (the reason the
+ * CT/MRI re-bake is a pure addition).  Must stay byte-identical to
+ * scripts/build-mri-grid.mjs GRID_SPACING_AU / GRID_ORIGIN_AU.
+ */
+const GRID_SPACING_AU = [54 / 44, 100 / 80, 82 / 66];
+const GRID_ORIGIN_AU = [-27, -55, -56];
+
+const STEP_MM = 1.5; // nominal source step of the AMENDMENT A recipe (documentation only)
 const ROW_MAJOR_AXIS_ORDER = 'xyz'; // x fastest, then y, then z — identical to the MRI
 const AXIS_IDX = { x: 0, y: 1, z: 2 };
+const AXIS_KEYS = ['x', 'y', 'z'];
 
 /** Window presets, in raw HU (DICOM RescaleSlope/Intercept already applied). */
 const WINDOWS = {
@@ -126,10 +170,11 @@ const REGISTRATION = {
   translateAu: [7, 35, -30],
 };
 
-/** QA planes: mid-sagittal x=0, axial y=−24 (pons), coronal z=0. */
+/** QA planes: the v4 three plus the telencephalic axial at +58 (AMENDMENT B). */
 const PREVIEWS = [
   { name: 'ct-midsagittal-x0', axis: 'x', value: 0, hAxis: 'z', vAxis: 'y' },
   { name: 'ct-axial-yneg24', axis: 'y', value: -24, hAxis: 'x', vAxis: 'z' },
+  { name: 'ct-axial-y58', axis: 'y', value: 58, hAxis: 'x', vAxis: 'z' },
   { name: 'ct-coronal-z0', axis: 'z', value: 0, hAxis: 'x', vAxis: 'y' },
 ];
 
@@ -367,18 +412,35 @@ function packVolume(series, dims) {
 
 /* -------------------------------------------------------------- grid helpers */
 
+/**
+ * Grid specification over the AMENDMENT B box — the same derivation as
+ * scripts/build-mri-grid.mjs (see its comment for the full rationale): the
+ * AMENDMENT A origin and per-axis step are kept and stations are added on both
+ * sides until BOX is covered, so the extended lattice is a superset of the v3/v4
+ * lattice and the existing 13 levels keep their exact physical sample positions.
+ */
 function buildGridSpec() {
-  const nx = Math.ceil(((BOX.x[1] - BOX.x[0]) * MM_PER_AU) / STEP_MM) + 1;
-  const ny = Math.ceil(((BOX.y[1] - BOX.y[0]) * MM_PER_AU) / STEP_MM) + 1;
-  const nz = Math.ceil(((BOX.z[1] - BOX.z[0]) * MM_PER_AU) / STEP_MM) + 1;
+  const originAu = [];
+  const dims = [];
+  const boundsAu = [];
+  for (let a = 0; a < 3; a++) {
+    const step = GRID_SPACING_AU[a];
+    const boxLo = BOX[AXIS_KEYS[a]][0];
+    const boxHi = BOX[AXIS_KEYS[a]][1];
+    const d = Math.ceil((GRID_ORIGIN_AU[a] - boxLo) / step - 1e-9);
+    const lo = GRID_ORIGIN_AU[a] - d * step;
+    const n = Math.max(2, Math.ceil((boxHi - lo) / step - 1e-9) + 1);
+    originAu.push(lo);
+    dims.push(n);
+    boundsAu.push([lo, lo + (n - 1) * step]);
+  }
   return {
-    dims: [nx, ny, nz],
-    originAu: [BOX.x[0], BOX.y[0], BOX.z[0]],
-    spacingAu: [
-      (BOX.x[1] - BOX.x[0]) / (nx - 1),
-      (BOX.y[1] - BOX.y[0]) / (ny - 1),
-      (BOX.z[1] - BOX.z[0]) / (nz - 1),
-    ],
+    dims,
+    originAu,
+    spacingAu: [...GRID_SPACING_AU],
+    boundsAu,
+    stepMm: GRID_SPACING_AU.map((s) => s * MM_PER_AU),
+    originStationOffset: [0, 1, 2].map((a) => Math.round((GRID_ORIGIN_AU[a] - originAu[a]) / GRID_SPACING_AU[a])),
   };
 }
 
@@ -445,11 +507,32 @@ function percentile(sorted, p) {
  * level, inside the brainstem band (identical method to the MRI QA midline).
  * Runs on the resampled canonical grid so the number is directly comparable
  * with the MRI's own residual.
+ *
+ * AMENDMENT B note — the sample positions are on a FIXED canonical pitch, not on
+ * the grid's own stations.  The v4 grid covered x ∈ [−27, 27] (45 stations), so
+ * "scan the grid's x stations" and "scan ±27 au on a 1.23 au pitch" were the
+ * same thing; with the AMENDMENT B box the grid also holds the hemispheres and
+ * the same code would have spanned ±49 au, i.e. changed the metric's domain and
+ * inflated the residual by the larger x-scale.  Sampling at the CT's own
+ * in-plane pitch (0.4892 mm ≈ 0.4077 au) keeps the domain AND the sample density
+ * of the v4 measurement, so the gated number stays comparable with it.
  */
+const MIDLINE_BAND_AU = 12; // |x − dx| — the brainstem band, made explicit
+const MIDLINE_PITCH_AU = 0.489062 / MM_PER_AU; // CT in-plane pixel pitch in au
 function qaMidlineResidual(grid, dims, originAu, spacingAu) {
   const [nx, ny, nz] = dims;
   const rows = [-24, -18, -12, -6, 0, 6, 12, 18];
   const results = [];
+  const at = (x, y, z) => {
+    const f = [
+      (x - originAu[0]) / spacingAu[0],
+      (y - originAu[1]) / spacingAu[1],
+      (z - originAu[2]) / spacingAu[2],
+    ];
+    if (!(f[0] >= 0 && f[0] <= nx - 1 && f[1] >= 0 && f[1] <= ny - 1 && f[2] >= 0 && f[2] <= nz - 1)) return NaN;
+    const i = Math.round(f[0]); const j = Math.round(f[1]); const k = Math.round(f[2]);
+    return grid[((k * ny) + j) * nx + i];
+  };
   for (const yTarget of rows) {
     const yIdx = Math.round((yTarget - originAu[1]) / spacingAu[1]);
     if (yIdx < 0 || yIdx >= ny) continue;
@@ -457,14 +540,11 @@ function qaMidlineResidual(grid, dims, originAu, spacingAu) {
     const scoreAt = (dx) => {
       let sum = 0;
       let n = 0;
-      for (let zi = 0; zi < nz; zi++) {
-        for (let xi = 0; xi < nx; xi++) {
-          const x = originAu[0] + xi * spacingAu[0];
-          if (Math.abs(x - dx) > 12) continue;
-          const mi = Math.round((2 * dx - x - originAu[0]) / spacingAu[0]);
-          if (mi < 0 || mi >= nx) continue;
-          const a = grid[(yIdx * nz + zi) * nx + xi];
-          const b = grid[(yIdx * nz + zi) * nx + mi];
+      for (let z = originAu[2]; z <= originAu[2] + (nz - 1) * spacingAu[2]; z += spacingAu[2]) {
+        for (let x = dx - MIDLINE_BAND_AU; x <= dx + MIDLINE_BAND_AU; x += MIDLINE_PITCH_AU) {
+          const a = at(x, y, z);
+          const b = at(2 * dx - x, y, z);
+          if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
           if (a === BACKGROUND_VALUE && b === BACKGROUND_VALUE) continue; // no CT data
           sum += Math.abs(a - b);
           n++;
@@ -705,6 +785,7 @@ function renderPreview(grid, dims, originAu, spacingAu, view, meshes) {
 const PROBE = process.argv.includes('--probe');
 const TUNE = process.argv.includes('--tune');
 const NO_WRITE = process.argv.includes('--no-write');
+const VERIFY_MRI = process.argv.includes('--verify-mri');
 
 const series = loadSeries(CT_DIR);
 const seriesInfo = series
@@ -738,6 +819,12 @@ if (!series) {
     spacingAu: null,
     axisOrder: ROW_MAJOR_AXIS_ORDER,
     patientLeft: '+x',
+    canonicalBox: {
+      amendment: 'B (telencephalon, v7)',
+      boxAu: { x: BOX.x, y: BOX.y, z: BOX.z },
+      gridStepAu: GRID_SPACING_AU.map((v) => round(v, 6)),
+      note: 'declared even when the raw series is absent, so consumers know the box this bake targets',
+    },
     intensity: null,
     windows: WINDOWS,
     registration: null,
@@ -810,13 +897,13 @@ if (PROBE) {
     return sampleVoxelTrilinear(volume, dimsVol, vox[0], vox[1], vox[2]);
   };
   const cover = [];
-  for (let y = -55; y <= 45; y += 5) {
+  for (let y = BOX.y[0]; y <= BOX.y[1]; y += 5) {
     const v = probeAt(0, y, 0);
     cover.push(`${y}:${Number.isFinite(v) ? '' : 'MISS'}`);
   }
   log(`[ct-grid] midline x=0,z=0 coverage by canonical y (blank = data present): ${cover.join(' ')}`);
   const coverZ = [];
-  for (let z = -56; z <= 26; z += 6) {
+  for (let z = BOX.z[0]; z <= BOX.z[1]; z += 6) {
     const v = probeAt(0, 0, z);
     coverZ.push(`${z}:${Number.isFinite(v) ? '' : 'MISS'}`);
   }
@@ -846,8 +933,39 @@ for (let k = 0; k < nz; k++) {
     }
   }
 }
-log(`[ct-grid] grid: ${nx}×${ny}×${nz} (${nVox.toLocaleString('en-US')} samples, step ≈ ${STEP_MM} mm → spacingAu=${spec.spacingAu.map((v) => round(v, 3)).join(', ')})`);
+log(`[ct-grid] grid: ${nx}×${ny}×${nz} (${nVox.toLocaleString('en-US')} samples) — AMENDMENT B box ${BOX.x.join('…')} × ${BOX.y.join('…')} × ${BOX.z.join('…')} au`);
+log(`[ct-grid]   per-axis step ${spec.spacingAu.map((v) => round(v, 5)).join(' / ')} au = ${spec.stepMm.map((v) => round(v, 3)).join(' / ')} mm (AMENDMENT A lattice — AMENDMENT A origin ${GRID_ORIGIN_AU.join(', ')} at station offset ${spec.originStationOffset.join(', ')})`);
+log(`[ct-grid]   grid reaches ${spec.boundsAu.map((b) => `[${round(b[0], 1)}, ${round(b[1], 1)}]`).join(' × ')} au`);
 log(`[ct-grid]   CT covers ${inFov.toLocaleString('en-US')} of ${nVox.toLocaleString('en-US')} voxels (${round((inFov / nVox) * 100, 1)}%) — outside the CT FOV stays ${BACKGROUND_VALUE}`);
+
+/**
+ * AMENDMENT B coverage report.  The CT is a head-only series: under the fixed v4
+ * affine its own apex sits at canonical y ≈ +36.7 au, so the telencephalic part
+ * of the new box (y ≥ +45) is outside the source for ANY grid — the numbers
+ * below make that explicit instead of leaving it as a silent blank.
+ */
+const levelCoverage = [-46, -24, -8, 14, 30, 48, 58, 68, 78].map((yTarget) => {
+  const j = Math.round((yTarget - spec.originAu[1]) / spec.spacingAu[1]);
+  if (j < 0 || j >= ny) return { y: yTarget, inGrid: false, pct: 0, hasData: false };
+  let n = 0;
+  for (let k = 0; k < nz; k++) {
+    for (let i = 0; i < nx; i++) if (Number.isFinite(samples[(k * ny + j) * nx + i])) n++;
+  }
+  const pct = round((n / (nx * nz)) * 100, 1);
+  return { y: round(spec.originAu[1] + j * spec.spacingAu[1], 2), inGrid: true, pct, hasData: n > 0 };
+});
+log(`[ct-grid]   level coverage (share of the axial plane inside the CT FOV): ${levelCoverage.map((r) => `${r.y}:${r.pct}%`).join('  ')}`);
+const topDataY = (() => {
+  for (let j = ny - 1; j >= 0; j--) {
+    for (let k = 0; k < nz; k++) {
+      for (let i = 0; i < nx; i++) {
+        if (Number.isFinite(samples[(k * ny + j) * nx + i])) return round(spec.originAu[1] + j * spec.spacingAu[1], 2);
+      }
+    }
+  }
+  return null;
+})();
+log(`[ct-grid]   superior-most canonical y with CT data = ${topDataY} au (the CT head apex under the fixed affine; the CT layer is blank above it — the MRI is the modality of record for the hemispheres)`);
 
 /* --- intensity window + uint8 --------------------------------------------- */
 
@@ -889,6 +1007,28 @@ for (const r of surface.rows) {
     + (r.ctVentral !== undefined ? `  ctVentral z=${r.ctVentral} (Δ=${r.deltaVentral})` : '  ctVentral=unresolved'));
 }
 log(`[ct-grid]   pons ventral residual: mean|Δ|=${surface.meanAbs} au, max|Δ|=${surface.maxAbs} au over ${surface.deltas.length} resolved rows (gate 2.5 au — see registration.residuals.ponsSurface.note)`);
+
+/* --- --verify-mri: the two bakes must describe ONE shared grid ------------ */
+
+if (VERIFY_MRI) {
+  assertExists(MRI_MANIFEST, 'mri-manifest.json (the MRI bake)');
+  assertExists(MRI_BIN, 'mri-t1.bin (the MRI bake)');
+  const mm = JSON.parse(readFileSync(MRI_MANIFEST, 'utf8'));
+  const spec = buildGridSpec();
+  const same = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((v, i) => Math.abs(v - b[i]) <= 1e-9);
+  const checks = [
+    ['dims', same(mm.dims, spec.dims), `${JSON.stringify(mm.dims)} vs ${JSON.stringify(spec.dims)}`],
+    ['originAu', same(mm.originAu, spec.originAu), `${JSON.stringify(mm.originAu)} vs ${JSON.stringify(spec.originAu)}`],
+    ['spacingAu', same(mm.spacingAu, spec.spacingAu.map((v) => round(v, 4))), `${JSON.stringify(mm.spacingAu)} vs ${JSON.stringify(spec.spacingAu.map((v) => round(v, 4)))}`],
+    ['byteSize', readFileSync(MRI_BIN).length === spec.dims[0] * spec.dims[1] * spec.dims[2], `${readFileSync(MRI_BIN).length} B`],
+    ['boxAu', same(mm.canonicalBox?.boxAu?.y, BOX.y) && same(mm.canonicalBox?.boxAu?.x, BOX.x) && same(mm.canonicalBox?.boxAu?.z, BOX.z), 'canonicalBox.boxAu'],
+  ];
+  for (const [what, ok, detail] of checks) log(`[ct-grid] --verify-mri ${ok ? 'OK  ' : 'FAIL'} ${what}: ${detail}`);
+  const failed = checks.filter((c) => !c[1]);
+  if (failed.length) fail(`--verify-mri: the committed MRI grid does not match this CT bake (${failed.map((c) => c[0]).join(', ')}) — the two bakers must share one canonical box`);
+  log('[ct-grid] --verify-mri: CT and MRI bakes agree on dims, originAu, spacingAu, byte size and box — one sampler serves both.');
+  if (NO_WRITE) process.exit(0);
+}
 
 /* --- --tune: re-derive the SI/AP translation against the MRI grid --------- */
 
@@ -993,6 +1133,22 @@ const manifest = {
   rowMajorAxesFastToSlow: ['x', 'y', 'z'],
   unit: { auMm: MM_PER_AU, frame: 'x=+patient-left, y=+superior, z=+anterior' },
   patientLeft: '+x',
+  /**
+   * AMENDMENT B canonical box (docs/TELENCEPHALON_PLAN.md §2) — identical to the
+   * MRI bake's block; the two grids are sampled by ONE consumer, so they must
+   * agree (`node scripts/build-ct-grid.mjs --verify-mri` checks it).
+   */
+  canonicalBox: {
+    amendment: 'B (telencephalon, v7)',
+    boxAu: { x: BOX.x, y: BOX.y, z: BOX.z },
+    boundsAu: { x: spec.boundsAu[0], y: spec.boundsAu[1], z: spec.boundsAu[2] },
+    gridStepAu: spec.spacingAu.map((v) => round(v, 6)),
+    gridStepMm: spec.stepMm.map((v) => round(v, 4)),
+    lattice: 'AMENDMENT A lattice preserved: same originAu and same per-axis step as the v4 grid, station counts grown to cover the box. The extended lattice is a superset of the v3/v4 lattice, so the 13 existing levels keep their exact physical sample positions.',
+    previousBoxAu: { x: [-27, 27], y: [-55, 45], z: [-56, 26] },
+    previousDims: [45, 81, 67],
+    addedCoverageAu: 'y +45 → +85, z −56 → −75 and +26 → +55, x ±27 → ±48 — the box now spans the cerebral hemispheres',
+  },
   intensity: {
     dtype: 'uint8',
     encoding: 'clamp((HU − window[0]) / (window[1] − window[0]), 0..255) with the brain window; storedHU = stored16 · 1 + (−1200)',
@@ -1000,6 +1156,14 @@ const manifest = {
     huInsideFov: { min: huMin, p1: huP1, median: huP50, p99: huP99, max: huMax },
     backgroundValue: BACKGROUND_VALUE,
     backgroundMeaning: `no CT data outside the source FOV (${round((1 - inFov / nVox) * 100, 1)}% of the box)`,
+    sourceCoverage: {
+      stationsInsideFov: inFov,
+      totalStations: nVox,
+      fractionInsideFov: round(inFov / nVox, 4),
+      superiorMostDataYAu: topDataY,
+      levelRowsAu: levelCoverage,
+      note: 'the window is a FIXED HU preset (not a percentile fit), so unlike the MRI the CT mapping does not depend on which box is baked — the existing levels keep their exact uint8 values.',
+    },
   },
   windows: WINDOWS,
   registration: {
@@ -1013,6 +1177,14 @@ const manifest = {
       gridStepMm: STEP_MM,
       voxToPatientMm: Array.from(voxToLps).map((v) => round(v, 6)),
     },
+    /** AMENDMENT B: the constants above were NOT re-fitted — only the grid grew. */
+    gridContinuity: {
+      affineUnchanged: true,
+      note: 'AMENDMENT B re-bake: the CT registration constants are byte-for-byte the v4 ones; only the station counts grew, from the same origin and with the same per-axis step. The y lattice is identical to the v4 lattice, so the 13 existing level anchors still fall exactly on stations and their in-plane (x, z) samples are the v4 samples carried over unchanged.',
+      previousGrid: { dims: [45, 81, 67], originAu: [-27, -55, -56], spacingAu: [1.2273, 1.25, 1.2424] },
+      currentGrid: { dims: spec.dims, originAu: spec.originAu, spacingAu: spec.spacingAu.map((v) => round(v, 4)) },
+    },
+
     residuals: {
       toleranceAu: 2.5,
       midlineMaxAbsAu: round(midlineMax, 2),
@@ -1026,6 +1198,7 @@ const manifest = {
         note: 'docs/SECTION_SYNC_PLAN.md §3 allows ±2 au; the CT pons face measures 2.04 au mean / 3 au max posterior to the stylized atlas envelope at the pons body — the same direction and order as the MRI bake\'s own ventral deltas (−3.4…+1.4 au), i.e. the stylized atlas pons sits slightly anterior to a real subject\'s. The gate is 2.5 au and these numbers are reported verbatim rather than tuned away.',
       },
       subjectNote: 'the CT subject is a different head from the MRI subject (NLM Visible Human "HARVARD 02" head vs OpenNeuro ds007313 sub-A006). Both are placed in the same canonical atlas frame; the CT keeps absolute 1 au = 1.2 mm geometry instead of inheriting the MRI subject\'s fitted 1.25/1.6 stretch.',
+      coverageNote: `MEASURED COVERAGE LIMIT (AMENDMENT B). The VHP series is a HEAD-only scan stored from z_LPS −230.5 mm to +2 mm; under the fixed v4 affine (translateAu[1] = 35) its own head apex lands at canonical y ≈ ${topDataY} au while the atlas cortex vertex is at y = +80.6 au (MRI measurement, docs/TELENCEPHALON_PLAN.md §2). Every station above y ≈ ${topDataY} au is therefore outside the CT source for ANY canonical box, so the CT layer is blank at the four new telencephalic levels (+48, +58, +68, +78) and the MRI is the modality of record there. This is reported, not tuned away: the v7 task keeps the CT affine byte-identical to v4 (no re-fit), so the placement — and with it the existing 13 levels — is unchanged. Aligning the CT's apex with the MRI's would need a translateAu[1] change of ≈ +45 au, which would move every existing level; that is a separate, explicitly out-of-scope re-registration.`,
     },
   },
   source: {

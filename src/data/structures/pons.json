@@ -56,6 +56,12 @@
         "syndrome": "Locked-in syndrome",
         "findings": "Interruption of the longitudinal fibers in the ventral pons disconnects the motor cortex from all spinal and cranial motor nuclei below, sparing only the oculomotor pathways in the tegmentum.",
         "vascular": "Basilar artery occlusion"
+      },
+      {
+        "syndrome": "Dysarthria-clumsy hand syndrome (small basis-pontis lacune)",
+        "findings": "A small paramedian lacunar infarct confined to the basis pontis destroys descending corticospinal and corticobulbar fibres together with the transverse pontocerebellar fibres, so the patient shows a clumsy, slow hand with mild weakness of the same limbs and dysarthria — plus gait ataxia disproportionate to the weakness. Larger lesions produce the full locked-in picture.",
+        "vascular": "Basilar paramedian perforators",
+        "note": "The transverse fibres decussate here and gather as the middle cerebellar peduncle, so a unilateral basis lesion also de-afferents the contralateral cerebellar hemisphere and can add crossed cerebellar ataxia."
       }
     ],
     "levels": ["lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
@@ -277,6 +283,12 @@
         "syndrome": "Vestibular (vertigo-nystagmus) deficit",
         "findings": "Unilateral involvement produces vertigo with nystagmus and past-pointing as part of AICA or lateral pontine syndromes.",
         "vascular": "AICA"
+      },
+      {
+        "syndrome": "Skew deviation and the ocular tilt reaction (otolith pathway)",
+        "findings": "Utricular signals relayed through the superior vestibular nucleus are distributed by the MLF to the ocular motor nuclei and to the interstitial nucleus of Cajal; when they become asymmetric — a superior vestibular nerve or nucleus lesion, or a brainstem tegmental lesion — the brain misjudges 'down' and produces an ocular tilt reaction of head tilt, skew deviation (one eye higher than the other) and conjugate ocular torsion. The direction of the tilt indicates the side of the imbalanced utricular input.",
+        "vascular": "AICA and SCA circumferential branches",
+        "note": "Skew deviation is a graviceptive (otolith) sign, not a nerve palsy: ductions and versions are full, and the vertical diplopia is commonly dissociated from the degree of vertigo."
       }
     ],
     "levels": ["lvl-pons-middle", "lvl-pons-rostral"],
@@ -307,6 +319,12 @@
         "syndrome": "Gaze-holding failure and nystagmus",
         "findings": "Lesions impair the vestibulo-ocular reflex, producing oscillopsia, gaze-evoked nystagmus and impaired smooth pursuit-vestibular cooperation in lateral pontomedullary strokes.",
         "vascular": "AICA / vertebral"
+      },
+      {
+        "syndrome": "Lateropulsion (ipsilateral trunk push) in lateral medullary and vestibular lesions",
+        "findings": "The medial vestibular nucleus is the source of the medial vestibulospinal tract and of the MLF vestibulo-ocular fibres, so its involvement — classically in a Wallenberg infarct — produces lateropulsion: the patient actively pushes the trunk and falls toward the side of the lesion, with the head and eyes deviated the same way, and the symptom may outlast the vertigo and nystagmus by weeks.",
+        "vascular": "PICA / vertebral (dorsolateral medulla); AICA at the pontine level",
+        "note": "Distinguishing lateropulsion (vestibulospinal, toward the lesion) from cerebellar past-pointing (limb, ipsilateral, with dysmetria) is a classic bedside discriminator."
       }
     ],
     "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle"],
@@ -361,6 +379,14 @@
       "efferent": ["Vestibulocerebellar fibers via tract-icp", "Descending vestibulospinal and reticular connections"]
     },
     "bloodSupply": "PICA / vertebral circumferential branches",
+    "clinical": [
+      {
+        "syndrome": "Vertical (downbeat) nystagmus and dysequilibrium",
+        "findings": "The inferior (descending) vestibular nucleus processes vertical-canal and otolith signals and is the caudalmost link between the vestibular nerve and the vestibulocerebellum; lesions at the caudal medulla or craniocervical junction — a dorsal PICA-territory infarct, a small cerebellar haemorrhage or a Chiari malformation — are associated with vertical (typically downbeat) or direction-changing positional nystagmus, postural instability with falls, and dysequilibrium that outlasts the acute vertigo.",
+        "vascular": "PICA / vertebral circumferential branches",
+        "note": "Hearing is usually preserved: the cochlear nuclei and nerve root lie rostral to this nucleus, which is why a 'vestibular' medullary infarct can present exactly like vestibular neuritis."
+      }
+    ],
     "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal"],
     "origin3d": [3.5, -24, -5.5],
     "size3d": [1.8, 3.5, 1.8],
@@ -414,6 +440,14 @@
       "efferent": ["Contralateral lateral lemniscus (tract-lateral-lemniscus) via the acoustic striae"]
     },
     "bloodSupply": "AICA branches",
+    "clinical": [
+      {
+        "syndrome": "Ipsilateral sensorineural deafness with tinnitus (cerebellopontine angle lesion)",
+        "findings": "Compression or infarction of the dorsal cochlear nucleus at the cerebellopontine angle — the usual site of a vestibular schwannoma, an AICA-territory infarct or an epidermoid — removes hearing and adds tinnitus on that side, usually with vertigo and facial numbness from the neighbouring structures. Because the auditory pathway decussates at the trapezoid body and is bilateral from the cochlear nuclei onwards, lesions above this level never cause unilateral deafness.",
+        "vascular": "AICA branches (labyrinthine segment)",
+        "note": "Its surface bulge is the acoustic tubercle over the inferior cerebellar peduncle; the nucleus is also a site of somatosensory-auditory convergence implicated in tinnitus generation."
+      }
+    ],
     "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
     "origin3d": [6, -20, -6],
     "size3d": [1.6, 1.2, 1.2],
@@ -437,6 +471,14 @@
       "efferent": ["Lateral lemniscus (tract-lateral-lemniscus) to the inferior colliculus", "Olivocochlear efferent bundle back to the cochlea"]
     },
     "bloodSupply": "Basilar short circumferential branches / AICA",
+    "clinical": [
+      {
+        "syndrome": "Loss of binaural sound localization (impaired interaural processing)",
+        "findings": "The complex is the brain's first binaural comparator, so a lesion that removes it — typically a small basilar or AICA-territory pontine infarct — leaves pure-tone thresholds relatively preserved while destroying the ability to judge which side a sound comes from and degrading speech understanding against background noise; the deficit is easily missed because routine audiometry is normal.",
+        "vascular": "Basilar short circumferential branches / AICA",
+        "note": "The same complex gives rise to the medial olivocochlear bundle, so its damage also removes efferent control of the cochlea (protection from loud sound and the 'anti-masking' reflex)."
+      }
+    ],
     "levels": ["lvl-pons-caudal"],
     "origin3d": [3.5, -17, 0],
     "size3d": [1.5, 1.5, 1.2],
@@ -460,6 +502,14 @@
       "efferent": ["Superior olivary complex (nuc-superior-olivary) and lateral lemniscus (tract-lateral-lemniscus), contralateral"]
     },
     "bloodSupply": "Basilar paramedian and short circumferential perforators",
+    "clinical": [
+      {
+        "syndrome": "Bilateral representation of each ear (auditory decussation)",
+        "findings": "The trapezoid body is the first decussation of the auditory system: section of it, or of the ventral cochlear nucleus output that feeds it, removes the crossed contribution of one ear to the opposite lateral lemniscus. Clinically this is expressed as part of a ventral caudal pontine infarct, where the auditory finding is muffled hearing and impaired sound localization rather than an isolated deafness, because the uncrossed projection from each cochlear nucleus survives.",
+        "vascular": "Basilar paramedian and short circumferential perforators",
+        "note": "This decussation is why each inferior colliculus and each auditory cortex is driven by both ears — and why a brainstem lesion almost never causes unilateral deafness."
+      }
+    ],
     "levels": ["lvl-pons-caudal"],
     "origin3d": [4, -17, 2],
     "size3d": [5, 1, 1.4],
@@ -483,6 +533,14 @@
       "efferent": ["Inferior colliculus (nuc-inferior-colliculus), thence the brachium of the inferior colliculus to the medial geniculate nucleus"]
     },
     "bloodSupply": "Short circumferential branches of the basilar artery; SCA rostrally",
+    "clinical": [
+      {
+        "syndrome": "Auditory component of the lateral pontine (AICA) syndrome",
+        "findings": "The lateral lemniscus lies in the subpial lateral tegmentum beside the middle cerebellar peduncle, exactly where an AICA infarct lands: patients then report tinnitus and reduced hearing on that side, although the damage that produces the deafness is at the cochlear nuclei and nerve root rather than in the lemniscus itself. An isolated lemniscal lesion barely changes pure-tone thresholds because each lemniscus already carries information from both ears (the ventral cochlear nuclei project bilaterally through the trapezoid body); the typical residual is difficulty localizing sound and understanding speech in noise.",
+        "vascular": "AICA / basilar short circumferential branches",
+        "note": "Teaching point for localization: unilateral deafness is never central — it points to the cochlea, the auditory nerve or the cochlear nuclei, not to this bundle."
+      }
+    ],
     "levels": ["lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic"],
     "origin3d": [5.5, -6, -2],
     "size3d": [1.2, 7, 1.2],

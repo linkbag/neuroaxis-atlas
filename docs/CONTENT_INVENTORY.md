@@ -2,6 +2,8 @@
 
 **Single source of truth for all content tasks.** Every structure, tract, level, plate and syndrome id used anywhere in this app must appear here and resolve in `src/data/taxonomy.json` (± `src/data/levels.json`). If a builder needs a new id they must NOT invent one: add it here AND to `taxonomy.json`, then flag the reviewer.
 
+**Refreshed 2026-09-10** against the data as committed: registry **137** entries (diencephalon 42 · midbrain 24 · pons 34 · medulla 32 · cerebellum 5); **26** syndrome records in 3 files; **19** authored tract records out of the 36 registry tracts; **12** plates. Every count below — the §2 registry line, the §2 context-layer identity table, the §3 region headings and rows, the §4 gap note, the §5 syndrome table and the §7 "Required" counts — was **recomputed from `src/data` on that date rather than copied**, and each §7 count now equals the number of distinct `data-structure` slugs actually present in that plate's SVG. The refresh was made against `taxonomy.json` as committed at `716896f` (137 entries, 11 `kind:"context"`), i.e. the state *before* `p1-identity` registers the four unowned `ctx-*` silhouettes; `integration-v6` re-reconciles the context table once that lands. Every count here is pinned to that revision: if a later run extends the registry or the level anchors, re-run this reconciliation instead of trusting the numbers (that is a content-run task, recorded in §4.1 for the tract gaps).
+
 **Conventions (from ENGINEERING_PLAN §2, §3, §6):**
 - Transverse plates: dorsal at top, **patient LEFT on image RIGHT** (clinical convention). Sagittal: anterior left, superior top. Coronal: patient left on image right, superior top.
 - Orientation badges L/R (transverse, coronal) and A/P/S/I (sagittal) drawn in the SVG.
@@ -39,11 +41,31 @@ Plate mapping: 9 transverse plates → `plate-pyramid-decuss`(lvl-pyramid-decuss
 - Registry count: **137 entries** (by region field: diencephalon 42, midbrain 24, pons 34, medulla 32, cerebellum 5; by kind: nucleus 71, context 11, tract 36, ventricle 3, surface 16 — `vent-cerebral-aqueduct` carries region `diencephalon` per plan §3.1 CSF grouping; peduncle tracts carry their owning region: `tract-scp` midbrain, `tract-mcp` pons, `tract-icp` medulla). Two records are additions over the plan §3 list, both `kind:"context"`, added because the plate contract (§6) requires a `<slug>` for every region and §3.9 mandates "thalamus/hypothalamus blocks" on the sagittal plate: `ctx-thalamus-envelope`, `ctx-hypothalamus-envelope`. No group records were invented; tree grouping is region → subdivision → records.
 - `parent` links (tree nesting to existing ids only): `nuc-edinger-westphal → nuc-oculomotor`, `nuc-pprf → nuc-pontine-reticular`.
 
+### Context layer identity (documented 2026-09-10, against committed `taxonomy.json` @ `716896f`)
+
+Eleven registry entries carry `kind:"context"`, and the viewer bakes exactly ten `ctx-*` GLB silhouettes (`src/assets/anatomy/anatomy-manifest.json`: 10 context parts of 84). `SceneLayers.tsx` (`ENVELOPE_SLOTS`) maps every rendered silhouette onto the record id it stands for, so each registered context id resolves as follows:
+
+| registered context id | rendered mesh that represents it | why / where it otherwise lives |
+| --- | --- | --- |
+| `ctx-thalamus-envelope` | `ctx-thalamus-l` + `ctx-thalamus-r` (2 slots, slot id = `ctx-thalamus-envelope`) | The paired ovoid envelopes, mirrored at −x; both slots carry this record id (they become clickable when `p1-identity` lands the envelope-picking fix). |
+| `ctx-hypothalamus-envelope` | `ctx-hypothalamus-surface` | Envelope wedge, slot id = `ctx-hypothalamus-envelope`. |
+| `ctx-cerebellum` | `ctx-cerebellum-l` + `ctx-cerebellum-r` + `ctx-cerebellar-vermis` (3 slots) | Two hemispheres plus the vermis bar, all owned by the one context record. |
+| `ctx-internal-medullary-lamina` | **none** | Plate-2D context only: the Y-shaped lamina is tagged on `plate-thalamus-mid` and `plate-coronal-thalamus`; a myelin sheet has no standalone baked mesh and is not separable inside the thalamic envelope. |
+| `ctx-fields-of-forel` | **none** | Plate-2D context only (H1/H2 fiber zones on `plate-thalamus-mid`, `plate-coronal-midbrain`, `plate-coronal-thalamus`); white-matter zones inside the subthalamic region, no GLB. |
+| `ctx-corpus-callosum` | **none** | Sagittal-plate context silhouette only; the cerebral hemispheres lie outside the brainstem/diencephalon GLB set by design. |
+| `ctx-internal-capsule` | **none** | Plate-2D context only (sagittal, coronal and transverse plates); a fiber plane, not a renderable nucleus. |
+| `ctx-lenticular-nucleus` | **none** | Plate-2D context only (putamen/pallidum silhouette); telencephalic, outside the baked brainstem set. |
+| `ctx-caudate-nucleus` | **none** | Plate-2D context only (head/body at the anterior limb); telencephalic, outside the baked brainstem set. |
+| `ctx-pontine-nuclei` | **none** | Plate-2D context only: the gray of the basis pontis is part of the `ctx-pons-surface` envelope in 3D, and the baked envelope cannot separate gray from fibers. |
+| `ctx-pontine-fibers` | **none** | Same reason as the pontine nuclei — the longitudinal/transverse fiber systems are drawn and tagged on the pontine plates but are not individually meshable inside the pons envelope. |
+
+**Four rendered silhouettes had no registry owner at this revision:** `ctx-midbrain-surface`, `ctx-pons-surface`, `ctx-medulla-surface` and `ctx-pineal` (slot ids `env-midbrain`, `env-pons`, `env-medulla`, `env-pineal` in `SceneLayers.tsx`). `p1-identity` owns the fix — 4 new `kind:"context"` records in `taxonomy.json` plus the matching authored records in `src/data/structures/context.json` — and `integration-v6` updates this table in close-out. Until then those four silhouettes render but are not addressable by id.
+
 ---
 
 ## 3. Region tables (slug · name · subdivision · kind · function summary)
 
-### 3.1 Diencephalon (41)
+### 3.1 Diencephalon (42)
 
 **Thalamus**
 
@@ -111,7 +133,13 @@ Plate mapping: 9 transverse plates → `plate-pyramid-decuss`(lvl-pyramid-decuss
 | `ctx-lenticular-nucleus` | Lentiform nucleus (context silhouette) | Hemisphere context | context | Putamen + globus pallidus silhouette for coronal/transverse plates. |
 | `ctx-caudate-nucleus` | Caudate nucleus (context silhouette) | Hemisphere context | context | C-shaped striatal silhouette; head/body visible at the anterior limb of the internal capsule. |
 
-### 3.2 Midbrain (22)
+**Descending pathways**
+
+| slug | name | subdivision | kind | function summary |
+| --- | --- | --- | --- | --- |
+| `tract-hypothalamospinal` | Hypothalamospinal (sympathetic) tract | Descending pathways | tract | First-order sympathetic fibers from the paraventricular/perifornical hypothalamus descending through the lateral brainstem tegmentum to the intermediolateral column (T1–L2); its interruption gives a central Horner syndrome. |
+
+### 3.2 Midbrain (24)
 
 | slug | name | subdivision | kind | function summary |
 | --- | --- | --- | --- | --- |
@@ -138,7 +166,14 @@ Plate mapping: 9 transverse plates → `plate-pyramid-decuss`(lvl-pyramid-decuss
 | `surf-cn3-exit` | Oculomotor nerve (CN III) exit | Surface landmarks | surface | CN III rootlets in the interpeduncular fossa, passing between PCA and SCA; Weber lesion territory. |
 | `surf-cn4-exit` | Trochlear nerve (CN IV) exit | Surface landmarks | surface | CN IV dorsal exit below the inferior colliculus (superior medullary velum); longest intracranial course. |
 
-### 3.3 Pons (27)
+**Descending pathways**
+
+| slug | name | subdivision | kind | function summary |
+| --- | --- | --- | --- | --- |
+| `tract-rubrospinal` | Rubrospinal tract | Descending pathways | tract | Magnocellular red-nucleus output that crosses in the ventral tegmental decussation and descends to the contralateral cervical cord; facilitates flexor tone of the upper limb and feeds the rubro-olivary side-loop. |
+| `tract-tectospinal` | Tectospinal tract | Descending pathways | tract | Superior-colliculus output crossing in the dorsal tegmental decussation to the contralateral cervical cord; turns the head and neck toward a seen or heard target. |
+
+### 3.3 Pons (34)
 
 | slug | name | subdivision | kind | function summary |
 | --- | --- | --- | --- | --- |
@@ -168,9 +203,27 @@ Plate mapping: 9 transverse plates → `plate-pyramid-decuss`(lvl-pyramid-decuss
 | `surf-cn7-exit` | Facial nerve (CN VII) exit | Surface landmarks | surface | CN VII at the cerebellopontine angle (with nervus intermedius). |
 | `surf-cn8-exit` | Vestibulocochlear nerve (CN VIII) exit | Surface landmarks | surface | CN VIII at the CPA; vestibular + cochlear divisions. |
 | `surf-facial-colliculus` | Facial colliculus | Surface landmarks | surface | Dorsal floor bulge produced by the facial nerve genu over the abducens nucleus. |
-| `tract-spinal-trigeminal` / `nuc-spinal-trigeminal` | (listed under medulla, owner = medulla; present in the pons too, see §7 plates) | | | |
+Note: `tract-spinal-trigeminal` and `nuc-spinal-trigeminal` are **owned by medulla** (region field) and are listed in §3.4; they are drawn on the pontine plates too — see §7.
 
-### 3.4 Medulla (25)
+**Ascending pathways**
+
+| slug | name | subdivision | kind | function summary |
+| --- | --- | --- | --- | --- |
+| `tract-trigeminothalamic-ventral` | Ventral trigeminothalamic tract | Ascending pathways | tract | Crossed trigeminal lemniscus from the principal sensory and spinal trigeminal nuclei to contralateral VPM; carries face touch, pain and temperature. |
+| `tract-trigeminothalamic-dorsal` | Dorsal trigeminothalamic tract | Ascending pathways | tract | Ipsilateral oral-facial mechanosensory route from the principal sensory nucleus to VPM — the uncrossed partner of the trigeminal lemniscus. |
+| `tract-auditory-pathway` | Auditory pathway (cochlear nuclei to MGN) | Ascending pathways | tract | Composite central auditory route: cochlear nuclei → trapezoid body/SOC → lateral lemniscus → inferior colliculus → brachium → MGN; bilateral from the cochlear nuclei onwards. |
+
+**Descending pathways**
+
+| slug | name | subdivision | kind | function summary |
+| --- | --- | --- | --- | --- |
+| `tract-corticobulbar` | Corticobulbar tract | Descending pathways | tract | Corticonuclear fibers from motor and somatosensory cortex through the genu and basis pontis to the cranial-nerve motor nuclei; bilateral to most nuclei, crossed-dominant to the lower face and genioglossus. |
+| `tract-corticopontine` | Corticopontine tract | Descending pathways | tract | Frontopontine (medial) and temporoparietooccipitopontine (lateral) fibers ending on the pontine nuclei — the first leg of the corticopontocerebellar route. |
+| `tract-lateral-vestibulospinal` | Lateral vestibulospinal tract | Descending pathways | tract | Uncrossed descending bundle from Deiters' nucleus through the medulla to the ipsilateral ventrolateral funiculus; the main driver of antigravity extensor tone. |
+| `tract-medial-vestibulospinal` | Medial vestibulospinal tract | Descending pathways | tract | Descends bilaterally within the MLF/interfascicular bundle from the medial vestibular nucleus to the cervical cord; positions the head and stabilizes gaze. |
+| `tract-reticulospinal` | Reticulospinal tract (pontine and medullary) | Descending pathways | tract | The medial descending system: pontine (medial) reticulospinal fibers facilitate extensor and locomotor tone while medullary (lateral) fibers inhibit it; both descend in the ventromedial cord. |
+
+### 3.4 Medulla (32)
 
 | slug | name | subdivision | kind | function summary |
 | --- | --- | --- | --- | --- |
@@ -200,6 +253,22 @@ Plate mapping: 9 transverse plates → `plate-pyramid-decuss`(lvl-pyramid-decuss
 | `surf-cn11-exit` | Accessory nerve (CN XI) exit | Surface landmarks | surface | Cranial (postolivary) + spinal rootlets entering through the foramen magnum; SCM/trapezius. |
 | `surf-cn12-exit` | Hypoglossal nerve (CN XII) exit | Surface landmarks | surface | Preolivary sulcus rootlets → hypoglossal canal; tongue motor. |
 | `surf-obex` | Obex | Surface landmarks | surface | Caudal apex of the fourth ventricle; surgical landmark at the foramen magnum. |
+
+**Ascending pathways**
+
+| slug | name | subdivision | kind | function summary |
+| --- | --- | --- | --- | --- |
+| `tract-dcml` | Dorsal column-medial lemniscus pathway | Ascending pathways | tract | Composite conscious-mechanosensory pathway: dorsal-column fasciculi → gracile/cuneate nuclei → internal arcuate decussation → medial lemniscus → VPL → S1; its components are drawn and tagged individually on the plates. |
+| `tract-spinothalamic` | Spinothalamic tract (anterolateral system) | Ascending pathways | tract | Crossed pain-temperature and crude-touch pathway ascending the ventrolateral brainstem to VPL; in the medulla it lies between the olive and the spinal trigeminal complex. |
+| `tract-posterior-spinocerebellar` | Posterior spinocerebellar tract | Ascending pathways | tract | Uncrossed Clarke's-column fibers entering the inferior cerebellar peduncle at the upper medulla; unconscious lower-limb proprioception for the spinocerebellum. |
+| `tract-anterior-spinocerebellar` | Anterior spinocerebellar tract | Ascending pathways | tract | Gowers' tract: crossed ventral spinocerebellar fibers ascending the lateral brainstem, to cross a second time in the superior cerebellar peduncle. |
+| `tract-spinoreticular` | Spinoreticular tract | Ascending pathways | tract | Collateral anterolateral fibers ending in the medullary and pontine reticular formation; the arousal-affective (medial pain system) route to the intralaminar thalamus. |
+
+**Descending pathways**
+
+| slug | name | subdivision | kind | function summary |
+| --- | --- | --- | --- | --- |
+| `tract-corticospinal-lateral` | Corticospinal tract (lateral) | Descending pathways | tract | Crossed pyramidal fibers descending from the decussation in the lateral funiculus to the ventral horn; the principal voluntary motor pathway to the limbs. |
 
 ### 3.5 Cerebellum (5)
 
@@ -262,37 +331,82 @@ Plate mapping: 9 transverse plates → `plate-pyramid-decuss`(lvl-pyramid-decuss
 | `tract-fasciculus-gracilis` / `tract-fasciculus-cuneatus` | dorsal column fasciculi | see §3.4 | medulla |
 | `tract-pyramid` / `tract-pyramidal-decussation` / `tract-internal-arcuate` / `tract-medial-lemniscus` / `tract-spinal-trigeminal` | | see §3.4 | medulla |
 
+### 4.1 Recorded gap: tracts with no plate label (verified 2026-09-10)
+
+The 12 plate SVGs carry **122** distinct `data-structure` slugs between them. Eight of the 19 authored tract records appear in none of them:
+
+`tract-dcml` · `tract-trigeminothalamic-ventral` · `tract-trigeminothalamic-dorsal` · `tract-auditory-pathway` · `tract-spinoreticular` · `tract-lateral-vestibulospinal` · `tract-medial-vestibulospinal` · `tract-hypothalamospinal`
+
+**This is a 2D discoverability gap, not a 3D one.** All 19 records carry complete, in-bounds path data (`waypoints` 5–8 points each, `tubeRadius`, `color`, `levels`) and every one of them renders as a tube through the existing `TractTube` path, so nothing is missing from the viewer — they simply cannot be found by eye on a plate yet. Two of the eight (`tract-dcml`, `tract-auditory-pathway`) are **composite pathway records that must never be plate-tagged** by the convention at the head of this document, so only six are genuinely taggable; giving them plate presence is a future content-run decision (it needs new SVG geometry, not just a label).
+
+Separately, **17 of the 36 registry tracts have no authored record at all** (`tract-pyramid`, `tract-scp`, `tract-mcp`, `tract-icp`, `tract-medial-lemniscus`, `tract-fasciculus-gracilis`, `tract-fasciculus-cuneatus`, `tract-internal-arcuate`, `tract-pyramidal-decussation`, `tract-spinal-trigeminal`, `tract-crus-cerebri`, `tract-scp-decussation`, `tract-mesencephalic-v`, `tract-stria-medullaris`, `tract-posterior-commissure`, `tract-trapezoid-body`, `tract-lateral-lemniscus`): they are 2D-label-only — registry entries with plate presence but no 3D tube and no `tracts.json` record. Authoring them is likewise a content-run decision, recorded here so the two different gaps are not conflated.
+
 ---
 
-## 5. Syndromes (`syndromes/*.json`, 23 records — §3.7)
+## 5. Syndromes (`syndromes/*.json`, 26 records — §3.7)
 
-`structures[]` ids below must resolve in `taxonomy.json` (they do).
+`structures[]` ids below must resolve in `taxonomy.json` (they do — re-verified from the data on 2026-09-10). The table is **regenerated from the record files and reproduced verbatim** (id · name · `structures[]` · `vascularTerritory`; eponyms shown only where they add information). The previous revision listed 23 records and had drifted in four ways, all fixed here: it **omitted** `syn-lateral-pontine` and `syn-peduncular-hallucinosis`, it **claimed** a `syn-central-horner` that existed in no data file, it **abbreviated** the `structures[]` lists (e.g. row 1 omitted `tract-icp`), and it **miscounted** the total. `syn-one-and-a-half` and `syn-central-horner` were authored on 2026-09-10: the first was the audit's missing classic syndrome; the second **resolves the doc/data mismatch by authoring the record** (structures `tract-hypothalamospinal` + `nuc-medullary-reticular`, both of which resolve) rather than deleting the claim.
 
 | # | id | name (eponym/alt) | structures[] | vascularTerritory |
 | --- | --- | --- | --- | --- |
-| 1 | `syn-lateral-medullary` | Lateral medullary (Wallenberg) | nuc-spinal-trigeminal, tract-spinal-trigeminal, nuc-solitarius-caudal, nuc-ambiguus, nuc-dmv, tract-anterior-spinocerebellar, tract-spinothalamic, nuc-medullary-reticular | PICA / vertebral |
-| 2 | `syn-medial-medullary` | Medial medullary | tract-pyramid, tract-medial-lemniscus, nuc-hypoglossal | Anterior spinal artery |
-| 3 | `syn-hemimedullary` | Hemimedullary (combined) | tract-pyramid, tract-medial-lemniscus, nuc-hypoglossal, nuc-spinal-trigeminal, nuc-ambiguus, nuc-dmv, tract-spinothalamic | Vertebral disease |
-| 4 | `syn-millard-gubler` | Millard-Gubler | nuc-facial, nuc-abducens, nuc-pprf, tract-corticospinal-lateral, tract-corticobulbar | Basilar paramedian perforators / AICA |
-| 5 | `syn-foville` | Foville (dorsal pontine) | nuc-facial, nuc-abducens, nuc-pprf, tract-medial-lemniscus, tract-lateral-lemniscus | Basilar paramedian / AICA |
-| 6 | `syn-locked-in` | Locked-in (ventral pons) | tract-corticospinal-lateral, tract-corticobulbar, ctx-pontine-nuclei, ctx-pontine-fibers | Basilar occlusion |
-| 7 | `syn-cpm` | Central pontine myelinolysis | tract-corticospinal-lateral, tract-corticobulbar, ctx-pontine-nuclei | None (osmotic demyelination) |
-| 8 | `syn-weber` | Weber | nuc-oculomotor, tract-crus-cerebri, tract-corticospinal-lateral, tract-corticobulbar | PCA (mesencephalic/perforating) |
-| 9 | `syn-benedikt` | Benedikt | nuc-oculomotor, nuc-edinger-westphal, nuc-red-nucleus, tract-medial-lemniscus | PCA (posterior thalamoperforating / paramedian) |
-| 10 | `syn-claude` | Claude | nuc-red-nucleus, nuc-oculomotor, nuc-dentate, tract-scp | PCA paramedian |
-| 11 | `syn-nothnagel` | Nothnagel | nuc-superior-colliculus, nuc-oculomotor, nuc-red-nucleus | SCA / PCA |
-| 12 | `syn-parinaud` | Parinaud (dorsal midbrain) | nuc-pretectal, nuc-superior-colliculus, nuc-pineal-gland, nuc-edinger-westphal | Collicular/quadrigeminal (or pineal mass) |
-| 13 | `syn-ino` | Internuclear ophthalmoplegia (MLF) | tract-mlf, nuc-abducens, nuc-oculomotor | Basilar paramedian perforators |
-| 14 | `syn-central-horner` | Central Horner | tract-hypothalamospinal, nuc-medullary-reticular | Vertebral / PICA |
-| 15 | `syn-dejerine-roussy` | Déjérine-Roussy thalamic pain | nuc-vpl, nuc-pulvinar | PCA — thalamogeniculate |
-| 16 | `syn-percheron` | Artery-of-Percheron (paramedian thalamic) | nuc-intralaminar, nuc-md, nuc-midline-thalamic | PCA — paramedian thalamic (Percheron) |
-| 17 | `syn-tuberothalamic` | Tuberothalamic aphasia-plus (optional record) | nuc-thalamic-anterior, nuc-va, nuc-vl | PCA — tuberothalamic |
-| 18 | `syn-korsakoff` | Korsakoff (Wernicke-Korsakoff) | nuc-mammillary-body, nuc-thalamic-anterior, nuc-md | None (thiamine deficiency) |
-| 19 | `syn-hypothalamic` | Hypothalamic — DI / SIADH / autonomic | nuc-supraoptic, nuc-paraventricular, nuc-preoptic, nuc-ventromedial | PCA / anterior choroidal (and sellar disease) |
-| 20 | `syn-pineal-region` | Pineal region tumor gaze palsy | nuc-pineal-gland, nuc-pretectal, nuc-superior-colliculus, nuc-edinger-westphal | None (mass effect) |
-| 21 | `syn-parkinson` | Parkinson's disease | nuc-snc, nuc-snr | None (degenerative) |
-| 22 | `syn-hemiballismus` | Hemiballismus | nuc-subthalamic | PCA / anterior choroidal (STN) |
-| 23 | `syn-cerebellar` | Cerebellar signs (dentate/SCP) | nuc-dentate, nuc-interposed, nuc-fastigial, tract-scp | SCA / AICA |
+| 1 | `syn-dejerine-roussy` | Déjérine-Roussy thalamic pain syndrome | nuc-vpl, nuc-pulvinar | PCA — thalamogeniculate artery (inferolateral thalamic territory) |
+| 2 | `syn-percheron` | Artery-of-Percheron paramedian thalamic infarction | nuc-intralaminar, nuc-md, nuc-midline-thalamic | PCA — paramedian thalamic (posterior thalamoperforating) territory supplied by a single artery of Percheron off one P1 segment |
+| 3 | `syn-tuberothalamic` | Tuberothalamic artery syndrome (aphasia-plus) | nuc-thalamic-anterior, nuc-va, nuc-vl | PCA — tuberothalamic (anterior thalamoperforating) artery from the P1/posterior communicating junction |
+| 4 | `syn-korsakoff` | Wernicke-Korsakoff syndrome | nuc-mammillary-body, nuc-thalamic-anterior, nuc-md | None — metabolic-toxic (thiamine deficiency), not a vascular territory |
+| 5 | `syn-hypothalamic` | Hypothalamic syndrome — central DI, SIADH, and autonomic crises | nuc-supraoptic, nuc-paraventricular, nuc-preoptic, nuc-ventromedial | Circle-of-Willis hypothalamic perforators (anterior communicating/superior hypophyseal rostrally; posterior communicating and P1/PCA paramedially) — often sellar/suprasellar mass effect rather than stroke |
+| 6 | `syn-pineal-region` | Pineal region tumor with gaze palsy | nuc-pineal-gland, nuc-pretectal, nuc-superior-colliculus, nuc-edinger-westphal | None — mass effect (pineal region tumor compressing the pretectal plate, posterior commissure and cerebral aqueduct) with obstructive hydrocephalus |
+| 7 | `syn-hemiballismus` | Hemiballismus | nuc-subthalamic | Perforating branches of the posterior communicating artery and anterior choroidal artery to the subthalamic nucleus (classically a small lacunar infarct) |
+| 8 | `syn-weber` | Weber syndrome | nuc-oculomotor, tract-crus-cerebri, tract-corticospinal-lateral, tract-corticobulbar | Paramedian branches of the posterior cerebral artery (posterior thalamoperforating / midbrain perforators) |
+| 9 | `syn-benedikt` | Benedikt syndrome | nuc-oculomotor, nuc-edinger-westphal, nuc-red-nucleus, tract-medial-lemniscus | Paramedian branches of the posterior cerebral artery (posterior thalamoperforating / paramedian midbrain) |
+| 10 | `syn-claude` | Claude syndrome | nuc-red-nucleus, nuc-oculomotor, nuc-dentate, tract-scp | Paramedian branches of the posterior cerebral artery |
+| 11 | `syn-nothnagel` | Nothnagel syndrome | nuc-superior-colliculus, nuc-oculomotor, nuc-red-nucleus | Superior cerebellar artery and collicular/quadrigeminal branches of the posterior cerebral artery |
+| 12 | `syn-parinaud` | Parinaud syndrome (dorsal midbrain) | nuc-pretectal, nuc-superior-colliculus, nuc-pineal-gland, nuc-edinger-westphal | Collicular/quadrigeminal branches of the posterior cerebral artery; pineal region masses cause the syndrome by mass effect rather than ischemia |
+| 13 | `syn-ino` | Internuclear ophthalmoplegia (MLF) | tract-mlf, nuc-abducens, nuc-oculomotor | Paramedian branches of the basilar artery |
+| 14 | `syn-parkinson` | Parkinson's disease (paralysis agitans) | nuc-snc, nuc-snr | None (degenerative alpha-synucleinopathy, not vascular) |
+| 15 | `syn-peduncular-hallucinosis` | Peduncular hallucinosis (Lhermitte) | tract-crus-cerebri, nuc-snc, nuc-red-nucleus, nuc-md | Paramedian branches of the basilar tip / posterior cerebral artery (midbrain perforators and paramedian thalamic perforators, including artery-of-Percheron territory) |
+| 16 | `syn-lateral-medullary` | Lateral medullary syndrome (Wallenberg) | nuc-spinal-trigeminal, tract-spinal-trigeminal, nuc-solitarius-caudal, nuc-ambiguus, nuc-dmv, tract-anterior-spinocerebellar, tract-icp, tract-spinothalamic, nuc-medullary-reticular | Posterior inferior cerebellar artery (PICA), usually occluded at its vertebral origin; occasionally the vertebral artery directly |
+| 17 | `syn-medial-medullary` | Medial medullary syndrome (Déjerine anterior bulbar) | tract-pyramid, tract-medial-lemniscus, nuc-hypoglossal | Anterior spinal artery (paramedian branches of the vertebral artery) |
+| 18 | `syn-hemimedullary` | Hemimedullary syndrome (Reinhold) | tract-pyramid, tract-medial-lemniscus, nuc-hypoglossal, nuc-spinal-trigeminal, nuc-ambiguus, nuc-dmv, tract-spinothalamic | Occlusion of the vertebral artery at the medullary foramina (conjoint ASA + PICA supply of one hemicord-half of the medulla) |
+| 19 | `syn-millard-gubler` | Millard-Gubler syndrome | nuc-facial, nuc-abducens, nuc-pprf, tract-corticospinal-lateral, tract-corticobulbar | Basilar artery paramedian perforators, or the AICA territory at the caudal-ventral pons |
+| 20 | `syn-foville` | Foville syndrome | nuc-facial, nuc-abducens, nuc-pprf, tract-medial-lemniscus, tract-lateral-lemniscus | Paramedian perforating branches of the basilar artery (dorsal caudal pons), sometimes AICA |
+| 21 | `syn-locked-in` | Locked-in syndrome | tract-corticospinal-lateral, tract-corticobulbar, ctx-pontine-nuclei, ctx-pontine-fibers | Occlusion of the basilar artery (thrombotic or embolic) with sparing of the tegmentum |
+| 22 | `syn-cpm` | Central pontine myelinolysis (osmotic demyelination syndrome) | tract-corticospinal-lateral, tract-corticobulbar, ctx-pontine-nuclei | None — osmotic (metabolic) demyelination of the central basis pontis, not a vascular territory |
+| 23 | `syn-cerebellar` | Cerebellar syndrome (dentate/SCP) | nuc-dentate, nuc-interposed, nuc-fastigial, tract-scp | Superior cerebellar artery (SCA) for the dentate/SCP complex; AICA and PICA for the other deep-nucleus territories |
+| 24 | `syn-lateral-pontine` | Lateral pontine syndrome (AICA syndrome) | nuc-facial, nuc-principal-sensory-v, nuc-spinal-trigeminal, tract-spinal-trigeminal, nuc-vestibular-superior, nuc-vestibular-medial, nuc-vestibular-lateral, nuc-vestibular-inferior, nuc-cochlear-ventral, nuc-cochlear-dorsal, surf-cn7-exit, surf-cn8-exit, tract-mcp | Anterior inferior cerebellar artery (AICA), including its internal auditory (labyrinthine) branches |
+| 25 | `syn-one-and-a-half` | One-and-a-half syndrome (Fisher — PPRF/abducens plus ipsilateral MLF) | nuc-pprf, tract-mlf | Basilar artery paramedian perforators at the dorsal caudal pons (also small tegmental haemorrhage, tumour or demyelinating plaque) |
+| 26 | `syn-central-horner` | Central Horner syndrome (first-order/central sympathetic paresis) | tract-hypothalamospinal, nuc-medullary-reticular | Posterior inferior cerebellar artery / vertebral artery in the dorsolateral medulla; basilar paramedian perforators in the pons; anterior spinal artery in the cervical cord |
+
+---
+
+## 5.1 Clinical-item coverage (`clinical[]` on structure and tract records)
+
+**Post-state, 2026-09-10: 0 records without clinical content** (118 structure records + 19 tract records). Eleven records previously omitted `clinical` altogether — `nuc-cochlear-dorsal`, `nuc-superior-olivary`, `nuc-interposed`, `nuc-inferior-olive-medial`, `nuc-arcuate-medullary`, `nuc-nucleus-cuneatus`, `nuc-vestibular-inferior`, `tract-lateral-lemniscus`, `tract-trapezoid-body`, `tract-internal-arcuate`, `tract-fasciculus-cuneatus` — and all eleven now carry a first item. Fifteen further records that had exactly one item gained a second; the single-item population therefore went **51 → 47** (51 − 15 + 11). Note the last term: the eleven rescued records enter the population *as* single-item records, so the plan's stated target of "51 → 36" omits them and is an arithmetic slip in the plan, not a shortfall here — 47 is the correct post-state and is what the data shows.
+
+**Selection rule for the fifteen second items** (data-derived, deterministic, evaluated on the *pre-change* state): score = 3 × (number of syndrome records whose `structures[]` lists the id) + 1 × (number of authored plate SVGs carrying a `data-structure` label for the id); single-item records are ranked by score descending, then by id ascending, and the **top fifteen** were taken (the brief caps this addition at fifteen). This is a pure rank cut, not a hand-picked list — re-running the score on the pre-change state reproduces the table below exactly, ids and order.
+
+Note the honest boundary: **sixteen** single-item records clear a score of 5, so the cut is *rank 15*, not a score threshold. The sixteenth, `vent-fourth-ventricle` (0 syndrome references, 5 plate labels, score 5), was excluded solely because the brief fixes the count at fifteen; it is the single most-teachable record left with one item, and extending it is the obvious next increment if the cap is ever raised. Below it the score drops to 4 (`nuc-cochlear-ventral`, `nuc-fastigial`, `nuc-mesencephalic-v`), so nothing else is close.
+
+| # | id | syndrome refs | plate labels | score |
+| --- | --- | --- | --- | --- |
+| 1 | `tract-medial-lemniscus` | 4 | 8 | 20 |
+| 2 | `nuc-spinal-trigeminal` | 3 | 5 | 14 |
+| 3 | `tract-spinal-trigeminal` | 2 | 5 | 11 |
+| 4 | `tract-pyramid` | 2 | 4 | 10 |
+| 5 | `nuc-ambiguus` | 2 | 3 | 9 |
+| 6 | `tract-scp` | 2 | 3 | 9 |
+| 7 | `ctx-pontine-fibers` | 1 | 5 | 8 |
+| 8 | `nuc-dmv` | 2 | 2 | 8 |
+| 9 | `nuc-hypoglossal` | 2 | 2 | 8 |
+| 10 | `nuc-snr` | 1 | 3 | 6 |
+| 11 | `nuc-midline-thalamic` | 1 | 2 | 5 |
+| 12 | `nuc-vestibular-medial` | 1 | 2 | 5 |
+| 13 | `nuc-vestibular-superior` | 1 | 2 | 5 |
+| 14 | `nuc-vl` | 1 | 2 | 5 |
+| 15 | `tract-icp` | 1 | 2 | 5 |
+| — | *rank 16, below the cap — not taken*: `vent-fourth-ventricle` | 0 | 5 | 5 |
+| — | *rank 17 (score drops to 4)*: `nuc-cochlear-ventral` | 1 | 1 | 4 |
+
+Every new item keeps the existing `{ syndrome, findings, vascular?, note? }` shape, cites the same Blumenfeld/Patten/RadioGraphics sources as its neighbours, and is an original paraphrase. `vascular` is present wherever an arterial territory applies and omitted where none does (e.g. the bulbar-palsy and neurodegenerative items).
 
 ---
 
@@ -322,7 +436,7 @@ Rules: transverse = dorsal top, patient LEFT on image right. Requirements below 
 
 Section outline: rounded/scalloped square; gracile and cuneate tubercles at the dorsal edge; ventral pyramids interrupted midline by the cross. The 4th ventricle is NOT present (closed medulla). Ventral = pyramids/decussation; dorsal = DC nuclei.
 
-Required (18):
+Required (19 — recomputed from the plate SVG on 2026-09-10):
 
 - **Dorsomedial pair (dorsal → deep)**: `tract-fasciculus-gracilis` — dorsal, most medial (column of Goll); `nuc-nucleus-gracilis` — its caudal pole, immediately deep/ventral to the fasciculus; `tract-fasciculus-cuneatus` — dorsal, just lateral to the gracile column; `nuc-nucleus-cuneatus` — deep to the cuneate fasciculus.
 - **Dorsolateral margin**: `tract-spinal-trigeminal` — the long dorsolateral subpial bundle at the lateral border; `nuc-spinal-trigeminal` — deep (medial) to the tract; `tract-posterior-spinocerebellar` — small subpial oval at the dorsolateral edge, immediately lateral to the spinal V tract.
@@ -332,7 +446,7 @@ Required (18):
 - **Ventral surface**: `nuc-arcuate-medullary` — tiny superficial nodules at the ventromedial surface beside the decussation.
 - **Lateral surface**: `surf-cn11-exit` — the spinal/cranial accessory rootlets ascending along the lateral margin.
 
-Optional (1): `nuc-ambiguus` — rostral pole only, deep in the lateral tegmentum at the superior edge of this section; omit if not drawn.
+No optionals at this level: `nuc-ambiguus` — rostral pole only, deep in the lateral tegmentum at the superior edge of this section — **is drawn on the plate**, so it is counted in the 19 above.
 
 ### 7.2 `plate-sensory-decuss` — transverse @ `lvl-sensory-decuss` (y = −42) — **closed medulla, internal arcuate crossing**
 
@@ -412,7 +526,7 @@ Optional (3): `nuc-pprf` (rostral extent, paramedian adjacent to the MLF — lik
 
 Crux: paired inferior colliculi forming the dorsal humps, aqueduct + PAG central, the SCP crossing in the ventral midline (decussation), the trochlear nucleus just lateral to the MLF. Ventral surface smooth (no crus cerebri yet).
 
-Required (18):
+Required (25 — recomputed from the plate SVG on 2026-09-10):
 
 - **Dorsal**: `nuc-inferior-colliculus` — paired humps, dorsal; `surf-cn4-exit` — dorsal midline, immediately below the ICs (trochlear roots emerging).
 - **Central**: `vent-cerebral-aqueduct` — central round CSF space; `nuc-pag` — gray ring around the aqueduct; `nuc-mesencephalic-v` + `tract-mesencephalic-v` — dorsolateral, at the PAG lateral border.
@@ -422,12 +536,13 @@ Required (18):
 - **Dorsal-lateral tegmentum**: `nuc-cuneiform` — lateral to the PAG, in the dorsal-lateral tegmentum.
 - **Descending midline bundle**: `tract-tectospinal` — descending in the dorsal/intermediate tegmentum just lateral to the raphe.
 - **Posterior**: `ctx-cerebellum` — the cerebellum (superior surface) behind the ICs; draw the outline and tag with the context record.
+- **Ventral block at the inferior margin (caudal midbrain)**: `nuc-snc` + `nuc-snr` — the two substantia nigra tiers at the ventral surface; `tract-crus-cerebri` — the paired ventral bundles, with the crus somatotopy tagged individually (`tract-corticobulbar` medial, `tract-corticospinal-lateral` central, `tract-corticopontine` lateral); `surf-interpeduncular-fossa` — the midline cleft between the crura. This ventral block is what raises the plate's drawn count from 18 to 25.
 
 ### 7.8 `plate-midbrain-sc` — transverse @ `lvl-midbrain-sc` (y = +14) — **superior colliculus (CN III)**
 
 Crux: the paired superior colliculi, the oculomotor complex in the midline, the red nucleus (large ovoid) and substantia nigra (dark ventral band) bilaterally; cerebral peduncles at the ventral surface with somatotopic subdivisions; interpeduncular fossa between them.
 
-Required (21):
+Required (24 — recomputed from the plate SVG on 2026-09-10):
 
 - **Dorsal**: `nuc-superior-colliculus` — paired dorsal humps; `nuc-pretectal` — at the rostral margin of this section (dorsomedial, just rostral to the SC — tag if drawn at the top edge).
 - **Central**: `vent-cerebral-aqueduct`; `nuc-pag`; `nuc-mesencephalic-v` + `tract-mesencephalic-v` (dorsolateral PAG border).
@@ -436,7 +551,7 @@ Required (21):
 - **Ventral**: `nuc-snc` — dark dorsal band of the substantia nigra; `nuc-snr` — ventral band, between SNc and the crus; `tract-crus-cerebri` — the paired ventral bundles (somatotopy medial→lateral: frontopontine, corticobulbar, corticospinal, temporoparietooccipitopontine — the crus record covers the bundle; optional finer tags: `tract-corticobulbar`, `tract-corticospinal-lateral`, `tract-corticopontine`).
 - **Ventral surface**: `surf-interpeduncular-fossa` — midline triangle between the crura; `surf-cn3-exit` — CN III rootlets emerging from the medial crura into the fossa.
 
-Optional (3): `ctx-cerebellum` (posterior margin, only if the section includes cerebellar surface), `tract-corticobulbar`, `tract-corticospinal-lateral`, `tract-corticopontine` (only if the crus somatotopy is drawn in subdivisions).
+Optional (4 listed; the 3 crus subdivisions **are** drawn and are therefore counted in the 24 above): `ctx-cerebellum` (posterior margin, only if the section includes cerebellar surface — not drawn at this level), `tract-corticobulbar`, `tract-corticospinal-lateral`, `tract-corticopontine` (only if the crus somatotopy is drawn in subdivisions).
 
 ### 7.9 `plate-thalamus-mid` — transverse @ `lvl-thalamus-mid` (y = +28) — **mid-thalamus (mammillary bodies)**
 
@@ -456,7 +571,7 @@ Optional (3): `nuc-snc` — inferior margin (caudal pole of the SN, only if the 
 
 Midline sagittal: corpus callosum above, thalamus + hypothalamus blocks, aqueduct and tectum, 4th ventricle, brainstem profile, pineal, mammillary bodies, optic chiasm. Anterior = left, superior = top. Draw the brainstem outline (`data-role="outline"`), the cerebellum block, and the diencephalic blocks.
 
-Required (23):
+Required (26 — recomputed from the plate SVG on 2026-09-10):
 
 - **Dorsal**: `ctx-corpus-callosum` — the great arched white commissure; `nuc-pineal-gland` — behind/above the habenula, at the dorsal midline; `nuc-habenula` — small paramedian pair (drawn dotted at the midline just rostral to the pineal); `tract-stria-medullaris` — the fiber line running to the habenula along the dorsal thalamic edge; `tract-posterior-commissure` — small dorsal midline decussation just above the tectum.
 - **Ventricular midline**: `vent-third-ventricle` — slit between corpus callosum and hypothalamus; `vent-cerebral-aqueduct` — the curved channel through the midbrain; `vent-fourth-ventricle` — tent-shaped cavity over the pons/medulla, apex at the obex.
@@ -464,27 +579,27 @@ Required (23):
 - **Tectum/midbrain**: `nuc-superior-colliculus` — dorsal hump above the aqueduct; `nuc-inferior-colliculus` — dorsal hump below the SC; `nuc-pag` — gray band around the aqueduct.
 - **Brainstem profile**: `ctx-pontine-nuclei` — the ventral pontine block; `ctx-pontine-fibers` — the longitudinal fiber streak through it; `tract-pyramid` — the ventral medullary column continuing from the pons; `ctx-cerebellum` — the posterior block; `surf-vermis` — the vermis surface on the cerebellar block; `nuc-fastigial` — dotted deep-nucleus pair near the 4th ventricle roof (paramedian, drawn dashed on the midline); `surf-obex` — at the 4th ventricle caudal apex.
 
-Optional (dotted paramedian pairs — label only with dotted-leader style): `nuc-thalamic-anterior`, `nuc-md`, `nuc-pulvinar`, `nuc-vpl` (dotted outlines inside the thalamus block), `nuc-paraventricular`, `nuc-arcuate-hypothalamic` (dotted, hypothalamus block), `tract-mlf` (dotted line along the dorsal brainstem), `nuc-dorsal-raphe` (midline dotted), `nuc-locus-coeruleus` (dotted, rostral pons floor), `nuc-pretectal` (dotted, rostral to the SC), `tract-scp` (dotted course from the dentate region to the decussation), `nuc-pontine-reticular` (dotted tegmentum), `nuc-hypoglossal` (dotted at the medullary floor).
+Optional (13 listed; 3 of them — `tract-mlf`, `nuc-dorsal-raphe`, `nuc-pretectal` — are drawn and therefore counted in the 26 above; the other 10 are dotted paramedian pairs/outlines that this SVG omits — label only with dotted-leader style): `nuc-thalamic-anterior`, `nuc-md`, `nuc-pulvinar`, `nuc-vpl` (dotted outlines inside the thalamus block), `nuc-paraventricular`, `nuc-arcuate-hypothalamic` (dotted, hypothalamus block), `tract-mlf` (dotted line along the dorsal brainstem), `nuc-dorsal-raphe` (midline dotted), `nuc-locus-coeruleus` (dotted, rostral pons floor), `nuc-pretectal` (dotted, rostral to the SC), `tract-scp` (dotted course from the dentate region to the decussation), `nuc-pontine-reticular` (dotted tegmentum), `nuc-hypoglossal` (dotted at the medullary floor).
 
 ### 7.11 `plate-coronal-midbrain` — coronal, through cerebral peduncles / red nucleus / substantia nigra
 
 Coronal (frontal) section: patient left on image right, superior top. From superior to inferior: lentiform nucleus + internal capsule, subthalamus, midbrain (crus, SNc/SNr, RN, ML/MLF/CTT), then the rostral pons (basis + tegmentum) at the inferior margin.
 
-Required (21):
+Required (25 — recomputed from the plate SVG on 2026-09-10):
 
-- **Superior lateral**: `ctx-internal-capsule` — vertical white columns; `ctx-lenticular-nucleus` — lateral to the capsule.
+- **Superior lateral**: `ctx-internal-capsule` — vertical white columns; `ctx-lenticular-nucleus` — lateral to the capsule; `ctx-thalamus-envelope` — the caudal thalamic mass drawn at the superior margin of the section.
 - **Subthalamic zone**: `nuc-subthalamic` — lens-shaped, lateral, just dorsal to the SN; `nuc-zona-incerta` — thin band dorsal to the STN; `ctx-fields-of-forel` — white fiber zones medial to the zona incerta.
 - **Midbrain tegmentum**: `nuc-red-nucleus` — paired ovoids, medial superior; `tract-mlf` — midline vertical pair, dorsal to the RN; `tract-central-tegmental` — lateral to the MLF bundle; `tract-medial-lemniscus` — vertical paramedian band ventral to the RN; `tract-spinothalamic` — lateral to the ML.
 - **Ventral midbrain**: `nuc-snc` — the dark dorsal nigral band; `nuc-snr` — ventral nigral band; `tract-crus-cerebri` — the large paired descending bundles (with internal somatotopy: `tract-corticobulbar` medial, `tract-corticospinal-lateral` central, `tract-corticopontine` lateral — tag subdivisions only if drawn); `surf-interpeduncular-fossa` — the midline cleft between the crura; `surf-cn3-exit` — rootlets at the medial crus edges.
 - **Inferior margin (rostral pons)**: `ctx-pontine-nuclei` — the basis block; `ctx-pontine-fibers` — the longitudinal fiber streaks; `nuc-pontine-reticular` — the tegmentum core.
 
-Optional (7): `nuc-mammillary-body` + `vent-third-ventricle` — superior medial margin (only if the section extends into the caudal diencephalon); `ctx-caudate-nucleus` — superior lateral tip; `tract-scp` — dashed bundle at the superior margin adjacent to the RN (dentatothalamic); `nuc-pag` + `vent-cerebral-aqueduct` — only if the section plane reaches the dorsal (posterior) midbrain; `nuc-dorsal-raphe` — midline, dorsal to the CN III region.
+Optional (7 listed; 3 are drawn and therefore counted in the 25 above — `vent-third-ventricle`, `ctx-caudate-nucleus`, `tract-scp`; the remaining 4 — `nuc-mammillary-body`, `nuc-pag`, `vent-cerebral-aqueduct`, `nuc-dorsal-raphe` — do not reach this section plane): `nuc-mammillary-body` + `vent-third-ventricle` — superior medial margin (only if the section extends into the caudal diencephalon); `ctx-caudate-nucleus` — superior lateral tip; `tract-scp` — dashed bundle at the superior margin adjacent to the RN (dentatothalamic); `nuc-pag` + `vent-cerebral-aqueduct` — only if the section plane reaches the dorsal (posterior) midbrain; `nuc-dorsal-raphe` — midline, dorsal to the CN III region.
 
 ### 7.12 `plate-coronal-thalamus` — coronal, through thalamus / 3rd ventricle / LGN / MGN / pineal (+ cerebral peduncle slice below)
 
 Coronal (frontal) section at the caudal diencephalon: patient left on image right, superior top. Superior: pineal/habenula; middle: the two thalami with nuclear groups around the 3rd ventricle; inferior: the cerebral peduncle slice (transition into the midbrain).
 
-Required (29):
+Required (31 — recomputed from the plate SVG on 2026-09-10):
 
 - **Dorsal midline**: `nuc-pineal-gland` — midline, superior; `nuc-habenula` — paramedian pair, rostral-ventral to the pineal; `vent-third-ventricle` — the midline slit between the thalami; `nuc-midline-thalamic` — nuclei along the ventricle wall; `nuc-intralaminar` (CM-PF) — lateral to the midline; `ctx-internal-medullary-lamina` — the Y-shaped white lamina.
 - **Thalamic masses (per side, medial → lateral / dorsal → ventral)**: `nuc-md` — medial; `nuc-thalamic-anterior` — dorsal pole; `nuc-lateral-dorsal` — dorsolateral; `nuc-lateral-posterior` — lateral; `nuc-pulvinar` — posterior mass (dominant at this caudal level); `nuc-va` — anteroventral; `nuc-vl` — ventrolateral; `nuc-vpl` — ventrolateral (leg lateral); `nuc-vpm` — ventromedial, adjacent to the midline; `nuc-thalamic-reticular` — thin lateral shell; `ctx-thalamus-envelope` — use to tag the fused mass outline IF drawn as a block (prefer individual nucleus tags when drawn separately).
@@ -492,13 +607,17 @@ Required (29):
 - **Lateral**: `ctx-internal-capsule` — the vertical white bands; `ctx-lenticular-nucleus` — lateral to the capsule (upper part).
 - **Inferior**: `nuc-subthalamic` — lens-shaped, above the peduncle slice; `nuc-zona-incerta` — dorsal to the STN; `ctx-fields-of-forel` — H1/H2 zones; `nuc-mammillary-body` — paired at the inferior midline; `tract-crus-cerebri` — the cerebral peduncle slice at the inferior margin (with somatotopy subdivisions `tract-corticobulbar`, `tract-corticospinal-lateral`, `tract-corticopontine` if drawn).
 
-Optional (8): `ctx-caudate-nucleus` (superolateral tip), `tract-posterior-commissure` (dorsal midline, dotted), `nuc-ventromedial`, `nuc-dorsomedial`, `nuc-arcuate-hypothalamic`, `nuc-supraoptic` (inferomedial hypothalamic margin, only if the section extends rostrally), `surf-optic-chiasm` (inferior margin, rostral-most sections), `nuc-paraventricular` (dotted at the 3rd ventricle wall).
+Optional (8 listed; 2 are drawn and therefore counted in the 31 above — `ctx-caudate-nucleus` and `tract-posterior-commissure`; the other 6 are omitted): `ctx-caudate-nucleus` (superolateral tip), `tract-posterior-commissure` (dorsal midline, dotted), `nuc-ventromedial`, `nuc-dorsomedial`, `nuc-arcuate-hypothalamic`, `nuc-supraoptic` (inferomedial hypothalamic margin, only if the section extends rostrally), `surf-optic-chiasm` (inferior margin, rostral-most sections), `nuc-paraventricular` (dotted at the 3rd ventricle wall).
 
 ---
 
 ## 8. Verification checklist for this document
 
-- [ ] Every slug listed above resolves exactly in `src/data/taxonomy.json` (cross-checked with a Node script).
-- [ ] All 12 plate ids match §3.9: 9 transverse + `plate-sagittal-midline` + `plate-coronal-midbrain` + `plate-coronal-thalamus`.
-- [ ] Required count per plate is 18–40; optionals are clearly marked.
-- [ ] No slug or id was renamed; new ids (`ctx-thalamus-envelope`, `ctx-hypothalamus-envelope`) are additions flagged in §2.
+Refreshed and re-verified **2026-09-10** (see the note at the head of the file):
+
+- [x] Every slug listed above resolves exactly in `src/data/taxonomy.json` (cross-checked with a Node script: 137 registry ids, 0 unresolved slugs in the §3/§4 tables; the only non-registry ids in this document are `lvl-*` level anchors, which resolve in `levels.json`).
+- [x] All 12 plate ids match §3.9: 9 transverse + `plate-sagittal-midline` + `plate-coronal-midbrain` + `plate-coronal-thalamus`.
+- [x] Required count per plate is 18–40 and **now equals the number of distinct `data-structure` slugs in that plate's SVG** (19/22/23/30/21/19/25/24/26/26/25/31); drawn optionals are named and the ones deliberately omitted are stated.
+- [x] No slug or id was renamed; `ctx-thalamus-envelope` and `ctx-hypothalamus-envelope` remain the only registry additions flagged in §2, and the four unowned `ctx-*` silhouettes are recorded in the §2 context-layer identity table.
+- [x] §3 region headings and row counts agree with the registry (42/24/34/32/5 = 137), §5 lists **26** syndromes (every `structures[]` id resolves), and §4 records the two tract gaps (8 records with no plate label; 17 registry tracts with no record).
+- [ ] Still open, owned by other tasks: the four unregistered `ctx-*` silhouettes (§2) and the tract/plate gaps (§4.1) — both are recorded here so the next content run has a starting list.

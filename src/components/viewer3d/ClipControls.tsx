@@ -14,23 +14,10 @@
  * marker; the PiP's own axis buttons can still override it manually.
  */
 import { useMemo } from 'react'
-import type { LevelAnchor } from '../../data/load'
 import { levels, platesForLevel, shortLevelName } from '../../data/load'
 import { useAtlasStore, type SectionAxis } from '../../state/store'
+import { nearestLevelTo, snapClipWrite } from '../section/planeGeometry'
 import { CLIP_BOUNDS } from './clipPlanes'
-
-function nearestLevelTo(y: number): LevelAnchor | null {
-  let best: LevelAnchor | null = null
-  let bestDistance = Number.POSITIVE_INFINITY
-  for (const level of levels) {
-    const distance = Math.abs(level.y - y)
-    if (distance < bestDistance) {
-      bestDistance = distance
-      best = level
-    }
-  }
-  return best
-}
 
 function formatValue(value: number): string {
   return `${value > 0 ? '+' : ''}${value.toFixed(value % 1 === 0 ? 0 : 1)}`
@@ -51,21 +38,23 @@ export default function ClipControls() {
     if (useAtlasStore.getState().sectionAxis !== axis) setSectionAxis(axis)
   }
 
-  const nearestLevel = useMemo(() => nearestLevelTo(clip.y), [clip.y])
+  const nearest = useMemo(() => nearestLevelTo('y', clip.y, levels), [clip.y])
+  const nearestLevel = nearest?.level ?? null
   const nearestPlate = useMemo(
     () => (nearestLevel ? (platesForLevel(nearestLevel.id)[0] ?? null) : null),
     [nearestLevel],
   )
 
   const onTransverseInput = (raw: number) => {
-    // Snap to the plate level nearest the DRAGGED value (not the current
-    // clip.y, or the slider would snap back to the level it starts on).
-    if (snapToPlate) {
-      const level = nearestLevelTo(raw)
-      setClip({ y: level !== null ? level.y : raw })
-      return
-    }
-    setClip({ y: raw })
+    // ONE snap rule (planeGeometry.snapClipWrite): the transverse plane snaps to
+    // the plate level nearest the DRAGGED value — never to the current `clip.y`,
+    // or the slider would snap back to the level it starts on — while x and z
+    // never snap at all.
+    setClip(snapClipWrite('y', raw, snapToPlate, levels))
+  }
+
+  const onAxisInput = (axis: SectionAxis, raw: number) => {
+    setClip(snapClipWrite(axis, raw, snapToPlate, levels))
   }
 
   return (
@@ -109,7 +98,7 @@ export default function ClipControls() {
             value={clip.x}
             onPointerDown={touchAxis('x')}
             onFocus={touchAxis('x')}
-            onChange={(event) => setClip({ x: Number(event.target.value) })}
+            onChange={(event) => onAxisInput('x', Number(event.target.value))}
           />
         </div>
 
@@ -130,7 +119,7 @@ export default function ClipControls() {
             value={clip.z}
             onPointerDown={touchAxis('z')}
             onFocus={touchAxis('z')}
-            onChange={(event) => setClip({ z: Number(event.target.value) })}
+            onChange={(event) => onAxisInput('z', Number(event.target.value))}
           />
         </div>
 

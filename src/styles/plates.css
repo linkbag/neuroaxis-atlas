@@ -223,6 +223,27 @@
   box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4);
 }
 
+/*
+ * Keyboard focus (QUALITY_PLAN §4 item 13 / AUDIT §2.17). The regions are
+ * injected SVG nodes wired by PlateRenderer, so the global `:focus-visible`
+ * rule in base.css applies — but the SVG lives on a LIGHT plate (#f8fafc)
+ * where base.css's `--accent` ring is the only thing that reads, and the ring
+ * must clear the plate padding: `outline-offset` plus a dark inner ring gives a
+ * ring that is visible on both the pale artwork and the region's own colour.
+ * Scoped to :focus-visible so pointer clicks never paint a ring.
+ */
+.plate-root svg:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+:is(.plate-region, .plate-label):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 1px #0c4a6e;
+}
+
 .plate-root svg {
   display: block;
   width: 100%;

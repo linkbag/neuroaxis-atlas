@@ -174,5 +174,39 @@
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
       "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
     ]
+  },
+  {
+    "id": "syn-one-and-a-half",
+    "name": "One-and-a-half syndrome",
+    "eponym": "Fisher one-and-a-half syndrome (PPRF/abducens plus ipsilateral MLF)",
+    "structures": [
+      "nuc-pprf",
+      "tract-mlf"
+    ],
+    "vascularTerritory": "Basilar artery paramedian perforators at the dorsal caudal pons (also small tegmental haemorrhage, tumour or demyelinating plaque)",
+    "presentation": "A single dorsal caudal pontine lesion removes the horizontal gaze command on one side and half of the horizontal gaze pathway on the same side. The eyes rest conjugately deviated AWAY from the lesion, and then: gaze TOWARD the lesion is impossible for either eye (the complete horizontal gaze palsy — the 'one'), because the PPRF burst neurons can no longer drive the ipsilateral abducens nucleus; on attempted gaze AWAY from the lesion only the contralateral eye abducts, often with endpoint nystagmus, while the eye on the lesion side fails to adduct (the internuclear component — the 'half'), because MLF axons carrying the command from the contralateral abducens nucleus to the ipsilateral medial-rectus subnucleus of CN III are interrupted. The adducting eye usually still converges, and vertical gaze and the vertical vestibulo-ocular reflex are intact — which is what separates the picture from a CN III palsy. Common accompaniments when the lesion extends ventrally are ipsilateral LMN facial weakness (the facial fascicles loop through this tegmentum) and contralateral hemiparesis if the basis pontis is caught.",
+    "cause": "Infarction, haemorrhage, tumour or a demyelinating plaque of the dorsal caudal pontine tegmentum at the facial colliculus, damaging the PPRF/abducens complex and the adjacent ipsilateral MLF together; in younger patients demyelination (multiple sclerosis) or a pontine cavernoma is the usual cause, while in older patients it follows basilar paramedian perforator occlusion",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
+      "Patten, Neurological Differential Diagnosis, 2nd ed., brainstem level plates",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
+  },
+  {
+    "id": "syn-central-horner",
+    "name": "Central Horner syndrome",
+    "eponym": "First-order (central) sympathetic paresis",
+    "structures": [
+      "tract-hypothalamospinal",
+      "nuc-medullary-reticular"
+    ],
+    "vascularTerritory": "Posterior inferior cerebellar artery / vertebral artery in the dorsolateral medulla; basilar paramedian perforators in the pons; anterior spinal artery in the cervical cord",
+    "presentation": "Interruption of the descending hypothalamospinal sympathetic pathway removes sympathetic drive to the whole ipsilateral head and upper limb: mild ptosis from Müller-muscle paralysis, miosis of 1-2 mm with a normally reactive pupil that still dilates briskly to a mydriatic, apparent enophthalmos, conjunctival injection, and reduced sweating of the face — with anhidrosis characteristically extending beyond the forehead to the neck and arm, which separates a first-order lesion from the face-limited anhidrosis of a third-order (postganglionic) lesion. The pupil dilates poorly in the dark and the ciliospinal reflex is lost. Brainstem accompaniments localize the lesion: vertigo, nystagmus, crossed pain-temperature loss and dysphagia place it in the lateral medulla (Wallenberg), whereas an alternating hemiparesis or a facial palsy places it in the pons. Pharmacological testing is a useful adjunct — hydroxyamphetamine releases noradrenaline from intact postganglionic terminals, so a first- or second-order lesion still dilates the pupil while a third-order lesion does not.",
+    "cause": "Any lesion of the central sympathetic pathway: dorsolateral medullary (Wallenberg) infarction, pontine tegmental stroke or haemorrhage, syringobulbia or Chiari malformation, brainstem tumour or demyelination, and cervical cord lesions such as a Brown-Séquard hemicord injury or syringomyelia at C8-T1",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
+      "Fix, High-Yield Neuroanatomy, autonomic nervous system section",
+      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+    ]
   }
 ]

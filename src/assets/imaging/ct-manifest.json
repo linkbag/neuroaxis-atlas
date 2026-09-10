@@ -3,14 +3,14 @@
   "status": "available",
   "modality": "ct",
   "dims": [
-    45,
     81,
-    67
+    113,
+    107
   ],
   "originAu": [
-    -27,
+    -49.09090909090909,
     -55,
-    -56
+    -75.87878787878788
   ],
   "spacingAu": [
     1.2273,
@@ -18,9 +18,9 @@
     1.2424
   ],
   "origin": [
-    -27,
+    -49.09090909090909,
     -55,
-    -56
+    -75.87878787878788
   ],
   "spacing": [
     1.2273,
@@ -39,6 +39,68 @@
     "frame": "x=+patient-left, y=+superior, z=+anterior"
   },
   "patientLeft": "+x",
+  "canonicalBox": {
+    "amendment": "B (telencephalon, v7)",
+    "boxAu": {
+      "x": [
+        -48,
+        48
+      ],
+      "y": [
+        -55,
+        85
+      ],
+      "z": [
+        -75,
+        55
+      ]
+    },
+    "boundsAu": {
+      "x": [
+        -49.09090909090909,
+        49.09090909090909
+      ],
+      "y": [
+        -55,
+        85
+      ],
+      "z": [
+        -75.87878787878788,
+        55.81818181818181
+      ]
+    },
+    "gridStepAu": [
+      1.227273,
+      1.25,
+      1.242424
+    ],
+    "gridStepMm": [
+      1.4727,
+      1.5,
+      1.4909
+    ],
+    "lattice": "AMENDMENT A lattice preserved: same originAu and same per-axis step as the v4 grid, station counts grown to cover the box. The extended lattice is a superset of the v3/v4 lattice, so the 13 existing levels keep their exact physical sample positions.",
+    "previousBoxAu": {
+      "x": [
+        -27,
+        27
+      ],
+      "y": [
+        -55,
+        45
+      ],
+      "z": [
+        -56,
+        26
+      ]
+    },
+    "previousDims": [
+      45,
+      81,
+      67
+    ],
+    "addedCoverageAu": "y +45 → +85, z −56 → −75 and +26 → +55, x ±27 → ±48 — the box now spans the cerebral hemispheres"
+  },
   "intensity": {
     "dtype": "uint8",
     "encoding": "clamp((HU − window[0]) / (window[1] − window[0]), 0..255) with the brain window; storedHU = stored16 · 1 + (−1200)",
@@ -47,14 +109,77 @@
       100
     ],
     "huInsideFov": {
-      "min": -549.7,
-      "p1": -515.8,
-      "median": -11.6,
-      "p99": 805.2,
-      "max": 1216.5
+      "min": -1200,
+      "p1": -1200,
+      "median": -27.9,
+      "p99": 747.2,
+      "max": 1237.4
     },
     "backgroundValue": 0,
-    "backgroundMeaning": "no CT data outside the source FOV (8.6% of the box)"
+    "backgroundMeaning": "no CT data outside the source FOV (35.7% of the box)",
+    "sourceCoverage": {
+      "stationsInsideFov": 629370,
+      "totalStations": 979371,
+      "fractionInsideFov": 0.6426,
+      "superiorMostDataYAu": 36.25,
+      "levelRowsAu": [
+        {
+          "y": -46.25,
+          "inGrid": true,
+          "pct": 98.1,
+          "hasData": true
+        },
+        {
+          "y": -23.75,
+          "inGrid": true,
+          "pct": 98.1,
+          "hasData": true
+        },
+        {
+          "y": -7.5,
+          "inGrid": true,
+          "pct": 98.1,
+          "hasData": true
+        },
+        {
+          "y": 13.75,
+          "inGrid": true,
+          "pct": 98.1,
+          "hasData": true
+        },
+        {
+          "y": 30,
+          "inGrid": true,
+          "pct": 98.1,
+          "hasData": true
+        },
+        {
+          "y": 47.5,
+          "inGrid": true,
+          "pct": 0,
+          "hasData": false
+        },
+        {
+          "y": 57.5,
+          "inGrid": true,
+          "pct": 0,
+          "hasData": false
+        },
+        {
+          "y": 67.5,
+          "inGrid": true,
+          "pct": 0,
+          "hasData": false
+        },
+        {
+          "y": 77.5,
+          "inGrid": true,
+          "pct": 0,
+          "hasData": false
+        }
+      ],
+      "note": "the window is a FIXED HU preset (not a percentile fit), so unlike the MRI the CT mapping does not depend on which box is baked — the existing levels keep their exact uint8 values."
+    }
   },
   "windows": {
     "brain": [
@@ -106,17 +231,55 @@
         1
       ]
     },
+    "gridContinuity": {
+      "affineUnchanged": true,
+      "note": "AMENDMENT B re-bake: the CT registration constants are byte-for-byte the v4 ones; only the station counts grew, from the same origin and with the same per-axis step. The y lattice is identical to the v4 lattice, so the 13 existing level anchors still fall exactly on stations and their in-plane (x, z) samples are the v4 samples carried over unchanged.",
+      "previousGrid": {
+        "dims": [
+          45,
+          81,
+          67
+        ],
+        "originAu": [
+          -27,
+          -55,
+          -56
+        ],
+        "spacingAu": [
+          1.2273,
+          1.25,
+          1.2424
+        ]
+      },
+      "currentGrid": {
+        "dims": [
+          81,
+          113,
+          107
+        ],
+        "originAu": [
+          -49.09090909090909,
+          -55,
+          -75.87878787878788
+        ],
+        "spacingAu": [
+          1.2273,
+          1.25,
+          1.2424
+        ]
+      }
+    },
     "residuals": {
       "toleranceAu": 2.5,
       "midlineMaxAbsAu": 1.25,
       "midlineRowsAu": [
         {
           "y": -23.7,
-          "dx": -0.3
+          "dx": -1.25
         },
         {
           "y": -17.5,
-          "dx": -0.3
+          "dx": -1.25
         },
         {
           "y": -12.5,
@@ -124,23 +287,23 @@
         },
         {
           "y": -6.2,
-          "dx": -0.25
+          "dx": 0
         },
         {
           "y": 0,
-          "dx": -0.25
+          "dx": -1.25
         },
         {
           "y": 6.3,
-          "dx": -0.25
+          "dx": -0.8
         },
         {
           "y": 12.5,
-          "dx": -0.25
+          "dx": 0
         },
         {
           "y": 17.5,
-          "dx": 0.5
+          "dx": 0
         }
       ],
       "ponsSurface": {
@@ -244,7 +407,8 @@
         "method": "first persistent drop of the uint8 trace (HU −20..100 ↦ 0..255) walking anteriorly from inside the atlas pons at x = 0 (|x| ≤ 6 au band) — the CT pons reads 25–45 HU and the prepontine cistern ≈ −5…+15 HU, so the first step is the pontine face; the atlas reference is the pons GLB ventral z",
         "note": "docs/SECTION_SYNC_PLAN.md §3 allows ±2 au; the CT pons face measures 2.04 au mean / 3 au max posterior to the stylized atlas envelope at the pons body — the same direction and order as the MRI bake's own ventral deltas (−3.4…+1.4 au), i.e. the stylized atlas pons sits slightly anterior to a real subject's. The gate is 2.5 au and these numbers are reported verbatim rather than tuned away."
       },
-      "subjectNote": "the CT subject is a different head from the MRI subject (NLM Visible Human \"HARVARD 02\" head vs OpenNeuro ds007313 sub-A006). Both are placed in the same canonical atlas frame; the CT keeps absolute 1 au = 1.2 mm geometry instead of inheriting the MRI subject's fitted 1.25/1.6 stretch."
+      "subjectNote": "the CT subject is a different head from the MRI subject (NLM Visible Human \"HARVARD 02\" head vs OpenNeuro ds007313 sub-A006). Both are placed in the same canonical atlas frame; the CT keeps absolute 1 au = 1.2 mm geometry instead of inheriting the MRI subject's fitted 1.25/1.6 stretch.",
+      "coverageNote": "MEASURED COVERAGE LIMIT (AMENDMENT B). The VHP series is a HEAD-only scan stored from z_LPS −230.5 mm to +2 mm; under the fixed v4 affine (translateAu[1] = 35) its own head apex lands at canonical y ≈ 36.25 au while the atlas cortex vertex is at y = +80.6 au (MRI measurement, docs/TELENCEPHALON_PLAN.md §2). Every station above y ≈ 36.25 au is therefore outside the CT source for ANY canonical box, so the CT layer is blank at the four new telencephalic levels (+48, +58, +68, +78) and the MRI is the modality of record there. This is reported, not tuned away: the v7 task keeps the CT affine byte-identical to v4 (no re-fit), so the placement — and with it the existing 13 levels — is unchanged. Aligning the CT's apex with the MRI's would need a translateAu[1] change of ≈ +45 au, which would move every existing level; that is a separate, explicitly out-of-scope re-registration."
     }
   },
   "source": {

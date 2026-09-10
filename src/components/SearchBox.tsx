@@ -4,6 +4,18 @@
  * support (↑/↓ move, Enter selects the highlighted or first hit, Escape
  * clears). Selecting a hit activates the 3D tab and shows the record in the
  * info panel.
+ *
+ * ── A11Y: a complete combobox (QUALITY_PLAN §4 item 15 / AUDIT §2.19) ──────
+ * The input already carried `role="combobox"` + `aria-expanded` +
+ * `aria-controls`, but the active option was conveyed by `aria-selected` on the
+ * <li>s ONLY. In an ARIA combobox the DOM focus never leaves the text field, so
+ * `aria-selected` alone tells assistive tech nothing — the pattern requires the
+ * input to point at the active option with `aria-activedescendant`. Every
+ * option therefore has a stable id (`searchbox-option-<structure id>`, derived
+ * from the data id, not the index, so it survives re-ranking as the user types)
+ * and the input names the active one; `aria-controls` resolves while the listbox
+ * is rendered, and the attribute is omitted when it is not (the results list
+ * only exists for a non-empty query), so it can never dangle.
  */
 
 import { useEffect, useMemo, useState } from 'react'
@@ -13,6 +25,8 @@ import { useAtlasStore } from '../state/store'
 import { KindGlyph } from './KindGlyph'
 
 const MAX_RESULTS = 12
+const LISTBOX_ID = 'searchbox-results'
+const optionId = (hit: SearchHit) => `searchbox-option-${hit.id}`
 
 export default function SearchBox() {
   const [query, setQuery] = useState('')
@@ -22,6 +36,12 @@ export default function SearchBox() {
 
   const hits = useMemo(() => searchAll(query), [query])
   const visible = hits.slice(0, MAX_RESULTS)
+  const trimmed = query.trim()
+  const listOpen = open && trimmed !== ''
+  // The active option's id, or undefined when no option is rendered (the id
+  // must never point at a node that does not exist).
+  const activeHit = listOpen ? visible[activeIndex] : undefined
+  const activeOptionId = activeHit !== undefined ? optionId(activeHit) : undefined
 
   useEffect(() => {
     setActiveIndex(0)
@@ -50,8 +70,6 @@ export default function SearchBox() {
     }
   }
 
-  const trimmed = query.trim()
-
   return (
     <div className="searchbox">
       <input
@@ -60,9 +78,13 @@ export default function SearchBox() {
         placeholder="Search nuclei, tracts, synonyms…"
         aria-label="Search structures by name or synonym"
         role="combobox"
-        aria-expanded={open && trimmed !== ''}
-        aria-controls="searchbox-results"
+        aria-expanded={listOpen}
+        aria-controls={listOpen ? LISTBOX_ID : undefined}
         aria-autocomplete="list"
+        // A11Y-CONTRACT (item 15): the input keeps DOM focus; the active option
+        // is announced through aria-activedescendant. Omitted when no option is
+        // rendered, so the id can never point at a missing node.
+        aria-activedescendant={activeOptionId}
         value={query}
         onChange={(event) => {
           setQuery(event.target.value)
@@ -73,14 +95,15 @@ export default function SearchBox() {
         onKeyDown={onKeyDown}
       />
 
-      {open && trimmed !== '' && (
-        <ul className="searchbox-results" id="searchbox-results" role="listbox" aria-label="Search results">
+      {listOpen && (
+        <ul className="searchbox-results" id={LISTBOX_ID} role="listbox" aria-label="Search results">
           {visible.length === 0 && (
             <li className="searchbox-empty">No structure matches “{trimmed}” — try a synonym (e.g. “STN”, “MLF”, “PICA”).</li>
           )}
           {visible.map((hit, index) => (
             <li
               key={hit.id}
+              id={optionId(hit)}
               role="option"
               aria-selected={index === activeIndex}
               className={`searchbox-item${index === activeIndex ? ' is-active' : ''}`}

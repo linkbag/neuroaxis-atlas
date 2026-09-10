@@ -118,8 +118,17 @@ import {
 } from './SectionCanvas'
 import type { PlaneAxis, PlaneSpec } from './contours'
 import {
+  AXIS_INDEX,
+  AXIS_PAIR,
+  MODALITY_TOLERANCE_AU as PLANE_TOLERANCE_AU,
+  nearestLevelTo,
+  pickImageForPlane,
+  planeTransform,
+  samplerViewport,
+} from './planeGeometry'
+import {
+  sectionImages,
   sectionImagesForLevel,
-  sectionImagesNearPlane,
   type SectionImage,
 } from '../../data/sectionImages'
 import { levels } from '../../data/load'
@@ -364,15 +373,23 @@ export function mriLayerStatus(): MriLayerStatus {
 /**
  * Default anchoring tolerance for a plane-anchored photograph (au): a plate
  * mounts while the section plane is within this distance of its `planeValue`
- * (plan §4 "default 1.5 au"). Single source of truth for QA, the canvas hint
- * and the PiP sampler; SectionCanvas applies the same 1.5 au value through its
- * own LEVEL_MAP_WINDOW, which derives the levelId the layer then maps to a
- * plate (the canvas cannot import this module — the layers register on it).
+ * (plan §4 "default 1.5 au").
+ *
+ * The number is spelled here because `scripts/verify-imaging-v4.mjs` reads this
+ * declaration out of the source; planeGeometry declares the same value as
+ * MODALITY_TOLERANCE_AU (the shared name every consumer uses) and
+ * `npm run verify:plane` asserts the two are equal, so the value still has one
+ * meaning even though the gate reads it here.
  */
 export const MODALITY_TOLERANCE_AU = 1.5
 
-/** Two anchored planes closer than this count as the same plane (tie). */
-const PLANE_TIE_EPSILON = 0.01
+/* Keep the shared declaration honest: a change on one side fails loudly. */
+if (MODALITY_TOLERANCE_AU !== PLANE_TOLERANCE_AU) {
+  throw new Error(
+    `imageLayers: MODALITY_TOLERANCE_AU (${MODALITY_TOLERANCE_AU}) disagrees with ` +
+      `planeGeometry.MODALITY_TOLERANCE_AU (${PLANE_TOLERANCE_AU})`,
+  )
+}
 
 const clamp01 = (v: number): number => (v < 0 ? 0 : v > 1 ? 1 : v)
 
@@ -451,7 +468,8 @@ export interface StainPick {
  * the single place the plate-selection rule lives (the canvas, the layer and
  * the PiP sampler all call it, so they can never disagree).
  *
- * Rule (plan §4 "Photo manifest" + "plane-anchored photo placement"):
+ * The rule itself is `planeGeometry.pickImageForPlane` (QUALITY_PLAN §2 item 4),
+ * which the Plates-tab toolbar reads too — one implementation, no drift:
  *  1. only entries whose `axis` matches the section plane's own anatomic axis
  *     are eligible (a coronal plate never mounts on a transverse plane);
  *  2. a plate mounts while the plane is within `tolerance` au of its
@@ -474,32 +492,82 @@ export function pickStainForPlane(
   levelId: string | null,
   tolerance = MODALITY_TOLERANCE_AU,
 ): StainPick | undefined {
-  const anchored = sectionImagesNearPlane(sectionAxisOf(axis), value, tolerance)
-  let best: SectionImage | undefined
-  let bestDistance = Number.POSITIVE_INFINITY
-  for (const image of anchored) {
-    const distance = Math.abs((image.planeValue ?? value) - value)
-    if (best === undefined || distance < bestDistance - PLANE_TIE_EPSILON) {
-      best = image
-      bestDistance = distance
-      continue
-    }
-    if (distance <= bestDistance + PLANE_TIE_EPSILON && beatsPlaneTie(image, best)) {
-      best = image
-      bestDistance = Math.min(bestDistance, distance)
-    }
-  }
-  if (best !== undefined) return { image: best, via: 'plane', distanceAu: bestDistance }
-  if (axis === 'y' && levelId !== null) {
-    const image = pickStainImage(levelId)
-    if (image !== undefined) return { image, via: 'level', distanceAu: 0 }
-  }
-  return undefined
+  const pick = pickImageForPlane<SectionImage>(sectionImages, axis, value, tolerance, {
+    levelId: axis === 'y' ? levelId : null,
+    // Same tie order as before: a fitted plate beats an unfitted one, then the
+    // measured source resolution, then manifest order (the incumbent stays).
+    beatsTie: (candidate, incumbent) => beatsPlaneTie(candidate, incumbent),
+    // The layer's own per-level override (imageLayerOptions.stainPreferred).
+    pickLevelImage: (entries, id) => {
+      const preferred = imageLayerOptions.stainPreferred[id]
+      if (preferred !== undefined) {
+        const match = entries.find((entry) => entry.id === preferred)
+        if (match !== undefined) return match
+      }
+      return entries.find((entry) => entry.levelId === id)
+    },
+  })
+  if (pick === undefined) return undefined
+  return { image: pick.image, via: pick.via, distanceAu: pick.distanceAu }
 }
 
 /** Image cache keyed by manifest entry id (decoded lazily on first need). */
 const stainImageCache = new Map<string, HTMLImageElement>()
 const stainImageFailed = new Set<string>()
+
+/**
+ * P0 survivability (QUALITY_PLAN §1 item 3, AUDIT §2.3): every plate decode is
+ * bounded. A photograph that neither loads nor errors (a stalled request, a
+ * flaky CDN that never closes the response, an image the decoder never
+ * finishes) used to leave the layer permanently in 'loading': the canvas hint
+ * said "loading the photograph…" forever and no retry existed.
+ *
+ * The bound can therefore never be "just" a hint — a timed-out plate is a
+ * DIFFERENT state ('could not be loaded', not 'still arriving'), and the
+ * `retry` affordance below is what makes it recoverable.
+ */
+export const PLATE_LOAD_TIMEOUT_MS = 15_000
+
+/** Timed-out plate ids (cleared on retry / on a late successful decode). */
+const stainImageTimedOut = new Set<string>()
+
+/** Armed deadline per in-flight plate id (cleared on load/error/timeout). */
+const stainImageTimers = new Map<string, ReturnType<typeof setTimeout>>()
+
+/** Why a plate is not paintable: still arriving vs. gave up (timeout/error). */
+export type PlateLoadState = 'ready' | 'loading' | 'timed-out' | 'failed' | 'idle'
+
+function clearPlateTimer(id: string): void {
+  const timer = stainImageTimers.get(id)
+  if (timer !== undefined) {
+    clearTimeout(timer)
+    stainImageTimers.delete(id)
+  }
+}
+
+/** Public read of one plate's load state (QA + UI affordances). */
+export function plateLoadState(id: string): PlateLoadState {
+  if (stainImageFailed.has(id)) return 'failed'
+  if (stainImageTimedOut.has(id)) return 'timed-out'
+  const cached = stainImageCache.get(id)
+  if (cached === undefined) return 'idle'
+  return cached.complete && cached.naturalWidth > 0 ? 'ready' : 'loading'
+}
+
+/**
+ * Drop the cached image/timer/failure state of one plate so the next draw
+ * re-requests it. Idempotent; returns true when there was something to retry.
+ * The previously decoded image (if any) stays valid for the caller holding it.
+ */
+export function retryPlateImage(id: string): boolean {
+  const had = stainImageCache.has(id) || stainImageFailed.has(id) || stainImageTimedOut.has(id)
+  clearPlateTimer(id)
+  stainImageCache.delete(id)
+  stainImageFailed.delete(id)
+  stainImageTimedOut.delete(id)
+  nudgeRedraw()
+  return had
+}
 
 /** Returns the decoded Image, or undefined while loading / after a failure
  *  (the draw then paints nothing this frame; the onload nudge schedules a
@@ -509,13 +577,36 @@ function getStainImage(image: SectionImage): HTMLImageElement | undefined {
   if (cached !== undefined) {
     return cached.complete && cached.naturalWidth > 0 ? cached : undefined
   }
-  if (stainImageFailed.has(image.id)) return undefined
+  if (stainImageFailed.has(image.id) || stainImageTimedOut.has(image.id)) return undefined
   const img = new Image()
   stainImageCache.set(image.id, img)
-  img.onload = () => nudgeRedraw()
-  img.onerror = () => stainImageFailed.add(image.id)
+  img.onload = () => {
+    clearPlateTimer(image.id)
+    // A late decode of a plate we had already given up on is a recovery:
+    // clear the timeout flag so the layer reports 'ready' again.
+    stainImageTimedOut.delete(image.id)
+    nudgeRedraw()
+  }
+  img.onerror = () => {
+    clearPlateTimer(image.id)
+    stainImageFailed.add(image.id)
+    // Visible state change: the canvas repaints and can say the plate failed.
+    nudgeRedraw()
+  }
   img.decoding = 'async'
   img.src = image.file
+  // One deadline per image: on expiry the plate settles to the explicit
+  // 'timed-out' state (never silently back to 'loading') and one repaint is
+  // scheduled so the state change reaches the canvas without a store edit.
+  stainImageTimers.set(
+    image.id,
+    setTimeout(() => {
+      stainImageTimers.delete(image.id)
+      if (stainImageCache.get(image.id)?.complete) return
+      stainImageTimedOut.add(image.id)
+      nudgeRedraw()
+    }, PLATE_LOAD_TIMEOUT_MS),
+  )
   return undefined
 }
 
@@ -572,14 +663,17 @@ function drawStainToView(
     height = view.vToSy(legacy.vMin) - sy
     flip = legacy.flipX === true
   } else if (fit !== undefined) {
-    // px per au → the image's world size (canonical au).
+    // px per au → the image's world size (canonical au): `fit.scale` is the ONE
+    // definition of the plate's world size, on every surface.
     const wAu = img.naturalWidth / Math.max(1e-6, fit.scale)
     const hAu = img.naturalHeight / Math.max(1e-6, fit.scale)
-    // The visible view centre is the canonical midline on the transverse and
-    // coronal axes (u = x, bounds symmetric about 0 — §2.2); `dx` measures how
-    // far the plate's own tissue midline sits right of its image centre, so the
-    // image centre goes at `−dx` from the midline. `dy` shifts the plate
-    // vertically from the view centre (dy = 0 keeps it centred).
+    // The visible rect's centre is the canonical midline on the transverse and
+    // coronal axes (u = x, bounds symmetric about 0 — §2.2) and the bounds
+    // midpoint on the others; `dx` measures how far the plate's own tissue
+    // midline sits right of its image centre, so the image centre goes at `−dx`
+    // from that midline. `dy` shifts the plate vertically from the view centre
+    // (dy = 0 keeps it centred). Both surfaces reach this same world rect, which
+    // is what the canvas/PiP agreement assertion in verify:plane proves.
     const uCenter = (view.uRange[0] + view.uRange[1]) / 2 - (fit.dx ?? 0)
     const vCenter = (view.vRange[0] + view.vRange[1]) / 2 + (fit.dy ?? 0)
     sx = view.uToSx(uCenter - wAu / 2)
@@ -615,7 +709,7 @@ function drawStainToView(
 
 /** Whether the cached plate for an entry is decoded and ready to paint. */
 function stainImageReady(image: SectionImage): boolean {
-  if (stainImageFailed.has(image.id)) return false
+  if (stainImageFailed.has(image.id) || stainImageTimedOut.has(image.id)) return false
   const cached = stainImageCache.get(image.id)
   return cached !== undefined && cached.complete && cached.naturalWidth > 0
 }
@@ -641,8 +735,12 @@ const stainLayer: SectionImageLayer = {
     if (pick === undefined) return 'unavailable'
     if (stainImageReady(pick.image)) return 'ready'
     // The decode is kicked off by draw(); dataStatus only reports its state, so
-    // the first frames honestly read "loading the photograph…".
-    return stainImageFailed.has(pick.image.id) ? 'unavailable' : 'loading'
+    // the first frames honestly read "loading the photograph…". A decode that
+    // failed or exceeded PLATE_LOAD_TIMEOUT_MS is NOT 'loading' any more — the
+    // canvas must be able to say "unavailable" and offer the retry.
+    return stainImageFailed.has(pick.image.id) || stainImageTimedOut.has(pick.image.id)
+      ? 'unavailable'
+      : 'loading'
   },
 
   draw(ctx, view, plane, layerCtx) {
@@ -687,17 +785,36 @@ interface GridManifest {
   attribution?: string
 }
 
-export type MriDataStatus = 'idle' | 'loading' | 'ready' | 'failed'
+/**
+ * Grid load status. 'timeout' is a FIRST-CLASS state, not a flavour of
+ * 'failed' (QUALITY_PLAN §1 item 3): a request that never answered and a grid
+ * the server refused are different stories, and only the timeout one is worth
+ * offering an immediate retry for.
+ */
+export type MriDataStatus = 'idle' | 'loading' | 'ready' | 'failed' | 'timeout'
+
+/**
+ * Upper bound (ms) on one baked-grid fetch + decode before it settles to the
+ * visible 'timeout'/'failed' state (exported for UI + QA so the number is
+ * stated once). 15 s matches ANATOMY_LOAD_TIMEOUT_MS in anatomyAssets.ts — the
+ * volume payload is ~0.5 MB, so anything slower than that is a stall, not a
+ * slow link.
+ */
+export const GRID_LOAD_TIMEOUT_MS = 15_000
 
 /** Resize/decode state of ONE grid; null until loadGrid() runs. */
 interface GridEntry {
   status: MriDataStatus
   grid: SliceGrid | null
   fetch: Promise<void> | null
+  /** Abort handle of the in-flight request (so retry can cancel it). */
+  controller: AbortController | null
+  /** True when the last attempt ended by exceeding GRID_LOAD_TIMEOUT_MS. */
+  timedOut: boolean
 }
 
 function createGridEntry(): GridEntry {
-  return { status: 'idle', grid: null, fetch: null }
+  return { status: 'idle', grid: null, fetch: null, controller: null, timedOut: false }
 }
 
 const mriEntry = createGridEntry()
@@ -713,6 +830,19 @@ export function getCtDataStatus(): MriDataStatus {
   return ctEntry.status
 }
 
+/** Whether the MRI grid settled as a timeout (the retryable failure). */
+export function mriGridTimedOut(): boolean {
+  return mriEntry.timedOut
+}
+
+/** Whether the CT grid settled as a timeout (the retryable failure). */
+export function ctGridTimedOut(): boolean {
+  return ctEntry.timedOut
+}
+
+/** Last failure/timeout message per grid id, or null (visible diagnostics). */
+export const gridLoadError: { mri: string | null; ct: string | null } = { mri: null, ct: null }
+
 /**
  * The canvas draw loop is store-driven (SectionCanvas subscribes to the whole
  * store), so when async data lands outside a store change we emit a no-op
@@ -723,9 +853,43 @@ function nudgeRedraw(): void {
 }
 
 /**
+ * Retry one grid fetch after a failure/timeout: cancels the in-flight request,
+ * drops the entry back to 'idle' and re-runs the loader. Returns true when a
+ * new attempt was started. Idempotent while an attempt is genuinely in flight
+ * and has not timed out (nothing to retry yet).
+ *
+ * Declared before loadGrid and called from it through the hoisted function
+ * declaration — see the ordering note on loadGrid.
+ */
+export function retryGridLoad(id: 'mri' | 'ct', onReady?: () => void): boolean {
+  const entry = id === 'mri' ? mriEntry : ctEntry
+  const manifest =
+    id === 'mri' ? (mriManifest as unknown as GridManifest) : (ctManifest as unknown as GridManifest)
+  const url = id === 'mri' ? MRI_BIN_URL : CT_BIN_URL
+  if (entry.status === 'loading' && !entry.timedOut) return false
+  entry.controller?.abort()
+  entry.controller = null
+  entry.fetch = null
+  entry.status = 'idle'
+  entry.timedOut = false
+  entry.grid = null
+  gridLoadError[id] = null
+  void loadGrid(entry, id, manifest, url, onReady)
+  return true
+}
+
+/**
  * Start (once) the fetch of a baked uint8 grid and decode it into a SliceGrid.
  * `onReady` runs after the grid lands — SectionPiP uses it to flag its backdrop
  * texture dirty so the real slice appears as soon as the volume arrives.
+ *
+ * P0 survivability: the request is bounded by `timeoutMs`. On expiry the
+ * controller aborts the fetch and the entry settles to `status: 'timeout'`
+ * (visible + retryable) instead of staying 'loading' forever. Every terminal
+ * failure clears `entry.fetch`, so a later `loadGrid()` — e.g. the retry path —
+ * starts a fresh attempt rather than awaiting a dead promise. The declared
+ * `entry` parameter (rather than a closure over mriEntry/ctEntry) is what lets
+ * `retryGridLoad` above drive both grids through one code path.
  */
 function loadGrid(
   entry: GridEntry,
@@ -733,10 +897,36 @@ function loadGrid(
   manifest: GridManifest,
   url: string,
   onReady?: () => void,
+  timeoutMs: number = GRID_LOAD_TIMEOUT_MS,
 ): Promise<void> {
   if (entry.fetch !== null) return entry.fetch
   entry.status = 'loading'
-  entry.fetch = fetch(url)
+  entry.timedOut = false
+  const errorKey: 'mri' | 'ct' | null = id === 'mri' ? 'mri' : id === 'ct' ? 'ct' : null
+  const controller =
+    typeof AbortController === 'undefined' ? null : new AbortController()
+  entry.controller = controller
+  let timedOut = false
+  let timer: ReturnType<typeof setTimeout> | null = null
+  if (typeof setTimeout === 'function' && timeoutMs > 0) {
+    timer = setTimeout(() => {
+      timedOut = true
+      if (errorKey !== null) {
+        gridLoadError[errorKey] = `${id} did not answer within ${Math.round(timeoutMs / 1000)} s`
+      }
+      controller?.abort()
+    }, timeoutMs)
+  }
+  const clearTimer = (): void => {
+    if (timer !== null) {
+      clearTimeout(timer)
+      timer = null
+    }
+  }
+  // The fetch itself rejects with AbortError once the timeout fires; a
+  // non-abort rejection is an ordinary HTTP/network failure and is kept
+  // distinct from the timeout in the entry's status.
+  entry.fetch = fetch(url, controller !== null ? { signal: controller.signal } : undefined)
     .then((res) => {
       if (!res.ok) throw new Error(`${id} HTTP ${res.status}`)
       return res.arrayBuffer()
@@ -764,11 +954,32 @@ function loadGrid(
         spacing: [spacing[0], spacing[1], spacing[2]],
       }
       entry.status = 'ready'
+      entry.timedOut = false
+      entry.controller = null
+      clearTimer()
       nudgeRedraw()
       onReady?.()
     })
-    .catch(() => {
-      entry.status = 'failed'
+    .catch((error: unknown) => {
+      // A settled attempt is never left in the map: a retry must be able to
+      // start a fresh fetch instead of re-awaiting this one.
+      clearTimer()
+      entry.fetch = null
+      entry.controller = null
+      if (timedOut) {
+        entry.status = 'timeout'
+        entry.timedOut = true
+        entry.grid = null
+        console.warn(`[imageLayers] ${id} grid timed out after ${timeoutMs} ms — retry available`)
+      } else {
+        entry.status = 'failed'
+        entry.timedOut = false
+        entry.grid = null
+        const message = error instanceof Error ? error.message : String(error)
+        if (errorKey !== null) gridLoadError[errorKey] = message
+      }
+      // Repaint so the failure state is visible without a store edit.
+      nudgeRedraw()
     })
   return entry.fetch
 }
@@ -785,15 +996,8 @@ function loadCtGrid(onReady?: () => void): void {
 
 /* --------------------------------------------------------- grid sampling */
 
-const AXIS_INDEX: Record<PlaneAxis, 0 | 1 | 2> = { x: 0, y: 1, z: 2 }
-
-/** In-plane world-axis pairs per plane axis: [u (screen x), v (screen y)] —
- *  mirrors SectionCanvas AXIS_PAIR (§2.2 orientation conventions). */
-const AXIS_PAIR: Record<PlaneAxis, [PlaneAxis, PlaneAxis]> = {
-  y: ['x', 'z'], // transverse: u = x, v = z
-  x: ['z', 'y'], // sagittal:   u = z, v = y
-  z: ['x', 'y'], // coronal:    u = x, v = y
-}
+/* AXIS_INDEX and AXIS_PAIR are the SHARED tables from planeGeometry — this
+ * module keeps no private copy of the in-plane axis pair (§2.2 conventions). */
 
 /** Grid world-extent rect of a slice's in-plane axes (au). */
 function gridPlaneRect(
@@ -813,40 +1017,68 @@ function gridPlaneRect(
 /**
  * Trilinear uint8 sample at canonical au coordinates (bilinear in-plane once
  * the slice axis is fixed). Returns -1 outside the grid extent.
+ *
+ * Allocation-free (QUALITY_PLAN §3 item 11, AUDIT §2.15): the ~1.5 M calls a
+ * plane change makes no longer allocate three coordinate arrays, three base
+ * arrays, six clamped indices and two closures PER SAMPLE. Out-of-range axes
+ * short-circuit before any index is written, so a fully out-of-range sample
+ * never departs from the documented -1. The caller supplies the preallocated
+ * scratch: `coords` is the sample position (mutated in place per pixel) and
+ * `base`/`frac` are the module-level Float64Array(3) scratch below.
+ *
+ * The third argument (the precomputed AXIS_INDEX of the slice axis) documents
+ * which axis is fixed for this raster. It is deliberately NOT used to skip a
+ * sample: an earlier revision broke out of the outermost blend loop when the
+ * slice axis landed exactly on a grid plane, on the theory that a zero
+ * fractional weight makes that plane's contribution vanish — it does not,
+ * because the two flanking planes hold different values (the weight multiplies
+ * a DIFFERENT sample, so it cannot be dropped: that revision shifted sampled
+ * values by up to 248 of 255). The eight-neighbour blend is therefore evaluated
+ * unconditionally, and `check-samplegrid.mjs` proves the rewritten reader is
+ * bit-identical to the pre-change one — that bug is what it caught.
  */
-function sampleGrid(grid: SliceGrid, x: number, y: number, z: number): number {
-  const coords = [x, y, z]
-  const base = [0, 0, 0]
-  const frac = [0, 0, 0]
+function sampleGrid(
+  grid: SliceGrid,
+  coords: Float64Array,
+  /** Slice axis index — documents the fixed axis; see the note below. */
+  _axisIdx: number,
+  base: Float64Array,
+  frac: Float64Array,
+  origin: readonly number[],
+  spacing: readonly number[],
+): number {
+  void _axisIdx
+  // Out-of-extent is a property of the position alone, so all three axes are
+  // checked before any table lookup (pixel centers are never exactly at the
+  // grid maximum for the in-plane axes, but the slice axis can be).
   for (let a = 0; a < 3; a++) {
-    const f = (coords[a] - grid.origin[a]) / grid.spacing[a]
+    const f = (coords[a] - origin[a]) / spacing[a]
     if (!(f >= 0) || !(f <= grid.dims[a] - 1)) return -1
-    base[a] = Math.floor(f)
-    frac[a] = f - base[a]
+    const b = Math.floor(f)
+    base[a] = b
+    frac[a] = f - b
   }
   const nx = grid.dims[0]
   const ny = grid.dims[1]
   const nz = grid.dims[2]
-  const clampI = (i: number, n: number): number => (i < 0 ? 0 : i > n - 1 ? n - 1 : i)
-  const ix0 = clampI(base[0], nx)
-  const ix1 = clampI(base[0] + 1, nx)
-  const iy0 = clampI(base[1], ny)
-  const iy1 = clampI(base[1] + 1, ny)
-  const iz0 = clampI(base[2], nz)
-  const iz1 = clampI(base[2] + 1, nz)
+  const ix1 = Math.min(base[0] + 1, nx - 1)
+  const iy1 = Math.min(base[1] + 1, ny - 1)
+  const iz1 = Math.min(base[2] + 1, nz - 1)
   const data = grid.data
-  const at = (i: number, j: number, k: number): number => data[(k * ny + j) * nx + i]
   let sum = 0
   for (let ck = 0; ck < 2; ck++) {
     const wz = ck === 0 ? 1 - frac[2] : frac[2]
-    const k = ck === 0 ? iz0 : iz1
+    const k = ck === 0 ? base[2] : iz1
+    const plane = k * ny
     for (let cj = 0; cj < 2; cj++) {
       const wy = cj === 0 ? 1 - frac[1] : frac[1]
-      const j = cj === 0 ? iy0 : iy1
+      const j = cj === 0 ? base[1] : iy1
+      const row = plane + j
+      const rowBase = row * nx
       for (let ci = 0; ci < 2; ci++) {
         const wx = ci === 0 ? 1 - frac[0] : frac[0]
-        const i = ci === 0 ? ix0 : ix1
-        sum += at(i, j, k) * wx * wy * wz
+        const i = ci === 0 ? base[0] : ix1
+        sum += data[rowBase + i] * wx * wy * wz
       }
     }
   }
@@ -855,10 +1087,66 @@ function sampleGrid(grid: SliceGrid, x: number, y: number, z: number): number {
 
 /** Plane quantization for the slice cache (matches SectionCanvas). */
 const MRI_PLANE_QUANTIZE = 0.25
-const SLICE_CACHE_LIMIT = 32
+/**
+ * Byte budget of the slice cache (QUALITY_PLAN §3 item 11: bound the caches by
+ * BYTES, not entries — AUDIT §2.15).
+ *
+ * WP-B11: the cache used to hold up to SLICE_CACHE_LIMIT = 32 entries
+ * regardless of their size, i.e. ≈ 32 MB worst case for the MRI raster and up
+ * to ≈ 128 MB once the CT raster (6× upsample) and the PiP's 512×512 backdrop
+ * slices are in play, with no relationship to what the panel actually reuses.
+ * The bound is now a counted budget: every entry is charged
+ * `width × height × 4` bytes (one RGBA texel per pixel — the canvas backing
+ * store, and the GPU texture it is uploaded into) and insertion evicts the
+ * oldest entries until the total fits.
+ *
+ * The budget is 24 MB, i.e. ≈ 13 MRI slices at the live-section upsample (3 →
+ * 339×321 = 435 kB each) or 12 backdrop slices at the PiP's RT resolution
+ * (512×512 = 1 MB each) — a superset of what one plane change can reuse
+ * (2 entry points × a handful of window/upsample variants), while the hard
+ * ceiling is now a number the module can state.
+ */
+const SLICE_CACHE_BUDGET_BYTES = 24 * 1024 * 1024
 
-/** Offscreen grayscale canvas per (axis, quantized plane, window). */
-const sliceCache = new Map<string, HTMLCanvasElement>()
+/** Offscreen grayscale canvas per (axis, quantized plane, window, upsample). */
+const sliceCache = new Map<string, { canvas: HTMLCanvasElement; bytes: number }>()
+let sliceCacheBytes = 0
+
+/**
+ * Sampling scratch for renderGridSlice (module scope = allocated once, reused
+ * by every slice render; the 2D canvas path is single-threaded). `sliceCoords`
+ * is the floating sample position, mutated per output pixel.
+ */
+const sliceCoords = new Float64Array(3)
+const sliceBase = new Float64Array(3)
+const sliceFrac = new Float64Array(3)
+const sliceRgb: [number, number, number] = [0, 0, 0]
+
+/** Cache a slice canvas and evict oldest-first until the byte budget holds. */
+function rememberSlice(key: string, canvas: HTMLCanvasElement): void {
+  const bytes = canvas.width * canvas.height * 4
+  const previous = sliceCache.get(key)
+  if (previous !== undefined) sliceCacheBytes -= previous.bytes
+  sliceCache.set(key, { canvas, bytes })
+  sliceCacheBytes += bytes
+  while (sliceCacheBytes > SLICE_CACHE_BUDGET_BYTES && sliceCache.size > 1) {
+    const oldest = sliceCache.keys().next()
+    if (oldest.done) break
+    const evicted = sliceCache.get(oldest.value)
+    sliceCache.delete(oldest.value)
+    if (evicted !== undefined) sliceCacheBytes -= evicted.bytes
+  }
+  if (sliceCache.size === 1 && sliceCacheBytes > SLICE_CACHE_BUDGET_BYTES) {
+    // A single entry larger than the whole budget: keep it (it is the slice
+    // being drawn right now) but do not let it hide the budget breach.
+    sliceCacheBytes = sliceCache.get(key)?.bytes ?? 0
+  }
+}
+
+/** Diagnostics for `?sectiondebug` / QA: entries and bytes the cache holds. */
+export function sliceCacheStats(): { entries: number; bytes: number; budgetBytes: number } {
+  return { entries: sliceCache.size, bytes: sliceCacheBytes, budgetBytes: SLICE_CACHE_BUDGET_BYTES }
+}
 
 function windowMap(sample: number, wMin: number, wMax: number): number {
   const t = wMax > wMin ? (sample - wMin) / (wMax - wMin) : sample >= wMax ? 1 : 0
@@ -888,7 +1176,7 @@ function renderGridSlice(
   const key =
     `${grid.id}|${axis}|${quantized.toFixed(2)}|${Math.round(wMin)}|${Math.round(wMax)}|${upsample}`
   const cached = sliceCache.get(key)
-  if (cached !== undefined) return cached
+  if (cached !== undefined) return cached.canvas
 
   // Plane value off the grid extent → nothing to sample (e.g. sagittal
   // planes beyond the ±27 au grid while the canvas x extent is ±48 au).
@@ -909,42 +1197,53 @@ function renderGridSlice(
   const imageData = c2d.createImageData(w, h)
   const pixels = imageData.data
 
-  const coords = [0, 0, 0]
+  // Allocation-free sampling (QUALITY_PLAN §3 item 11): per-call scratch lives
+  // in module scope (single-threaded 2D canvas work, no reentrancy) and the
+  // per-axis origin/spacing/step terms are hoisted OUT of the pixel loop.
+  const origin = grid.origin as unknown as readonly number[]
+  const spacing = grid.spacing as unknown as readonly number[]
+  const coords = sliceCoords
   coords[aIdx] = value
-  const rgb: [number, number, number] = [0, 0, 0]
+  const uOrigin = origin[uIdx]
+  const vOrigin = origin[vIdx]
+  const uStep = ((grid.dims[uIdx] - 1) * spacing[uIdx]) / w
+  const vStep = ((grid.dims[vIdx] - 1) * spacing[vIdx]) / h
   let p = 0
   // Output-pixel centers map to fractional grid indices strictly inside
   // (0, dim-1): (px + 0.5) / w ∈ (0, 1) — no edge clamping needed. Top row
   // (py = 0) is max v, matching the canvas' vToSy (v grows upward).
-  for (let py = 0; py < h; py++) {
-    coords[vIdx] =
-      grid.origin[vIdx] + ((h - 1 - py + 0.5) / h) * (grid.dims[vIdx] - 1) * grid.spacing[vIdx]
-    for (let px = 0; px < w; px++) {
-      coords[uIdx] =
-        grid.origin[uIdx] + ((px + 0.5) / w) * (grid.dims[uIdx] - 1) * grid.spacing[uIdx]
-      const sample = Math.max(0, sampleGrid(grid, coords[0], coords[1], coords[2]))
-      const gray = windowMap(sample, wMin, wMax)
-      if (colorize === undefined) {
+  if (colorize === undefined) {
+    for (let py = 0; py < h; py++) {
+      coords[vIdx] = vOrigin + (h - 1 - py + 0.5) * vStep
+      for (let px = 0; px < w; px++) {
+        coords[uIdx] = uOrigin + (px + 0.5) * uStep
+        const gray = windowMap(Math.max(0, sampleGrid(grid, coords, aIdx, sliceBase, sliceFrac, origin, spacing)), wMin, wMax)
         pixels[p] = gray
         pixels[p + 1] = gray
         pixels[p + 2] = gray
-      } else {
+        pixels[p + 3] = 255
+        p += 4
+      }
+    }
+  } else {
+    const rgb = sliceRgb
+    for (let py = 0; py < h; py++) {
+      coords[vIdx] = vOrigin + (h - 1 - py + 0.5) * vStep
+      for (let px = 0; px < w; px++) {
+        coords[uIdx] = uOrigin + (px + 0.5) * uStep
+        const sample = Math.max(0, sampleGrid(grid, coords, aIdx, sliceBase, sliceFrac, origin, spacing))
         colorize(sample, rgb)
         pixels[p] = rgb[0]
         pixels[p + 1] = rgb[1]
         pixels[p + 2] = rgb[2]
+        pixels[p + 3] = 255
+        p += 4
       }
-      pixels[p + 3] = 255
-      p += 4
     }
   }
   c2d.putImageData(imageData, 0, 0)
 
-  sliceCache.set(key, canvas)
-  if (sliceCache.size > SLICE_CACHE_LIMIT) {
-    const oldest = sliceCache.keys().next()
-    if (!oldest.done) sliceCache.delete(oldest.value)
-  }
+  rememberSlice(key, canvas)
   return canvas
 }
 
@@ -989,14 +1288,33 @@ function drawGridToView(
  * (the manifest's own huInsideFov p99 is 805 HU). A very slight blue reduction
  * keeps the CT backdrop visually distinct from the grayscale MRI without
  * inventing contrast: R = G = g, B = 0.94·g.
+ *
+ * The mapper is memoized on the window pair (QUALITY_PLAN §3 item 11: hoist
+ * closures out of the draw path) — only two presets exist, so the closure is
+ * built once per preset instead of once per CT draw. The window values are
+ * read from module state at CALL time, so a window change still takes effect
+ * immediately on the next slice sample.
  */
+let ctColorizeWindowKey = Number.NaN
+let ctColorizeWindowMax = Number.NaN
+let ctColorizeFn: ((sample: number, out: [number, number, number]) => void) | null = null
+
 function ctColorizeFromWindow(window: [number, number]) {
-  return (sample: number, out: [number, number, number]): void => {
-    const g = windowMap(sample, window[0], window[1])
-    out[0] = g
-    out[1] = g
-    out[2] = Math.round(g * 0.94)
+  if (
+    ctColorizeFn === null ||
+    ctColorizeWindowKey !== window[0] ||
+    ctColorizeWindowMax !== window[1]
+  ) {
+    ctColorizeWindowKey = window[0]
+    ctColorizeWindowMax = window[1]
+    ctColorizeFn = (sample: number, out: [number, number, number]): void => {
+      const g = windowMap(sample, window[0], window[1])
+      out[0] = g
+      out[1] = g
+      out[2] = Math.round(g * 0.94)
+    }
   }
+  return ctColorizeFn
 }
 
 const mriLayer: SectionImageLayer = {
@@ -1015,7 +1333,9 @@ const mriLayer: SectionImageLayer = {
     if (mriLayerStatus() !== 'available') return 'unavailable'
     if (mriEntry.grid !== null) return 'ready'
     // 'idle' until draw() starts the fetch, 'loading' while it is in flight.
-    return mriEntry.status === 'failed' ? 'unavailable' : 'loading'
+    // 'failed' AND 'timeout' are terminal: the layer must report 'unavailable'
+    // (with the retry path) rather than claiming to still be loading.
+    return mriEntry.status === 'failed' || mriEntry.status === 'timeout' ? 'unavailable' : 'loading'
   },
 
   draw(ctx, view, plane, layerCtx) {
@@ -1072,7 +1392,7 @@ const ctLayer: SectionImageLayer = {
   dataStatus() {
     if (ctLayerStatus() !== 'available') return 'unavailable'
     if (ctEntry.grid !== null) return 'ready'
-    return ctEntry.status === 'failed' ? 'unavailable' : 'loading'
+    return ctEntry.status === 'failed' || ctEntry.status === 'timeout' ? 'unavailable' : 'loading'
   },
 
   draw(ctx, view, plane, layerCtx) {
@@ -1270,19 +1590,30 @@ export const sliceSamplerState: { lastRequested: SliceModality; lastResolved: Sl
   lastResolved: 'none',
 }
 
-/** Nearest levels.json anchor within `tolerance` au on the transverse axis. */
+/**
+ * Nearest levels.json anchor within `tolerance` au on the transverse axis: the
+ * shared `nearestLevelTo` scan AND distance (planeGeometry), plus this module's
+ * window.
+ */
 function levelIdForPlane(axis: PlaneAxis, value: number, tolerance: number): string | null {
-  if (axis !== 'y') return null
-  let best: string | null = null
-  let bestDistance = Number.POSITIVE_INFINITY
-  for (const level of levels) {
-    const distance = Math.abs(level.y - value)
-    if (distance < bestDistance) {
-      bestDistance = distance
-      best = level.id
-    }
-  }
-  return best !== null && bestDistance <= tolerance ? best : null
+  const nearest = nearestLevelTo(axis, value, levels)
+  if (nearest === null) return null
+  return nearest.distance <= tolerance ? nearest.level.id : null
+}
+
+/**
+ * Why a grid modality has nothing to paint yet: `'unavailable'` once the load
+ * has terminally failed or timed out (the payload itself is fine — this
+ * attempt is not), `'loading'` while an attempt is genuinely in flight.
+ *
+ * P0 survivability (QUALITY_PLAN §1 item 3): without this distinction a
+ * timed-out grid kept the PiP hint saying "the real MRI imagery for this plane
+ * is still loading" forever — the exact "hangs with no terminal state" failure
+ * the item calls out. A dead grid must read as unavailable so the UI can offer
+ * `retryGridLoad()`.
+ */
+function gridMissReason(entry: GridEntry): SliceMissReason {
+  return entry.status === 'failed' || entry.status === 'timeout' ? 'unavailable' : 'loading'
 }
 
 /**
@@ -1316,19 +1647,19 @@ export function resolveSliceModality(
   }
   if (requested === 'ct') {
     if (!ctReady) return { modality: 'ct', reason: 'unavailable' }
-    return { modality: 'ct', reason: ctEntry.grid === null ? 'loading' : undefined }
+    return { modality: 'ct', reason: ctEntry.grid === null ? gridMissReason(ctEntry) : undefined }
   }
   if (requested === 'mri') {
     if (!mriReady) return { modality: 'mri', reason: 'unavailable' }
-    return { modality: 'mri', reason: mriEntry.grid === null ? 'loading' : undefined }
+    return { modality: 'mri', reason: mriEntry.grid === null ? gridMissReason(mriEntry) : undefined }
   }
   // 'auto' — real-first default (plan §4): the closest-match real imagery first
   // (a plate anchored at this plane, else the level-mapped micrograph the live
   // 2D canvas would show), then the continuous CT / MRI grids.
   const image = stain()
   if (image !== undefined) return { modality: 'stain', image }
-  if (ctReady) return { modality: 'ct', reason: ctEntry.grid === null ? 'loading' : undefined }
-  if (mriReady) return { modality: 'mri', reason: mriEntry.grid === null ? 'loading' : undefined }
+  if (ctReady) return { modality: 'ct', reason: ctEntry.grid === null ? gridMissReason(ctEntry) : undefined }
+  if (mriReady) return { modality: 'mri', reason: mriEntry.grid === null ? gridMissReason(mriEntry) : undefined }
   return { modality: 'none', reason: 'unavailable' }
 }
 
@@ -1374,26 +1705,26 @@ export function renderSliceToCanvas(
   const resolution = resolveSliceModality(spec.axis, spec.value, requested, levelId, tolerance)
   sliceSamplerState.lastResolved = resolution.modality
 
-  // SectionCanvas.computeTransform with the caller's extents: scale = px per au,
-  // u0/v0 = the world rect's left/top edge.
+  // THE shared world→screen mapping (planeGeometry.planeTransform) — the same
+  // function the live canvas and the PiP camera consume, so this sampler can
+  // never place an image at a world position the 2D canvas would not use. The
+  // caller defines the world window by its in-plane half-extents, and
+  // `samplerViewport` turns that into the viewport whose aspect fit reproduces
+  // exactly that window at this raster size.
   const halfU = spec.halfU > 0 ? spec.halfU : 1
   const halfV = spec.halfV > 0 ? spec.halfV : 1
-  const scale = width / (2 * halfU)
-  const uCenter = 0 // canonical bounds are symmetric about 0 on every axis pair
-  const vCenter = 0
-  const u0 = uCenter - halfU
-  const v0 = vCenter + halfV
+  const transform = planeTransform(spec.axis, spec.value, samplerViewport({ width, height, halfU, halfV }))
   const view: SectionView = {
     axis: spec.axis,
     value: spec.value,
     width,
     height,
-    uRange: [u0, u0 + width / scale],
-    vRange: [v0 - height / scale, v0],
-    uToSx: (u) => (u - u0) * scale,
-    vToSy: (v) => (v0 - v) * scale,
-    sxToU: (sx) => u0 + sx / scale,
-    syToV: (sy) => v0 - sy / scale,
+    uRange: [transform.uMin, transform.uMax],
+    vRange: [transform.vMin, transform.vMax],
+    uToSx: transform.uToSx,
+    vToSy: transform.vToSy,
+    sxToU: transform.sxToU,
+    syToV: transform.syToV,
   }
   const plane: PlaneSpec = { axis: spec.axis, value: spec.value }
   const opacity = spec.opacity ?? 1

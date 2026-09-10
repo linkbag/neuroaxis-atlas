@@ -56,7 +56,19 @@
   gap: 2px;
 }
 
+/*
+ * PiP header buttons. Hit target ≥24 px in both axes (QUALITY_PLAN §4 item 15 /
+ * AUDIT §2.20 measured ~16 px): `min-height`/`min-width` do the work, so the
+ * compact mono typography of the axis override (X/Y/Z), the size toggle and the
+ * × is unchanged while every control becomes comfortably clickable. `display:
+ * inline-flex` + centring keeps the glyph centred in the enlarged box.
+ */
 .pip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
   font-family: var(--font-mono);
   font-size: 0.66rem;
   line-height: 1;
@@ -71,6 +83,12 @@
 .pip-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.pip-btn:focus-visible,
+.pip-restore:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .pip-btn[aria-pressed='true'] {
@@ -225,9 +243,147 @@
   color: var(--accent);
 }
 
-.pip-restore:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+/*
+ * Narrow-viewport tab (`.pip-toggle` + its rows, markup in SectionPiP). At a
+ * normal desktop width the header above already carries the title, the plane
+ * readout and the controls, so the tab is not rendered at all — it appears only
+ * inside the ≤900 px media query below, which is where its layout lives.
+ */
+.pip-toggle {
+  display: none;
+}
+
+.pip-toggle-label {
+  font-weight: 600;
+}
+
+/*
+ * ── RESPONSIVE PiP: collapse to a labelled tab below ~900 px ─────────────
+ * QUALITY_PLAN §4 item 15 / AUDIT §2.20: the panel was fixed-size (224×170 /
+ * 348×262) with no narrow-width behaviour, so on a phone it covered the 3D
+ * model it is supposed to annotate. Below 900 px the two states become
+ *
+ *   (a) COLLAPSED — only the panel's own header bar, which is a real
+ *       <label class="pip-toggle"> wrapping the native checkbox in the PiP
+ *       component, sticks out of the viewer's bottom-right corner as a tab
+ *       showing the plane readout. 44 px tall and full-width-safe: a thumb
+ *       target, and a labelled control (the label text IS the accessible
+ *       name), so the audit's "every interactive node has a name" check holds;
+ *   (b) EXPANDED — `:checked` grows the panel to `max-height: 62vh` and lays
+ *       the slice out above the tab.
+ *
+ * WHY the label is `position: sticky`: the panel participates in no layout (it
+ * is absolutely positioned chrome in `.viewer3d-root`), so a plain child of a
+ * `.pip-panel` collapsed to `height: 0` would be clipped away. Sticky keeps the
+ * tab inside the panel's own box (no second positioned container, nothing for
+ * the R3F canvas rect to notice) while it hangs off the collapsed top edge.
+ * The checkbox itself is visually hidden — `appearance:none` + zero size + full
+ * clip — but never `display:none`/`visibility:hidden`, so it stays focusable and
+ * a keyboard user gets the same expand/collapse the pointer user gets.
+ *
+ * The larger-desktop layout (>900 px) is untouched: the header stays the
+ * non-focusable title/readout strip it has always been and the axis, size and
+ * hide buttons stay visible.
+ */
+@media (max-width: 900px) {
+  .pip-panel {
+    /* Expanded the panel is a fixed-size card again (the narrow viewer has no
+       spare width): 62vh tall at most, and never wider than the viewer minus
+       its own margins. Both are inert while collapsed (height: 0). */
+    width: min(304px, calc(100% - 2 * var(--space-3)));
+    max-width: calc(100% - 2 * var(--space-3));
+    max-height: 62vh;
+    overflow: visible;
+  }
+
+  .pip-header {
+    display: none;
+  }
+
+  .pip-panel .pip-toggle {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    /* Collapsed: the free space of the drained panel is the tab's own box. */
+    height: 100%;
+    min-height: 44px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--bg-panel) 94%, transparent);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* One row, one line: a wrapped second row would poke out of the collapsed
+     panel's 44 px tab. The plane readout is what must never be clipped. */
+  .pip-toggle-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .pip-toggle-caret {
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  .pip-toggle:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Visually hidden, still focusable (never display:none / visibility:hidden). */
+  .pip-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    appearance: none;
+  }
+
+  /* Expanded: the slice first, the tab pinned underneath it. */
+  .pip-panel:has(.pip-toggle input:checked) {
+    height: auto;
+    flex-direction: column-reverse;
+  }
+
+  .pip-panel:has(.pip-toggle input:checked) .pip-toggle {
+    position: static;
+    height: auto;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+  }
+
+  .pip-panel .pip-window {
+    display: none;
+  }
+
+  /* Expanded narrow panel: the slice fills the free width and is capped by the
+     62vh panel budget; the tab keeps its 44 px row underneath it. The window
+     carries its own top corners because the panel's `overflow: visible` (needed
+     for the collapsed tab) no longer clips them. */
+  .pip-panel:has(.pip-toggle input:checked) .pip-window {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    max-height: calc(62vh - 44px);
+    border: 1px solid var(--border-subtle);
+    border-bottom: none;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
 }
 
 @media (max-width: 860px) {

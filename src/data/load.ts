@@ -176,12 +176,20 @@ function plateRank(plate: PlateRecord): number {
 
 /* ------------------------------------------------------------------ enums */
 
-export const ALL_REGIONS: readonly Region[] = ['diencephalon', 'midbrain', 'pons', 'medulla', 'cerebellum']
+export const ALL_REGIONS: readonly Region[] = [
+  'telencephalon',
+  'diencephalon',
+  'midbrain',
+  'pons',
+  'medulla',
+  'cerebellum',
+]
 export const ALL_KINDS: readonly Kind[] = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context']
 export const REGION_ORDER: readonly Region[] = ALL_REGIONS
 export const KIND_ORDER: readonly Kind[] = ALL_KINDS
 
 export const REGION_LABELS: Record<Region, string> = {
+  telencephalon: 'Telencephalon (cerebral hemispheres)',
   diencephalon: 'Diencephalon',
   midbrain: 'Mesencephalon (midbrain)',
   pons: 'Pons',

@@ -75,6 +75,21 @@
   background: var(--bg-panel);
 }
 
+/*
+ * P2 a11y (QUALITY_PLAN §4 item 14 / AUDIT §2.18): a closed sidebar must not be
+ * visible in ANY breakpoint. App.tsx makes the closed subtree `inert` (no tab
+ * order, no hit-testing, no accessibility-tree entry); this rule makes the
+ * visual state agree with it. On desktop and tablet the closed sidebar was
+ * already `display:none` at its breakpoint, but ≤640px it was only translated
+ * off-screen — visible-but-off-screen chrome is exactly the trap the finding
+ * describes, and `visibility:hidden` closes it without touching the phone
+ * sheet's `transform` transition (visibility is not animated here).
+ * `.app-shell.is-sidebar-open .sidebar` (below, ≤640px) restores visibility.
+ */
+.app-shell.is-sidebar-closed .sidebar {
+  visibility: hidden;
+}
+
 .sidebar-scroll {
   flex: 1;
   min-height: 0;
@@ -362,6 +377,9 @@
 
   .app-shell.is-sidebar-open .sidebar {
     transform: translateY(0);
+    /* Pairs with `.app-shell.is-sidebar-closed .sidebar { visibility:hidden }`
+       above (P2 a11y): the open sheet is visible at every width. */
+    visibility: visible;
   }
 
   .sidebar-handle {

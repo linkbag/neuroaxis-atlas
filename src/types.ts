@@ -9,7 +9,13 @@
  * manifests, SVG data-structure attributes) must exist in taxonomy.json.
  */
 
-export type Region = 'diencephalon' | 'midbrain' | 'pons' | 'medulla' | 'cerebellum';
+export type Region =
+  | 'telencephalon'
+  | 'diencephalon'
+  | 'midbrain'
+  | 'pons'
+  | 'medulla'
+  | 'cerebellum';
 export type Kind = 'nucleus' | 'tract' | 'ventricle' | 'surface' | 'vessel' | 'context';
 export type Laterality = 'midline' | 'paired';
 export type Vec3 = [number, number, number];

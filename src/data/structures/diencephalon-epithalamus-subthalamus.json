@@ -2,7 +2,10 @@
   {
     "id": "nuc-pineal-gland",
     "name": "Pineal gland",
-    "synonyms": ["epiphysis", "pineal body"],
+    "synonyms": [
+      "epiphysis",
+      "pineal body"
+    ],
     "region": "diencephalon",
     "subdivision": "Epithalamus",
     "kind": "nucleus",
@@ -36,9 +39,19 @@
         "note": "CSF-flow obstruction"
       }
     ],
-    "levels": ["lvl-post-comm"],
-    "origin3d": [0, 22, -8],
-    "size3d": [1.6, 1.4, 1.6],
+    "levels": [
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      0,
+      22,
+      -8
+    ],
+    "size3d": [
+      1.6,
+      1.4,
+      1.6
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
       "RadioGraphics 2019 — 'Midbrain, Pons, and Medulla: Anatomy and Syndromes'"
@@ -47,7 +60,10 @@
   {
     "id": "nuc-habenula",
     "name": "Habenular nuclei",
-    "synonyms": ["habenular complex", "medial and lateral habenula"],
+    "synonyms": [
+      "habenular complex",
+      "medial and lateral habenula"
+    ],
     "region": "diencephalon",
     "subdivision": "Epithalamus",
     "kind": "nucleus",
@@ -79,9 +95,20 @@
         "vascular": "Posterior choroidal territory"
       }
     ],
-    "levels": ["lvl-post-comm", "lvl-thalamus-mid"],
-    "origin3d": [2.5, 27, -4],
-    "size3d": [1.2, 1.2, 1.6],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid"
+    ],
+    "origin3d": [
+      2.5,
+      27,
+      -4
+    ],
+    "size3d": [
+      1.2,
+      1.2,
+      1.6
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
@@ -90,7 +117,9 @@
   {
     "id": "tract-stria-medullaris",
     "name": "Stria medullaris thalami",
-    "synonyms": ["stria medullaris"],
+    "synonyms": [
+      "stria medullaris"
+    ],
     "region": "diencephalon",
     "subdivision": "Epithalamus",
     "kind": "tract",
@@ -120,9 +149,20 @@
         "vascular": "Posterior choroidal territory"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [3, 30.5, -1.5],
-    "size3d": [1.0, 0.9, 3.5],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      3,
+      30.5,
+      -1.5
+    ],
+    "size3d": [
+      1,
+      0.9,
+      3.5
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
     ]
@@ -130,7 +170,9 @@
   {
     "id": "tract-posterior-commissure",
     "name": "Posterior commissure",
-    "synonyms": ["PC"],
+    "synonyms": [
+      "PC"
+    ],
     "region": "diencephalon",
     "subdivision": "Epithalamus",
     "kind": "tract",
@@ -160,9 +202,19 @@
         "vascular": "PCA — collicular/quadrigeminal branches"
       }
     ],
-    "levels": ["lvl-post-comm"],
-    "origin3d": [0, 20, -5.5],
-    "size3d": [3.5, 0.8, 1.0],
+    "levels": [
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      0,
+      20,
+      -5.5
+    ],
+    "size3d": [
+      3.5,
+      0.8,
+      1
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brainstem II: Eye Movements and Pupillary Control'"
@@ -171,7 +223,10 @@
   {
     "id": "nuc-subthalamic",
     "name": "Subthalamic nucleus",
-    "synonyms": ["STN", "body of Luys"],
+    "synonyms": [
+      "STN",
+      "body of Luys"
+    ],
     "region": "diencephalon",
     "subdivision": "Subthalamus",
     "kind": "nucleus",
@@ -202,9 +257,20 @@
         "note": "therapeutic"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [8, 20, 4],
-    "size3d": [2.2, 1.6, 3.2],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      8,
+      20,
+      4
+    ],
+    "size3d": [
+      2.2,
+      1.6,
+      3.2
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia', section 'Ansa Lenticularis, Lenticular Fasciculus, and the Fields of Forel'"
@@ -245,9 +311,20 @@
         "vascular": "Posterior communicating/anterior choroidal perforators"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [8, 23.5, 3],
-    "size3d": [1.0, 0.9, 3.0],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      8,
+      23.5,
+      3
+    ],
+    "size3d": [
+      1,
+      0.9,
+      3
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia', section 'Ansa Lenticularis, Lenticular Fasciculus, and the Fields of Forel'"
@@ -256,7 +333,10 @@
   {
     "id": "ctx-fields-of-forel",
     "name": "Fields of Forel (H1/H2)",
-    "synonyms": ["thalamic fasciculus (H1)", "lenticular fasciculus (H2)"],
+    "synonyms": [
+      "thalamic fasciculus (H1)",
+      "lenticular fasciculus (H2)"
+    ],
     "region": "diencephalon",
     "subdivision": "Subthalamus",
     "kind": "context",
@@ -286,9 +366,20 @@
         "note": "historic/therapeutic"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [5, 24.5, 2.5],
-    "size3d": [1.2, 1.2, 3.0],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      5,
+      24.5,
+      2.5
+    ],
+    "size3d": [
+      1.2,
+      1.2,
+      3
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia', section 'Ansa Lenticularis, Lenticular Fasciculus, and the Fields of Forel'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
@@ -330,9 +421,21 @@
         "note": "mass effect"
       }
     ],
-    "levels": ["lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [0, 29, 0.5],
-    "size3d": [1.0, 6.0, 5.0],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      0,
+      29,
+      0.5
+    ],
+    "size3d": [
+      1,
+      6,
+      5
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
@@ -341,7 +444,10 @@
   {
     "id": "vent-cerebral-aqueduct",
     "name": "Cerebral aqueduct",
-    "synonyms": ["aqueduct of Sylvius", "aqueduct of the midbrain"],
+    "synonyms": [
+      "aqueduct of Sylvius",
+      "aqueduct of the midbrain"
+    ],
     "region": "diencephalon",
     "subdivision": "Ventricular system",
     "kind": "ventricle",
@@ -369,9 +475,21 @@
         "vascular": "Paramedian perforators of the PCA/SCA"
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [0, 8, -2.5],
-    "size3d": [0.9, 7.0, 0.9],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      0,
+      8,
+      -2.5
+    ],
+    "size3d": [
+      0.9,
+      7,
+      0.9
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brainstem III: Internal Structures and Vascular Supply'"
@@ -381,8 +499,8 @@
     "id": "ctx-corpus-callosum",
     "name": "Corpus callosum (context)",
     "synonyms": [],
-    "region": "diencephalon",
-    "subdivision": "Hemisphere context",
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
     "kind": "context",
     "laterality": "midline",
     "color": "#94a3b8",
@@ -409,9 +527,20 @@
         "note": "developmental"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [0, 40, 1],
-    "size3d": [2.5, 1.8, 7.5],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      0,
+      40,
+      1
+    ],
+    "size3d": [
+      2.5,
+      1.8,
+      7.5
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
     ]
@@ -419,9 +548,14 @@
   {
     "id": "ctx-internal-capsule",
     "name": "Internal capsule (context)",
-    "synonyms": ["anterior limb", "genu", "posterior limb", "retrolenticular part"],
-    "region": "diencephalon",
-    "subdivision": "Hemisphere context",
+    "synonyms": [
+      "anterior limb",
+      "genu",
+      "posterior limb",
+      "retrolenticular part"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
     "kind": "context",
     "laterality": "paired",
     "color": "#94a3b8",
@@ -448,9 +582,20 @@
         "vascular": "Anterior choroidal artery"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [12.5, 27, 2.5],
-    "size3d": [1.8, 6.5, 3.5],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      12.5,
+      27,
+      2.5
+    ],
+    "size3d": [
+      1.8,
+      6.5,
+      3.5
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
@@ -459,9 +604,12 @@
   {
     "id": "ctx-lenticular-nucleus",
     "name": "Lentiform nucleus (context silhouette)",
-    "synonyms": ["putamen", "globus pallidus"],
-    "region": "diencephalon",
-    "subdivision": "Hemisphere context",
+    "synonyms": [
+      "putamen",
+      "globus pallidus"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
     "kind": "context",
     "laterality": "paired",
     "color": "#94a3b8",
@@ -488,9 +636,20 @@
         "note": "toxic/metabolic"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [16.5, 27, 3],
-    "size3d": [3.2, 5.0, 5.0],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      16.5,
+      27,
+      3
+    ],
+    "size3d": [
+      3.2,
+      5,
+      5
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
     ]
@@ -498,9 +657,12 @@
   {
     "id": "ctx-caudate-nucleus",
     "name": "Caudate nucleus (context silhouette)",
-    "synonyms": ["caudate head", "caudate body"],
-    "region": "diencephalon",
-    "subdivision": "Hemisphere context",
+    "synonyms": [
+      "caudate head",
+      "caudate body"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
     "kind": "context",
     "laterality": "paired",
     "color": "#94a3b8",
@@ -527,9 +689,20 @@
         "note": "degenerative"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [10.5, 35, 5],
-    "size3d": [2.4, 3.5, 4.5],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      10.5,
+      35,
+      5
+    ],
+    "size3d": [
+      2.4,
+      3.5,
+      4.5
+    ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
     ]

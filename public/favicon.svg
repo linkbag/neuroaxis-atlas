@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NeuroAxis">
+  <title>NeuroAxis — 3D brainstem atlas</title>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <!-- Dark plate background: the favicon sits on a light or a dark tab strip. -->
+  <rect width="64" height="64" rx="14" fill="#0b1220"/>
+  <!-- Three stacked cross-section levels: mesencephalon, pons, medulla. -->
+  <g fill="none" stroke="url(#g)" stroke-width="4" stroke-linecap="round">
+    <ellipse cx="32" cy="19" rx="14" ry="9"/>
+    <ellipse cx="32" cy="32" rx="17" ry="10"/>
+    <ellipse cx="32" cy="45" rx="12" ry="8"/>
+  </g>
+  <circle cx="32" cy="32" r="3.2" fill="#f8fafc"/>
+</svg>

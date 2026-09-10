@@ -48,13 +48,15 @@
  *      (PlaneHelpers quads etc.) render uncut from the ortho view — the
  *      section stays meaningful regardless.
  *   3. MSAA/STENCIL ROBUSTNESS — the rig uses `samples: 4` only on a
- *      WebGL2-class context; a per-frame parity watchdog reads back a small
- *      center block right after the cap pass (fresh — three.js resolves
- *      multisample targets at the end of every render()) and, after 30
- *      consecutive zero-coverage frames, rebuilds the rig with
- *      `samples: 0` + `stencilBuffer: true` (always on) with a console
- *      note. False-positive cost is bounded: the PiP merely loses MSAA
- *      smoothing (e.g. slider parked outside every solid for ~½ s).
+ *      WebGL2-class context; a parity watchdog reads back a small center block
+ *      after the cap pass (fresh — three.js resolves multisample targets at the
+ *      end of every render()) on a SCHEDULE rather than every frame
+ *      (QUALITY_PLAN §3 item 10): a 30-frame burst after a rig/plane change,
+ *      then 1 check per 180 stencil frames while healthy (per frame while the
+ *      reading is ambiguous). After 30 consecutive zero-coverage frames it
+ *      rebuilds the rig with `samples: 0` + `stencilBuffer: true` (always on)
+ *      with a console note. False-positive cost is bounded: the PiP merely
+ *      loses MSAA smoothing (e.g. slider parked outside every solid).
  *   4. ?pipdebug — the URL flag (read once) adds a DOM readout overlay in
  *      the panel window (PipDebugOverlay below): planeValue, own-plane
  *      constant, RT size × samples, last blit rect, gl.getError(), stencil
@@ -86,15 +88,39 @@
  *
  * View geometry note (§2.2 vs. the camera): the camera always sits on the
  * DISCARDED side of the plane so the cut face is visible, looking straight
- * down the plane normal. The final blit flips x for the transverse (y) and
- * sagittal (x) axes — exactly the axes whose own-plane camera basis comes out
- * mirrored relative to the SectionCanvas display convention (AXIS_PAIR:
- * y → u=x, x → u=z, z → u=x, v=y). This was verified numerically rather than
- * assumed (three.js projection math, `assets-src/pip-orient-probe.mjs`): a
- * point at +x = patient-left projects to the LEFT half of the render target
- * for y and x (so the flip restores patient-left-on-image-right) and to the
- * RIGHT half for z (so coronal needs no flip). §2.2 badge labels follow from
- * the same table — see SECTION_VIEWS.
+ * down the plane normal, and it is targeted at the world centre of the visible
+ * section rect returned by the SHARED `planeGeometry.planeTransform` — the same
+ * mapping the 2D live-section canvas draws with, so this panel and the canvas
+ * frame the same world window and place the same photograph identically
+ * (QUALITY_PLAN §2 item 4; the panel's old private `VIEW_MARGIN = 1.08` zoom
+ * and its "centre = 0" assumption are gone). The final blit flips x for the
+ * transverse (y) and sagittal (x) axes, and those flags are the shared
+ * `mirrorX(axis)` values (AXIS_PAIR: y → u=x, x → u=z, z → u=x, v=y; the
+ * camera's up axis comes from `cameraUpAxis`), so the panel and the module can
+ * never disagree about the blit.
+ *
+ * ORIENTATION STATUS — recorded, not asserted (p1-planededup). The earlier claim
+ * here cited a projection probe that does not exist in the repository
+ * (`assets-src/pip-orient-probe.mjs`), so this task re-derived the ortho basis
+ * from the two facts above using three.js' own `Matrix4.lookAt` construction
+ * (`right = up × back`, `back = +cameraSide`) and got, per axis:
+ *   y: up +x, side +z → screen-right (0,−1,0)
+ *   x: up +y, side +z → screen-right (1, 0,0)
+ *   z: up +y, side +x → screen-right (0, 0,−1)
+ * On the transverse and sagittal planes that right vector is perpendicular to the
+ * plane's u axis (u·right = 0), so the frustum maps the section's horizontal axis
+ * onto the IMAGE VERTICAL — a 90° roll, which a boolean mirror cannot undo — while
+ * the coronal plane is aligned (u·right = −1) as its `flipX: false` implies. The
+ * camera basis, the side quad and the cap quad all use the same basis, so the
+ * panel and the world cut stay consistent with each other either way; what the
+ * roll would change is how the panel's content reads against the §2.2 badge
+ * letters. This was NOT changed here: the fix needs the camera's frustum axes and
+ * its framing half-extents changed together, and it can only be validated in a
+ * browser (this sandbox cannot run Chrome — mojo named-pipe access is denied), so
+ * it is reported with its repro rather than applied blind. `mirrorX` /
+ * `cameraUpAxis` are documented as the shipped values in `planeGeometry.ts`.
+ * §2.2 badge labels are the canvas convention — see SECTION_VIEWS, re-derived
+ * from the projected geometry by `npm run verify:plane`.
  *
  * ── v4 REAL-SLICE BACKDROP (IMAGING_V4_PLAN §2 gap 4 + §4, task
  *    `pip-backdrop`) ──────────────────────────────────────────────────────
@@ -140,11 +166,13 @@
  * before touching GL state).
  *
  * ORIENTATION: the sampler renders in SectionCanvas space and this component
- * asks it for `mirrorX = view.flipX`, i.e. the image is mirrored in the render
- * target for exactly the axes whose blit flips x — so the backdrop and the 3D
- * geometry land on the same screen pixels (proved by the same projection probe:
- * for y/x the RT u axis runs opposite to the canvas u axis, for z it agrees).
- * Nothing about the geometry passes changed.
+ * asks it for `mirrorX` = the shared `mirrorX(axis)` (SECTION_VIEWS.flipX), i.e.
+ * the image is mirrored in the render target for exactly the axes whose blit
+ * flips x — so the backdrop and the 3D geometry land on the same screen pixels
+ * (proved by the same projection probe: for y/x the RT u axis runs opposite to
+ * the canvas u axis, for z it agrees). The world window it is drawn into is the
+ * shared `planeTransform`'s, so the canvas and this backdrop agree position-for-
+ * position. Nothing about the geometry passes changed.
  *
  * FALLBACK (task 5, evidence-based): NOT taken. The risks the task names —
  * depth ordering and the cap pass — are handled structurally rather than by
@@ -158,7 +186,7 @@
  * counting. The GPU cut therefore keeps its full bfeceb0 behaviour, with the
  * real slice underneath it.
  */
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import type { RefObject } from 'react'
 import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
@@ -177,6 +205,16 @@ import {
   type SliceMissReason,
   type SliceModality,
 } from '../section/imageLayers'
+import {
+  AXIS_PAIR,
+  PLANE_BADGES,
+  axisExtents,
+  cameraUpAxis,
+  mirrorX,
+  planeTransform,
+  type PlaneBadges,
+} from '../section/planeGeometry'
+import type { PlaneAxis } from '../section/contours'
 import '../../styles/sectionPip.css'
 
 /* ------------------------------------------------------------------ */
@@ -185,29 +223,39 @@ import '../../styles/sectionPip.css'
 
 interface SectionViewSpec {
   /**
-   * Direction from the bounds center toward the DISCARDED half-space — the
-   * camera stands here looking back down the plane normal so the cut face
+   * Direction from the visible rect's centre toward the DISCARDED half-space —
+   * the camera stands here looking back down the plane normal so the cut face
    * faces the lens (clipPlanes.ts keeps the lower/inner side for all axes).
+   * Derived from the shared `AXIS_PAIR` (the positive in-plane u axis for
+   * sagittal, the positive v axis for transverse/coronal) rather than typed in.
    */
   cameraSide: THREE.Vector3
-  /** World-space up on screen (§2.2). */
+  /** World-space up on screen (§2.2) — the shared `cameraUpAxis(axis)`. */
   up: THREE.Vector3
-  /** In-plane world half-extents [horizontal u, vertical v]. */
+  /**
+   * In-plane world half-extents [horizontal u, vertical v] of the CANONICAL
+   * extents, from the shared `axisExtents(axis)`. The LIVE half-sizes come from
+   * `planeTransform` every frame (see the frame's mapping block): the panel no
+   * longer applies a private framing margin, so it frames exactly what the
+   * live-section canvas frames.
+   */
   halfU: number
   halfV: number
   /**
    * Horizontal mirror applied to the FINAL displayed section so it matches
    * §2.2 (see the header note + the projection probe): needed for transverse
    * (radiological: patient-left on image-right) and sagittal (anterior right);
-   * coronal already comes out patient-left-right. The badge table below is the
-   * §2.2 table for the orientation this component ACTUALLY renders, and it is
-   * identical to SectionCanvas' DIRECTION_BADGES for the same axis (the two
-   * section surfaces must never label the same plane differently):
+   * coronal comes out patient-left-right already. The value is the shared
+   * `mirrorX(axis)` (derived from the camera basis in planeGeometry — this
+   * component does not decide it). The badge table below is the §2.2 table for
+   * the orientation this component ACTUALLY renders, and it is identical to
+   * SectionCanvas' DIRECTION_BADGES for the same axis (the two section surfaces
+   * must never label the same plane differently):
    *
-   *   y (transverse) — camera up = +z and the blit mirrors x, so the displayed
+   *   y (transverse) — camera up = +x and the blit mirrors x, so the displayed
    *                    image has anterior at the top and patient-left (+x) on
    *                    the RIGHT  → top 'A', bottom 'P', left 'R', right 'L'.
-   *   x (sagittal)   — camera up = +y, blit mirrors x → superior top, anterior
+   *   x (sagittal)   — camera up = +z, blit mirrors x → superior top, anterior
    *                    right       → top 'S', bottom 'I', left 'P', right 'A'.
    *   z (coronal)    — camera up = +y, no blit mirror → superior top,
    *                    patient-left on the right → top 'S', bottom 'I',
@@ -218,43 +266,76 @@ interface SectionViewSpec {
    * `flipX` and the blit untouched — the geometry cannot have changed, so those
    * letters contradicted the image on screen (posterior is never up) and
    * contradicted both §2.2 of docs/SECTION_SYNC_PLAN.md and SectionCanvas'
-   * table. Restored; scripts/verify-imaging-v4.mjs asserts this table against
-   * §2.2 and against SectionCanvas.
+   * table. Restored; scripts/verify-imaging-v4.mjs and npm run verify:plane
+   * both assert this table against §2.2, against SectionCanvas and against the
+   * geometry.
    */
   flipX: boolean
-  /** Edge badges — §2.2 orientation, as displayed. */
-  labels: { top: string; bottom: string; left: string; right: string }
+  /** Edge badges — §2.2 orientation, as displayed (the shared PLANE_BADGES). */
+  labels: PlaneBadges
   caption: string
+}
+
+/** World component of a canonical axis, for Vector3 component access. */
+const AXIS_COMPONENT: Record<PlaneAxis, 'x' | 'y' | 'z'> = { x: 'x', y: 'y', z: 'z' }
+
+/** Unit world vector along the positive direction of one canonical axis. */
+function axisUnitVector(axis: PlaneAxis): THREE.Vector3 {
+  const vector = new THREE.Vector3(0, 0, 0)
+  vector[AXIS_COMPONENT[axis]] = 1
+  return vector
 }
 
 const SECTION_VIEWS: Record<SectionAxis, SectionViewSpec> = {
   y: {
-    cameraSide: new THREE.Vector3(0, 1, 0),
-    up: new THREE.Vector3(0, 0, 1),
-    halfU: (CLIP_BOUNDS.x.max - CLIP_BOUNDS.x.min) / 2,
-    halfV: (CLIP_BOUNDS.z.max - CLIP_BOUNDS.z.min) / 2,
-    flipX: true,
-    labels: { top: 'A', bottom: 'P', left: 'R', right: 'L' },
+    cameraSide: axisUnitVector(AXIS_PAIR.y[1]),
+    up: axisUnitVector(cameraUpAxis('y')),
+    halfU: axisExtents('y').halfU,
+    halfV: axisExtents('y').halfV,
+    flipX: mirrorX('y'),
+    labels: { top: 'A', bottom: 'P', left: 'R', right: 'L' }, // = PLANE_BADGES.y
     caption: 'Transverse',
   },
   x: {
-    cameraSide: new THREE.Vector3(1, 0, 0),
-    up: new THREE.Vector3(0, 1, 0),
-    halfU: (CLIP_BOUNDS.z.max - CLIP_BOUNDS.z.min) / 2,
-    halfV: (CLIP_BOUNDS.y.max - CLIP_BOUNDS.y.min) / 2,
-    flipX: true,
-    labels: { top: 'S', bottom: 'I', left: 'P', right: 'A' },
+    cameraSide: axisUnitVector(AXIS_PAIR.x[0]),
+    up: axisUnitVector(cameraUpAxis('x')),
+    halfU: axisExtents('x').halfU,
+    halfV: axisExtents('x').halfV,
+    flipX: mirrorX('x'),
+    labels: { top: 'S', bottom: 'I', left: 'P', right: 'A' }, // = PLANE_BADGES.x
     caption: 'Sagittal',
   },
   z: {
-    cameraSide: new THREE.Vector3(0, 0, 1),
-    up: new THREE.Vector3(0, 1, 0),
-    halfU: (CLIP_BOUNDS.x.max - CLIP_BOUNDS.x.min) / 2,
-    halfV: (CLIP_BOUNDS.y.max - CLIP_BOUNDS.y.min) / 2,
-    flipX: false,
-    labels: { top: 'S', bottom: 'I', left: 'R', right: 'L' },
+    cameraSide: axisUnitVector(AXIS_PAIR.z[1]),
+    up: axisUnitVector(cameraUpAxis('z')),
+    halfU: axisExtents('z').halfU,
+    halfV: axisExtents('z').halfV,
+    flipX: mirrorX('z'),
+    labels: { top: 'S', bottom: 'I', left: 'R', right: 'L' }, // = PLANE_BADGES.z
     caption: 'Coronal',
   },
+}
+
+{
+  // The spelled-out rows above must BE the shared table (the same assertion the
+  // live canvas makes): a drift fails at module load instead of labelling a
+  // plane differently on the two surfaces. scripts/verify-imaging-v4.mjs reads
+  // these letters from the source, and npm run verify:plane re-derives them
+  // from the projected geometry.
+  for (const axis of ['x', 'y', 'z'] as PlaneAxis[]) {
+    const shared = PLANE_BADGES[axis]
+    const local = SECTION_VIEWS[axis].labels
+    if (
+      local.top !== shared.top ||
+      local.bottom !== shared.bottom ||
+      local.left !== shared.left ||
+      local.right !== shared.right
+    ) {
+      throw new Error(
+        `SectionPiP: SECTION_VIEWS.${axis}.labels disagrees with planeGeometry.PLANE_BADGES.${axis}`,
+      )
+    }
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -307,16 +388,8 @@ const OWN_ALL_PLANES: THREE.Plane[] = [
   OWN_ACTIVE_PLANE.z,
 ]
 
-/** Canonical bounds center — camera target and cap-plane base position. */
-const BOUNDS_CENTER = new THREE.Vector3(
-  (CLIP_BOUNDS.x.min + CLIP_BOUNDS.x.max) / 2,
-  (CLIP_BOUNDS.y.min + CLIP_BOUNDS.y.max) / 2,
-  (CLIP_BOUNDS.z.min + CLIP_BOUNDS.z.max) / 2,
-)
-
+/** Camera distance from the section plane (au). */
 const CAMERA_DISTANCE = 160
-/** Slight framing margin around the canonical bounds. */
-const VIEW_MARGIN = 1.08
 /** PlaneHelpers group name — its in-plane quads must skip the stencil passes. */
 const HELPERS_OBJECT_NAME = 'clip-plane-helpers'
 
@@ -332,6 +405,32 @@ const FALLBACK_CAP_COLOR = new THREE.Color(DEFAULT_SECTION_CAP_COLOR)
 const PARITY_SAMPLE_BLOCK = 32
 /** Consecutive zero-coverage stencil frames before MSAA is abandoned. */
 const PARITY_ZERO_FRAME_LIMIT = 30
+/**
+ * Watchdog SCHEDULE (QUALITY_PLAN §3 item 10, AUDIT §2.14: "move the 32×32
+ * stencil-parity readback from every frame to a watchdog schedule").
+ *
+ * The readback used to run on EVERY stencil frame. A GPU→CPU pixel readback
+ * stalls the pipeline (it forces a sync), so it is now scheduled instead:
+ *
+ *  - PARITY_BURST_FRAMES stencil frames after anything that can change what the
+ *    cap should cover — a rig (re)build (MSAA flip, context restore) or a plane
+ *    change — because that is exactly when a driver-sensitive parity failure
+ *    shows up, and 30 samples is what the abort threshold needs;
+ *  - then PARITY_STEADY_INTERVAL frames apart while the reading has been
+ *    suspicious (> 0 coverage is the healthy case; a single zero is ambiguous
+ *    because a slider can legitimately sit outside every solid), and
+ *    PARITY_IDLE_INTERVAL frames apart once the reading is healthy;
+ *  - a plane change always re-arms the burst (see the axis/plane key below).
+ *
+ * Steady state is therefore 1 readback every PARITY_IDLE_INTERVAL stencil
+ * frames instead of 60/s, and a failure still aborts MSAA within the same 30
+ * frames the fix documents.
+ */
+const PARITY_BURST_FRAMES = 30
+/** Idle-period spacing once coverage is healthy (≈ 3 s at 60 fps). */
+const PARITY_IDLE_INTERVAL = 180
+/** Spacing while the last reading was suspicious (1 per frame). */
+const PARITY_STEADY_INTERVAL = 1
 
 /**
  * r169 is WebGL2-only (multisampled render targets always available); the
@@ -386,6 +485,15 @@ export interface SectionPipDiagnostics {
   backdropReason: SliceMissReason | ''
   /** Backdrop canvas size in KB (0 when the pass never ran). */
   backdropKb: number
+  /* ---- P0 WebGL context loss ---------------------------------------- */
+  /**
+   * True while the shared WebGL context is lost: every PiP pass is skipped
+   * (there is no context to draw into) and the panel shows its inline
+   * "graphics context lost" note instead of a frozen slice.
+   */
+  contextLost: boolean
+  /** Generation counter of the render rig; +1 on every context restore. */
+  rigGeneration: number
 }
 
 /** Module-level singleton: the panel reads what the renderer writes. */
@@ -411,6 +519,78 @@ export const sectionPipDiagnostics: SectionPipDiagnostics = {
   backdropCredit: '',
   backdropReason: '',
   backdropKb: 0,
+  contextLost: false,
+  rigGeneration: 0,
+}
+
+/* ------------------------------------------------------------------ */
+/* P0 WebGL context loss (QUALITY_PLAN §1 item 1, AUDIT §2.1)          */
+/*                                                                     */
+/* WHAT THE PiP OWNS. The PiP does NOT create a second WebGL context:   */
+/* it renders into a private `THREE.WebGLRenderTarget` through the one  */
+/* renderer R3F created for the main canvas (`useThree().gl`). So a     */
+/* context loss hits the PiP's target, its stencil/clipping materials,  */
+/* its blit quad and its 2D canvas→texture backdrop all at once, and    */
+/* the loss event fires on the SHARED canvas element.                   */
+/*                                                                     */
+/* RECIPE (this is the interface Viewer3D documents in its file header  */
+/* and what integration can rely on):                                   */
+/*  1. attach `webglcontextlost` / `webglcontextrestored` to            */
+/*     `gl.domElement` (never to a private target — targets do not      */
+/*     emit DOM events); `preventDefault()` on loss is mandatory or the */
+/*     browser never restores;                                          */
+/*  2. while lost, skip EVERY pass (rendering into a lost context is a  */
+/*     silent no-op that still costs a full scene-graph walk);          */
+/*  3. on restore, DISPOSE and REBUILD the whole rig — the render       */
+/*     target's stencil buffer, the multisample buffer, the cap/blit/   */
+/*     stencil materials and the CanvasTexture all belong to the dead   */
+/*     context. Bumping `restoreGeneration` does exactly that through   */
+/*     the existing `useMemo`/cleanup pair, which is why no PiP code    */
+/*     had to learn about contexts: it is the same path as a            */
+/*     quality-tier flip.                                               */
+/* ------------------------------------------------------------------ */
+
+/** Live mirror of the shared context state (written by the event handlers). */
+export const pipContextState: { lost: boolean; restores: number } = {
+  lost: false,
+  restores: 0,
+}
+
+/** Subscribers notified when the shared context state changes. */
+const pipContextListeners = new Set<() => void>()
+
+/** Write the shared context state and notify every subscriber (idempotent). */
+function setPipContextLost(lost: boolean, restored = false): void {
+  if (lost) {
+    pipContextState.lost = true
+    sectionPipDiagnostics.contextLost = true
+  } else {
+    pipContextState.lost = false
+    if (restored) {
+      pipContextState.restores += 1
+      sectionPipDiagnostics.rigGeneration = pipContextState.restores
+    }
+    sectionPipDiagnostics.contextLost = false
+  }
+  for (const listener of pipContextListeners) listener()
+}
+
+/** Subscribe to context-state changes (for `useSyncExternalStore`). */
+export function subscribePipContext(listener: () => void): () => void {
+  pipContextListeners.add(listener)
+  return () => {
+    pipContextListeners.delete(listener)
+  }
+}
+
+/** Snapshot of the shared context state (for `useSyncExternalStore`). */
+export function pipContextSnapshot(): boolean {
+  return pipContextState.lost
+}
+
+/** True while the shared WebGL context is lost — read by the frame hook. */
+export function isPipContextLost(): boolean {
+  return pipContextState.lost
 }
 
 /** '?pipdebug' or '?pipdebug=1' enables the overlay; '=0' explicitly disables. Read once. */
@@ -642,12 +822,48 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
   // 0 otherwise; a detected stencil-parity failure pins 0 for the session.
   const [msaaOverride, setMsaaOverride] = useState<number | null>(null)
   const msaaFallbackRef = useRef(false)
+  /**
+   * P0 context loss (see the CONTEXT LOSS block above). `restoreGeneration` is
+   * the rig rebuild trigger — the render target, its stencil buffer and every
+   * material here belong to the context that died, so the only correct restore
+   * is a fresh rig.
+   */
+  const [restoreGeneration, setRestoreGeneration] = useState(0)
+
+  useEffect(() => {
+    // The loss event fires on the SHARED canvas element (the PiP renders
+    // through the same renderer into a private target, so there is no second
+    // context to listen to).
+    const canvas = gl.domElement
+    const onLost = (event: Event) => {
+      // Mandatory: without this the browser never restores the context.
+      event.preventDefault()
+      setPipContextLost(true)
+    }
+    const onRestored = () => {
+      // Rebuild the rig: the old target/materials/CanvasTexture were created
+      // against the dead context and their GPU objects no longer exist.
+      setPipContextLost(false, true)
+      setRestoreGeneration((generation) => generation + 1)
+      // The PiP's own GL state (stencil/clipping materials, blend state) is
+      // re-assigned on the next frame by the useFrame body below.
+      console.info('[SectionPiP] graphics context restored — rebuilding the render rig')
+    }
+    canvas.addEventListener('webglcontextlost', onLost, false)
+    canvas.addEventListener('webglcontextrestored', onRestored, false)
+    return () => {
+      canvas.removeEventListener('webglcontextlost', onLost, false)
+      canvas.removeEventListener('webglcontextrestored', onRestored, false)
+    }
+  }, [gl])
+
   // Rig depends on the tier only through MSAA samples; recreated on flips
-  // (rare) and disposed through the effect cleanup.
+  // (rare), on a context restore (mandatory), and disposed through the effect
+  // cleanup.
   const rig = useMemo(() => {
     const base = quality === 'high' && supportsMsaaTargets(gl) ? 4 : 0
     return createPipRig(msaaOverride ?? base)
-  }, [quality, gl, msaaOverride])
+  }, [quality, gl, msaaOverride, restoreGeneration])
   useEffect(() => () => disposePipRig(rig), [rig])
 
   const scratch = useMemo(
@@ -655,15 +871,25 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
       clearColor: new THREE.Color(),
       viewport: new THREE.Vector4(),
       scissor: new THREE.Vector4(),
+      /** World centre of the visible section rect — camera target + cap base. */
+      viewCentre: new THREE.Vector3(),
     }),
     [],
   )
 
-  // Watchdog scratch: one small RGBA block read back per stencil frame.
+  // Watchdog scratch: one small RGBA block read back on a schedule (see
+  // PARITY_BURST_FRAMES / PARITY_STEADY_INTERVAL — QUALITY_PLAN §3 item 10).
   const watch = useMemo(
     () => ({
       buffer: new Uint8Array(PARITY_SAMPLE_BLOCK * PARITY_SAMPLE_BLOCK * 4),
       zeroFrames: 0,
+      /** Stencil frames until the next scheduled readback (0 = due now). */
+      framesUntilCheck: 0,
+      /** Scheduled readbacks performed since the last plane/rig change — the
+       *  burst is the first PARITY_BURST_FRAMES of them. */
+      burstChecks: 0,
+      /** The (axis, quantized plane, samples) the burst is running for. */
+      planeKey: '',
     }),
     [],
   )
@@ -694,6 +920,12 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
   useFrame((state) => {
     const gl = state.gl
     const scene = state.scene
+    // P0 context loss: with no context every pass below is a silent no-op that
+    // still walks the whole scene graph 3–4 times per frame, so skip the PiP
+    // entirely until `webglcontextrestored` rebuilt the rig. The flag is read
+    // from the module mirror (not React state) because `useFrame` must never
+    // need a re-render to observe it.
+    if (pipContextState.lost) return
     const store = useAtlasStore.getState()
     const diag = sectionPipDiagnostics
     diag.msaaFallback = msaaFallbackRef.current
@@ -730,18 +962,27 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
     OWN_ACTIVE_PLANE.z.constant = store.clip.z
     const activePlane = OWN_ACTIVE_PLANE[axis]
 
+    /* ---- THE shared world→screen mapping (planeGeometry) --------------
+     * ONE transform for both section surfaces (QUALITY_PLAN §2 item 4): the live
+     * canvas and this panel each hand `planeTransform` their own CSS viewport, so
+     * the same photograph at the same plane lands at the same world position and
+     * size in both. The panel's private `VIEW_MARGIN = 1.08` and its "centre = 0"
+     * assumption are gone — those two were exactly the audit's §2.4 drift.
+     * `halfU/halfV` are the ortho half-extents (also what the backdrop sampler
+     * consumes); `viewCentre` is the world centre of the visible rect, i.e. the
+     * camera target AND the base position of the cap quad. */
+    const transform = planeTransform(axis, planeValue, { width, height })
+    const halfU = transform.halfU
+    const halfV = transform.halfV
+    const viewCentre = scratch.viewCentre.set(0, 0, 0)
+    viewCentre[AXIS_COMPONENT[transform.uAxis]] = transform.centerU
+    viewCentre[AXIS_COMPONENT[transform.vAxis]] = transform.centerV
+
     /* ---- orthographic section camera (§2.1 + §2.2) ------------------- */
     const pipCamera = rig.pipCamera
     pipCamera.up.copy(view.up)
-    pipCamera.position.copy(BOUNDS_CENTER).addScaledVector(view.cameraSide, CAMERA_DISTANCE)
-    pipCamera.lookAt(BOUNDS_CENTER)
-    // Aspect-fit the canonical bounds into the panel (same rule as
-    // SectionCanvas.computeTransform): nothing is ever cropped.
-    let halfU = view.halfU * VIEW_MARGIN
-    let halfV = view.halfV * VIEW_MARGIN
-    const aspect = width / height
-    if (halfU / halfV > aspect) halfV = halfU / aspect
-    else halfU = halfV * aspect
+    pipCamera.position.copy(viewCentre).addScaledVector(view.cameraSide, CAMERA_DISTANCE)
+    pipCamera.lookAt(viewCentre)
     pipCamera.left = -halfU
     pipCamera.right = halfU
     pipCamera.top = halfV
@@ -752,7 +993,7 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
     rig.capMaterial.clippingPlanes = OWN_OTHER_PLANES[axis]
     rig.capMaterial.color.copy(firstSectionCapColor() ?? FALLBACK_CAP_COLOR)
     const capMesh = rig.capMesh
-    capMesh.position.copy(BOUNDS_CENTER)
+    capMesh.position.copy(viewCentre)
     if (axis === 'x') capMesh.position.x = planeValue
     else if (axis === 'y') capMesh.position.y = planeValue
     else capMesh.position.z = planeValue
@@ -832,14 +1073,16 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
           value: planeValue,
           width: rtWidth,
           height: rtHeight,
-          // Aspect-fit extents exactly as the ortho camera below — one canvas
-          // texel then maps onto one RT pixel.
+          // The SAME world window the ortho camera was just given (the shared
+          // transform's half-extents, in CSS px — the ratio is identical at RT
+          // resolution), so one canvas texel maps onto one RT pixel.
           halfU,
           halfV,
-          // Mirror for exactly the axes whose blit flips x (see the header):
-          // the image is laid out in SectionCanvas space, the RT/display basis
-          // is mirrored for y/x, so mirroring here cancels the blit mirror and
-          // the backdrop lands under the same anatomy as the 3D cut.
+          // Mirror for exactly the axes whose blit flips x (the shared
+          // `mirrorX(axis)`, see the header): the image is laid out in
+          // SectionCanvas space, the RT/display basis is mirrored for y/x, so
+          // mirroring here cancels the blit mirror and the backdrop lands under
+          // the same anatomy as the 3D cut.
           mirrorX: view.flipX,
           opacity: 1,
         },
@@ -940,54 +1183,83 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
       /* ---- stencil parity watchdog (fix §3) ------------------------ */
       // Multisampled targets are driver-sensitive for the ±1 parity trick.
       // three.js resolves multisample buffers at the end of every render(),
-      // so this readback sees the just-finished cap pass. 30 consecutive
-      // zero-coverage stencil frames ⇒ broken parity ⇒ rebuild the rig at
-      // samples 0 (stencilBuffer stays on). A slider parked outside every
-      // solid can legitimately read 0 — the bounded false-positive cost is
-      // losing MSAA smoothing only.
+      // so a readback sees the just-finished cap pass. PARITY_ZERO_FRAME_LIMIT
+      // consecutive zero-coverage stencil frames ⇒ broken parity ⇒ rebuild the
+      // rig at samples 0 (stencilBuffer stays on). A slider parked outside
+      // every solid can legitimately read 0 — the bounded false-positive cost
+      // is losing MSAA smoothing only.
       //
       // v4: the readback looks at COLOUR, and a real-slice backdrop keeps the
       // centre block non-black even when the cap draws nothing. That would
-      // mask the very failure this watchdog detects, so it only runs on frames
-      // whose RT does NOT hold a backdrop; on backdrop frames it idles
-      // (capCoveragePct = −1) and clears its zero counter instead of counting.
+      // mask the very failure this watchdog detects, so the readback only runs
+      // on frames whose RT does NOT hold a backdrop; on backdrop frames the
+      // watchdog idles (capCoveragePct = −1) and clears its zero counter
+      // instead of counting — and it KEEPS its scheduled check armed, so the
+      // first backdrop-free frame re-measures instead of skipping the window.
+      //
+      // Scheduling (QUALITY_PLAN §3 item 10): PARITY_BURST_FRAMES checks right
+      // after a rig or plane change — one per stencil frame, which is what the
+      // 30-consecutive-zero abort threshold needs — then a spaced check: dense
+      // (PARITY_STEADY_INTERVAL) while the last reading was suspicious because a
+      // zero frame is ambiguous on its own, idle (PARITY_IDLE_INTERVAL) once
+      // coverage is healthy.
+      const parityKey = `${axis}|${(Math.round(planeValue / 0.25) * 0.25).toFixed(2)}|${rt.samples}`
+      if (parityKey !== watch.planeKey) {
+        // A rig rebuild or a plane change: the geometry the cap covers is
+        // different, so the previous zero counter says nothing about it.
+        watch.planeKey = parityKey
+        watch.zeroFrames = 0
+        watch.burstChecks = 0
+        watch.framesUntilCheck = 0
+      }
       if (rt.samples > 0 && !msaaFallbackRef.current && !backdrop.drawn) {
-        const bw = Math.min(PARITY_SAMPLE_BLOCK, rt.width)
-        const bh = Math.min(PARITY_SAMPLE_BLOCK, rt.height)
-        const bx = Math.min(Math.max(0, ((rt.width - bw) / 2) | 0), rt.width - bw)
-        const by = Math.min(Math.max(0, ((rt.height - bh) / 2) | 0), rt.height - bh)
-        let covered = 0
-        if (bw > 0 && bh > 0) {
-          const pixels = watch.buffer
-          gl.readRenderTargetPixels(rt, bx, by, bw, bh, pixels)
-          const count = bw * bh
-          for (let i = 0; i < count; i += 1) {
-            const o = i * 4
-            if (pixels[o] > 2 || pixels[o + 1] > 2 || pixels[o + 2] > 2) covered += 1
-          }
-        }
-        const pct = (covered / (bw * bh)) * 100
-        diag.capCoveragePct = Number.isFinite(pct) ? pct : 0
-        if (covered === 0) {
-          watch.zeroFrames += 1
-          if (watch.zeroFrames >= PARITY_ZERO_FRAME_LIMIT) {
-            msaaFallbackRef.current = true
-            diag.msaaFallback = true
-            console.warn(
-              `[SectionPiP] stencil parity dead under ${rt.samples}×MSAA ` +
-                `(cap coverage 0 across ${PARITY_ZERO_FRAME_LIMIT} stencil frames) — ` +
-                'rebuilding the rig with samples 0, stencilBuffer stays on',
-            )
-            setMsaaOverride(0)
-          }
+        if (watch.framesUntilCheck > 0) {
+          watch.framesUntilCheck -= 1
         } else {
-          watch.zeroFrames = 0
+          const bw = Math.min(PARITY_SAMPLE_BLOCK, rt.width)
+          const bh = Math.min(PARITY_SAMPLE_BLOCK, rt.height)
+          const bx = Math.min(Math.max(0, ((rt.width - bw) / 2) | 0), rt.width - bw)
+          const by = Math.min(Math.max(0, ((rt.height - bh) / 2) | 0), rt.height - bh)
+          let covered = 0
+          if (bw > 0 && bh > 0) {
+            const pixels = watch.buffer
+            gl.readRenderTargetPixels(rt, bx, by, bw, bh, pixels)
+            const count = bw * bh
+            for (let i = 0; i < count; i += 1) {
+              const o = i * 4
+              if (pixels[o] > 2 || pixels[o + 1] > 2 || pixels[o + 2] > 2) covered += 1
+            }
+          }
+          const pct = (covered / (bw * bh)) * 100
+          diag.capCoveragePct = Number.isFinite(pct) ? pct : 0
+          watch.burstChecks += 1
+          const inBurst = watch.burstChecks <= PARITY_BURST_FRAMES
+          if (covered === 0) {
+            watch.zeroFrames += 1
+            // Keep sampling densely inside the burst; once the burst is spent a
+            // zero keeps the watchdog attentive (STEADY) instead of relaxing it.
+            watch.framesUntilCheck = inBurst ? 0 : PARITY_STEADY_INTERVAL
+            if (watch.zeroFrames >= PARITY_ZERO_FRAME_LIMIT) {
+              msaaFallbackRef.current = true
+              diag.msaaFallback = true
+              console.warn(
+                `[SectionPiP] stencil parity dead under ${rt.samples}×MSAA ` +
+                  `(cap coverage 0 across ${PARITY_ZERO_FRAME_LIMIT} stencil frames) — ` +
+                  'rebuilding the rig with samples 0, stencilBuffer stays on',
+              )
+              setMsaaOverride(0)
+            }
+          } else {
+            watch.zeroFrames = 0
+            watch.framesUntilCheck = inBurst ? 0 : PARITY_IDLE_INTERVAL
+          }
+          diag.parityZeroFrames = watch.zeroFrames
         }
-        diag.parityZeroFrames = watch.zeroFrames
       } else {
         // Idle: either the tier has no stencil frames or a real-slice backdrop
         // is in the RT (see above). Never count zeros the backdrop could have
-        // caused.
+        // caused. The scheduled check stays armed (framesUntilCheck = 0 on a
+        // plane change) so it fires on the first frame that can be measured.
         diag.capCoveragePct = -1
         if (backdrop.drawn) {
           watch.zeroFrames = 0
@@ -1150,6 +1422,7 @@ function PipDebugOverlay() {
           `back    ${d.backdropModality}${d.backdropKey === '' ? ` (none${d.backdropReason === '' ? '' : `: ${d.backdropReason}`})` : ''}`,
           `bkey    ${d.backdropKey === '' ? '—' : d.backdropKey}`,
           `bredraw ${d.backdropRedraw ? 'yes' : 'no'} ${d.backdropKb.toFixed(0)}KB`,
+          `ctx     ${d.contextLost ? `LOST (restores ${d.rigGeneration})` : `ok (rig ${d.rigGeneration})`}`,
         ].join('\n')
       }
       raf = requestAnimationFrame(tick)
@@ -1177,6 +1450,40 @@ function PipDebugOverlay() {
  * bottom-left corner of the section window, the same corner the 2D canvas uses
  * for the same purpose.
  */
+/**
+ * Inline state line for a LOST graphics context (P0, QUALITY_PLAN §1 item 1).
+ * The panel is small and sits over the very canvas that lost its context, so
+ * it must state what happened rather than freeze on the last blitted frame —
+ * a frozen picture is indistinguishable from a working-but-static one.
+ *
+ * Fed from the module-level context mirror through useSyncExternalStore, so the
+ * note appears/disappears without a polling loop and without a store edit.
+ */
+function PipContextLostNote() {
+  const lost = useSyncExternalStore(subscribePipContext, pipContextSnapshot, pipContextSnapshot)
+  if (!lost) return null
+  return (
+    <span
+      className="pip-context-lost"
+      role="alert"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 6,
+        textAlign: 'center',
+        background: 'rgba(7, 12, 24, 0.86)',
+        color: '#fecaca',
+        font: '10px/1.4 system-ui, sans-serif',
+      }}
+    >
+      Graphics context lost — restoring…
+    </span>
+  )
+}
+
 function PipAttribution() {
   const ref = useRef<HTMLSpanElement>(null)
   useEffect(() => {
@@ -1333,6 +1640,32 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
           ×
         </button>
       </div>
+      {/* RESPONSIVE TAB (P2 a11y/polish: QUALITY_PLAN §4 item 15, AUDIT §2.20)
+          — the narrow-viewport (<900 px) COLLAPSED state of this panel.
+          `sectionPip.css` hides `.pip-header` there and this 44 px sticky row is
+          all that shows, so the PiP degrades to a labelled tab instead of a
+          fixed panel sitting on top of the model it annotates. The checkbox is
+          visually hidden but focusable, so the row is ONE named control for both
+          pointer and keyboard; `:checked` is the expanded state and the caret
+          flips with it. The buttons above stay in the DOM and are re-shown when
+          expanded — this adds no focus stop and no unnamed node (the label text
+          and the plane readout are the accessible name). Desktop is unaffected:
+          the header stays visible and this row is a second, tab-style
+          readout/expand control beside the `▴/▾` button. */}
+      <label className="pip-toggle" title="Show or hide the live section panel">
+        <input
+          type="checkbox"
+          checked={large}
+          aria-expanded={large}
+          onChange={(event) => setLarge(event.target.checked)}
+        />
+        <span className="pip-toggle-row">
+          <span className="pip-toggle-label">Live section</span>
+          <span className="pip-readout">{`${sectionAxis} = ${formatPlaneValue(planeValue)} au`}</span>
+          <span className="pip-spacer" />
+          <span className="pip-toggle-caret" aria-hidden="true">{large ? '▾' : '▸'}</span>
+        </span>
+      </label>
       <div className="pip-window" ref={windowRef} aria-hidden="true">
         <span className="pip-orient pip-orient-n">{view.labels.top}</span>
         <span className="pip-orient pip-orient-s">{view.labels.bottom}</span>
@@ -1350,6 +1683,7 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
           </span>
         )}
         <PipAttribution />
+        <PipContextLostNote />
         <PipDebugOverlay />
       </div>
     </div>

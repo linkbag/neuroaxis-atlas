@@ -80,6 +80,9 @@ import SectionErrorBoundary from './section/SectionErrorBoundary'
 // v5 (UX_FIXES_PLAN Feature 2): the plane sliders of the live section itself —
 // same store slice (clip{x,y,z} + sectionAxis + snapToPlate) as the 3D dock.
 import SectionSliderBar from './section/SectionSliderBar'
+// The ONE photograph-selection rule + the anchor tolerance (planeGeometry),
+// so the toolbar names exactly the plate the canvas and the PiP paint.
+import { pickImageForPlane } from './section/planeGeometry'
 // Module side effect: registers the 'stain' + 'mri' + 'ct' image layers on the
 // section-canvas registry (plan §4); getLayerLinks feeds the source chips,
 // ctWindowPresets() the CT window options and ctLayerStatus()/mriLayerStatus()
@@ -214,30 +217,6 @@ export function modalityUnavailableReason(
 }
 
 /**
- * The embedded photograph the CANVAS would show at this plane, or undefined:
- * a plate anchored at `planeValue` (the SAME nearest-anchor-within-tolerance
- * rule as the layer, so the toolbar can never name a different plate than the
- * one painted), else the v3 level-mapped micrograph on transverse planes.
- * Credit/link only — no drawing.
- */
-function photoForPlane(axis: SectionAxis, value: number, levelId: string | null): SectionImage | undefined {
-  const candidates = IMAGES_BY_AXIS[axis]
-  let best: SectionImage | undefined
-  let bestDistance = Number.POSITIVE_INFINITY
-  for (const image of candidates) {
-    if (image.planeValue === undefined) continue
-    const distance = Math.abs(image.planeValue - value)
-    if (distance <= MODALITY_TOLERANCE_AU && distance < bestDistance) {
-      best = image
-      bestDistance = distance
-    }
-  }
-  if (best !== undefined) return best
-  if (axis !== 'y' || levelId === null) return undefined
-  return IMAGES_BY_AXIS.y.find((image) => image.levelId === levelId)
-}
-
-/**
  * Verbatim credit of the two continuous grids, assembled exactly the way
  * imageLayers does it (its `CT_CREDIT` / `MRI_CREDIT` are module-private):
  * the CT manifest's own `credit` field first, else its `attribution`, else
@@ -334,8 +313,16 @@ export default function PlatesTab() {
   const stainLevelId = toolbarLevelId(sectionAxis, clip.y)
   const planeValue = clip[sectionAxis]
   const layerLinks = useMemo(() => getLayerLinks(stainLevelId), [stainLevelId])
+  // The photograph the CANVAS would show at this plane: `pickImageForPlane` is
+  // the ONE anchor-within-tolerance rule (with the v3 transverse level
+  // fallback) that the layer registry and the PiP sampler also use, so this
+  // toolbar can never name a different plate than the one that is painted.
+  // Credit/link only — no drawing here.
   const photo = useMemo(
-    () => photoForPlane(sectionAxis, planeValue, stainLevelId),
+    () =>
+      pickImageForPlane<SectionImage>(IMAGES_BY_AXIS[sectionAxis], sectionAxis, planeValue, MODALITY_TOLERANCE_AU, {
+        levelId: sectionAxis === 'y' ? stainLevelId : null,
+      })?.image,
     [sectionAxis, planeValue, stainLevelId],
   )
   /** Every CT window preset name the manifest bakes, in store display order. */
@@ -510,7 +497,16 @@ export default function PlatesTab() {
                 </p>
               </div>
               <div className="plate-stage">
-                <PlateRenderer key={plate.id} plate={plate} />
+                {/* P0 (QUALITY_PLAN §1 item 2): the AUTHOR mode is a major
+                    surface of its own — a throw while rendering a plate used to
+                    blank the whole app, because the only boundary sat around
+                    the live-section canvas in the OTHER mode. `key={plate.id}`
+                    re-mounts the boundary per plate (same contract as the
+                    renderer it wraps), so a failure on one plate does not
+                    persist into the next one. */}
+                <SectionErrorBoundary key={plate.id} name="Plate viewer">
+                  <PlateRenderer plate={plate} />
+                </SectionErrorBoundary>
               </div>
             </>
           ) : (
@@ -714,7 +710,11 @@ export default function PlatesTab() {
             )}
           </div>
           <div className="section-live-stage">
-            <SectionErrorBoundary>
+            {/* Transparent wrapper (P0, QUALITY_PLAN §1 item 2): the boundary
+                does not take a box, so the live canvas is still the flex child
+                `.section-live-stage` sizes; a failure renders the shared
+                "live section failed — Retry" card in its place. */}
+            <SectionErrorBoundary style={{ display: 'contents' }}>
               <SectionCanvas onOpenPlate={() => setMode('author')} />
             </SectionErrorBoundary>
           </div>
