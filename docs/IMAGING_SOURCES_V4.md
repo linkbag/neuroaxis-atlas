@@ -295,7 +295,7 @@ licence and the fetch are re-recorded here because this is the embedded asset:
 | What was embedded | `src/assets/imaging/ct.bin` (244,215 B uint8, 45×81×67, same canonical box/spacing as the MRI grid) + `ct-manifest.json` with `windows:{brain:[−20,100], bone:[200,1600]}`, the registration constants/residuals and `status:"available"` |
 | Adaptations | LPS patient-mm → canonical au by a fixed affine from `ImagePositionPatient` / `ImageOrientationPatient` / `PixelSpacing`; trilinear resample to 1.5 mm grid steps; `storedHU = stored16 · 1 − 1200`; uint8 encoding through the brain window. No crop, no retouch, re-runnable with `node scripts/build-ct-grid.mjs` |
 | NC status | **not NC-licensed** — no non-commercial clause, no fee |
-| Redistribution condition | the NLM terms' *most-current-version* clause is met by the second arm: the committed grid is a **frozen 2026-09-10 snapshot** and the UI/docs state that it is a fixed teaching resample, not a live mirror of NLM's series (recorded in `docs/ATTRIBUTION.md` §"NLM Visible Human Project — Additional Head Images head CT") |
+| Redistribution condition | the NLM terms' *most-current-version* clause is met by the second arm: the committed grid is a **frozen 2026-09-10 snapshot** and the UI/docs state that it is a fixed teaching resample, **not a live NLM mirror** (recorded in `docs/ATTRIBUTION.md` §"NLM Visible Human Project — Additional Head Images head CT") |
 
 `docs/ATTRIBUTION.md` carries the same record with the full attribution
 sentence; `README.md`'s modality table carries the credit line verbatim.
@@ -368,9 +368,10 @@ the same):
 | Existing v3 stain JPEGs (27 files) | 2.77 MiB |
 | MRI grid (`mri-t1.bin`) | 0.23 MiB |
 | **CT grid (`ct.bin`, added by `ct-grid`)** | **0.23 MiB** |
+| **VHP cryosections (22 files, added by v4b)** | **1.18 MiB** (sub-cap 1.75 MB) |
 | Manifests (`mri-manifest.json`, `ct-manifest.json`) | <0.01 MiB |
-| **Total imaging payload** (`src/assets/imaging/`, 58 files) | **6.12 MiB** (plan cap 8 MiB) — re-measured and asserted by `node scripts/verify-imaging-v4.mjs` |
-| Raw evidence kept out of git (`assets-src/imaging2/`) | 151.9 MB total (16.3 MB source imagery + 13.9 MB probe responses + 109.5 MB VHP CT series + code/records) |
+| **Total imaging payload** (`src/assets/imaging/`, 80 files) | **7.30 MiB** (plan cap 8 MiB) — re-measured and asserted by `node scripts/verify-imaging-v4.mjs` (and by `node scripts/verify-imaging-v4b.mjs` after v4b) |
+| Raw evidence kept out of git (`assets-src/imaging2/`, `assets-src/imaging3/`) | 151.9 MB (imaging2) + the v4b acquisition (632 local cryosection plates + analysis artefacts; see `assets-src/imaging3/VHP_INVENTORY.md`) |
 
 ---
 

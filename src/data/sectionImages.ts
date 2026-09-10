@@ -256,6 +256,22 @@ export const VHP_LICENSE =
  */
 export const VHP_FIT_SCALE = 4.0816
 
+/**
+ * The plate-placement mapping the committed set ships with (the documented
+ * fallback of the registration attempt — read `VHP_PLANE_NOTE`):
+ *
+ *   y(index) = VHP_Y_TOP − (index − 1) × VHP_AU_PER_INDEX
+ *
+ * `VHP_AU_PER_INDEX` = the documented 0.147 mm slice spacing ÷ 1.2 mm/au, used
+ * **unscaled** (a free scale would silently contradict the only documented
+ * number in play); `VHP_Y_TOP` is the same donor's head apex **measured** from
+ * the full-field Visible Human head CT through the v4 CT grid's own canonical
+ * registration. Exported so the manifest entries, the per-plate note and the
+ * QA gate all derive from one number instead of three copies of it.
+ */
+export const VHP_Y_TOP = 36.0
+export const VHP_AU_PER_INDEX = 0.1225
+
 /** Per-plate source URL base (VHP_INVENTORY.md §2: `.02` is part of the name,
  *  indices are 4-digit zero-padded 0001..1477, `0000`/`1478` answer HTTP 403). */
 export const VHP_CRYO_BASE =
@@ -289,9 +305,21 @@ export const VHP_CRYO_BASE =
  * the ORDER of the plates and their relative spacing are exact (documented
  * spacing), and the lateral placement is measured per plate (see each `fit.dx`,
  * the plate's own left–right symmetry axis, mean mirror correlation r = 0.51).
+ *
+ * Independently re-measured by `v4c-qa` (`node scripts/verify-imaging-v4b.mjs`
+ * plus the raw-plate probes recorded in assets-src/imaging3/VHP_ANCHORS.md):
+ * the column axis being the medio-lateral one is confirmed at full resolution —
+ * mirror correlation about the vertical axis **r = 0.59** (mean over the 22
+ * committed plates) against 0.12 for a horizontal mirror — and adjacent plates
+ * correlate at **r = 0.9935**, against 0.176 row-flipped and 0.10 at 200 indices
+ * apart, i.e. the series really is one specimen sampled at 0.147 mm and the
+ * plate order is exact. Neither probe decides the SIGN of the row axis: the row
+ * direction and `mirrorX` stay documented-but-not-proven, because no vision
+ * model is reachable from this environment and the same donor's on-disk head CT
+ * is a brain-box resample too small to fix the absolute plane.
  */
 export const VHP_PLANE_NOTE =
-  'REGISTRATION FALLBACK, not a landmark fit — plane uncertainty ±10 au (±12 mm). y = +36.0 − (index − 1) × 0.1225 au: 0.1225 au/index is the documented 0.147 mm slice spacing and +36.0 au is the same donor’s head apex measured from the full-field Visible Human head CT through the v4 CT grid’s own canonical registration; index 1 is the superior-most plate. The programmatic fit was attempted and rejected: it reached r = 0.92 and refuted the competing y₁ ≈ −8 au hypothesis (r = 0.29), but its landmark residuals missed by 20–210 au against a ±5 au tolerance (plan §2.1). Plate order and relative spacing are exact; see assets-src/imaging3/VHP_ANCHORS.md.'
+  'REGISTRATION FALLBACK, not a landmark fit — plane uncertainty ±10 au (±12 mm). y = VHP_Y_TOP − (index − 1) × VHP_AU_PER_INDEX, i.e. +36.0 − (index − 1) × 0.1225 au: 0.1225 au/index is the documented 0.147 mm slice spacing and +36.0 au is the same donor’s head apex measured from the full-field Visible Human head CT through the v4 CT grid’s own canonical registration; index 1 is the superior-most plate. The programmatic fit was attempted and rejected: it reached r = 0.92 and refuted the competing y₁ ≈ −8 au hypothesis (r = 0.29), but its landmark residuals missed by 20–210 au against a ±5 au tolerance (plan §2.1). Plate order and relative spacing are exact; the row direction (anterior up vs down) and the mirror are documented-but-not-proven; see assets-src/imaging3/VHP_ANCHORS.md.'
 
 const UBC_BASE = 'https://www.neuroanatomy.ca/micrographviewer/images/micrographs'
 const UBC_H_BASE = 'https://www.neuroanatomy.ca/horizontalviewer/images/horizontal_slices'

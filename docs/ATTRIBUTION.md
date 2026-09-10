@@ -331,6 +331,25 @@ from the VHP **cryosections**, which stay uncommitted (next section).
   individual from the OpenNeuro MRI subject** — the canonical atlas geometry is
   the only common frame. Full method, search grid, residuals and the
   orientation/mirror evidence: `assets-src/imaging3/VHP_ANCHORS.md`.
+- **QA record (`v4c-qa`, final gate for v4b).** The acknowledgement above, the
+  frozen-2026-09-10-snapshot statement and the fetch date were re-audited in
+  **this file**, `src/data/sectionImages.ts`, `src/assets/imaging/ct-manifest.json`,
+  `README.md` and `docs/IMAGING_SOURCES_V4.md`; the 22 manifest entries were
+  re-derived from the placement formula and the curated record (byte counts, the
+  `SOF` 528 × 764 geometry, per-plate NLM `sourceUrl`, `mirrorX`, `dx`), every
+  anchor's distance to every other transverse anchor re-measured, and the load
+  order re-swept across the whole slider range. The licence-bearing claim that
+  none of these plates comes from a **link-out-only** source (Harvard Whole Brain
+  Atlas, BrainMaps) was re-checked. **Nothing was found to embed from such a
+  source.** The audit is reproducible with one command:
+  `node scripts/verify-imaging-v4b.mjs`; the independent orientation
+  measurements (lateral-axis mirror symmetry |r| = 0.59; adjacent-plate
+  continuity r = 0.9935) and the **stated limits** — the absolute plane and the
+  row direction are *not* verifiable without a visual pass, no vision model is
+  reachable from this environment, and the same donor's head CT is a brain-box
+  resample too small to anchor them — are recorded in `README.md` (*Visible
+  Human cryosections → Honest limits*) and in the gitignored
+  `assets-src/imaging3/VHP_ANCHORS.md`.
 
 ### Sources verified, not embedded (v4)
 
@@ -418,9 +437,9 @@ from — the wiki page was consulted as a naming reference only.
   source was embedded**. Licence evidence, verbatim licence quotes and fetch
   dates for every v4 source are in `docs/IMAGING_SOURCES_V4.md` and
   `assets-src/imaging2/sources.json`; the NLM Visible Human Project CT series
-  was verified embeddable and is shipped as `src/assets/imaging/ct.bin`, while
-  the VHP *cryosection photographs* remain uncommitted pending the plane-mapping
-  pass described above.
+  was verified embeddable and is shipped as `src/assets/imaging/ct.bin`, and the
+  **22 VHP cryosection photographs committed in v4b** (the stanza above) follow
+  the same NLM terms with the same verbatim acknowledgement.
 - Code is released under the MIT License (see [`LICENSE`](../LICENSE)). The
   textbooks cited above remain the property of their publishers; citing them
   does not imply endorsement.
