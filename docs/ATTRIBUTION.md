@@ -134,7 +134,7 @@ verbatim in the UI whenever the corresponding image is displayed.
   (the in-image "10 mm" scale bar is preserved); JPEG quality 80 re-encode at
   native 1050×700 (total 1,084 KB).
 
-### OpenNeuro ds007313 — T1w MRI (linked out; raw volume not redistributed)
+### OpenNeuro ds007313 — T1w MRI (dataset linked out; derived grid embedded)
 
 - **Dataset:** *Brain and spinal cord fMRI and qMRI - Single participant*,
   OpenNeuro [ds007313](https://openneuro.org/datasets/ds007313/versions/1.0.0),
@@ -142,10 +142,15 @@ verbatim in the UI whenever the corresponding image is displayed.
 - **License:** CC0 (verified in the dataset's `dataset_description.json`,
   snapshot 1.0.0). No attribution required; recorded for provenance.
 - The raw `.nii.gz` is downloaded by the build pipeline into the gitignored
-  `assets-src/imaging/mri/`; the only derived, committed artifact will be the
-  resampled uint8 grid (`src/assets/imaging/mri-t1.bin`) produced by the
-  `mri-grid` task from a CC0 input (CC0 permits derivative redistribution;
-  provenance is still documented).
+  `assets-src/imaging/mri/`; the committed artifacts are the resampled uint8
+  grid (`src/assets/imaging/mri-t1.bin`) and its manifest
+  (`mri-manifest.json`), produced by the `mri-grid` task from a CC0 input (CC0
+  permits derivative redistribution; provenance is still documented). The raw
+  volume is not redistributed.
+- **Credit line shown in-UI** (built from the manifest's own `source`/`license`
+  fields and rendered wherever the MRI draws — section-canvas bottom-left,
+  Plates toolbar, PiP attribution), quoted verbatim as it appears:
+  > ds007313 doi:10.18112/openneuro.ds007313.v1.0.0, OpenNeuro CC0
 
 ### Link-out-only sources (nothing embedded)
 
@@ -261,6 +266,19 @@ from the VHP **cryosections**, which stay uncommitted (next section).
   `node scripts/build-ct-grid.mjs` (`--tune` re-runs the registration search).
   No image is cropped, retouched, or composited; QA preview renders stay in the
   gitignored `assets-src/imaging2/preview-ct/`.
+- **Redistribution condition (quoted verbatim from the NLM terms, added in the
+  `review-qa-v4` audit):** *"Users who republish or redistribute the data
+  (services, products or raw data) agree to: maintain the most current version
+  of all distributed data, **or** make known in a clear and conspicuous manner
+  that the products/services/applications do not reflect the most
+  current/accurate data available from NLM."* This project takes the **second**
+  arm: the committed grid is a **frozen 2026-09-10 snapshot** of the series (a
+  fixed teaching resample on our 1.5 mm canonical grid), it is never re-synced
+  at runtime, and it is published as a didactic atlas — i.e. it does not track
+  NLM's current data. The acknowledgement above is rendered **verbatim in-UI**
+  wherever CT draws (the section canvas' bottom-left credit, the Plates toolbar
+  credit line, and the PiP panel's attribution) and recorded in
+  `ct-manifest.json` (`credit`, `attribution`, `fetchDate`).
 
 ### Visible Human Project (NLM) — cryosection photographs: licence cleared, not committed
 

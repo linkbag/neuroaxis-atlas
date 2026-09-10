@@ -259,11 +259,13 @@ const bmmNotes: Record<number, string> = {
  * The site's own viewer metadata (`/horizontalviewer/util/slicesInfo.js`) names
  * one landmark per slice — those labels are the sole positional evidence, so
  * `planeValue` is an ESTIMATE built from two anchors inside our canonical
- * y range and a constant 6 au step (docs/IMAGING_SOURCES_V4.md §5):
- *   h16 "Basilar Pons"     → y = −14 (between lvl-pons-caudal −18 and
- *                                   lvl-pontomedullary −24, on the basilar pons)
+ * y range and a 6 au step (docs/IMAGING_SOURCES_V4.md §5):
+ *   h16 "Basilar Pons"     → y = −14 (the lower pontine body: between
+ *                                   lvl-pons-middle −8 and lvl-pons-caudal −18)
  *   h17 "Dentate Nucleus"  → y = −26 (cerebellar dentate, just caudal to the pons)
- * Everything is clamped to the canonical box y ∈ [−55, 45].
+ * The step is 6 au from h12 through h20 with ONE 12 au gap between h16 and h17
+ * (the dentate label jumps straight from the pons to the deep cerebellum); the
+ * values are inside the canonical box y ∈ [−55, 45] by construction.
  */
 const ubcHPlane: Record<number, number> = {
   12: 10,
@@ -325,10 +327,18 @@ const ubcHFiles: Record<number, string> = {
  * and c20–c22 "Cerebellar Tonsil". `planeValue` interpolates between the pons
  * centre (c16 → z = −14, matching the atlas pons) and the foramen-magnum
  * tonsillar level (c21 → z = −46, next to lvl-spinal-medulla) with a constant
- * 5 au step, clamped to the canonical box z ∈ [−56, 26].
+ * 5 au step through c13–c18; outside that brainstem run the step widens to
+ * 7–10 au (c18→c19 −8, c19→c20 −7, c20→c21 −7, c21..c24 −3/−2/−3, c13→c11
+ * −10). Every value is clamped into the canonical box z ∈ [−56, 26]:
+ *   • c07 was 31 in the first pass — OUTSIDE the reachable coronal slider
+ *     range [−56, 26] (CLIP_BOUNDS.z), so the plate could never be displayed
+ *     (found by `scripts/verify-imaging-v4.mjs`, review-qa-v4). It is clamped
+ *     to the anterior limit 26, which keeps the rostro-caudal ordering
+ *     (c07 remains the most anterior plate, 5 au rostral to c09) and makes the
+ *     plate reachable. c07's absolute plane is an estimate as before.
  */
 const ubcCPlane: Record<number, number> = {
-  7: 31,
+  7: 26,
   9: 21,
   11: 11,
   13: 1,
@@ -443,8 +453,8 @@ export const sectionImages: SectionImage[] = [
   // ---- v4: UBC horizontal (transverse) section photographs ----------------
   ...[12, 13, 14, 15, 16, 17, 18, 19, 20].map((n) => {
     const lvlByY: Record<number, string> = {
-      10: 'lvl-pons-rostral',
-      4: 'lvl-midbrain-ic',
+      10: 'lvl-midbrain-ic',
+      4: 'lvl-pons-rostral',
       '-2': 'lvl-pons-rostral',
       '-8': 'lvl-pons-middle',
       '-14': 'lvl-pons-caudal',

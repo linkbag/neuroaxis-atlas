@@ -200,11 +200,26 @@ interface SectionViewSpec {
    * §2.2 (see the header note + the projection probe): needed for transverse
    * (radiological: patient-left on image-right) and sagittal (anterior right);
    * coronal already comes out patient-left-right. The badge table below is the
-   * §2.2 table AFTER that mirror — i.e. the letters a viewer actually sees on
-   * each edge. Before the v4 backdrop work these two axes were labelled with
-   * the pre-mirror letters (y showed 'A' top / 'L' right, x showed 'A' right),
-   * which contradicted the geometry; the geometry is authoritative and
-   * unchanged, so the badges were corrected to match it.
+   * §2.2 table for the orientation this component ACTUALLY renders, and it is
+   * identical to SectionCanvas' DIRECTION_BADGES for the same axis (the two
+   * section surfaces must never label the same plane differently):
+   *
+   *   y (transverse) — camera up = +z and the blit mirrors x, so the displayed
+   *                    image has anterior at the top and patient-left (+x) on
+   *                    the RIGHT  → top 'A', bottom 'P', left 'R', right 'L'.
+   *   x (sagittal)   — camera up = +y, blit mirrors x → superior top, anterior
+   *                    right       → top 'S', bottom 'I', left 'P', right 'A'.
+   *   z (coronal)    — camera up = +y, no blit mirror → superior top,
+   *                    patient-left on the right → top 'S', bottom 'I',
+   *                    left 'R', right 'L'.
+   *
+   * REVIEW NOTE (review-qa-v4): the v4 real-imagery commit flipped ONLY the
+   * transverse entry to 'P'/'A' and 'L'/'R' while leaving `cameraSide`, `up`,
+   * `flipX` and the blit untouched — the geometry cannot have changed, so those
+   * letters contradicted the image on screen (posterior is never up) and
+   * contradicted both §2.2 of docs/SECTION_SYNC_PLAN.md and SectionCanvas'
+   * table. Restored; scripts/verify-imaging-v4.mjs asserts this table against
+   * §2.2 and against SectionCanvas.
    */
   flipX: boolean
   /** Edge badges — §2.2 orientation, as displayed. */
@@ -219,7 +234,7 @@ const SECTION_VIEWS: Record<SectionAxis, SectionViewSpec> = {
     halfU: (CLIP_BOUNDS.x.max - CLIP_BOUNDS.x.min) / 2,
     halfV: (CLIP_BOUNDS.z.max - CLIP_BOUNDS.z.min) / 2,
     flipX: true,
-    labels: { top: 'P', bottom: 'A', left: 'L', right: 'R' },
+    labels: { top: 'A', bottom: 'P', left: 'R', right: 'L' },
     caption: 'Transverse',
   },
   x: {
