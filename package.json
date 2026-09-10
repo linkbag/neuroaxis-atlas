@@ -8,7 +8,10 @@
     "dev": "vite --port 5173",
     "build": "vite build",
     "check": "tsc --noEmit",
-    "validate": "node scripts/validate-data.mjs"
+    "validate": "node scripts/validate-data.mjs",
+    "verify:pipeline": "node scripts/verify/section-pipeline.mjs",
+    "verify:browser": "node scripts/verify/browser-probe.mjs",
+    "verify:acceptance": "node scripts/verify/browser-acceptance.mjs"
   },
   "dependencies": {
     "@react-three/drei": "9.114.3",
