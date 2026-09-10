@@ -91,18 +91,36 @@ function metaFor(part: AnatomyPart): SectionPartMeta {
 export const SECTION_PARTS: readonly SectionPartMeta[] = getManifest().parts.map(metaFor)
 
 /** Copy positions + indices out of a parsed geometry as worker-owned
- *  transferables (detach-safe for the 3D scene's shared geometry). */
+ *  transferables (detach-safe for the 3D scene's shared geometry).
+ *
+ *  The copies go into FRESH ArrayBuffers rather than `.slice()`: an attribute's
+ *  `.array` is not guaranteed to be a plain Float32Array (a loader may hand
+ *  back Float64Array/Uint16Array-backed, interleaved or shared views), and
+ *  `worker.postMessage(msg, transfer)` throws DataCloneError for any transfer
+ *  entry that is not a transferable ArrayBufferView. */
 export function registryPartFromGeometry(
   meta: SectionPartMeta,
   geometry: import('three').BufferGeometry,
 ): WorkerRegistryPart | null {
   const position = geometry.getAttribute('position')
   if (!position || position.count === 0) return null
-  const positions = (position.array as Float32Array).slice()
+  const positions = new Float32Array(position.count * 3)
+  const source = position.array as Float32Array | Float64Array | number[] | undefined
+  if (source !== undefined && source.length >= positions.length) {
+    positions.set(source.length === positions.length ? source : source.slice(0, positions.length))
+  } else {
+    // Unpacked / custom layout: read through the attribute accessors instead.
+    for (let i = 0; i < position.count; i++) {
+      positions[i * 3] = position.getX(i)
+      positions[i * 3 + 1] = position.getY(i)
+      positions[i * 3 + 2] = position.getZ(i)
+    }
+  }
   const sourceIndex = geometry.getIndex()
   let indices: Uint32Array
-  if (sourceIndex !== null) {
-    indices = new Uint32Array(sourceIndex.array as ArrayLike<number>)
+  if (sourceIndex !== null && sourceIndex.count > 0) {
+    indices = new Uint32Array(sourceIndex.count)
+    indices.set(sourceIndex.array as ArrayLike<number>)
   } else {
     indices = new Uint32Array(position.count)
     for (let i = 0; i < position.count; i++) indices[i] = i

@@ -76,6 +76,7 @@ import mriManifestJson from '../assets/imaging/mri-manifest.json'
 import ctManifestJson from '../assets/imaging/ct-manifest.json'
 import PlateRenderer from './PlateRenderer'
 import SectionCanvas from './section/SectionCanvas'
+import SectionErrorBoundary from './section/SectionErrorBoundary'
 // Module side effect: registers the 'stain' + 'mri' + 'ct' image layers on the
 // section-canvas registry (plan §4); getLayerLinks feeds the source chips,
 // ctWindowPresets() the CT window options and ctLayerStatus()/mriLayerStatus()
@@ -701,7 +702,9 @@ export default function PlatesTab() {
             )}
           </div>
           <div className="section-live-stage">
-            <SectionCanvas onOpenPlate={() => setMode('author')} />
+            <SectionErrorBoundary>
+              <SectionCanvas onOpenPlate={() => setMode('author')} />
+            </SectionErrorBoundary>
           </div>
         </>
       )}

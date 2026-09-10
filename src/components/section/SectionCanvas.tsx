@@ -529,6 +529,18 @@ function clampToBounds(axis: PlaneAxis, value: number): number {
   return Math.min(range.max, Math.max(range.min, value))
 }
 
+/** One-line description of a value offered as a transferable (diagnostics). */
+function describeTransferEntry(value: unknown): string {
+  if (value === undefined) return 'undefined'
+  if (value === null) return 'null'
+  if (ArrayBuffer.isView(value)) {
+    const view = value as ArrayBufferView
+    return `${view.constructor.name}(len=${(view as { length?: number }).length ?? '?'}, bytes=${view.byteLength}${view.byteLength === 0 ? ' DETACHED?' : ''})`
+  }
+  if (value instanceof ArrayBuffer) return `ArrayBuffer(bytes=${value.byteLength})`
+  return `${typeof value}:${(value as { constructor?: { name?: string } }).constructor?.name ?? '?'}`
+}
+
 export interface SectionCanvasProps {
   /**
    * Called after the plate chip snaps the plane and selects the authored
@@ -700,9 +712,14 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   /* --------------------------------------------------------- draw loop */
 
   function scheduleDraw(): void {
-    if (drawNeededRef.current) return
+    // Skip only when a frame is genuinely outstanding. A bare boolean latch is
+    // not enough: cancelling the frame (StrictMode's mount→cleanup→mount, or an
+    // unmount while a frame is pending) would leave the flag stuck true and kill
+    // the draw loop for the component's whole lifetime.
+    if (rafRef.current !== 0) return
     drawNeededRef.current = true
     rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0
       drawNeededRef.current = false
       try {
         draw()
@@ -1126,7 +1143,28 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       transfer.push(part.positions, part.indices)
     }
     const message: SectionWorkerRequest = { t: 'init', parts: registryParts }
-    worker.postMessage(message, transfer)
+    try {
+      worker.postMessage(message, transfer)
+    } catch (error) {
+      // A single non-transferable entry aborts the whole call (DataCloneError).
+      // The arrays stay intact on failure, so retry as a structured clone —
+      // slower (a copy) but it always works, and the section still renders.
+      console.warn(
+        '[section] geometry transfer rejected — falling back to a structured clone :: ' +
+          `entries=${transfer.length} first=${describeTransferEntry(transfer[0])} ` +
+          `second=${describeTransferEntry(transfer[1])} ` +
+          `allViews=${String(transfer.every((entry) => ArrayBuffer.isView(entry)))} :: ` +
+          `${error instanceof Error ? error.message : String(error)}`,
+      )
+      try {
+        worker.postMessage(message)
+      } catch (cloneError) {
+        setWorkerError(
+          cloneError instanceof Error ? cloneError.message : String(cloneError),
+        )
+        return
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geometryStatus.readyCount, geometryStatus.total, workerError])
 
@@ -1229,7 +1267,13 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
 
   useEffect(() => {
     return () => {
-      if (rafRef.current !== 0) cancelAnimationFrame(rafRef.current)
+      if (rafRef.current !== 0) {
+        cancelAnimationFrame(rafRef.current)
+        // Clear BOTH signals: leaving the boolean latched would make every later
+        // scheduleDraw() a no-op (StrictMode remounts this component in dev).
+        rafRef.current = 0
+        drawNeededRef.current = false
+      }
       if (postTimerRef.current !== 0) window.clearTimeout(postTimerRef.current)
     }
   }, [])
