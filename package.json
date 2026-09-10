@@ -11,7 +11,8 @@
     "validate": "node scripts/validate-data.mjs",
     "verify:pipeline": "node scripts/verify/section-pipeline.mjs",
     "verify:browser": "node scripts/verify/browser-probe.mjs",
-    "verify:acceptance": "node scripts/verify/browser-acceptance.mjs"
+    "verify:acceptance": "node scripts/verify/browser-acceptance.mjs",
+    "verify:audit": "node scripts/verify/audit.mjs"
   },
   "dependencies": {
     "@react-three/drei": "9.114.3",

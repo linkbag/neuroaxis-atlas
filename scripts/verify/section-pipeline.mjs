@@ -7,12 +7,13 @@
  *   contourWorker init                      → partBounds + slice
  *   contourWorker plane                     → extractContours per part
  *
- * Run: node .plate-scratch/section-harness.mjs
+ * Run: npm run verify:pipeline   (must be run from the repo root — the paths
+ * below are repo-relative and this file lives in scripts/verify/)
  */
 import { readFileSync } from 'node:fs'
-import { basename, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { boundsMayCut, extractContours, partBounds } from '../src/components/section/contours.ts'
+import { boundsMayCut, extractContours, partBounds } from '../../src/components/section/contours.ts'
 
 const MANIFEST = resolve('src/assets/anatomy/anatomy-manifest.json')
 const DIR = resolve('src/assets/anatomy')
@@ -96,6 +97,9 @@ const planes = [
   { axis: 'z', value: 0 },
 ]
 
+let sweepErrors = 0
+let sweepLoops = 0
+
 for (const plane of planes) {
   const t0 = performance.now()
   let tris = 0
@@ -128,6 +132,8 @@ for (const plane of planes) {
   }
   const ms = performance.now() - t0
   const heap = (process.memoryUsage().heapUsed / 1048576).toFixed(0)
+  sweepErrors += errors.length
+  sweepLoops += loops
   console.log(
     `plane ${plane.axis}=${String(plane.value).padStart(4)}  tris ${String(tris).padStart(6)}  ` +
       `seg ${String(segments).padStart(6)}  loops ${String(loops).padStart(5)}  parts ${partsWithLoops}/${parts.length}  ` +
@@ -135,3 +141,24 @@ for (const plane of planes) {
   )
   for (const e of errors.slice(0, 5)) console.log(`    ! ${e}`)
 }
+
+/* ------------------------------------------------------------------- gate */
+const expectedParts = manifest.parts.length
+const problems = []
+if (parts.length !== expectedParts) {
+  problems.push(`registry built ${parts.length}/${expectedParts} manifest parts`)
+}
+if (failures.length > 0) problems.push(`${failures.length} GLB parse/validation failure(s)`)
+if (sweepErrors > 0) problems.push(`${sweepErrors} contour error(s) during the plane sweep`)
+if (sweepLoops === 0) problems.push('no contours produced at any tested plane')
+
+console.log(
+  `\npipeline: ${parts.length}/${expectedParts} parts · ${totalTris.toFixed(0)} triangles · ` +
+    `${sweepLoops} loops across ${planes.length} planes · ${problems.length} problem(s)`,
+)
+if (problems.length > 0) {
+  for (const p of problems) console.log(`  FAIL ${p}`)
+  process.exit(1)
+}
+console.log('  PASS section pipeline')
+process.exit(0)

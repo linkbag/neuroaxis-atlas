@@ -340,9 +340,20 @@ if (failedRequests.length === 0) console.log('(none)')
 for (const f of failedRequests.slice(0, 15)) console.log('-', f)
 
 console.log('\n=== HTTP >=400 ===')
-if (responses404.length === 0) console.log('(none)')
-for (const f of responses404.slice(0, 15)) console.log('-', f)
+const realBadResponses = responses404.filter((f) => !/favicon/.test(f))
+if (realBadResponses.length === 0) console.log('(none)')
+for (const f of realBadResponses.slice(0, 15)) console.log('-', f)
 
+/* This probe is primarily a diagnostic dumper, but it must still be able to
+ * FAIL: an uncaught page exception means the app is broken, so exited non-zero
+ * (a probe that can never fail is not a gate). */
 ws.close()
 chrome.kill()
+const fatal = exceptions.length + realBadResponses.length
+console.log(
+  fatal === 0
+    ? '\nprobe: no page exceptions, no bad responses — PASS'
+    : `\nprobe: ${exceptions.length} page exception(s), ${realBadResponses.length} bad response(s) — FAIL`,
+)
+process.exit(fatal === 0 ? 0 : 1)
 process.exit(0)
