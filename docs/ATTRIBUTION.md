@@ -280,11 +280,14 @@ from the VHP **cryosections**, which stay uncommitted (next section).
   credit line, and the PiP panel's attribution) and recorded in
   `ct-manifest.json` (`credit`, `attribution`, `fetchDate`).
 
-### Visible Human Project (NLM) — cryosection photographs: licence cleared, not committed
+### Visible Human Project (NLM) — cryosection photographs: **COMMITTED** (v4b)
 
 - **Source:** NLM Visible Human Project, *Additional Head Images* cryosections
   (Brigham and Women's Hospital / Harvard Medical School; P. Ratiu et al.),
   <https://data.lhncbc.nlm.nih.gov/public/Visible-Human/Additional-Head-Images/>.
+  Per-plate URL pattern (verified at source, not inferred):
+  `…/cryo/jpeg/halfSize/axial/NNNN.02.jpg.gz`, `NNNN` = 4-digit zero-padded
+  0001…1477 (`.02` is part of the filename; `0000`/`1478` answer HTTP 403).
 - **License:** **NLM Terms and Conditions (2019)** —
   <https://www.nlm.nih.gov/databases/download/terms_and_conditions.html>. The
   pre-2019 licence agreement was **replaced** in July 2019; the current terms
@@ -292,13 +295,42 @@ from the VHP **cryosections**, which stay uncommitted (next section).
   (NLM describes the VHP as a public-domain image library).
 - **Required acknowledgement, verbatim:**
   > Courtesy of the U.S. National Library of Medicine
-- **Status in v4:** the licence is cleared and 125 half-size cryosections were
-  downloaded to the gitignored `assets-src/imaging2/vhp-cryo/`, but **no
-  cryosection photograph is committed or displayed**: mapping slice indices to
-  atlas levels needs a visual pass that this run could not perform, so the
-  plates are held back rather than shipped mis-anchored. If a later run commits
-  them, the credit line above must be rendered verbatim. (The **CT** series from
-  the same VHP product *is* committed as the CT grid — see the section above.)
+- **Committed in v4b: 22 plates**, `src/assets/imaging/stains/vhp-0017.jpg` …
+  `vhp-0721.jpg`, **1,204,904 bytes (1.18 MiB)** in total, re-encoded JPEG q80 at
+  the native 528 × 764 px — **content verbatim: no crop, no rotation, no
+  annotation, no resize, full colour**. They are curated across canonical
+  y ∈ [−52.2, +34.0] au with extra density through medulla / pons / midbrain and
+  are anchored per plane in `src/data/sectionImages.ts`.
+- **Fetch date: 2026-09-10** (the same acquisition as the CT series above; the
+  raw `.jpg.gz` originals and every measurement derived from them live in the
+  gitignored `assets-src/imaging3/`, with the licence verdict re-verified at
+  source on that date — `VHP_INVENTORY.md` §1 records the raw response bodies).
+- **Redistribution condition (the same "current version" clause as the CT grid,
+  quoted verbatim from the NLM terms in the CT stanza above):** this project
+  takes the **second** arm — the committed plates are a **frozen 2026-09-10
+  snapshot** (not a live NLM mirror), never re-synced at runtime, published as a
+  didactic atlas, i.e. they do not track NLM's current data. The acknowledgement
+  above is carried **verbatim in-UI** on every cryosection: `VHP_CREDIT` supplies
+  the layer credit that the section canvas and the PiP panel render bottom-left
+  next to the plate's own source link, and the Plates toolbar lists the same
+  line.
+- **Registration honesty (what the `planeValue`s are and are not).** The
+  ranking of plates was *fitted*: the cryosection tissue/structure profile was
+  correlated against the **same donor's** full-field head CT (the raw DICOM
+  series, mapped into canonical au through the CT bake's own registration). That
+  fit reached **r = 0.92** and rejected the competing `y₁ ≈ −8` hypothesis
+  (r = 0.29), but its **landmark residuals missed by 20–210 au against the ±5 au
+  acceptance tolerance**, so per the plan it is **rejected** and the plates are
+  placed on the documented fallback: `y = +36.0 − (index − 1) × 0.1225 au`, with
+  the documented 0.147 mm slice spacing, index 1 the superior-most plate, and
+  **+36.0 au = the same donor's head apex measured from the CT** (not an
+  assumption). **Every plate therefore carries ±10 au (≈ ±12 mm) of absolute
+  plane uncertainty, disclosed per plate in `planeValueNote`; the plate order
+  and their relative spacing are exact.** The plates are per-plane anchors, not a
+  continuous photographic volume, and the cryosections are a **different
+  individual from the OpenNeuro MRI subject** — the canonical atlas geometry is
+  the only common frame. Full method, search grid, residuals and the
+  orientation/mirror evidence: `assets-src/imaging3/VHP_ANCHORS.md`.
 
 ### Sources verified, not embedded (v4)
 

@@ -9,6 +9,15 @@
  *  • v4 — 9 UBC horizontal (transverse) section photographs (`ubc-h*`) and 15
  *    UBC coronal section photographs (`ubc-c*`) from the same CC BY-NC-SA 4.0
  *    site, plus CC0 CT slices from Wikimedia Commons (`wikict-*`).
+ *  • v4b — 22 NLM **Visible Human Project** axial cryosection photographs
+ *    (`vhp-NNNN`, full-colour cadaver sections of the head, 0.294 mm/px,
+ *    0.147 mm slice spacing) spanning canonical y −52.2 … +34.0 au with extra
+ *    density through medulla/pons/midbrain. Licence: NLM Terms and Conditions
+ *    (2019), redistribution permitted with the verbatim acknowledgement in
+ *    `VHP_CREDIT`; the committed set is a **frozen 2026-09-10 snapshot, not a
+ *    live NLM mirror** (docs/ATTRIBUTION.md). Their `planeValue` comes from the
+ *    documented fallback of the registration attempt — read `VHP_PLANE_NOTE`.
+ *    Registration record: assets-src/imaging3/VHP_ANCHORS.md (working artefact).
  *
  * Each `file` is a Vite-resolved asset URL (static import) — consumers can use
  * it directly as an <img src> or Image resource.
@@ -114,7 +123,34 @@ import ctAxial10 from '../assets/imaging/stains/wikict-axial-10.png'
 import ctAxial14 from '../assets/imaging/stains/wikict-axial-14.png'
 import ctAxial18 from '../assets/imaging/stains/wikict-axial-18.png'
 
-export type ImageSource = 'ubc' | 'brainmuseum' | 'commons-ct'
+// ---- v4b: NLM Visible Human Project axial cryosection photographs -----------
+// 22 plates spanning canonical y -52.2 .. +34.0, curated for medulla / pons /
+// midbrain density. See VHP_PLANE_NOTE below for the registration provenance and
+// assets-src/imaging3/VHP_ANCHORS.md (working artefact) for the fit record.
+import vhp0017 from '../assets/imaging/stains/vhp-0017.jpg'
+import vhp0046 from '../assets/imaging/stains/vhp-0046.jpg'
+import vhp0074 from '../assets/imaging/stains/vhp-0074.jpg'
+import vhp0103 from '../assets/imaging/stains/vhp-0103.jpg'
+import vhp0132 from '../assets/imaging/stains/vhp-0132.jpg'
+import vhp0160 from '../assets/imaging/stains/vhp-0160.jpg'
+import vhp0189 from '../assets/imaging/stains/vhp-0189.jpg'
+import vhp0230 from '../assets/imaging/stains/vhp-0230.jpg'
+import vhp0246 from '../assets/imaging/stains/vhp-0246.jpg'
+import vhp0295 from '../assets/imaging/stains/vhp-0295.jpg'
+import vhp0328 from '../assets/imaging/stains/vhp-0328.jpg'
+import vhp0385 from '../assets/imaging/stains/vhp-0385.jpg'
+import vhp0430 from '../assets/imaging/stains/vhp-0430.jpg'
+import vhp0450 from '../assets/imaging/stains/vhp-0450.jpg'
+import vhp0470 from '../assets/imaging/stains/vhp-0470.jpg'
+import vhp0491 from '../assets/imaging/stains/vhp-0491.jpg'
+import vhp0532 from '../assets/imaging/stains/vhp-0532.jpg'
+import vhp0581 from '../assets/imaging/stains/vhp-0581.jpg'
+import vhp0631 from '../assets/imaging/stains/vhp-0631.jpg'
+import vhp0681 from '../assets/imaging/stains/vhp-0681.jpg'
+import vhp0701 from '../assets/imaging/stains/vhp-0701.jpg'
+import vhp0721 from '../assets/imaging/stains/vhp-0721.jpg'
+
+export type ImageSource = 'ubc' | 'brainmuseum' | 'commons-ct' | 'vhp-nlm'
 export type SectionAxis = 'transverse' | 'coronal' | 'sagittal'
 
 /** First-pass image→canonical affine (see the header: documented defaults). */
@@ -179,6 +215,83 @@ export const COMMONS_CT_CREDIT =
 
 export const COMMONS_CT_LICENSE = 'CC0 1.0'
 export const COMMONS_CT_LICENSE_URL = 'https://creativecommons.org/publicdomain/zero/1.0/'
+
+/* ------------------------------------------- v4b: NLM Visible Human (VHP) */
+
+/**
+ * EXACT acknowledgement the NLM Terms and Conditions require (verified verbatim
+ * at source on 2026-09-10 by the `vhp-acquire` task; see
+ * assets-src/imaging3/VHP_INVENTORY.md §1.1 and docs/ATTRIBUTION.md):
+ *
+ *   "Users of the data agree to: […] acknowledge NLM as the source of the data
+ *    by including the phrase "Courtesy of the U.S. National Library of Medicine"
+ *    in a clear and conspicuous manner, […] not indicate or imply that NLM has
+ *    endorsed its products/services/applications."
+ *
+ * Character for character — no trailing period, no paraphrase, never reworded.
+ */
+export const VHP_CREDIT = 'Courtesy of the U.S. National Library of Medicine'
+
+/** NLM Terms and Conditions (2019) — the licence deed for the VHP data. */
+export const VHP_TERMS_URL = 'https://www.nlm.nih.gov/databases/download/terms_and_conditions.html'
+
+/**
+ * Licence + the "most current version OR say so" obligation, met by the second
+ * arm exactly as the CT grid's stanza already does (docs/ATTRIBUTION.md): a
+ * committed plate set is a FROZEN 2026-09-10 snapshot, not a live NLM mirror.
+ */
+export const VHP_LICENSE =
+  'NLM Terms and Conditions (2019) — redistribution permitted with acknowledgement; frozen 2026-09-10 snapshot, not a live NLM mirror'
+
+/**
+ * `fit.scale` is PIXELS PER CANONICAL AU, matching `SectionImageFit` and
+ * `imageLayers.drawStainToView` (`wAu = naturalWidth / fit.scale`).
+ *
+ *   scale = 528 px · 1.2 mm/au ÷ 155.232 mm field of view = 4.0816 px/au
+ *
+ * The plate is 0.294 mm/px = 0.245 **au per px** (VHP_INVENTORY.md §3.1 — the
+ * corrected figure; 0.147 mm/px would be a 2× error). 4.0816 is its reciprocal
+ * in the right units; writing 0.245 here would render the plate 16.7× too large.
+ * World size follows: 528/4.0816 = 129.4 au × 764/4.0816 = 187.2 au.
+ */
+export const VHP_FIT_SCALE = 4.0816
+
+/** Per-plate source URL base (VHP_INVENTORY.md §2: `.02` is part of the name,
+ *  indices are 4-digit zero-padded 0001..1477, `0000`/`1478` answer HTTP 403). */
+export const VHP_CRYO_BASE =
+  'https://data.lhncbc.nlm.nih.gov/public/Visible-Human/Additional-Head-Images/cryo/jpeg/halfSize/axial'
+
+/**
+ * How each cryosection's `planeValue` was obtained, and how far to trust it.
+ * This is the honest disclosure the manifest carries into the UI: the
+ * programmatic registration was ATTEMPTED and its accept rule was NOT met, so
+ * the plates are placed on the documented fallback, with the residual
+ * uncertainty in au stated rather than implied away.
+ *
+ * Evidence (full record: assets-src/imaging3/VHP_ANCHORS.md):
+ *  - the spatial step 0.1225 au/index is the DOCUMENTED 0.147 mm slice spacing
+ *    ÷ 1.2 mm/au, so it is used unscaled;
+ *  - index 1 is the superior-most plate (VHP_INVENTORY.md §4.1) and the series
+ *    runs 1477 × 0.147 mm = 217.1 mm inferiorly;
+ *  - the anchor y(1) = +36.0 au is MEASURED, not assumed: the same donor's
+ *    full-field head CT DICOM series, mapped into canonical au by the v4 CT
+ *    bake's own published registration (scripts/build-ct-grid.mjs), carries its
+ *    topmost head cross-section at y = +33.3 … +35.8 au, tapering smoothly to
+ *    zero (analysis/ct-full-profile.json).
+ *  - the profile fit against that reference reached r = 0.92 (forward direction)
+ *    and rejected the competing calibration hypothesis (r = 0.29) by a wide
+ *    margin, but its LANDMARK residuals missed by 20–210 au against a ±5 au
+ *    tolerance, so per PLAN.md §2.1 step 2 the fit is REJECTED and the fallback
+ *    is used. The plate-to-atlas correspondence is therefore a documented
+ *    placement, not a landmark-verified registration.
+ *
+ * Residual uncertainty: ±10 au (≈ ±12 mm) in the absolute plane of every plate;
+ * the ORDER of the plates and their relative spacing are exact (documented
+ * spacing), and the lateral placement is measured per plate (see each `fit.dx`,
+ * the plate's own left–right symmetry axis, mean mirror correlation r = 0.51).
+ */
+export const VHP_PLANE_NOTE =
+  'REGISTRATION FALLBACK, not a landmark fit — plane uncertainty ±10 au (±12 mm). y = +36.0 − (index − 1) × 0.1225 au: 0.1225 au/index is the documented 0.147 mm slice spacing and +36.0 au is the same donor’s head apex measured from the full-field Visible Human head CT through the v4 CT grid’s own canonical registration; index 1 is the superior-most plate. The programmatic fit was attempted and rejected: it reached r = 0.92 and refuted the competing y₁ ≈ −8 au hypothesis (r = 0.29), but its landmark residuals missed by 20–210 au against a ±5 au tolerance (plan §2.1). Plate order and relative spacing are exact; see assets-src/imaging3/VHP_ANCHORS.md.'
 
 const UBC_BASE = 'https://www.neuroanatomy.ca/micrographviewer/images/micrographs'
 const UBC_H_BASE = 'https://www.neuroanatomy.ca/horizontalviewer/images/horizontal_slices'
@@ -548,6 +661,342 @@ export const sectionImages: SectionImage[] = [
     sourceUrl: ctUrl('axial', 18),
     license: COMMONS_CT_LICENSE,
     note: 'Head CT, axial plane, 4 mm slice thickness, no intravenous contrast (CC0 series "CT of a normal brain"). Half-scale lossless PNG re-encode, no crop.',
+  },
+  // ---- v4b: NLM Visible Human Project axial cryosection photographs --------
+  // Content-verbatim full-colour photographs (re-encoded JPEG q80, no crop, no
+  // rotation, no annotation). `levelId: null` is deliberate: appending after
+  // every existing entry means `pickStainImage(levelId)` can never let a
+  // cryosection displace a v4-QA-verified UBC micrograph for a level, and the
+  // plane-anchored path (`pickStainForPlane`) does not consult `levelId` at all.
+  {
+    id: 'vhp-0017',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 34.04,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0017,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0017.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -1.47, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0017 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 34.04 au; specimen symmetry axis 258 px against the frame centre 264 => dx -1.47 au.',
+  },
+  {
+    id: 'vhp-0046',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 30.488,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0046,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0046.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -1.715, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0046 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 30.488 au; specimen symmetry axis 257 px against the frame centre 264 => dx -1.715 au.',
+  },
+  {
+    id: 'vhp-0074',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 27.058,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0074,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0074.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0074 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 27.058 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
+  },
+  {
+    id: 'vhp-0103',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 23.505,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0103,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0103.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.49, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0103 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 23.505 au; specimen symmetry axis 262 px against the frame centre 264 => dx -0.49 au.',
+  },
+  {
+    id: 'vhp-0132',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 19.953,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0132,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0132.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -1.96, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0132 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 19.953 au; specimen symmetry axis 256 px against the frame centre 264 => dx -1.96 au.',
+  },
+  {
+    id: 'vhp-0160',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 16.523,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0160,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0160.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0160 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 16.523 au; specimen symmetry axis 263 px against the frame centre 264 => dx -0.245 au.',
+  },
+  {
+    id: 'vhp-0189',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 12.97,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0189,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0189.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0189 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 12.97 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
+  },
+  {
+    id: 'vhp-0230',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 7.948,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0230,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0230.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0230 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 7.948 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
+  },
+  {
+    id: 'vhp-0246',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: 5.988,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0246,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0246.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0246 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y 5.988 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
+  },
+  {
+    id: 'vhp-0295',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -0.015,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0295,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0295.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0295 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -0.015 au; specimen symmetry axis 264 px against the frame centre 264 => dx 0 au.',
+  },
+  {
+    id: 'vhp-0328',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -4.057,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0328,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0328.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0328 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -4.057 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
+  },
+  {
+    id: 'vhp-0385',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -11.04,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0385,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0385.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0385 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -11.04 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
+  },
+  {
+    id: 'vhp-0430',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -16.553,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0430,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0430.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0430 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -16.553 au; specimen symmetry axis 264 px against the frame centre 264 => dx 0 au.',
+  },
+  {
+    id: 'vhp-0450',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -19.002,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0450,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0450.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0450 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -19.002 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
+  },
+  {
+    id: 'vhp-0470',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -21.453,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0470,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0470.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: 0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0470 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -21.453 au; specimen symmetry axis 265 px against the frame centre 264 => dx 0.245 au.',
+  },
+  {
+    id: 'vhp-0491',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -24.025,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0491,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0491.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0491 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -24.025 au; specimen symmetry axis 263 px against the frame centre 264 => dx -0.245 au.',
+  },
+  {
+    id: 'vhp-0532',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -29.047,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0532,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0532.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.245, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0532 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -29.047 au; specimen symmetry axis 263 px against the frame centre 264 => dx -0.245 au.',
+  },
+  {
+    id: 'vhp-0581',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -35.05,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0581,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0581.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0581 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -35.05 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
+  },
+  {
+    id: 'vhp-0631',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -41.175,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0631,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0631.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0631 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -41.175 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
+  },
+  {
+    id: 'vhp-0681',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -47.3,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0681,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0681.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0681 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -47.3 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
+  },
+  {
+    id: 'vhp-0701',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -49.75,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0701,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0701.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0701 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -49.75 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
+  },
+  {
+    id: 'vhp-0721',
+    levelId: null,
+    axis: 'transverse' as const,
+    planeValue: -52.2,
+    planeValueNote: VHP_PLANE_NOTE,
+    file: vhp0721,
+    source: 'vhp-nlm' as const,
+    credit: VHP_CREDIT,
+    creditUrl: VHP_TERMS_URL,
+    sourceUrl: `${VHP_CRYO_BASE}/0721.02.jpg.gz`,
+    license: VHP_LICENSE,
+    fit: { scale: VHP_FIT_SCALE, dx: -0.98, dy: 0, mirrorX: false },
+    note: 'NLM Visible Human Project cryosection, axial index 0721 of 1477 (528x764 px, 0.294 mm/px, 0.147 mm slice spacing) — content-verbatim re-encode (JPEG q80, no crop, no rotation, no annotation, full colour). Fitted canonical y -52.2 au; specimen symmetry axis 260 px against the frame centre 264 => dx -0.98 au.',
   },
 ]
 

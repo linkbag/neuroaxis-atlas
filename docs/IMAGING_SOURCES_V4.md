@@ -214,6 +214,52 @@ canonical level for this donor requires visually identifying the brainstem in
 the slice, and this session has no vision model available (§6). The licence
 verdict and credit line are recorded so a follow-up can commit them.
 
+### 3.5b Cryosection acquisition completed by the v4b `vhp-acquire` task (2026-09-10)
+
+The open items in §3.5 are closed. Full record: `assets-src/imaging3/VHP_INVENTORY.md`
+(raw downloads, probe bodies and measurements are gitignored under `assets-src/imaging3/`).
+
+* **Licence re-verified at source on 2026-09-10** — terms page
+  <https://www.nlm.nih.gov/databases/download/terms_and_conditions.html> (HTTP 200,
+  "Last Reviewed: May 21, 2019"); the acknowledgement string
+  `Courtesy of the U.S. National Library of Medicine` was confirmed verbatim **in the raw
+  response body**, with no fee ("No charges, usage fees or royalties are paid to NLM for this
+  data.") and **no NC clause**. Verdict unchanged: embeddable, credit mandatory, and the
+  "most current version **or** say so" arm met by treating a committed set as a frozen
+  2026-09-10 snapshot.
+* **URL pattern proven from the server's own listing** (bare directory URLs answer 403, the
+  per-directory `index.html` answers 200 — which is why §3.5 could not enumerate it):
+  `…/Additional-Head-Images/cryo/jpeg/halfSize/axial/NNNN.02.jpg.gz` with `NNNN` = `0001`…`1477`
+  (0000 and 1478 → 403). The served object is a gzip'd baseline JPEG.
+* **632 slices** fetched to `assets-src/imaging3/cryo/` — 679 distinct indices combined with the
+  v4 batch above, index span 1…1471, largest gap 9 slices. The brief's ≈300-slice / 60 MB
+  acquisition cap stopped a complete-series pass; the downloader is resumable and the missing
+  index list is `assets-src/imaging3/analysis/missing-slices.txt`.
+* **Measured geometry corrects the "0.147 mm" reading used in §3.5.** All 632 plates measure
+  **528×764 px**, exactly half of the `README_cryo.txt` TIFF (1056×1528) on both axes; a
+  downsample preserves the physical field of view, so the plate scale is **0.294 mm/px** and the
+  frame is **155.2 × 224.6 mm** (a whole-head frame, matching the specimens measured).
+  Downstream `fit.scale` must use 0.294 mm/px — 0.147 mm/px would halve every photograph.
+* **Slice numbering:** index 1 is the superior-most end, increasing inferiorly. Neither `README`
+  nor `README_cryo.txt` states the direction in words, so it is recorded as the VHP axial
+  convention **corroborated by a measurement** (mean plate darkness rises monotonically from
+  0.308 at slice 0001 to a 0.42–0.52 plateau between ≈0600 and ≈1200). The **absolute canonical
+  placement is not settled**: a profile correlation against our own registered CT of the same
+  donor reached |r| ≈ 0.86 but is not decisive (0.12 margin over the reversed direction), so the
+  inventory publishes a **±10 au provisional** mapping and `vhp-cryo-embed` must fit the anchor
+  from its own landmark residuals.
+* **Companion series, same licence** (verdict recorded, nothing downloaded): **coronal**
+  cryosection reformats (1,528 files) and **sagittal** reformats (834 files) — a photographic
+  coronal/sagittal option with *no* NC clause, which speaks directly to the gap noted in §6.5 —
+  plus the **VHP MRI** products: T1/PD/T2 (76 slices each, 3.0 mm) and **T2_512** (229 slices,
+  1.0 mm, 512²), all `HFS` with identical `ImagePositionPatient`/`ImageOrientationPatient`, so a
+  single registration would serve them all. Raw evidence: `assets-src/imaging3/mri-probe.json`.
+* Slices **0172, 0173, 0174 and 1395** are computed averages, not real sections
+  (`README_cryo.txt`) — do not anchor on them.
+* Reproducible gate: `node assets-src/imaging3/verify-acquisition.mjs` (48 checks, including
+  SHA-256 verification of every plate on disk and of the hashes printed in the inventory).
+  Last run: 48/48, exit 0.
+
 ### 3.6 TCIA, BigBrain, Allen, Harvard, BrainMaps
 
 * **TCIA** — licence grants are per collection. The inspected head/neck

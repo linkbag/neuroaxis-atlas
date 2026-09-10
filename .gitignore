@@ -21,3 +21,21 @@ check-output.txt
 # regenerable via scripts; derived GLBs in src/assets are committed)
 .bp3d-probe/
 assets-src/
+
+# Per-task scratch workspaces and the run's plan-of-record. These hold raw
+# source images, probe crops and intermediate renders (≈200 MB across the set
+# at v4b time) that are regenerable from the scripts in the repo — they must
+# never be committed by `git add -A`. Listed explicitly rather than as `_*/`
+# so an intentional future directory starting with an underscore is not
+# silently swallowed.
+.dsh-scratch/
+.slice-crops/
+.v4c-check/
+_ctcrops/
+_ctwork/
+_imgtmp/
+_vhp_tmp/
+_vhpwork/
+_work/
+crops/
+PLAN.md
