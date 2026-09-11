@@ -179,3 +179,226 @@ vendor chunk is byte-identical, and first paint is still far below the 762.24 kB
    `fit.dy` still at the documented default `0`. §2 item 6 is therefore satisfied
    by its **"say so"** arm: the measurement was performed twice, rejected, and
    recorded — not skipped.
+
+---
+
+## 8. QA verdict — independent verification of the closure (`v6b-qa`)
+
+Appended by `v6b-qa` (the run's reviewer) on the frozen closure tree `b5ab6f3`
+(clean, `git status --porcelain` = 0 entries before and after). §1–§7 above are
+unedited. **Verdict: the v6 remediation is VERIFIED, with the four recorded gaps
+of §8.6.** Every statement below was produced in this session; nothing is copied
+from §7.
+
+### 8.1 The P0 fixes bite (demonstrated by mutation, not by inspection)
+
+*Context loss — handlers exist on BOTH surfaces.* Main canvas:
+`src/components/viewer3d/Viewer3D.tsx:640-658` attaches `webglcontextlost` /
+`webglcontextrestored` to the R3F canvas element, calls `event.preventDefault()`
+first (without it the browser never fires the restore event), enters the `'lost'`
+phase, and on restore calls `restoreRenderer()` + bumps `envGeneration` (the PMREM
+environment is keyed by it at `:718`). The overlay
+(`div.viewer-context-lost[role="alert"][data-context-lost={phase}]`, `:298-340`) is
+mounted **only** while a loss phase is active (`:792-794`) and carries a bounded
+terminal state (`CONTEXT_LOSS_DEAD_MS = 20 000`). PiP:
+`src/components/viewer3d/SectionPiP.tsx:833-858` attaches both events to
+`gl.domElement` (the SHARED canvas — a private render target emits no DOM events),
+calls `preventDefault()`, publishes the state through `setPipContextLost`, and on
+restore bumps `restoreGeneration`, which is a `useMemo` dependency of the render
+rig (`:863-867`) — so the target, its stencil buffer and every material are
+rebuilt, because they all belonged to the dead context.
+
+*Negative test.* The permanent gate for this P0 is the browser audit block M, which
+drives the real `WEBGL_lose_context` extension. **In this environment it cannot
+run**: Chrome 153 cannot start at all (5 launch variants tried; every one exits
+immediately with `crashpad_client_win.cc:421 OpenProcess: Access is denied. (0x5)`
+and `platform_channel.cc:108 Check failed: . : Access is denied. (0x5)`), and
+`npm run verify:audit` therefore exits **4** (`environment unusable — no check was
+run`) after successfully starting the dev server (ready in 4 879 ms, killed as a
+whole tree). **So the audit-driven simulated-loss negative test was NOT
+performed, and this record does not claim it was.** The strongest available
+Node-only substitute was run instead, and it was mutation-tested: a scratch
+harness (`.dsh-scratch/qa-bite/ctx-surrogate.mjs`, uncommitted) asserts the 20
+load-bearing facts above out of the shipped sources and drives the shipped
+`webglContextOf` / `requestContextRestore` against a real fake GL object. It
+reports **30 passed · 0 failed** on the closure tree, and **fails with the
+specific label** on each of six deliberate defects introduced into a scratch copy:
+
+| Deliberate defect (scratch copy) | Result |
+| --- | --- |
+| drop `event.preventDefault()` from the main-canvas lost handler | FAIL `the lost handler calls event.preventDefault() (mandatory for a restore event)` |
+| unwire the main-canvas `webglcontextlost` listener | FAIL `Viewer3D attaches webglcontextlost to the R3F canvas element` |
+| drop the overlay's `data-context-lost={phase}` | FAIL `the overlay carries data-context-lost={phase} — the exact attribute the audit queries` |
+| mount the overlay unconditionally | FAIL `the recovery overlay is mounted ONLY while a loss phase is active` |
+| drop the PiP `restoreGeneration` rebuild | FAIL `the PiP restore rebuilds the rig — the render target belongs to the dead context` |
+| make `requestContextRestore` always refuse | FAIL `requestContextRestore() really calls restoreContext() once — asked=false calls=0` |
+
+*Boundaries.* All seven surfaces of §1 item 2 are wrapped
+(`boundary-contract.mjs`: `App.tsx` carries exactly 7 `<TransparentBoundary>`
+call sites and `AppErrorBoundary` additionally wraps the shell; `PlatesTab.tsx`
+guards both of its modes internally). **Behaviour, not just presence, is gated:**
+removing one of the seven wrappers in a scratch copy fails the gate with
+`FAIL App.tsx does not wrap: Info panel` (21 passed · 1 failed), and deleting
+`role="alert"` from the recovery card fails it with
+`FAIL failure state is not announced (no role="alert")`. What neither the Node
+gate nor this record proves is React's own containment of a render throw — that is
+what the browser hook `?panelfail=<surface>` is for, and it is the piece the
+environment could not exercise (see §8.6 item 1).
+
+### 8.2 The gates can fail (the audit's own lesson, demonstrated)
+
+Three independent mutations of a constant `npm run verify:plane` depends on, each in
+a scratch copy of the tree, each reverted:
+
+| Mutation | Observed |
+| --- | --- |
+| flip the `DIRECTION_VECTORS` L/R mirror (`L: [1,0,0]` → `[-1,0,0]`) | **exit 1** — `Error: planeGeometry: PLANE_BADGES.y (A/P/R/L) disagrees with the geometry-derived orientation (A/P/L/R)` at `planeGeometry.ts:496` |
+| swap the sagittal in-plane axis pair (`AXIS_PAIR.x` `['z','y']` → `['y','z']`) | **exit 1** — `Error: planeGeometry: PLANE_BADGES.x (S/I/P/A) disagrees with the geometry-derived orientation (A/P/I/S)` |
+| shift an extent asymmetrically (`axisExtents` `uMax: u.max` → `u.max + 6`) | **exit 1** — `plane-transform: 10761/10827 assertion(s) passed, 66 FAILED` |
+
+`npm run verify:pipeline` was mutated too: `boundsMayCut` forced to `false` in a
+scratch copy (culling every part) → **exit 1** with
+`FAIL no contours produced at any tested plane`. All four mutations were reverted;
+the scratch files are byte-identical to the repository afterwards (SHA-256 per
+file) and the gates are green again (10 827 assertions / PASS ·
+`PASS section pipeline`).
+
+**One honest non-bite.** Shifting the canonical bound itself
+(`CLIP_BOUNDS.y.max` 85 → 91 in a scratch copy) does **not** fail `verify:plane`.
+That is not a weakened check: C1 asserts `axisExtents` *agrees with* `CLIP_BOUNDS`
+and that the y range still brackets every level anchor, so it is a consistency
+gate, not a pinned copy of AMENDMENT B. Nothing in the seven Node gates pins
+x ±48 / y −55…85 / z −75…+55 as literals; those numbers are pinned by
+`docs/TELENCEPHALON_PLAN.md §2` and by the geometry baked against them.
+
+### 8.3 The claimed-landed work, spot-checked
+
+*`p1-photofit`.* Per D1 the deliverable is on disk and committed. The
+`REGISTRATION_MEASURED` table carries **43 rows** — exactly the 49 anchored plates
+minus the 3 Commons CT plates (`no-declared-scale`) and the 3 that produce no
+cross-section (`no-cross-section`). Recomputing the table's own statistics from
+the committed numbers reproduces the note **exactly** on every range it states:
+`centroidResidualAu` min 0.23 / median 2.49 / max 64.78 · UBC transverse
+0.53–1.32 (median 0.81) · UBC coronal 0.23–4.16 · VHP 2.36–64.78 (median 10.84) ·
+VHP `atlasVsPlateExtentV` 0.06–0.74 · `iouAtDefaultAu` max 0.363 with
+`scanPeakIou` max 0.383 (ubc-h12). **One prose range does not reproduce:** the note
+says `atlasVsPlateExtentU/V` is "1.7–3.5× (UBC)", while the committed UBC rows span
+**0.34–6.07** (U) and 0.63–6.07 (V); 1.69 is the coronal V minimum and 3.5 the
+transverse U maximum, so the sentence looks like a two-subset splice. The
+discrepancy runs in the safe direction — the real spread is *wider* than claimed,
+which supports the note's conclusion (the atlas cross-section is not the same
+object as the plate silhouette) more strongly, not less. No `fit` value was
+changed; every entry stays `unmeasured-default` with one of the four declared
+reasons.
+
+*`p1-identity`.* All **16** `ctx-*` registry ids carry an authored record
+(`npm run validate`: `183 registry entr(ies) (0 awaiting authored records)`) and
+`SceneLayers.tsx:170-180` maps every one of the **10** rendered envelope
+silhouettes onto a registry id — `env-medulla → ctx-medulla-surface`,
+`env-pons → ctx-pons-surface`, `env-midbrain → ctx-midbrain-surface`,
+`env-pineal → ctx-pineal` are the four that previously owned nothing — with
+`selectStructure(slot.id, …)` at `:279` and the telencephalic ghost shell
+answering clicks as `ctx-cerebral-cortex` (`:353`, `:381`). 8 of the 16 have a
+rendered mesh; the rest are documented per id. The "8 invisible tracts" are
+visible through the shared `TractTube` path — they always were: all 23 authored
+tracts carry waypoints and render, and the real gap is 2D: **9** authored tracts
+carry no plate label (the 8 named in AUDIT §2.10 plus `tract-uncinate-fasciculus`,
+added by v7).
+
+*`p1-content`.* `syn-one-and-a-half` is present
+(`src/data/syndromes/hindbrain.json:179`, name "One-and-a-half syndrome",
+substrates `nuc-pprf` + `tract-mlf`), conforms to `DATA_CONTRACT` §SyndromeRecord,
+and every `clinical[].syndromeId` in the data resolves. `syn-central-horner`
+exists. Syndromes total **26** in 3 files. **§6's "0 records with empty
+`clinical`" is NOT met: 4 records still hold `clinical: []`** — `ctx-pineal`,
+`ctx-medulla-surface`, `ctx-midbrain-surface`, `ctx-pons-surface`, which are
+exactly the four `kind:"context"` silhouettes `p1-identity` registered. The
+single-item population is 47; the distribution is 0→4, 1→47, 2→83, 3→39, 4→10.
+
+### 8.4 Budgets and all Node gates, re-run on the closure tree
+
+| Budget / gate | Limit | Measured | Result |
+| --- | --- | --- | --- |
+| Rendered triangles | ≤ 800 000 | **570 096** | PASS |
+| Committed anatomy GLB | ≤ 14 MiB | **13 755 548 B (13.12 MiB)** | PASS |
+| Imaging payload | ≤ 10 MiB | **8.71 MiB in 80 files** | PASS |
+| v4-added assets · cryosections · nuclei | 4.00 MiB · 1 750 000 B · 3.00 MiB | 3.81 MiB · 1 232 904 B · 2.81 MiB | PASS |
+| `validate` / `check` / `build` / `verify:pipeline` / `verify:plane` | — | 0 errors 0 warnings · exit 0 · exit 0 (entry 1 120.53 kB / **252.91 kB gzip**, vendor 1 206.81 kB / 354.64 kB) · 106/106 parts · 10 827 assertions | PASS |
+| `a11y-contract` · `boundary-contract` · `verify:audit` | — | 38 passed · 22 passed · **exit 4, no check ran** | see §8.6 |
+
+`verify:plane` still prints its pre-existing coronal camera-degeneracy note and
+still exits 0 (D9 item 1 — report, do not touch).
+
+### 8.5 Regression over v1–v7
+
+Nothing the housekeeping removal touched is referenced anywhere: all 14 dead
+exports, the `Viewer3D` re-export block, the `SectionSliderBar` self re-export, the
+2 dead classes and the 5 dead tokens return **zero** occurrences under `src/`,
+`scripts/`, `index.html`, `vite.config.ts` and `package.json`;
+`src/geometry/envelope.ts` still exists with its 7 live exports and is still the
+v1 per-slot fallback at `SceneLayers.tsx:240`; `.webref-tag--journal` is still
+declared (`src/styles/panels.css:598`) and `src/styles/plates.css` consumes none
+of the five removed tokens. A plate-integrity check the earlier passes did not
+run: **every** `regions[].slug` in `plates.json` resolves to a record and **every**
+`levelId` resolves in `levels.json` (0 unresolved, 15 plates, 156 distinct slugs).
+The v7 telencephalon work is intact: 183 registry records (**46** telencephalon),
+**17** level anchors including the four new transverse anchors
+(+48 `lvl-tel-thalamostriate`, +58 `lvl-tel-basal-ganglia`,
++68 `lvl-tel-centrum-semiovale`, +78 `lvl-tel-convexity`), **15** plates of which
+**3** are telencephalon (`plate-tel-axial-58`, `plate-tel-sagittal-hemisphere`,
+`plate-tel-coronal-fornix`), 106 manifest parts (v2), and the ghost-cortex default
+(`VIEW_PRESETS`/`DEFAULT_LAYERS` → `brainstem-focus`, ghost outline at
+`GHOST_OUTLINE_OPACITY` 0.05) still on. Telencephalon picking uses the identical
+`selectStructure(recordId)` path as every other part.
+
+### 8.6 Honest limitations of THIS verification
+
+1. **The browser lane did not run** (Chrome cannot start; audit exit 4). Every
+   browser-only check — the in-browser half of both P0 gates, the `?panelfail`
+   containment demonstration, the v1–v7 interaction sweep, screenshots — is
+   written and wired but was **not observed passing here**. §8.1's context-loss
+   evidence is a Node-only surrogate plus a six-case mutation test, not the audit;
+   §8.1's boundary evidence proves the seven wrappers and the failure-card
+   contract, not React's containment of a live render throw. The D7 sentence
+   applies verbatim: **a forced-throw containment demonstration was not performed;
+   containment is asserted by construction plus the failure-card path, not
+   demonstrated.**
+2. **The 4 empty `clinical` arrays are not closed** (see §8.3). `v6b-qa` did not
+   author clinical content for four context silhouettes: inventing clinical text
+   for a surface shell is a content decision, not a conservative QA fix, and §6's
+   line therefore remains unmet.
+3. **`docs/CONTENT_INVENTORY.md` is only partly reconciled** — §10 of that
+   document now carries the QA re-measurement, but the historical §2/§3/§4/§5/§7
+   tables still show their pinned-revision counts (registry 179, 137 authored,
+   12 plates, 19 tracts, `context` 12). They were deliberately not rewritten in
+   place: they are dated records of the revision they document (`716896f` /
+   `d1cefef`), and the document itself asks for a *re-run* rather than an in-place
+   edit. The CURRENT numbers are in §10 of that document and in §8.3/§8.5 above.
+4. **Per-process attribution of stray `chrome.exe` was not possible**: the
+   sandbox denies `Get-CimInstance Win32_Process` (Access denied), so command
+   lines could not be read. What IS verified: no listener on :5173 after the
+   audit (`taskkill` of the whole tree fired on every path), no DevTools port
+   left listening, the tree clean at `b5ab6f3`, and `.dsh-scratch/`,
+   `.plate-scratch/`, `.bp3d-probe/`, `assets-src/` still gitignored and
+   uncommitted.
+5. **D6's script wiring is only half done, and `package.json` is outside this
+   task's write scope.** D6 required three *new* entries — `verify:budget` →
+   `build-anatomy-geometry.mjs --manifest`, `verify:imaging` →
+   `verify-imaging-v4.mjs`, `verify:a11y` → `a11y-contract.mjs`. They are **not**
+   in `package.json`, which still exposes only `validate`, `check`, `build`,
+   `verify:pipeline`, `verify:plane`, `verify:browser`, `verify:acceptance` and
+   `verify:audit` (and `boundary-contract.mjs` has no entry either — §7.3 item 4
+   flagged that one). The three gates themselves exist, pass, and are documented
+   **by path** in `README.md §Scripts` (L301–L313), so this is a wiring/
+   discoverability gap, not a broken gate: the four budget/contract gates were
+   run by path in §8.4 and all pass. `v6b-qa` did not add them because
+   `package.json` is not in its write scope; whoever owns it should add the four
+   entries (`verify:budget`, `verify:imaging`, `verify:a11y`, `verify:boundary`)
+   as new keys without renaming any existing one.
+
+**What `v6b-qa` changed:** `docs/QUALITY_PLAN.md` (this §8) ·
+`docs/QA_CHANGELOG.md` (the matching dated QA entry) ·
+`docs/CONTENT_INVENTORY.md` (the apex **§10** re-measurement). **No product,
+data or gate file was edited** — every mutation of §8.1/§8.2 lived in
+`.dsh-scratch/qa-bite/` (gitignored) and was reverted there, and the repository
+tree holds no other modification.

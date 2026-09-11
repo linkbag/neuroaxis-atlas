@@ -290,6 +290,101 @@ exits 1 on any breach; `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` enforce
   requires. The two run-level constraints — **800,000 rendered triangles** and **14 MiB committed
   anatomy payload** — are unchanged and pass.
 
+## v7 closure — what the QA confirmed, and how it was verified
+
+The telencephalon landed in `d1cefef → 2681d20 → 8ab1b47 → b5ab6f3`, but the run's QA never executed
+and an independent 56-check browser audit left **10 failures**. This section records the closure:
+what was wrong, what was fixed, and — importantly — **which tier of evidence proves each item**.
+
+### The five real defects, and their fixes
+
+| # | Symptom the audit measured | Root cause (established in code) | Fix | Gate that fails if reverted |
+| --- | --- | --- | --- | --- |
+| 1 | `no "lost" recovery overlay after the context was lost` (`isContextLost() === true`, no `[data-context-lost]`) | The PostFX `alpha` throw (#2) was re-thrown by react-three-fiber's internal boundary into the DOM tree, so the `3D viewer` panel boundary unmounted **all of `Viewer3D`** — taking the overlay with it | The overlay is now rendered **outside** the `<Canvas>` subtree, and every canvas child sits in its own `CanvasSceneBoundary` (which renders `null`, the only fallback the THREE reconciler accepts) | `audit-checks.test.mjs` — *"the overlay is rendered OUTSIDE the R3F `<Canvas>` subtree"* / *"canvas children are wrapped in CanvasSceneBoundary"* |
+| 2 | `TypeError: Cannot read properties of null (reading 'alpha')` at `PostFX.tsx` | `postprocessing@6.36.7` reads `renderer.getContext().getContextAttributes().alpha` in `addPass` (`build/index.js:1002`) and `setRenderer` (`:864`); per the WebGL spec that call returns **`null`** while the context is lost, and React re-renders the R3F tree on the loss | `PostFX` returns `null` while lost (`contextLost` prop), so there is no pass to re-add; it remounts on restore against the new context | `audit-checks.test.mjs` — *"PostFX returns null while the context is lost"* / *"passes the live loss state into PostFX"* |
+| 3 | `CT coverage statement missing at y = +58` | **Check defect, not a product defect.** The statement already existed and was already wired; the check never proved the live section was pinned to the **y** axis before asserting | The check now pins the axis, proves `sectionAxis === 'y'`, and reports `{axis, planeValue, kind, notePresent}` before it asserts — and asserts the **honest** state above the measured limit instead of demanding a credit that cannot exist | `audit-checks.test.mjs` group (3) — driven by the real `ctCoverageStatement()` and the shipped `ct-manifest.json` |
+| 4 | `the default preset is not Brainstem focus` + `2 brainstem-family tree row(s) are dimmed` | **Check defect + a latent code gap.** The audit's profile persisted `neuroaxis.viewPreset`, so a returning preference decided the boot check. Separately, `telSubdivisionIds` filtered on `subdivision` **alone**, so a diencephalon record could be swept into a cortex preset's `hidden` set | The audit uses a **fresh profile per run** plus an explicit `localStorage.clear()` prologue, and asserts the boot state in its own block before any check clicks a preset. `telSubdivisionIds` now filters on `region === 'telencephalon'` **and** subdivision | `audit-checks.test.mjs` group (4) — the region guard and the "no brainstem row is layer-off" assertion |
+| 5 | `the forced throw was not contained by the "Taxonomy tree" boundary` + `?panelfail armed 0 boundaries` | **Two real defects.** (a) The probe marker was a *sibling* of the component that throws, so React discarded it in the render pass that threw — "armed" was unobservable. (b) `isDevBuild()` read `import.meta.env` through a **type-cast alias**, which esbuild erases; Vite's `vite:import-analysis` walks the transformed module for a literal `import.meta.<prop>` access, so no env object was injected and the hook was dead in the dev server | The marker moved **onto the failure card** (`panelErrorCard`), so `probes === 1` proves arming *and* containment as one fact; `isDevBuild()` reads the literal token. The latch is one-shot, consumed in `componentDidCatch`, so **Retry recovers** instead of re-throwing | `audit-checks.test.mjs` group (5) — drives the real boundary through the real throw and asserts `card=Taxonomy tree · probes=1 · retry=true`, then that Retry restores the children |
+
+Defects 1 and 2 share one cause: the effects stack must not crash while the context is lost, and a
+canvas throw must not be able to unmount the recovery UI. The two fixes are independent, so either
+alone leaves the other gap open.
+
+### Two audit artifacts (checks, not product bugs)
+
+Both were checks demanding something the data cannot provide; both are now **coverage-aware** and
+assert the honest state instead:
+
+- **CT at telencephalon planes.** The Visible Human CT series is a head-only scan whose data ends at
+  canonical **y ≈ 36.25 au** (`ct-manifest.json` → `intensity.sourceCoverage.superiorMostDataYAu`;
+  64.3 % of stations inside the source FOV). Above it the CT grid still spans the box but *every
+  station is background*. The check now requires **no CT credit** there and requires the statement
+  naming the limit and MRI — never "painted nothing" as a failure.
+- **Photo at y = +58.** No photograph is anchored above the highest mapped level, so the honest
+  assertion is the canvas' no-anchor hint, not a credit.
+
+Inside its coverage the CT check is **unchanged and still strict**: it demands the NLM credit and
+real painted samples. The sweep gate fails if CT paints nothing on a covered plane.
+
+### Measured budgets (v7 closure, re-derived from the committed artifacts)
+
+| Budget | Cap | Measured | Verdict |
+| --- | --- | --- | --- |
+| Rendered triangles (scene) | ≤ 800,000 | **570,096** (106 parts) | PASS |
+| Committed anatomy GLB payload | ≤ 14 MiB | **13,755,548 B = 13.12 MiB** (106 files, 0 missing) | PASS |
+| Imaging payload | ≤ 10 MiB | **9,132,531 B = 8.71 MiB / 80 files** | PASS |
+
+`node scripts/build-anatomy-geometry.mjs --manifest` is the authority for the anatomy rows and
+`node scripts/verify-imaging-v4.mjs` for the imaging row; `audit-checks.test.mjs` re-derives all
+three from the manifest and `statSync` and fails on any breach.
+
+### Space integrity — nothing below y = +45 moved
+
+The run's hard constraint is explicitly verified, not assumed:
+
+- `src/assets/anatomy/anatomy-manifest.json` is **byte-identical** to the pre-closure commit — every
+  one of the 106 parts keeps its `triCount`, `bbox` and `centroid`, so no baked geometry moved.
+- `src/data/levels.json` holds the **same 17 anchors**: the 13 pre-v7 ones
+  (−50, −46, −42, −34, −24, −18, −8, 2, 8, 14, 19, 28, 36) are unchanged, and the four v7 additions
+  (+48/+58/+68/+78) are purely additive with the set still strictly increasing.
+- `CLIP_BOUNDS` extends only upward: `x −48..48`, `y −55..+85`, `z −75..+55`. The lower bounds are
+  untouched.
+
+`audit-checks.test.mjs` asserts the anchor arithmetic on every run.
+
+### Evidence tiers — read this before quoting a pass
+
+The browser lane (`verify:audit`, `verify:browser`, `verify:acceptance`) drives **headless Chrome
+over the DevTools Protocol**. In a restricted sandbox Chrome cannot start at all, and all three
+lanes exit **`4` — "environment unusable, no check was run"**:
+
+```
+crashpad_client_win.cc:421  OpenProcess: Access is denied. (0x5)
+platform_channel.cc:108     Check failed: . : Access is denied. (0x5)
+```
+
+This was measured against **four** launch variants — Chrome *and* Edge, `--headless=new` *and*
+legacy headless, all with `--no-sandbox --disable-crash-reporter --disable-breakpad` — every one
+exiting before its DevTools endpoint answered. **`exit 4` is neither a pass nor a product failure**;
+the harness's own exit codes exist precisely so that "a check that cannot run" can never be read as
+"the product is broken".
+
+So every audit verdict is decided by the **same pure predicates** in `scripts/verify/checks.mjs`.
+The browser lane feeds them real DOM readings; the Node lane feeds them the **shipped manifests and
+the shipped sources**:
+
+| Tier | Gate | Runs without a browser |
+| --- | --- | --- |
+| **1 — binding** | `npm run validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `node scripts/verify/boundary-contract.mjs`, `node scripts/verify/a11y-contract.mjs`, `node scripts/verify/audit-checks.test.mjs`, `node scripts/build-anatomy-geometry.mjs --manifest`, `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | yes — these must exit 0 |
+| **2 — recorded, not asserted** | `npm run verify:audit`, `verify:browser`, `verify:acceptance` | **no** — reported as command + exit code + reason |
+
+`audit-checks.test.mjs` is a **mirror, not a browser test**: it proves the decision logic, the DOM
+contract in the shipped code and the shipped data/manifest facts — 75 assertions across 8 groups. It
+does **not** prove that pixels appeared. The runtime half of the audit (scene luminance, live-section
+paint counts, pointer and focus interaction, translucency of the ghost shell, and the real
+`WEBGL_lose_context` cycle) remains **unproven in a sandbox** and must be re-run with
+`npm run verify:audit` on a machine where Chrome can launch.
+
 ## Scripts
 
 | Script | What it does |
@@ -306,11 +401,12 @@ exits 1 on any breach; `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` enforce
 
 | `npm run verify:plane` | **One-plane-transform gate** (`scripts/verify/plane-transform.mjs`): imports the shipped `src/components/section/planeGeometry.ts` (never a copy) and asserts that the 2D canvas, the GPU PiP and the backdrop sampler agree on the world→screen mapping for a grid of axes/planes/viewports and that the orientation badge table is derived from projected pixels (10 827 assertions). Also prints the pre-existing coronal camera-basis degeneracy it does **not** fail on |
 | `npm run verify:pipeline` | Section-pipeline gate: slices every committed anatomy GLB through 13 planes and asserts the contour engine's loop/segment invariants (106/106 parts, no problems) |
-| `npm run verify:audit` | **Self-sufficient runtime audit** (`scripts/verify/audit.mjs`): starts Vite itself when nothing answers at the target URL, drives headless Chrome over the DevTools Protocol through the whole feature surface, and stops the server again on every exit path. Includes the two P0 gates — simulated WebGL context loss via `WEBGL_lose_context` (overlay appears, canvas recovers) and a **forced render throw** through the dev-only `?panelfail=<surface>` hook (the failure is contained, the app keeps working, Retry restores the panel). Pass an existing URL to reuse a running server |
+| `node scripts/verify/audit-checks.test.mjs` | **Audit check mirror, no browser** (v7 closure): runs the *same* pure predicates the runtime audit uses (`scripts/verify/checks.mjs`) against the **shipped manifests and the shipped sources** — CT coverage honesty driven by the real `ct-manifest.json` and `ctCoverageStatement()`, the brainstem-focus default and the preset region guard (imported from the real store), the `?panelfail` containment demonstration (drives the real `PanelErrorBoundary` through the real throw: `probes === 1`, correct surface, Retry recovers), the context-loss DOM contract including the "overlay is outside `<Canvas>`" and "PostFX returns null while lost" root causes, and the modality sweep in both directions. It also re-derives the three budget numbers and checks the telencephalon data/plate inventory. **This is a mirror, not a browser test**: it proves the decision logic and the shipped code contract, never that pixels appeared |
+| `npm run verify:audit` | **Self-sufficient runtime audit** (`scripts/verify/audit.mjs`): starts Vite itself when nothing answers at the target URL, drives headless Chrome over the DevTools Protocol through the whole feature surface, and stops the server again on every exit path. Includes the two P0 gates — simulated WebGL context loss via `WEBGL_lose_context` (overlay appears, canvas recovers) and a **forced render throw** through the dev-only `?panelfail=<surface>` hook (the failure is contained, the app keeps working, Retry restores the panel). Pass an existing URL to reuse a running server. **v7 closure:** every load-bearing verdict is now decided by `scripts/verify/checks.mjs`, the run uses a **fresh Chrome profile per run** plus a `localStorage`/`sessionStorage` clear before the boot read (so a persisted `neuroaxis.viewPreset` can never masquerade as a wrong default), and the CT/modality checks are coverage-aware |
 | `node scripts/verify/boundary-contract.mjs` | **Error-boundary gate, no browser** (`scripts/verify/boundary-contract.mjs`): loads the shipped boundary components through the installed TypeScript compiler and drives their real state transitions — healthy render returns the children unchanged, a throw renders the `role="alert"` card with `data-panel-error`, Retry clears the error, and all seven App-level surfaces plus both PlatesTab modes are wrapped. This is the same claim the audit's forced throw proves, for environments where Chrome cannot start |
 | `node scripts/verify/a11y-contract.mjs` | **a11y gate, no browser**: reads the shared source files and the shipped bundle for the keyboard/AX contract (plate regions focusable with an accessible name, `inert` hidden panels, modal trap/restore, `aria-activedescendant`, focus rings, ≥24 px hit targets, favicon) |
 
-All of `validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `a11y-contract` and `boundary-contract` must exit 0; `npm run validate` is the pre-commit data authority (plan §9).
+All of `validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `a11y-contract`, `boundary-contract` and `audit-checks.test.mjs` must exit 0; `npm run validate` is the pre-commit data authority (plan §9).
 
 **Exit codes of the browser lane** (`verify:audit`, `verify:acceptance`, `verify:browser`) — an environment failure must never look like a product failure:
 

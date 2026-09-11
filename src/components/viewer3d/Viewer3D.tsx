@@ -62,6 +62,17 @@
  *     recovered in-page), the overlay switches after `CONTEXT_LOSS_DEAD_MS` to a
  *     terminal "could not be restored — reload" message with a Reload button.
  *     The failure mode is a stated state, never a silent black rectangle.
+ *  5. **v7 closure — the overlay is not hostage to the canvas subtree.** The
+ *     measured defect (audit gap 1+2) was that the overlay never appeared even
+ *     though `isContextLost()` was true: the PostFX composer threw
+ *     `TypeError: … reading 'alpha'` while the context was lost (see PostFX's
+ *     header for the exact chain), R3F's internal boundary re-threw that error in
+ *     the DOM tree, and the app's "3D viewer" panel boundary unmounted this whole
+ *     component — overlay included. Two independent fixes: PostFX is not mounted
+ *     while `contextPhase !== null`, and every R3F child is wrapped in
+ *     `CanvasSceneBoundary` (fallback `null`, DOM notice below), so a throw in
+ *     the scene, the post stack or the PiP is contained in-canvas and this
+ *     component keeps rendering.
  *
  * ── v4 PiP real-imagery state (IMAGING_V4_PLAN §2 gap 4 + §4, task
  *    `integration-v4`) ─────────────────────────────────────────────────────
@@ -109,6 +120,7 @@ import ClipControls from './ClipControls'
 import ExplodeSlider from './ExplodeSlider'
 import PlaneHelpers from './PlaneHelpers'
 import PostFX from './PostFX'
+import CanvasSceneBoundary from './CanvasSceneBoundary'
 import {
   SectionPiP,
   SectionPiPPanel,
@@ -116,6 +128,9 @@ import {
   sectionPipDiagnostics,
 } from './SectionPiP'
 import { applyClipState } from './clipPlanes'
+// v7 closure (gap 3): the PiP's hint line states the SAME measured CT coverage
+// limit as the Plates toolbar and the live section — one function, one number.
+import { ctCoverageStatement } from '../section/imageLayers'
 
 /**
  * Keeps the shared THREE.Plane constants in lockstep with store.clip without
@@ -396,6 +411,68 @@ export function GeometryUnavailableNotice(): ReactElement | null {
   )
 }
 
+/* --------------------------- canvas-subtree failure (P0 containment) */
+
+/**
+ * The visible half of a `CanvasSceneBoundary` failure (v7 closure, gap 1).
+ *
+ * Why a DOM notice and not an in-canvas card: the boundary lives inside the R3F
+ * reconciler, whose fallback can only be THREE-safe (`null`). This element is the
+ * sibling OUTSIDE the canvas, so the failure is still stated in words — "the
+ * §1 item 2 rule" (a failed surface must say so and offer recovery) applied to
+ * the one subtree that cannot draw its own error state.
+ *
+ * It is the reason the WebGL context-loss overlay can no longer disappear: a
+ * throw in the scene or the post-processing stack is now contained HERE, so
+ * `Viewer3D` keeps rendering and `[data-context-lost]` stays reachable.
+ */
+export function CanvasSceneFailureNotice({
+  surface,
+  message,
+  onRetry,
+}: {
+  surface: string
+  message: string
+  onRetry: () => void
+}): ReactElement {
+  return (
+    <p
+      className="viewer-canvas-failure"
+      role="alert"
+      data-canvas-scene-error={surface}
+      style={{
+        position: 'absolute',
+        left: 'var(--space-3, 12px)',
+        bottom: 76,
+        zIndex: 7,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        maxWidth: 'min(560px, 70%)',
+        margin: 0,
+        padding: '6px 10px',
+        border: '1px solid rgba(248, 113, 113, 0.45)',
+        borderRadius: 4,
+        background: 'rgba(13, 21, 38, 0.9)',
+        color: '#fecaca',
+        font: '11px/1.4 system-ui, sans-serif',
+      }}
+    >
+      <span>
+        {`${surface} failed${message.length > 0 ? `: ${message}` : ''} — the rest of the viewer is still live`}
+      </span>
+      <button
+        type="button"
+        className="viewer-canvas-retry btn"
+        title={`Re-mount the ${surface} (a fresh subtree, not a resumed broken one)`}
+        onClick={onRetry}
+      >
+        Retry
+      </button>
+    </p>
+  )
+}
+
 /* ------------------------------- v4 PiP real-imagery state hint */
 
 /** Modality names for the hint sentence (indexed by the sampler's union). */
@@ -428,7 +505,10 @@ export interface PipBackdropState {
  * that state would be the opposite of honest. See the file header for the
  * fallback decision.
  */
-export function pipBackdropHint(state: PipBackdropState): string | null {
+export function pipBackdropHint(
+  state: PipBackdropState,
+  coverageStatement: string | null = null,
+): string | null {
   if (!(state.reason.length > 0)) return null
   if (state.requested === 'none') return null
   // `modality` is what the sampler RESOLVED even when it could not paint, so
@@ -451,6 +531,17 @@ export function pipBackdropHint(state: PipBackdropState): string | null {
       ? 'no embeddable real imagery in this build — see the Plates tab for the modality list and the live section'
       : `no embeddable ${word} imagery in this build — see the Plates tab for the modalities that are embedded`
   }
+  if (state.reason === 'beyond-source') {
+    // v7 closure (gap 3): a CT plane above the Visible Human series' measured
+    // apex. The grid is loaded and healthy — the SOURCE has no data there for any
+    // canonical box — so the panel states the measured limit (the same sentence
+    // the Plates toolbar and the live section show) rather than the previous
+    // fallback, which printed the internal token "beyond-source".
+    return (
+      coverageStatement ??
+      `no real ${word} imagery at this plane — see the Plates tab for the coverage limit and the other modalities`
+    )
+  }
   return `real imagery unavailable at this plane (${state.reason}${resolved === 'auto' ? '' : `; ${word}`})`
 }
 
@@ -472,14 +563,32 @@ function SectionPipHint({ visible }: { visible: boolean }): ReactElement | null 
     if (typeof requestAnimationFrame === 'undefined') return
     let raf = 0
     let stopped = false
+    // The coverage statement is a pure function of (axis, plane) and this tick
+    // runs every animation frame while the hint is up — cache it per plane.
+    let coverageKey = ''
+    let coverageText: string | null = null
     const tick = () => {
       if (stopped) return
       const d = sectionPipDiagnostics
-      const hint = pipBackdropHint({
-        requested: d.backdropRequested,
-        modality: d.backdropModality,
-        reason: d.backdropReason,
-      })
+      const key = `${String(d.backdropAxis)}|${String(d.planeValue)}`
+      if (d.backdropReason === 'beyond-source') {
+        if (key !== coverageKey) {
+          coverageKey = key
+          coverageText =
+            d.backdropAxis === null ? null : ctCoverageStatement(d.backdropAxis, d.planeValue)
+        }
+      } else if (coverageText !== null) {
+        coverageText = null
+        coverageKey = key
+      }
+      const hint = pipBackdropHint(
+        {
+          requested: d.backdropRequested,
+          modality: d.backdropModality,
+          reason: d.backdropReason,
+        },
+        coverageText,
+      )
       const text = hint ?? ''
       if (node.textContent !== text) node.textContent = text
       if (node.hidden !== (hint === null)) node.hidden = hint === null
@@ -599,6 +708,18 @@ export default function Viewer3D() {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   /** Bumped on every successful restore: remounts the PMREM environment. */
   const [envGeneration, setEnvGeneration] = useState(0)
+  /**
+   * v7 closure (gap 1): a throw INSIDE the canvas subtree must not take the
+   * viewer — and with it the context-loss overlay — down. `CanvasSceneBoundary`
+   * contains it in-canvas (fallback `null`), and this is the DOM-side report.
+   * `sceneGeneration` is the reset key: the Retry button below, and a successful
+   * context restore, both bump it so the failed subtree is rebuilt.
+   */
+  const [sceneFailure, setSceneFailure] = useState<{ surface: string; message: string } | null>(null)
+  const [sceneGeneration, setSceneGeneration] = useState(0)
+  const onSceneError = useCallback((surface: string, error: Error) => {
+    setSceneFailure({ surface, message: error.message })
+  }, [])
 
   useEffect(() => {
     try {
@@ -646,6 +767,10 @@ export default function Viewer3D() {
     const onRestored = () => {
       restoreRenderer()
       setEnvGeneration((generation) => generation + 1)
+      // v7 closure: the canvas subtree was rebuilt against a NEW context, so any
+      // failure recorded against the dead one is stale — clear it and remount.
+      setSceneFailure(null)
+      setSceneGeneration((generation) => generation + 1)
       setContextPhase(null)
     }
 
@@ -714,8 +839,17 @@ export default function Viewer3D() {
           onPointerMissed={() => selectStructure(null)}
         >
           {/* Keyed by envGeneration: a restored context has no PMREM target, so
-              the environment is rebuilt (its cleanup disposes the old one). */}
-          <SceneEnvironment key={envGeneration} />
+              the environment is rebuilt (its cleanup disposes the old one).
+              Wrapped like the rest of the GPU work: `PMREMGenerator.fromScene`
+              is a real render pass, and a failure there must not take the
+              overlay down with it (v7 closure, gap 1). */}
+          <CanvasSceneBoundary
+            key={`env-${envGeneration}-${sceneGeneration}`}
+            name="Image-based lighting"
+            onError={onSceneError}
+          >
+            <SceneEnvironment key={envGeneration} />
+          </CanvasSceneBoundary>
           <CanvasContextRecovery
             contextLost={contextPhase !== null}
             stateRef={rootStateRef}
@@ -728,16 +862,48 @@ export default function Viewer3D() {
           <hemisphereLight args={['#dfe7f2', '#2b2f38', 0.35]} />
           <directionalLight position={[40, 60, 40]} intensity={1.35} color="#fff3e2" castShadow={false} />
           <directionalLight position={[-45, 20, -35]} intensity={0.45} color="#d8e6f8" />
-          <SceneLayers />
-          <PlaneHelpers />
+          {/* v7 closure (gap 1): the canvas subtree is contained locally, so a
+              throw in the scene or in the post stack can no longer be re-thrown
+              by R3F's own boundary into the DOM tree — which is what unmounted
+              Viewer3D (and the context-loss overlay with it) during the audit's
+              context-loss gate. The key is the Retry reset only: the scene and
+              the PiP deliberately keep the pre-existing restore semantics (three
+              re-uploads its own resources; the PiP rebuilds its rig from
+              `pipContextState.restores`), so a context restore does NOT remount
+              the whole model. PostFX, which owns render targets, IS rebuilt on
+              restore — see its key below. */}
+          <CanvasSceneBoundary
+            key={`scene-${sceneGeneration}`}
+            name="3D scene"
+            onError={onSceneError}
+          >
+            <SceneLayers />
+            <PlaneHelpers />
+          </CanvasSceneBoundary>
           {/* Post FX (realism plan §1 Layer 3): SSAO + subtle bloom + SMAA,
-              mounted after the scene; skipped entirely on 'balanced'. */}
-          <PostFX enabled={quality === 'high'} quality={quality} />
+              mounted after the scene; skipped entirely on 'balanced' AND while
+              the WebGL context is lost (PostFX's header documents the measured
+              `getContextAttributes().alpha` crash that the guard removes). The
+              envGeneration in the key rebuilds the composer against the NEW
+              context after a restore. */}
+          <CanvasSceneBoundary
+            key={`postfx-${envGeneration}-${sceneGeneration}`}
+            name="Post-processing"
+            onError={onSceneError}
+          >
+            <PostFX enabled={quality === 'high'} quality={quality} contextLost={contextPhase !== null} />
+          </CanvasSceneBoundary>
           {/* GPU live-section PiP (v3 plan §2.1): renders the scene from the
               section-aligned orthographic camera after PostFX presents, and
               only while the panel below is visible. */}
           {sectionPipVisible ? (
-            <SectionPiP visible={sectionPipVisible} windowRef={sectionPipWindowRef} />
+            <CanvasSceneBoundary
+              key={`pip-${sceneGeneration}`}
+              name="Live-section PiP"
+              onError={onSceneError}
+            >
+              <SectionPiP visible={sectionPipVisible} windowRef={sectionPipWindowRef} />
+            </CanvasSceneBoundary>
           ) : null}
           <OrbitControls
             makeDefault
@@ -785,6 +951,18 @@ export default function Viewer3D() {
       {/* P0: visible, retryable state for timed-out anatomy loads. Renders
           nothing at all while every slug resolved (the healthy case). */}
       <GeometryUnavailableNotice />
+      {/* v7 closure (gap 1): the DOM half of a contained canvas-subtree throw.
+          Renders nothing while the scene and the post stack are healthy. */}
+      {sceneFailure !== null ? (
+        <CanvasSceneFailureNotice
+          surface={sceneFailure.surface}
+          message={sceneFailure.message}
+          onRetry={() => {
+            setSceneFailure(null)
+            setSceneGeneration((generation) => generation + 1)
+          }}
+        />
+      ) : null}
       <p className="viewer-hint">drag to orbit · scroll to zoom · right-drag to pan · click any structure</p>
       {/* P0: the recovery overlay. Mounted ONLY while a loss is active, so a
           healthy canvas is never covered (and the audit's screenshot check

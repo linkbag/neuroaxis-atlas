@@ -483,6 +483,14 @@ export interface SectionPipDiagnostics {
   backdropCredit: string
   /** Why the requested modality could not paint ('' = it did, or 'none'). */
   backdropReason: SliceMissReason | ''
+  /**
+   * Section axis the backdrop was resolved on (`store.sectionAxis` at that
+   * frame). v7 closure (gap 3): the host needs it to turn the 'beyond-source'
+   * reason into the measured CT coverage statement — the same sentence the
+   * Plates toolbar and the live section show — instead of leaking the internal
+   * token into the panel's hint line.
+   */
+  backdropAxis: SectionAxis | null
   /** Backdrop canvas size in KB (0 when the pass never ran). */
   backdropKb: number
   /* ---- P0 WebGL context loss ---------------------------------------- */
@@ -518,6 +526,7 @@ export const sectionPipDiagnostics: SectionPipDiagnostics = {
   backdropRedraw: false,
   backdropCredit: '',
   backdropReason: '',
+  backdropAxis: null,
   backdropKb: 0,
   contextLost: false,
   rigGeneration: 0,
@@ -1130,6 +1139,10 @@ export function SectionPiP({ visible, windowRef }: SectionPiPProps) {
       requested === 'none' || backdrop.drawn
         ? ''
         : (resolveSliceModality(axis, planeValue, requested, null).reason ?? 'unavailable')
+    // The axis travels with the reason: the host's hint line turns
+    // 'beyond-source' back into the measured coverage statement (see the
+    // SectionPipDiagnostics.backdropAxis note).
+    diag.backdropAxis = axis
 
     if (backdropPainted) {
       // Depth + stencil are cleared first and the backdrop quad writes neither

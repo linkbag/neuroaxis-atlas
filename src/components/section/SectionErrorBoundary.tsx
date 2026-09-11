@@ -68,9 +68,11 @@ interface PanelErrorBoundaryState {
  *
  * SAFETY — three independent guards, because a test hook that can reach
  * production is a defect of its own:
- *   1. `import.meta.env.DEV` is statically `false` in a production build, so
- *      Vite/Terser removes the whole block. The hook cannot be reached in a
- *      shipped bundle even by hand-editing the URL.
+ *   1. `import.meta.env?.DEV` is `false` in a production build (Vite replaces the
+ *      token with its own env object, so the dev branch is statically dead and
+ *      the minifier drops the URL read). The hook cannot be reached in a shipped
+ *      bundle even by hand-editing the URL — asserted by grepping the built
+ *      bundle for `panelfail`.
  *   2. The parameter must be present. Without `?panelfail` nothing is armed.
  *   3. The name must match THIS boundary's `name` exactly, so one surface fails
  *      and every other panel proves it keeps working.
@@ -78,24 +80,96 @@ interface PanelErrorBoundaryState {
  * The probe element it renders (`data-panel-probe="<name>"`) additionally gives
  * the audit a positive signal that the hook is armed, so a *missing* card can
  * never be mistaken for a passing containment check.
+ *
+ * ── v7 closure: the probe marker moved ONTO THE FAILURE CARD (audit gap 5) ──
+ * The marker used to be `hidden` span rendered as a SIBLING of
+ * `<PanelFailureProbe/>`. React discards that whole subtree in the render pass
+ * that throws, so the span never committed: the audit measured
+ * `?panelfail armed 0 boundaries` and could not tell "the hook never armed" from
+ * "the card is missing". The marker now lives on the failure card
+ * (`panelErrorCard`, rendered while `error !== null`), i.e. AFTER the boundary's
+ * state transition, so `document.querySelectorAll('[data-panel-probe]').length
+ * === 1` proves arming AND containment in one signal.
+ *
+ * ── v7 closure: the probe fires ONCE per page load ─────────────────────────
+ * Retry must be a real recovery, not a re-throw: an unconditional probe made
+ * `Retry` restart the failure and left `probes === 1` forever, so the
+ * recoverability half of the demonstration could not be asserted. The hook now
+ * arms one throw per page load (it is a dev-only demonstration, and re-arming is
+ * one reload away), which lets the audit assert: card appears → Retry clears it →
+ * the panel renders again → the hook is inert afterwards.
  */
 export const PANEL_FAIL_PARAM = 'panelfail'
 
 /**
- * True when this build is a dev build. Vite replaces `import.meta.env` with a
- * literal object, so this folds to `false` in production and the hook below is
- * removed by the minifier. The optional chain is defended because a NON-Vite
- * consumer of this module exists: `scripts/verify/boundary-contract.mjs` imports
- * this file directly under Node (to execute the boundary's real state
- * transition), and there `import.meta.env` is undefined.
+ * One-shot latch for the forced throw (see the header).
+ *
+ * Consumed in `componentDidCatch` — i.e. AFTER React committed the failure —
+ * NOT during render. That matters because the app runs inside
+ * `React.StrictMode` (`src/main.tsx`), which DOUBLE-INVOKES render in dev: a
+ * latch flipped inside `render()` would be spent by the second invocation, the
+ * committed output would be the healthy children, and the deliberate throw would
+ * never happen at all (the demonstration would silently stop working — the same
+ * class of defect this whole gap is about).
+ */
+let probeConsumed = false
+
+/**
+ * Node-only arming seam. Under Node there is no `window` and no
+ * `import.meta.env`, so `panelFailTarget()` is inert by construction — which
+ * would make the containment demonstration impossible in the browser-free lane
+ * that `scripts/verify/boundary-contract.mjs` runs. This seam lets that lane arm
+ * the SAME shipped code path (no copy, no regex): pass the surface name to arm,
+ * `null` to disarm and reset the one-shot latch.
+ *
+ * It is a test seam, NOT a feature: the browser path never calls it, and it
+ * cannot enable the hook in a production build (the probe is still gated by
+ * `isDevBuild()` on the query-parameter path).
+ */
+export function armPanelFailForTest(target: string | null): void {
+  testTarget = target
+  probeConsumed = false
+}
+
+/** Armed target for the Node lane; null in the browser path. */
+let testTarget: string | null = null
+/**
+ * True when this build is served by the Vite DEV server.
+ *
+ * ── v7 closure: THE ROOT CAUSE OF THE `?panelfail` FAILURE (audit gap 5) ───
+ * This function used to read the flag through a local alias of `import.meta`:
+ *
+ *     const meta = import.meta as unknown as { env?: { DEV?: boolean } }
+ *     return meta.env?.DEV === true
+ *
+ * which is always `false` in the dev server, so `panelFailTarget()` was inert
+ * and the whole forced-throw demonstration could never arm — the audit measured
+ * exactly that (`?panelfail armed 0 boundaries`, `card=null`). The reason:
+ *
+ *   • Vite's dev transform decides whether to inject `import.meta.env` by
+ *     WALKING THE TRANSFORMED MODULE for an `import.meta.<prop>` access
+ *     (`vite:import-analysis`, "hasEnv", `prop === ".env"`). The esbuild TS strip
+ *     runs first, and a type cast is erased — so the alias above leaves the
+ *     module with a bare `import.meta` and a local `.env` read, no token to
+ *     detect, and therefore NO injected env object: `import.meta.env` is
+ *     `undefined` at runtime.
+ *   • The token has to appear literally, which is what the single line below
+ *     does. In a production build Vite replaces that same token with its own
+ *     literal env object, so `DEV` is `false` and the hook stays dead — verified
+ *     by grepping the built bundle for `panelfail` (see the run's evidence).
+ *
+ * The optional chain is deliberate: `scripts/verify/boundary-contract.mjs` and
+ * other Node lanes import this module directly, where `import.meta.env` is
+ * `undefined` and `armPanelFailForTest()` is the arming seam.
  */
 function isDevBuild(): boolean {
-  const meta = import.meta as unknown as { env?: { DEV?: boolean } }
-  return meta.env?.DEV === true
+  return import.meta.env?.DEV === true
 }
 
 /** Read `?panelfail` from the current URL. Dev-only; '' in every other case. */
 function panelFailTarget(): string {
+  // The Node lane's explicit seam wins (see armPanelFailForTest).
+  if (testTarget !== null) return testTarget
   if (!isDevBuild()) return ''
   if (typeof window === 'undefined') return ''
   try {
@@ -127,11 +201,17 @@ function PanelFailureProbe({ name }: { name: string }): never {
  * semantically identical.
  */
 export function panelErrorCard(name: string, message: string, onRetry: () => void) {
+  // v7 closure (gap 5): the armed surface's own card carries the probe marker, so
+  // "the hook is armed" and "the throw was contained" are ONE observable fact.
+  // Every other boundary's card is unaffected (its name does not match), which is
+  // what keeps `[data-panel-probe]` unique in the document.
+  const armed = panelFailTarget() === name && name.length > 0
   return (
     <div
       className="panel-error"
       role="alert"
       data-panel-error={name}
+      {...(armed ? { 'data-panel-probe': name } : {})}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -188,6 +268,12 @@ export class PanelErrorBoundary extends Component<PanelErrorBoundaryProps, Panel
   componentDidCatch(error: Error, info: ErrorInfo): void {
     // Keep the stack in the console for field diagnosis; the UI stays readable.
     console.error(`[panel] ${this.props.name ?? 'Panel'} failed`, error, info.componentStack)
+    // Consume the one-shot demonstration latch HERE, not in render(): this runs
+    // once per COMMITTED failure, while render() is double-invoked under
+    // React.StrictMode (see the latch declaration).
+    if (this.props.name !== undefined && panelFailTarget() === this.props.name) {
+      probeConsumed = true
+    }
   }
 
   private reset = (): void => {
@@ -201,16 +287,12 @@ export class PanelErrorBoundary extends Component<PanelErrorBoundaryProps, Panel
     if (error === null) {
       const armed = panelFailTarget()
       const name = this.props.name ?? 'Panel'
-      if (armed !== '' && armed === name) {
-        // The probe throws → React hands the error to getDerivedStateFromError →
-        // the failure branch below renders the card. The armed marker is a sibling
-        // because the throw discards the tree in the same pass.
-        return (
-          <>
-            <span hidden data-panel-probe={name} />
-            <PanelFailureProbe name={name} />
-          </>
-        )
+      if (armed !== '' && armed === name && !probeConsumed) {
+        // The ONE deliberate throw. The failure branch below renders the card
+        // (and `panelErrorCard` puts `data-panel-probe` on it, so arming and
+        // containment are one observable fact); `componentDidCatch` then spends
+        // the latch, which is what makes Retry recover instead of re-throwing.
+        return <PanelFailureProbe name={name} />
       }
       return this.props.children
     }

@@ -109,6 +109,10 @@ import {
   type PlaneTransform,
 } from './planeGeometry'
 import { pointInLoops, type PlaneAxis, type PlaneSpec } from './contours'
+// v7 closure (gap 3): the CT source-coverage statement — the SAME function the
+// Plates toolbar renders its `.is-ct-coverage` note from, so the canvas hint and
+// the toolbar can never state two different limits.
+import { ctCoverageStatement } from './imageLayers'
 import type { SectionContourPart, SectionWorkerRequest, SectionWorkerResponse, WorkerRegistryPart } from './contourWorker'
 import {
   SECTION_KIND_ALPHA,
@@ -449,15 +453,25 @@ export function resolveLayerFrame(
  * real data at this plane" states are honest and never blank). Pure and
  * exported for QA. Returns null exactly when real imagery painted — then the
  * layer's verbatim credit is shown in the same bottom-left slot instead.
+ *
+ * v7 closure (gap 3): `coverageStatement` is the measured CT source-coverage
+ * statement for THIS plane (from `imageLayers.ctCoverageStatement`, i.e. the
+ * shipped manifest's own number). A CT frame above the Visible Human series'
+ * apex is not a generic "no imagery" case: the source simply has no data there
+ * for any canonical box, and the hint says so — with the limit and with MRI
+ * named as the modality of record — instead of the neutral wording. The
+ * statement is used verbatim so the canvas and the toolbar state the same fact.
  */
 export function imageryHint(
   kind: SectionUnderlayKind,
   modality: SectionLayerModality | 'none',
   status: LayerFrameStatus,
   drew: boolean,
+  coverageStatement: string | null = null,
 ): string | null {
   if (drew) return null
   if (kind === 'none') return 'simulated only — real imagery is switched off'
+  if (coverageStatement !== null && modality === 'ct') return coverageStatement
   if (status === 'loading' && modality !== 'none') {
     return `loading the real ${MODALITY_LABELS[modality]} imagery… showing the simulated section`
   }
@@ -1240,7 +1254,18 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       status: String(imageryFrame.status ?? 'n/a'),
       drewReal,
     }
-    const hint = imageryHint(underlay.kind, imageryFrame.modality, imageryFrame.status, drewReal)
+    const hint = imageryHint(
+      underlay.kind,
+      imageryFrame.modality,
+      imageryFrame.status,
+      drewReal,
+      // v7 closure (gap 3): the canvas half of the CT coverage honesty. Only
+      // computed for a CT request/CT frame — the statement itself is null inside
+      // the coverage, so a covered plane keeps its normal hint/credit.
+      underlay.kind === 'ct' || imageryFrame.modality === 'ct'
+        ? ctCoverageStatement(plane.axis, plane.value)
+        : null,
+    )
     if (lastHintRef.current !== hint) {
       lastHintRef.current = hint
       setHint(hint)

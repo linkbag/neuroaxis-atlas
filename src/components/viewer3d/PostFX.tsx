@@ -23,6 +23,35 @@
  * `balanced` never reaches the composer: the caller passes
  * `enabled={quality === 'high'}`, which renders null and leaves the plain
  * canvas (renderer AA + renderer tone mapping) untouched.
+ *
+ * ── v7 CLOSURE: the composer MUST NOT be mounted while the WebGL context is
+ *    lost (QUALITY_PLAN §1 item 1, audit gap 2) ───────────────────────────
+ * Measured defect (`FAIL 3 unexpected error(s) during the P0 gates: TypeError:
+ * Cannot read properties of null (reading 'alpha')`, sourced to this file):
+ *   1. `webglcontextlost` fires, `Viewer3D` flips its loss state, and React
+ *      re-renders the R3F tree (R3F v8's `Canvas` re-renders its root in a
+ *      layout effect with no dependency array — `react-three-fiber.esm.js`
+ *      `useIsomorphicLayoutEffect` around line 258).
+ *   2. `@react-three/postprocessing`'s `EffectComposer` re-adds every pass in a
+ *      layout effect whose deps include the `children` ARRAY IDENTITY
+ *      (`EffectComposer.js:77-115`) — a fresh array on every render — so
+ *      `composer.addPass(pass)` runs on that very re-render.
+ *   3. `postprocessing@6.36.7` reads the context attributes in `addPass`
+ *      (`build/index.js:1002`, and `:864` in `setRenderer`):
+ *      `renderer.getContext().getContextAttributes().alpha` — and per the WebGL
+ *      spec `getContextAttributes()` returns **null** while the context is lost.
+ *      Hence the TypeError, thrown during React's commit phase.
+ *   4. R3F's internal error boundary catches it and RE-THROWS it in the DOM tree
+ *      (`Canvas`: `if (error) throw error`), so the app-level panel boundary for
+ *      the 3D viewer unmounted the whole `Viewer3D` — taking the context-loss
+ *      OVERLAY with it, which is why the audit saw `isContextLost() === true`
+ *      with no `[data-context-lost]` element at the same moment.
+ *
+ * The fix is the third switch below: while the context is lost the composer is
+ * never mounted (props → `contextLost`), so there is no pass to re-add, and it
+ * is mounted again after `webglcontextrestored` (the caller also bumps
+ * `envGeneration`, so the composer is rebuilt against the NEW context instead of
+ * holding render targets that belong to the dead one).
  */
 import { EffectComposer, SSAO, Bloom, SMAA, ToneMapping } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
@@ -33,10 +62,20 @@ export interface PostFXProps {
   enabled: boolean
   /** Sample budget knob; 'balanced' is expected to pass enabled={false}. */
   quality?: RenderQuality
+  /**
+   * True while the WebGL context is lost. Renders nothing: the composer's
+   * constructor/`addPass` read `getContextAttributes().alpha`, which is null on
+   * a lost context (see the header note). The caller unmounts this subtree for
+   * the duration of the loss and remounts it on restore.
+   */
+  contextLost?: boolean
 }
 
-export function PostFX({ enabled, quality = 'high' }: PostFXProps) {
+export function PostFX({ enabled, quality = 'high', contextLost = false }: PostFXProps) {
   if (!enabled) return null
+  // No context → no composer. Not a visual downgrade: there is nothing to render
+  // into, and the loss overlay is what the user must see.
+  if (contextLost) return null
 
   const samples = quality === 'high' ? 16 : 10
 

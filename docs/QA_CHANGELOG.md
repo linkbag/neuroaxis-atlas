@@ -239,3 +239,210 @@ was clean at review start and only the files listed below changed.
   anchoring and credit claims were settled from the committed sources, the
   geometry, and the plan's conventions.
 
+---
+
+# v6 remediation closure — independent QA pass (`v6b-qa`)
+
+Date: 2026-09-10 · Tree: `b5ab6f3`, clean before and after · Scope: the final QA
+gate of the v6 audit remediation (`docs/QUALITY_PLAN.md` §6, §8).
+Full record, with the exact failure text of every mutation: `docs/QUALITY_PLAN.md`
+**§8**. This entry is the changelog half.
+
+## Verdict
+
+**VERIFIED, with four recorded gaps** (`docs/QUALITY_PLAN.md §8.6`). The P0 fixes
+bite, the gates can fail when the code they guard is broken, every budget is
+inside its cap, and no v1–v7 feature regressed. The gaps are: the browser lane
+could not run at all in this environment (`verify:audit` exit **4**), 4
+`kind:"context"` records still carry an empty `clinical[]`, the historical
+`CONTENT_INVENTORY.md` tables still show their pinned-revision counts (a §10
+re-measurement was appended), and stray `chrome.exe` could not be attributed per
+process (the sandbox denies `Win32_Process`).
+
+## 1. The P0 fixes bite (mutation-tested, not inspected)
+
+- Context-loss handlers are real on **both** surfaces — main canvas
+  (`Viewer3D.tsx:640-658`, `preventDefault` + overlay `[data-context-lost]`
+  mounted only while lost) and the PiP
+  (`SectionPiP.tsx:833-858`, shared `gl.domElement`, `restoreGeneration` rebuild
+  of the target/stencil/materials).
+- The permanent gate (browser audit block M) **could not be run** — Chrome 153
+  exits instantly with `crashpad_client_win.cc:421 OpenProcess: Access is denied`.
+  A Node-only surrogate (scratch, uncommitted) passes 30/30 on the shipped tree
+  and **fails with a specific label** on each of six deliberate defects
+  (removed `preventDefault`, unwired listener, missing `data-context-lost`,
+  always-mounted overlay, dropped PiP rig rebuild, always-refusing
+  `requestContextRestore`). This is a surrogate, **not** the audit.
+- Boundaries: 7/7 surfaces wrapped. `boundary-contract.mjs` **fails** when one
+  wrapper is removed (`FAIL App.tsx does not wrap: Info panel`) and when
+  `role="alert"` is deleted from the recovery card.
+
+## 2. The gates can fail (the audit's own lesson, demonstrated)
+
+| Mutated in a scratch copy | Result |
+| --- | --- |
+| `DIRECTION_VECTORS` L/R mirror flipped | `verify:plane` **exit 1** — `PLANE_BADGES.y (A/P/R/L) disagrees with the geometry-derived orientation (A/P/L/R)` |
+| `AXIS_PAIR.x` swapped `['z','y']→['y','z']` | `verify:plane` **exit 1** — `PLANE_BADGES.x (S/I/P/A) disagrees with the geometry-derived orientation (A/P/I/S)` |
+| `axisExtents` `uMax + 6` (extent shift) | `verify:plane` **exit 1** — `10761/10827 assertion(s) passed, 66 FAILED` |
+| `boundsMayCut → false` (cull every part) | `verify:pipeline` **exit 1** — `FAIL no contours produced at any tested plane` |
+
+All reverted; scratch files byte-identical to the repository, both gates green
+again. Honest non-bite: shifting `CLIP_BOUNDS` itself does **not** fail
+`verify:plane` — C1 is a consistency assertion, not a pinned copy of AMENDMENT B,
+so out-of-band bound edits are caught by the plan and the baked geometry, not by
+that gate.
+
+## 3. Claimed-landed work, re-measured
+
+- **`p1-photofit` — honest.** `REGISTRATION_MEASURED` holds 43 rows; recomputing
+  its statistics reproduces the note's stated ranges exactly (centroid 0.23 /
+  2.49 / 64.78; UBC transverse 0.53–1.32 median 0.81; UBC coronal 0.23–4.16; VHP
+  2.36–64.78 median 10.84; VHP extentV 0.06–0.74; IoU peak 0.383). One prose range
+  does not reproduce — the note's "1.7–3.5× (UBC)" extent, where the table spans
+  0.34–6.07 — and it errs in the safe direction (the real mismatch is wider, so
+  the rejection stands). No `fit` value changed; every entry stays
+  `unmeasured-default`.
+- **`p1-identity` — landed.** 16/16 `ctx-*` ids are registered and authored
+  (validator: 0 awaiting records); all 10 rendered silhouettes map to a registry
+  id and answer `selectStructure(slot.id)`; the four previously unowned
+  silhouettes now carry `ctx-medulla-surface`, `ctx-pons-surface`,
+  `ctx-midbrain-surface`, `ctx-pineal`. The 8 "invisible" tracts always rendered
+  through `TractTube`; the surviving gap is 2D — 9 authored tracts (the 8 + v7's
+  `tract-uncinate-fasciculus`) carry no plate label.
+- **`p1-content` — landed, with one unmet acceptance line.** 26 syndromes
+  (`syn-one-and-a-half` present and conformant; every `clinical[].syndromeId`
+  resolves; `syn-central-horner` exists). **4 records still hold `clinical: []`**,
+  so §6's "0 records with empty `clinical`" is NOT met.
+
+## 4. Gates and budgets on the closure tree
+
+`validate` 0/0 · `check` 0 · `build` 0 (entry 1 120.53 kB / 252.91 kB gzip;
+vendor 1 206.81 kB / 354.64 kB) · `verify:pipeline` 106/106 · `verify:plane`
+10 827 assertions · `a11y-contract` 38 · `boundary-contract` 22 · tris
+**570 096/800 000** · GLB **13.12 MiB/14 MiB** · imaging **8.71 MiB/10 MiB** ·
+`verify:audit` **exit 4, no check ran**.
+
+## 5. Files changed by this QA pass
+
+| File | Change |
+| --- | --- |
+| `docs/QUALITY_PLAN.md` | **§8** appended — the full QA verdict, per-item results, the gate-bite demonstrations with exact failure text, and the honest limitations |
+| `docs/CONTENT_INVENTORY.md` | **§10** appended — the re-measured current counts, as the document's own preamble asks; the historical §1–§9 tables are left intact as the pinned-revision record |
+| `docs/QA_CHANGELOG.md` | this entry |
+
+No product, data or gate file was edited. Every mutation lived in
+`.dsh-scratch/qa-bite/` (gitignored) and was reverted there; the scratch
+surrogate and counter are uncommitted, and `.dsh-scratch/`, `.plate-scratch/`,
+`.bp3d-probe/`, `assets-src/` remain gitignored and uncommitted.
+
+
+# v7 closure — integration acceptance pass (`v7c-integration`)
+
+Date: v7 closure (spec: `docs/TELENCEPHALON_PLAN.md` §9 + `docs/QUALITY_PLAN.md` §6).
+Scope: merge the closure work, prove each of the five audit gaps is genuinely closed, re-run every
+gate, re-derive the budgets, and commit — without touching anything below `y = +45`.
+
+## Verdict
+
+The five gaps the orchestrator's 56-check browser audit found are **closed in the shipped code**, and
+every fix is now covered by a gate that fails if it is reverted. The **browser lane could not run in
+this sandbox** — see the honest limitation below — so no Tier-2 verdict is claimed.
+
+## 1. Gate table on the frozen tree
+
+| # | Gate | Command | Tier | Result |
+| --- | --- | --- | --- | --- |
+| 1 | Data integrity | `npm run validate` | 1 | **PASS** — 0 errors, 0 warnings · 17 levels · 183 registry entries · 160 structures · 23 tracts · 26 syndromes · 15 plates |
+| 2 | Types | `npm run check` | 1 | **PASS** — exit 0 |
+| 3 | Build | `npm run build` | 1 | **PASS** — exit 0 (`index` 1,123.44 kB / 253.89 kB gzip + `vendor-three` 1,206.81 kB / 354.64 kB) |
+| 4 | Section pipeline | `npm run verify:pipeline` | 1 | **PASS** — 106/106 parts · 570,096 triangles · 329 loops across 13 planes · 0 problems |
+| 5 | Plane transform | `npm run verify:plane` | 1 | **PASS** — 10,827 assertions |
+| 6 | Boundary contract | `node scripts/verify/boundary-contract.mjs` | 1 | **PASS** — 22 passed · 0 failed |
+| 7 | a11y contract | `node scripts/verify/a11y-contract.mjs` | 1 | **PASS** — 38 passed · 0 failed |
+| 8 | Audit check mirror | `node scripts/verify/audit-checks.test.mjs` | 1 | **PASS** — 75 passed · 0 failed · 8 groups |
+| 9 | Anatomy + budgets | `node scripts/build-anatomy-geometry.mjs --manifest` | 1 | **PASS** — 570,096/800,000 tris · 13.12/14 MiB GLB · 2.81/3 MiB nuclei |
+| 10 | Imaging gates | `node scripts/verify-imaging-v4.mjs`, `-v4b.mjs` | 1 | **PASS** — 8.71 MiB/10 MiB in 80 files · 22/22 cryosections re-decoded |
+| 11 | Runtime audit | `npm run verify:audit` | **2** | **exit 4 — no check was run** (no browser; see §4) |
+| 12 | Browser probe | `npm run verify:browser` | **2** | **exit 4 — no check was run** |
+| 13 | Browser acceptance | `npm run verify:acceptance` | **2** | **exit 4 — no check was run** |
+
+Rows 11–13 are recorded as command + exit code + reason and are **never reported as a pass**.
+`exit 4` is `EXIT.BROWSER_UNAVAILABLE`, not a product failure — that distinction is the whole reason
+the harness has separate exit codes.
+
+## 2. Per-gap evidence (with the gate that fails if the fix is reverted)
+
+| Gap | Fix in the shipped code | Gate that catches a revert |
+| --- | --- | --- |
+| (1) no recovery overlay on context loss | overlay moved **outside** the R3F `<Canvas>` subtree; each canvas child wrapped in `CanvasSceneBoundary` (THREE-safe `null` fallback) | `audit-checks.test.mjs` — "the overlay is rendered OUTSIDE the R3F `<Canvas>` subtree" · "canvas children are wrapped in CanvasSceneBoundary" |
+| (2) `TypeError … reading 'alpha'` in PostFX | `PostFX` returns `null` while `contextLost` (no composer ⇒ no `addPass` ⇒ no `getContextAttributes().alpha`); remounts on restore against the new context | `audit-checks.test.mjs` — "PostFX returns null while the context is lost" · "passes the live loss state into PostFX" · "the 'high' quality gate is unchanged" |
+| (3) CT coverage statement "missing" at y = +58 | **check defect**: the statement already existed and was wired; the check never proved the axis. It now pins `sectionAxis === 'y'` and reports `{axis, planeValue, kind, notePresent}` before asserting, then asserts the honest state | `audit-checks.test.mjs` group (3), driven by the real `ctCoverageStatement()` + shipped `ct-manifest.json`; the predicate is proven to **bite** when the note is absent above the limit |
+| (4) default preset + 2 dimmed rows | **check defect + latent code gap**: audit profile persisted `neuroaxis.viewPreset`; and `telSubdivisionIds` filtered on `subdivision` alone. Now: fresh profile per run + `localStorage.clear()` prologue + boot assertions in their own block; `region === 'telencephalon'` added to the filter | `audit-checks.test.mjs` group (4) — the region guard, the "no brainstem row is layer-off" sweep, and the stale-preference-vs-wrong-default discrimination |
+| (5) `?panelfail` armed 0 boundaries / no containment | **two real defects**: the probe marker was a *sibling* of the throwing component (React discards it in the throwing pass), and `isDevBuild()` read `import.meta.env` through a type-cast alias that esbuild erases (so Vite injected no env object and the hook was dead). Marker moved onto the failure card; the token is now literal; the latch is one-shot so Retry recovers | `audit-checks.test.mjs` group (5) — drives the real `PanelErrorBoundary` through the real throw: `card=Taxonomy tree · probes=1 · retry=true`, then Retry restores the children |
+
+### Audit artifacts (checks, not product bugs) — both re-framed
+
+- **CT above its source.** The Visible Human CT series ends at canonical **y ≈ 36.25 au**
+  (`ct-manifest.json` → `intensity.sourceCoverage.superiorMostDataYAu`, 64.3 % of stations inside the
+  source FOV). The check now requires **no CT credit** there and requires the statement naming the
+  limit and MRI. **Inside** coverage the check is unchanged and still demands the NLM credit plus
+  real painted samples, and it is proven to fail when CT paints nothing on a covered plane.
+- **Photo at y = +58.** No photograph is anchored above the highest mapped level, so the honest
+  assertion is the canvas' no-anchor hint.
+
+## 3. Budgets, re-derived from the committed artifacts
+
+| Budget | Cap | Measured | Verdict |
+| --- | --- | --- | --- |
+| Rendered triangles | ≤ 800,000 | **570,096** (106 parts) | PASS |
+| Committed anatomy GLB | ≤ 14 MiB | **13,755,548 B = 13.12 MiB** (106 files, 0 missing) | PASS |
+| Imaging payload | ≤ 10 MiB | **9,132,531 B = 8.71 MiB / 80 files** | PASS |
+| Pooled nuclei | ≤ 3 MiB | **2.81 MiB** | PASS |
+
+## 4. Honest limitation — the browser lane did not run here
+
+`verify:audit`, `verify:browser` and `verify:acceptance` all exit **4** with *"environment unusable,
+no check was run"*. Measured against **four** launch variants — Chrome **and** Edge, `--headless=new`
+**and** legacy headless, every one with `--no-sandbox --disable-crash-reporter --disable-breakpad`
+and a fresh profile — each process died before its DevTools endpoint answered:
+
+```
+crashpad_client_win.cc:421  OpenProcess: Access is denied. (0x5)
+platform_channel.cc:108     Check failed: . : Access is denied. (0x5)
+```
+
+**Therefore:** the runtime half of the audit (scene luminance, live-section paint counts, pointer and
+focus interaction, translucency of the ghost shell, the real `WEBGL_lose_context` cycle, and the
+telencephalon browser sanity checklist) is **NOT independently reproduced in this run**. What the
+Node lane proves is the decision logic, the DOM contract in the shipped sources and the shipped
+data/manifest facts — it does **not** prove that pixels appeared. The two observations below are
+quoted from the orchestrator's earlier run against this tree, not produced here:
+
+- `ok transverse plane reaches y = +58 and the live section repaints (range -55..85; hash 63782274 → 788243822)`
+- `ok live section paints at y = +58 (494/6492 non-background samples)`
+
+**Unproven here and requiring a machine where Chrome starts:** re-run `npm run verify:audit` and
+require exit 0.
+
+## 5. Node-verified telencephalon facts (the half a browser is not needed for)
+
+- taxonomy: 183 entries · **46 telencephalon** records · all 5 subdivisions present (Basal ganglia ·
+  Cerebral cortex · Lateral ventricles · Limbic system · Telencephalic white matter)
+- the default preset hides 31 telencephalic records and **no** non-telencephalon record; neither
+  `ctx-thalamus-envelope` nor `ctx-internal-medullary-lamina` is hidden or layer-dimmed (137 rows swept)
+- the four v7 levels are anchored (+48/+58/+68/+78) and `CLIP_BOUNDS` admits them:
+  x −48..48, y −55..+85, z −75..+55
+- 15 plate records; the 3 v7 telencephalon plates are committed (`plate-tel-axial-58`,
+  `plate-tel-coronal-fornix`, `plate-tel-sagittal-hemisphere`)
+
+**Not Node-verifiable** (requires the browser): that the hemisphere/ghost shell renders and is
+translucent enough to keep the brainstem visible at the default preset, and that a telencephalon
+structure selects from the tree, search, the 3D view and the axial +58 plate.
+
+## 6. Files added/changed by this pass
+
+| File | Change |
+| --- | --- |
+| `scripts/verify/audit-checks.test.mjs` | **new** — the Tier-1 mirror of the audit's load-bearing checks (75 assertions, 8 groups), runnable with plain `node` |
+| `README.md` | **v7 closure** section — the five defects with root causes and reverting gates, the two audit artifacts, the budgets, the evidence tiers and the browser-lane limitation; `audit-checks.test.mjs` added to the Scripts table |
+| `docs/QA_CHANGELOG.md` | this entry |

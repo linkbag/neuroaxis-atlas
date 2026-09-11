@@ -528,7 +528,19 @@ export const DEFAULT_LAYERS: AtlasLayers = defaultLayers()
  *  2. **the default preset does not hide the brainstem** — no record outside
  *     the telencephalon may appear in its `hidden` set. The plan's wording is
  *     "assert brainstem structures remain visible/selectable at default
- *     framing", and this is that assertion at the earliest possible moment.
+ *     framing", and this is that assertion at the earliest possible moment;
+ *  3. **v7 closure (gap 4) — the default preset does not DIM the brainstem
+ *     either.** The audit measured two diencephalon rows rendered with the
+ *     taxonomy tree's `is-off` class at what it believed was default framing
+ *     ("Internal medullary lamina", "Thalamus (context envelope)"). The cause was
+ *     a non-default preset (the audit's own earlier preset click, persisted to
+ *     `neuroaxis.viewPreset`), because those rows are neither hidden nor
+ *     layer-off under `brainstem-focus`. This loop asserts the whole rule rather
+ *     than the symptom: for every non-telencephalon record the default layers
+ *     must have BOTH its region and its kind layer on, which is exactly the
+ *     condition `TaxonomyTree`'s `layerOff()` uses to emit `is-off`. A future
+ *     edit that narrowed the default's `kinds` (e.g. to `['nucleus']`) would dim
+ *     brainstem rows silently; it now fails at module load instead.
  */
 {
   const preset = viewPresetOf(DEFAULT_LAYERS)
@@ -544,6 +556,16 @@ export const DEFAULT_LAYERS: AtlasLayers = defaultLayers()
       throw new Error(
         `store: the default preset hides "${entry.id}" (${entry.region}) — the brainstem must stay ` +
           'visible/selectable at default framing (docs/TELENCEPHALON_PLAN.md §5/§9)',
+      )
+    }
+    // (3) The dimming half: TaxonomyTree renders `is-off` exactly when the row's
+    // region OR kind layer is off (TaxonomyTree.tsx `layerOff`). Both must hold
+    // for every brainstem-family record under the default preset.
+    if (!DEFAULT_LAYERS.regions.has(entry.region) || !DEFAULT_LAYERS.kinds.has(entry.kind)) {
+      throw new Error(
+        `store: the default preset turns off the ${entry.region}/${entry.kind} layer of "${entry.id}" ` +
+          '— that row would render dimmed (is-off) at default framing, where the brainstem must be ' +
+          'the visual focus (docs/TELENCEPHALON_PLAN.md §5/§9)',
       )
     }
   }

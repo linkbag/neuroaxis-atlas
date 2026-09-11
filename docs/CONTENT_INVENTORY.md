@@ -756,3 +756,48 @@ These four have **no BP3D mesh**: the `waypoints` polyline is the geometry, rout
 - **Geometry rule applied to `origin3d`/`size3d`** (per the task contract): they appear only where no baked mesh in the `tel-geometry` manifest covers the record. Six of the 38 new structure records carry an ellipsoid placeholder (`nuc-ventral-striatum`, `nuc-dentate-gyrus`, `tract-fimbria`, `tract-corona-radiata`, `vent-interventricular-foramen`, `surf-planum-temporale`); every other new record, including the ventricular horns/atrium, the caudate and callosal sub-regions, the pallidal segments and the capsular limbs, gets its geometry from the parent baked mesh and therefore carries neither field.
 - **Not touched by this task:** `src/data/taxonomy.json`, `src/data/levels.json`, `src/data/sectionImages.ts`, any plate manifest/SVG, and every existing brainstem/diencephalon/cerebellum record. Nothing below y = +45 changed coordinates; this task added content and level references only.
 - **Verification run after the edits:** `npm run validate` → `0 awaiting authored records · tracts 23 record(s)`, **0 errors / 0 warnings**; `npm run check` (`tsc --noEmit`) exit 0 — both re-run after the waypoint correction, with the same result. The ad-hoc cross-checks (scratch harnesses, not committed) confirm: 46/46 telencephalon ids have both an authored record and a curated web-ref key; no `origin3d`/`size3d` or waypoint value falls outside the AMENDMENT B bounds (`x ±48`, `y −55…+85`, `z −75…+55`); every `levels[]` entry resolves in `levels.json`; every authored record carries a non-empty `function`, a `bloodSupply`, ≥ 1 complete `clinical` item (130 items across the 46, 73 of them naming an arterial territory), Blumenfeld-style `refs`, and `origin3d`/`size3d` only where no baked mesh exists; and the tract geometry check described in §9.6 (point-to-triangle distances to the registered meshes, ≤ 3.2 au worst case).
+
+---
+
+## 10. QA re-reconciliation (`v6b-qa`) — the CURRENT counts
+
+Appended by `v6b-qa` on the closure tree `b5ab6f3`, exactly as this document's
+preamble instructs ("if a later run extends the registry or the level anchors,
+re-run this reconciliation instead of trusting the numbers"). **The §1–§9 tables
+above are NOT edited**: they are the dated record of revision `716896f` /
+`d1cefef` and they say so. This section is the current truth, measured from
+`src/data`, `src/data/plates/` and `src/assets/anatomy/anatomy-manifest.json` with
+`npm run validate` (0 errors / 0 warnings, exit 0) plus a scratch Node counter
+(`.dsh-scratch/qa-bite/inventory-count.mjs`, uncommitted).
+
+| Quantity | §2/§3/§4/§7 say (pinned revision) | Measured on `b5ab6f3` |
+| --- | --- | --- |
+| registry entries | 179 (137 at `716896f`) | **183** |
+| by region | diencephalon 38 · tel 46 · midbrain 24 · pons 34 · medulla 32 · cerebellum 5 | diencephalon **39** · tel **46** · midbrain **25** · pons **35** · medulla **33** · cerebellum **5** |
+| by kind | nucleus 81 · tract 51 · surface 25 · **context 12** · ventricle 10 | nucleus **81** · tract **51** · surface **25** · **context 16** · ventricle **10** |
+| registry entries with an authored record | 137 (42 registry-only stubs) | **183 — 0 stubs** (`validate`: "0 awaiting authored records") |
+| `structures/*.json` | 11 files, 156 records | 11 files, **160 records** |
+| `tracts.json` | 23 records | **23** |
+| registry tracts with no authored record | "32 of 51" | **0 of 51** |
+| syndrome records | 26 in 3 files | **26** in 3 files |
+| plate SVGs / plate records | 12 / 12 | **15 / 15** |
+| distinct slugs across ALL plates | 122 (12 plates) | **156** (15 plates) — the 122 figure is still exactly right for the 12 non-telencephalon plates, whose per-plate counts are unchanged |
+| authored tracts with no plate label | 8 of 19 | **9 of 23** (the same eight + `tract-uncinate-fasciculus`, v7) |
+| `levels.json` anchors | 17 | **17** |
+| records with an empty `clinical[]` | 0 (§5.1 "Post-state") | **4** — `ctx-pineal`, `ctx-medulla-surface`, `ctx-midbrain-surface`, `ctx-pons-surface`, all `kind:"context"` |
+| records with exactly 1 clinical item | 47 | **47** |
+| anatomy manifest | 84 parts (10 context) | **106 parts (15 context)**, `version: 2` |
+
+Two integrity checks with no equivalent row above, run for the first time here:
+every `plates.json` `regions[].slug` resolves to an authored record (**0
+unresolved**), and every `plates.json` `levelId` resolves in `levels.json` (**0
+unresolved**).
+
+§5.1's authorship *history* cannot be re-measured — no pre-change baseline is
+committed — so only its post-state is confirmable; that post-state (47
+single-item records; `nuc-cochlear-dorsal` as the single citation exception among
+183 records) **does** reproduce. The four empty `clinical[]` arrays are the one
+§6 acceptance line the v6 closure did not close: they are registered
+`kind:"context"` surface silhouettes, and authoring clinical items for a surface
+shell is a content decision rather than a QA fix (see
+`docs/QUALITY_PLAN.md §8.6` item 2).

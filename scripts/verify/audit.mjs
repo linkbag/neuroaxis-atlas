@@ -26,8 +26,33 @@
  *   4  no browser: Chrome could not be started / its DevTools endpoint never
  *      answered (preflight, before any check runs). The most common cause in a
  *      restricted sandbox is crashpad: `OpenProcess: Access is denied (0x5)`.
+ *
+ * ── v7 closure: DETERMINISM (audit gaps 4a/5, plan §2.6) ────────────────────
+ * Two of the ten failures in the orchestrator's run were not product defects at
+ * all: the boot-preset check read a `neuroaxis.viewPreset` left behind in the
+ * PERSISTENT Chrome profile (`.plate-scratch/chrome-profile-audit`) by an earlier
+ * run, and the audit's own section B clicks the header's "Nuclei" preset before
+ * that check ran. A stored preference could therefore masquerade as "the default
+ * preset is wrong". The run is now deterministic by construction:
+ *   1. a FRESH profile directory every run (the previous one is deleted first;
+ *      if it cannot be deleted, a per-PID directory is used instead) — nothing
+ *      survives between runs;
+ *   2. an explicit `localStorage.clear()` + `sessionStorage.clear()` prologue
+ *      before the boot read, reported in the log — this also covers the case
+ *      where the audit is pointed at an already-running server;
+ *   3. the boot-preset assertions run IMMEDIATELY after that clean boot (block
+ *      A0), before any check clicks a preset button, and they report the raw
+ *      reading (`active`, `stored`, `offRows`) with the cause.
+ *
+ * ── v7 closure: PREDICATES (audit gaps 3/5/6, plan §4.1 item 6) ─────────────
+ * Every load-bearing verdict below is decided by a PURE predicate imported from
+ * `./checks.mjs` (coverage honesty, preset focus/dimming, panel containment and
+ * recovery, context-loss DOM contract, modality sweep honesty). The browser lane
+ * feeds them real DOM readings; `scripts/verify/audit-checks.test.mjs` feeds the
+ * same predicates synthetic readings and the SHIPPED manifests, so the checks are
+ * falsifiable without a browser and cannot drift from the assertions run here.
  */
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
   EXIT,
@@ -35,6 +60,17 @@ import {
   launchChrome,
   startDevServer,
 } from './lib/startServer.mjs'
+import {
+  contextLossReading,
+  contextRestoreReading,
+  ctCoverageReading,
+  modalityReading,
+  panelContainmentReading,
+  panelRecoveryReading,
+  presetDimmingReading,
+  presetFocusReading,
+  readCtSourceCoverage,
+} from './checks.mjs'
 
 const BASE = process.argv[2] ?? 'http://localhost:5173'
 if (/^https?:\/\/(127\.0\.0\.1|\[::1\])/.test(BASE)) {
@@ -45,8 +81,41 @@ if (/^https?:\/\/(127\.0\.0\.1|\[::1\])/.test(BASE)) {
   console.log(`note: ${BASE} uses a loopback literal — prefer http://localhost:<port>`)
 }
 const PORT = 9355
-const PROFILE = resolve('.plate-scratch/chrome-profile-audit')
+
+/**
+ * CLEAN PROFILE PER RUN (v7 closure, gap 4a — see the header). The audit used a
+ * single persistent profile, so a `neuroaxis.viewPreset` written by an earlier
+ * run (or by this script's own earlier sections) decided the boot-preset check.
+ * The directory lives under `.plate-scratch/` (gitignored, created by this
+ * script), which is the only place a verify script may delete: a user profile is
+ * never touched.
+ */
+const PROFILE_BASE = resolve('.plate-scratch/chrome-profile-audit')
+let PROFILE = PROFILE_BASE
+try {
+  rmSync(PROFILE_BASE, { recursive: true, force: true })
+} catch (error) {
+  PROFILE = `${PROFILE_BASE}-${process.pid}`
+  console.log(
+    `  ·  could not reset ${PROFILE_BASE} (${
+      error instanceof Error ? error.message : String(error)
+    }) — using the per-run profile ${PROFILE} instead`,
+  )
+}
 mkdirSync(PROFILE, { recursive: true })
+console.log(`  ·  audit profile: ${PROFILE} (fresh — no stored preference can survive a run)`)
+
+/**
+ * The CT source-coverage block of the SHIPPED manifest, read once per run
+ * (`checks.readCtSourceCoverage`). ONE source for the limit: no check below types
+ * the number, so a re-bake moves every assertion with it.
+ */
+const CT_COVERAGE = readCtSourceCoverage()
+console.log(
+  `  ·  CT source coverage from ct-manifest.json: superior-most data y ≈ ` +
+    `${CT_COVERAGE.limit === null ? 'not declared' : CT_COVERAGE.limit.toFixed(2)} au` +
+    `${CT_COVERAGE.fractionInsideFov === null ? '' : ` · ${(CT_COVERAGE.fractionInsideFov * 100).toFixed(1)} % of stations inside the source FOV`}`,
+)
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const results = []
@@ -255,8 +324,105 @@ if (environment.exitCode !== null) {
 
 try {
   await connect()
+
+  /* ======================================================================
+   * A0 — DETERMINISTIC CLEAN BOOT + THE DEFAULT-PRESET GATE
+   * (v7 closure, gaps 4/4a; docs/TELENCEPHALON_PLAN.md §5 + §9; plan §2.6)
+   *
+   * The boot preset is read from a page that CANNOT have a stored preference:
+   * a fresh Chrome profile (see PROFILE above), an explicit localStorage /
+   * sessionStorage clear, and a reload before the reading. This runs BEFORE
+   * section B — which clicks the header's "Nuclei" preset — because reading the
+   * "default" after that click measures the click, not the default. That was the
+   * exact defect: the audit reported "the default preset is not Brainstem focus
+   * (active: Nuclei …)" and "2 brainstem-family tree row(s) are dimmed" when the
+   * code default was correct all along (store.ts asserts it at module load).
+   *
+   * The tree is expanded first: leaves only render while their subdivision is
+   * open, and a collapsed tree would let the dimming assertion pass vacuously.
+   * ==================================================================== */
+
+  await send('Page.navigate', { url: BASE })
+  await sleep(5000)
+  const storageReset = await evaluate(`(() => {
+    try {
+      const keys = Object.keys(window.localStorage);
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      return 'cleared ' + keys.length + ' key(s)' + (keys.length > 0 ? ': ' + keys.join(', ') : '');
+    } catch (error) {
+      return 'storage unavailable: ' + (error && error.message ? error.message : String(error));
+    }
+  })()`)
+  info('clean-profile prologue: ' + String(storageReset))
+
+  // Reload: the app now boots from the cleared state (first-visit conditions).
   await send('Page.navigate', { url: BASE })
   await sleep(7000)
+
+  const expandRegions = await evaluate(`(() => {
+    const family = /(medulla|pons|midbrain|diencephalon|cerebellum)/i;
+    let opened = 0;
+    for (const region of document.querySelectorAll('.tree-region')) {
+      const name = (region.querySelector('.tree-region-name')?.textContent || '');
+      if (!family.test(name)) continue;
+      const row = region.querySelector('.tree-region-row');
+      if (row && row.getAttribute('aria-expanded') !== 'true') { row.click(); opened++; }
+    }
+    return 'opened ' + opened + ' brainstem-family region(s)';
+  })()`)
+  await sleep(1000)
+  const expandSubdivisions = await evaluate(`(() => {
+    const family = /(medulla|pons|midbrain|diencephalon|cerebellum)/i;
+    let opened = 0;
+    for (const region of document.querySelectorAll('.tree-region')) {
+      const name = (region.querySelector('.tree-region-name')?.textContent || '');
+      if (!family.test(name)) continue;
+      for (const sub of region.querySelectorAll('.tree-sub-row')) {
+        if (sub.getAttribute('aria-expanded') !== 'true') { sub.click(); opened++; }
+      }
+    }
+    return 'opened ' + opened + ' subdivision(s)';
+  })()`)
+  await sleep(1200)
+
+  const bootPreset = await evaluate(`(() => {
+    const presets = [...document.querySelectorAll('.header-presets button')];
+    const active = presets.filter((b) => b.getAttribute('aria-pressed') === 'true')
+      .map((b) => b.textContent.trim());
+    const offRows = [];
+    let rowsSeen = 0;
+    for (const region of document.querySelectorAll('.tree-region')) {
+      const name = (region.querySelector('.tree-region-name')?.textContent || '').toLowerCase();
+      if (name.indexOf('telencephalon') !== -1) continue;
+      if (!/(medulla|pons|midbrain|diencephalon|cerebellum)/.test(name)) continue;
+      for (const row of region.querySelectorAll('.tree-leaf-row')) {
+        rowsSeen++;
+        if (row.classList.contains('is-off')) offRows.push((row.textContent || '').trim().slice(0, 24));
+      }
+    }
+    let stored = null;
+    try { stored = window.localStorage.getItem('neuroaxis.viewPreset'); } catch (error) { stored = null; }
+    return {
+      bootActiveLabels: active,
+      labels: presets.map((b) => b.textContent.trim()),
+      offRows: offRows.slice(0, 8),
+      offCount: offRows.length,
+      rowsSeen,
+      storedPreset: stored,
+    };
+  })()`)
+  info('boot preset reading (' + String(expandRegions) + ', ' + String(expandSubdivisions) + '): '
+    + JSON.stringify({
+      active: bootPreset.bootActiveLabels,
+      stored: bootPreset.storedPreset,
+      rowsSeen: bootPreset.rowsSeen,
+      offCount: bootPreset.offCount,
+    }))
+  const focusVerdict = presetFocusReading(bootPreset)
+  focusVerdict.ok ? ok(focusVerdict.detail) : bad(focusVerdict.detail)
+  const dimmingVerdict = presetDimmingReading(bootPreset)
+  dimmingVerdict.ok ? ok(dimmingVerdict.detail) : bad(dimmingVerdict.detail)
 
   /* A — shell & boot */
   const boot = await evaluate(`({
@@ -471,30 +637,72 @@ try {
   await setAxis('transverse')
   await sleep(2500)
 
-  /* modality sweep — explicit modalities must never silently swap to another */
+  /* modality sweep — explicit modalities must never silently swap to another.
+   * v7 closure (gap 6): this sweep is COVERAGE-AWARE. It used to demand a credit
+   * for every modality at every plane, which is false in this build in two
+   * measured cases (the CT source ends at canonical y ≈ 36.25 au, and no
+   * photograph is anchored above the highest mapped level) — and it read the
+   * canvas hint from `.section-overlay-note`, which is the ERROR slot, not the
+   * honest-state line (`.section-imagery-hint`). The verdict now comes from
+   * `checks.modalityReading`, which is fed the plane the section is ACTUALLY on
+   * (axis + value), the credit, the canvas hint and the toolbar note. */
   const modalityResults = []
-  for (const [label, expect, forbid] of [
-    ['CT', /national library of medicine/i, /openneuro|british columbia/i],
-    ['MRI', /openneuro/i, /national library of medicine|british columbia/i],
-    ['Photo', /(british columbia|national library of medicine)/i, /openneuro|ds007313/i],
-    ['Simulated only', null, /openneuro|national library|british columbia/i],
-  ]) {
+  const sectionPlaneReading = `(() => {
+    const axisGroup = document.querySelector('.section-toolbar-group[aria-label="Section axis"]');
+    const axisBtn = axisGroup
+      ? [...axisGroup.querySelectorAll('button')].find((b) => b.getAttribute('aria-pressed') === 'true')
+      : null;
+    const activeRow = document.querySelector('.section-plane-sliders .slider-row.is-active-axis');
+    const slider = activeRow ? activeRow.querySelector('input[type=range]') : null;
+    const kindGroup = document.querySelector('.section-toolbar-group[aria-label="Imagery modality"]');
+    const kindBtn = kindGroup
+      ? [...kindGroup.querySelectorAll('button')].find((b) => b.getAttribute('aria-pressed') === 'true')
+      : null;
+    return {
+      axis: axisBtn && /^[xyz]/.test(axisBtn.textContent.trim()) ? axisBtn.textContent.trim().charAt(0) : null,
+      planeValue: slider ? Number(slider.value) : null,
+      kindPressed: kindBtn ? kindBtn.textContent.trim() : null,
+    };
+  })()`
+  for (const label of ['CT', 'MRI', 'Photo', 'Simulated only']) {
     await evaluate(`(() => {
       const b = [...document.querySelectorAll('button')].find(x => x.textContent.trim() === ${JSON.stringify(label)});
       if (b) b.click();
     })()`)
     await sleep(3000)
     const stats = await evaluate(sectionStats)
-    const credit = await evaluate(`document.querySelector('.section-credit')?.textContent?.trim() ?? ''`)
-    const hint = await evaluate(`document.querySelector('.section-overlay-note:not(.section-debug)')?.textContent?.trim() ?? ''`)
-    modalityResults.push({ label, painted: stats?.painted ?? 0, credit, hint })
-    if (!stats || stats.painted < 50) bad(`modality ${label} painted nothing`)
-    else if (forbid && forbid.test(credit)) bad(`modality ${label} silently showed another modality: "${credit.slice(0, 50)}"`)
-    else if (expect && expect.test(credit)) ok(`modality ${label}: ${stats.painted} samples · credit "${credit.slice(0, 44)}"`)
-    else if (!expect && credit === '') ok(`modality ${label}: ${stats.painted} samples · no real imagery (as chosen)`)
-    else if (!credit && hint) ok(`modality ${label}: ${stats.painted} samples · honest state "${hint.slice(0, 40)}"`)
-    else bad(`modality ${label} credit unexpected: "${credit.slice(0, 50)}"`)
+    const planeState = await evaluate(sectionPlaneReading)
+    const dom = await evaluate(`(() => ({
+      credit: document.querySelector('.section-credit')?.textContent?.trim() ?? '',
+      hint: document.querySelector('.section-imagery-hint')?.textContent?.trim() ?? '',
+      note: document.querySelector('.section-alignment-note.is-ct-coverage')?.textContent?.trim() ?? '',
+    }))()`)
+    const reading = {
+      requested: label,
+      axis: planeState?.axis ?? null,
+      planeValue: planeState?.planeValue ?? null,
+      painted: stats?.painted ?? 0,
+      credit: dom?.credit ?? '',
+      hint: dom?.hint ?? '',
+      note: dom?.note ?? '',
+    }
+    modalityResults.push({ ...reading, label, pressed: planeState?.kindPressed ?? null })
+    if (planeState?.kindPressed !== label) {
+      // A disabled control would make the sweep assert the imagery state of a
+      // modality that was never requested — say that instead of guessing.
+      bad('the "' + label + '" modality could not be selected (pressed: '
+        + String(planeState?.kindPressed) + ') — a disabled control must carry its reason in its title')
+      continue
+    }
+    const verdict_ = modalityReading(reading, CT_COVERAGE)
+    verdict_.ok ? ok(verdict_.detail) : bad(verdict_.detail)
   }
+  info('modality sweep readings: ' + JSON.stringify(
+    modalityResults.map((r) => ({
+      m: r.label, axis: r.axis, plane: r.planeValue, painted: r.painted,
+      credit: r.credit.slice(0, 30), hint: r.hint.slice(0, 40),
+    })),
+  ))
 
   /* cross-view sync: section slider → 3D clip plane */
   const setY = await moveSlider('transverse', -6)
@@ -632,41 +840,15 @@ try {
    * the telencephalon taxonomy, and the anatomy build CLI proves the budgets.
    * ==================================================================== */
 
-  /* L1 — the DEFAULT preset is Brainstem focus and it does not hide the
-   * brainstem (section 9: "assert brainstem structures remain visible /
-   * selectable at default framing"). This runs FIRST because the preset is boot
-   * state — the checks below navigate the tree and the plates. */
-  const defaultPreset = await evaluate(`(() => {
-    const presets = [...document.querySelectorAll('.header-presets button')];
-    const active = presets.filter((b) => b.getAttribute('aria-pressed') === 'true')
-      .map((b) => b.textContent.trim());
-    const labels = presets.map((b) => b.textContent.trim());
-    const offBrainstem = [];
-    for (const region of document.querySelectorAll('.tree-region')) {
-      const heading = region.querySelector('.tree-region-name');
-      const name = (heading && heading.textContent ? heading.textContent : '').toLowerCase();
-      if (name.indexOf('telencephalon') !== -1) continue;
-      if (!/(medulla|pons|midbrain|diencephalon|cerebellum)/.test(name)) continue;
-      for (const row of region.querySelectorAll('.tree-leaf-row')) {
-        if (row.classList.contains('is-off')) offBrainstem.push((row.textContent || '').trim().slice(0, 24));
-      }
-    }
-    return { active, labels, offBrainstem: offBrainstem.slice(0, 8), offCount: offBrainstem.length };
-  })()`)
-  const focusActive = (defaultPreset.active || []).some((label) => /brainstem focus/i.test(label))
-  if (focusActive) {
-    ok('default preset is Brainstem focus (header reports "' + defaultPreset.active.join(', ') + '")')
-  } else {
-    bad('the default preset is not Brainstem focus (active: '
-      + ((defaultPreset.active || []).join(', ') || 'none')
-      + ' of ' + (defaultPreset.labels || []).join(', ') + ')')
-  }
-  if (defaultPreset.offCount === 0) {
-    ok('no brainstem/diencephalon/cerebellum tree row is layer-off at default framing')
-  } else {
-    bad(defaultPreset.offCount + ' brainstem-family tree row(s) are dimmed at default framing: '
-      + (defaultPreset.offBrainstem || []).join(', '))
-  }
+  /* L1 — MOVED (v7 closure, gap 4a). The default-preset assertions now run in
+   * block A0, immediately after the clean-profile boot and BEFORE any check
+   * clicks a preset button. Reading the "default" here measured the audit's own
+   * earlier preset click (the `Nuclei` chip in section B, which persists to
+   * `neuroaxis.viewPreset`) and, across runs, whatever the persistent Chrome
+   * profile had left behind. Nothing about the product changed: the default was
+   * — and is — Brainstem focus, asserted at module load in `src/state/store.ts`.
+   * `A0` proves it deterministically and also asserts that no brainstem-family
+   * tree row renders dimmed at boot. */
 
   /* L2 — the tree shows the telencephalon region with its five subdivisions. */
   const telTreeOpen = await evaluate(`(() => {
@@ -798,35 +980,118 @@ try {
   }
 
   /* L5 — CT coverage honesty above the Visible Human series' measured apex
-   * (docs/TELENCEPHALON_PLAN.md section 2 and 9, plan C3). */
+   * (docs/TELENCEPHALON_PLAN.md section 2 and 9, plan C3).
+   *
+   * v7 closure (gap 3): the statement is a function of (axis, planeValue, kind),
+   * and the check used to drive the transverse SLIDER without pinning the AXIS —
+   * earlier sections focus the sagittal slider, which pins `sectionAxis = 'x'`,
+   * where no coverage statement can exist. The result was a FAIL with an empty
+   * note and an empty hint, which reads as a product defect but measured nothing.
+   * The check now: pins the axis through its own toolbar button, PROVES the pin
+   * (aria-pressed), reports {axis, planeValue, kind, notePresent, noteText,
+   * hintText}, and only then asserts — through the shared pure predicate, so the
+   * covered and uncovered directions are both exercised. */
+  const pinTransverse = await evaluate(`(() => {
+    const group = document.querySelector('.section-toolbar-group[aria-label="Section axis"]');
+    const b = group ? [...group.querySelectorAll('button')].find((x) => /transverse/i.test(x.textContent)) : null;
+    if (!b) return 'no transverse axis button';
+    b.click();
+    return 'clicked ' + b.textContent.trim();
+  })()`)
+  await sleep(1500)
   await evaluate(`(() => {
     const b = [...document.querySelectorAll('button')].find((x) => x.textContent.trim() === 'CT');
     if (b) b.click();
   })()`)
   await sleep(2500)
+  const ctPlane = await evaluate(sectionPlaneReading)
   const ctNote = await evaluate(`(() => {
-    const note = document.querySelector('.section-alignment-note.is-ct-coverage');
-    const creditEl = document.querySelector('.section-credit');
+    const noteEl = document.querySelector('.section-alignment-note.is-ct-coverage');
     const hintEl = document.querySelector('.section-imagery-hint');
+    const creditEl = document.querySelector('.section-credit');
     return {
-      text: note && note.textContent ? note.textContent.trim() : '',
+      notePresent: noteEl !== null,
+      text: noteEl && noteEl.textContent ? noteEl.textContent.trim() : '',
       credit: creditEl && creditEl.textContent ? creditEl.textContent.trim() : '',
       hint: hintEl && hintEl.textContent ? hintEl.textContent.trim() : '',
     };
   })()`)
-  if (/36\.\d+/.test(ctNote.text) && /(MRI|magnetic resonance)/i.test(ctNote.text)) {
-    ok('CT states its measured coverage limit above the source ("'
-      + ctNote.text.slice(0, 130) + '...")')
-  } else {
-    bad('CT coverage statement missing at y = +58 (note: "' + String(ctNote.text).slice(0, 90)
-      + '" hint: "' + String(ctNote.hint).slice(0, 60) + '")')
-  }
-  if (/openneuro/i.test(ctNote.credit)) {
+  const ctAxisProven = ctPlane?.axis === 'y'
+  ctAxisProven
+    ? ok('the live section is pinned to the transverse (y) axis before the CT coverage assertion ('
+      + String(pinTransverse) + ', plane y = ' + String(ctPlane?.planeValue) + ' au, kind '
+      + String(ctPlane?.kindPressed) + ')')
+    : bad('the CT coverage check could not pin the transverse axis (' + String(pinTransverse)
+      + ' → ' + JSON.stringify(ctPlane) + ') — a coverage assertion on an unpinned axis measures nothing')
+  const ctVerdict = ctCoverageReading(
+    {
+      axis: ctPlane?.axis ?? null,
+      planeValue: ctPlane?.planeValue ?? null,
+      kind: ctPlane?.kindPressed ?? null,
+      notePresent: ctNote?.notePresent === true,
+      noteText: ctNote?.text ?? '',
+      hintText: ctNote?.hint ?? '',
+    },
+    CT_COVERAGE,
+  )
+  info('CT coverage reading: ' + JSON.stringify({
+    axis: ctPlane?.axis ?? null,
+    planeValue: ctPlane?.planeValue ?? null,
+    kind: ctPlane?.kindPressed ?? null,
+    notePresent: ctNote?.notePresent === true,
+    note: String(ctNote?.text ?? '').slice(0, 90),
+    hint: String(ctNote?.hint ?? '').slice(0, 90),
+  }))
+  ctVerdict.ok ? ok(ctVerdict.detail) : bad(ctVerdict.detail)
+
+  /* The canvas half must state the same limit as the toolbar: the hint is the
+   * only thing visible over the blank plane itself. (No regex literal after a
+   * statement that ends in a call — see the note on concatenation in block L.) */
+  const ctCanvasHint = String(ctNote?.hint ?? '')
+  const ctLimitText = CT_COVERAGE.limit === null ? '' : CT_COVERAGE.limit.toFixed(2)
+  const canvasHintIsHonest =
+    ctCanvasHint.length > 0 &&
+    ctLimitText.length > 0 &&
+    ctCanvasHint.indexOf(ctLimitText) !== -1 &&
+    ctCanvasHint.indexOf('MRI is the modality of record') !== -1
+  canvasHintIsHonest
+    ? ok('the canvas states the same CT coverage limit as the toolbar ("'
+      + ctCanvasHint.slice(0, 110) + '")')
+    : bad('the canvas hint at a CT plane above the source does not state the measured limit ("'
+      + ctCanvasHint.slice(0, 110) + '")')
+
+  if (/openneuro/i.test(ctNote?.credit ?? '')) {
     ok('MRI is the modality of record above the CT limit (credit "'
-      + ctNote.credit.slice(0, 46) + '")')
+      + String(ctNote?.credit ?? '').slice(0, 46) + '")')
   } else {
-    info('credit while CT is requested above its coverage: "' + ctNote.credit.slice(0, 60) + '"')
+    info('credit while CT is requested above its coverage: "' + String(ctNote?.credit ?? '').slice(0, 60) + '"')
   }
+
+  /* L5b — the third surface that shows real imagery: the 3D tab's live-section
+   * PiP. At this same CT-above-the-source request its hint must state the same
+   * measured limit (it used to print the internal token "beyond-source"). */
+  await evaluate(clickText('3D'))
+  await sleep(3000)
+  const pipHint = await evaluate(`(() => {
+    const el = document.querySelector('.pip-backdrop-hint');
+    if (el === null) return null;
+    return { text: (el.textContent || '').trim(), hidden: el.hidden === true };
+  })()`)
+  if (pipHint === null) {
+    info('the PiP backdrop hint element is not in this page (the panel may be hidden) — '
+      + 'the canvas half above is the asserted one')
+  } else if (pipHint.text === '') {
+    info('the PiP shows real imagery at this plane (no hint line) — the CT request is honoured by another modality')
+  } else if (pipHint.text.indexOf(ctLimitText) !== -1 && pipHint.text.indexOf('MRI is the modality of record') !== -1) {
+    ok('the PiP states the same CT coverage limit as the toolbar and the canvas ("'
+      + pipHint.text.slice(0, 100) + '")')
+  } else {
+    bad('the PiP hint at a CT plane above the source does not state the measured limit ("'
+      + pipHint.text.slice(0, 100) + '")')
+  }
+  // Back to the Plates tab: block L6 (the author plate) lives there.
+  await evaluate(clickText('Plates'))
+  await sleep(2000)
 
   /* L6 — the telencephalon plates are present and render. */
   await evaluate(clickText('Author plate'))
@@ -907,10 +1172,14 @@ try {
     // (a second getContext call on a lost canvas may return null).
     window.__auditGl = gl;
     window.__auditExt = ext;
+    window.__auditCanvas = canvas;
     return {
       tag: canvas.tagName,
+      canvasClass: canvas.className,
       lostBefore: gl.isContextLost(),
-      overlayBefore: overlay === null ? 'unmounted' : overlay.getAttribute('data-context-lost'),
+      overlayMounted: overlay !== null,
+      overlayPhase: overlay === null ? null : overlay.getAttribute('data-context-lost'),
+      panelError: document.querySelector('[data-panel-error]')?.getAttribute('data-panel-error') ?? null,
     };
   })()`)
 
@@ -920,9 +1189,16 @@ try {
      * it could not exercise rather than failing the run for it. */
     info('context-loss gate skipped: ' + contextBefore.error)
   } else {
-    contextBefore.lostBefore === false && contextBefore.overlayBefore === 'unmounted'
-      ? ok('context-loss overlay is UNMOUNTED while the context is healthy (a live canvas is never covered)')
-      : bad('the recovery overlay is present before any loss (' + JSON.stringify(contextBefore) + ')')
+    const healthyVerdict = contextLossReading(
+      {
+        mounted: contextBefore.overlayMounted === true,
+        phase: contextBefore.overlayPhase,
+        canvasLost: contextBefore.lostBefore,
+        panelError: contextBefore.panelError,
+      },
+      false,
+    )
+    healthyVerdict.ok ? ok(healthyVerdict.detail) : bad(healthyVerdict.detail)
 
     // --- lose the context -------------------------------------------------
     const lostNow = await evaluate(`(() => {
@@ -936,21 +1212,36 @@ try {
       const overlay = document.querySelector('[data-context-lost]');
       const gl = window.__auditGl;
       return {
-        phase: overlay === null ? 'no overlay' : overlay.getAttribute('data-context-lost'),
+        mounted: overlay !== null,
+        phase: overlay === null ? null : overlay.getAttribute('data-context-lost'),
         role: overlay === null ? '' : overlay.getAttribute('role'),
         text: overlay === null ? '' : overlay.innerText.slice(0, 120).replace(/\\n+/g, ' | '),
         buttons: overlay === null ? [] : [...overlay.querySelectorAll('button')].map((b) => b.textContent.trim()),
         canvasLost: gl ? gl.isContextLost() : 'no gl',
+        // Fail-stop diagnostics: when the overlay is missing, these fields say
+        // WHY — a panel error card means an error boundary replaced the canvas
+        // subtree (the measured v7 defect), while a still-attached canvas means
+        // the loss was simply never observed.
+        panelError: document.querySelector('[data-panel-error]')?.getAttribute('data-panel-error') ?? null,
+        canvasAttached: window.__auditCanvas ? document.contains(window.__auditCanvas) : false,
+        canvasCount: document.querySelectorAll('canvas').length,
       };
     })()`)
+    info('context-loss diagnostic after loseContext(): ' + JSON.stringify({
+      phase: afterLoss.phase,
+      role: afterLoss.role,
+      buttons: afterLoss.buttons,
+      canvasLost: afterLoss.canvasLost,
+      canvasAttached: afterLoss.canvasAttached,
+      canvasCount: afterLoss.canvasCount,
+      panelError: afterLoss.panelError,
+      text: String(afterLoss.text).slice(0, 80),
+    }))
     String(lostNow).includes('called') && afterLoss.canvasLost === true
       ? ok('WEBGL_lose_context.loseContext() really lost the context (isContextLost() === true)')
       : bad('loseContext() did not lose the context (' + String(lostNow) + ' / ' + JSON.stringify(afterLoss) + ')')
-    afterLoss.phase === 'lost'
-      ? ok('recovery overlay appears on loss (data-context-lost="lost", role='
-        + afterLoss.role + ', buttons: ' + afterLoss.buttons.join('/') + ') — "'
-        + afterLoss.text.slice(0, 70) + '..."')
-      : bad('no "lost" recovery overlay after the context was lost (' + JSON.stringify(afterLoss) + ')')
+    const lossVerdict = contextLossReading(afterLoss, true)
+    lossVerdict.ok ? ok(lossVerdict.detail) : bad(lossVerdict.detail)
 
     // --- restore it -------------------------------------------------------
     const restoreNow = await evaluate(`(() => {
@@ -967,33 +1258,26 @@ try {
       const gl = window.__auditGl;
       const canvas = document.querySelector('.viewer3d-canvas canvas') || document.querySelector('canvas');
       return {
-        phase: overlay === null ? 'unmounted' : overlay.getAttribute('data-context-lost'),
+        mounted: overlay !== null,
+        phase: overlay === null ? null : overlay.getAttribute('data-context-lost'),
+        buttons: overlay === null ? [] : [...overlay.querySelectorAll('button')].map((b) => b.textContent.trim()),
         canvasLost: gl ? gl.isContextLost() : 'no gl',
         canvasCount: document.querySelectorAll('canvas').length,
         liveContext: canvas ? (canvas.getContext('webgl2') || canvas.getContext('webgl')) !== null : false,
       };
     })()`)
-    if (afterRestore.phase === 'unmounted' && afterRestore.canvasLost === false) {
-      ok('context restored: overlay unmounted and the canvas holds a live context ('
-        + String(restoreNow) + ')')
+    const restoreVerdict = contextRestoreReading(afterRestore)
+    if (restoreVerdict.ok && restoreVerdict.label === 'restored') {
+      ok(restoreVerdict.detail + ' (' + String(restoreNow) + ')')
       const repaint = await pagePixelStats()
       repaint && repaint.uniqueColors > 20
         ? ok('the 3D scene really repainted after the restore (' + repaint.uniqueColors
           + ' colour buckets, mean luminance ' + repaint.meanLum + ')')
         : bad('the canvas did not repaint after the context was restored (' + JSON.stringify(repaint) + ')')
-    } else if (afterRestore.phase === 'dead') {
-      /* Honest terminal branch: the browser never fired webglcontextrestored
-       * (headless SwiftShader often will not). The app is still NOT blank —
-       * it says what happened and offers a reload. */
-      ok('restore never arrived, so the code took its documented terminal state '
-        + '(data-context-lost="dead") with a Reload control — not a silent blank canvas ('
-        + String(restoreNow) + ')')
-    } else if (afterRestore.phase === 'lost' && afterRestore.canvasLost === false) {
-      ok('the context came back and is live; the overlay is still in its "lost" state for one frame '
-        + '(reported, not failed — the canvas is not lost)')
     } else {
-      bad('the canvas did not recover and did not reach the documented terminal state ('
-        + String(restoreNow) + ' / ' + JSON.stringify(afterRestore) + ')')
+      restoreVerdict.ok
+        ? ok(restoreVerdict.detail + ' (' + String(restoreNow) + ')')
+        : bad(restoreVerdict.detail + ' (' + String(restoreNow) + ' / ' + JSON.stringify(afterRestore) + ')')
     }
 
     /* The PiP has its own context survival path. `pipContextState` is the
@@ -1037,11 +1321,17 @@ try {
 
   const contained = await evaluate(`(() => {
     const card = document.querySelector('[data-panel-error]');
+    const probe = document.querySelector('[data-panel-probe]');
     return {
       card: card === null ? null : card.getAttribute('data-panel-error'),
       role: card === null ? '' : card.getAttribute('role'),
       text: card === null ? '' : card.innerText.slice(0, 140).replace(/\\n+/g, ' | '),
       hasRetry: card === null ? false : [...card.querySelectorAll('button')].some((b) => /retry/i.test(b.textContent || '')),
+      // v7 closure (gap 5): the marker now lives ON the failure card, so a single
+      // signal proves "the hook armed" AND "that throw was contained here".
+      probes: document.querySelectorAll('[data-panel-probe]').length,
+      probeName: probe === null ? null : probe.getAttribute('data-panel-probe'),
+      cards: document.querySelectorAll('[data-panel-error]').length,
       // The rest of the app must still be there and still be interactive.
       tabs: [...document.querySelectorAll('[role=tab]')].map((t) => t.textContent.trim()),
       appShell: document.querySelector('.app-shell') !== null,
@@ -1053,16 +1343,16 @@ try {
     };
   })()`)
 
-  if (contained.card === BOUNDARY_SURFACES[0]) {
-    ok('a throw inside "' + BOUNDARY_SURFACES[0] + '" is CONTAINED: [data-panel-error="'
-      + contained.card + '"] (role=' + contained.role + ') — "' + contained.text.slice(0, 80) + '"')
-  } else {
-    bad('the forced throw was not contained by the "' + BOUNDARY_SURFACES[0]
-      + '" boundary (card=' + JSON.stringify(contained.card) + ', panelfail armed=' + String(probeHooked) + ')')
-  }
-  contained.hasRetry
-    ? ok('the containment card offers a Retry action')
-    : bad('the containment card has no Retry action')
+  const containmentVerdict = panelContainmentReading({
+    expected: BOUNDARY_SURFACES[0],
+    card: contained.card,
+    probes: contained.probes,
+    hasRetry: contained.hasRetry,
+    armed: probeHooked,
+  })
+  containmentVerdict.ok
+    ? ok(containmentVerdict.detail + ' — "' + String(contained.text).slice(0, 80) + '"')
+    : bad(containmentVerdict.detail)
   contained.appShell && contained.tabs.length >= 3
     ? ok('the app did NOT blank: shell present, ' + contained.tabs.length + ' tabs still rendered ('
       + contained.tabs.join(', ') + ')')
@@ -1070,6 +1360,21 @@ try {
   contained.canvases >= 1
     ? ok('the other panels kept rendering while one threw (' + contained.canvases + ' canvas element(s) live)')
     : info('no canvas while the Plates/3D tab is inactive (tab-scoped panels are unmounted by design)')
+
+  /* Exactly ONE boundary may be armed by the parameter, and the other surfaces
+   * must be untouched. Read from the SAME reading as the card (before Retry):
+   * the probe is one-shot (see SectionErrorBoundary), so after a successful
+   * recovery there is correctly nothing left to count. */
+  contained.probes === 1 && contained.cards === 1
+    ? ok('exactly ONE boundary is armed by ?panelfail=<surface> (probe="' + String(contained.probeName)
+      + '", 1 failure card, the other surfaces render their children normally)')
+    : bad('?panelfail armed ' + contained.probes + ' boundary marker(s) / ' + contained.cards
+      + ' failure card(s) — the other panels must be unaffected')
+  contained.probes === 1 && contained.probeName === BOUNDARY_SURFACES[0]
+    ? ok('the containment card is observable: [data-panel-probe="' + contained.probeName
+      + '"] and [data-panel-error="' + contained.card + '"] are the same element')
+    : bad('the containment signal is not observable (probes=' + contained.probes
+      + ', probeName=' + JSON.stringify(contained.probeName) + ', card=' + JSON.stringify(contained.card) + ')')
 
   /* Retry must clear the card and bring the panel back. */
   const retryClick = await evaluate(`(() => {
@@ -1086,22 +1391,19 @@ try {
     return {
       card: card === null ? 'cleared' : card.getAttribute('data-panel-error'),
       probeArmed: probe === null ? 'disarmed' : 'still armed',
+      treePanelBack: document.querySelector('.tree .tree-region-row') !== null,
+      cards: document.querySelectorAll('[data-panel-error]').length,
     };
   })()`)
-  afterRetry.card === 'cleared'
-    ? ok('Retry clears the failure card (containment is recoverable, not terminal) — '
-      + afterRetry.probeArmed)
-    : info('Retry re-armed the probe and the card is still shown (' + JSON.stringify(afterRetry)
-      + ') — expected: the ?panelfail hook is unconditional while the parameter is present')
-
-  /* A surface that is NOT named by the parameter must be untouched. */
-  const untouched = await evaluate(`(() => {
-    const cards = [...document.querySelectorAll('[data-panel-error]')].map((c) => c.getAttribute('data-panel-error'));
-    return { cards, probes: document.querySelectorAll('[data-panel-probe]').length };
-  })()`)
-  untouched.probes === 1
-    ? ok('exactly ONE boundary is armed by ?panelfail=<surface> (the other 6 render their children normally)')
-    : bad('?panelfail armed ' + untouched.probes + ' boundaries — the other panels must be unaffected')
+  const recoveryVerdict = panelRecoveryReading({
+    expected: BOUNDARY_SURFACES[0],
+    card: afterRetry.card,
+    panelBack: afterRetry.treePanelBack === true,
+  })
+  recoveryVerdict.ok
+    ? ok(recoveryVerdict.detail + ' (' + String(retryClick) + ', probe ' + String(afterRetry.probeArmed) + ')')
+    : bad(recoveryVerdict.detail + ' (card=' + String(afterRetry.card) + ', probe='
+      + String(afterRetry.probeArmed) + ', tree=' + String(afterRetry.treePanelBack) + ')')
 
   /* Back to a healthy page: the hook must be inert without the parameter. */
   await send('Page.navigate', { url: BASE })
@@ -1119,9 +1421,26 @@ try {
     ? ok('the app loads healthy again after the containment demonstration')
     : bad('the app did not return to a healthy state (' + JSON.stringify(healthyAgain) + ')')
 
-  const p0Errors = [...new Set([...exceptions, ...consoleErrors])].filter(
-    (e) => !/favicon/i.test(e) && !/404 \(Not Found\)/.test(e) && !/panel\] .* failed/.test(e),
+  /* v7 closure (gap 5): the `?panelfail` throw is DELIBERATE, so the boundary's
+   * own componentDidCatch line, React's dev log of the captured error and the
+   * "The above error occurred in the <PanelFailureProbe> component" message are
+   * expected traffic — they are excluded by the probe's OWN error text, never by
+   * a broad "any panel error" pattern, so a real (uncontained) failure still
+   * fails this gate. How many lines were excluded is reported. */
+  const DELIBERATE_PROBE = /deliberate render failure|PanelFailureProbe/
+  const collected = [...new Set([...exceptions, ...consoleErrors])].filter(
+    (e) => !/favicon/i.test(e) && !/404 \(Not Found\)/.test(e),
   )
+  const deliberate = collected.filter(
+    (e) => /panel\] .* failed/.test(e) || DELIBERATE_PROBE.test(e),
+  )
+  const p0Errors = collected.filter(
+    (e) => !/panel\] .* failed/.test(e) && !DELIBERATE_PROBE.test(e),
+  )
+  if (deliberate.length > 0) {
+    info('excluded ' + deliberate.length + ' log line(s) from the DELIBERATE ?panelfail throw: "'
+      + deliberate[0].slice(0, 90) + '"')
+  }
   if (p0Errors.length === 0) {
     ok('no unexpected runtime errors during the P0 gates (the deliberate throw is reported by the boundary itself)')
   } else {

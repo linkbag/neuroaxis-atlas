@@ -582,6 +582,14 @@ export default function PlatesTab() {
               <span className="section-toolbar-label">Imagery</span>
               {SECTION_UNDERLAY_KINDS.map((kind) => {
                 const reason = modalityUnavailableReason(kind, sectionAxis, gridStatus)
+                // v7 closure (gap 3): the toolbar REASON for a CT request above
+                // the Visible Human series' measured apex. The statement below
+                // the toolbar says it in full; the control's own title says it
+                // where the user is looking when they pick CT at y = +58.
+                const coverageReason =
+                  reason === null && kind === 'ct' && ctCoverageNotice !== null
+                    ? ctCoverageNotice
+                    : null
                 return (
                   <button
                     key={kind}
@@ -589,7 +597,13 @@ export default function PlatesTab() {
                     className={`btn${sectionUnderlay.kind === kind ? ' is-active' : ''}`}
                     aria-pressed={sectionUnderlay.kind === kind}
                     disabled={reason !== null}
-                    title={reason !== null ? `${MODALITY_TITLES[kind]} — ${reason}` : MODALITY_TITLES[kind]}
+                    title={
+                      reason !== null
+                        ? `${MODALITY_TITLES[kind]} — ${reason}`
+                        : coverageReason !== null
+                          ? `${MODALITY_TITLES[kind]} — ${coverageReason}`
+                          : MODALITY_TITLES[kind]
+                    }
                     onClick={() => setSectionUnderlay({ kind })}
                   >
                     {SECTION_UNDERLAY_KIND_LABELS[kind]}
