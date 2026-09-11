@@ -671,5 +671,159 @@
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Spinal Cord\"",
       "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
     ]
+  },
+  {
+    "id": "tract-optic-radiation",
+    "name": "Optic radiation",
+    "synonyms": ["geniculocalcarine tract", "geniculostriate pathway", "radiatio optica", "Meyer loop (temporal part)"],
+    "direction": "ascending",
+    "modality": "Special sensory — vision, retinotopically organized for the contralateral half-field",
+    "origin": "Lateral geniculate nucleus (LGN) of the thalamus: parvocellular and magnocellular relay layers (plus koniocellular layers) receiving crossed nasal and uncrossed temporal retinal fibres",
+    "target": "Primary visual cortex (V1, striate cortex) around the calcarine fissure — lower-field (superior retinal) fibres to the cuneus above the fissure, upper-field (inferior retinal) fibres to the lingual gyrus below it",
+    "decussation": "None within the radiation: the crossing occurred at the optic chiasm (nasal retina) and again at the LGN relay, so each radiation carries the contralateral visual half-field. Fibres for the superior field loop forward into the temporal lobe (Meyer loop) while fibres for the inferior field sweep posteriorly through the parietal lobe (dorsal bundle).",
+    "somatotopy": "Retinotopy with macular magnification: macular fibres occupy the posterior third of the radiation and the occipital pole (which represents the central ~10 degrees of vision and receives a dual blood supply), while peripheral fibres lie more anteriorly in the temporal and parietal lobes. This is why small lesions cause quadrantic and often incongruous defects, and why macular sparing occurs in PCA infarction.",
+    "function": "The thalamocortical leg of the visual pathway: it leaves the LGN through the retrolenticular part of the internal capsule, fans through the deep white matter of the temporal lobe (Meyer loop) and parietal lobe (dorsal bundle), and converges on the striate cortex. Because its fibres are spread across two lobes before concentrating at the occipital pole, field defects from incomplete lesions are incongruous and those from complete lesions are congruent — a distinction that localizes the damage along the tract.",
+    "clinical": [
+      {
+        "syndrome": "Meyer loop (temporal) lesion",
+        "findings": "Contralateral homonymous superior quadrantanopia ('pie in the sky'), typically after temporal-lobe resection that extends more than 3.5–4 cm behind the temporal pole, or after temporal-lobe infarction.",
+        "vascular": "Middle cerebral artery (inferior division) or anterior choroidal artery"
+      },
+      {
+        "syndrome": "Dorsal bundle (parietal) lesion",
+        "findings": "Contralateral homonymous inferior quadrantanopia ('pie on the floor') with preserved reading, often accompanied by hemispatial neglect when the parietal lesion is extensive.",
+        "vascular": "Middle cerebral artery (superior division, parietal branches)"
+      },
+      {
+        "syndrome": "Retrolenticular (anterior choroidal) infarction",
+        "findings": "Complete interruption of the radiation gives a dense congruent contralateral homonymous hemianopia; in anterior choroidal artery infarction it is part of the triad with hemiplegia and hemianaesthesia.",
+        "vascular": "Anterior choroidal artery"
+      },
+      {
+        "syndrome": "Congruity rule for field defects",
+        "findings": "Incongruous defects point to a partial anterior radiation lesion (temporal or parietal), congruent defects to a complete radiation lesion or occipital cortical damage — the single most useful localizing rule for retrochiasmatic visual loss.",
+        "note": "Clinical localizing principle rather than a distinct lesion"
+      }
+    ],
+    "waypoints": [[18, 16, -6], [23, 20, 6], [27, 15, 12], [28, 14, -14], [24, 20, -34], [20, 27, -52], [13, 30, -66]],
+    "tubeRadius": 0.7,
+    "color": "#a78bfa",
+    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid"],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Visual System\"",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Cerebral Hemispheres and Vascular Supply\""
+    ]
+  },
+  {
+    "id": "tract-cingulum",
+    "name": "Cingulum",
+    "synonyms": ["cingulum bundle", "cingulate bundle"],
+    "direction": "mixed",
+    "modality": "Association (limbic) — bidirectional cortical-cortical fibres of the cingulate and parahippocampal circuit",
+    "origin": "Subcallosal (parolfactory) area and rostral anterior cingulate cortex, in front of and below the genu of the corpus callosum",
+    "target": "Posterior cingulate and retrosplenial cortex along the dorsal arc, then the entorhinal and parahippocampal cortex at the ventral (temporal) end; the circuit closes through the entorhinal cortex and the hippocampal formation",
+    "decussation": "None — the cingulum is entirely intrahemispheric, which is why unilateral cingulate or parahippocampal lesions produce lateralized limbic and memory deficits",
+    "somatotopy": "Topographic rather than somatotopic: the dorsal (supracallosal) fibres run in the white matter of the cingulate gyrus, the ventral (parahippocampal) fibres in the parahippocampal gyrus, and the two limbs join at the isthmus behind the splenium of the corpus callosum",
+    "function": "The long association bundle of the limbic lobe: it links the subcallosal, anterior cingulate, posterior cingulate/retrosplenial and parahippocampal/entorhinal cortices, giving the cingulate cortex direct access to the hippocampal input stage. It is the cortical limb of the Papez circuit and one of the most consistently reconstructed tracts in the human connectome.",
+    "clinical": [
+      {
+        "syndrome": "Cingulum damage and limbic dysfunction",
+        "findings": "Interruption of the cingulum (tumour, surgery, small-vessel disease, diffuse axonal injury) is associated with episodic memory impairment, apathy and blunted emotional modulation, with the deficit depending on which limb is involved.",
+        "vascular": "Anterior cerebral (pericallosal) or posterior cerebral (splenial) branches"
+      },
+      {
+        "syndrome": "Cingulotomy / cingulumotomy",
+        "findings": "Stereotactic section of the anterior cingulum relieves the affective component of intractable pain and improves refractory obsessive-compulsive symptoms — direct evidence that the bundle carries the emotional-evaluative signal.",
+        "note": "Therapeutic lesion rather than a spontaneous syndrome"
+      },
+      {
+        "syndrome": "Cingulum degeneration in Alzheimer disease",
+        "findings": "Posterior cingulate and cingulum degeneration correlates with episodic memory decline and is detectable with diffusion MRI before atrophy is visible, following the spread of pathology from the entorhinal cortex.",
+        "note": "Neurodegenerative (Braak staging)"
+      }
+    ],
+    "waypoints": [[4, 29, 42], [5, 52, 36], [6, 68.5, 14], [7, 66, -6], [8, 58, -22], [10, 40, -34], [12, 24, -38], [14, 14, -30]],
+    "tubeRadius": 0.55,
+    "color": "#a78bfa",
+    "levels": ["lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate", "lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale"],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Limbic System: Homeostasis, Olfaction, Memory, and Emotion\"",
+      "Catani & ffytche, \"The rises and falls of disconnection syndromes,\" Brain 2005;128:2224-2239"
+    ]
+  },
+  {
+    "id": "tract-uncinate-fasciculus",
+    "name": "Uncinate fasciculus",
+    "synonyms": ["uncinate bundle", "hook bundle", "fasciculus uncinatus"],
+    "direction": "mixed",
+    "modality": "Association — bidirectional fibres linking the anterior temporal lobe with the orbitofrontal and ventrolateral frontal cortex (ventral semantic and social-emotional stream)",
+    "origin": "Temporal pole, anterior superior and middle temporal gyrus, and the uncinate/amygdalar region at the anterior temporal stem",
+    "target": "Orbital and inferior (ventrolateral) frontal cortex, including the lateral orbitofrontal and inferior frontal gyri, hooking around the limen insulae at the anterior inferior insula",
+    "decussation": "None — intrahemispheric throughout. The hook at the limen insulae is its defining feature (uncinate = hooked), and it is the ventral counterpart of the dorsal arcuate/superior longitudinal system.",
+    "somatotopy": "A single compact hook rather than a somatotopic map: fibres traverse the anterior temporal stem, curve around the limen insulae and fan out into the orbital frontal cortex. The left uncinate is generally more extensive than the right, consistent with its role in semantic and naming networks.",
+    "function": "Carries the ventral route between the anterior temporal lobe and the frontal lobe, supporting semantic memory, naming and the integration of emotional value with social decision-making. Its protracted myelination in childhood and its early degeneration in frontotemporal dementia track the development and loss of social-emotional behaviour and semantic knowledge.",
+    "clinical": [
+      {
+        "syndrome": "Uncinate disconnection (semantic/naming deficit)",
+        "findings": "Damage to the left uncinate (infarction, tumour, epilepsy surgery) impairs confrontation naming and semantic access with relatively preserved repetition, while right-sided damage disturbs emotion recognition and behavioural regulation.",
+        "vascular": "Middle cerebral artery (anterior temporal and orbital branches); anterior choroidal artery for the temporal end"
+      },
+      {
+        "syndrome": "Epilepsy surgery and naming decline",
+        "findings": "Anterior temporal resection that interrupts the uncinate in the language-dominant hemisphere is a recognized cause of post-operative naming decline, and tractography of the fasciculus is now used to plan the resection.",
+        "note": "Surgical rather than spontaneous"
+      },
+      {
+        "syndrome": "Frontotemporal dementia",
+        "findings": "Selective early degeneration of the uncinate follows the temporal pole-to-orbitofrontal axis and correlates with the behavioural variant of the disease: disinhibition, apathy and loss of empathy.",
+        "note": "Neurodegenerative"
+      }
+    ],
+    "waypoints": [[32, 12, 30], [35, 16, 26], [29, 23, 28], [26, 25, 28], [22, 28, 36], [18, 32, 45], [14, 36, 52]],
+    "tubeRadius": 0.5,
+    "color": "#a78bfa",
+    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Cerebral Hemispheres and Vascular Supply\"",
+      "Catani & Thiebaut de Schotten, \"A diffusion tensor imaging tractography atlas for virtual in vivo dissections,\" Cortex 2008;44:1105-1132"
+    ]
+  },
+  {
+    "id": "tract-superior-longitudinal-fasciculus",
+    "name": "Superior longitudinal fasciculus",
+    "synonyms": ["SLF", "arcuate fasciculus (dorsal component)"],
+    "direction": "mixed",
+    "modality": "Association — bidirectional dorsal stream linking frontal, parietal and temporal association cortex; the arcuate component is the phonological-language loop",
+    "origin": "Inferior frontal gyrus (Broca region) and the adjacent frontal operculum for the arcuate component; dorsolateral prefrontal and premotor cortex for the SLF I/II components",
+    "target": "Inferior parietal lobule (supramarginal and angular gyri) and, through the arcuate component, the posterior superior and middle temporal gyrus — arching over the insula and beneath the perisylvian cortex",
+    "decussation": "None — the SLF/arcuate system is entirely intrahemispheric; together with the uncinate it forms the dorsal-ventral pair of the perisylvian language network",
+    "somatotopy": "Four components with progressive arcs around the sylvian fissure: SLF I (premotor/supplementary motor to superior parietal), SLF II (dorsolateral prefrontal to angular gyrus), SLF III (inferior frontal to supramarginal gyrus) and the arcuate component (inferior frontal to posterior temporal), the last with the lowest and most lateral arc.",
+    "function": "The dorsal language and attention stream: the arcuate component carries the phonological loop that lets speech be repeated and articulated accurately, while SLF II/III support spatial attention, working memory and the top-down control of goal-directed action. Because its fibres arch immediately above the insula and below the cortex, it is the association tract most often destroyed by middle cerebral artery infarction and most often encountered during glioma surgery.",
+    "clinical": [
+      {
+        "syndrome": "Conduction aphasia (arcuate disconnection)",
+        "findings": "Fluent speech with intact comprehension but markedly impaired repetition and frequent phonemic paraphasias, from interruption of the arcuate segment between Wernicke's and Broca's areas — the classic disconnection syndrome of the dorsal language stream.",
+        "vascular": "Middle cerebral artery (perisylvian/insular branches)"
+      },
+      {
+        "syndrome": "Aphasia outcome and tractography",
+        "findings": "Preserved left arcuate/SLF integrity predicts better recovery of repetition and naming after stroke, and its preservation is a goal of glioma resection in the dominant hemisphere.",
+        "note": "Prognostic/imaging principle rather than a distinct syndrome"
+      },
+      {
+        "syndrome": "Hemispheric neglect (dorsal attention stream)",
+        "findings": "Right-hemisphere SLF II/III damage contributes to hemispatial neglect, ipsilesional deviation and impaired disengagement of attention together with the inferior parietal lesion.",
+        "vascular": "Right middle cerebral artery (parietal branches)"
+      }
+    ],
+    "waypoints": [[24, 40, 44], [32, 56, 18], [36, 62, -6], [34, 58, -24], [32, 40, -28], [31, 26, -34], [30, 18, -30]],
+    "tubeRadius": 0.6,
+    "color": "#a78bfa",
+    "levels": ["lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate", "lvl-tel-basal-ganglia"],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Cerebral Hemispheres and Vascular Supply\"",
+      "Catani & Thiebaut de Schotten, \"A diffusion tensor imaging tractography atlas for virtual in vivo dissections,\" Cortex 2008;44:1105-1132",
+      "Catani & ffytche, \"The rises and falls of disconnection syndromes,\" Brain 2005;128:2224-2239"
+    ]
   }
 ]

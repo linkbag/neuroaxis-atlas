@@ -1,0 +1,337 @@
+[
+  {
+    "id": "vent-lateral-ventricle",
+    "name": "Lateral ventricle",
+    "synonyms": ["lateral ventricle (body)", "ventriculus lateralis", "paracoele"],
+    "region": "telencephalon",
+    "subdivision": "Lateral ventricles",
+    "kind": "ventricle",
+    "laterality": "paired",
+    "color": "#06b6d4",
+    "function": "The paired C-shaped CSF space of the cerebral hemisphere: its body lies under the corpus callosum with the caudate above the thalamus, and its frontal, temporal and occipital horns extend into the three lobes around the thalamus. It receives CSF from the third ventricle through the interventricular foramen, hosts the choroid plexus that produces most of it, and drains through the atrium into the temporal horn and thence to the fourth ventricle — so its shape is a direct readout of the deep hemispheric anatomy.",
+    "connections": {
+      "afferent": [
+        "Interventricular foramen (of Monro) from the third ventricle — CSF inflow and the route by which intraventricular pressure is transmitted"
+      ],
+      "efferent": [
+        "Atrium → temporal horn → collateral trigone to the fourth ventricle via the cerebral aqueduct; the subarachnoid space is reached through the fourth-ventricle foramina",
+        "Venous drainage of its walls through subependymal veins (thalamostriate, septal, caudate) into the internal cerebral vein and the great cerebral vein"
+      ]
+    },
+    "bloodSupply": "The ependymal surface itself is avascular and nourished by CSF; the adjoining walls are supplied by the anterior choroidal artery (temporal horn and atrium region), the lateral and medial posterior choroidal arteries (body and trigone) and lenticulostriate branches (adjacent basal ganglia). Subependymal veins (thalamostriate and internal cerebral veins) drain the region.",
+    "clinical": [
+      {
+        "syndrome": "Obstructive (non-communicating) hydrocephalus",
+        "findings": "Blockage at or below the interventricular foramen dilates the lateral ventricles disproportionately, with transependymal CSF seepage, headache, papilloedema and, in infants, macrocephaly with a sun-setting sign.",
+        "vascular": "Not vascular — mechanical obstruction (colloid cyst, tumour, aqueductal stenosis, intraventricular haemorrhage)"
+      },
+      {
+        "syndrome": "Normal-pressure hydrocephalus",
+        "findings": "Ventriculomegaly out of proportion to cortical atrophy with a normal opening pressure presents as the triad of gait apraxia, urinary incontinence and dementia — the one reversible dementia of CSF dynamics.",
+        "note": "CSF dynamics; ventricular size alone does not distinguish it from ex vacuo dilatation"
+      },
+      {
+        "syndrome": "Intraventricular haemorrhage of prematurity",
+        "findings": "Germinal-matrix bleeding in the caudothalamic groove ruptures into the lateral ventricle, and the resulting blood and ependymal injury cause post-haemorrhagic hydrocephalus — the commonest cause of acquired hydrocephalus in newborns.",
+        "vascular": "Germinal matrix (lenticulostriate/anterior choroidal perforator bed)"
+      },
+      {
+        "syndrome": "Asymmetry of the lateral ventricles",
+        "findings": "Mild asymmetry and an asymmetric occipital horn are common normal variants; a disproportionately large temporal horn is an early sign of true hydrocephalus, whereas uniform ventricular enlargement with cortical atrophy indicates ex vacuo dilatation.",
+        "note": "Imaging interpretation rather than a syndrome"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "vent-lateral-ventricle-frontal-horn",
+    "name": "Frontal horn of the lateral ventricle",
+    "synonyms": ["anterior horn of the lateral ventricle", "cornu anterius", "prefrontal (anterior) horn"],
+    "region": "telencephalon",
+    "subdivision": "Lateral ventricles",
+    "kind": "ventricle",
+    "laterality": "paired",
+    "color": "#06b6d4",
+    "function": "The anterior extension of the lateral ventricle into the frontal lobe, bounded laterally by the head of the caudate, medially by the septum pellucidum (with the contralateral horn across the midline) and above by the corpus callosum; the interventricular foramen opens at its posterior-medial floor. Its width is the standard index of ventricular enlargement, and the caudothalamic groove at its junction with the body is the site of germinal-matrix haemorrhage.",
+    "connections": {
+      "afferent": [
+        "Interventricular foramen (of Monro) at its posterior floor, from the third ventricle",
+        "CSF secreted by the choroid plexus of the body, which begins behind the foramen"
+      ],
+      "efferent": [
+        "Continuous posteriorly with the body and atrium; no choroid plexus lies within the frontal horn itself"
+      ]
+    },
+    "bloodSupply": "Recurrent artery of Heubner and medial lenticulostriate branches of the ACA supply the caudate head forming its lateral wall; the anterior choroidal artery and the septal veins drain and supply the medio-inferior adjacent tissue. The ependyma is sustained by CSF.",
+    "clinical": [
+      {
+        "syndrome": "Hydrocephalus (frontal horn index)",
+        "findings": "Frontal-horn widening is quantified by the Evans index (maximal frontal horn width divided by maximal inner skull width); a ratio above 0.3 defines ventriculomegaly and is the standard criterion on CT.",
+        "vascular": "Not vascular — CSF dynamics"
+      },
+      {
+        "syndrome": "Colloid cyst obstruction at the foramen",
+        "findings": "A colloid cyst at the anterior third ventricle plugs one or both interventricular foramina, dilating the frontal horns abruptly and causing positional headache, drop attacks, papilloedema and sudden death.",
+        "note": "Mechanical obstruction; the frontal horns are the first to dilate"
+      },
+      {
+        "syndrome": "Germinal matrix-intraventricular haemorrhage",
+        "findings": "In preterm infants, bleeding in the caudothalamic groove at the junction of the frontal horn and body ruptures through the ependyma; graded I-IV by the extent of ventricular and parenchymal blood.",
+        "vascular": "Germinal matrix (immature lenticulostriate/anterior choroidal perforators)"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "vent-lateral-ventricle-temporal-horn",
+    "name": "Temporal horn of the lateral ventricle",
+    "synonyms": ["inferior horn of the lateral ventricle", "cornu inferius"],
+    "region": "telencephalon",
+    "subdivision": "Lateral ventricles",
+    "kind": "ventricle",
+    "laterality": "paired",
+    "color": "#06b6d4",
+    "function": "The inferior extension of the lateral ventricle that curves forward into the temporal lobe around the pulvinar and the tail of the caudate: its roof carries the tail of the caudate and the tapetum, its floor and medial wall are formed by the hippocampus and fimbria, and the choroid plexus of the temporal horn enters through the choroidal fissure. It is the anatomical corridor of temporal-lobe surgery.",
+    "connections": {
+      "afferent": [
+        "Atrium (drains the body and occipital horn) — the temporal horn is the CSF exit route toward the fourth ventricle",
+        "Choroid plexus entering along the choroidal fissure from the atrium"
+      ],
+      "efferent": [
+        "CSF flows posteriorly from the temporal horn through the atrium to the cerebral aqueduct"
+      ]
+    },
+    "bloodSupply": "Anterior choroidal artery (internal carotid) supplies the choroid plexus of the temporal horn and the adjacent hippocampus/amygdala; the posterior cerebral artery (hippocampal and posterior choroidal branches) supplies the posterior part. The basal vein of Rosenthal drains the region.",
+    "clinical": [
+      {
+        "syndrome": "Temporal horn dilatation in hydrocephalus",
+        "findings": "A widened temporal horn is one of the earliest reliable signs of true (as opposed to ex vacuo) ventricular enlargement, because the temporal horn is the first part of the lateral ventricle to dilate.",
+        "vascular": "Not vascular — CSF dynamics"
+      },
+      {
+        "syndrome": "Mesial temporal sclerosis",
+        "findings": "Hippocampal atrophy with loss of the normal internal architecture narrows the temporal horn on the affected side and is accompanied by T2 hyperintensity and secondary temporal-lobe volume loss.",
+        "note": "Epilepsy-related; the temporal horn is the imaging window onto the hippocampus"
+      },
+      {
+        "syndrome": "Anterior choroidal artery infarct",
+        "findings": "The temporal horn choroid plexus and the hippocampus/amygdala fall in the anterior choroidal territory, so temporal-horn infarction accompanies the capsular triad of hemiplegia, hemianaesthesia and hemianopia.",
+        "vascular": "Anterior choroidal artery"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "vent-lateral-ventricle-occipital-horn",
+    "name": "Occipital horn of the lateral ventricle",
+    "synonyms": ["posterior horn of the lateral ventricle", "cornu posterius"],
+    "region": "telencephalon",
+    "subdivision": "Lateral ventricles",
+    "kind": "ventricle",
+    "laterality": "paired",
+    "color": "#06b6d4",
+    "function": "The posterior extension of the lateral ventricle into the occipital lobe: its roof is formed by the tapetum (splenial fibres of the corpus callosum), its medial wall carries the calcar avis (the bulge of the calcarine fissure) and the bulb of the posterior horn, and its lateral wall carries the collateral trigone. It contains no choroid plexus, and it is the part of the ventricular system whose size varies most between individuals.",
+    "connections": {
+      "afferent": [
+        "Atrium (trigone) — CSF arriving from the body and from the temporal horn"
+      ],
+      "efferent": [
+        "CSF returns to the atrium and then to the cerebral aqueduct and fourth ventricle; the horn is a blind posterior recess"
+      ]
+    },
+    "bloodSupply": "Lateral posterior choroidal artery branches (from the PCA) supply the adjoining plexus and walls of the trigone; the calcarine (PCA) branches and the splenial vessels supply the medial wall, with venous drainage through the internal cerebral vein and the basal vein.",
+    "clinical": [
+      {
+        "syndrome": "Occipital horn asymmetry (normal variant)",
+        "findings": "One occipital horn is commonly larger than the other or absent (especially on the left); recognising this as a normal variant avoids misdiagnosing atrophy or hydrocephalus.",
+        "note": "Normal anatomical variation"
+      },
+      {
+        "syndrome": "Porencephaly and periventricular leukomalacia",
+        "findings": "Posterior periventricular white-matter injury (prematurity, ischaemia) enlarges the occipital horns disproportionately, producing the characteristic colpocephaly pattern.",
+        "vascular": "Periventricular watershed ischaemia (immature periventricular vessels)"
+      },
+      {
+        "syndrome": "Callosal (tapetum) involvement",
+        "findings": "The tapetum forming the roof of the occipital horn is part of the splenium's outflow; lesions of the splenium that spare the optic radiations can produce interhemispheric visual disconnection without a field defect.",
+        "vascular": "Posterior cerebral artery (splenial branches)"
+      }
+    ],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "vent-lateral-ventricle-atrium",
+    "name": "Atrium of the lateral ventricle",
+    "synonyms": ["trigone of the lateral ventricle", "collateral trigone"],
+    "region": "telencephalon",
+    "subdivision": "Lateral ventricles",
+    "kind": "ventricle",
+    "laterality": "paired",
+    "color": "#06b6d4",
+    "function": "The triangular confluence of the ventricular body, occipital horn and temporal horn, roofed by the tapetum and floored by the collateral trigone: it is the widest part of the lateral ventricle and the site of the glomus (the largest tuft) of the choroid plexus. Its medial wall carries the forceps major and the bulb of the corpus callosum.",
+    "connections": {
+      "afferent": [
+        "Body of the lateral ventricle and the occipital horn converge here; the choroid plexus fills the trigone from the choroidal fissure"
+      ],
+      "efferent": [
+        "CSF leaves through the temporal horn toward the fourth ventricle; the plexus at the glomus absorbs and produces CSF and is the landmark for atrial surgery"
+      ]
+    },
+    "bloodSupply": "Lateral posterior choroidal artery (posterior cerebral artery) supplies the glomus and the atrial plexus, with contributions from the anterior choroidal artery anteriorly and the medial posterior choroidal artery medially; venous drainage via the internal cerebral and basal veins.",
+    "clinical": [
+      {
+        "syndrome": "Choroid plexus xanthogranuloma and cyst",
+        "findings": "The glomus at the atrial trigone is the commonest site of choroid plexus xanthogranuloma and of asymptomatic plexus cysts; both are usually incidental but can obstruct CSF flow when large.",
+        "vascular": "Not vascular — degeneration/CSF retention"
+      },
+      {
+        "syndrome": "Intraventricular meningioma (atrial trigone)",
+        "findings": "The trigone is the classic site of intraventricular meningioma, presenting with headache, papilloedema and contralateral homonymous field loss (adjacent optic radiation) rather than with focal weakness.",
+        "vascular": "Anterior/posterior choroidal artery feeders"
+      },
+      {
+        "syndrome": "Atrial enlargement as an early hydrocephalus sign",
+        "findings": "The atrium and temporal horn dilate before the frontal horns in early hydrocephalus because they have the least surrounding white-matter bulk to compress them.",
+        "note": "CSF dynamics and imaging interpretation"
+      }
+    ],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "vent-choroid-plexus-lateral",
+    "name": "Choroid plexus of the lateral ventricle",
+    "synonyms": ["choroid plexus (lateral ventricle)", "plexus choroideus ventriculi lateralis", "glomus choroideum (atrial tuft)"],
+    "region": "telencephalon",
+    "subdivision": "Lateral ventricles",
+    "kind": "ventricle",
+    "laterality": "paired",
+    "color": "#06b6d4",
+    "function": "The villous, fenestrated capillary-CSF interface that secretes the great majority of the cerebrospinal fluid and forms the blood-CSF barrier: it extends from the interventricular foramen along the body and atrium into the temporal horn, but is absent from the frontal and occipital horns. Its epithelial tight junctions, carbonic anhydrase activity and aquaporin-1 expression make CSF production a regulated, energy-dependent process — and the target of acetazolamide.",
+    "connections": {
+      "afferent": [
+        "Anterior choroidal artery (internal carotid) to the temporal horn and the inferior body; lateral and medial posterior choroidal arteries (posterior cerebral) to the body, trigone and glomus",
+        "Choroidal fissure attachments through the tela choroidea, along which it enters each ventricle"
+      ],
+      "efferent": [
+        "CSF secreted into the lateral ventricles flows through the interventricular foramen to the third ventricle (and, from the atrium and temporal horn, posteriorly toward the aqueduct)",
+        "Venous drainage through choroidal veins into the internal cerebral, basal and great cerebral veins"
+      ]
+    },
+    "bloodSupply": "Anterior choroidal artery (from the internal carotid) supplies the plexus in the temporal horn and inferior body; the lateral posterior choroidal artery (from the PCA) supplies the body, trigone and glomus; the medial posterior choroidal artery supplies the plexus near the foramen and the third ventricle. These arteries are the feeders of choroid plexus tumours.",
+    "clinical": [
+      {
+        "syndrome": "Choroid plexus papilloma and carcinoma",
+        "findings": "A villous neoplasm (usually in the lateral ventricle of a child or the fourth ventricle of an adult) overproduces CSF, causing communicating hydrocephalus with enlarged plexus and, when malignant, drop metastases through the CSF pathways.",
+        "vascular": "Anterior and posterior choroidal arteries (the vessels to be embolized or controlled at surgery)"
+      },
+      {
+        "syndrome": "Choroid plexus calcification",
+        "findings": "Physiological calcification of the atrial glomus is common after the fourth decade and must be distinguished from a calcified tumour or from subependymal spread of a germinoma.",
+        "note": "Normal ageing finding"
+      },
+      {
+        "syndrome": "Choroid plexitis and intraventricular infection",
+        "findings": "Bacterial or cryptococcal ventriculitis enhances the plexus avidly on MRI and causes loculated hydrocephalus, which is why plexus enhancement in a febrile patient is treated urgently.",
+        "note": "Infectious"
+      },
+      {
+        "syndrome": "Choroid plexus cyst",
+        "findings": "Small cysts at the glomus are common and almost always incidental in adults; in fetuses they are a soft marker that resolves in most cases.",
+        "note": "Incidental finding"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "vent-interventricular-foramen",
+    "name": "Interventricular foramen",
+    "synonyms": ["foramen of Monro", "interventricular foramen of Monro", "foramen interventriculare"],
+    "region": "telencephalon",
+    "subdivision": "Lateral ventricles",
+    "kind": "ventricle",
+    "laterality": "paired",
+    "color": "#06b6d4",
+    "function": "The short, paired channel that connects each lateral ventricle to the third ventricle, running between the anterior column of the fornix in front and the anterior thalamic tubercle behind. It is the narrowest point of the lateral-to-third-ventricle CSF pathway and therefore a choke point where small lesions cause abrupt, asymmetric hydrocephalus.",
+    "connections": {
+      "afferent": [
+        "Anterior part of the lateral ventricle (frontal horn and body), carrying CSF and any intraventricular blood or tumour cells"
+      ],
+      "efferent": [
+        "Third ventricle, and thence the cerebral aqueduct and fourth ventricle",
+        "Choroid plexus continuity: the plexus runs through the foramen from the third ventricle into the lateral ventricle"
+      ]
+    },
+    "bloodSupply": "Supplied at its margins by the anterior choroidal artery, the medial posterior choroidal artery and small branches of the anterior cerebral/anterior communicating complex; the foramen lies adjacent to the thalamostriate and internal cerebral veins.",
+    "clinical": [
+      {
+        "syndrome": "Colloid cyst of the third ventricle",
+        "findings": "A cyst impacted at the foramen of Monro causes intermittent positional headache, drop attacks and acute hydrocephalus with dilated lateral ventricles and a normal-sized third ventricle, and is a recognized cause of sudden death.",
+        "vascular": "Not vascular — mechanical obstruction at the foramen"
+      },
+      {
+        "syndrome": "Asymmetric (unilateral) hydrocephalus",
+        "findings": "Obstruction of one foramen (tumour, cyst, ventriculitis, shunt malfunction) dilates only that lateral ventricle, shifting the septum pellucidum across the midline.",
+        "note": "Obstructive — the asymmetry itself identifies the level of the block"
+      },
+      {
+        "syndrome": "Subependymal giant cell astrocytoma (tuberous sclerosis)",
+        "findings": "A enhancing mass at the foramen of Monro in a patient with tuberous sclerosis obstructs CSF flow and is one of the major diagnostic criteria for the disease.",
+        "note": "Genetic/hamartomatous; the location makes it symptomatic"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "origin3d": [3, 42, 12],
+    "size3d": [1.2, 1.5, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  }
+]

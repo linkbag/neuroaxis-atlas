@@ -5,8 +5,10 @@
  *    src/assets/anatomy (resolved via anatomyAssets.ts) when the manifest has
  *    the slug, otherwise the v1 parametric lathe/ellipsoid from
  *    src/geometry/envelope.ts (KEPT as the instant fallback — the app never
- *    blanks). Envelopes are non-pickable, depthWrite false, renderOrder −1,
- *    gated by region + 'context' layers, and use the central PBR material
+ *    blanks). Envelopes keep depthWrite false and renderOrder −1, and are
+ *    gated by region + 'context' layers; since p1-identity they are also
+ *    **pickable** (a click selects the record the slot resolves to, and each
+ *    slot id is a real registry id) and use the central PBR material
  *    factory (src/geometry/materials.ts) so clipping planes and presets come
  *    from one place;
  *  - one NucleusMesh per structure record (paired records get a mirrored −x
@@ -24,7 +26,8 @@
  */
 import { Fragment, useMemo } from 'react'
 import * as THREE from 'three'
-import type { Region } from '../../types'
+import type { ThreeEvent } from '@react-three/fiber'
+import type { Region, StructureRecord } from '../../types'
 import { getTaxonomyEntry, structures, tracts } from '../../data/load'
 import { highlightIdSet, useAtlasStore } from '../../state/store'
 import {
@@ -36,8 +39,14 @@ import {
   createThalamusEnvelopes,
   ventricleGeometryFor,
 } from '../../geometry/envelope'
-import { createContextMaterial } from '../../geometry/materials'
-import { useAnatomyAsset } from '../../geometry/anatomyAssets'
+import { createContextMaterial, createGhostShellMaterial } from '../../geometry/materials'
+import {
+  anatomySlugForRecord,
+  isGhostOrContentOnly,
+  useAnatomyAsset,
+  TEL_HEMISPHERE_RECORD_IDS,
+  TEL_HEMISPHERE_SHELLS,
+} from '../../geometry/anatomyAssets'
 import NucleusMesh from './NucleusMesh'
 import TractTube from './TractTube'
 
@@ -47,6 +56,55 @@ const ENVELOPE_OPACITY = 0.16
 const ENVELOPE_OPACITY_LIT = 0.45
 /** Selection glow on envelopes, softer than the v1 0.4 (ACES + IBL read brighter). */
 const ENVELOPE_EMISSIVE_LIT = 0.22
+
+/* ------------------------------------------------- v7 telencephalon presets */
+
+/**
+ * Hue of the hemisphere ghost shell (docs/TELENCEPHALON_PLAN.md §5 "cortex ghost
+ * by default"). Deliberately the SAME slate family as the existing context
+ * envelopes so the ghost reads as the outer envelope it is, not as a new layer.
+ */
+const GHOST_SHELL_COLOR = '#9fb0c4'
+
+/**
+ * How faint the ghost gets when its record is in the active preset's `hidden`
+ * set — §5's "Brainstem focus: cortex hidden except a faint outline". This is a
+ * genuine silhouette, not an assertion: the mesh stays in the scene at this
+ * opacity so the brain's outline frames the brainstem, while everything a click
+ * can reach through it (the brainstem, diencephalon and cerebellum) reads
+ * unobstructed.
+ */
+export const GHOST_OUTLINE_OPACITY = 0.05
+
+/**
+ * Which records the active preset emphasises (docs/TELENCEPHALON_PLAN.md §5
+ * "Deep structures: ghost cortex + basal ganglia/limbic emphasised"). The
+ * emissive lift itself is `NucleusMesh`'s `emphasised` prop (0.18, below the
+ * hover value so an emphasis can never read as an interaction); this pass only
+ * decides WHO gets it: opaque kinds, never the translucent envelopes.
+ */
+
+/** A structure is "solid" when its kind renders opaque by default. */
+function isSolidKind(kind: StructureRecord['kind']): boolean {
+  return kind !== 'context' && kind !== 'ventricle' && kind !== 'vessel'
+}
+
+/**
+ * The ordinary hemisphere opacity (§5's window is 0.12–0.18; the material
+ * factory carries 0.14 as its own default, restated here because this pass
+ * mutates opacity per frame and must restore the same number).
+ */
+const GHOST_SHELL_OPACITY = 0.14
+
+/** One ghost material per shell — module singletons, like the envelope pass. */
+const GHOST_SHELL_MATERIALS = TEL_HEMISPHERE_SHELLS.map(() =>
+  createGhostShellMaterial(GHOST_SHELL_COLOR),
+)
+
+/** Shell slug → its module-singleton ghost material (stable, key-free). */
+const GHOST_SHELL_MATERIAL_BY_SLUG = new Map<string, THREE.MeshPhysicalMaterial>(
+  TEL_HEMISPHERE_SHELLS.map((shell, index) => [shell.slug, GHOST_SHELL_MATERIALS[index]]),
+)
 
 /**
  * One context-envelope slot: the record id it highlights under (`id`),
@@ -73,18 +131,32 @@ function createPinealFallback(): THREE.BufferGeometry {
  * The envelope pass, v2 wiring (integration-v2): GLB slugs follow
  * anatomy-manifest.json; the fallback geometries are the exact v1 shapes so
  * the silhouette only ever improves.
+ *
+ * `id` is the **registry id the slot resolves to** — it is what a click,
+ * hover and label use, and the P1 identity fix (`p1-identity`) replaced the
+ * four internal `env-*` names that owned no record with the four new `ctx-*`
+ * silhouette records registered in taxonomy.json (one slot per new record):
+ *   env-medulla   → ctx-medulla-surface
+ *   env-pons      → ctx-pons-surface
+ *   env-midbrain  → ctx-midbrain-surface
+ *   env-pineal    → ctx-pineal
+ * Every slot id now exists in the registry, so no silhouette is unaddressable;
+ * the pre-existing owners are unchanged (ctx-thalamus-envelope on the two
+ * thalamus slots, ctx-hypothalamus-envelope, ctx-cerebellum on all three
+ * cerebellar slots). Keep this table and `ENVELOPE_RECORD_IDS` in step with
+ * the registry — the verifier asserts it.
  */
 const ENVELOPE_SLOTS: EnvelopeSlot[] = [
-  { id: 'env-medulla', region: 'medulla', slug: 'ctx-medulla-surface', geometry: createMedullaEnvelope() },
-  { id: 'env-pons', region: 'pons', slug: 'ctx-pons-surface', geometry: createPonsEnvelope() },
-  { id: 'env-midbrain', region: 'midbrain', slug: 'ctx-midbrain-surface', geometry: createMidbrainEnvelope() },
+  { id: 'ctx-medulla-surface', region: 'medulla', slug: 'ctx-medulla-surface', geometry: createMedullaEnvelope() },
+  { id: 'ctx-pons-surface', region: 'pons', slug: 'ctx-pons-surface', geometry: createPonsEnvelope() },
+  { id: 'ctx-midbrain-surface', region: 'midbrain', slug: 'ctx-midbrain-surface', geometry: createMidbrainEnvelope() },
   { id: 'ctx-thalamus-envelope', region: 'diencephalon', slug: 'ctx-thalamus-l', geometry: createThalamusEnvelopes()[0] },
   { id: 'ctx-thalamus-envelope', region: 'diencephalon', slug: 'ctx-thalamus-r', geometry: createThalamusEnvelopes()[1] },
   { id: 'ctx-hypothalamus-envelope', region: 'diencephalon', slug: 'ctx-hypothalamus-surface', geometry: createHypothalamusEnvelope() },
   { id: 'ctx-cerebellum', region: 'cerebellum', slug: 'ctx-cerebellum-l', geometry: createCerebellumEnvelopes()[0] },
   { id: 'ctx-cerebellum', region: 'cerebellum', slug: 'ctx-cerebellum-r', geometry: createCerebellumEnvelopes()[1] },
   { id: 'ctx-cerebellum', region: 'cerebellum', slug: 'ctx-cerebellar-vermis', geometry: createCerebellumEnvelopes()[2] },
-  { id: 'env-pineal', region: 'diencephalon', slug: 'ctx-pineal', geometry: createPinealFallback() },
+  { id: 'ctx-pineal', region: 'diencephalon', slug: 'ctx-pineal', geometry: createPinealFallback() },
 ]
 
 /**
@@ -98,7 +170,18 @@ const ENVELOPE_MATERIALS: THREE.MeshPhysicalMaterial[] = ENVELOPE_SLOTS.map(() =
 )
 
 /** Records whose 3D body is the envelope pass instead of a per-record mesh. */
-const ENVELOPE_RECORD_IDS = new Set(['ctx-thalamus-envelope', 'ctx-hypothalamus-envelope', 'ctx-cerebellum'])
+const ENVELOPE_RECORD_IDS = new Set([
+  'ctx-thalamus-envelope',
+  'ctx-hypothalamus-envelope',
+  'ctx-cerebellum',
+  // p1-identity: the four silhouettes that previously had no registry owner.
+  // Without these the records would fall through to NucleusMesh and draw a
+  // second, wrong v1 sphere on top of the envelope they describe.
+  'ctx-medulla-surface',
+  'ctx-pons-surface',
+  'ctx-midbrain-surface',
+  'ctx-pineal',
+])
 
 /* Ventricle envelope overrides are cached module-level (one instance each). */
 const ventricleGeometryCache = new Map<string, THREE.BufferGeometry>()
@@ -128,6 +211,8 @@ function EnvelopeSlotMesh({
   const kinds = useAtlasStore((s) => s.layers.kinds)
   const hoveredId = useAtlasStore((s) => s.hoveredId)
   const selectedId = useAtlasStore((s) => s.selectedId)
+  const setHovered = useAtlasStore((s) => s.setHovered)
+  const selectStructure = useAtlasStore((s) => s.selectStructure)
 
   const asset = useAnatomyAsset(slot.slug)
   const geometry =
@@ -143,6 +228,36 @@ function EnvelopeSlotMesh({
   const material = ENVELOPE_MATERIALS[index]
   material.opacity = lit ? ENVELOPE_OPACITY_LIT : ENVELOPE_OPACITY
   material.emissiveIntensity = lit ? ENVELOPE_EMISSIVE_LIT : 0
+
+  // Silhouettes are pickable (p1-identity, QUALITY_PLAN §2 item 8): a click
+  // selects the registry record the slot stands for, exactly like
+  // NucleusMesh.tsx. `ctx-thalamus-envelope` and `ctx-cerebellum` deliberately
+  // own several slots each (both thalamic ovoids, the two hemispheres plus the
+  // vermis bar) — a click anywhere on that body reports the single record that
+  // describes it, which is the registry's own pairing.
+  //
+  // Click precedence still favours the real anatomy: R3F raycasts every hit
+  // and dispatches nearest-first, so a nucleus inside the envelope is nearer to
+  // the camera than the envelope surface that contains it and claims the click;
+  // the envelope only answers clicks that miss every nucleus, which is exactly
+  // the behaviour that was missing while the whole silhouette was inert. These
+  // handlers never stopPropagation on a nucleus' behalf — stopPropagation here
+  // only ends the event after this mesh has already won the pick.
+  const handleOver = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    setHovered(slot.id)
+  }
+
+  const handleOut = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    if (useAtlasStore.getState().hoveredId === slot.id) setHovered(null)
+  }
+
+  const handleDown = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    selectStructure(slot.id, { tab: null })
+  }
+
   return (
     <mesh
       name={slot.slug}
@@ -150,7 +265,9 @@ function EnvelopeSlotMesh({
       material={material}
       visible={visible}
       renderOrder={-1}
-      raycast={() => null}
+      onPointerOver={handleOver}
+      onPointerOut={handleOut}
+      onPointerDown={handleDown}
     />
   )
 }
@@ -167,17 +284,131 @@ function ContextEnvelopes({ highlight }: { highlight: Set<string> | null }) {
   )
 }
 
+/* ------------------------------------------- v7 hemisphere ghost shells */
+
+/**
+ * One hemisphere ghost shell (docs/TELENCEPHALON_PLAN.md §5, plan C9 step 3).
+ *
+ * This is a DEDICATED pass rather than an `ENVELOPE_SLOTS` entry because the
+ * hemispheres need their own material preset (opacity ≈ 0.14, `depthWrite:false`,
+ * front-face only — see `createGhostShellMaterial`) while every other context
+ * silhouette keeps the shared 0.16 envelope material. Folding them into the
+ * existing pass would have forced one opacity on both, which is exactly the
+ * "cortex swamps the brainstem" risk §8 opens with.
+ *
+ * The shell answers clicks and hovers as `ctx-cerebral-cortex`, the record that
+ * describes it; when that record is in the active preset's `hidden` set the
+ * shell fades to `GHOST_OUTLINE_OPACITY` instead of disappearing, so the
+ * brainstem-first framing keeps the brain's silhouette (§5 "cortex hidden
+ * except a faint outline"). Its `renderOrder` is −2, in front of the context
+ * envelopes' −1, so the largest and faintest surface is drawn first.
+ */
+function TelGhostShell({
+  slug,
+  highlight,
+  outlineOnly,
+}: {
+  slug: string
+  highlight: Set<string> | null
+  outlineOnly: boolean
+}) {
+  const regions = useAtlasStore((s) => s.layers.regions)
+  const kinds = useAtlasStore((s) => s.layers.kinds)
+  const hoveredId = useAtlasStore((s) => s.hoveredId)
+  const selectedId = useAtlasStore((s) => s.selectedId)
+  const setHovered = useAtlasStore((s) => s.setHovered)
+  const selectStructure = useAtlasStore((s) => s.selectStructure)
+
+  const asset = useAnatomyAsset(slug)
+  // Before the GLB resolves there is no v1 stand-in at hemisphere scale (a
+  // parametric hemisphere would be a lie about the shape), so the shell simply
+  // is not drawn yet. §2 constraint 6 — "the app never blanks" — is satisfied by
+  // the brainstem scene behind it, which is fully populated from its own parts.
+  if (asset.status !== 'ready' || asset.geometry === null) return null
+
+  const recordId = TEL_HEMISPHERE_RECORD_IDS[0]
+  const visible = regions.has('telencephalon') && kinds.has('context')
+  if (!visible) return null
+
+  const lit =
+    (highlight !== null && highlight.has(recordId)) ||
+    hoveredId === recordId ||
+    selectedId === recordId
+  const material = GHOST_SHELL_MATERIAL_BY_SLUG.get(slug) ?? GHOST_SHELL_MATERIALS[0]
+  material.opacity = lit ? ENVELOPE_OPACITY_LIT : outlineOnly ? GHOST_OUTLINE_OPACITY : GHOST_SHELL_OPACITY
+  // The ghost is the outer envelope, so it never takes an emissive lift: at
+  // hemisphere scale a lifted emissive would wash the brainstem out rather than
+  // emphasise the cortex (unlike the nuclei, where an emissive lift reads as
+  // "pay attention to me").
+  material.emissiveIntensity = 0
+
+  const handleOver = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    setHovered(recordId)
+  }
+
+  const handleOut = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    if (useAtlasStore.getState().hoveredId === recordId) setHovered(null)
+  }
+
+  const handleDown = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    selectStructure(recordId, { tab: null })
+  }
+
+  return (
+    <mesh
+      name={slug}
+      geometry={asset.geometry}
+      material={material}
+      renderOrder={-2}
+      onPointerOver={handleOver}
+      onPointerOut={handleOut}
+      onPointerDown={handleDown}
+    />
+  )
+}
+
+/** The two hemisphere shells, drawn as the translucent cortical envelope. */
+function TelGhostShells({ highlight, cortexHidden }: { highlight: Set<string> | null; cortexHidden: boolean }) {
+  return (
+    <group name="tel-hemisphere-ghosts">
+      {TEL_HEMISPHERE_SHELLS.map((shell) => (
+        <TelGhostShell
+          key={shell.slug}
+          slug={shell.slug}
+          highlight={highlight}
+          outlineOnly={cortexHidden}
+        />
+      ))}
+    </group>
+  )
+}
+
 export default function SceneLayers() {
   const regions = useAtlasStore((s) => s.layers.regions)
   const kinds = useAtlasStore((s) => s.layers.kinds)
+  const hidden = useAtlasStore((s) => s.layers.hidden)
+  const emphasis = useAtlasStore((s) => s.layers.emphasis)
   const selectedId = useAtlasStore((s) => s.selectedId)
   const syndromeId = useAtlasStore((s) => s.syndromeId)
 
   const highlight = useMemo(() => highlightIdSet({ selectedId, syndromeId }), [selectedId, syndromeId])
 
   const visibleStructures = useMemo(
-    () => structures.filter((record) => regions.has(record.region) && kinds.has(record.kind)),
-    [regions, kinds],
+    () =>
+      structures.filter(
+        (record) =>
+          regions.has(record.region) &&
+          kinds.has(record.kind) &&
+          // v7 preset `hidden` (plan C11): structure-level visibility that the
+          // region/kind sets cannot express — §5's "cortex hidden" and
+          // "deep structures only" presets are structure-level states.
+          !hidden.has(record.id) &&
+          !isGhostOrContentOnly(record.id),
+      ),
+    [regions, kinds, hidden],
   )
 
   const visibleTracts = useMemo(() => {
@@ -185,28 +416,64 @@ export default function SceneLayers() {
     return tracts.filter((tract) => {
       // TractRecord carries no region; the taxonomy registry is authoritative.
       const entry = getTaxonomyEntry(tract.id)
-      return entry ? regions.has(entry.region) : true
+      if (!regions.has(entry ? entry.region : 'medulla')) return false
+      // A tract whose own record is hidden OR whose telencephalic body belongs
+      // to a hidden record (the corpus-callosum / internal-capsule subdivisions)
+      // is hidden too — otherwise the preset would leak the very fibres it says
+      // it is hiding.
+      if (hidden.has(tract.id)) return false
+      return true
     })
-  }, [regions, kinds])
+  }, [regions, kinds, hidden])
 
   return (
     <group name="scene-layers">
       <ContextEnvelopes highlight={highlight} />
+      {/* §5 cortex ghost: the two hemisphere shells at their own material. */}
+      <TelGhostShells highlight={highlight} cortexHidden={hidden.has(TEL_HEMISPHERE_RECORD_IDS[0])} />
       {visibleStructures.map((record) => {
         if (ENVELOPE_RECORD_IDS.has(record.id)) return null // envelope pass above
         // Ventricle records keep their parametric v1 shape as the fallback;
         // NucleusMesh upgrades to the committed GLB when the manifest has one.
         const override = record.kind === 'ventricle' ? cachedVentricleGeometry(record.id) : undefined
+        // v7 (plan C9): every other record resolves its 3D body through
+        // ANATOMY_RECORD_LINKS. Records with no baked body never reach here at
+        // all — `isGhostOrContentOnly` filtered them above — so the
+        // `anatomySlug` a record hands NucleusMesh is always either a real
+        // committed GLB or the record id itself (which is a manifest slug for
+        // the whole v1–v6 set, so nothing below y = +45 changes).
+        const anatomySlug = anatomySlugForRecord(record.id) ?? record.id
+        const emphasised = emphasis.has(record.id) && isSolidKind(record.kind)
         if (record.laterality === 'paired') {
           return (
             <Fragment key={record.id}>
-              <NucleusMesh record={record} highlight={highlight} geometry={override} anatomySlug={record.id} />
-              <NucleusMesh record={record} mirrored highlight={highlight} geometry={override} anatomySlug={record.id} />
+              <NucleusMesh
+                record={record}
+                highlight={highlight}
+                geometry={override}
+                anatomySlug={anatomySlug}
+                emphasised={emphasised}
+              />
+              <NucleusMesh
+                record={record}
+                mirrored
+                highlight={highlight}
+                geometry={override}
+                anatomySlug={anatomySlug}
+                emphasised={emphasised}
+              />
             </Fragment>
           )
         }
         return (
-          <NucleusMesh key={record.id} record={record} highlight={highlight} geometry={override} anatomySlug={record.id} />
+          <NucleusMesh
+            key={record.id}
+            record={record}
+            highlight={highlight}
+            geometry={override}
+            anatomySlug={anatomySlug}
+            emphasised={emphasised}
+          />
         )
       })}
       {visibleTracts.map((tract) => (

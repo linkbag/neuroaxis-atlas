@@ -7,7 +7,22 @@
 
 import { useAtlasStore, viewPresetOf, VIEW_PRESETS, type RenderQuality, type ViewPreset } from '../state/store'
 
-const PRESET_ORDER: ViewPreset[] = ['all', 'nuclei', 'tracts', 'clinical-motor']
+/**
+ * Preset button order. v1–v6 presets first (their behaviour is unchanged), then
+ * the four v7 telencephalon-aware presets of docs/TELENCEPHALON_PLAN.md §5 —
+ * whose FIRST entry, Brainstem focus, is also the default layer state a fresh
+ * visitor boots into (state/store.ts DEFAULT_LAYERS).
+ */
+const PRESET_ORDER: ViewPreset[] = [
+  'brainstem-focus',
+  'deep-structures',
+  'whole-brain',
+  'cortex-only',
+  'all',
+  'nuclei',
+  'tracts',
+  'clinical-motor',
+]
 
 const QUALITY_ORDER: RenderQuality[] = ['high', 'balanced']
 
@@ -33,7 +48,7 @@ export default function Header() {
     <header className="app-header">
       <div className="brand">
         <h1 className="app-title">NeuroAxis</h1>
-        <span className="app-subtitle">3D Brainstem Atlas — diencephalon · midbrain · rhombencephalon</span>
+        <span className="app-subtitle">3D Brainstem Atlas — diencephalon · midbrain · rhombencephalon · telencephalon</span>
       </div>
 
       <div className="header-presets" role="group" aria-label="View presets">

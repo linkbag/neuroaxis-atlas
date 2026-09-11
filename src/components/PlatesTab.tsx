@@ -83,12 +83,17 @@ import SectionSliderBar from './section/SectionSliderBar'
 // The ONE photograph-selection rule + the anchor tolerance (planeGeometry),
 // so the toolbar names exactly the plate the canvas and the PiP paint.
 import { pickImageForPlane } from './section/planeGeometry'
+// The canonical slider ranges (v7: used to decide whether the CT source covers
+// this axis' whole range) — CLIP_BOUNDS stays the single declaration.
+import { CLIP_BOUNDS } from './viewer3d/clipPlanes'
 // Module side effect: registers the 'stain' + 'mri' + 'ct' image layers on the
 // section-canvas registry (plan §4); getLayerLinks feeds the source chips,
 // ctWindowPresets() the CT window options and ctLayerStatus()/mriLayerStatus()
 // the honest availability states.
 import {
+  ctCoverageStatement,
   ctLayerStatus,
+  ctSuperiorMostDataYAu,
   ctWindowPresets,
   getCtDataStatus,
   getLayerLinks,
@@ -183,6 +188,13 @@ const IMAGES_BY_AXIS: Record<SectionAxis, SectionImage[]> = {
  * Pure + exported for QA. "Cannot be served" means the BUILD has no data for it
  * on this axis — never merely "this particular plane is empty inside a covered
  * modality", which stays selectable and is explained by the canvas hint.
+ *
+ * v7 (docs/TELENCEPHALON_PLAN.md §2/§9, plan C3): the CT grid is present but the
+ * Visible Human series is a HEAD-only scan whose measured apex is
+ * canonical y ≈ 36.25 au, so on the transverse axis every plane above it is
+ * genuinely uncovered. That is a property of the DATA on this axis, not of any
+ * one plane, and it is reported as its own reason so the button's tooltip says
+ * what actually happened instead of "still loading".
  */
 export function modalityUnavailableReason(
   kind: SectionUnderlayKind,
@@ -198,11 +210,23 @@ export function modalityUnavailableReason(
     return 'no embeddable MRI grid in this build — re-bake with: node scripts/build-mri-grid.mjs'
   }
   if (kind === 'ct') {
-    if (status.ct) return null
-    if (ctLayerStatus() === 'available') {
-      return 'unavailable right now — the CT grid is still loading or its fetch failed; the section canvas reports the live state'
+    if (!status.ct) {
+      if (ctLayerStatus() === 'available') {
+        return 'unavailable right now — the CT grid is still loading or its fetch failed; the section canvas reports the live state'
+      }
+      return 'no embeddable CT grid in this build — re-bake with: node scripts/build-ct-grid.mjs (or choose MRI / Photo)'
     }
-    return 'no embeddable CT grid in this build — re-bake with: node scripts/build-ct-grid.mjs (or choose MRI / Photo)'
+    // Grid present: on the transverse axis the series may still be exhausted
+    // over the whole slider range (AMENDMENT B reaches y = +85, the CT source
+    // ends at ≈ +36.25). Anything below that limit stays fully selectable.
+    const limit = ctSuperiorMostDataYAu()
+    if (limit !== null && axis === 'y' && CLIP_BOUNDS.y.min > limit) {
+      return (
+        `the Visible Human CT series ends at canonical y ≈ ${limit.toFixed(2)} au, below this axis' whole `
+        + 'range — MRI is the modality of record here'
+      )
+    }
+    return null
   }
   if (kind === 'stain') {
     if (IMAGES_BY_AXIS[axis].length > 0) return null
@@ -386,6 +410,19 @@ export default function PlatesTab() {
           ...layerLinks.filter((link) => link.url !== activeCredit.sourceUrl),
         ]
       : layerLinks
+
+  /**
+   * v7 CT coverage honesty (plan §9/C3): the statement shown when the CT
+   * modality is requested at a plane above the Visible Human series' measured
+   * apex. Null when CT is not being asked for, or when the plane is covered —
+   * so the toolbar never shows a coverage warning on a plane that has data.
+   * The text comes from `imageLayers.ctCoverageStatement`, which reads the
+   * number and the note out of ct-manifest.json (plan C2: one source).
+   */
+  const ctCoverageNotice =
+    sectionUnderlay.kind === 'ct' || sectionUnderlay.kind === 'auto'
+      ? ctCoverageStatement(sectionAxis, planeValue)
+      : null
 
   return (
     <section className="plates-tab">
@@ -706,6 +743,17 @@ export default function PlatesTab() {
                     : 'approximate alignment — real imagery is placed by a fixed documented affine, not registered to the contours; '}
                 photo coverage is per-plane (±{MODALITY_TOLERANCE_AU} au), so the plane between two
                 photographs honestly shows the modality fallback instead
+              </span>
+            )}
+
+            {/* v7 CT coverage honesty (docs/TELENCEPHALON_PLAN.md §2/§9, plan
+                C3): above the Visible Human series' measured apex the CT grid
+                has stations but no DATA, so the modality cannot paint. The
+                statement is built from ct-manifest.json's own measurement and
+                note — no second, drifting constant (plan C2). */}
+            {ctCoverageNotice !== null && (
+              <span className="section-alignment-note is-ct-coverage" role="note">
+                {ctCoverageNotice}
               </span>
             )}
           </div>

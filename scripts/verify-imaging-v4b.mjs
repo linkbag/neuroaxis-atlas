@@ -38,8 +38,9 @@
  *     significance threshold. The gate fails if a source axis is being
  *     presented as measured while the recorded statistic is not significant —
  *     that is the defect class this run is most exposed to.
- *  6. PAYLOAD — total `src/assets/imaging/**` bytes <= 8 MiB and the 22
- *     cryosections <= 1.75 MB, measured on disk.
+ *  6. PAYLOAD — total `src/assets/imaging/**` bytes <= 10 MiB (AMENDMENT B,
+ *     docs/TELENCEPHALON_PLAN.md §2/§4) and the 22 cryosections <= 1.75 MB,
+ *     measured on disk.
  *  7. NON-REGRESSION — the pre-v4b manifest is intact: the 17 UBC micrographs,
  *     9 UBC horizontal, 15 UBC coronal, 10 MSU coronal and 3 Commons CT entries
  *     are still present, appending did not reorder them, and no existing entry
@@ -76,7 +77,14 @@ const FETCH_DATE = '2026-09-10'
 const PLATE_W = 528
 const PLATE_H = 764
 const AU_PER_INDEX = 0.1225
-const IMAGING_CAP_BYTES = 8 * 1024 * 1024
+/**
+ * Total imaging payload cap. Raised 8 MiB → 10 MiB by v7 AMENDMENT B
+ * (docs/TELENCEPHALON_PLAN.md §2/§4): the extended canonical box
+ * x ±48 / y −55..85 / z −75..55 makes both baked uint8 grids [81,113,107] =
+ * 979,371 B each, which the pre-v7 8 MiB cap could no longer hold.
+ */
+const IMAGING_CAP_BYTES = 10 * 1024 * 1024
+const IMAGING_CAP_MIB = 10
 const VHP_CAP_BYTES = 1_750_000
 const EXPECTED_PLATES = 22
 const LINK_OUT_ONLY = [/wholebrainatlas/i, /brainmaps\.org/i, /brain-map\.org/i]
@@ -468,10 +476,10 @@ if (ctManifest.credit !== CREDIT) {
     if (total > IMAGING_CAP_BYTES) {
       fail(
         'payload',
-        `src/assets/imaging/** is ${(total / 1048576).toFixed(2)} MiB in ${count} files — over the 8 MiB cap`,
+        `src/assets/imaging/** is ${(total / 1048576).toFixed(2)} MiB in ${count} files — over the ${IMAGING_CAP_MIB} MiB cap`,
       )
     } else {
-      note(`payload: src/assets/imaging/** = ${(total / 1048576).toFixed(2)} MiB in ${count} files (cap 8 MiB)`)
+      note(`payload: src/assets/imaging/** = ${(total / 1048576).toFixed(2)} MiB in ${count} files (cap ${IMAGING_CAP_MIB} MiB)`)
     }
     const vhp = plateFiles.reduce((s, n) => s + statSync(join(stainsDir, n)).size, 0)
     if (vhp > VHP_CAP_BYTES) {

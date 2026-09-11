@@ -698,11 +698,63 @@ function conventionFromSyncPlan() {
    * asserts a basis it cannot check is worth less than one that says so. The
    * roll's status is recorded in `cameraUpAxis`'s note in the module instead.
    */
+  const spanRuleWitnesses = []
   for (const axis of AXES) {
     const mirrored = mirrorX(axis)
     const upAxis = cameraUpAxis(axis)
     const [uAxis, vAxis] = AXIS_PAIR[axis]
     const extents = axisExtents(axis)
+    // The section camera's basis, read out of the PANEL's own source and
+    // resolved through the shared AXIS_PAIR (the two facts `SECTION_VIEWS`
+    // declares per axis: its `up:` and `cameraSide:` vectors). Used by B5c as
+    // the declared side and by B6 as the cross-check of the module's up axis.
+    const declaredUpSide = (() => {
+      const pipSource = readFileSync(resolve('src/components/viewer3d/SectionPiP.tsx'), 'utf8')
+      const viewBlock = pipSource.slice(pipSource.indexOf('const SECTION_VIEWS'))
+      const entry = viewBlock.slice(viewBlock.indexOf(`\n  ${axis}: {`))
+      const axisOf = (arg) => {
+        const literal = /^'([xyz])'$/.exec(arg)
+        if (literal !== null) return literal[1]
+        const pair = /AXIS_PAIR\.([xyz])\[(\d)\]/.exec(arg)
+        // AXIS_PAIR entries are [u, v], so the index maps to the axis pair, not
+        // to a world component: 0 → the plane's u axis, 1 → its v axis.
+        if (pair !== null) return AXIS_PAIR[pair[1]][Number(pair[2])] ?? null
+        // A derived `cameraUpAxis('x')` argument is the MODULE looking itself up
+        // — not a fact the panel declares — so it is reported as such (B6 then
+        // asserts the shipped up axis equals the module's, which closes the loop
+        // without letting this extraction hand the module its own answer).
+        return null
+      }
+      // The argument of a `field: axisUnitVector(…)` call, read with paren
+      // matching: `axisUnitVector(AXIS_PAIR.z[1])` contains a paren itself, so a
+      // non-greedy regex would stop inside the argument and read the WRONG axis
+      // out of the entry. The field match is anchored to the START OF ITS OWN
+      // LINE (`m` flag, indentation only): `…group: axisUnitVector(…)` contains
+      // the substring `up:` and an unanchored pattern reads the cap quad's group
+      // axis as the camera's up vector.
+      const callArgument = (field) => {
+        const match = new RegExp(`^\\s*${field}:\\s*axisUnitVector\\(`, 'm').exec(entry)
+        if (match === null) return null
+        let depth = 1
+        let body = ''
+        for (let i = match.index + match[0].length; i < entry.length; i++) {
+          const ch = entry[i]
+          if (ch === '(') depth++
+          else if (ch === ')') {
+            depth--
+            if (depth === 0) return body.trim()
+          }
+          body += ch
+        }
+        return null
+      }
+      const upArg = callArgument('up')
+      const sideArg = callArgument('cameraSide')
+      return {
+        up: upArg === null ? null : axisOf(upArg),
+        side: sideArg === null ? null : axisOf(sideArg),
+      }
+    })()
 
     // (B5a) The module's rule, re-derived: `mirrorX(axis)` is exactly
     //       `cameraUpAxis(axis) === uAxis`. A mirror is needed when the camera's
@@ -723,14 +775,92 @@ function conventionFromSyncPlan() {
       upAxis === uAxis || upAxis === vAxis,
       `B5 ${axis}: cameraUpAxis(${axis}) = ${upAxis} is not one of the plane's in-plane axes`,
     )
-    // (B5c) The framing contract of `cameraUpAxis`: the module names the larger
-    //       canonical span as the camera's up axis, which is what keeps the ortho
-    //       fit of the shared extents from needing a second scale (the drift
-    //       `planeTransform` exists to remove).
+    // (B5c) AMENDMENT B (docs/TELENCEPHALON_PLAN.md §2, task `tel-space`) — the
+    //       camera basis is an ORIENTATION CONTRACT, not an extent measurement.
+    //       This assertion used to read
+    //           (upAxis === uAxis) === (extents.uSpan >= extents.vSpan)
+    //       i.e. "the camera's up axis is the in-plane axis with the larger
+    //       canonical span". That was an observation about ONE bound set, and
+    //       extending the box (y 100 → 140 au, z 82 → 130 au) flips it on the
+    //       transverse plane: the larger span becomes the plane's v axis (z),
+    //       which is ALSO the side the PiP camera stands on (SECTION_VIEWS.y
+    //       cameraSide = AXIS_PAIR.y[1] = +z). The panel would then build an
+    //       orthographic camera whose up vector is parallel to its view
+    //       direction — a degenerate basis. Measured with this repo's three.js
+    //       (r169): `up +z`, `side +z` does not produce NaN, it silently
+    //       substitutes right (0,1,0) / up (−1,0,0), rolling the transverse
+    //       panel 90° and (through flipX = mirrorX('y') → false) moving
+    //       patient-left to the image LEFT against the badge table the same
+    //       panel prints.
+    //
+    //       So this revision is NOT a relaxation: the deleted clause is
+    //       replaced by three assertions that are strictly more specific —
+    //       (i) the up axis is an in-plane, non-normal axis, which the old span
+    //       rule satisfied only by coincidence of the old bounds; (ii) it is
+    //       never parallel to the side the camera stands on, which is the
+    //       degeneracy the old clause would have introduced (NEW check — it has
+    //       no counterpart in the deleted one); and (iii) it is the value the
+    //       panel's own SECTION_VIEWS declares (B6), so module and panel still
+    //       cannot drift. The framing half-extents are NOT part of this
+    //       assertion any more — they come from axisExtents()/planeTransform()
+    //       and are checked, per axis and per plane, in A1/A2/A6 against the
+    //       LIVE CLIP_BOUNDS; the camera may not constrain them (that coupling
+    //       is what made a bounds amendment able to roll a v3 surface).
     assert(
-      (upAxis === uAxis) === (extents.uSpan >= extents.vSpan),
-      `B5 ${axis}: cameraUpAxis(${axis}) = ${upAxis} is not the larger-span rule of the function`,
+      upAxis !== axis,
+      `B5 ${axis}: cameraUpAxis(${axis}) = ${upAxis} is the plane normal — the ortho basis would be degenerate`,
     )
+    const sideAxis = declaredUpSide.side
+    assert(
+      sideAxis !== null,
+      `B5 ${axis}: SectionPiP declares no resolvable cameraSide for ${axis} — the degeneracy check cannot run`,
+    )
+    // The up axis must be the axis the AMENDMENT B refit is allowed to keep: on
+    // each plane the camera's up vector is the in-plane axis PERPENDICULAR to the
+    // side the camera stands on (any other choice is either the plane normal or
+    // parallel to the view direction — a degenerate basis, see the note above).
+    // One plane is a RECORDED PRE-EXISTING EXCEPTION, not a product of this
+    // change: coronal's `cameraSide` is +y (AXIS_PAIR.z[1]) and its up is +y, so
+    // the basis IS degenerate today — and was before this task (`cameraUpAxis`
+    // resolved to 'y' under both the old larger-span rule and the frozen table).
+    // Measured with this repo's three.js r169, that pair yields
+    // right = (+x) / up = (−z) / back = (+y): the coronal panel's screen-right is
+    // patient-LEFT and its screen-up is inferior, which contradicts its own
+    // badge table (S↑ I↓ R← L→) and SectionCanvas' orientation. Fixing it means
+    // changing `SectionPiP`'s `cameraSide` for the coronal plane (outside this
+    // task's write scope) and re-verifying the coronal panel in a browser, so it
+    // is reported rather than patched blind — the same treatment the module's
+    // recorded 90°-roll note already gets.
+    const DEGENERATE_BASIS_EXCEPTIONS = { z: 'AXIS_PAIR.z[1] = +y is parallel to up +y (pre-existing)' }
+    if (sideAxis !== null) {
+      const perpendicular = upAxis !== sideAxis
+      assert(
+        perpendicular || DEGENERATE_BASIS_EXCEPTIONS[axis] !== undefined,
+        `B5 ${axis}: the section camera's up axis (${upAxis}) is parallel to the side it stands on ` +
+          `(${sideAxis}) — three.js' lookAt would silently roll the panel (the AMENDMENT B degeneracy)`,
+      )
+      if (!perpendicular) {
+        console.log(
+          `   ! coronal camera basis is degenerate and PRE-EXISTING: up ${upAxis} ∥ cameraSide ${sideAxis} ` +
+            `(${DEGENERATE_BASIS_EXCEPTIONS[axis]}) — measured basis right=+x up=−z; needs a SectionPiP ` +
+            `cameraSide fix (reported, not applied here)`,
+        )
+      }
+      assert(
+        sideAxis === uAxis || sideAxis === vAxis,
+        `B5 ${axis}: the section camera stands on ${sideAxis}, which is not an in-plane axis of ${axis}`,
+      )
+    }
+    // The module's declared up axis is the one the panel consumes
+    // (`up: axisUnitVector(cameraUpAxis('<axis>'))`): if the table ever diverges
+    // from the function, the panel renders a basis the module does not describe.
+    if (declaredUpSide.up !== null) {
+      assert(
+        declaredUpSide.up === upAxis,
+        `B5 ${axis}: the panel's declared camera up (${declaredUpSide.up}) is not the module's ` +
+          `cameraUpAxis (${upAxis})`,
+      )
+    }
     // (B5d) The two flags are cross-consistent across the three planes: exactly the
     //       planes whose up axis is their u axis report a mirror. (Recorded so a
     //       partial edit — flipping one constant but not the other — cannot pass.)
@@ -738,6 +868,51 @@ function conventionFromSyncPlan() {
       mirrorX(axis) === (cameraUpAxis(axis) === AXIS_PAIR[axis][0]),
       `B5 ${axis}: mirrorX/cameraUpAxis disagree with each other`,
     )
+
+    // (B5f) The camera side is the positive in-plane axis that faces the
+    //       DISCARDED half-space (clipPlanes keeps the lower half of every axis,
+    //       so the camera stands on the positive side of the plane normal) — and
+    //       it is NOT always the same axis-pair slot: the panel declares
+    //       AXIS_PAIR[axis][1] on transverse and coronal but AXIS_PAIR[axis][0]
+    //       on sagittal. Re-derived here from the shared pair + the clip
+    //       convention, and asserted against the panel's declared value
+    //       (`sideAxis`, extracted from its source), which is what makes the
+    //       non-degeneracy check above a statement about the REAL basis.
+    {
+      // Slot of each plane's camera side within its own AXIS_PAIR, read from the
+      // panel's source above (`cameraSide: axisUnitVector(AXIS_PAIR.<axis>[<slot>])`).
+      const sideSlot = { y: 1, x: 0, z: 1 }
+      const expectedSide = AXIS_PAIR[axis][sideSlot[axis]]
+      assert(
+        sideAxis === expectedSide,
+        `B5 ${axis}: the panel's declared camera side (${sideAxis}) is not ` +
+          `AXIS_PAIR.${axis}[${sideSlot[axis]}] = ${expectedSide}`,
+      )
+      // …and that side really is perpendicular to the plane normal (it is an
+      // in-plane axis by construction, which is the geometric fact the camera
+      // placement in SectionPiP relies on: `position = centre + side·distance`).
+      assert(
+        expectedSide !== axis,
+        `B5 ${axis}: the declared camera side ${expectedSide} is the plane normal`,
+      )
+    }
+
+    // (B5g) THE SUBSTITUTION WITNESS for the deleted span rule. It answers "was
+    //       deleting `up = larger span` harmless HERE?" — with AMENDMENT B's
+    //       extents the answer is no on the transverse plane, where the larger
+    //       span is the plane's v axis and is ALSO the side the camera stands on
+    //       (the degenerate basis). The collected witnesses are asserted to be
+    //       non-empty after the loop: if the deleted rule ever becomes silent on
+    //       all three planes, this gate would no longer be checking it at all.
+    {
+      const largerSpan = extents.uSpan >= extents.vSpan ? uAxis : vAxis
+      if (largerSpan !== upAxis) {
+        spanRuleWitnesses.push(
+          `${axis}: larger span ${largerSpan} ≠ declared up ${upAxis}` +
+            (largerSpan === sideAxis ? ' AND is the side the camera stands on (degenerate)' : ''),
+        )
+      }
+    }
 
     // (B5e) Pixel proof of the canvas side: world +u lands on the image RIGHT and
     //       world +v toward the top through the shared transform — the convention
@@ -753,6 +928,17 @@ function conventionFromSyncPlan() {
       `B5 ${axis}: the canvas transform must put world +u right and world +v up`,
     )
   }
+  // (B5h) The deleted span rule must still be WITNESSED (see B5g): AMENDMENT B
+  //       keeps at least one plane on which it would have disagreed with the
+  //       declared basis, so a future re-introduction of it cannot go unnoticed.
+  assert(
+    spanRuleWitnesses.length > 0,
+    'B5: no plane witnesses the deleted larger-span camera rule — the substitution cannot be checked',
+  )
+  console.log(
+    `B. camera basis  frozen per plane (up ${AXES.map((a) => `${a}→${cameraUpAxis(a)}`).join(' ')}); ` +
+      `deleted span rule witnessed by ${spanRuleWitnesses.join('; ')}`,
+  )
   // The values the PiP's SECTION_VIEWS declares, read from the source: the
   // orientation table and the flip flags are the same facts on both surfaces.
   // The facts the PiP's SECTION_VIEWS declares, read from the source: its badge

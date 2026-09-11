@@ -1,0 +1,361 @@
+[
+  {
+    "id": "tract-corpus-callosum-rostrum",
+    "name": "Rostrum of the corpus callosum",
+    "synonyms": ["rostrum corporis callosi"],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
+    "kind": "tract",
+    "laterality": "midline",
+    "color": "#a78bfa",
+    "function": "The thin, tapering anterior-inferior lip of the corpus callosum that curves down behind the anterior commissure to blend with the lamina terminalis and the septal area. It carries the most anterior commissural fibres, connecting the orbital and subcallosal cortex of the two hemispheres and completing the ring of the callosal arch.",
+    "connections": {
+      "afferent": [
+        "Commissural axons from the orbital, subcallosal and anterior cingulate cortex of each hemisphere"
+      ],
+      "efferent": [
+        "Homotopic projections to the contralateral orbital and subcallosal cortex (anterior interhemispheric transfer)"
+      ]
+    },
+    "bloodSupply": "Anterior cerebral artery — pericallosal and subcallosal branches, with the anterior communicating complex supplying the adjacent lamina terminalis and septum.",
+    "clinical": [
+      {
+        "syndrome": "Anterior callosal disconnection",
+        "findings": "Lesions of the rostrum, genu and anterior body disconnect the frontal lobes: the patient may show an alien hand, compulsive utilization behaviour and intermanual conflict because the supplementary motor and premotor areas can no longer exchange commands.",
+        "vascular": "Anterior cerebral artery (pericallosal branches) or anterior communicating artery perforators"
+      },
+      {
+        "syndrome": "Agenesis of the corpus callosum",
+        "findings": "Failure of the callosal commissure leaves the rostrum absent and the third ventricle high-riding between the lateral ventricles, with Probst bundles running anteroposteriorly instead of crossing.",
+        "note": "Developmental — often incidental, sometimes with intellectual or coordination deficits"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "tract-corpus-callosum-genu",
+    "name": "Genu of the corpus callosum",
+    "synonyms": ["genu corporis callosi", "knee of the corpus callosum"],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
+    "kind": "tract",
+    "laterality": "midline",
+    "color": "#a78bfa",
+    "function": "The sharp anterior bend of the corpus callosum, whose fibres sweep forward and laterally as the forceps minor into the prefrontal cortex of both hemispheres. It is the busiest anterior interhemispheric junction: the genu carries the commissural traffic that coordinates bilateral frontal action, including the transfer of motor intention between the premotor areas.",
+    "connections": {
+      "afferent": [
+        "Commissural axons from the prefrontal, premotor and anterior cingulate cortex of both hemispheres (forceps minor)"
+      ],
+      "efferent": [
+        "Homotopic and heterotopic projections to the contralateral prefrontal and premotor cortex"
+      ]
+    },
+    "bloodSupply": "ACA — pericallosal branches (the callosomarginal artery runs above it); the recurrent artery of Heubner territory lies immediately inferior-lateral.",
+    "clinical": [
+      {
+        "syndrome": "Alien hand syndrome (anterior callosal variant)",
+        "findings": "Damage to the genu/anterior body with the adjacent supplementary motor area releases the non-dominant hand from contralateral control: the hand performs purposeful movements the patient does not intend and cannot inhibit.",
+        "vascular": "Anterior cerebral artery (pericallosal) territory"
+      },
+      {
+        "syndrome": "Callosal disconnection (split-brain) syndrome",
+        "findings": "Surgical or pathological section of the anterior callosum impairs interhemispheric transfer of motor programmes: the left hand cannot imitate or name what the right hand feels, and bimanual coordination breaks down.",
+        "vascular": "ACA infarction; also surgical (callosotomy) and demyelinating"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "tract-corpus-callosum-body",
+    "name": "Body of the corpus callosum",
+    "synonyms": ["truncus corporis callosi", "trunk of the corpus callosum"],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
+    "kind": "tract",
+    "laterality": "midline",
+    "color": "#a78bfa",
+    "function": "The long arched trunk of the commissure that forms the roof of the lateral ventricles, carrying the great majority of the ~200 million callosal axons between the sensorimotor, parietal and temporal association cortices. Its topographical organization mirrors the cortical map: the anterior body connects motor and premotor areas, the posterior body connects parietal and auditory regions, and the ventricular-facing fibres are the thinnest and most recently evolved.",
+    "connections": {
+      "afferent": [
+        "Commissural axons from the precentral/postcentral gyri, parietal association cortex and superior temporal cortex"
+      ],
+      "efferent": [
+        "Homotopic projections to the mirror-image contralateral cortical area, with a minority of heterotopic projections to functionally related areas"
+      ]
+    },
+    "bloodSupply": "ACA — pericallosal and callosomarginal branches supply the anterior body; PCA — splenial and posterior pericallosal branches supply the posterior body; the callosal arteries run in the pericallosal cistern above the body.",
+    "clinical": [
+      {
+        "syndrome": "Callosal infarction (ACA territory)",
+        "findings": "Infarction of the callosal body accompanies anterior cerebral artery stroke and adds interhemispheric disconnection to the leg-predominant hemiparesis: the left hand acts against the patient's intent (alien hand), and bimanual tasks decompose.",
+        "vascular": "Anterior cerebral artery (pericallosal branches); posterior body also receives posterior cerebral (splenial) branches"
+      },
+      {
+        "syndrome": "Callosotomy for catastrophic epilepsy",
+        "findings": "Sectioning the callosal body prevents secondary generalization of seizures and reveals the disconnection syndrome: the left hand behaves independently, and objects palpated by the left hand cannot be named.",
+        "note": "Therapeutic lesion — the classical experimental model of disconnection"
+      },
+      {
+        "syndrome": "Marchiafava-Bignami disease",
+        "findings": "Necrosis of the callosal body (and genu/splenium) in chronic severe alcohol use causes acute confusion, dysarthria, apraxia and interhemispheric disconnection with T2-hyperintense callosal lesions.",
+        "note": "Toxic/nutritional rather than vascular"
+      },
+      {
+        "syndrome": "Diffuse callosal thinning",
+        "findings": "Callosal atrophy with regional specificity (anterior in frontotemporal dementia, posterior in Alzheimer disease, focal in ALS) is a marker of the cortical regions whose commissural fibres have degenerated.",
+        "note": "Neurodegenerative marker"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "tract-corpus-callosum-splenium",
+    "name": "Splenium of the corpus callosum",
+    "synonyms": ["splenium corporis callosi", "tapetum (adjacent)"],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
+    "kind": "tract",
+    "laterality": "midline",
+    "color": "#a78bfa",
+    "function": "The thick, rounded posterior end of the corpus callosum: its fibres form the forceps major (interconnecting the occipital and posterior parietal cortices, arching as the tapetum over the occipital and temporal horns) and the dorsal hippocampal commissure lies immediately beneath it. It is the decisive interhemispheric link for visual material, so its destruction disconnects the seeing right hemisphere from the speaking left one.",
+    "connections": {
+      "afferent": [
+        "Commissural axons from the occipital, posterior parietal and posterior temporal (including auditory association) cortex"
+      ],
+      "efferent": [
+        "Homotopic projections to the contralateral occipital and posterior parietal cortex (forceps major); tapetum fibres pass to the contralateral temporal lobe",
+        "Commissural hippocampal fibres (dorsal hippocampal commissure) to the contralateral hippocampal formation"
+      ]
+    },
+    "bloodSupply": "PCA — splenial branches (from the posterior cerebral artery) and the posterior pericallosal artery; the splenium is at the junction of the ACA and PCA pericallosal territories.",
+    "clinical": [
+      {
+        "syndrome": "Alexia without agraphia (pure alexia)",
+        "findings": "A left occipital infarct that also destroys the splenium isolates the intact right visual cortex from the left language areas: the patient can write but cannot read what they have written, and can copy letters without comprehension.",
+        "vascular": "Posterior cerebral artery (left calcarine and splenial branches)"
+      },
+      {
+        "syndrome": "Splenial disconnection with intact fields",
+        "findings": "Selective splenial lesions impair interhemispheric transfer of visual and memory information (for example matching across the midline) while visual fields remain full — a pure transfer defect.",
+        "vascular": "PCA splenial branches; also demyelinating and post-surgical"
+      },
+      {
+        "syndrome": "Reversible splenial lesion syndrome",
+        "findings": "A transient midline splenial T2/FLAIR lesion (MERS) accompanies seizures, infection, hypoglycaemia or drug withdrawal and typically resolves completely with treatment of the cause.",
+        "note": "Metabolic/toxic — a mimic of callosal infarction"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "tract-internal-capsule-anterior-limb",
+    "name": "Internal capsule, anterior limb",
+    "synonyms": ["crus anterius capsulae internae", "frontopontine and anterior thalamic radiation segment"],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "function": "The front half of the internal capsule, lying between the head of the caudate medially and the lentiform nucleus laterally: it carries the anterior thalamic radiation (MD and anterior nuclei to the prefrontal and cingulate cortex) in its anterior part and the frontopontine fibres descending from the frontal lobe posteriorly. It is the corridor through which the executive and limbic loops reach the frontal lobe.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical fibres from the mediodorsal, anterior and midline thalamic nuclei"
+      ],
+      "efferent": [
+        "Frontopontine fibres from the frontal cortex to the pontine nuclei; cortico-amygdalar and corticostriate fibres crossing its bed"
+      ]
+    },
+    "bloodSupply": "Recurrent artery of Heubner (ACA) and the medial lenticulostriate branches of the MCA supply its anterior half; the lateral lenticulostriate arteries supply its posterior half, and the anterior choroidal artery reaches its posterior-inferior edge.",
+    "clinical": [
+      {
+        "syndrome": "Anterior limb lacunar infarct",
+        "findings": "Small perforator infarcts here produce subtle frontal-executive slowing, apathy or a mild contralateral hemiparesis rather than a dense stroke; they are frequently mistaken for lacunes of the caudate head.",
+        "vascular": "Medial lenticulostriate arteries (middle cerebral artery) / recurrent artery of Heubner"
+      },
+      {
+        "syndrome": "Frontopontine fibre involvement in capsular stroke",
+        "findings": "Damage to the anterior limb interrupts corticopontine traffic to the contralateral cerebellum (via the double crossing of the pontocerebellar system), which is why capsular strokes may leave mild ipsilateral cerebellar-type ataxia alongside the hemiparesis.",
+        "vascular": "Lenticulostriate arteries"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+    ]
+  },
+  {
+    "id": "tract-internal-capsule-genu",
+    "name": "Internal capsule, genu",
+    "synonyms": ["genu capsulae internae", "corticonuclear segment"],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "function": "The apex of the internal capsule, where the fibre plane turns from the anterior to the posterior limb between the caudate head and the thalamus: it contains the corticobulbar (corticonuclear) fibres bound for the cranial-nerve motor nuclei, with the face and tongue representations lying immediately adjacent in the posterior limb. Because the genu is the narrowest part of the capsule, small lesions here are disproportionately disabling.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical fibres of the VA/VL motor loops crossing the genu region"
+      ],
+      "efferent": [
+        "Corticobulbar fibres from the lower precentral gyrus and frontal operculum to the motor nuclei of CN V, VII, IX/X and XII; corticoreticular fibres to the brainstem reticular formation"
+      ]
+    },
+    "bloodSupply": "Lenticulostriate branches of the MCA (the medial group for the genu, lateral group for the posterior limb) with a contribution from the recurrent artery of Heubner anteriorly.",
+    "clinical": [
+      {
+        "syndrome": "Dysarthria-clumsy hand syndrome",
+        "findings": "A small lacune at the genu/posterior limb junction causes dysarthria, facial weakness, a clumsy but not weak hand and mild finger dexterity loss — one of the classic lacunar syndromes, and the one most often mistaken for a peripheral cause.",
+        "vascular": "Lenticulostriate arteries (middle cerebral artery)"
+      },
+      {
+        "syndrome": "Capsular genu infarct with facial-predominant weakness",
+        "findings": "Corticobulbar fibre damage yields contralateral lower facial and tongue weakness with relatively preserved limb power; bilateral involvement of the genu produces pseudobulbar palsy with emotional incontinence.",
+        "vascular": "Lenticulostriate arteries"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'"
+    ]
+  },
+  {
+    "id": "tract-internal-capsule-posterior-limb",
+    "name": "Internal capsule, posterior limb",
+    "synonyms": ["crus posterius capsulae internae", "corticospinal segment"],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "function": "The motor and sensory trunk of the capsule, between the thalamus medially and the lentiform nucleus laterally: the corticospinal fibres occupy its posterior third in a somatotopic order (face and arm anteriorly, leg posteriorly), the corticorubral and corticoreticular fibres lie anterior to them, and the somatosensory thalamocortical radiations travel with them. Its compactness is why a lesion the size of a pea can produce a complete contralateral hemiplegia.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical radiations from VPL/VPM (somatosensory) and from VL/VA (motor loops)"
+      ],
+      "efferent": [
+        "Corticospinal fibres from the precentral gyrus (somatotopic: arm anterior, leg posterior) to the crus cerebri, basis pontis and pyramid",
+        "Corticorubral and corticoreticular fibres; retrolenticular fibres of the optic radiation and the posterior thalamic radiation run just behind it"
+      ]
+    },
+    "bloodSupply": "Lateral lenticulostriate branches of the MCA (the classic territory of hypertensive lacunar infarction and of Charcot-Bouchard microaneurysm rupture) with the anterior choroidal artery supplying the retrolenticular/inferior posterior part.",
+    "clinical": [
+      {
+        "syndrome": "Pure motor hemiparesis (capsular lacune)",
+        "findings": "A small posterior-limb lacune produces dense, proportional contralateral face-arm-leg weakness without sensory loss, aphasia or hemianopia — the archetypal lacunar syndrome, and the commonest stroke presentation from lenticulostriate disease.",
+        "vascular": "Lateral lenticulostriate arteries (middle cerebral artery)"
+      },
+      {
+        "syndrome": "Capsular warning syndrome",
+        "findings": "Repeated stereotyped episodes of hemiparesis, dysarthria or hemisensory loss over hours to days (a stuttering lacunar onset) precede a permanent capsular infarct; the mechanism is perforator hypoperfusion or microembolism rather than large-vessel occlusion.",
+        "vascular": "Single lenticulostriate perforator"
+      },
+      {
+        "syndrome": "Anterior choroidal artery infarct (retrolenticular/posterior limb)",
+        "findings": "The complete syndrome is contralateral hemiplegia, hemianaesthesia and hemianopia: posterior limb of the internal capsule, thalamus/optic tract and optic radiation all fall in one territory.",
+        "vascular": "Anterior choroidal artery"
+      },
+      {
+        "syndrome": "Ataxic hemiparesis from a capsular lesion",
+        "findings": "Weakness with out-of-proportion ipsilateral limb ataxia from a small capsular or pontine lacune; the corticopontine fibres to the contralateral cerebellum explain the cerebellar-type component.",
+        "vascular": "Lenticulostriate arteries"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "tract-corona-radiata",
+    "name": "Corona radiata",
+    "synonyms": ["cerebral corona", "corona radiata of the internal capsule"],
+    "region": "telencephalon",
+    "subdivision": "Telencephalic white matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "function": "The fan of ascending and descending projection fibres between the internal capsule below and the cortical surface above — the centrum semiovale is simply the part of the corona radiata seen above the level of the lateral ventricles. Descending corticospinal, corticobulbar and corticopontine fibres interdigitate with ascending thalamocortical radiations, so the corona radiata is the anatomical site where the motor and sensory projections to the entire hemisphere are packed into the space of a few centimetres.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical radiations from VPL/VPM, VL/VA, LGN, MGN and the association nuclei, fanning to their cortical areas"
+      ],
+      "efferent": [
+        "Corticospinal, corticobulbar and corticopontine fibres converging from the whole cortical mantle into the internal capsule",
+        "Corticostriate and corticothalamic fibres leaving the fan toward the basal ganglia and thalamus"
+      ]
+    },
+    "bloodSupply": "The internal watershed zone: deep medullary branches of the MCA (and the anterior choroidal/lenticulostriate system medially) meet the superficial MCA cortical branches here, so the corona radiata is the classic site of haemodynamic (low-flow) infarction, and it is also the territory of the long penetrating medullary arteries damaged by chronic hypertension and diabetes.",
+    "clinical": [
+      {
+        "syndrome": "Internal watershed (border-zone) infarct",
+        "findings": "Hypoperfusion from carotid stenosis or systemic hypotension infarcts the Rosary-like chain of lesions along the corona radiata: contralateral hemiparesis and hemisensory loss that is worse in the proximal limb and hand, with fluctuating or stepwise onset. It is the deep counterpart of the cortical watershed infarct.",
+        "vascular": "Internal watershed between superficial MCA branches and the deep lenticulostriate/medullary arteries"
+      },
+      {
+        "syndrome": "Small-vessel disease of the centrum semiovale",
+        "findings": "Chronic hypertensive and diabetic arteriolopathy produces confluent periventricular and deep white-matter T2 hyperintensities (leukoaraiosis) and lacunes along the corona radiata, the anatomical substrate of vascular cognitive impairment and of gait apraxia.",
+        "vascular": "Long penetrating medullary arteries (middle cerebral artery)"
+      },
+      {
+        "syndrome": "Multiple sclerosis plaques",
+        "findings": "Periventricular and juxtacortical demyelinating lesions characteristically involve the corona radiata and centrum semiovale, producing pyramidal weakness, sensory disturbance and ataxia that follow a relapsing or progressive course.",
+        "note": "Autoimmune demyelination rather than vascular"
+      },
+      {
+        "syndrome": "Corona radiata stroke with disproportionate deficit",
+        "findings": "Because the motor and sensory projections are tightly packed, small infarcts here cause dense hemiparesis or hemianaesthesia with little cortical impairment — motor recovery is nonetheless often better than after capsular lesions because adjacent fibres can be recruited.",
+        "vascular": "Medullary branches of the middle cerebral artery"
+      }
+    ],
+    "levels": [
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [19, 64, 4],
+    "size3d": [7, 8, 12],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'"
+    ]
+  }
+]

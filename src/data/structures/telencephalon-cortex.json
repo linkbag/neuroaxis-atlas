@@ -1,0 +1,509 @@
+[
+  {
+    "id": "ctx-cerebral-cortex",
+    "name": "Cerebral cortex (context envelope)",
+    "synonyms": ["cortical ribbon", "cortex", "cortical gray matter", "gray matter of cerebral hemisphere"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The 2.5–4 mm laminated gray-matter ribbon folded over the cerebral white matter — the substrate of conscious perception, voluntary action, language, memory and social behaviour. Its six layers segregate the input (granular layer IV), the local processing (II/III) and the output (V/VI) of every cortical area. In this atlas the ribbon is a context envelope, not a nucleus: the six lobes and the named gyri carry the functional detail.",
+    "contextNote": "Derived envelope, not a dissectable structure: the BodyParts3D source has no cortical gray-matter surface, so the ribbon is built by dilating the cerebral white-matter surface and subtracting it (docs/TELENCEPHALON_PLAN.md §1). The envelope has no origin3d/size3d because its geometry is the derived ribbon; the lobe, gyrus and planum records inside it are the addressable content.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical radiations from all relay nuclei (VPL/VPM, LGN, MGN, VA/VL, pulvinar, MD)",
+        "Ascending modulatory systems: cholinergic basal forebrain, noradrenergic locus coeruleus, serotonergic raphe, dopaminergic VTA/SNc",
+        "Corticocortical association and commissural fibres (cingulum, uncinate, superior longitudinal fasciculus, corpus callosum)"
+      ],
+      "efferent": [
+        "Corticospinal, corticobulbar and corticopontine fibres funnelling through the corona radiata and internal capsule",
+        "Corticostriate and corticothalamic feedback; callosal projections to the homotopic contralateral area"
+      ]
+    },
+    "bloodSupply": "Three territories meet on the cortex: ACA (medial surface, callosomarginal branch), MCA (lateral convexity and insula) and PCA (medial occipital and inferior temporal). The ACA/MCA border runs along the superior convexity and the MCA/PCA border along the lateral occipital surface — both are watershed strips that infarct with systemic hypotension.",
+    "clinical": [
+      {
+        "syndrome": "Cortical watershed (border-zone) infarction",
+        "findings": "Bilateral, roughly symmetric weakness or sensory loss of the proximal limb with relative sparing of the hand and face, after a hypotensive episode; the lesion straddles the ACA/MCA border on the convexity or the MCA/PCA border posteriorly.",
+        "vascular": "ACA/MCA or MCA/PCA border zone (internal watershed along the corona radiata is the deep variant)"
+      },
+      {
+        "syndrome": "Cortical laminar necrosis",
+        "findings": "Global hypoxic-ischaemic injury destroys the metabolically most demanding middle cortical layers, giving T1-hyperintense ribbon-like cortical signal with laminar (pseudolaminar) necrosis on MRI.",
+        "note": "Hypoxic-ischaemic (cardiac arrest, prolonged hypotension) rather than territorial infarction"
+      },
+      {
+        "syndrome": "Lobar intracerebral haemorrhage",
+        "findings": "Cortical/subcortical bleeding (cerebral amyloid angiopathy in the elderly, arteriovenous malformation in the young) causes focal cortical deficits with headache and, often, seizure — the counterpart of the deep hypertensive haemorrhage of the basal ganglia.",
+        "note": "Amyloid angiopathy spares the deep perforator territories, which is why lobar bleeds favour the cortex"
+      }
+    ],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "surf-frontal-lobe",
+    "name": "Frontal lobe",
+    "synonyms": ["lobus frontalis", "frontal cortex"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "The largest lobe, and the one that turns intention into action: the precentral gyrus (primary motor cortex) and the premotor/supplementary motor areas programme movement, the frontal eye fields direct gaze, Broca's area generates speech, and the dorsolateral, orbitofrontal and medial prefrontal cortices hold working memory, inhibit impulses and evaluate reward. It also contains the anterior portion of the lateral ventricle and the frontopontine fibres on their way to the cerebellum.",
+    "connections": {
+      "afferent": [
+        "VA/VL (motor and premotor loops), MD and anterior thalamic nuclei (executive and limbic loops)",
+        "Posterior association cortex through the superior longitudinal fasciculus and the uncinate fasciculus",
+        "Dopaminergic VTA/SNc and noradrenergic/cholinergic ascending systems"
+      ],
+      "efferent": [
+        "Corticospinal and corticobulbar fibres from the precentral gyrus, through the corona radiata, genu and posterior limb of the internal capsule",
+        "Frontopontine fibres of the corticopontine tract (medial third of the crus cerebri)",
+        "Corticostriate fibres to the caudate head and putamen; callosal fibres to the contralateral frontal cortex"
+      ]
+    },
+    "bloodSupply": "MCA (superior division) supplies the lateral convexity, including Broca's area and most of the motor strip; ACA (pericallosal and callosomarginal branches) supplies the medial surface, the supplementary motor area and the leg representation at the vertex; the recurrent artery of Heubner (ACA) and the medial lenticulostriate branches supply the adjoining caudate head and anterior limb of the internal capsule.",
+    "clinical": [
+      {
+        "syndrome": "MCA superior-division infarct",
+        "findings": "Contralateral face-and-arm-predominant weakness with gaze deviation toward the lesion, and (dominant hemisphere) non-fluent Broca aphasia with preserved comprehension; the leg is spared because the ACA territory supplies the medial motor strip.",
+        "vascular": "Middle cerebral artery, superior (frontal) division"
+      },
+      {
+        "syndrome": "ACA territory infarct",
+        "findings": "Contralateral leg-predominant weakness and sensory loss with abulia, urinary incontinence, grasp reflex and mutism when the supplementary motor area and anterior cingulate are involved.",
+        "vascular": "Anterior cerebral artery (pericallosal branches)"
+      },
+      {
+        "syndrome": "Frontal-lobe behavioural syndrome",
+        "findings": "Dorsolateral lesions cause apathy, abulia and executive failure with perseveration; orbitomedial lesions cause disinhibition, inappropriate jocularity and impaired social judgement.",
+        "note": "Degenerative (frontotemporal dementia), traumatic or tumour-related rather than vascular in most cases"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'"
+    ]
+  },
+  {
+    "id": "surf-parietal-lobe",
+    "name": "Parietal lobe",
+    "synonyms": ["lobus parietalis", "parietal cortex"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "The sensory-associative lobe: the postcentral gyrus (primary somatosensory cortex) maps the contralateral body surface, the superior parietal lobule and precuneus build the body schema and guide visually directed reaching, and the supramarginal and angular gyri at the temporoparietal junction support spatial attention, praxis and (on the left) language comprehension. It is the principal cortical bridge between what is sensed and what is done.",
+    "connections": {
+      "afferent": [
+        "VPL/VPM thalamocortical radiations to the postcentral gyrus (somatotopic: leg medial over the hemisphere, face lateral)",
+        "Pulvinar and lateral posterior nucleus (visuospatial and associative input)",
+        "Corticocortical input from visual, auditory and premotor areas via the superior longitudinal fasciculus"
+      ],
+      "efferent": [
+        "Corticospinal and corticopontine fibres from the postcentral and superior parietal cortex through the corona radiata",
+        "Superior longitudinal fasciculus to the frontal lobe; cingulum to the posterior cingulate",
+        "Callosal fibres to the homotopic contralateral parietal cortex"
+      ]
+    },
+    "bloodSupply": "MCA inferior division supplies the angular and supramarginal gyri and the posterior temporal-parietal junction; MCA superior division supplies the postcentral gyrus and superior parietal lobule; PCA (parieto-occipital and splenial branches) supplies the precuneus and the medial parietal surface.",
+    "clinical": [
+      {
+        "syndrome": "MCA inferior-division infarct (angular/supramarginal)",
+        "findings": "Fluent (Wernicke-type) aphasia with poor comprehension and repetition, alexia and acalculia on the left; hemispatial neglect, anosognosia and dressing apraxia on the right.",
+        "vascular": "Middle cerebral artery, inferior (parietotemporal) division"
+      },
+      {
+        "syndrome": "Postcentral (S1) lesion",
+        "findings": "Contralateral hemisensory loss with preserved crude touch but lost graphaesthesia, stereognosis and two-point discrimination; sensory ataxia of the hand without weakness.",
+        "vascular": "MCA superior division (or a small cortical branch infarct)"
+      },
+      {
+        "syndrome": "Gerstmann syndrome",
+        "findings": "Dominant angular gyrus lesion: finger agnosia, agraphia, acalculia and right-left disorientation — a disconnection syndrome of the dominant parietal lobe.",
+        "vascular": "MCA inferior division (angular branch)"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Somatosensory Pathways'"
+    ]
+  },
+  {
+    "id": "surf-temporal-lobe",
+    "name": "Temporal lobe",
+    "synonyms": ["lobus temporalis", "temporal cortex"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "Hearing, language comprehension, memory and emotion in one lobe: primary auditory cortex on the superior temporal plane (Heschl's gyrus and planum temporale), Wernicke's area posteriorly, the fusiform and inferior temporal cortex for visual object and face recognition, and the medial temporal allocortex (hippocampus, amygdala, parahippocampal gyrus) for memory encoding and threat evaluation. Its white matter carries Meyer's loop of the optic radiation into the temporal pole.",
+    "connections": {
+      "afferent": [
+        "MGN via the auditory radiations to Heschl's gyrus",
+        "Perirhinal/entorhinal cortex fed by unimodal and polymodal association areas; amygdala input from the thalamus and brainstem",
+        "LGN via the optic radiation (Meyer loop) to the inferior visual field representation"
+      ],
+      "efferent": [
+        "Hippocampus to the fornix; amygdala to the stria terminalis and ventral amygdalofugal pathway",
+        "Wernicke's area to the inferior frontal lobe via the arcuate/superior longitudinal fasciculus; uncinate fasciculus to the orbitofrontal cortex",
+        "Corticopontine (temporopontine) fibres through the lateral third of the crus cerebri"
+      ]
+    },
+    "bloodSupply": "MCA inferior division supplies the lateral temporal convexity (superior and middle temporal gyri); PCA (temporal and hippocampal branches) supplies the medial temporal lobe, inferior temporal gyrus and posterior hippocampus; the anterior choroidal artery (from the internal carotid) supplies the amygdala, hippocampal head and temporal horn choroid plexus.",
+    "clinical": [
+      {
+        "syndrome": "MCA inferior-division infarct with temporal involvement",
+        "findings": "Wernicke aphasia (dominant hemisphere) with contralateral superior quadrantanopia from Meyer-loop damage, plus a dense sensory deficit if the parietal territory is included.",
+        "vascular": "Middle cerebral artery, inferior division"
+      },
+      {
+        "syndrome": "PCA territory infarct of the medial temporal lobe",
+        "findings": "Contralateral homonymous hemianopia with memory impairment; bilateral PCA infarcts produce cortical blindness and a severe amnestic state (the hippocampus is in the PCA territory).",
+        "vascular": "Posterior cerebral artery (temporal and hippocampal branches)"
+      },
+      {
+        "syndrome": "Mesial temporal lobe epilepsy",
+        "findings": "Hippocampal sclerosis produces stereotyped auras (déjà vu, epigastric rising sensation, fear), automatisms and impaired awareness; the temporal lobe is the commonest site of focal epilepsy in adults.",
+        "note": "Sclerosis rather than stroke — but the same medial temporal structures are involved and the temporal horn dilates"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "surf-occipital-lobe",
+    "name": "Occipital lobe",
+    "synonyms": ["lobus occipitalis", "occipital cortex"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "The visual cortex: primary visual cortex (V1, striate cortex) is wrapped around the calcarine fissure with a precise retinotopic map in which the macula occupies a disproportionate posterior share, and the surrounding extrastriate areas (V2–V5) extract form, colour, motion and depth. It is the cortical terminus of the geniculostriate pathway and the target of the optic radiations.",
+    "connections": {
+      "afferent": [
+        "LGN via the optic radiations (dorsal bundle through the parietal lobe, Meyer loop through the temporal lobe)",
+        "Pulvinar and lateral posterior nucleus (visual association feedback)",
+        "Callosal fibres connecting the two occipital poles along the vertical meridian representation"
+      ],
+      "efferent": [
+        "Dorsal stream to the parietal lobe (where/how) and ventral stream to the temporal lobe (what), through the superior and inferior longitudinal fasciculi",
+        "Corticopontine (occipitopontine) fibres; corticothalamic feedback to the LGN and pulvinar"
+      ]
+    },
+    "bloodSupply": "PCA — calcarine and parieto-occipital branches supply the medial occipital surface and the visual cortex; the occipital pole usually has a dual supply, receiving a variable contribution from the MCA as well, which is why macular vision is often spared in PCA infarction.",
+    "clinical": [
+      {
+        "syndrome": "PCA infarct with homonymous hemianopia",
+        "findings": "Contralateral homonymous hemianopia with macular sparing (dual blood supply of the occipital pole); left-sided lesions that also involve the splenium give alexia without agraphia, and involvement of the pulvinar or thalamus adds hemi-sensory loss.",
+        "vascular": "Posterior cerebral artery (calcarine branch)"
+      },
+      {
+        "syndrome": "Cortical blindness with Anton syndrome",
+        "findings": "Bilateral occipital infarction causes blindness that the patient denies, with confabulated visual descriptions — damage to the visual cortex with preserved association cortex.",
+        "vascular": "Bilateral posterior cerebral arteries (or basilar tip embolism)"
+      },
+      {
+        "syndrome": "Visual field defect from optic-radiation lesions",
+        "findings": "Incongruous quadrantanopia from a retrolenticular/temporal lesion versus a congruent hemianopia from a complete radiation or occipital lesion — a distinction that locates the damage anterior or posterior in the geniculostriate pathway.",
+        "vascular": "Anterior choroidal artery (retrolenticular) or MCA/PCA branches along the radiation"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "surf-insula",
+    "name": "Insula",
+    "synonyms": ["insular lobe", "insular cortex", "island of Reil", "lobus insularis"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "The buried fifth lobe in the floor of the sylvian fissure: the posterior granular insula is primary interoceptive cortex (visceral sensation, temperature, pain affect), while the anterior agranular insula is a salience hub linking autonomic state, taste, emotion and decision-making. It sits directly over the putamen and is the surface across which the MCA's insular branches and the lenticulostriate arteries run.",
+    "connections": {
+      "afferent": [
+        "Thalamic relay nuclei (VPMpc for taste; VMpo and posterior thalamus for interoception and pain affect)",
+        "Amygdala, orbitofrontal and anterior cingulate cortex (salience and emotional input)",
+        "Brainstem and hypothalamic autonomic afferents via the parabrachial nucleus"
+      ],
+      "efferent": [
+        "Autonomic effector columns: insular efferents to the lateral hypothalamus, periaqueductal gray, nucleus of the solitary tract and the vagal/dorsal motor nuclei",
+        "Cortical efferents to the anterior cingulate, orbitofrontal cortex and frontal operculum"
+      ]
+    },
+    "bloodSupply": "MCA — insular (M2) branches of both the superior and inferior divisions course over its surface; the lateral lenticulostriate arteries arise at the level of the insular apex before turning into the basal ganglia, so insular infarction and deep lacunar infarction share a source.",
+    "clinical": [
+      {
+        "syndrome": "Insular (MCA M2) branch infarction",
+        "findings": "The insula is infarcted in nearly every MCA occlusion because its branches arise first; lesions of the right insula are associated with autonomic instability, arrhythmia and sudden death, and insular strokes impair taste and interoceptive awareness.",
+        "vascular": "Middle cerebral artery, insular (M2) branches"
+      },
+      {
+        "syndrome": "Insular cortex lesion and addiction/awareness",
+        "findings": "Damage to the insula disrupts the conscious urge to smoke and can abolish addiction in some patients; the same region is activated by visceral and emotional stimuli.",
+        "note": "Lesion-observation and functional-imaging literature, not a vascular syndrome"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "surf-limbic-lobe",
+    "name": "Limbic lobe",
+    "synonyms": ["lobus limbicus", "grand lobe of Broca", "fornicate gyrus"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "Broca's grand lobe limbique: the ring of allocortical and paralimbic cortex — subcallosal area, cingulate and parahippocampal gyri and the hippocampal formation — that encircles the corpus callosum and the diencephalon. It is defined morphologically as a rim rather than a function, and it is the cortical component of the circuit (Papez) that links emotion, olfaction and memory to the hypothalamus.",
+    "connections": {
+      "afferent": [
+        "Anterior and mediodorsal thalamic nuclei (cingulate cortex); entorhinal cortex from unimodal and polymodal association areas",
+        "Amygdala and septal nuclei via the stria terminalis and ventral amygdalofugal pathway"
+      ],
+      "efferent": [
+        "Cingulum and fornix: cingulate/parahippocampal cortex interconnects the septal area, entorhinal cortex and hippocampal formation, and the fornix carries hippocampal output to the mammillary bodies and septal region",
+        "Cingulate projections to the striatum and to the pontine nuclei (limbic-motor interface)"
+      ]
+    },
+    "bloodSupply": "ACA (pericallosal/callosomarginal) supplies the subcallosal and anterior cingulate cortex; PCA (splenial, posterior pericallosal, temporal and hippocampal branches) supplies the posterior cingulate, retrosplenial, parahippocampal and hippocampal cortices; the anterior choroidal artery supplies the uncal and amygdalar end.",
+    "clinical": [
+      {
+        "syndrome": "Limbic encephalitis",
+        "findings": "Subacute short-term memory loss, temporal-lobe seizures, behavioural change and medial temporal FLAIR signal — the limbic ring is inflamed, most often autoimmunologically (anti-LGI1, anti-NMDAR) or as a paraneoplastic syndrome.",
+        "note": "Autoimmune/paraneoplastic — the imaging target is the limbic lobe itself"
+      },
+      {
+        "syndrome": "PCA infarct involving the posterior limbic ring",
+        "findings": "Infarction of the posterior cingulate, retrosplenial and parahippocampal cortex adds memory loss to the hemianopia of PCA occlusion.",
+        "vascular": "Posterior cerebral artery (splenial and temporal branches)"
+      },
+      {
+        "syndrome": "Klüver-Bucy syndrome",
+        "findings": "Bilateral temporal-limbic destruction (herpes encephalitis, trauma, frontotemporal dementia) produces hyperorality, hypersexuality, visual agnosia and emotional blunting — the classic proof that the limbic ring gates affect and object recognition.",
+        "note": "Structural/infectious rather than vascular"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "surf-cingulate-gyrus",
+    "name": "Cingulate gyrus",
+    "synonyms": ["gyrus cinguli", "cingulum (gyrus)", "callosal gyrus"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "The arch of cortex above the corpus callosum, divided into an anterior (affective, rostral/ventral) and a mid-posterior (cognitive, dorsal) subdivision: the dorsal midcingulate monitors conflict and errors and drives response selection, while the rostral anterior cingulate regulates emotion, pain affect and autonomic tone. It is the cortical hub of the Papez circuit and carries the cingulum bundle in its white matter.",
+    "connections": {
+      "afferent": [
+        "Anterior thalamic nucleus (mammillothalamic relay) to the anterior cingulate; mediodorsal and midline thalamic nuclei",
+        "Amygdala, orbitofrontal cortex, insula and posterior cingulate via the cingulum"
+      ],
+      "efferent": [
+        "Cingulum to the hippocampal formation and parahippocampal/entorhinal cortex",
+        "Corticostriate projections to the ventral striatum and caudate; corticospinal-adjacent projections to the pontine nuclei (limbic-motor interface)",
+        "Autonomic projections to the periaqueductal gray, hypothalamus and brainstem nuclei"
+      ]
+    },
+    "bloodSupply": "ACA — pericallosal and callosomarginal branches supply the anterior and mid cingulate gyrus; PCA — splenial and posterior pericallosal branches supply the posterior cingulate and retrosplenial cortex. This ACA/PCA junction on the cingulate is a classic watershed zone in the sagittal plane.",
+    "clinical": [
+      {
+        "syndrome": "Anterior cingulate infarction (ACA territory)",
+        "findings": "Akinetic mutism or abulia with urinary incontinence, grasp reflex and mutism when the supplementary motor area and anterior cingulate are infarcted bilaterally; unilateral lesions cause contralateral leg weakness with apathy.",
+        "vascular": "Anterior cerebral artery (pericallosal/callosomarginal branches)"
+      },
+      {
+        "syndrome": "Posterior cingulate/retrosplenial lesion",
+        "findings": "Amnesia and topographical disorientation; the retrosplenial cortex is an early metabolic casualty in Alzheimer disease and a target of limbic encephalitis.",
+        "vascular": "Posterior cerebral artery (splenial branches)"
+      },
+      {
+        "syndrome": "Cingulotomy for intractable pain or OCD",
+        "findings": "Stereotactic lesions of the anterior cingulate relieve the affective distress of chronic pain and improve refractory obsessive-compulsive symptoms, with apathy and disinhibition as the main adverse effects.",
+        "note": "Lesion therapy — the clinical proof that the cingulate encodes the suffering component of pain"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "surf-parahippocampal-gyrus",
+    "name": "Parahippocampal gyrus",
+    "synonyms": ["gyrus parahippocampalis", "parahippocampus"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "The medial temporal gateway to the hippocampal formation: its anterior part is the entorhinal cortex (Brodmann 28/34), which receives the convergent output of every association area and funnels it through the perforant path into the dentate gyrus, while the posterior part (with the perirhinal and postrhinal cortex) encodes scenes, contexts and object familiarity. It is the cortical interface between neocortex and hippocampus — and therefore the epicentre of early Alzheimer pathology.",
+    "connections": {
+      "afferent": [
+        "Perirhinal and postrhinal cortex from unimodal and polymodal association areas of all four lobes",
+        "Amygdala and orbitofrontal cortex; posterior cingulate and retrosplenial cortex via the cingulum"
+      ],
+      "efferent": [
+        "Perforant path from the entorhinal cortex to the dentate gyrus and hippocampal CA fields (the first leg of the trisynaptic circuit)",
+        "Cingulum to the posterior cingulate and retrosplenial cortex; reciprocal projections back to the association cortices"
+      ]
+    },
+    "bloodSupply": "PCA — hippocampal and temporal branches of the posterior cerebral artery supply the parahippocampal gyrus and the posterior hippocampal formation; the anterior (uncal) end is supplied by the anterior choroidal artery from the internal carotid.",
+    "clinical": [
+      {
+        "syndrome": "PCA infarct of the medial temporal lobe",
+        "findings": "Amnesia (entorhinal/hippocampal damage) with contralateral homonymous superior quadrantanopia from Meyer-loop involvement; bilateral infarcts cause a persistent amnestic syndrome.",
+        "vascular": "Posterior cerebral artery (hippocampal branches)"
+      },
+      {
+        "syndrome": "Herpes simplex encephalitis",
+        "findings": "Bilateral but asymmetric necrosis of the medial temporal and inferior frontal cortex with fever, headache, seizures and profound amnesia — the classic infectious lesion of the limbic ring.",
+        "note": "Infectious (HSV-1 via the olfactory route); treated with aciclovir"
+      },
+      {
+        "syndrome": "Alzheimer disease (entorhinal origin)",
+        "findings": "Neurofibrillary pathology begins in the entorhinal cortex and spreads through the hippocampal circuit to the posterior cingulate and neocortex — the anatomical reason episodic memory fails first.",
+        "note": "Neurodegenerative staging (Braak), not vascular"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "surf-planum-temporale",
+    "name": "Planum temporale",
+    "synonyms": ["temporal plane", "auditory association cortex of the superior temporal plane"],
+    "region": "telencephalon",
+    "subdivision": "Cerebral cortex",
+    "kind": "surface",
+    "laterality": "paired",
+    "color": "#64748b",
+    "function": "The triangular expanse of superior temporal plane cortex posterior to Heschl's gyrus — the core auditory association area that computes spectrotemporal patterns and, on the left, the anatomical substrate of Wernicke's area. Its leftward size asymmetry is one of the best-documented structural asymmetries of the human brain and the classic anatomical correlate of language lateralization.",
+    "connections": {
+      "afferent": [
+        "Heschl's gyrus and the MGN via the auditory radiations (tonotopic input)",
+        "Corticocortical input from the adjacent superior temporal gyrus and the inferior parietal lobule"
+      ],
+      "efferent": [
+        "Arcuate/superior longitudinal fasciculus to the inferior frontal gyrus (Broca's area) and to the inferior parietal lobule",
+        "Corticothalamic feedback to the MGN and brachium of the inferior colliculus"
+      ]
+    },
+    "bloodSupply": "MCA inferior division — the posterior temporal and angular branches supply the superior temporal plane; the posterior extremity borders the PCA territory, and the deep plane territory is reached by the temporo-occipital branches.",
+    "clinical": [
+      {
+        "syndrome": "Wernicke aphasia",
+        "findings": "Destruction of the posterior superior temporal plane and adjacent superior temporal gyrus produces fluent but empty speech with impaired comprehension and repetition, with anosognosia for the deficit — the classic receptive aphasia.",
+        "vascular": "Middle cerebral artery, inferior (posterior temporal) division"
+      },
+      {
+        "syndrome": "Dyslexia and developmental language disorder",
+        "findings": "Loss or reversal of the normal leftward planum temporale asymmetry has been reported in developmental dyslexia and in some language-impaired populations.",
+        "note": "Developmental structural association — controversial and not a lesion syndrome"
+      },
+      {
+        "syndrome": "Auditory agnosia (pure word deafness)",
+        "findings": "Bilateral planum temporale lesions disconnect Heschl's gyri from Wernicke's area: hearing is intact but spoken words cannot be recognized.",
+        "note": "Disconnection syndrome of the superior temporal plane"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [33, 34, 2],
+    "size3d": [3, 3.5, 8],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  }
+]

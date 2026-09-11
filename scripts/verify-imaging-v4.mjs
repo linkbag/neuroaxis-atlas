@@ -35,7 +35,8 @@
  *     both `docs/ATTRIBUTION.md` and `README.md`.
  *  6. ASSET INTEGRITY + BUDGETS — every stain file referenced by the manifest
  *     exists, every committed stain file is referenced (no orphans), and the
- *     committed imaging payload respects the plan §4 budgets (≤ 8 MiB total,
+ *     committed imaging payload respects the plan §4 budgets (≤ 10 MiB total
+ *     after the v7 AMENDMENT B raise, docs/TELENCEPHALON_PLAN.md §2/§4,
  *     ≤ 4 MiB of assets added by v4).
  *  7. LINK-OUT-ONLY SOURCES — no embedded asset resolves to a link-out-only
  *     host (Harvard Whole Brain Atlas, BrainMaps).
@@ -528,8 +529,22 @@ function dirBytes(relative, filter = () => true) {
 
 const MIB = 1024 * 1024
 const imaging = dirBytes('src/assets/imaging')
-if (imaging.total > 8 * MIB) {
-  fail('budget', `imaging payload ${(imaging.total / MIB).toFixed(2)} MiB exceeds the 8 MiB plan §4 cap`)
+/**
+ * v7 AMENDMENT B raises this cap from 8 MiB to 10 MiB
+ * (docs/TELENCEPHALON_PLAN.md §2: "MRI/CT grids re-baked over the new box …
+ * imaging payload 7.30 MB → ≈ 8.5 MB, so the cap rises to 10 MB and must be
+ * stated in the README"; §4 carries the same number in the run-level budget).
+ * The telencephalon box x ±48 / y −55..85 / z −75..55 makes both uint8 grids
+ * [81,113,107] = 979,371 B each, so the v6 payload no longer fits 8 MiB. The
+ * v4 sub-caps below (v4-added assets ≤ 4 MiB) are deliberately unchanged.
+ */
+const IMAGING_CAP_MIB = 10
+if (imaging.total > IMAGING_CAP_MIB * MIB) {
+  fail(
+    'budget',
+    `imaging payload ${(imaging.total / MIB).toFixed(2)} MiB exceeds the ${IMAGING_CAP_MIB} MiB `
+      + 'AMENDMENT B cap (docs/TELENCEPHALON_PLAN.md §2/§4)',
+  )
 }
 /** v4-added assets: the 24 UBC plates + 3 Commons CT plates + ct.bin. */
 const v4Added = ['ct.bin']
@@ -598,7 +613,7 @@ for (const plate of anchored) {
   }
 }
 console.log(
-  `  imaging payload           ${(imaging.total / MIB).toFixed(2)} MiB in ${imaging.count} files (cap 8.00 MiB)`,
+  `  imaging payload           ${(imaging.total / MIB).toFixed(2)} MiB in ${imaging.count} files (cap ${IMAGING_CAP_MIB.toFixed(2)} MiB, AMENDMENT B)`,
 )
 console.log(
   `  v4-added assets           ${(v4Bytes / MIB).toFixed(2)} MiB in ${v4Added.length} files (cap 4.00 MiB)`,

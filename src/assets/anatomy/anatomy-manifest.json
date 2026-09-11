@@ -3,6 +3,106 @@
   "generatedBy": "scripts/build-anatomy-geometry.mjs",
   "parts": [
     {
+      "slug": "ctx-amygdala-l",
+      "file": "ctx-amygdala-l.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1184,
+      "centroid": [
+        21.62,
+        13.158,
+        14.609
+      ],
+      "bbox": {
+        "min": [
+          14.436,
+          6.608,
+          5.873
+        ],
+        "max": [
+          28.49,
+          19.358,
+          20.776
+        ]
+      }
+    },
+    {
+      "slug": "ctx-amygdala-r",
+      "file": "ctx-amygdala-r.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1168,
+      "centroid": [
+        -21.322,
+        13.149,
+        14.558
+      ],
+      "bbox": {
+        "min": [
+          -28.012,
+          6.552,
+          5.834
+        ],
+        "max": [
+          -14.058,
+          19.322,
+          20.524
+        ]
+      }
+    },
+    {
+      "slug": "ctx-caudate-l",
+      "file": "ctx-caudate-l.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 3152,
+      "centroid": [
+        11.393,
+        40.689,
+        10.774
+      ],
+      "bbox": {
+        "min": [
+          2.003,
+          16.107,
+          -17.367
+        ],
+        "max": [
+          25.809,
+          57.192,
+          35.204
+        ]
+      }
+    },
+    {
+      "slug": "ctx-caudate-r",
+      "file": "ctx-caudate-r.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 3212,
+      "centroid": [
+        -11.897,
+        40.648,
+        10.742
+      ],
+      "bbox": {
+        "min": [
+          -25.924,
+          16.123,
+          -17.341
+        ],
+        "max": [
+          -2.444,
+          57.172,
+          35.246
+        ]
+      }
+    },
+    {
       "slug": "ctx-cerebellar-vermis",
       "file": "ctx-cerebellar-vermis.glb",
       "kind": "context",
@@ -74,6 +174,306 @@
           -0.159,
           14.829,
           1.459
+        ]
+      }
+    },
+    {
+      "slug": "ctx-choroid-plexus-l",
+      "file": "ctx-choroid-plexus-l.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1520,
+      "centroid": [
+        16.433,
+        27.994,
+        -8.946
+      ],
+      "bbox": {
+        "min": [
+          1.989,
+          10.386,
+          -20.612
+        ],
+        "max": [
+          30.527,
+          46.954,
+          11.33
+        ]
+      }
+    },
+    {
+      "slug": "ctx-choroid-plexus-r",
+      "file": "ctx-choroid-plexus-r.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1512,
+      "centroid": [
+        -16.798,
+        27.847,
+        -8.871
+      ],
+      "bbox": {
+        "min": [
+          -30.272,
+          10.386,
+          -20.559
+        ],
+        "max": [
+          -2.551,
+          46.889,
+          11.361
+        ]
+      }
+    },
+    {
+      "slug": "ctx-corpus-callosum",
+      "file": "ctx-corpus-callosum.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "white-matter",
+      "triCount": 16512,
+      "centroid": [
+        -0.27,
+        45.009,
+        0.803
+      ],
+      "bbox": {
+        "min": [
+          -21.08,
+          19.395,
+          -34.85
+        ],
+        "max": [
+          20.592,
+          63.946,
+          41.083
+        ]
+      }
+    },
+    {
+      "slug": "ctx-fornix-commissure",
+      "file": "ctx-fornix-commissure.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1416,
+      "centroid": [
+        -0.422,
+        31.392,
+        -15.533
+      ],
+      "bbox": {
+        "min": [
+          -19.616,
+          22.508,
+          -19.923
+        ],
+        "max": [
+          18.613,
+          43.858,
+          1.878
+        ]
+      }
+    },
+    {
+      "slug": "ctx-fornix-l",
+      "file": "ctx-fornix-l.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2160,
+      "centroid": [
+        9.996,
+        30.216,
+        -2.52
+      ],
+      "bbox": {
+        "min": [
+          -0.222,
+          10.548,
+          -18.764
+        ],
+        "max": [
+          25.454,
+          45.604,
+          17.168
+        ]
+      }
+    },
+    {
+      "slug": "ctx-fornix-r",
+      "file": "ctx-fornix-r.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2188,
+      "centroid": [
+        -10.53,
+        29.918,
+        -2.396
+      ],
+      "bbox": {
+        "min": [
+          -25.464,
+          10.509,
+          -18.744
+        ],
+        "max": [
+          -0.266,
+          45.585,
+          17.174
+        ]
+      }
+    },
+    {
+      "slug": "ctx-globus-pallidus-l",
+      "file": "ctx-globus-pallidus-l.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1480,
+      "centroid": [
+        18.584,
+        30.505,
+        11.613
+      ],
+      "bbox": {
+        "min": [
+          10.874,
+          22.134,
+          -0.197
+        ],
+        "max": [
+          24.413,
+          40.761,
+          22.833
+        ]
+      }
+    },
+    {
+      "slug": "ctx-globus-pallidus-r",
+      "file": "ctx-globus-pallidus-r.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 1452,
+      "centroid": [
+        -18.972,
+        30.602,
+        11.712
+      ],
+      "bbox": {
+        "min": [
+          -24.862,
+          22.068,
+          -0.182
+        ],
+        "max": [
+          -11.33,
+          40.74,
+          22.867
+        ]
+      }
+    },
+    {
+      "slug": "ctx-hemisphere-l",
+      "file": "ctx-hemisphere-l.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 81128,
+      "centroid": [
+        23.841,
+        50.137,
+        -6.555
+      ],
+      "bbox": {
+        "min": [
+          0.997,
+          -6.803,
+          -72.816
+        ],
+        "max": [
+          55.475,
+          113.701,
+          70.592
+        ]
+      }
+    },
+    {
+      "slug": "ctx-hemisphere-r",
+      "file": "ctx-hemisphere-r.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "gray-matter",
+      "triCount": 81448,
+      "centroid": [
+        -24.091,
+        50.1,
+        -6.736
+      ],
+      "bbox": {
+        "min": [
+          -56.051,
+          -6.902,
+          -72.496
+        ],
+        "max": [
+          -0.249,
+          113.757,
+          70.709
+        ]
+      }
+    },
+    {
+      "slug": "ctx-hippocampus-l",
+      "file": "ctx-hippocampus-l.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2024,
+      "centroid": [
+        23.529,
+        11.614,
+        -1.818
+      ],
+      "bbox": {
+        "min": [
+          15.044,
+          3.931,
+          -18.132
+        ],
+        "max": [
+          31.003,
+          25.262,
+          16.253
+        ]
+      }
+    },
+    {
+      "slug": "ctx-hippocampus-r",
+      "file": "ctx-hippocampus-r.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2024,
+      "centroid": [
+        -23.15,
+        11.529,
+        -1.562
+      ],
+      "bbox": {
+        "min": [
+          -30.363,
+          3.879,
+          -18.012
+        ],
+        "max": [
+          -15.354,
+          25.325,
+          16.219
         ]
       }
     },
@@ -199,6 +599,56 @@
           18.239,
           5.849,
           16.679
+        ]
+      }
+    },
+    {
+      "slug": "ctx-putamen-l",
+      "file": "ctx-putamen-l.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2340,
+      "centroid": [
+        23.02,
+        34.72,
+        13.466
+      ],
+      "bbox": {
+        "min": [
+          14.6,
+          20.737,
+          -4.332
+        ],
+        "max": [
+          28.973,
+          50.167,
+          30.436
+        ]
+      }
+    },
+    {
+      "slug": "ctx-putamen-r",
+      "file": "ctx-putamen-r.glb",
+      "kind": "nucleus",
+      "source": "bp3d+sculpt",
+      "materialHint": "nucleus",
+      "triCount": 2312,
+      "centroid": [
+        -23.442,
+        34.816,
+        13.592
+      ],
+      "bbox": {
+        "min": [
+          -29.44,
+          20.64,
+          -4.343
+        ],
+        "max": [
+          -15.024,
+          50.121,
+          30.415
         ]
       }
     },
@@ -2024,6 +2474,106 @@
           8.926,
           24.39,
           5.625
+        ]
+      }
+    },
+    {
+      "slug": "tel-lateral-ventricle-l",
+      "file": "tel-lateral-ventricle-l.glb",
+      "kind": "ventricle",
+      "source": "bp3d+sculpt",
+      "materialHint": "csf",
+      "triCount": 7376,
+      "centroid": [
+        13.595,
+        35.206,
+        -1.216
+      ],
+      "bbox": {
+        "min": [
+          -0.033,
+          5.633,
+          -53.156
+        ],
+        "max": [
+          32.338,
+          59.341,
+          37.489
+        ]
+      }
+    },
+    {
+      "slug": "tel-lateral-ventricle-r",
+      "file": "tel-lateral-ventricle-r.glb",
+      "kind": "ventricle",
+      "source": "bp3d+sculpt",
+      "materialHint": "csf",
+      "triCount": 7356,
+      "centroid": [
+        -13.88,
+        35.299,
+        -1.113
+      ],
+      "bbox": {
+        "min": [
+          -31.998,
+          5.669,
+          -53.155
+        ],
+        "max": [
+          -0.418,
+          59.319,
+          37.531
+        ]
+      }
+    },
+    {
+      "slug": "tel-white-matter-l",
+      "file": "tel-white-matter-l.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "white-matter",
+      "triCount": 13524,
+      "centroid": [
+        23.277,
+        51.807,
+        -7.079
+      ],
+      "bbox": {
+        "min": [
+          4.25,
+          -1.3,
+          -67.798
+        ],
+        "max": [
+          50.647,
+          107.177,
+          66.118
+        ]
+      }
+    },
+    {
+      "slug": "tel-white-matter-r",
+      "file": "tel-white-matter-r.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "white-matter",
+      "triCount": 13592,
+      "centroid": [
+        -23.615,
+        52.037,
+        -6.856
+      ],
+      "bbox": {
+        "min": [
+          -50.763,
+          -1.212,
+          -67.632
+        ],
+        "max": [
+          -4.815,
+          107.673,
+          65.867
         ]
       }
     },

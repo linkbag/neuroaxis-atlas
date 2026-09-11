@@ -2,8 +2,9 @@
  * Viewer3D — the R3F canvas hosting the atlas scene (plan §5 viewer3d task,
  * realism plan §1 Layer 3 render-pipeline task).
  *
- * Camera [34.5, 11.5, 63.25] (default framing ×1.15, AMENDMENT A) looking at
- * [0, −5, 0]; OrbitControls with damping;
+ * Camera [48.3, 18.1, 88.55] (default framing ×1.4, AMENDMENT B — the v2
+ * AMENDMENT A offset [34.5, 11.5, 63.25] scaled by 1.4) looking at [0, −5, 0];
+ * OrbitControls with damping;
  * image-based lighting from three's bundled RoomEnvironment through a
  * PMREMGenerator (no network/CDN), plus a soft warm key and a cool fill
  * directional (no shadow maps yet); ACESFilmic tone mapping at exposure 1.1
@@ -509,6 +510,68 @@ function SectionPipHint({ visible }: { visible: boolean }): ReactElement | null 
   )
 }
 
+/**
+ * Default framing distance (au) — the AMENDMENT B value.
+ *
+ * The v2 camera sat at `[34.5, 11.5, 63.25]` with the target `[0, −5, 0]`, so its
+ * offset was `[34.5, 16.5, 63.25]` and |offset| = √(34.5² + 16.5² + 63.25²) =
+ * **73.9125 au** (the AMENDMENT A "default framing camera distance ×1.15" of
+ * REALISM_PLAN §3). The telencephalon extension raises the canonical box from
+ * y ≤ +45 to y ≤ +85 and z −56…+26 to z −75…+55
+ * (docs/TELENCEPHALON_PLAN.md §2), so the plan's rule is "camera default
+ * distance ×1.4": 73.9125 × 1.4 = **103.4775 au**.
+ *
+ * The framing DIRECTION is deliberately preserved exactly (that is what "×1.4"
+ * means — the same view, further back), and that includes its asymmetry: the
+ * default view stays brainstem-centric rather than re-aimed at the new box
+ * centre (the coronal centre moves +15 au, the transverse centre −10 au), which
+ * is the §5 legibility rule — "the cortex is 4–5× the brainstem in every
+ * dimension; the default view must stay brainstem-centric". Scaling the same
+ * offset reproduces the previous framing exactly, 1.4× larger, so a viewer of
+ * the old default sees the brainstem+diencephalon+cerebellum block unchanged in
+ * composition and the hemispheres in frame around it.
+ *
+ * `camera.position = target + 1.4 × offset`:
+ *   x: 0 + 1.4·34.5  = 48.3        y: −5 + 1.4·16.5 = 18.1
+ *   z: 0 + 1.4·63.25 = 88.55
+ * (|offset| = 103.4775 au — asserted at module load below, so the position and
+ * this derivation cannot drift apart silently. The OrbitControls
+ * `minDistance`/`maxDistance` and the explode range are intentionally
+ * unchanged: the new box is reachable by orbiting and zooming, and the explode
+ * factor's semantics are per-mesh, not per-box.)
+ */
+export const DEFAULT_CAMERA_TARGET: readonly [number, number, number] = [0, -5, 0]
+
+/** AMENDMENT A distance 73.9125 au × the plan's AMENDMENT B factor 1.4. */
+export const DEFAULT_CAMERA_DISTANCE = 103.4775
+
+/** The v2 (AMENDMENT A) camera offset, scaled by the AMENDMENT B factor. */
+export const DEFAULT_CAMERA_POSITION: readonly [number, number, number] = [
+  DEFAULT_CAMERA_TARGET[0] + 1.4 * 34.5, // 48.3
+  DEFAULT_CAMERA_TARGET[1] + 1.4 * 16.5, // 18.1
+  DEFAULT_CAMERA_TARGET[2] + 1.4 * 63.25, // 88.55
+]
+
+{
+  // The default framing IS the ×1.4 rule: assert both readings of it so a later
+  // edit cannot move the camera without restating the distance (or vice versa).
+  const [dx, dy, dz] = [
+    DEFAULT_CAMERA_POSITION[0] - DEFAULT_CAMERA_TARGET[0],
+    DEFAULT_CAMERA_POSITION[1] - DEFAULT_CAMERA_TARGET[1],
+    DEFAULT_CAMERA_POSITION[2] - DEFAULT_CAMERA_TARGET[2],
+  ]
+  const distance = Math.hypot(dx, dy, dz)
+  if (Math.abs(distance - DEFAULT_CAMERA_DISTANCE) > 1e-3) {
+    throw new Error(
+      `Viewer3D: default camera distance ${distance.toFixed(3)} au disagrees with ` +
+        `DEFAULT_CAMERA_DISTANCE ${DEFAULT_CAMERA_DISTANCE} (the AMENDMENT B ×1.4 framing)`,
+    )
+  }
+  if (Math.abs(dx - 1.4 * 34.5) > 1e-9 || Math.abs(dy - 1.4 * 16.5) > 1e-9 || Math.abs(dz - 1.4 * 63.25) > 1e-9) {
+    throw new Error('Viewer3D: the default camera offset is not the v2 offset × 1.4 (AMENDMENT B)')
+  }
+}
+
 export default function Viewer3D() {
   const selectStructure = useAtlasStore((s) => s.selectStructure)
   // Quality tier (post-fx task): 'high' runs the post composer at dpr ≤ 2;
@@ -622,9 +685,21 @@ export default function Viewer3D() {
         <Canvas
           ref={setCanvasEl}
           dpr={dpr}
-          // Default framing ×1.15 (REALISM_PLAN §3 AMENDMENT A) for the
-          // extended v2 bounds: the wider cerebellar envelope must fit.
-          camera={{ position: [34.5, 11.5, 63.25], fov: 45, near: 0.5, far: 800 }}
+          // Default framing ×1.4 (docs/TELENCEPHALON_PLAN.md §2 AMENDMENT B, task
+          // tel-space) for the extended telencephalic bounds: the v2 camera
+          // offset 1.4× larger along the SAME direction, so the default view
+          // stays brainstem-centric (plan §5). See DEFAULT_CAMERA_* above for
+          // the derivation and the load-time assertion.
+          camera={{
+            position: [
+              DEFAULT_CAMERA_POSITION[0],
+              DEFAULT_CAMERA_POSITION[1],
+              DEFAULT_CAMERA_POSITION[2],
+            ],
+            fov: 45,
+            near: 0.5,
+            far: 800,
+          }}
           gl={{ alpha: true, antialias: true, localClippingEnabled: true }}
           onCreated={(state) => {
             const { gl } = state
@@ -670,7 +745,11 @@ export default function Viewer3D() {
             makeDefault
             enableDamping
             dampingFactor={0.08}
-            target={[0, -5, 0]}
+            target={[
+              DEFAULT_CAMERA_TARGET[0],
+              DEFAULT_CAMERA_TARGET[1],
+              DEFAULT_CAMERA_TARGET[2],
+            ]}
             minDistance={20}
             maxDistance={260}
           />

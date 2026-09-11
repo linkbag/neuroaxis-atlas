@@ -2443,5 +2443,585 @@
         ]
       }
     ]
+  },
+  {
+    "id": "plate-tel-axial-58",
+    "title": "Telencephalon - axial at the basal ganglia and lateral ventricles (y = +58)",
+    "orientation": "transverse",
+    "region": "telencephalon",
+    "levelId": "lvl-tel-basal-ganglia",
+    "svg": "plates/plate-tel-axial-58.svg",
+    "regions": [
+      {
+        "slug": "ctx-cerebral-cortex",
+        "label": "Cerebral cortex (cortical ribbon)",
+        "labelPos": [
+          652,
+          549
+        ]
+      },
+      {
+        "slug": "surf-frontal-lobe",
+        "label": "Frontal lobe",
+        "labelPos": [
+          250,
+          700
+        ]
+      },
+      {
+        "slug": "surf-parietal-lobe",
+        "label": "Parietal lobe",
+        "labelPos": [
+          652,
+          595
+        ]
+      },
+      {
+        "slug": "surf-occipital-lobe",
+        "label": "Occipital lobe",
+        "labelPos": [
+          652,
+          643
+        ]
+      },
+      {
+        "slug": "surf-parahippocampal-gyrus",
+        "label": "Parahippocampal gyrus",
+        "labelPos": [
+          560,
+          712
+        ]
+      },
+      {
+        "slug": "surf-cingulate-gyrus",
+        "label": "Cingulate gyrus",
+        "labelPos": [
+          148,
+          434
+        ]
+      },
+      {
+        "slug": "surf-insula",
+        "label": "Insula",
+        "labelPos": [
+          652,
+          503
+        ]
+      },
+      {
+        "slug": "nuc-caudate-body",
+        "label": "Caudate nucleus (body)",
+        "labelPos": [
+          148,
+          474
+        ]
+      },
+      {
+        "slug": "tract-internal-capsule-anterior-limb",
+        "label": "Internal capsule, anterior limb",
+        "labelPos": [
+          148,
+          512
+        ]
+      },
+      {
+        "slug": "tract-internal-capsule-genu",
+        "label": "Internal capsule, genu",
+        "labelPos": [
+          148,
+          552
+        ]
+      },
+      {
+        "slug": "tract-internal-capsule-posterior-limb",
+        "label": "Internal capsule, posterior limb",
+        "labelPos": [
+          148,
+          590
+        ]
+      },
+      {
+        "slug": "nuc-putamen",
+        "label": "Putamen",
+        "labelPos": [
+          148,
+          676
+        ]
+      },
+      {
+        "slug": "nuc-caudate-head",
+        "label": "Caudate (head)",
+        "labelPos": [
+          652,
+          457
+        ]
+      },
+      {
+        "slug": "tract-corpus-callosum-body",
+        "label": "Corpus callosum (body)",
+        "labelPos": [
+          148,
+          315
+        ]
+      },
+      {
+        "slug": "vent-lateral-ventricle",
+        "label": "Lateral ventricle (body)",
+        "labelPos": [
+          148,
+          358
+        ]
+      },
+      {
+        "slug": "vent-lateral-ventricle-frontal-horn",
+        "label": "Frontal horn",
+        "labelPos": [
+          652,
+          411
+        ]
+      },
+      {
+        "slug": "nuc-globus-pallidus-externus",
+        "label": "Globus pallidus, external (dashed)",
+        "labelPos": [
+          148,
+          630
+        ]
+      },
+      {
+        "slug": "nuc-globus-pallidus-internus",
+        "label": "Globus pallidus, internal (dashed)",
+        "labelPos": [
+          652,
+          319
+        ]
+      },
+      {
+        "slug": "tract-corona-radiata",
+        "label": "Corona radiata",
+        "labelPos": [
+          652,
+          365
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-tel-sagittal-hemisphere",
+    "title": "Telencephalon - sagittal hemisphere with brainstem and cerebellum",
+    "orientation": "sagittal",
+    "region": "telencephalon",
+    "svg": "plates/plate-tel-sagittal-hemisphere.svg",
+    "regions": [
+      {
+        "slug": "ctx-cerebral-cortex",
+        "label": "Cerebral cortex (medial surface)",
+        "labelPos": [
+          208,
+          122
+        ]
+      },
+      {
+        "slug": "ctx-pontine-nuclei",
+        "label": "Pons",
+        "labelPos": [
+          228,
+          780
+        ]
+      },
+      {
+        "slug": "ctx-cerebellum",
+        "label": "Cerebellum",
+        "labelPos": [
+          528,
+          780
+        ]
+      },
+      {
+        "slug": "tract-pyramid",
+        "label": "Medulla / pyramid",
+        "labelPos": [
+          348,
+          780
+        ]
+      },
+      {
+        "slug": "surf-vermis",
+        "label": "Vermis",
+        "labelPos": [
+          638,
+          780
+        ]
+      },
+      {
+        "slug": "surf-frontal-lobe",
+        "label": "Frontal lobe",
+        "labelPos": [
+          140,
+          122
+        ]
+      },
+      {
+        "slug": "surf-parietal-lobe",
+        "label": "Parietal lobe",
+        "labelPos": [
+          648,
+          730
+        ]
+      },
+      {
+        "slug": "surf-occipital-lobe",
+        "label": "Occipital lobe",
+        "labelPos": [
+          658,
+          474
+        ]
+      },
+      {
+        "slug": "surf-parahippocampal-gyrus",
+        "label": "Parahippocampal gyrus",
+        "labelPos": [
+          88,
+          730
+        ]
+      },
+      {
+        "slug": "surf-temporal-lobe",
+        "label": "Temporal lobe",
+        "labelPos": [
+          294,
+          730
+        ]
+      },
+      {
+        "slug": "surf-cingulate-gyrus",
+        "label": "Cingulate gyrus",
+        "labelPos": [
+          658,
+          178
+        ]
+      },
+      {
+        "slug": "tract-cingulum",
+        "label": "Cingulum (dashed)",
+        "labelPos": [
+          658,
+          226
+        ]
+      },
+      {
+        "slug": "tract-corpus-callosum-genu",
+        "label": "Corpus callosum, genu (cut edge)",
+        "labelPos": [
+          140,
+          223
+        ]
+      },
+      {
+        "slug": "tract-corpus-callosum-body",
+        "label": "Corpus callosum, body",
+        "labelPos": [
+          224,
+          80
+        ]
+      },
+      {
+        "slug": "tract-corpus-callosum-splenium",
+        "label": "Corpus callosum, splenium",
+        "labelPos": [
+          658,
+          115
+        ]
+      },
+      {
+        "slug": "tract-corpus-callosum-rostrum",
+        "label": "Rostrum",
+        "labelPos": [
+          140,
+          290
+        ]
+      },
+      {
+        "slug": "ctx-corpus-callosum",
+        "label": "Corpus callosum (context)",
+        "labelPos": [
+          528,
+          80
+        ]
+      },
+      {
+        "slug": "vent-lateral-ventricle",
+        "label": "Lateral ventricle (body & atrium)",
+        "labelPos": [
+          658,
+          315
+        ]
+      },
+      {
+        "slug": "vent-lateral-ventricle-frontal-horn",
+        "label": "Frontal horn",
+        "labelPos": [
+          140,
+          446
+        ]
+      },
+      {
+        "slug": "vent-choroid-plexus-lateral",
+        "label": "Choroid plexus",
+        "labelPos": [
+          658,
+          360
+        ]
+      },
+      {
+        "slug": "nuc-caudate-body",
+        "label": "Caudate body",
+        "labelPos": [
+          658,
+          274
+        ]
+      },
+      {
+        "slug": "nuc-caudate-head",
+        "label": "Caudate head",
+        "labelPos": [
+          140,
+          340
+        ]
+      },
+      {
+        "slug": "tract-fornix",
+        "label": "Fornix (body & column)",
+        "labelPos": [
+          140,
+          167
+        ]
+      },
+      {
+        "slug": "tract-fornix-commissure",
+        "label": "Commissure of the fornix",
+        "labelPos": [
+          140,
+          365
+        ]
+      },
+      {
+        "slug": "tract-fimbria",
+        "label": "Fimbria",
+        "labelPos": [
+          658,
+          424
+        ]
+      }
+    ]
+  },
+  {
+    "id": "plate-tel-coronal-fornix",
+    "title": "Coronal - amygdala, hippocampus and basal ganglia (fornix level, z = +12)",
+    "orientation": "coronal",
+    "region": "telencephalon",
+    "svg": "plates/plate-tel-coronal-fornix.svg",
+    "regions": [
+      {
+        "slug": "surf-cingulate-gyrus",
+        "label": "Cingulate gyrus",
+        "labelPos": [
+          152,
+          115
+        ]
+      },
+      {
+        "slug": "surf-frontal-lobe",
+        "label": "Frontal lobe",
+        "labelPos": [
+          648,
+          115
+        ]
+      },
+      {
+        "slug": "tract-cingulum",
+        "label": "Cingulum (dashed)",
+        "labelPos": [
+          152,
+          162
+        ]
+      },
+      {
+        "slug": "ctx-cerebral-cortex",
+        "label": "Cerebral cortex (envelope)",
+        "labelPos": [
+          648,
+          164
+        ]
+      },
+      {
+        "slug": "tract-corpus-callosum-body",
+        "label": "Corpus callosum, body",
+        "labelPos": [
+          152,
+          208
+        ]
+      },
+      {
+        "slug": "tract-superior-longitudinal-fasciculus",
+        "label": "Superior longitudinal fasciculus (dashed)",
+        "labelPos": [
+          648,
+          225
+        ]
+      },
+      {
+        "slug": "vent-lateral-ventricle",
+        "label": "Lateral ventricle (body)",
+        "labelPos": [
+          152,
+          255
+        ]
+      },
+      {
+        "slug": "nuc-caudate-head",
+        "label": "Caudate nucleus (head)",
+        "labelPos": [
+          648,
+          287
+        ]
+      },
+      {
+        "slug": "tract-internal-capsule-anterior-limb",
+        "label": "Internal capsule, anterior limb",
+        "labelPos": [
+          152,
+          302
+        ]
+      },
+      {
+        "slug": "tract-internal-capsule-genu",
+        "label": "Internal capsule, genu",
+        "labelPos": [
+          648,
+          335
+        ]
+      },
+      {
+        "slug": "tract-fornix",
+        "label": "Fornix (body and column)",
+        "labelPos": [
+          152,
+          361
+        ]
+      },
+      {
+        "slug": "nuc-putamen",
+        "label": "Putamen",
+        "labelPos": [
+          648,
+          384
+        ]
+      },
+      {
+        "slug": "surf-insula",
+        "label": "Insula",
+        "labelPos": [
+          152,
+          408
+        ]
+      },
+      {
+        "slug": "ctx-thalamus-envelope",
+        "label": "Thalamus, anterior (envelope)",
+        "labelPos": [
+          648,
+          432
+        ]
+      },
+      {
+        "slug": "nuc-globus-pallidus-internus",
+        "label": "Globus pallidus, internal (dashed)",
+        "labelPos": [
+          152,
+          455
+        ]
+      },
+      {
+        "slug": "nuc-globus-pallidus-externus",
+        "label": "Globus pallidus, external (dashed)",
+        "labelPos": [
+          648,
+          494
+        ]
+      },
+      {
+        "slug": "vent-third-ventricle",
+        "label": "Third ventricle (slit)",
+        "labelPos": [
+          152,
+          514
+        ]
+      },
+      {
+        "slug": "ctx-hypothalamus-envelope",
+        "label": "Hypothalamus (envelope)",
+        "labelPos": [
+          648,
+          555
+        ]
+      },
+      {
+        "slug": "tract-optic-radiation",
+        "label": "Optic radiation (dashed)",
+        "labelPos": [
+          152,
+          561
+        ]
+      },
+      {
+        "slug": "vent-choroid-plexus-lateral",
+        "label": "Choroid plexus",
+        "labelPos": [
+          648,
+          604
+        ]
+      },
+      {
+        "slug": "nuc-amygdala",
+        "label": "Amygdala",
+        "labelPos": [
+          152,
+          608
+        ]
+      },
+      {
+        "slug": "vent-lateral-ventricle-temporal-horn",
+        "label": "Temporal horn",
+        "labelPos": [
+          648,
+          652
+        ]
+      },
+      {
+        "slug": "surf-temporal-lobe",
+        "label": "Temporal lobe",
+        "labelPos": [
+          152,
+          654
+        ]
+      },
+      {
+        "slug": "ctx-pons-surface",
+        "label": "Pons",
+        "labelPos": [
+          152,
+          701
+        ]
+      },
+      {
+        "slug": "nuc-hippocampus",
+        "label": "Hippocampus",
+        "labelPos": [
+          648,
+          701
+        ]
+      }
+    ]
   }
 ]

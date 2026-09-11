@@ -1,0 +1,310 @@
+[
+  {
+    "id": "nuc-caudate-head",
+    "name": "Caudate nucleus, head",
+    "synonyms": ["caput nuclei caudati", "caudate head"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The anterior, bulging third of the C-shaped striatum, filling the wall of the frontal horn and lying against the anterior limb of the internal capsule. It is the associative and limbic striatum: prefrontal, cingulate and orbitofrontal projections converge here before the striatopallidal loops select behaviour, and its dopaminergic input comes from the substantia nigra pars compacta.",
+    "connections": {
+      "afferent": [
+        "Corticostriate fibres from the dorsolateral prefrontal, anterior cingulate and orbitofrontal cortex (associative and limbic loops)",
+        "Nigrostriatal dopamine from the substantia nigra pars compacta and ventral tegmental area",
+        "Intralaminar thalamic (centromedian-parafascicular) input and amygdala/stria terminalis input to its ventromedial edge"
+      ],
+      "efferent": [
+        "Striatopallidal GABAergic fibres to the internal and external pallidal segments (direct and indirect pathways)",
+        "Striatonigral fibres to the substantia nigra pars reticulata and compacta (striosomes versus matrix)"
+      ]
+    },
+    "bloodSupply": "Recurrent artery of Heubner (a medial lenticulostriate branch of the ACA) supplies the head and its adjacent anterior limb of the internal capsule; lateral lenticulostriate branches of the MCA supply the lateral part of the head. The venule-rich anterior perforated substance is the surgical landmark.",
+    "clinical": [
+      {
+        "syndrome": "Head-of-caudate infarct with abulia",
+        "findings": "Apathy, loss of spontaneous speech and movement, disinhibition and contralateral neglect, often mistaken for a frontal-lobe lesion; the head is supplied by Heubner's artery, so this accompanies ACA territory infarction.",
+        "vascular": "Recurrent artery of Heubner (anterior cerebral artery)"
+      },
+      {
+        "syndrome": "Huntington disease",
+        "findings": "Selective loss of striatal medium spiny neurons begins in the caudate head and body, giving chorea, executive decline and psychiatric change with the characteristic boxcar appearance of the frontal horns on imaging.",
+        "note": "Neurodegenerative (CAG repeat in HTT), not vascular"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "nuc-caudate-body",
+    "name": "Caudate nucleus, body",
+    "synonyms": ["corpus nuclei caudati", "caudate body"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The thin arched middle segment of the caudate, lying in the floor of the lateral ventricle body with the thalamostriate vein and stria terminalis along its medial edge and the internal capsule below. It carries the associative-sensorimotor transition of the striatum between the frontal head and the temporal tail.",
+    "connections": {
+      "afferent": [
+        "Corticostriate fibres from premotor, supplementary motor and somatosensory cortex",
+        "Nigrostriatal dopamine and intralaminar thalamic (centromedian) input"
+      ],
+      "efferent": [
+        "Striatopallidal fibres to the globus pallidus (internal and external segments) and striatonigral fibres to the substantia nigra pars reticulata"
+      ]
+    },
+    "bloodSupply": "Lateral lenticulostriate branches of the MCA, with additional supply from the anterior choroidal artery posteriorly; the subependymal and thalamostriate veins drain it into the internal cerebral vein.",
+    "clinical": [
+      {
+        "syndrome": "Lacunar infarct of the caudate body",
+        "findings": "Small lenticulostriate infarcts are frequently silent but may cause a mild contralateral hemi-motor or hemi-sensory deficit with transient abulia.",
+        "vascular": "Lateral lenticulostriate arteries (middle cerebral artery)"
+      },
+      {
+        "syndrome": "Caudate haemorrhage with intraventricular extension",
+        "findings": "Bleeding from the caudate body ruptures into the lateral ventricle, producing headache, meningism, a reduced level of consciousness and hydrocephalus rather than a focal hemiplegia.",
+        "vascular": "Lenticulostriate arteries"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+    ]
+  },
+  {
+    "id": "nuc-caudate-tail",
+    "name": "Caudate nucleus, tail",
+    "synonyms": ["cauda nuclei caudati", "caudate tail", "amygdaloid end of caudate"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The thinnest, most posterior segment of the striatum, which arcs downward behind the thalamus into the roof of the temporal horn, ending at the amygdaloid complex. Because it carries the limbic-striatal transition, its tail provides a continuous anatomical bridge between the dorsal (sensorimotor) and ventral (limbic) striatum.",
+    "connections": {
+      "afferent": [
+        "Corticostriate fibres from the temporal and posterior cingulate cortex",
+        "Amygdaloid and hippocampal (subicular) projections at its temporal extremity"
+      ],
+      "efferent": [
+        "Striatopallidal fibres to the globus pallidus and striatonigral fibres to the substantia nigra pars reticulata"
+      ]
+    },
+    "bloodSupply": "Anterior choroidal artery (from the internal carotid) for the tail and the adjacent temporal horn choroid plexus; posteriorly the tail borders the thalamogeniculate branches of the PCA.",
+    "clinical": [
+      {
+        "syndrome": "Anterior choroidal artery infarct (the capsular triad)",
+        "findings": "Contralateral hemiplegia, hemianaesthesia and hemianopia — the posterior limb of the internal capsule, the optic radiation and the tail region fall together in the anterior choroidal territory; the tail lesion adds little clinically to the capsular deficit.",
+        "vascular": "Anterior choroidal artery"
+      },
+      {
+        "syndrome": "Temporal horn epilepsy propagation",
+        "findings": "The caudate tail and the amygdala form part of the pathway by which mesial temporal seizures spread to the dorsal striatum, contributing to the automatisms of temporal-lobe seizures.",
+        "note": "Network observation rather than a vascular syndrome"
+      }
+    ],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "nuc-putamen",
+    "name": "Putamen",
+    "synonyms": ["lateral lentiform segment", "dorsal striatum (putamen part)"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The sensorimotor striatum — the large, somatotopically organized lateral division of the lentiform nucleus, separated from the caudate by the internal capsule and from the insula by the external capsule and claustrum. It receives topographic input from the primary motor and somatosensory cortices and, with the centromedian intralaminar nucleus, sets the gain of the direct and indirect pathways that release wanted and suppress unwanted movement.",
+    "connections": {
+      "afferent": [
+        "Corticostriate fibres from the primary motor, premotor and somatosensory cortex with a leg-to-face somatotopic map (leg dorsolateral, face ventromedial)",
+        "Nigrostriatal dopamine from the substantia nigra pars compacta (the pathway lost in Parkinson disease)",
+        "Centromedian-parafascicular intralaminar thalamic input and amygdala/temporal input to its ventral portion"
+      ],
+      "efferent": [
+        "Striatopallidal fibres to the globus pallidus internus (direct pathway, substance P/dynorphin) and externus (indirect pathway, enkephalin)",
+        "Striatonigral fibres to the substantia nigra pars reticulata"
+      ]
+    },
+    "bloodSupply": "Lateral lenticulostriate branches of the MCA (the perforators that make the putamen the commonest site of hypertensive intracerebral haemorrhage); the inferior and posterior parts also receive anterior choroidal branches. The lateral lenticulostriate arteries pass through the putamen to reach the internal capsule.",
+    "clinical": [
+      {
+        "syndrome": "Hypertensive putaminal haemorrhage",
+        "findings": "Sudden contralateral hemiplegia and hemisensory loss with gaze deviation toward the lesion and, when large, depressed consciousness and transtentorial herniation — the classic deep hypertensive bleed from lenticulostriate rupture.",
+        "vascular": "Lateral lenticulostriate arteries (middle cerebral artery)"
+      },
+      {
+        "syndrome": "Parkinson disease and levodopa-induced dyskinesia",
+        "findings": "Loss of nigrostriatal dopamine depletes putamenal input, producing bradykinesia and rigidity; chronic dopamine replacement drives maladaptive putamenal plasticity and dyskinesias.",
+        "note": "Neurodegenerative — the putamen is the imaging and surgical target (putaminal DBS/grafts)"
+      },
+      {
+        "syndrome": "Pure motor lacunar stroke",
+        "findings": "Small putamenal lenticulostriate infarcts or microhaemorrhages commonly involve the adjacent posterior limb of the internal capsule, giving a pure motor or sensorimotor lacunar syndrome.",
+        "vascular": "Lenticulostriate arteries (middle cerebral artery)"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "nuc-globus-pallidus-externus",
+    "name": "Globus pallidus, external segment",
+    "synonyms": ["GPe", "external pallidal segment", "globus pallidus lateralis"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The relay of the indirect pathway: it receives GABAergic striatal input and projects a tonic GABAergic brake onto the subthalamic nucleus, so it controls how strongly the STN excites the output nuclei. Loss of GPe output therefore disinhibits the STN and raises GPi firing — the mechanism by which pallidal lesions generate dystonia and by which the indirect pathway modulates movement.",
+    "connections": {
+      "afferent": [
+        "Striatopallidal fibres of the indirect pathway (enkephalin/GABA) from the putamen and caudate",
+        "GPe-GPe recurrent collaterals; minor input from the subthalamic nucleus"
+      ],
+      "efferent": [
+        "GABAergic projection to the subthalamic nucleus (the key indirect-pathway brake)",
+        "Collaterals to the globus pallidus internus and to the striatum (interneuronal feedback)"
+      ]
+    },
+    "bloodSupply": "Lenticulostriate branches of the MCA for the upper two-thirds; anterior choroidal artery for the inferior and posterior part (the same territory that supplies the posterior limb of the internal capsule and the optic radiation).",
+    "clinical": [
+      {
+        "syndrome": "Pallidal lesion dystonia",
+        "findings": "Focal or segmental dystonia after GPe/indirect-pathway lesions (stroke, anoxia, neurodegeneration with brain iron accumulation), reflecting loss of the STN brake and excess GPi output.",
+        "vascular": "Lenticulostriate or anterior choroidal arteries"
+      },
+      {
+        "syndrome": "Bilateral pallidal necrosis (toxic-metabolic)",
+        "findings": "Carbon monoxide poisoning, manganese exposure, methanol and heroin pyrolysis selectively injure the globus pallidus, producing parkinsonism, dystonia and, in carbon monoxide cases, delayed encephalopathy after a lucid interval.",
+        "note": "Toxic/metabolic rather than vascular"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+    ]
+  },
+  {
+    "id": "nuc-globus-pallidus-internus",
+    "name": "Globus pallidus, internal segment",
+    "synonyms": ["GPi", "internal pallidal segment", "globus pallidus medialis", "entopeduncular nucleus (rodents)"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "One of the two output nuclei of the basal ganglia and a tonically active inhibitor of the motor thalamus: because GPi neurons fire continuously, movement is produced by a phasic withdrawal of inhibition through the direct pathway and a phasic increase through the indirect pathway. Its axons leave as the ansa lenticularis and lenticular fasciculus (H2) to reach VA/VL through the thalamic fasciculus (H1), and the intralaminar centromedian nucleus is its second major target.",
+    "connections": {
+      "afferent": [
+        "Direct-pathway striatopallidal fibres (substance P/dynorphin/GABA) from the putamen and caudate",
+        "Subthalamic nucleus glutamatergic axons (the indirect-pathway drive)",
+        "GPe collaterals and nigral dopaminergic modulation"
+      ],
+      "efferent": [
+        "Ansa lenticularis and lenticular fasciculus (H2) to the thalamic fasciculus (H1) and thence to the ventral anterior and ventral lateral thalamic nuclei",
+        "Descending pallidal fibres to the pedunculopontine nucleus (locomotor region) and to the centromedian intralaminar nucleus"
+      ]
+    },
+    "bloodSupply": "Lenticulostriate branches of the MCA and the anterior choroidal artery (which supplies the inferior/posterior pallidum together with the posterior limb of the internal capsule and the optic radiation).",
+    "clinical": [
+      {
+        "syndrome": "Pallidotomy and GPi deep brain stimulation",
+        "findings": "Lesioning or high-frequency stimulation of GPi relieves levodopa-induced dyskinesia and generalized dystonia and reduces rigidity and tremor, because silencing the output nucleus releases the motor thalamus — the clinical proof of the rate model of basal-ganglia output.",
+        "note": "Therapeutic lesion/stimulation, not a spontaneous syndrome"
+      },
+      {
+        "syndrome": "GPi/ansa lenticularis infarction",
+        "findings": "Contralateral hemichorea or hemiballismus can follow damage to GPi or its outflow, but the classic hyperkinetic syndrome belongs to the subthalamic nucleus; small GPi infarcts usually present as part of a lenticulostriate or anterior choroidal stroke.",
+        "vascular": "Lenticulostriate or anterior choroidal arteries"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+    ]
+  },
+  {
+    "id": "nuc-ventral-striatum",
+    "name": "Ventral striatum",
+    "synonyms": ["nucleus accumbens septi", "NAc", "fundus striati"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The limbic striatum at the junction of the caudate head, putamen and septal area (nucleus accumbens and fundus striati): it is where motivation becomes movement, receiving convergent prefrontal, hippocampal and amygdalar input and dopaminergic input from the ventral tegmental area. Its shell and core subdivisions serve reward prediction, incentive salience and the invigoration of goal-directed behaviour.",
+    "connections": {
+      "afferent": [
+        "Corticostriate fibres from the orbitofrontal, anterior cingulate and medial prefrontal cortex",
+        "Hippocampal (subicular) fibres via the fornix and amygdala fibres via the stria terminalis and amygdalofugal pathway",
+        "Mesolimbic dopamine from the ventral tegmental area (the reward system), plus serotonergic raphe input"
+      ],
+      "efferent": [
+        "Ventral pallidum, then mediodorsal thalamus and anterior cingulate cortex (the limbic basal-ganglia loop)",
+        "Extending amygdala/striatal projections to the lateral hypothalamus and brainstem effector regions (feeding, autonomic, locomotor drive)"
+      ]
+    },
+    "bloodSupply": "Anterior perforated substance: the recurrent artery of Heubner (ACA) and the medial lenticulostriate branches of the MCA at the junction of the anterior and middle cerebral territories; venous drainage through the anterior cerebral and striate veins.",
+    "clinical": [
+      {
+        "syndrome": "Addiction and reward circuitry",
+        "findings": "Repeated drug exposure reorganizes ventral-striatal dopamine signalling, driving incentive salience and relapse; the nucleus accumbens is the shared anatomical convergence point of addictive drugs and the target of deep-brain-stimulation trials for addiction.",
+        "note": "Circuit-level, not a focal lesion syndrome"
+      },
+      {
+        "syndrome": "Ventral striatal infarct (Heubner territory)",
+        "findings": "Small infarcts here cause disinhibition, apathy or obsessive-compulsive behaviour and can unmask mania with adjunctive frontal-lobe involvement; they accompany ACA infarction of the caudate head.",
+        "vascular": "Recurrent artery of Heubner (anterior cerebral artery)"
+      },
+      {
+        "syndrome": "Major depression (deep brain stimulation)",
+        "findings": "Chronic stimulation of the ventral striatum/ventral capsule improves treatment-resistant depression in selected patients — evidence that the limbic striatum gates mood as well as reward.",
+        "note": "Investigational therapy"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [12, 32, 29],
+    "size3d": [3.5, 4, 4],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  }
+]

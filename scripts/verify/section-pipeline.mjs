@@ -86,6 +86,24 @@ console.log(`failures: ${failures.length}`)
 for (const [slug, why] of failures.slice(0, 20)) console.log(`  - ${slug}: ${why}`)
 
 // --- plane sweep: the exact per-plane worker work -------------------------
+/**
+ * The plane sweep. The first eight entries are the original v1–v6 set (they
+ * must keep producing the same contours: "nothing below y = +45 moves"); the
+ * five added by v7 cover the AMENDMENT B telencephalon box
+ * (docs/TELENCEPHALON_PLAN.md §2/§9) — the four new transverse anchors
+ * (+48 thalamostriate, +58 basal ganglia, +68 centrum semiovale, +78 high
+ * convexity) plus one frontal plane at z = +40. This is the machine evidence
+ * for the §9 item "the four new levels drive the live section", and it runs
+ * without a browser (plan C12/R6).
+ */
+const TEL_PLANES = [
+  { axis: 'y', value: 48 },
+  { axis: 'y', value: 58 },
+  { axis: 'y', value: 68 },
+  { axis: 'y', value: 78 },
+  { axis: 'z', value: 40 },
+]
+
 const planes = [
   { axis: 'y', value: -46 },
   { axis: 'y', value: -24 },
@@ -95,6 +113,7 @@ const planes = [
   { axis: 'y', value: 30 },
   { axis: 'x', value: 6 },
   { axis: 'z', value: 0 },
+  ...TEL_PLANES,
 ]
 
 let sweepErrors = 0

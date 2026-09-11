@@ -352,6 +352,57 @@ export function createContextMaterial(color: string = CONTEXT_COLOR): THREE.Mesh
   return track(material)
 }
 
+/**
+ * Hemisphere ghost shell: the translucent CORTICAL ENVELOPE of v7
+ * (docs/TELENCEPHALON_PLAN.md §5 "Cortex ghost by default: hemispheres render
+ * as a translucent shell (opacity ~0.12–0.18, depthWrite:false, back-face
+ * culled) so the brainstem and diencephalon remain visible through it").
+ *
+ * It is a factory preset rather than an ad-hoc material for the same reason
+ * every other material is: it must carry the shared clipping planes, join the
+ * registry (so `updateAllClipping` and the section-capping audit see it) and
+ * keep the PBR look of the context envelope family.
+ *
+ * Two deliberate differences from `createContextMaterial`:
+ *  - `side: FrontSide` — the shell is a closed watertight solid, so drawing both
+ *    faces would double the fill rate on the largest meshes in the app (the two
+ *    shells are ~78–80k tris each) and stack two translucent layers into a
+ *    muddy interior. One front-facing layer is what makes the brainstem read
+ *    THROUGH the cortex, which is the whole point of the preset.
+ *  - `opacity: 0.14` — the low end of §5's 0.12–0.18 window, compared with the
+ *    context envelopes' 0.16, because a hemisphere covers several times the
+ *    screen area of any brainstem envelope.
+ *
+ * Callers may override opacity/depthWrite per instance (the "faint outline"
+ * state of the Brainstem-focus preset) — the fresnel hook reads the live
+ * `opacity` uniform, so mutating it keeps working exactly as it does for the
+ * context/envelope presets.
+ */
+export function createGhostShellMaterial(color: string = '#9fb0c4'): THREE.MeshPhysicalMaterial {
+  const material = new THREE.MeshPhysicalMaterial({
+    color,
+    roughness: 0.92,
+    metalness: 0,
+    sheen: 0.1,
+    sheenColor: SHEEN_PINKISH,
+    sheenRoughness: 0.9,
+    clearcoat: 0,
+    transparent: true,
+    opacity: 0.14,
+    depthWrite: false,
+    side: THREE.FrontSide,
+    normalMap: getTissueNormalTexture(),
+    envMapIntensity: 0.35,
+    clippingPlanes: ALL_CLIP_PLANES,
+  })
+  material.normalScale.set(0.04, 0.04)
+  // A wide, soft rim: on a hemisphere-scale shell the fresnel term is what
+  // draws the silhouette, which is the "faint outline" §5 asks for.
+  applyFresnelOpacity(material, { boost: 1.8, power: 2.4 })
+  enableSectionCapping(material)
+  return track(material)
+}
+
 /* ------------------------------------------------------------------ */
 /* Manifest-hint dispatch                                              */
 /* ------------------------------------------------------------------ */

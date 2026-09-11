@@ -62,6 +62,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from '
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import manifestJson from '../assets/anatomy/anatomy-manifest.json'
+import type { Region } from '../types'
 import type { AnatomyManifest, AnatomyPart } from './generated'
 
 /* ------------------------------------------------------------- manifest */
@@ -84,6 +85,196 @@ export function getAnatomyPart(slug: string): AnatomyPart | undefined {
 /** Whether a committed v2 mesh exists for the slug. */
 export function hasAnatomyPart(slug: string): boolean {
   return partBySlug.has(slug)
+}
+
+/* ------------------------------------------------- anatomy record contract */
+
+/**
+ * ── THE TELENCEPHALON RECORD → BAKED-BODY CONTRACT (v7, plan C9/C10) ────────
+ *
+ * Before v7 the manifest slug and the registry record id were assumed to be the
+ * SAME string: `SceneLayers` passed `anatomySlug={record.id}` and `partBySlug`
+ * was an exact map, so a record whose id is not a manifest slug silently fell
+ * back to the v1 primitive.
+ *
+ * The telencephalon breaks that assumption in both directions and this table is
+ * the single place that reconciles them:
+ *
+ *  - **many records, one body.** `nuc-caudate-head/body/tail` are the three
+ *    parts of ONE caudate mesh (FJ1754/FJ1802); the ventricular horn/atrium
+ *    records are regions of ONE ventricular cast; the claustral and capsule
+ *    context records describe parts of the white-matter / basal-ganglia bodies.
+ *    Pointing them all at the same GLB is the registry's own pairing rule
+ *    (`ctx-thalamus-l`/`-r` → `ctx-thalamus-envelope`), applied at hemisphere
+ *    scale.
+ *  - **one record, several bodies.** The four corpus-callosum tract records
+ *    (genu / rostrum / body / splenium) are the traditional subdivisions of the
+ *    ONE corpus-callosum mesh, and the cortical surface records are regions of
+ *    the two hemisphere shells.
+ *
+ * Mirrored parts of a paired record share one mesh: `SceneLayers` renders the
+ * `-l` geometry twice (the second instance mirrored on x), exactly as it does
+ * for every other paired record in the app, so a body is never baked twice just
+ * to fill a right-hand slot.
+ *
+ * `region` is carried here as well because the live-section registry
+ * (`section/sectionAssets.ts` GROUP_OVERRIDES) needs the same answer for
+ * region grouping and taxonomy colour: one table, two consumers, no drift
+ * — the failure mode plan C9 identified.
+ */
+export type AnatomyRender = 'body' | 'ghost' | 'none'
+
+export interface AnatomyRecordLink {
+  /** Manifest slug of the committed GLB (null = region has no baked body). */
+  body: string | null
+  /** Canonical region of the record (the taxonomy's own answer). */
+  region: Region
+  /** Whether the record is drawn twice (mirrored on −x). */
+  paired: boolean
+  /**
+   * How the record reaches the 3D scene:
+   *  - `body`  — an ordinary pickable mesh (`SceneLayers` → `NucleusMesh`);
+   *  - `ghost` — the translucent hemisphere shell pass (its own material, §5);
+   *  - `none`  — content-only: selectable from the tree/search/plates and
+   *              painted by the live section, but deliberately NOT drawn as a v1
+   *              placeholder (see `TEL_CONTENT_ONLY_IDS`).
+   */
+  render: AnatomyRender
+}
+
+/**
+ * The two hemisphere shells' owning records. They are `ghost` links on purpose:
+ * §5 requires the hemispheres to render as a translucent envelope at their OWN
+ * opacity/depthWrite, which the shared context-envelope pass cannot express —
+ * so `SceneLayers` draws them in a dedicated pass and these ids are excluded
+ * from the ordinary body loop.
+ */
+export const TEL_HEMISPHERE_RECORD_IDS = ['ctx-cerebral-cortex'] as const
+
+/** The hemisphere shell slugs (ghost pass), left first. */
+export const TEL_HEMISPHERE_SHELLS: readonly { slug: string; side: 'left' | 'right' }[] = [
+  { slug: 'ctx-hemisphere-l', side: 'left' },
+  { slug: 'ctx-hemisphere-r', side: 'right' },
+]
+
+/**
+ * Telencephalon records that must NOT be drawn as a v1 placeholder ellipsoid.
+ *
+ * Plan C10 measured this before v7: 32 of the 38 telencephalon records carried
+ * neither a baked GLB nor `origin3d`/`size3d`, so `NucleusMesh` fell through to
+ * the shared unit sphere at `[0, 0, 0]` — a stack of 1 au balls at the origin,
+ * visually wrong AND a picking hazard at exactly the framing §5 makes the
+ * default. Every record below is either a cortex record (whose body IS the
+ * ghost shell) or a redirection to a body that a neighbouring record already
+ * draws.
+ *
+ * They stay **fully selectable**: the taxonomy tree, the search index, the
+ * plates and their syndromes all read the registry, not this table, and the live
+ * section paints their region through the redirect above. What they lose is only
+ * a duplicate v1 sphere they should never have had. This mirrors the existing
+ * `ENVELOPE_RECORD_IDS` precedent.
+ */
+export const TEL_CONTENT_ONLY_IDS: ReadonlySet<string> = new Set<string>([
+  // Cortex: each region of the two hemisphere shells. The shells themselves are
+  // drawn by the ghost pass under `ctx-cerebral-cortex`.
+  'surf-cingulate-gyrus',
+  'surf-frontal-lobe',
+  'surf-insula',
+  'surf-limbic-lobe',
+  'surf-occipital-lobe',
+  'surf-parahippocampal-gyrus',
+  'surf-parietal-lobe',
+  'surf-temporal-lobe',
+  // Sub-regions of a body another record already draws: the caudate's three
+  // parts, the pallidal segments, the ventricular horns/atrium and the
+  // choroid-plexus record whose mesh belongs to the ventricular cast.
+  'nuc-caudate-body',
+  'nuc-caudate-head',
+  'nuc-caudate-tail',
+  'nuc-globus-pallidus-externus',
+  'vent-lateral-ventricle-atrium',
+  'vent-lateral-ventricle-frontal-horn',
+  'vent-lateral-ventricle-occipital-horn',
+  'vent-lateral-ventricle-temporal-horn',
+  'vent-choroid-plexus-lateral',
+  // Corpus-callosum subdivisions: the fibres of the ONE callosal mesh, which
+  // `ctx-corpus-callosum` and `tract-corpus-callosum-body` already draw.
+  'tract-corpus-callosum-genu',
+  'tract-corpus-callosum-rostrum',
+  'tract-corpus-callosum-splenium',
+  // Internal-capsule subdivisions: parts of the capsule body drawn by
+  // `ctx-internal-capsule`.
+  'tract-internal-capsule-anterior-limb',
+  'tract-internal-capsule-genu',
+  'tract-internal-capsule-posterior-limb',
+  // Authored as placements with their own origin3d/size3d: the v1 primitive IS
+  // their body (the four the v7 plan measured as already placed), so they keep
+  // it rather than being hidden.
+  //  nuc-ventral-striatum · surf-planum-temporale · nuc-dentate-gyrus
+  //  tract-fimbria · vent-interventricular-foramen · tract-corona-radiata
+])
+
+const LINKS: Record<string, AnatomyRecordLink> = {
+  /* --- cerebral cortex: the two ghost shells ---------------------------- */
+  'ctx-cerebral-cortex': { body: null, region: 'telencephalon', paired: true, render: 'ghost' },
+
+  /* --- telencephalic white matter --------------------------------------- */
+  'ctx-corpus-callosum': { body: 'ctx-corpus-callosum', region: 'telencephalon', paired: false, render: 'body' },
+  'tract-corpus-callosum-body': { body: 'ctx-corpus-callosum', region: 'telencephalon', paired: false, render: 'none' },
+  'tract-corpus-callosum-genu': { body: 'ctx-corpus-callosum', region: 'telencephalon', paired: false, render: 'none' },
+  'tract-corpus-callosum-rostrum': { body: 'ctx-corpus-callosum', region: 'telencephalon', paired: false, render: 'none' },
+  'tract-corpus-callosum-splenium': { body: 'ctx-corpus-callosum', region: 'telencephalon', paired: false, render: 'none' },
+  'ctx-internal-capsule': { body: 'tel-white-matter-l', region: 'telencephalon', paired: true, render: 'body' },
+
+  /* --- basal ganglia ---------------------------------------------------- */
+  'nuc-caudate-head': { body: 'ctx-caudate-l', region: 'telencephalon', paired: true, render: 'body' },
+  'nuc-caudate-body': { body: 'ctx-caudate-l', region: 'telencephalon', paired: true, render: 'none' },
+  'nuc-caudate-tail': { body: 'ctx-caudate-l', region: 'telencephalon', paired: true, render: 'none' },
+  'nuc-putamen': { body: 'ctx-putamen-l', region: 'telencephalon', paired: true, render: 'body' },
+  'nuc-globus-pallidus-internus': { body: 'ctx-globus-pallidus-l', region: 'telencephalon', paired: true, render: 'body' },
+  'nuc-globus-pallidus-externus': { body: 'ctx-globus-pallidus-l', region: 'telencephalon', paired: true, render: 'none' },
+  'ctx-lenticular-nucleus': { body: 'ctx-putamen-l', region: 'telencephalon', paired: false, render: 'body' },
+
+  /* --- limbic system ---------------------------------------------------- */
+  'nuc-hippocampus': { body: 'ctx-hippocampus-l', region: 'telencephalon', paired: true, render: 'body' },
+  'nuc-amygdala': { body: 'ctx-amygdala-l', region: 'telencephalon', paired: true, render: 'body' },
+  'tract-fornix': { body: 'ctx-fornix-l', region: 'telencephalon', paired: true, render: 'body' },
+  'tract-fornix-commissure': { body: 'ctx-fornix-commissure', region: 'telencephalon', paired: false, render: 'body' },
+
+  /* --- lateral ventricles ----------------------------------------------- */
+  'vent-lateral-ventricle': { body: 'tel-lateral-ventricle-l', region: 'telencephalon', paired: true, render: 'body' },
+  'vent-lateral-ventricle-frontal-horn': { body: 'tel-lateral-ventricle-l', region: 'telencephalon', paired: true, render: 'none' },
+  'vent-lateral-ventricle-occipital-horn': { body: 'tel-lateral-ventricle-l', region: 'telencephalon', paired: true, render: 'none' },
+  'vent-lateral-ventricle-temporal-horn': { body: 'tel-lateral-ventricle-l', region: 'telencephalon', paired: true, render: 'none' },
+  'vent-lateral-ventricle-atrium': { body: 'tel-lateral-ventricle-l', region: 'telencephalon', paired: true, render: 'none' },
+  'vent-choroid-plexus-lateral': { body: 'ctx-choroid-plexus-l', region: 'telencephalon', paired: true, render: 'none' },
+}
+
+/**
+ * The record → baked-body links that are actually DRAWN (render 'body'/'ghost').
+ * `sectionAssets` and `SceneLayers` both consume this, so the region a record
+ * paints under and the mesh it highlights under are one fact.
+ */
+export const ANATOMY_RECORD_LINKS: Readonly<Record<string, AnatomyRecordLink>> = LINKS
+
+/** Link for a record id, or undefined when the record owns no telencephalic body. */
+export function anatomyLinkFor(recordId: string): AnatomyRecordLink | undefined {
+  return LINKS[recordId]
+}
+
+/** The manifest slug a record's 3D body comes from, or null when it has none. */
+export function anatomySlugForRecord(recordId: string): string | null {
+  return LINKS[recordId]?.body ?? null
+}
+
+/**
+ * Records the ordinary body pass must skip: the ghost shells (drawn by their own
+ * pass) and the content-only ids above. Returns true for every record in
+ * {@link TEL_CONTENT_ONLY_IDS} plus the hemisphere owners.
+ */
+export function isGhostOrContentOnly(recordId: string): boolean {
+  if (TEL_CONTENT_ONLY_IDS.has(recordId)) return true
+  return LINKS[recordId]?.render === 'ghost'
 }
 
 /* ------------------------------------------------------------ load bound */

@@ -57,6 +57,14 @@ function hintForKind(kind: StructureRecord['kind']): MaterialHint {
 const EMISSIVE_SELECTED = 0.38
 const EMISSIVE_SYNDROME = 0.28
 const EMISSIVE_HOVER = 0.16
+/**
+ * v7 preset emphasis lift (docs/TELENCEPHALON_PLAN.md §5 "basal ganglia/limbic
+ * emphasised"). Deliberately below the hover value: it marks the subject of a
+ * preset at rest, so it must be visible without being mistakable for an
+ * interaction. `SceneLayers` decides WHICH records get it (preset `emphasis`,
+ * opaque kinds only).
+ */
+const EMPHASIS_EMISSIVE = 0.18
 
 export interface NucleusMeshProps {
   record: StructureRecord
@@ -68,6 +76,14 @@ export interface NucleusMeshProps {
   geometry?: THREE.BufferGeometry
   /** Overrides the kind-derived factory preset (anatomy-manifest materialHint). */
   materialHint?: MaterialHint
+  /**
+   * v7 preset emphasis (docs/TELENCEPHALON_PLAN.md §5 "Deep structures: ghost
+   * cortex + basal ganglia/limbic emphasised"): lift the material's emissive so
+   * this structure reads as the subject of the current preset without changing
+   * its geometry or its opacity. Only ever set for opaque kinds — the caller
+   * checks — so the lift can never smear a translucent envelope.
+   */
+  emphasised?: boolean
   /** Ids kept lit while everything else dims (selection or open syndrome). */
   highlight: Set<string> | null
 }
@@ -78,6 +94,7 @@ export default function NucleusMesh({
   anatomySlug,
   geometry,
   materialHint,
+  emphasised = false,
   highlight,
 }: NucleusMeshProps) {
   const hoveredId = useAtlasStore((s) => s.hoveredId)
@@ -92,9 +109,21 @@ export default function NucleusMesh({
   const asset = useAnatomyAsset(anatomySlug, mirrored)
   const glbGeometry = asset.status === 'ready' ? asset.geometry : null
 
-  // Context meshes are passive backdrop (plan §11: envelopes non-pickable);
-  // everything else is selectable directly in 3D.
-  const pickable = record.kind !== 'context'
+  // Context records are selectable since p1-identity (QUALITY_PLAN §2 item 8,
+  // "every rendered silhouette must be selectable"). The silhouettes
+  // themselves are drawn by SceneLayers' envelope pass, which carries the
+  // registry id of the record it stands for; the records in
+  // `ENVELOPE_RECORD_IDS` are filtered out of this component's list, so what
+  // reaches this branch is either a nucleus/ventricle/surface/tract record or
+  // a context record whose **3D body is the v1 placeholder ellipsoid**
+  // (ctx-internal-capsule, ctx-lenticular-nucleus, ctx-caudate-nucleus,
+  // ctx-pontine-nuclei, … — authored with origin3d/size3d for exactly this).
+  // Those placeholders are real drawn meshes, so they answer clicks like every
+  // other record; making them `raycast={() => null}` was what left the whole
+  // context layer unaddressable. Click precedence still favours the real
+  // anatomy: R3F dispatches nearest-hit-first and these ellipsoids sit inside
+  // the envelope surface, so a nucleus in front always wins, and the
+  // envelope/placeholder handlers never claim an event on a nucleus' behalf.
 
   const isSelected = selectedId === record.id
   const isHovered = hoveredId === record.id
@@ -131,13 +160,18 @@ export default function NucleusMesh({
 
   material.opacity = dimmed ? 0.15 : KIND_OPACITY[record.kind]
   material.depthWrite = !dimmed && KIND_OPACITY[record.kind] >= 1
+  // Selection/hover/syndrome intensity wins over the preset's emphasis lift, so
+  // "emphasised" can never mask an interaction (the interactivity contract of
+  // §5 is unchanged by the v7 presets).
   material.emissiveIntensity = isSelected
     ? EMISSIVE_SELECTED
     : syndromeLit
       ? EMISSIVE_SYNDROME
       : isHovered
         ? EMISSIVE_HOVER
-        : 0
+        : emphasised
+          ? EMPHASIS_EMISSIVE
+          : 0
 
   // Label floats above the shape (bounding box for canonical-space geometry).
   const shownGeometry = glbGeometry ?? geometry
@@ -146,19 +180,16 @@ export default function NucleusMesh({
     : scale[1] + 0.8
 
   const handleOver = (event: ThreeEvent<PointerEvent>) => {
-    if (!pickable) return
     event.stopPropagation()
     setHovered(record.id)
   }
 
   const handleOut = (event: ThreeEvent<PointerEvent>) => {
-    if (!pickable) return
     event.stopPropagation()
     if (useAtlasStore.getState().hoveredId === record.id) setHovered(null)
   }
 
   const handleDown = (event: ThreeEvent<PointerEvent>) => {
-    if (!pickable) return
     event.stopPropagation()
     selectStructure(record.id, { tab: null })
   }
@@ -171,13 +202,9 @@ export default function NucleusMesh({
       position={position}
       scale={scale}
       renderOrder={record.kind === 'context' || record.kind === 'ventricle' ? -1 : 0}
-      {...(pickable
-        ? {
-            onPointerOver: handleOver,
-            onPointerOut: handleOut,
-            onPointerDown: handleDown,
-          }
-        : { raycast: () => null })}
+      onPointerOver={handleOver}
+      onPointerOut={handleOut}
+      onPointerDown={handleDown}
     >
       {labelVisibility && (isSelected || isHovered) ? (
         <Html

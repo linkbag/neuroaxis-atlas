@@ -7,6 +7,15 @@
  * "Snap to plate" button. Slider drags write store.clip; the scene applies
  * the planes to every material via clipPlanes.applyClipState.
  *
+ * RANGES (docs/TELENCEPHALON_PLAN.md §2 AMENDMENT B, task `tel-space`): the three
+ * `min`/`max` below are read from `CLIP_BOUNDS` — the single declaration — and
+ * never typed in, so this dock followed the box extension without an edit:
+ * x ∈ [−48, 48] (unchanged), y ∈ [−55, 85] (was +45), z ∈ [−75, 55] (was
+ * −56…26). The transverse slider therefore reaches the four new telencephalic
+ * anchors (+48, +58, +68, +78) and still snaps to levels.json through the shared
+ * `snapClipWrite`; the step rule (`snapToPlate ? 1 : 0.5` on y, 0.5 on x/z) and
+ * everything below +45 are unchanged.
+ *
  * v3 section sync (SECTION_SYNC_PLAN §2.1): touching any slider — dragging it
  * or focusing it for keyboard input — pins store.sectionAxis to that slider's
  * axis, so the GPU live-section PiP and the 2D section canvas always follow

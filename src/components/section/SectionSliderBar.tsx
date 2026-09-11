@@ -9,8 +9,13 @@
  * section-side twin and deliberately reuses its semantics rather than inventing
  * a second mechanism:
  *
- *   • ranges come from CLIP_BOUNDS (viewer3d/clipPlanes.ts — REALISM_PLAN §3
- *     AMENDMENT A: x ∈ [−48, 48], z ∈ [−56, 26], y ∈ [−55, 45]), never retyped;
+ *   • ranges come from CLIP_BOUNDS (viewer3d/clipPlanes.ts) and are therefore
+ *     never retyped here: AMENDMENT B (docs/TELENCEPHALON_PLAN.md §2, task
+ *     tel-space) sets x ∈ [−48, 48] (unchanged), y ∈ [−55, 85] (was +45) and
+ *     z ∈ [−75, 55] (was −56…26). Nothing below y = +45 moved, so every existing
+ *     plate level keeps its coordinate and only new range is added; the slider
+ *     row this component renders simply reaches the four new telencephalic
+ *     levels (+48, +58, +68, +78) with the same step written below;
  *   • step 0.5, except transverse = `snapToPlate ? 1 : 0.5` (ClipControls:150);
  *   • writes go to the ONE store slice every surface already consumes,
  *     `useAtlasStore.setClip` → `SectionCanvas` repaints through its own

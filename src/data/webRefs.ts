@@ -26,6 +26,40 @@ function wiki(title: string): string {
   return `https://en.wikipedia.org/wiki/${encodeURIComponent(title.trim().replace(/\s+/g, '_'))}`
 }
 
+/**
+ * High-confidence academic sources for the telencephalon (v7). Each DOI was
+ * resolved and title-checked against Crossref before being listed here.
+ */
+const BG_LOOPS: WebRef = {
+  source: 'journal',
+  label: 'Alexander, DeLong & Strick 1986 — Parallel organization of functionally segregated circuits linking basal ganglia and cortex (Annu Rev Neurosci)',
+  url: 'https://doi.org/10.1146/annurev.ne.09.030186.002041',
+}
+
+const DISCONNECTION: WebRef = {
+  source: 'journal',
+  label: 'Catani & ffytche 2005 — The rises and falls of disconnection syndromes (Brain)',
+  url: 'https://doi.org/10.1093/brain/awh622',
+}
+
+const TRACTOGRAPHY_ATLAS: WebRef = {
+  source: 'journal',
+  label: 'Catani & Thiebaut de Schotten 2008 — A diffusion tensor imaging tractography atlas for virtual in vivo dissections (Cortex)',
+  url: 'https://doi.org/10.1016/j.cortex.2008.05.004',
+}
+
+const HIPPOCAMPAL_LESION: WebRef = {
+  source: 'journal',
+  label: 'Scoville & Milner 1957 — Loss of recent memory after bilateral hippocampal lesions (J Neurol Neurosurg Psychiatry)',
+  url: 'https://doi.org/10.1136/jnnp.20.1.11',
+}
+
+const CSF_SECRETION: WebRef = {
+  source: 'journal',
+  label: 'Damkier, Brown & Praetorius 2013 — Cerebrospinal fluid secretion by the choroid plexus (Physiol Rev)',
+  url: 'https://doi.org/10.1152/physrev.00004.2013',
+}
+
 /** Curated map: slug → web refs. Titles are the exact Wikipedia article titles. */
 const curated: Record<string, WebRef[]> = {
   // ---- Diencephalon: Thalamus ----
@@ -162,6 +196,94 @@ const curated: Record<string, WebRef[]> = {
   'tract-medial-vestibulospinal': [{ source: 'wikipedia', label: 'Wikipedia — Medial vestibulospinal tract', url: wiki('Medial vestibulospinal tract') }],
   'tract-reticulospinal': [{ source: 'wikipedia', label: 'Wikipedia — Reticulospinal tract', url: wiki('Reticulospinal tract') }],
   'tract-hypothalamospinal': [{ source: 'wikipedia', label: 'Wikipedia — Hypothalamospinal tract', url: wiki('Hypothalamospinal tract') }],
+
+  // ---- Telencephalon: cerebral cortex (ribbon, lobes, gyri) ----
+  'ctx-cerebral-cortex': [{ source: 'wikipedia', label: 'Wikipedia — Cerebral cortex', url: wiki('Cerebral cortex') }],
+  'surf-frontal-lobe': [{ source: 'wikipedia', label: 'Wikipedia — Frontal lobe', url: wiki('Frontal lobe') }],
+  'surf-parietal-lobe': [{ source: 'wikipedia', label: 'Wikipedia — Parietal lobe', url: wiki('Parietal lobe') }],
+  'surf-temporal-lobe': [{ source: 'wikipedia', label: 'Wikipedia — Temporal lobe', url: wiki('Temporal lobe') }],
+  'surf-occipital-lobe': [{ source: 'wikipedia', label: 'Wikipedia — Occipital lobe', url: wiki('Occipital lobe') }],
+  'surf-insula': [{ source: 'wikipedia', label: 'Wikipedia — Insular cortex', url: wiki('Insular cortex') }],
+  'surf-limbic-lobe': [{ source: 'wikipedia', label: 'Wikipedia — Limbic lobe', url: wiki('Limbic lobe') }],
+  'surf-cingulate-gyrus': [{ source: 'wikipedia', label: 'Wikipedia — Cingulate cortex', url: wiki('Cingulate cortex') }],
+  'surf-parahippocampal-gyrus': [{ source: 'wikipedia', label: 'Wikipedia — Parahippocampal gyrus', url: wiki('Parahippocampal gyrus') }],
+  'surf-planum-temporale': [{ source: 'wikipedia', label: 'Wikipedia — Planum temporale', url: wiki('Planum temporale') }],
+
+  // ---- Telencephalon: basal ganglia ----
+  'ctx-lenticular-nucleus': [{ source: 'wikipedia', label: 'Wikipedia — Lentiform nucleus', url: wiki('Lentiform nucleus') }],
+  'ctx-caudate-nucleus': [{ source: 'wikipedia', label: 'Wikipedia — Caudate nucleus', url: wiki('Caudate nucleus') }],
+  'nuc-caudate-head': [
+    { source: 'wikipedia', label: 'Wikipedia — Caudate nucleus', url: wiki('Caudate nucleus') },
+    { ...BG_LOOPS },
+  ],
+  'nuc-caudate-body': [{ source: 'wikipedia', label: 'Wikipedia — Caudate nucleus', url: wiki('Caudate nucleus') }],
+  'nuc-caudate-tail': [{ source: 'wikipedia', label: 'Wikipedia — Caudate nucleus', url: wiki('Caudate nucleus') }],
+  'nuc-putamen': [
+    { source: 'wikipedia', label: 'Wikipedia — Putamen', url: wiki('Putamen') },
+    { ...BG_LOOPS },
+  ],
+  'nuc-globus-pallidus-externus': [{ source: 'wikipedia', label: 'Wikipedia — Globus pallidus', url: wiki('Globus pallidus') }],
+  'nuc-globus-pallidus-internus': [
+    { source: 'wikipedia', label: 'Wikipedia — Globus pallidus', url: wiki('Globus pallidus') },
+    { ...BG_LOOPS },
+  ],
+  'nuc-ventral-striatum': [
+    { source: 'wikipedia', label: 'Wikipedia — Ventral striatum', url: wiki('Ventral striatum') },
+    { source: 'wikipedia', label: 'Wikipedia — Nucleus accumbens', url: wiki('Nucleus accumbens') },
+    { ...BG_LOOPS },
+  ],
+
+  // ---- Telencephalon: limbic system ----
+  'nuc-hippocampus': [
+    { source: 'wikipedia', label: 'Wikipedia — Hippocampus', url: wiki('Hippocampus') },
+    { ...HIPPOCAMPAL_LESION },
+  ],
+  'nuc-dentate-gyrus': [{ source: 'wikipedia', label: 'Wikipedia — Dentate gyrus', url: wiki('Dentate gyrus') }],
+  'nuc-amygdala': [{ source: 'wikipedia', label: 'Wikipedia — Amygdala', url: wiki('Amygdala') }],
+  'tract-fornix': [{ source: 'wikipedia', label: 'Wikipedia — Fornix (neuroanatomy)', url: wiki('Fornix (neuroanatomy)') }],
+  'tract-fornix-commissure': [{ source: 'wikipedia', label: 'Wikipedia — Fornix and hippocampal commissure', url: wiki('Fornix (neuroanatomy)') }],
+  'tract-fimbria': [{ source: 'wikipedia', label: 'Wikipedia — Hippocampus anatomy (fimbria)', url: wiki('Hippocampus anatomy') }],
+
+  // ---- Telencephalon: lateral ventricles and CSF spaces ----
+  'vent-lateral-ventricle': [
+    { source: 'wikipedia', label: 'Wikipedia — Lateral ventricles', url: wiki('Lateral ventricles') },
+    { ...CSF_SECRETION },
+  ],
+  'vent-lateral-ventricle-frontal-horn': [{ source: 'wikipedia', label: 'Wikipedia — Lateral ventricles (frontal horn)', url: wiki('Lateral ventricles') }],
+  'vent-lateral-ventricle-temporal-horn': [{ source: 'wikipedia', label: 'Wikipedia — Lateral ventricles (temporal horn)', url: wiki('Lateral ventricles') }],
+  'vent-lateral-ventricle-occipital-horn': [{ source: 'wikipedia', label: 'Wikipedia — Lateral ventricles (occipital horn)', url: wiki('Lateral ventricles') }],
+  'vent-lateral-ventricle-atrium': [{ source: 'wikipedia', label: 'Wikipedia — Lateral ventricles (atrium/trigone)', url: wiki('Lateral ventricles') }],
+  'vent-choroid-plexus-lateral': [
+    { source: 'wikipedia', label: 'Wikipedia — Choroid plexus', url: wiki('Choroid plexus') },
+    { ...CSF_SECRETION },
+  ],
+  'vent-interventricular-foramen': [{ source: 'wikipedia', label: 'Wikipedia — Interventricular foramina (neuroanatomy)', url: wiki('Interventricular foramina (neuroanatomy)') }],
+
+  // ---- Telencephalon: white matter (commissural, projection, association) ----
+  'ctx-corpus-callosum': [{ source: 'wikipedia', label: 'Wikipedia — Corpus callosum', url: wiki('Corpus callosum') }],
+  'tract-corpus-callosum-rostrum': [{ source: 'wikipedia', label: 'Wikipedia — Corpus callosum (rostrum)', url: wiki('Corpus callosum') }],
+  'tract-corpus-callosum-genu': [{ source: 'wikipedia', label: 'Wikipedia — Corpus callosum (genu)', url: wiki('Corpus callosum') }],
+  'tract-corpus-callosum-body': [{ source: 'wikipedia', label: 'Wikipedia — Corpus callosum (body)', url: wiki('Corpus callosum') }],
+  'tract-corpus-callosum-splenium': [{ source: 'wikipedia', label: 'Wikipedia — Corpus callosum (splenium)', url: wiki('Corpus callosum') }],
+  'ctx-internal-capsule': [{ source: 'wikipedia', label: 'Wikipedia — Internal capsule', url: wiki('Internal capsule') }],
+  'tract-internal-capsule-anterior-limb': [{ source: 'wikipedia', label: 'Wikipedia — Internal capsule (anterior limb)', url: wiki('Internal capsule') }],
+  'tract-internal-capsule-genu': [{ source: 'wikipedia', label: 'Wikipedia — Internal capsule (genu)', url: wiki('Internal capsule') }],
+  'tract-internal-capsule-posterior-limb': [{ source: 'wikipedia', label: 'Wikipedia — Internal capsule (posterior limb)', url: wiki('Internal capsule') }],
+  'tract-corona-radiata': [{ source: 'wikipedia', label: 'Wikipedia — Corona radiata', url: wiki('Corona radiata') }],
+  'tract-optic-radiation': [{ source: 'wikipedia', label: 'Wikipedia — Optic radiation', url: wiki('Optic radiation') }],
+  'tract-cingulum': [
+    { source: 'wikipedia', label: 'Wikipedia — Cingulum (brain)', url: wiki('Cingulum (brain)') },
+    { ...DISCONNECTION },
+  ],
+  'tract-uncinate-fasciculus': [
+    { source: 'wikipedia', label: 'Wikipedia — Uncinate fasciculus', url: wiki('Uncinate fasciculus') },
+    { ...TRACTOGRAPHY_ATLAS },
+  ],
+  'tract-superior-longitudinal-fasciculus': [
+    { source: 'wikipedia', label: 'Wikipedia — Superior longitudinal fasciculus', url: wiki('Superior longitudinal fasciculus') },
+    { ...TRACTOGRAPHY_ATLAS },
+    { ...DISCONNECTION },
+  ],
 }
 
 /** Authoritative journal overview for the brainstem regions (RSNA RadioGraphics 2019). */

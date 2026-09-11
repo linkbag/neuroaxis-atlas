@@ -1,16 +1,17 @@
 # NeuroAxis — 3D Brainstem Atlas
 
-**An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum)** — selectable 3D nuclei and fiber tracts, twelve labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
+**An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum) — with the telencephalon (cerebral hemispheres, basal ganglia, limbic system, ventricles) layered on from v7** — selectable 3D nuclei and fiber tracts, labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
 ## Features
 
 - **Realistic v2 rendering** — real-scan-derived brainstem/diencephalon/cerebellum envelopes, organically sculpted nuclei, CSF spaces, PBR lighting with SSAO/bloom/SMAA, and a High/Balanced quality toggle (details below).
 - **3D viewer** — orbit / zoom / pan; click-select any nucleus, tract, ventricle, or surface landmark; hover labels; global selection shared with every other panel.
-- **Region & system layers** — toggle diencephalon / midbrain / pons / medulla / cerebellum and nuclei / tracts / ventricles / surface / context; presets *All*, *Nuclei*, *Tracts*, *Clinical motor*.
+- **Region & system layers** — toggle diencephalon / midbrain / pons / medulla / cerebellum **/ telencephalon** and nuclei / tracts / ventricles / surface / context; presets *Brainstem focus* (default), *Deep structures*, *Whole brain*, *Cortex only*, *All*, *Nuclei*, *Tracts*, *Clinical motor*.
 - **Exploded view** — slider fans nuclei radially off the brainstem axis while tracts and envelopes stay put.
 - **Clipping planes** — sagittal / coronal / transverse cuts over the full canonical range with a plane-helper toggle; the transverse slider snaps to plate levels.
 - **Live section sync (v3/v4)** — every clip slider also drives a GPU picture-in-picture live section (bottom-right of the 3D view) and a worker-computed 2D live-section canvas in the *Plates* tab, both showing **real imagery as the base layer** — real section photographs on their anchored planes, a continuous real head CT volume, and a continuous T1 MRI at any plane, with a modality toolbar (Auto real-first / MRI / CT / Photo / Simulated only), CT brain–bone windows, and the active modality's credit always visible — details below.
-- **12 interactive 2D plates** — 9 transverse levels (pyramidal decussation → mid-thalamus), 1 midline sagittal profile, 2 coronal slices; every labeled region highlights on hover and selects everywhere on click; leader-line labels toggle on/off.
+- **Telencephalon (v7)** — the cerebral hemispheres, basal ganglia, limbic structures, lateral ventricles and telencephalic white matter (22 new meshes, 46 registry entries, 4 new levels, 3 new plates) layered onto the same canonical space, with the hemispheres as a translucent **ghost cortex** so the brainstem stays the subject of the app. New presets *Brainstem focus* (the default) / *Deep structures* / *Whole brain* / *Cortex only* — details in [Telencephalon (v7)](#telencephalon-v7--the-rest-of-the-brain).
+- **12 interactive 2D plates** — 9 transverse levels (pyramidal decussation → mid-thalamus), 1 midline sagittal profile, 2 coronal slices; every labeled region highlights on hover and selects everywhere on click; leader-line labels toggle on/off. **(v7 adds 3 more — 15 total:** axial +58, sagittal hemisphere, coronal fornix.)
 - **2D ↔ 3D sync** — selecting a plate (or level-ruler entry) moves the 3D transverse clipping plane to that level and reveals the plane helper; dragging the plane keeps the level ruler and plate sync indicator in step.
 - **Structure browser** — region → subdivision → structure taxonomy tree plus case-insensitive search over names and synonyms (try "STN", "MLF", "pulvinar").
 - **Info panel** — overview, neurophysiological function, afferent/efferent connections, blood supply, clickable level chips, related syndromes, and textbook references for every record; tracts add direction, modality, origin→target, decussation, and somatotopy.
@@ -120,6 +121,14 @@ Both grids are `uint8` volumes on the **same canonical box and spacing** (45 × 
 
 ### Committed payload & budgets
 
+> **v7 update.** These figures are the **v4/v6 measurements** and are kept verbatim as the
+> record of that bake. For the current, v7 (AMENDMENT B) numbers see
+> [Telencephalon (v7)](#telencephalon-v7--the-rest-of-the-brain) below: the canonical box grew to
+> x ±48 / y −55…85 / z −75…+55, so **both uint8 grids are now `[81, 113, 107]` = 979,371 B each**
+> and the imaging payload is **8.71 MiB across 80 files** against the **10 MiB** cap that
+> `docs/TELENCEPHALON_PLAN.md` §2/§4 sets (the pre-v7 8 MiB limit is superseded; the ≤ 4 MiB
+> v4-added sub-cap is unchanged and still met).
+
 `src/assets/imaging/` holds **7.30 MiB across 80 files** (measured on disk) — **76 committed stain photographs** (6.82 MiB: 22 `vhp-*` cryosections 1.18 MiB, 9 `ubc-h*` + 15 `ubc-c*` 2.73 MiB, 3 `wikict-*` 0.14 MiB, 17 `ubc-m*` + 10 `bmm-*` v3 micrographs 2.77 MiB), `mri-t1.bin` (238 KiB) + `mri-manifest.json`, `ct.bin` (238 KiB) + `ct-manifest.json` — inside the plan §4 budgets: **≤ 8 MiB total imaging payload** (measured 7.30 MiB, 0.70 MiB of headroom) and **≤ 4 MiB of assets added by v4** (measured 3.11 MiB: `ct.bin` + 24 UBC plates + 3 Commons CT plates; the v4b cryosections are 1.18 MiB against their own ≤ 1.75 MB sub-cap and are not counted into that v4 remainder). Raw downloads stay in the gitignored `assets-src/`; every embedded plate is a content-verbatim copy (no crops, no retouching) with only technical modifications (integer 2× downsampling, alpha flatten onto white, lossless filtered-PNG re-encode for the v3/v4 photographs; JPEG q80 re-encode at native size for the v4b cryosections; uint8 resampling for the grids) recorded per file in `assets-src/imaging2/processed-photos.json` and `assets-src/imaging3/analysis/local-files.json`.
 
 **Re-baking** (deterministic, Node-only, no clock/RNG — the committed artifacts are byte-identical across runs; raw inputs stay in gitignored `assets-src/`):
@@ -138,6 +147,145 @@ A missing or failed CT bake is not fatal: `ct-manifest.json` carries `status: 'u
 
 The live toolbar lists "open source ↗" chips for the section's level: the mapped image's own page plus the UBC, MSU, Harvard Whole Brain Atlas and BrainMaps.org references — the latter two link-out only. License verdicts and fetch evidence: [docs/IMAGING_SOURCES.md](docs/IMAGING_SOURCES.md) (v3 sources) and [docs/IMAGING_SOURCES_V4.md](docs/IMAGING_SOURCES_V4.md) (v4 sources); full provenance and verbatim credit lines: [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
+## Telencephalon (v7) — the rest of the brain
+
+v7 layers the **telencephalon** (cerebral hemispheres, basal ganglia, limbic structures, lateral
+ventricles and telencephalic white matter) onto the brainstem + diencephalon atlas **without
+giving up the brainstem as the subject of the app**. Spec: [`docs/TELENCEPHALON_PLAN.md`](docs/TELENCEPHALON_PLAN.md) §2 AMENDMENT B (space),
+§3 (data model), §4 (geometry + budgets), §5 (rendering/UX), §6 (plates), §9 (acceptance).
+
+### What was added
+
+| | |
+| --- | --- |
+| **Canonical space (AMENDMENT B)** | x ±48 (unchanged) · **y −55…+85** · **z −75…+55**. `CLIP_BOUNDS` in `src/components/viewer3d/clipPlanes.ts` is still the single declaration — the clip sliders, the section plane geometry, the PiP camera, the plate↔clip sync and the level ruler all derive from it. **Nothing below y = +45 moved**: the 13 original level anchors keep their exact y values, the default transverse plane is still the olivary anchor (y = −34) and x/z stay 0. |
+| **Levels** | 13 pre-existing anchors + **4 new telencephalic ones**: `lvl-tel-thalamostriate` **+48**, `lvl-tel-basal-ganglia` **+58**, `lvl-tel-centrum-semiovale` **+68**, `lvl-tel-convexity` **+78** (17 total). They drive the clip plane, snap-to-plate, the level ruler and the live section. |
+| **Anatomy meshes** | **22 new committed GLBs** in `src/assets/anatomy/` (106 parts total, 570,096 rendered triangles of 800,000): 2 hemisphere shells (`ctx-hemisphere-l/-r`), the cerebral white-matter cores, corpus callosum, lateral ventricles, caudate, putamen, globus pallidus, hippocampus, amygdala, fornix + commissure, choroid plexus. |
+| **Registry** | 46 `telencephalon` entries (183 total) under five subdivisions: **Cerebral cortex · Basal ganglia · Limbic system · Telencephalic white matter · Lateral ventricles**. 38 new authored structure records in `src/data/structures/telencephalon-*.json`. |
+| **Plates** | 3 new authored SVGs (15 total): `plate-tel-axial-58` (19 labelled regions, synced to `lvl-tel-basal-ganglia`), `plate-tel-sagittal-hemisphere`, `plate-tel-coronal-fornix`. |
+| **Tracts** | 4 authored pathways with waypoints — optic radiation, cingulum, uncinate fasciculus, superior longitudinal fasciculus. |
+
+### How it renders — the cortex ghost, and why the brainstem stays the subject
+
+Plan §5 makes this the usability core, so the defaults are the feature:
+
+- **The hemispheres are a translucent ghost.** `createGhostShellMaterial`
+  (`src/geometry/materials.ts`) renders the two shells at **opacity 0.14** (plan §5 window
+  0.12–0.18) with **`depthWrite: false`**, **front-face only** (a closed watertight solid drawn
+  twice would stack two translucent layers into a muddy interior and double the fill rate on the
+  largest meshes in the app) and `renderOrder −2`. The brainstem, diencephalon and cerebellum read
+  straight through them.
+- **View presets (plan §5), with Brainstem focus as the DEFAULT** — a fresh visitor boots
+  brainstem-first; the choice persists like the quality toggle (`localStorage
+  neuroaxis.viewPreset`), so a returning visitor keeps their own framing:
+
+  | Preset | Behaviour |
+  | --- | --- |
+  | **Brainstem focus** *(default)* | The cortex records are hidden, so the ghost drops to a **faint outline** (`GHOST_OUTLINE_OPACITY` 0.05) and the brainstem/diencephalon/cerebellum carry the view. |
+  | **Deep structures** | Ghost cortex + the basal ganglia and limbic structures lifted by an emissive emphasis (`emphasised`, 0.18 — below the hover value, so emphasis can never be mistaken for an interaction). |
+  | **Whole brain** | Every structure at its own material. |
+  | **Cortex only** | Every non-telencephalic record hidden: the hemispheres alone. |
+  | All · Nuclei · Tracts · Clinical motor | The v1–v6 presets, unchanged. |
+
+  This needed one additive field pair on the layer model (`AtlasLayers.hidden` / `.emphasis`,
+  structure-level sets), because "hide the cortex" and "emphasise the basal ganglia" span region
+  and kind boundaries that `regions`/`kinds` cannot express. Empty sets mean "behave exactly as
+  v6 did", which is why the Legend toggles and the old presets are untouched.
+- **Every new structure is selectable from 3D, the tree, search and the plates.** Manifest slugs
+  and registry ids are reconciled in one table (`ANATOMY_RECORD_LINKS` in
+  `src/geometry/anatomyAssets.ts`) that both the 3D pass and the live-section registry read — many
+  records share one mesh (the caudate's head/body/tail are one caudate; the ventricular
+  horns/atrium are one ventricular cast; the callosal parts are one corpus callosum), which is the
+  registry's own pairing rule at hemisphere scale.
+- **No placeholder geometry at the origin.** Records that own no mesh and have no authored
+  placement are listed explicitly (`TEL_CONTENT_ONLY_IDS`) and excluded from the 3D body pass while
+  staying fully reachable from the tree, search and plates. Before v7, 32 of the 38 telencephalon
+  records would have drawn a unit sphere at `[0, 0, 0]`.
+- **Explode** separates the hemisphere shells outward on ±x — the shells use a **larger factor
+  than the nuclei** (they are envelopes, not structures), and the nucleus rule is unchanged.
+- **CT coverage is stated, not hidden.** The Visible Human CT series is a **head-only scan whose
+  own apex lands at canonical y ≈ 36.25 au** (measured; recorded in `ct-manifest.json` at
+  `intensity.sourceCoverage.superiorMostDataYAu` and `registration.residuals.coverageNote`). Above
+  that plane the CT grid has stations but no data, so the CT layer reports **`unavailable`**
+  rather than a stale slice, and the live-section toolbar says plainly that the series ends there
+  and that **MRI is the modality of record**. The MRI grid covers the whole AMENDMENT B box
+  (`coverage.fractionInsideFov = 1`, 979,371/979,371 stations), so it paints at +48/+58/+68/+78.
+  The number in the UI is read from the manifest — there is no second, drifting constant.
+
+### Data source
+
+The telencephalon geometry is **BodyParts3D 4.0** (the archive this project already owns,
+`assets-src/bp3d/isa_BP3D_4.0_obj_99.zip`, 2,234 meshes) — **CC BY 4.0**, the same source and
+licence as the brainstem, diencephalon and cerebellum meshes. **No new data source and no new
+licence work**: the archive already contained the whole telencephalon.
+
+Attribution, verbatim (also in [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)): *BodyParts3D, © The
+Database Center for Life Science, licensed under CC BY 4.0.* The cortical ribbon is derived from
+this data — see the honest limits below.
+
+### How to re-bake (deterministic, Node-only, no clock/RNG)
+
+```bash
+node scripts/lib/register.mjs            # 1. REGISTER  BP3D meshes → canonical space (assets-src/bp3d/canonical/tel-*.obj)
+node scripts/build-anatomy-geometry.mjs --all          # 2. GEOMETRY  bake every recipe → src/assets/anatomy/*.glb + manifest
+node scripts/build-anatomy-geometry.mjs --manifest     #    gate: rebuild the manifest from disk + enforce the budgets (exit 1 = over)
+node scripts/build-anatomy-geometry.mjs --stats --tel-check   #    per-part tris/bytes + ribbon watertightness and thickness
+node scripts/build-mri-grid.mjs          # 3. GRIDS     resample the CC0 OpenNeuro T1w over the AMENDMENT B box
+node scripts/build-ct-grid.mjs           #              resample the NLM Visible Human CT over the same box
+```
+
+Bake a single part with `--part <slug>` (and `--resolution <au>` to override its voxel step);
+`node scripts/build-anatomy-geometry.mjs --list` prints every slug. The SDF kernel, the recipe
+contract and the budget report are documented in [docs/GEOMETRY_PIPELINE.md](docs/GEOMETRY_PIPELINE.md).
+
+`node scripts/build-anatomy-geometry.mjs --all` is the *integrator's* command: it is a hard
+failure if any recipe module fails to load, so a broken recipe blocks re-baking everything else —
+prefer `--part` while iterating.
+
+### Measured budgets (this commit)
+
+| Budget | Cap | Measured | Verdict |
+| --- | --- | --- | --- |
+| Rendered triangles (scene) | ≤ 800,000 | **570,096** | PASS |
+| Committed anatomy GLB payload | ≤ 14 MiB | **13,755,548 B = 13.12 MiB** | PASS |
+| Pooled nucleus payload | ≤ 3 MiB | **2.81 MiB** | PASS |
+| Per-part caps | context ≤ 4 MiB · csf ≤ 1.5 MiB · nucleus ≤ 80 KiB | largest nucleus `ctx-caudate-r` 76 KiB | PASS |
+| Hemisphere shell tri caps (plan §4) | ≤ 90,000 each | `ctx-hemisphere-l` 78,512 · `ctx-hemisphere-r` 80,080 | PASS |
+| Imaging payload | ≤ 10 MiB | **9,132,531 B = 8.71 MiB / 80 files** | PASS |
+
+`node scripts/build-anatomy-geometry.mjs --manifest` is the authority for the first four rows and
+exits 1 on any breach; `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` enforce the last row.
+
+### Honest limits (v7)
+
+- **The cortical ribbon is derived, not scanned.** BodyParts3D carries **no explicit cortical
+  gray-matter surface** — the archive's only cortical concept resolves to the hippocampus. The
+  ribbon is therefore the standard construction: take the registered cerebral white-matter surface
+  and band it outward by the cortical thickness (**2.9 au ≈ 3.5 mm**, plan §1's 3–4 mm window),
+  then carve the interhemispheric fissure, the Sylvian cleft and the ventricular space. It is a
+  *modelled* pial surface, not a segmentation of a real cortex, and it inherits the white-matter
+  surface's gyral relief rather than reproducing true sulcal detail.
+- **Four tracts have no meshes.** The optic radiation, cingulum, uncinate fasciculus and superior
+  longitudinal fasciculus are **authored as waypoint paths** (like the v1–v6 tracts) because the
+  source archive contains no fibre geometry. They are schematic centre-lines, not tractography.
+- **CT does not cover the hemispheres.** The Visible Human series ends at **y ≈ 36.25 au**; see
+  *How it renders* above. The CT affine is deliberately **byte-identical to v4** (no re-fit), so
+  the 13 existing level anchors and their CT samples are unchanged — aligning the CT apex with the
+  MRI's would need a ≈ +45 au translation and would move every existing level, which is a separate
+  re-registration and explicitly out of scope.
+- **Registration is approximate and disclosed.** Telencephalon meshes inherit the documented
+  registration residuals of the brainstem bake (midline ≤ 1.25 au) and the derived ribbon adds the
+  thickness model's own error on top.
+- **Some records are content-only.** 20 telencephalon records are deliberately not drawn as 3D
+  bodies (see `TEL_CONTENT_ONLY_IDS`) — either because another record already draws their mesh, or
+  because they are sub-regions of one mesh. They remain fully selectable from the tree, search and
+  plates, and the live section still paints their region.
+- **One budget cap moved.** The **pooled nucleus payload cap 2.5 MiB → 3 MiB** is the single
+  number v7 raises, and it is documented with its measurements in
+  `scripts/build-anatomy-geometry.mjs` (`BUDGETS`). Resolution was cut first, as the plan
+  requires. The two run-level constraints — **800,000 rendered triangles** and **14 MiB committed
+  anatomy payload** — are unchanged and pass.
+
 ## Scripts
 
 | Script | What it does |
@@ -150,7 +298,7 @@ The live toolbar lists "open source ↗" chips for the section's level: the mapp
 | `node scripts/build-mri-grid.mjs` | MRI bake gate: resamples the CC0 OpenNeuro T1w into the canonical uint8 grid + manifest + QA preview PNGs (exit ≠ 0 on registration-QA violation) |
 | `node scripts/build-ct-grid.mjs` | CT bake gate: resamples the NLM Visible Human head CT DICOM series into the canonical uint8 grid (HU) + manifest with `brain`/`bone` windows + QA previews; `--tune` re-runs the registration search (exit ≠ 0 on QA violation) |
 | `node scripts/verify-imaging-v4.mjs` | Real-imagery QA gate (no bundler/browser): re-derives anchoring + reachability of all **49** plane-anchored photographs (24 UBC/Commons v4 + **22 v4b NLM cryosections** + 3 Commons CT) against the clip-slider range, checks every plate is the unambiguous nearest plate at its own plane, checks the transverse `levelId` mappings against `levels.json`, asserts the §2.2 orientation tables of the 2D canvas and the GPU PiP agree with `docs/SECTION_SYNC_PLAN.md` §2.2, checks every verbatim credit line in code + docs (including the NLM acknowledgement and the frozen-2026-09-10-snapshot statement), verifies asset/manifest completeness, prints the per-source payload breakdown and enforces both payload budgets (exit ≠ 0 on any violation) |
-| `node scripts/verify-imaging-v4b.mjs` | **v4b cryosection QA gate** (the `v4c-qa` review artifact): re-derives the v4b claims from the committed sources — the 22 manifest entries against the placement formula, the reachable slider range and the > 1.5 au spacing rule that keeps every plate the nearest at its own plane; each plate's JPEG header, size and curated byte count; the exact NLM structure/marker (`SOF` 528 × 764, `EOI` present, baseline only); the verbatim acknowledgement + fetch date + frozen-snapshot statement in all five records; the NLM host and per-plate index of every `sourceUrl`; no link-out-only source; that the registration record discloses the row direction and the mirror as unproven where their statistics are sub-threshold; the ≤ 8 MiB / ≤ 1.75 MB payload budgets; and that the pre-v4b manifest is intact and still comes first (exit ≠ 0 on any violation) |
+| `node scripts/verify-imaging-v4b.mjs` | **v4b cryosection QA gate** (the `v4c-qa` review artifact): re-derives the v4b claims from the committed sources — the 22 manifest entries against the placement formula, the reachable slider range and the > 1.5 au spacing rule that keeps every plate the nearest at its own plane; each plate's JPEG header, size and curated byte count; the exact NLM structure/marker (`SOF` 528 × 764, `EOI` present, baseline only); the verbatim acknowledgement + fetch date + frozen-snapshot statement in all five records; the NLM host and per-plate index of every `sourceUrl`; no link-out-only source; that the registration record discloses the row direction and the mirror as unproven where their statistics are sub-threshold; the ≤ 8 MiB / ≤ 1.75 MB payload budgets; and that the pre-v4b manifest is intact and still comes first (exit ≠ 0 on any violation). **v7 update:** the total-payload cap this gate enforces was raised **8 MiB → 10 MiB** by `docs/TELENCEPHALON_PLAN.md` §2/§4 (AMENDMENT B makes both uint8 grids `[81, 113, 107]` = 979,371 B each); the cryosection sub-cap is unchanged |
 
 All three gates (`validate`, `check`, `build`) must exit 0; `npm run validate` is the pre-commit data authority (plan §9).
 
@@ -160,14 +308,18 @@ All numbers produced by `npm run validate` at integration time:
 
 | Content | Count |
 | --- | --- |
-| Structures (nuclei, ventricles, surfaces, context) | **118 records** |
-| Fiber tracts & pathways (with waypoints, decussation, somatotopy) | **19 records** |
-| Registry entries (taxonomy tree + search; every authored id registered) | **137 entries** |
-| Canonical levels (rostro-caudal anchors, y = −50…+36 au) | **13 levels** |
-| 2D cross-section plates | **12** (9 transverse + 1 sagittal + 2 coronal) |
-| Clinical syndromes | **24 cards** |
+| Structures (nuclei, ventricles, surfaces, context) | **160 records** |
+| Fiber tracts & pathways (with waypoints, decussation, somatotopy) | **23 records** |
+| Registry entries (taxonomy tree + search; every authored id registered) | **183 entries** |
+| Canonical levels (rostro-caudal anchors, y = −50…+78 au) | **17 levels** |
+| 2D cross-section plates | **15** (11 transverse + 2 sagittal + 2 coronal) |
+| Clinical syndromes | **26 cards** |
 
-Vascular territories are carried as string fields (`bloodSupply` per structure, `vascularTerritory` per syndrome) — no 3D vessel models in v1. Every structure spans at least one of the 13 canonical levels; 9 of those levels have a matching transverse plate, and the plates' `data-structure` slugs resolve against the same registry as the 3D scene (enforced by the validator).
+> Counts as of **v7**: the telencephalon added 42 structure records, 4 tracts, 46 registry entries,
+> 4 canonical levels and 3 plates. Levels now run to y = +78 (the high-convexity anchor); the
+> **original 13 anchors keep their exact y values** — nothing below y = +45 moved.
+
+Vascular territories are carried as string fields (`bloodSupply` per structure, `vascularTerritory` per syndrome) — no 3D vessel models. Every structure spans at least one of the 17 canonical levels; a subset of those levels has a matching transverse plate, and the plates' `data-structure` slugs resolve against the same registry as the 3D scene (enforced by the validator).
 
 ## Project layout
 
@@ -181,9 +333,11 @@ src/
   state/         zustand store (selection, layers, clip planes, quality, syndromes)
   data/          taxonomy.json · levels.json · structures/ · tracts.json ·
                  syndromes/ · plates.json · plates/*.svg · sectionImages.ts
-  assets/anatomy committed v2 GLBs + anatomy-manifest.json (+ nuclei-report.json)
-  assets/imaging committed imaging payload (7.30 MiB): stain plates + mri-t1.bin
-                 + mri-manifest.json + ct.bin + ct-manifest.json
+  assets/anatomy committed v2 GLBs + anatomy-manifest.json (+ nuclei-report.json):
+                 106 parts, 570,096 rendered tris, 13.12 MiB (v7)
+  assets/imaging committed imaging payload (8.71 MiB in 80 files, cap 10 MiB from
+                 v7 AMENDMENT B): stain plates + mri-t1.bin + mri-manifest.json
+                 + ct.bin + ct-manifest.json, both grids [81, 113, 107]
   components/    Header, SearchBox, TaxonomyTree, LevelRuler, InfoPanel,
                  PlatesTab, PlateRenderer, SyndromeBrowser, ReferencesModal, Legend
   components/viewer3d/   R3F canvas, GLB-backed meshes, tract tubes, clip

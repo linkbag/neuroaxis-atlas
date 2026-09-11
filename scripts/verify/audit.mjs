@@ -530,6 +530,268 @@ try {
   realFailures.length === 0 ? ok('no failed network requests') : bad(`failed requests: ${realFailures.slice(0,3).join(' || ')}`)
   const badRes = badResponses.filter((r) => !/favicon/i.test(r))
   badRes.length === 0 ? ok('no HTTP 4xx/5xx responses') : bad(`bad responses: ${badRes.slice(0,3).join(' || ')}`)
+  /* ======================================================================
+   * L — v7 TELENCEPHALON checks (docs/TELENCEPHALON_PLAN.md section 5 and 9)
+   *
+   * Appended by v7b-integration. APPEND-ONLY: the v6 run's integration task
+   * also edits this file, so this group adds a new lettered block and changes
+   * nothing above it.
+   *
+   * Every assertion uses the existing ok/bad/info helpers and DOM the app
+   * already ships (the region tree, the plate chips, the header preset buttons,
+   * the section plane sliders and the .section-canvas sampler that section E
+   * defines). The app exposes no debug globals and this block invents none.
+   *
+   * Message strings here are built with concatenation rather than template
+   * literals: a stray backtick inside a comment that sits inside a template
+   * literal silently terminates that literal, and the resulting parse error
+   * points at an unrelated later line. Concatenation removes that trap.
+   *
+   * NOTE ON THE BROWSER (plan C12): this whole file needs headless Chrome,
+   * which cannot start in some restricted sandboxes. Where it cannot, the
+   * node-only lane is the evidence: npm run verify:pipeline independently
+   * proves the +58 plane paints, npm run validate proves the four levels and
+   * the telencephalon taxonomy, and the anatomy build CLI proves the budgets.
+   * ==================================================================== */
+
+  /* L1 — the DEFAULT preset is Brainstem focus and it does not hide the
+   * brainstem (section 9: "assert brainstem structures remain visible /
+   * selectable at default framing"). This runs FIRST because the preset is boot
+   * state — the checks below navigate the tree and the plates. */
+  const defaultPreset = await evaluate(`(() => {
+    const presets = [...document.querySelectorAll('.header-presets button')];
+    const active = presets.filter((b) => b.getAttribute('aria-pressed') === 'true')
+      .map((b) => b.textContent.trim());
+    const labels = presets.map((b) => b.textContent.trim());
+    const offBrainstem = [];
+    for (const region of document.querySelectorAll('.tree-region')) {
+      const heading = region.querySelector('.tree-region-name');
+      const name = (heading && heading.textContent ? heading.textContent : '').toLowerCase();
+      if (name.indexOf('telencephalon') !== -1) continue;
+      if (!/(medulla|pons|midbrain|diencephalon|cerebellum)/.test(name)) continue;
+      for (const row of region.querySelectorAll('.tree-leaf-row')) {
+        if (row.classList.contains('is-off')) offBrainstem.push((row.textContent || '').trim().slice(0, 24));
+      }
+    }
+    return { active, labels, offBrainstem: offBrainstem.slice(0, 8), offCount: offBrainstem.length };
+  })()`)
+  const focusActive = (defaultPreset.active || []).some((label) => /brainstem focus/i.test(label))
+  if (focusActive) {
+    ok('default preset is Brainstem focus (header reports "' + defaultPreset.active.join(', ') + '")')
+  } else {
+    bad('the default preset is not Brainstem focus (active: '
+      + ((defaultPreset.active || []).join(', ') || 'none')
+      + ' of ' + (defaultPreset.labels || []).join(', ') + ')')
+  }
+  if (defaultPreset.offCount === 0) {
+    ok('no brainstem/diencephalon/cerebellum tree row is layer-off at default framing')
+  } else {
+    bad(defaultPreset.offCount + ' brainstem-family tree row(s) are dimmed at default framing: '
+      + (defaultPreset.offBrainstem || []).join(', '))
+  }
+
+  /* L2 — the tree shows the telencephalon region with its five subdivisions. */
+  const telTreeOpen = await evaluate(`(() => {
+    const headings = [...document.querySelectorAll('.tree-region-name')];
+    const heading = headings.find((h) => /telencephalon/i.test(h.textContent || ''));
+    if (!heading) return 'no telencephalon region';
+    const region = heading.closest('.tree-region');
+    const row = region && region.querySelector('.tree-region-row');
+    if (row && row.getAttribute('aria-expanded') !== 'true') row.click();
+    return 'opened';
+  })()`)
+  await sleep(900)
+  const telSubdivisions = await evaluate(`(() => {
+    const headings = [...document.querySelectorAll('.tree-region-name')];
+    const heading = headings.find((h) => /telencephalon/i.test(h.textContent || ''));
+    if (!heading) return [];
+    const region = heading.closest('.tree-region');
+    if (!region) return [];
+    return [...region.querySelectorAll('.tree-sub-name')].map((el) => el.textContent.trim());
+  })()`)
+  const wantedSubdivisions = ['cerebral cortex', 'basal ganglia', 'limbic system',
+    'telencephalic white matter', 'lateral ventricles']
+  if (String(telTreeOpen) !== 'opened') {
+    bad('telencephalon region missing from the taxonomy tree (' + String(telTreeOpen) + ')')
+  } else {
+    const lowered = telSubdivisions.map((name) => name.toLowerCase())
+    const missing = wantedSubdivisions.filter((want) => !lowered.some((have) => have.indexOf(want) !== -1))
+    if (missing.length === 0) {
+      ok('telencephalon region in the tree with all ' + wantedSubdivisions.length
+        + ' subdivisions (' + telSubdivisions.join(' / ') + ')')
+    } else {
+      bad('telencephalon subdivisions missing from the tree: ' + missing.join(', ')
+        + ' (have: ' + telSubdivisions.join(' / ') + ')')
+    }
+  }
+
+  /* L3 — a telencephalon structure is selectable and the info panel fills. */
+  const pickTelSub = await evaluate(`(() => {
+    const headings = [...document.querySelectorAll('.tree-region-name')];
+    const heading = headings.find((h) => /telencephalon/i.test(h.textContent || ''));
+    if (!heading) return 'no telencephalon region';
+    const region = heading.closest('.tree-region');
+    if (!region) return 'no region node';
+    const sub = [...region.querySelectorAll('.tree-sub-row')]
+      .find((el) => /basal ganglia/i.test(el.textContent || ''));
+    if (!sub) return 'no basal ganglia subdivision';
+    if (sub.getAttribute('aria-expanded') !== 'true') sub.click();
+    return 'opened';
+  })()`)
+  await sleep(800)
+  const telLeafName = await evaluate(`(() => {
+    const headings = [...document.querySelectorAll('.tree-region-name')];
+    const heading = headings.find((h) => /telencephalon/i.test(h.textContent || ''));
+    if (!heading) return 'no region';
+    const region = heading.closest('.tree-region');
+    const leaf = region && region.querySelector('.tree-leaf-row');
+    if (!leaf) return 'no leaf rendered';
+    leaf.click();
+    return (leaf.textContent || '').trim().slice(0, 40);
+  })()`)
+  await sleep(1300)
+  const telPanel = await evaluate(`(() => {
+    const el = document.querySelector('.info-panel');
+    if (!el) return null;
+    const nameEl = el.querySelector('.info-name');
+    return {
+      name: nameEl && nameEl.textContent ? nameEl.textContent.trim() : '',
+      chars: el.innerText.length,
+      sections: [...el.querySelectorAll('.info-section h3')].length,
+    };
+  })()`)
+  if (String(pickTelSub).indexOf('opened') === 0 && telPanel !== null && telPanel.chars > 200 && telPanel.name !== '') {
+    ok('telencephalon structure selectable from the tree (' + String(telLeafName)
+      + ' -> info panel "' + telPanel.name + '", ' + telPanel.chars + ' chars, '
+      + telPanel.sections + ' sections)')
+  } else {
+    bad('telencephalon selection failed (' + String(pickTelSub) + ' / ' + String(telLeafName)
+      + ' / ' + JSON.stringify(telPanel) + ')')
+  }
+
+  /* L4 — the new level anchors exist and are reachable, and the live section
+   * paints at y = +58. Reachability is proven the way a user reaches it: move
+   * the transverse plane slider to +58 and require the canvas to repaint. */
+  const levelAnchors = await evaluate(`(() => {
+    const text = document.body.innerText;
+    const ids = ['lvl-tel-thalamostriate', 'lvl-tel-basal-ganglia',
+      'lvl-tel-centrum-semiovale', 'lvl-tel-convexity'];
+    return { idsInDom: ids.filter((id) => text.indexOf(id) !== -1) };
+  })()`)
+
+  await evaluate(clickText('Plates'))
+  await sleep(1200)
+  await evaluate(clickText('Live section'))
+  await sleep(5000)
+  const beforeTel = await evaluate(sectionStats)
+
+  const setTransverse = await evaluate(`(() => {
+    const sliders = [...document.querySelectorAll('.section-plane-sliders input[type=range]')];
+    const r = sliders.find((x) => /transverse/i.test(x.getAttribute('aria-label') || '')
+      || /transverse/i.test(x.className));
+    if (!r) return 'no transverse plane slider';
+    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    setter.call(r, '58');
+    r.dispatchEvent(new Event('input', { bubbles: true }));
+    return 'set to ' + r.value + ' (range ' + r.min + '..' + r.max + ')';
+  })()`)
+  await sleep(3000)
+  const afterTel = await evaluate(sectionStats)
+  const reached58 = String(setTransverse).indexOf('set to 58') !== -1
+  if (reached58 && beforeTel && afterTel && beforeTel.hash !== afterTel.hash) {
+    ok('transverse plane reaches y = +58 and the live section repaints (' + String(setTransverse)
+      + '; hash ' + beforeTel.hash + ' -> ' + afterTel.hash + ')')
+  } else {
+    bad('y = +58 was not reachable / did not repaint (' + String(setTransverse)
+      + ' -> ' + JSON.stringify(afterTel) + ')')
+  }
+  if (afterTel && afterTel.painted > 50) {
+    ok('live section paints at y = +58 (' + afterTel.painted + '/' + afterTel.sampled
+      + ' non-background samples)')
+  } else {
+    bad('live section blank at y = +58: ' + JSON.stringify(afterTel))
+  }
+  if (levelAnchors.idsInDom.length > 0) {
+    ok('telencephalon level anchors rendered in the level ruler ('
+      + levelAnchors.idsInDom.join(', ') + ')')
+  } else {
+    info('level anchor ids are not text in the DOM (the ruler may render names only) - '
+      + 'the four anchors are proven by npm run validate + verify:plane + verify:pipeline')
+  }
+
+  /* L5 — CT coverage honesty above the Visible Human series' measured apex
+   * (docs/TELENCEPHALON_PLAN.md section 2 and 9, plan C3). */
+  await evaluate(`(() => {
+    const b = [...document.querySelectorAll('button')].find((x) => x.textContent.trim() === 'CT');
+    if (b) b.click();
+  })()`)
+  await sleep(2500)
+  const ctNote = await evaluate(`(() => {
+    const note = document.querySelector('.section-alignment-note.is-ct-coverage');
+    const creditEl = document.querySelector('.section-credit');
+    const hintEl = document.querySelector('.section-imagery-hint');
+    return {
+      text: note && note.textContent ? note.textContent.trim() : '',
+      credit: creditEl && creditEl.textContent ? creditEl.textContent.trim() : '',
+      hint: hintEl && hintEl.textContent ? hintEl.textContent.trim() : '',
+    };
+  })()`)
+  if (/36\.\d+/.test(ctNote.text) && /(MRI|magnetic resonance)/i.test(ctNote.text)) {
+    ok('CT states its measured coverage limit above the source ("'
+      + ctNote.text.slice(0, 130) + '...")')
+  } else {
+    bad('CT coverage statement missing at y = +58 (note: "' + String(ctNote.text).slice(0, 90)
+      + '" hint: "' + String(ctNote.hint).slice(0, 60) + '")')
+  }
+  if (/openneuro/i.test(ctNote.credit)) {
+    ok('MRI is the modality of record above the CT limit (credit "'
+      + ctNote.credit.slice(0, 46) + '")')
+  } else {
+    info('credit while CT is requested above its coverage: "' + ctNote.credit.slice(0, 60) + '"')
+  }
+
+  /* L6 — the telencephalon plates are present and render. */
+  await evaluate(clickText('Author plate'))
+  await sleep(1200)
+  const telPlate = await evaluate(`(() => {
+    const chips = [...document.querySelectorAll('.plate-chip')];
+    const tel = chips.filter((c) => /telencephalon/i.test(c.textContent || ''));
+    if (tel.length === 0) return { found: false, count: 0, chips: chips.length, label: '' };
+    tel[0].click();
+    return {
+      found: true,
+      count: tel.length,
+      chips: chips.length,
+      label: tel[0].textContent.trim().slice(0, 60),
+    };
+  })()`)
+  await sleep(1800)
+  const telPlateDrawn = await evaluate(`({
+    svg: document.querySelectorAll('.plate-stage svg').length,
+    labels: document.querySelectorAll('.plate-stage svg text').length,
+  })`)
+  if (telPlate.found && telPlateDrawn.svg > 0) {
+    ok('telencephalon plate present and renders (' + telPlate.count + ' of ' + telPlate.chips
+      + ' chips; "' + telPlate.label + '" -> ' + telPlateDrawn.svg + ' svg, '
+      + telPlateDrawn.labels + ' label elements)')
+  } else {
+    bad('telencephalon plate missing or blank (' + JSON.stringify(telPlate) + ' / '
+      + JSON.stringify(telPlateDrawn) + ')')
+  }
+
+  /* L7 — runtime hygiene during the telencephalon pass: the same collectors as
+   * section K, re-read so a failure introduced by the new geometry or presets
+   * is attributed to this block rather than only to the earlier one. */
+  const telErrors = [...new Set([...exceptions, ...consoleErrors])].filter(
+    (e) => !/favicon/i.test(e) && !/404 \(Not Found\)/.test(e),
+  )
+  if (telErrors.length === 0) {
+    ok('no page exceptions or console errors during the telencephalon checks')
+  } else {
+    bad(telErrors.length + ' runtime error(s) during the telencephalon checks: '
+      + telErrors.slice(0, 3).join(' || '))
+  }
+
 } catch (error) {
   bad(`audit aborted: ${error instanceof Error ? error.message : String(error)}`)
 } finally {

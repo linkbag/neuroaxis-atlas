@@ -16,15 +16,44 @@ import {
   getPlate,
   getSyndrome,
   platesForLevel,
+  taxonomy,
 } from '../data/load'
+// The canonical slider ranges — the single declaration of the canonical box
+// (AMENDMENT B, docs/TELENCEPHALON_PLAN.md §2). Imported for the load-time
+// invariant check on DEFAULT_CLIP below, so "the defaults never moved" and "the
+// defaults are inside every bound" are enforced rather than asserted in prose.
+import { CLIP_BOUNDS } from '../components/viewer3d/clipPlanes'
 
 export type ActiveTab = '3d' | 'plates' | 'syndromes'
-export type ViewPreset = 'all' | 'nuclei' | 'tracts' | 'clinical-motor'
+/**
+ * View presets (plan §1.1 feature 2 + docs/TELENCEPHALON_PLAN.md §5).
+ *
+ * `all` / `nuclei` / `tracts` / `clinical-motor` are the v1–v6 set and keep
+ * their exact meaning; `brainstem-focus` / `deep-structures` / `whole-brain` /
+ * `cortex-only` are the v7 telencephalon-aware additions.
+ */
+export type ViewPreset =
+  | 'all'
+  | 'nuclei'
+  | 'tracts'
+  | 'clinical-motor'
+  | 'brainstem-focus'
+  | 'deep-structures'
+  | 'whole-brain'
+  | 'cortex-only'
 /** Rendering-quality tier (realism plan §1 Layer 3 post section, post-fx task). */
 export type RenderQuality = 'high' | 'balanced'
 
 /** localStorage key persisting the rendering-quality toggle. */
 export const RENDER_QUALITY_STORAGE_KEY = 'neuroaxis.quality'
+
+/**
+ * localStorage key persisting the chosen view preset (v7). Written by
+ * `applyViewPreset` and read once at boot, exactly like the quality toggle —
+ * the preset is a user preference, not a session value, so a returning visitor
+ * gets their own framing back rather than the fresh-visitor default.
+ */
+export const VIEW_PRESET_STORAGE_KEY = 'neuroaxis.viewPreset'
 
 /**
  * Balanced fallback for weak setups (post-fx guard): no WebGL2 (the post
@@ -262,6 +291,23 @@ function persistSectionUnderlay(settings: SectionUnderlay): void {
 export interface AtlasLayers {
   regions: Set<Region>
   kinds: Set<Kind>
+  /**
+   * ── v7 structure-level visibility (docs/TELENCEPHALON_PLAN.md §5, plan C11) ─
+   *
+   * `regions`/`kinds` are the v1–v6 layer model and can only express
+   * region-or-kind granularity. §5's presets are STRUCTURE-level statements —
+   * "Brainstem focus: cortex hidden except a faint outline", "Deep structures:
+   * ghost cortex + basal ganglia/limbic emphasised" — which that model cannot
+   * represent: the cortex spans a whole region, and the basal ganglia/limbic
+   * sets cut across the `nucleus` kind.
+   *
+   * So the two new sets are additive and OPTIONAL in behaviour: an empty set
+   * means "behave exactly as v6 did", which is why the region/kind toggles in
+   * the Legend and the existing presets keep working untouched. Record ids, not
+   * slugs — the same ids the tree, search, plates and 3D selection all use.
+   */
+  hidden: ReadonlySet<string>
+  emphasis: ReadonlySet<string>
 }
 
 export interface SelectOptions {
@@ -326,10 +372,50 @@ export interface AtlasActions {
 
 export type AtlasStore = AtlasState & AtlasActions
 
-export const VIEW_PRESETS: Record<
-  ViewPreset,
-  { label: string; hint: string; regions: readonly Region[]; kinds: readonly Kind[] }
-> = {
+/* ------------------------------------------------------- v7 view presets */
+
+/** Record ids of one telencephalon subdivision (the taxonomy is authoritative). */
+function telSubdivisionIds(subdivision: string): string[] {
+  return taxonomy
+    .filter((entry) => entry.region === 'telencephalon' && entry.subdivision === subdivision)
+    .map((entry) => entry.id)
+}
+
+/** Every record id outside the telencephalon — the brainstem + cerebellum set. */
+function nonTelencephalonIds(): string[] {
+  return taxonomy.filter((entry) => entry.region !== 'telencephalon').map((entry) => entry.id)
+}
+
+const CORTEX_IDS = telSubdivisionIds('Cerebral cortex')
+const BASAL_GANGLIA_IDS = telSubdivisionIds('Basal ganglia')
+const LIMBIC_IDS = telSubdivisionIds('Limbic system')
+
+/**
+ * The telencephalon subdivisions that make up §5's "cortex" for the purposes of
+ * the presets: the cortical surface records, the underlying white matter and the
+ * ventricular system. The basal ganglia and the limbic structures are NOT part
+ * of it — they are the "deep structures" the Deep-structures preset emphasises
+ * and the Brainstem-focus preset keeps visible.
+ */
+const CORTEX_PRESET_IDS = [
+  ...CORTEX_IDS,
+  ...telSubdivisionIds('Telencephalic white matter'),
+  ...telSubdivisionIds('Lateral ventricles'),
+]
+
+/** One preset's definition: layer sets plus the v7 structure-level extras. */
+export interface ViewPresetDefinition {
+  label: string
+  hint: string
+  regions: readonly Region[]
+  kinds: readonly Kind[]
+  /** Structure ids hidden under this preset (optional — absent = none). */
+  hidden?: ReadonlySet<string>
+  /** Structure ids lifted by `NucleusMesh`'s emphasis (optional). */
+  emphasis?: ReadonlySet<string>
+}
+
+export const VIEW_PRESETS: Record<ViewPreset, ViewPresetDefinition> = {
   all: { label: 'All', hint: 'Every region and structure kind', regions: ALL_REGIONS, kinds: ALL_KINDS },
   nuclei: { label: 'Nuclei', hint: 'Gray-matter nuclei only, all regions', regions: ALL_REGIONS, kinds: ['nucleus'] },
   tracts: { label: 'Tracts', hint: 'Fiber tracts only, all regions', regions: ALL_REGIONS, kinds: ['tract'] },
@@ -339,6 +425,128 @@ export const VIEW_PRESETS: Record<
     regions: ['midbrain', 'pons', 'medulla'],
     kinds: ['nucleus', 'tract'],
   },
+  /**
+   * §5's first preset and the v7 DEFAULT: the brainstem/diencephalon stays the
+   * visual subject while the hemispheres read as a faint outline. The four
+   * ventricular / white-matter / cortical subdivisions are structure-hidden, so
+   * the ghost shell (keyed to `ctx-cerebral-cortex`) drops to
+   * `GHOST_OUTLINE_OPACITY` in SceneLayers instead of disappearing.
+   *
+   * Why the region set is the non-telencephalon one as well: §5 says "cortex
+   * hidden except a faint outline", i.e. the cortex should NOT be part of the
+   * lit layer stack — but the outline must remain. Keeping `telencephalon` OUT
+   * of `regions` would take the ghost shell with it (the shell is gated on the
+   * region layer), so `telencephalon` stays IN and the hiding is done at
+   * structure level, which is exactly what the new `hidden` set is for.
+   */
+  'brainstem-focus': {
+    label: 'Brainstem focus',
+    hint:
+      'Brainstem-first default: the hemispheres stay as a faint translucent outline '
+      + 'while the brainstem, diencephalon and cerebellum carry the view',
+    regions: ALL_REGIONS,
+    kinds: ALL_KINDS,
+    hidden: new Set(CORTEX_PRESET_IDS),
+  },
+  /** §5: ghost cortex + basal ganglia/limbic emphasised. */
+  'deep-structures': {
+    label: 'Deep structures',
+    hint:
+      'Ghost cortex with the basal ganglia, limbic structures and lateral ventricles '
+      + 'emphasised — the subcortical telencephalon',
+    regions: ALL_REGIONS,
+    kinds: ALL_KINDS,
+    emphasis: new Set([...BASAL_GANGLIA_IDS, ...LIMBIC_IDS]),
+  },
+  /** §5: the whole brain, nothing hidden and nothing lifted. */
+  'whole-brain': {
+    label: 'Whole brain',
+    hint: 'Every structure at its own material — hemispheres, deep structures and brainstem together',
+    regions: ALL_REGIONS,
+    kinds: ALL_KINDS,
+  },
+  /** §5: the cortical envelope alone (the hemispheres and their surfaces). */
+  'cortex-only': {
+    label: 'Cortex only',
+    hint: 'The cerebral cortex and its hemispheres, with the deep and brainstem structures hidden',
+    regions: ALL_REGIONS,
+    kinds: ALL_KINDS,
+    hidden: new Set(nonTelencephalonIds()),
+  },
+}
+
+/**
+ * The layer state a fresh visitor boots into: **Brainstem focus** (§5's
+ * "the default view must stay brainstem-centric", plan step 4). Built from
+ * `VIEW_PRESETS['brainstem-focus']` rather than hand-written, so the default
+ * and the preset button can never mean two different things — the assertion
+ * below proves the correspondence.
+ */
+function defaultLayers(): AtlasLayers {
+  return layersFromPreset('brainstem-focus')
+}
+
+/** The layer state one preset describes (fresh mutable sets). */
+function layersFromPreset(preset: ViewPreset): AtlasLayers {
+  const def = VIEW_PRESETS[preset]
+  return {
+    regions: new Set<Region>(def.regions),
+    kinds: new Set<Kind>(def.kinds),
+    hidden: new Set<string>(def.hidden ?? []),
+    emphasis: new Set<string>(def.emphasis ?? []),
+  }
+}
+
+/**
+ * Persisted preset choice wins; otherwise the v7 default. A stored value is
+ * validated against the preset table, so a stale/corrupt key falls back to the
+ * default instead of throwing. This is the same contract as the quality toggle:
+ * a returning visitor's own choice is never silently overridden.
+ */
+function initialLayers(): AtlasLayers {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const stored = window.localStorage.getItem(VIEW_PRESET_STORAGE_KEY)
+      if (stored !== null && Object.prototype.hasOwnProperty.call(VIEW_PRESETS, stored)) {
+        return layersFromPreset(stored as ViewPreset)
+      }
+    }
+  } catch {
+    /* private-mode / storage disabled — fall through to the default */
+  }
+  return defaultLayers()
+}
+
+export const DEFAULT_LAYERS: AtlasLayers = defaultLayers()
+
+/**
+ * Boot-time invariants of the default framing (plan §5/§9, step 4). Both are
+ * asserted rather than documented because both are acceptance items:
+ *
+ *  1. the default preset reports itself as `brainstem-focus` through
+ *     `viewPresetOf` (so the header shows the right button pressed);
+ *  2. **the default preset does not hide the brainstem** — no record outside
+ *     the telencephalon may appear in its `hidden` set. The plan's wording is
+ *     "assert brainstem structures remain visible/selectable at default
+ *     framing", and this is that assertion at the earliest possible moment.
+ */
+{
+  const preset = viewPresetOf(DEFAULT_LAYERS)
+  if (preset !== 'brainstem-focus') {
+    throw new Error(
+      `store: the default layers do not report the brainstem-focus preset (got ${String(preset)}) — ` +
+        'docs/TELENCEPHALON_PLAN.md §5 makes it the default framing',
+    )
+  }
+  for (const entry of taxonomy) {
+    if (entry.region === 'telencephalon') continue
+    if (DEFAULT_LAYERS.hidden.has(entry.id)) {
+      throw new Error(
+        `store: the default preset hides "${entry.id}" (${entry.region}) — the brainstem must stay ` +
+          'visible/selectable at default framing (docs/TELENCEPHALON_PLAN.md §5/§9)',
+      )
+    }
+  }
 }
 
 function sameSet<T>(reference: readonly T[], actual: ReadonlySet<T>): boolean {
@@ -346,22 +554,73 @@ function sameSet<T>(reference: readonly T[], actual: ReadonlySet<T>): boolean {
   return reference.every((value) => actual.has(value))
 }
 
-/** Which header preset (if any) the current layer combination equals. */
+/**
+ * Which header preset (if any) the current layer combination equals.
+ *
+ * v7: the comparison covers `hidden` and `emphasis` as well. Without that, the
+ * four new presets would be indistinguishable from `all` (they share its
+ * regions/kinds) and the header would light up the wrong button — or none.
+ */
 export function viewPresetOf(layers: AtlasLayers): ViewPreset | null {
   for (const id of Object.keys(VIEW_PRESETS) as ViewPreset[]) {
     const preset = VIEW_PRESETS[id]
-    if (sameSet(preset.regions, layers.regions) && sameSet(preset.kinds, layers.kinds)) return id
+    if (!sameSet(preset.regions, layers.regions)) continue
+    if (!sameSet(preset.kinds, layers.kinds)) continue
+    if (!sameSet([...(preset.hidden ?? [])], layers.hidden)) continue
+    if (!sameSet([...(preset.emphasis ?? [])], layers.emphasis)) continue
+    return id
   }
   return null
 }
 
 const DEFAULT_LEVEL = getLevel('lvl-olivary')
+/**
+ * Default clip state — the AMENDMENT A values, deliberately untouched by the
+ * AMENDMENT B space extension (docs/TELENCEPHALON_PLAN.md §2, task `tel-space`).
+ *
+ * The rule the plan makes binding is "nothing below y = +45 may move": the
+ * default transverse plane stays exactly where a v1–v6 visitor finds it today —
+ * the olivary anchor from levels.json (whose 13 original y values are unchanged;
+ * the four telencephalic anchors +48/+58/+68/+78 are purely additive) — and the
+ * sagittal/coronal defaults stay 0 (the mid-sagittal plane and the coronal plane
+ * through the brainstem centre). None of them was ever a fraction of the box, so
+ * no default scales with the new bounds and no stored click target shifts.
+ *
+ * What DID change is only the RANGE the sliders expose, and that is read from
+ * `CLIP_BOUNDS` (viewer3d/clipPlanes.ts) — x ∈ [−48, 48], y ∈ [−55, 85],
+ * z ∈ [−75, 55] — never restated here. The load-time block below asserts the
+ * two invariants that keeps true: every default is inside every bound, and the
+ * default transverse plane is still the same anchor the old bounds had.
+ */
 const DEFAULT_CLIP: ClipState = {
   x: 0,
   y: DEFAULT_LEVEL ? DEFAULT_LEVEL.y : -34,
   z: 0,
   enabled: false,
   showHelper: false,
+}
+
+{
+  // (1) AMENDMENT B never moves a default: the transverse default is still the
+  //     olivary anchor (levels.json `lvl-olivary`, y = −34 — below +45, so
+  //     inside the OLD box too), and x/z stay 0.
+  if (DEFAULT_CLIP.y >= 45 || DEFAULT_CLIP.x !== 0 || DEFAULT_CLIP.z !== 0) {
+    throw new Error(
+      `store: the default clip state moved with AMENDMENT B (clip ${JSON.stringify(DEFAULT_CLIP)}) — ` +
+        'nothing below y = +45 may move (docs/TELENCEPHALON_PLAN.md §2)',
+    )
+  }
+  // (2) Every default is inside the canonical slider ranges the UI exposes, so
+  //     the sliders can never mount with a thumb outside their own min/max.
+  for (const axis of ['x', 'y', 'z'] as const) {
+    const bound = CLIP_BOUNDS[axis]
+    if (DEFAULT_CLIP[axis] < bound.min || DEFAULT_CLIP[axis] > bound.max) {
+      throw new Error(
+        `store: default clip.${axis} = ${DEFAULT_CLIP[axis]} is outside CLIP_BOUNDS ` +
+          `[${bound.min}, ${bound.max}]`,
+      )
+    }
+  }
 }
 
 export const useAtlasStore = create<AtlasStore>()((set) => ({
@@ -372,7 +631,7 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
   clip: { ...DEFAULT_CLIP },
   snapToPlate: true,
   explode: 0,
-  layers: { regions: new Set<Region>(ALL_REGIONS), kinds: new Set<Kind>(ALL_KINDS) },
+  layers: initialLayers(),
   labelVisibility: true,
   syndromeId: null,
   referencesOpen: false,
@@ -426,13 +685,19 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
       return { layers: { ...s.layers, kinds } }
     }),
 
-  applyViewPreset: (preset) =>
-    set(() => {
-      const def = VIEW_PRESETS[preset]
-      return {
-        layers: { regions: new Set<Region>(def.regions), kinds: new Set<Kind>(def.kinds) },
+  applyViewPreset: (preset) => {
+    // Persisted like the quality toggle (v7, plan step 4): the preset is a user
+    // preference, so a returning visitor gets their own framing back. A failed
+    // write (private mode) must never block the switch itself.
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(VIEW_PRESET_STORAGE_KEY, preset)
       }
-    }),
+    } catch {
+      /* storage unavailable — the preset still applies for this session */
+    }
+    set(() => ({ layers: layersFromPreset(preset) }))
+  },
 
   setLabelVisibility: (value) => set({ labelVisibility: value }),
 

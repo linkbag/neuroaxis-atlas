@@ -1,0 +1,289 @@
+[
+  {
+    "id": "nuc-hippocampus",
+    "name": "Hippocampus",
+    "synonyms": ["hippocampus proper", "cornu ammonis", "Ammon horn", "hippocampal formation"],
+    "region": "telencephalon",
+    "subdivision": "Limbic system",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The allocortical engine of declarative memory: the cornu ammonis (CA1–CA3) and dentate gyrus form the trisynaptic circuit that converts a single experience into a distributed cortical memory trace, and place cells and grid-like codes in this circuit build the cognitive map of space. It is the classic site of long-term potentiation, the cellular model of learning.",
+    "connections": {
+      "afferent": [
+        "Perforant path from the entorhinal cortex (layer II) to the dentate gyrus and CA3; temporoammonic path (layer III) to CA1",
+        "Septal (medial septal/diagonal band) cholinergic and GABAergic input; supramammillary and hypothalamic afferents",
+        "Noradrenergic locus coeruleus, serotonergic raphe and dopaminergic ventral tegmental input"
+      ],
+      "efferent": [
+        "Fornix: subicular and CA1/CA3 axons leave as the fimbria and fornix to the mammillary bodies, anterior thalamus (indirectly, via the mammillothalamic tract) and septal nuclei",
+        "Subiculum to the entorhinal cortex, amygdala and prefrontal cortex",
+        "Commissural fibres through the hippocampal commissure (dorsal and ventral hippocampal commissures) to the contralateral hippocampus"
+      ]
+    },
+    "bloodSupply": "PCA — hippocampal branches of the posterior cerebral artery for the body, tail and most of the head; the anterior choroidal artery (internal carotid) supplies the uncus, amygdala and anterior hippocampal head, and the posterior choroidal arteries supply the adjoining choroid plexus.",
+    "clinical": [
+      {
+        "syndrome": "Bilateral hippocampal infarction (PCA or global hypoxia)",
+        "findings": "Dense anterograde amnesia with preserved remote memory and procedural learning (patient H.M. after bilateral temporal lobectomy; CA1 Sommer sector is the most vulnerable zone to hypoxia).",
+        "vascular": "Posterior cerebral artery (hippocampal branches) or hypoxic-ischaemic injury"
+      },
+      {
+        "syndrome": "Mesial temporal sclerosis and temporal-lobe epilepsy",
+        "findings": "Hippocampal atrophy with T2 hyperintensity and loss of internal architecture produces drug-resistant focal seizures with déjà vu, epigastric aura and automatisms; anterior temporal lobectomy is curative in selected patients.",
+        "note": "Sclerotic rather than vascular — but the surgical anatomy is the hippocampal segment shown here"
+      },
+      {
+        "syndrome": "Alzheimer disease",
+        "findings": "Entorhinal and hippocampal neurofibrillary degeneration explains the earliest and most disabling symptom, episodic memory failure, with hippocampal atrophy on coronal MRI.",
+        "note": "Neurodegenerative (Braak staging)"
+      },
+      {
+        "syndrome": "Transient global amnesia",
+        "findings": "Abrupt, self-limited anterograde amnesia with repetitive questioning and preserved identity, associated with punctate hippocampal diffusion restriction in some patients.",
+        "note": "Mechanism debated (venous congestion, migraine, seizure); the hippocampus is the common final pathway"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "nuc-dentate-gyrus",
+    "name": "Dentate gyrus",
+    "synonyms": ["gyrus dentatus", "fascia dentata"],
+    "region": "telencephalon",
+    "subdivision": "Limbic system",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The thin, three-layered (allocortical) blade of cortex tucked between the hippocampus and the subiculum: it is the first relay of the trisynaptic circuit, receiving the perforant path and sending mossy fibres to CA3, and it is one of the very few sites of adult neurogenesis in the human brain. Its granule-cell layer acts as a pattern separator that converts similar experiences into distinguishable memory codes.",
+    "connections": {
+      "afferent": [
+        "Perforant path from the entorhinal cortex (layer II) onto granule-cell dendrites",
+        "Hilar mossy cells and commissural fibres from the contralateral dentate gyrus via the hippocampal commissure"
+      ],
+      "efferent": [
+        "Mossy fibres to CA3 pyramidal cells (the second leg of the trisynaptic circuit)",
+        "Hilar projections to the septum and, through the fimbria, to the fornix"
+      ]
+    },
+    "bloodSupply": "PCA — hippocampal branches of the posterior cerebral artery (the dentate lies within the hippocampal formation territory); the anterior (uncal) end also receives anterior choroidal branches.",
+    "clinical": [
+      {
+        "syndrome": "Mesial temporal sclerosis (granule-cell dispersion)",
+        "findings": "The dentate gyrus shows granule-cell dispersion and aberrant mossy-fibre sprouting in sclerotic hippocampi, creating recurrent excitatory circuits that sustain focal seizures.",
+        "note": "Epileptogenic remodelling rather than vascular injury"
+      },
+      {
+        "syndrome": "Hippocampal infarction with memory loss",
+        "findings": "Because it is inseparable from the hippocampal formation in the PCA territory, dentate infarction always presents as part of a medial temporal infarct: anterograde amnesia with hemianopia, never as an isolated syndrome.",
+        "vascular": "Posterior cerebral artery (hippocampal branches)"
+      },
+      {
+        "syndrome": "Adult neurogenesis and hippocampal function",
+        "findings": "Reduced dentate neurogenesis is reported in chronic stress, depression and epilepsy models, and is stimulated by exercise and antidepressants — the anatomical basis of the dentate gyrus as a plasticity hub.",
+        "note": "Preclinical and human-postmortem evidence"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [16, 14, -2],
+    "size3d": [1.6, 8, 14],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "nuc-amygdala",
+    "name": "Amygdala",
+    "synonyms": ["amygdaloid body", "amygdaloid complex", "corpus amygdaloideum"],
+    "region": "telencephalon",
+    "subdivision": "Limbic system",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The threat-detection and emotional-salience centre of the temporal lobe: the basolateral complex evaluates sensory and social signals, the central nucleus drives the autonomic and hormonal fear response through the hypothalamus and brainstem, and the corticomedial group handles olfactory and reproductive input. It also tags emotionally significant events so that the hippocampus and cortex store them preferentially.",
+    "connections": {
+      "afferent": [
+        "Sensory cortex and inferior temporal/fusiform cortex (visual and auditory objects, faces)",
+        "Thalamic (pulvinar, medial geniculate) fast subcortical route for threat; hippocampal and entorhinal input for context",
+        "Brainstem visceral afferents (nucleus of the solitary tract, parabrachial nucleus) and hypothalamic input"
+      ],
+      "efferent": [
+        "Stria terminalis and ventral amygdalofugal pathway to the septum, hypothalamus, orbitofrontal cortex and bed nucleus of the stria terminalis",
+        "Central nucleus to the periaqueductal gray, dorsal motor nucleus of the vagus, parabrachial and reticular nuclei (freezing, tachycardia, cortisol release)",
+        "Projections to the ventral striatum and medial dorsal thalamus (emotional modulation of the limbic loop)"
+      ]
+    },
+    "bloodSupply": "Anterior choroidal artery (internal carotid) for the amygdala and the anterior uncus, with a variable contribution from the MCA (temporal branches) and the posterior communicating/anterior temporal arteries; venous drainage through the basal vein of Rosenthal.",
+    "clinical": [
+      {
+        "syndrome": "Anterior choroidal artery infarct",
+        "findings": "Contralateral hemiplegia, hemianaesthesia and hemianopia (internal capsule, posterior limb; thalamus; optic radiation) — the amygdala lies in the same territory, and its infarction is usually overshadowed by the capsular deficit.",
+        "vascular": "Anterior choroidal artery"
+      },
+      {
+        "syndrome": "Klüver-Bucy syndrome",
+        "findings": "Bilateral amygdalectomy (or herpes encephalitis, trauma, frontotemporal dementia) produces hyperorality, hypersexuality, placidity, visual agnosia and hypermetamorphosis.",
+        "note": "Structural/infectious; experimentally reproduced in monkeys by bilateral temporal lobectomy"
+      },
+      {
+        "syndrome": "Urbach-Wiethe disease (bilateral amygdala calcification)",
+        "findings": "Selective bilateral amygdala destruction abolishes the normal fear response to threat and impairs recognition of fear in faces while leaving declarative memory and intellect intact.",
+        "note": "Genetic (ECM1 mutation) — the human lesion model of the amygdala"
+      },
+      {
+        "syndrome": "Mesial temporal lobe epilepsy",
+        "findings": "The amygdala is part of the epileptogenic zone in temporal-lobe epilepsy, generating the fear aura and the autonomic features (epigastric rising, tachycardia) that precede impaired awareness.",
+        "note": "Epileptogenic rather than vascular"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "tract-fornix",
+    "name": "Fornix",
+    "synonyms": ["fornix (crus, body, column)", "postcommissural fornix", "precommissural fornix"],
+    "region": "telencephalon",
+    "subdivision": "Limbic system",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "function": "The principal efferent bundle of the hippocampal formation: fibres leave the hippocampus as the fimbria, ascend as the crus, join beneath the corpus callosum as the body (with the commissure of the fornix between the two crura), and split anteriorly — the postcommissural column to the mammillary body (the Papez circuit) and the precommissural fibres to the septal area and hypothalamus. It is the anatomical substrate of hippocampal control over memory-related diencephalic and endocrine circuits.",
+    "connections": {
+      "afferent": [
+        "Subiculum and hippocampal CA1/CA3 pyramidal axons via the fimbria and crus"
+      ],
+      "efferent": [
+        "Mammillary bodies (postcommissural column) → mammillothalamic tract → anterior thalamic nucleus → cingulate gyrus (Papez circuit)",
+        "Septal nuclei and diagonal band (precommissural fibres); hypothalamic and medial prefrontal projections"
+      ]
+    },
+    "bloodSupply": "Supplied along its course by the choroidal arteries (anterior and posterior choroidal) and the pericallosal branches of the ACA near the body; the columns are supplied by small branches of the anterior communicating/anterior cerebral complex.",
+    "clinical": [
+      {
+        "syndrome": "Fornix injury and amnesia",
+        "findings": "Bilateral fornix damage (surgery, colloid cyst, infarction, penetrating trauma) reproduces the mammillary-body form of amnesia: dense anterograde episodic amnesia with relative preservation of recognition and procedural learning.",
+        "vascular": "Pericallosal/anterior cerebral branches, or posterior choroidal artery for the body"
+      },
+      {
+        "syndrome": "Colloid cyst at the foramen of Monro",
+        "findings": "A cyst at the anterior third ventricle compresses both fornices and obstructs the interventricular foramina, causing positional headache, drop attacks and hydrocephalus — a classic cause of reversible amnesia and sudden death.",
+        "vascular": "Not vascular — mechanical/obstructive"
+      },
+      {
+        "syndrome": "Wernicke-Korsakoff syndrome",
+        "findings": "Thiamine deficiency damages the mammillary bodies and the fornix along with the anterior and mediodorsal thalamic nuclei, producing the diencephalic amnestic syndrome with confabulation and oculomotor signs.",
+        "note": "Nutritional/toxic (thiamine deficiency, alcohol-related)"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "tract-fornix-commissure",
+    "name": "Commissure of the fornix",
+    "synonyms": ["hippocampal commissure", "commissura fornicis"],
+    "region": "telencephalon",
+    "subdivision": "Limbic system",
+    "kind": "tract",
+    "laterality": "midline",
+    "color": "#a78bfa",
+    "function": "The midline crossing of hippocampal fibres beneath the splenium of the corpus callosum (the dorsal hippocampal commissure plus the ventral commissure of the fornix): it interconnects the two hippocampal formations, synchronizing their activity and permitting the bilateral hippocampal coordination that supports spatial and contextual memory.",
+    "connections": {
+      "afferent": [
+        "Crus of the fornix of each side (and ventral hippocampal commissural fibres from the subiculum/CA3)"
+      ],
+      "efferent": [
+        "Contralateral hippocampus and dentate gyrus (commissural projections to the hilus and CA3)",
+        "Contralateral fornix and septal region"
+      ]
+    },
+    "bloodSupply": "Branches of the posterior choroidal and pericallosal arteries (its position under the splenium places it in the territory of the posterior choroidal/splenial vessels).",
+    "clinical": [
+      {
+        "syndrome": "Splenial and callosal lesions involving the commissure",
+        "findings": "Lesions of the splenium and the underlying hippocampal commissure produce disconnection of the two hemispheres for visual and memory material: alexia without agraphia with a left occipital infarct, and interhemispheric memory dissociation.",
+        "vascular": "Posterior cerebral artery (splenial branches)"
+      },
+      {
+        "syndrome": "Commissural seizure spread",
+        "findings": "The commissure (with the corpus callosum) is a preferred route of secondary generalization of temporal-lobe seizures, which is why callosotomy is used in catastrophic generalized epilepsy.",
+        "note": "Network/surgical anatomy"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "tract-fimbria",
+    "name": "Fimbria of the hippocampus",
+    "synonyms": ["fimbria hippocampi", "fimbria"],
+    "region": "telencephalon",
+    "subdivision": "Limbic system",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "function": "The white-matter fringe on the medial-dorsal surface of the hippocampus, formed by the axons leaving the subiculum and CA fields; it runs posteriorly, thickens into the crus of the fornix and so constitutes the first segment of the hippocampal outflow. Its fibres are the substrate of the fornix, and sectioning it isolates the hippocampus from the diencephalon.",
+    "connections": {
+      "afferent": [
+        "Alveus fibres from the subiculum, CA1 and CA3 pyramidal cells of the hippocampus"
+      ],
+      "efferent": [
+        "Crus of the fornix and thence the body and columns of the fornix to the mammillary bodies and septal area",
+        "Contralateral hippocampus through the commissure of the fornix"
+      ]
+    },
+    "bloodSupply": "Anterior choroidal artery (anterior part, in the temporal horn) and posterior cerebral artery hippocampal branches (posterior part), the same territories that supply the hippocampus itself.",
+    "clinical": [
+      {
+        "syndrome": "Choroidal fissure and temporal horn surgery",
+        "findings": "The fimbria is the surgical landmark of the choroidal fissure: transection of the fimbria during temporal-lobe surgery disconnects the hippocampus from the fornix and can produce memory decline — the reason hippocampal-sparing approaches were developed.",
+        "note": "Surgical anatomy rather than a spontaneous syndrome"
+      },
+      {
+        "syndrome": "Medial temporal infarct",
+        "findings": "As part of the hippocampal formation in the PCA (and anterior choroidal) territory, fimbrial infarction never occurs alone: it presents with the amnesia and hemianopia of a medial temporal infarct.",
+        "vascular": "Posterior cerebral artery (hippocampal branches) / anterior choroidal artery"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [22, 21, -2],
+    "size3d": [2.2, 3.5, 9],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  }
+]

@@ -4,6 +4,19 @@
 
 **Refreshed 2026-09-10** against the data as committed: registry **137** entries (diencephalon 42 · midbrain 24 · pons 34 · medulla 32 · cerebellum 5); **26** syndrome records in 3 files; **19** authored tract records out of the 36 registry tracts; **12** plates. Every count below — the §2 registry line, the §2 context-layer identity table, the §3 region headings and rows, the §4 gap note, the §5 syndrome table and the §7 "Required" counts — was **recomputed from `src/data` on that date rather than copied**, and each §7 count now equals the number of distinct `data-structure` slugs actually present in that plate's SVG. The refresh was made against `taxonomy.json` as committed at `716896f` (137 entries, 11 `kind:"context"`), i.e. the state *before* `p1-identity` registers the four unowned `ctx-*` silhouettes; `integration-v6` re-reconciles the context table once that lands. Every count here is pinned to that revision: if a later run extends the registry or the level anchors, re-run this reconciliation instead of trusting the numbers (that is a content-run task, recorded in §4.1 for the tract gaps).
 
+**Re-reconciled 2026-09-10 (second pass) — AMENDMENT B delta.** The pinned revision above was overtaken while this document was being verified: a concurrent v7 task landed `docs/TELENCEPHALON_PLAN.md` §2 (AMENDMENT B) in `src/data/taxonomy.json` and `src/data/levels.json` (checkpoint commit `d1cefef`), adding the **telencephalon** region. The committed data is therefore no longer the 137-entry/13-anchor revision reconciled above. Current, verified from `src/data` on 2026-09-10:
+
+| what | pinned revision (`716896f`) | current revision (`d1cefef`) |
+| --- | --- | --- |
+| registry entries | 137 (42/24/34/32/5) | **179** — diencephalon **38** · telencephalon **46** · midbrain 24 · pons 34 · medulla 32 · cerebellum 5 |
+| registry by kind | nucleus 71 · context 11 · tract 36 · ventricle 3 · surface 16 | nucleus **81** · tract **51** · surface **25** · context **12** · ventricle **10** |
+| registry entries with an authored record | 137 | **137** — 42 telencephalon entries are **registry-only stubs awaiting content** |
+| `levels.json` anchors | 13 | **17** (the 13 below + `lvl-tel-thalamostriate` +48, `lvl-tel-basal-ganglia` +58, `lvl-tel-centrum-semiovale` +68, `lvl-tel-convexity` +78) |
+| plate SVGs | 12 | **12** (unchanged) |
+| syndrome records | 24 → 26 with this run's additions | **26** (unchanged by AMENDMENT B) |
+
+Nothing below was deleted, renumbered or silently restated. The §3–§7 tables remain the **authored brainstem/diencephalon/cerebellum reconciliation** — 42/24/34/32/5 rows, 122 plate slugs, 26 syndromes — and every count in them was re-checked against the current data and still holds for that set; the four places where AMENDMENT B changes a statement are called out in §1, §2 (*Registry conventions* and *Context layer identity*), §3.6 and §4.1. Authoring the 42 telencephalon registry stubs is the v7 run's task (`docs/TELENCEPHALON_PLAN.md` §7 task 6, `tel-content`, which owns the telencephalon content section of this file); this run does not author them.
+
 **Conventions (from ENGINEERING_PLAN §2, §3, §6):**
 - Transverse plates: dorsal at top, **patient LEFT on image RIGHT** (clinical convention). Sagittal: anterior left, superior top. Coronal: patient left on image right, superior top.
 - Orientation badges L/R (transverse, coronal) and A/P/S/I (sagittal) drawn in the SVG.
@@ -14,7 +27,7 @@
 
 ---
 
-## 1. Level table (`src/data/levels.json`) — 13 entries, authoritative y anchors
+## 1. Level table (`src/data/levels.json`) — 17 entries (13 brainstem/diencephalon + 4 telencephalic AMENDMENT B), authoritative y anchors
 
 | id | name | y (au) |
 | --- | --- | --- |
@@ -31,35 +44,42 @@
 | `lvl-post-comm` | Posterior commissure / pretectal | +19 |
 | `lvl-thalamus-mid` | Diencephalon — mid-thalamus (mammillary bodies) | +28 |
 | `lvl-thalamus-rostral` | Diencephalon — rostral thalamus / hypothalamus (optic chiasm) | +36 |
+| `lvl-tel-thalamostriate` | Telencephalon — thalamostriate / body of lateral ventricle (AMENDMENT B) | +48 |
+| `lvl-tel-basal-ganglia` | Telencephalon — basal ganglia + internal capsule (AMENDMENT B) | +58 |
+| `lvl-tel-centrum-semiovale` | Telencephalon — centrum semiovale (AMENDMENT B) | +68 |
+| `lvl-tel-convexity` | Telencephalon — high convexity (AMENDMENT B) | +78 |
 
-Plate mapping: 9 transverse plates → `plate-pyramid-decuss`(lvl-pyramid-decuss), `plate-sensory-decuss`(lvl-sensory-decuss), `plate-olivary`(lvl-olivary), `plate-pons-caudal`(lvl-pons-caudal), `plate-pons-middle`(lvl-pons-middle), `plate-pons-rostral`(lvl-pons-rostral), `plate-midbrain-ic`(lvl-midbrain-ic), `plate-midbrain-sc`(lvl-midbrain-sc), `plate-thalamus-mid`(lvl-thalamus-mid). `lvl-spinal-medulla`, `lvl-pontomedullary`, `lvl-post-comm`, `lvl-thalamus-rostral` have **no** transverse plate; they exist for the 3D scene (envelopes, clipping) and the level ruler.
+The four `lvl-tel-*` anchors were added by AMENDMENT B (`docs/TELENCEPHALON_PLAN.md` §2); they extend the transverse navigation range into the hemispheres and have **no** transverse plate yet (that run plans an axial plate at +58, §6). The 13 anchors above them keep their exact y values — the brainstem/diencephalon contract is unchanged, and no plate, clip value or imagery coordinate moved.
+
+Plate mapping: 9 transverse plates → `plate-pyramid-decuss`(lvl-pyramid-decuss), `plate-sensory-decuss`(lvl-sensory-decuss), `plate-olivary`(lvl-olivary), `plate-pons-caudal`(lvl-pons-caudal), `plate-pons-middle`(lvl-pons-middle), `plate-pons-rostral`(lvl-pons-rostral), `plate-midbrain-ic`(lvl-midbrain-ic), `plate-midbrain-sc`(lvl-midbrain-sc), `plate-thalamus-mid`(lvl-thalamus-mid). `lvl-spinal-medulla`, `lvl-pontomedullary`, `lvl-post-comm`, `lvl-thalamus-rostral` and the four `lvl-tel-*` anchors have **no** transverse plate; they exist for the 3D scene (envelopes, clipping) and the level ruler.
 
 ## 2. Registry conventions
 
-- Region enum: `diencephalon | midbrain | pons | medulla | cerebellum`. Kind enum: `nucleus | tract | ventricle | surface | vessel | context`. Laterality: `midline | paired`.
+- Region enum: `diencephalon | telencephalon | midbrain | pons | medulla | cerebellum` (`telencephalon` added by AMENDMENT B — see §3.6). Kind enum: `nucleus | tract | ventricle | surface | vessel | context`. Laterality: `midline | paired`.
 - Slug prefixes: `nuc-`, `tract-`, `vent-`, `surf-`, `vasc-` (none in v1 — vascular map is string fields only), `ctx-` (context). Regex: `^(nuc|tract|vent|surf|vasc|ctx)-[a-z0-9-]+$`.
-- Registry count: **137 entries** (by region field: diencephalon 42, midbrain 24, pons 34, medulla 32, cerebellum 5; by kind: nucleus 71, context 11, tract 36, ventricle 3, surface 16 — `vent-cerebral-aqueduct` carries region `diencephalon` per plan §3.1 CSF grouping; peduncle tracts carry their owning region: `tract-scp` midbrain, `tract-mcp` pons, `tract-icp` medulla). Two records are additions over the plan §3 list, both `kind:"context"`, added because the plate contract (§6) requires a `<slug>` for every region and §3.9 mandates "thalamus/hypothalamus blocks" on the sagittal plate: `ctx-thalamus-envelope`, `ctx-hypothalamus-envelope`. No group records were invented; tree grouping is region → subdivision → records.
+- **Current registry count (AMENDMENT B, `d1cefef`): 179 entries** — by region: diencephalon 38, telencephalon 46, midbrain 24, pons 34, medulla 32, cerebellum 5; by kind: nucleus 81, tract 51, surface 25, context 12, ventricle 10. **137 of the 179 carry an authored record** (118 structure + 19 tract); the remaining **42 are registry-only stubs** (all telencephalon — see §3.6). Registry count at the pinned revision below: 137 entries (by region field: diencephalon 42, midbrain 24, pons 34, medulla 32, cerebellum 5; by kind: nucleus 71, context 11, tract 36, ventricle 3, surface 16 — `vent-cerebral-aqueduct` carries region `diencephalon` per plan §3.1 CSF grouping; peduncle tracts carry their owning region: `tract-scp` midbrain, `tract-mcp` pons, `tract-icp` medulla). Two records are additions over the plan §3 list, both `kind:"context"`, added because the plate contract (§6) requires a `<slug>` for every region and §3.9 mandates "thalamus/hypothalamus blocks" on the sagittal plate: `ctx-thalamus-envelope`, `ctx-hypothalamus-envelope`. No group records were invented; tree grouping is region → subdivision → records.
 - `parent` links (tree nesting to existing ids only): `nuc-edinger-westphal → nuc-oculomotor`, `nuc-pprf → nuc-pontine-reticular`.
 
-### Context layer identity (documented 2026-09-10, against committed `taxonomy.json` @ `716896f`)
+### Context layer identity (documented 2026-09-10, against committed `taxonomy.json` @ `716896f`; AMENDMENT B row added the same day)
 
-Eleven registry entries carry `kind:"context"`, and the viewer bakes exactly ten `ctx-*` GLB silhouettes (`src/assets/anatomy/anatomy-manifest.json`: 10 context parts of 84). `SceneLayers.tsx` (`ENVELOPE_SLOTS`) maps every rendered silhouette onto the record id it stands for, so each registered context id resolves as follows:
+Twelve registry entries carry `kind:"context"` at the current revision (eleven at `716896f`; AMENDMENT B added `ctx-cerebral-cortex`), and the viewer bakes exactly ten `ctx-*` GLB silhouettes (`src/assets/anatomy/anatomy-manifest.json`: 10 context parts of 84). `SceneLayers.tsx` (`ENVELOPE_SLOTS`, `:77-88`) maps every rendered silhouette onto the record id it stands for, so each registered context id resolves as follows:
 
 | registered context id | rendered mesh that represents it | why / where it otherwise lives |
 | --- | --- | --- |
 | `ctx-thalamus-envelope` | `ctx-thalamus-l` + `ctx-thalamus-r` (2 slots, slot id = `ctx-thalamus-envelope`) | The paired ovoid envelopes, mirrored at −x; both slots carry this record id (they become clickable when `p1-identity` lands the envelope-picking fix). |
 | `ctx-hypothalamus-envelope` | `ctx-hypothalamus-surface` | Envelope wedge, slot id = `ctx-hypothalamus-envelope`. |
 | `ctx-cerebellum` | `ctx-cerebellum-l` + `ctx-cerebellum-r` + `ctx-cerebellar-vermis` (3 slots) | Two hemispheres plus the vermis bar, all owned by the one context record. |
+| `ctx-cerebral-cortex` | **none** (AMENDMENT B addition) | The cortical ribbon / hemisphere shell is not in the current bake: `docs/TELENCEPHALON_PLAN.md` §1 records that BP3D has no cortical gray-matter concept, so it must be *derived* (dilate the cerebral-white-matter SDF, subtract) by that run's `tel-geometry` task (§4). Until it lands, this id is a registry/plate context record with no 3D silhouette. |
 | `ctx-internal-medullary-lamina` | **none** | Plate-2D context only: the Y-shaped lamina is tagged on `plate-thalamus-mid` and `plate-coronal-thalamus`; a myelin sheet has no standalone baked mesh and is not separable inside the thalamic envelope. |
 | `ctx-fields-of-forel` | **none** | Plate-2D context only (H1/H2 fiber zones on `plate-thalamus-mid`, `plate-coronal-midbrain`, `plate-coronal-thalamus`); white-matter zones inside the subthalamic region, no GLB. |
-| `ctx-corpus-callosum` | **none** | Sagittal-plate context silhouette only; the cerebral hemispheres lie outside the brainstem/diencephalon GLB set by design. |
-| `ctx-internal-capsule` | **none** | Plate-2D context only (sagittal, coronal and transverse plates); a fiber plane, not a renderable nucleus. |
-| `ctx-lenticular-nucleus` | **none** | Plate-2D context only (putamen/pallidum silhouette); telencephalic, outside the baked brainstem set. |
-| `ctx-caudate-nucleus` | **none** | Plate-2D context only (head/body at the anterior limb); telencephalic, outside the baked brainstem set. |
+| `ctx-corpus-callosum` | **none** | Sagittal-plate context silhouette only; the cerebral hemispheres lie outside the brainstem/diencephalon GLB set by design. Region reclassified diencephalon → telencephalon by AMENDMENT B. |
+| `ctx-internal-capsule` | **none** | Plate-2D context only (sagittal, coronal and transverse plates); a fiber plane, not a renderable nucleus. Region reclassified diencephalon → telencephalon by AMENDMENT B. |
+| `ctx-lenticular-nucleus` | **none** | Plate-2D context only (putamen/pallidum silhouette); telencephalic, outside the baked brainstem set. Region reclassified diencephalon → telencephalon by AMENDMENT B (subdivision `Basal ganglia`). |
+| `ctx-caudate-nucleus` | **none** | Plate-2D context only (head/body at the anterior limb); telencephalic, outside the baked brainstem set. Region reclassified diencephalon → telencephalon by AMENDMENT B (subdivision `Basal ganglia`). |
 | `ctx-pontine-nuclei` | **none** | Plate-2D context only: the gray of the basis pontis is part of the `ctx-pons-surface` envelope in 3D, and the baked envelope cannot separate gray from fibers. |
 | `ctx-pontine-fibers` | **none** | Same reason as the pontine nuclei — the longitudinal/transverse fiber systems are drawn and tagged on the pontine plates but are not individually meshable inside the pons envelope. |
 
-**Four rendered silhouettes had no registry owner at this revision:** `ctx-midbrain-surface`, `ctx-pons-surface`, `ctx-medulla-surface` and `ctx-pineal` (slot ids `env-midbrain`, `env-pons`, `env-medulla`, `env-pineal` in `SceneLayers.tsx`). `p1-identity` owns the fix — 4 new `kind:"context"` records in `taxonomy.json` plus the matching authored records in `src/data/structures/context.json` — and `integration-v6` updates this table in close-out. Until then those four silhouettes render but are not addressable by id.
+**Four rendered silhouettes had no registry owner at the pinned revision:** `ctx-midbrain-surface`, `ctx-pons-surface`, `ctx-medulla-surface` and `ctx-pineal` (slot ids `env-midbrain`, `env-pons`, `env-medulla`, `env-pineal` in `SceneLayers.tsx:78-80`, `:87`; at AMENDMENT B they are still unregistered). `p1-identity` owns the fix — 4 new `kind:"context"` records in `taxonomy.json` plus the matching authored records in `src/data/structures/context.json` — and `integration-v6` updates this table in close-out. Until then those four silhouettes render but are not addressable by id. The `ctx-cerebral-cortex` row above is the mirror case: registered, but not yet rendered.
 
 ---
 
@@ -281,6 +301,14 @@ Note: `tract-spinal-trigeminal` and `nuc-spinal-trigeminal` are **owned by medul
 | `surf-vermis` | Vermis | Surface landmarks | surface | Midline cerebellar surface; axial balance; midline tumors → truncal ataxia. |
 | (peduncles) | `tract-scp` (midbrain owner) · `tract-icp` (medulla owner) · `tract-mcp` (pons owner) | | | |
 
+### 3.6 Telencephalon (46 registry entries — AMENDMENT B; content owned by the v7 run)
+
+AMENDMENT B (`docs/TELENCEPHALON_PLAN.md` §2-§3, commit `d1cefef`) added the `telencephalon` region to `taxonomy.json`: **42 new entries** plus **4 reclassified** legacy hemisphere-context records, for **46** entries total. By kind: nucleus 10, tract 15, surface 9, ventricle 7, context 5. By subdivision: Telencephalic white matter 14, Cerebral cortex 10, Basal ganglia 9, Lateral ventricles 7, Limbic system 6.
+
+The four reclassified records are the ones previously tabulated under §3.1 ("Ventricular system / surfaces / hemisphere context"): `ctx-corpus-callosum` and `ctx-internal-capsule` (→ subdivision `Telencephalic white matter`), `ctx-lenticular-nucleus` and `ctx-caudate-nucleus` (→ `Basal ganglia`). That is why the §3.1 diencephalon table has 42 rows while the current registry's `diencephalon` region field counts 38: §3.1 is the authored brainstem/diencephalon grouping reconciled at `716896f`, and those four silhouettes are now region `telencephalon` in the registry. Neither number is stale — they describe different sets, and both are recomputed from the data.
+
+**None of the 42 new telencephalon entries has an authored record yet** (they are the 42 registry-only stubs the validator reports), so no function-summary rows are authored here: writing them is the v7 run's task (`docs/TELENCEPHALON_PLAN.md` §7 task 6 `tel-content`, which owns this document's telencephalon section) and its geometry is `tel-geometry`'s. The four reclassified context records keep their existing authored records and their §3.1 rows. Recording the delta here — rather than inventing 42 rows — is the honest state of the data at `d1cefef`.
+
 ---
 
 ## 4. Tract index (every `kind:"tract"` in the registry; direction, course, span)
@@ -337,9 +365,9 @@ The 12 plate SVGs carry **122** distinct `data-structure` slugs between them. Ei
 
 `tract-dcml` · `tract-trigeminothalamic-ventral` · `tract-trigeminothalamic-dorsal` · `tract-auditory-pathway` · `tract-spinoreticular` · `tract-lateral-vestibulospinal` · `tract-medial-vestibulospinal` · `tract-hypothalamospinal`
 
-**This is a 2D discoverability gap, not a 3D one.** All 19 records carry complete, in-bounds path data (`waypoints` 5–8 points each, `tubeRadius`, `color`, `levels`) and every one of them renders as a tube through the existing `TractTube` path, so nothing is missing from the viewer — they simply cannot be found by eye on a plate yet. Two of the eight (`tract-dcml`, `tract-auditory-pathway`) are **composite pathway records that must never be plate-tagged** by the convention at the head of this document, so only six are genuinely taggable; giving them plate presence is a future content-run decision (it needs new SVG geometry, not just a label).
+**This is a 2D discoverability gap, not a 3D one.** All 19 records carry complete, in-bounds path data (`waypoints` 5–8 points each, `tubeRadius`, `color`, `levels`) and every one of them renders as a tube through the existing `TractTube` path, so nothing is missing from the viewer — they simply cannot be found by eye on a plate yet. Measured per record on 2026-09-10 against the canonical bounds (`CLIP_BOUNDS`, `x ∈ [−48, 48]`, `y ∈ [−55, 45]`, `z ∈ [−56, 26]`): **every waypoint of every one of the 19 tracts is inside the box** (widest excursions across the set: x −6.5…+6.5, y −52…+40, z −7.5…+8), every `tubeRadius` is 0.4–0.9, every `color` is a palette hex (`#3b82f6` ascending, `#8b5cf6` descending, `#a78bfa` mixed), and every `levels[]` id resolves in `levels.json`. **No tract path field was added or edited in this run — which records were touched: none** — because there was nothing missing to fix; the eight below are exactly the eight that lack a plate label, and that is a plate-authoring gap. Two of the eight (`tract-dcml`, `tract-auditory-pathway`) are **composite pathway records that must never be plate-tagged** by the convention at the head of this document, so only six are genuinely taggable; giving them plate presence is a future content-run decision (it needs new SVG geometry, not just a label).
 
-Separately, **17 of the 36 registry tracts have no authored record at all** (`tract-pyramid`, `tract-scp`, `tract-mcp`, `tract-icp`, `tract-medial-lemniscus`, `tract-fasciculus-gracilis`, `tract-fasciculus-cuneatus`, `tract-internal-arcuate`, `tract-pyramidal-decussation`, `tract-spinal-trigeminal`, `tract-crus-cerebri`, `tract-scp-decussation`, `tract-mesencephalic-v`, `tract-stria-medullaris`, `tract-posterior-commissure`, `tract-trapezoid-body`, `tract-lateral-lemniscus`): they are 2D-label-only — registry entries with plate presence but no 3D tube and no `tracts.json` record. Authoring them is likewise a content-run decision, recorded here so the two different gaps are not conflated.
+Separately, **17 of the 36 registry tracts at the pinned revision have no authored record at all** (`tract-pyramid`, `tract-scp`, `tract-mcp`, `tract-icp`, `tract-medial-lemniscus`, `tract-fasciculus-gracilis`, `tract-fasciculus-cuneatus`, `tract-internal-arcuate`, `tract-pyramidal-decussation`, `tract-spinal-trigeminal`, `tract-crus-cerebri`, `tract-scp-decussation`, `tract-mesencephalic-v`, `tract-stria-medullaris`, `tract-posterior-commissure`, `tract-trapezoid-body`, `tract-lateral-lemniscus`): they are 2D-label-only — registry entries with plate presence but no 3D tube and no `tracts.json` record. Authoring them is likewise a content-run decision, recorded here so the two different gaps are not conflated. **AMENDMENT B update:** the registry now carries **51** tract entries (15 telencephalic tracts were added, none with an authored record), so at the current revision the stub count is **32 of 51** — the 17 above plus those 15. The authored side is unchanged: still 19 `tracts.json` records, still the same 8 without a plate label.
 
 ---
 
@@ -406,7 +434,7 @@ Note the honest boundary: **sixteen** single-item records clear a score of 5, so
 | — | *rank 16, below the cap — not taken*: `vent-fourth-ventricle` | 0 | 5 | 5 |
 | — | *rank 17 (score drops to 4)*: `nuc-cochlear-ventral` | 1 | 1 | 4 |
 
-Every new item keeps the existing `{ syndrome, findings, vascular?, note? }` shape, cites the same Blumenfeld/Patten/RadioGraphics sources as its neighbours, and is an original paraphrase. `vascular` is present wherever an arterial territory applies and omitted where none does (e.g. the bulbar-palsy and neurodegenerative items).
+Every new item keeps the existing `{ syndrome, findings, vascular?, note? }` shape and its neighbours' field style — a `findings` paragraph, a `vascular` territory where one applies, and a `note` teaching pearl where the point is worth stating — and every one is an original paraphrase. (Source citations are a **record-level** field, not an item field: all 26 authoring targets kept their existing top-level `refs[]` untouched — 136 of the 137 records carry a Blumenfeld / Patten / RadioGraphics citation, the one exception being `nuc-cochlear-dorsal`, which was authored with the two auditory-system sources it ships (Nolte; Duke brainstem sectional-anatomy lab) and keeps them. No authored item invents a new source.) `vascular` is present on **25 of the 26** authored items and omitted exactly once, where no arterial territory applies — `nuc-ambiguus` (progressive bulbar palsy, a motor-neuron degeneration); every item that has a territory names it.
 
 ---
 
@@ -613,11 +641,118 @@ Optional (8 listed; 2 are drawn and therefore counted in the 31 above — `ctx-c
 
 ## 8. Verification checklist for this document
 
-Refreshed and re-verified **2026-09-10** (see the note at the head of the file):
+Refreshed and re-verified **2026-09-10** (see the notes at the head of the file). Every item below was produced by a script run against `src/data` on that date, not by editing prose:
 
-- [x] Every slug listed above resolves exactly in `src/data/taxonomy.json` (cross-checked with a Node script: 137 registry ids, 0 unresolved slugs in the §3/§4 tables; the only non-registry ids in this document are `lvl-*` level anchors, which resolve in `levels.json`).
+- [x] Every slug listed in §3/§4/§7 resolves exactly in `src/data/taxonomy.json`. The §3 tables were reconciled against the 137-entry pinned revision (`716896f`); the **current** registry is 179 entries (42 of them telencephalon stubs — §3.6), and all 12 plate SVGs, all 12 §7 counts, all 26 syndromes and all 19 `tracts.json` records were re-checked against the current data and are unchanged. The only non-registry ids in this document are `lvl-*` level anchors, which resolve in `levels.json` (17 of them).
 - [x] All 12 plate ids match §3.9: 9 transverse + `plate-sagittal-midline` + `plate-coronal-midbrain` + `plate-coronal-thalamus`.
-- [x] Required count per plate is 18–40 and **now equals the number of distinct `data-structure` slugs in that plate's SVG** (19/22/23/30/21/19/25/24/26/26/25/31); drawn optionals are named and the ones deliberately omitted are stated.
-- [x] No slug or id was renamed; `ctx-thalamus-envelope` and `ctx-hypothalamus-envelope` remain the only registry additions flagged in §2, and the four unowned `ctx-*` silhouettes are recorded in the §2 context-layer identity table.
-- [x] §3 region headings and row counts agree with the registry (42/24/34/32/5 = 137), §5 lists **26** syndromes (every `structures[]` id resolves), and §4 records the two tract gaps (8 records with no plate label; 17 registry tracts with no record).
-- [ ] Still open, owned by other tasks: the four unregistered `ctx-*` silhouettes (§2) and the tract/plate gaps (§4.1) — both are recorded here so the next content run has a starting list.
+- [x] Required count per plate is 18–40 and equals the number of distinct `data-structure`/`data-for` slugs in that plate's SVG, verified plate-by-plate by id: `plate-pyramid-decuss` 19, `plate-sensory-decuss` 22, `plate-olivary` 23, `plate-pons-caudal` 30, `plate-pons-middle` 21, `plate-pons-rostral` 19, `plate-midbrain-ic` 25, `plate-midbrain-sc` 24, `plate-thalamus-mid` 26, `plate-sagittal-midline` 26, `plate-coronal-midbrain` 25, `plate-coronal-thalamus` 31 (122 distinct slugs in total); drawn optionals are named and the ones deliberately omitted are stated.
+- [x] No slug or id was renamed. `ctx-thalamus-envelope` and `ctx-hypothalamus-envelope` remain the only registry additions flagged in §2 at the pinned revision; AMENDMENT B added `ctx-cerebral-cortex`, which is now the twelfth row of the §2 context-layer identity table, and the four unowned rendered `ctx-*` silhouettes are recorded there too.
+- [x] §3 region headings and row counts agree with the authored groupings (42/24/34/32/5 = 137 rows) and §3.6 states the current registry split (diencephalon 38 / telencephalon 46); §5 lists **26** syndromes, all 26 rows reproduced verbatim from the records with every `structures[]` id resolving; §4.1 records both tract gaps (8 authored records with no plate label; 17 registry tracts without a record at the pinned revision, 32 of 51 at the current one).
+- [x] §5.1 states the post-state of clinical coverage (0 records without clinical content; 51 single-item records → 47), the data-derived selection rule for the fifteen second items, and its 15-row ranked table — which a re-run of the rule on the pre-change baseline reproduces exactly, including the honest note that **16** records clear score 5 so the cut is rank-15, and that `vent-fourth-ventricle` is the record left out.
+- [ ] Still open, owned by other tasks: the four unregistered `ctx-*` silhouettes (§2), the 42 telencephalon registry stubs and the telencephalon content section (§3.6), and the tract/plate gaps (§4.1) — all recorded here so the next content run has a starting list.
+
+---
+
+## 9. Telencephalon content (v7 run `tel-content`) — 46 registry ids, all authored
+
+**Appended by the v7 `tel-content` task** (`docs/TELENCEPHALON_PLAN.md` §7 task 6). This is a new section added at the end of the document: §1–§8 above are the brainstem/diencephalon/cerebellum reconciliation and none of them was restructured, renumbered or restated. §3.6's "content owned by the v7 run" placeholder is discharged by the tables below, which are generated from the records themselves — including its sentence "**None of the 42 new telencephalon entries has an authored record yet**", which this task supersedes: all 42 now carry authored records (see the count table below).
+
+What changed, recomputed from `src/data` after the edits (the registry/structure totals are the state **when this task's edits landed**; concurrent v6/v7 tasks keep registering ids, so re-measure rather than trusting them):
+
+| what | before this task | after this task |
+| --- | --- | --- |
+| registry entries | 179 (telencephalon 46) | **179** (unchanged — no id was added or renamed by this task; a concurrent run has since taken the registry past 179) |
+| registry entries **awaiting an authored record** | 42 (all telencephalon) | **0** |
+| `structures/*.json` | 6 files, 118 records | **11 files, 156 records** (this task's 5 new files + 38 records; concurrent runs add more elsewhere) |
+| `tracts.json` | 19 records | **23 records** |
+| `npm run validate` | 0 errors, 0 warnings | **0 errors, 0 warnings** |
+
+**42 new authored records:** 38 `StructureRecord`s in five new files plus 4 `TractRecord`s appended to `tracts.json`. The other 4 of the 46 telencephalon ids (`ctx-corpus-callosum`, `ctx-internal-capsule`, `ctx-lenticular-nucleus`, `ctx-caudate-nucleus`) already carried authored records in `src/data/structures/diencephalon-epithalamus-subthalamus.json` and were **not** re-authored (that would have been a duplicate id/name error). Every `id` below was read from `taxonomy.json`, never invented; kind, laterality, subdivision, colour and display name match the registry exactly (the validator's registry cross-check reports no drift).
+
+Levels are given as the `y` anchors the record carries, so `+48` = `lvl-tel-thalamostriate`, `+58` = `lvl-tel-basal-ganglia`, `+68` = `lvl-tel-centrum-semiovale`, `+78` = `lvl-tel-convexity` (AMENDMENT B). All four new anchors are used.
+
+### 9.1 Cerebral cortex (10) — `src/data/structures/telencephalon-cortex.json`
+
+| slug | name | kind | levels (y) | geometry |
+| --- | --- | --- | --- | --- |
+| `ctx-cerebral-cortex` | Cerebral cortex (context envelope) | context | +19 +28 +36 +48 +58 +68 +78 | derived ribbon (tel-geometry §4); no `origin3d` by design |
+| `surf-frontal-lobe` | Frontal lobe | surface | +36 +48 +58 +68 +78 | derived lobe envelope |
+| `surf-parietal-lobe` | Parietal lobe | surface | +36 +48 +58 +68 +78 | derived lobe envelope |
+| `surf-temporal-lobe` | Temporal lobe | surface | +8 +14 +19 +28 +36 | derived lobe envelope |
+| `surf-occipital-lobe` | Occipital lobe | surface | +8 +14 +19 +28 +36 +48 | baked (BP3D occipital lobe FJ1791/FJ1792) |
+| `surf-insula` | Insula | surface | +28 +36 +48 +58 | baked (BP3D insula FJ1748/FJ1749) |
+| `surf-limbic-lobe` | Limbic lobe | surface | +14 +19 +28 +36 +48 +58 +68 +78 | derived ring (cingulate + parahippocampal) |
+| `surf-cingulate-gyrus` | Cingulate gyrus | surface | +28 +36 +48 +58 +68 +78 | baked (BP3D cingulate FJ1739/FJ1740) |
+| `surf-parahippocampal-gyrus` | Parahippocampal gyrus | surface | +8 +14 +19 | derived from the medial temporal gyri |
+| `surf-planum-temporale` | Planum temporale | surface | +28 +36 | ellipsoid placeholder (`origin3d` [33, 34, 2], `size3d` [3, 3.5, 8]) — no BP3D concept exists |
+
+### 9.2 Basal ganglia (7 new; 9 in the registry here) — `src/data/structures/telencephalon-basal-ganglia.json`
+
+| slug | name | kind | levels (y) | geometry |
+| --- | --- | --- | --- | --- |
+| `nuc-caudate-head` | Caudate nucleus, head | nucleus | +36 +48 +58 | baked caudate cast (FJ1754/FJ1802), head region |
+| `nuc-caudate-body` | Caudate nucleus, body | nucleus | +36 +48 +58 | baked caudate cast, body region |
+| `nuc-caudate-tail` | Caudate nucleus, tail | nucleus | +19 +28 | baked caudate cast, tail region |
+| `nuc-putamen` | Putamen | nucleus | +28 +36 +48 | baked (FJ1776/FJ1823) |
+| `nuc-globus-pallidus-externus` | Globus pallidus, external segment | nucleus | +28 +36 | baked pallidal mesh (FJ1757/FJ1805), lateral segment |
+| `nuc-globus-pallidus-internus` | Globus pallidus, internal segment | nucleus | +28 +36 | baked pallidal mesh, medial segment |
+| `nuc-ventral-striatum` | Ventral striatum | nucleus | +28 +36 | ellipsoid placeholder (`origin3d` [12, 32, 29], `size3d` [3.5, 4, 4]) — no BP3D accumbens mesh |
+
+The claustrum is **not** in the registry, so no claustrum record was authored (inventing an id would break the registry-first contract, `docs/DATA_CONTRACT.md` §3).
+
+### 9.3 Limbic system (6) — `src/data/structures/telencephalon-limbic.json`
+
+| slug | name | kind | levels (y) | geometry |
+| --- | --- | --- | --- | --- |
+| `nuc-hippocampus` | Hippocampus | nucleus | +8 +14 +19 | baked (FJ1759/FJ1807) |
+| `nuc-dentate-gyrus` | Dentate gyrus | nucleus | +8 +14 +19 | ellipsoid placeholder (`origin3d` [16, 14, −2], `size3d` [1.6, 8, 14]) — BP3D folds it into the hippocampus |
+| `nuc-amygdala` | Amygdala | nucleus | +8 +14 | baked (FJ1753/FJ1829) |
+| `tract-fornix` | Fornix | tract (structure record) | +14 +19 +28 +36 | baked (FJ1756/FJ1804) |
+| `tract-fornix-commissure` | Commissure of the fornix | tract (structure record) | +28 +36 | baked (FJ1741) |
+| `tract-fimbria` | Fimbria of the hippocampus | tract (structure record) | +14 +19 | ellipsoid placeholder (`origin3d` [22, 21, −2], `size3d` [2.2, 3.5, 9]) — carried inside the fornix/hippocampus meshes |
+
+### 9.4 Lateral ventricles (7) — `src/data/structures/telencephalon-ventricles.json`
+
+| slug | name | kind | levels (y) | geometry |
+| --- | --- | --- | --- | --- |
+| `vent-lateral-ventricle` | Lateral ventricle | ventricle | +14 +19 +28 +36 +48 +58 | baked ventricular cast (FJ1767/FJ1814) |
+| `vent-lateral-ventricle-frontal-horn` | Frontal horn of the lateral ventricle | ventricle | +36 +48 | region of the baked cast |
+| `vent-lateral-ventricle-temporal-horn` | Temporal horn of the lateral ventricle | ventricle | +8 +14 | region of the baked cast |
+| `vent-lateral-ventricle-occipital-horn` | Occipital horn of the lateral ventricle | ventricle | +19 +28 | region of the baked cast (measured y span 17.4–31.9 au ⇒ the +19 and +28 anchors only) |
+| `vent-lateral-ventricle-atrium` | Atrium of the lateral ventricle | ventricle | +19 +28 +36 | region of the baked cast |
+| `vent-choroid-plexus-lateral` | Choroid plexus of the lateral ventricle | ventricle | +14 +19 +28 +36 +48 | baked (FJ1755/FJ1803) |
+| `vent-interventricular-foramen` | Interventricular foramen | ventricle | +36 +48 | ellipsoid placeholder (`origin3d` [3, 42, 12], `size3d` [1.2, 1.5, 1.5]) — a CSF channel, not a meshable surface |
+
+### 9.5 Telencephalic white matter (8 new structure records + 4 tracts) — `src/data/structures/telencephalon-white-matter.json`
+
+| slug | name | kind | levels (y) | geometry |
+| --- | --- | --- | --- | --- |
+| `tract-corpus-callosum-rostrum` | Rostrum of the corpus callosum | tract (structure record) | +36 | baked callosal mesh (FJ1742), rostrum region |
+| `tract-corpus-callosum-genu` | Genu of the corpus callosum | tract (structure record) | +36 +48 | baked callosal mesh, genu region |
+| `tract-corpus-callosum-body` | Body of the corpus callosum | tract (structure record) | +48 +58 | baked callosal mesh, body region |
+| `tract-corpus-callosum-splenium` | Splenium of the corpus callosum | tract (structure record) | +28 +48 | baked callosal mesh, splenium region |
+| `tract-internal-capsule-anterior-limb` | Internal capsule, anterior limb | tract (structure record) | +28 +36 +48 | baked capsule mesh (FJ1750/FJ1751), anterior region |
+| `tract-internal-capsule-genu` | Internal capsule, genu | tract (structure record) | +36 +48 | baked capsule mesh, genu region |
+| `tract-internal-capsule-posterior-limb` | Internal capsule, posterior limb | tract (structure record) | +28 +36 +48 | baked capsule mesh, posterior region |
+| `tract-corona-radiata` | Corona radiata | tract (structure record) | +58 +68 +78 | ellipsoid placeholder (`origin3d` [19, 64, 4], `size3d` [7, 8, 12]) — a fibre fan inside the WM core, no separate mesh |
+
+### 9.6 Authored association tracts (4) — `src/data/tracts.json` (now 23 records)
+
+These four have **no BP3D mesh**: the `waypoints` polyline is the geometry, routed through the measured canonical white matter (see the table's "course" column). Measured spans are inside AMENDMENT B (`x ±48`, `y −55…+85`, `z −75…+55`): every waypoint of all four was bounds-checked.
+
+| slug | name | direction | levels (y) | waypoint span (x · y · z) |
+| --- | --- | --- | --- | --- |
+| `tract-optic-radiation` | Optic radiation | ascending | +14 +19 +28 | LGN → retrolenticular capsule → Meyer loop → occipital pole; x 13…28, y 14…30, z −66…+12 |
+| `tract-cingulum` | Cingulum | mixed | +19 +28 +36 +48 +58 +68 | subcallosal area → above the callosum → isthmus → parahippocampal cortex; x 4…14, y 14…68.5, z −38…+42 |
+| `tract-uncinate-fasciculus` | Uncinate fasciculus | mixed | +14 +19 +28 +36 | temporal pole → hook at the limen insulae → orbital frontal cortex; x 14…35, y 12…36, z +26…+52 |
+| `tract-superior-longitudinal-fasciculus` | Superior longitudinal fasciculus | mixed | +19 +28 +36 +48 +58 | inferior frontal → arc over the insula → supramarginal/angular → posterior temporal; x 24…36, y 18…62, z −34…+44 |
+
+**Waypoint correction (second pass, evidence-based).** The four polylines were re-checked point-by-point against the *registered* canonical meshes (`assets-src/bp3d/canonical/tel-*.obj`, plus the LGN, thalamus and fornix casts) with an exact point-to-triangle distance oracle, because a waypoint that lies outside the white-matter core is outside the rendered brain. Five waypoints of the first pass sat 7.2–13.8 mm clear of every registered surface (they floated in the subarachnoid space / outside the hemisphere): the optic-radiation start (`[11, 23, −4.5]`, `[18, 32, −2]`), the uncinate's temporal-stem points (`[27, 13, 36]`, `[29, 18, 26]`, `[14, 34, 42]`) and the SLF's tail, which ended in the *anterior* temporal lobe (`[26, 18, 8]`) instead of the posterior superior temporal gyrus. They were re-routed onto the measured anatomy: the optic radiation now starts inside the lateral geniculate body (`[18, 16, −6]`, 0.03 au from the LGN mesh) and its dorsal bundle rises to the calcarine cortex; the uncinate now runs temporal-pole white matter → anterior temporal stem → hook at the limen insulae → orbitofrontal white matter; the SLF now arcs frontal operculum → centrum semiovale → supramarginal → posterior superior/middle temporal gyrus. After the correction **every waypoint of all four tracts is ≤ 3.2 au (≤ 3.8 mm) from a registered surface** (worst case: SLF at the parietal white matter), i.e. inside the brain envelope (cortical ribbon = 2.5–3.3 au thick), and the level lists were trimmed/extended to the levels each polyline actually spans (the optic radiation no longer claims +36/+48).
+
+### 9.7 Web references and deliberate omissions
+
+- `src/data/webRefs.ts` gained **curated entries for all 46** telencephalon ids (previously every one of them fell through to the auto-generated Wikipedia title, which produced imprecise labels such as "Globus pallidus external segment" or "Lateral ventricle frontal horn"). All **31 distinct Wikipedia titles** used (47 `wiki()` calls across the 46 entries) were verified to resolve through the MediaWiki API before being committed — re-verified afterwards with one `action=query&titles=` call, which returns all 31 with page ids and **nothing missing**; five journal sources were added (Alexander/DeLong/Strick 1986, Catani & ffytche 2005, Catani & Thiebaut de Schotten 2008, Scoville & Milner 1957, Damkier 2013), each with a DOI resolved and title-checked against Crossref (one `api.crossref.org/works?filter=doi:…` call returned all five with the titles cited here).
+- **No id was deliberately left unrecorded:** all 46 telencephalon registry ids now have an authored record (`0 awaiting authored records` in the validator summary). The only telencephalon-shaped content that is *not* authored is content the registry does not contain — the claustrum and the plan §3 "optional" functional-anatomy context record (operculum) — and it was not invented here, per the registry-first contract.
+- **Geometry rule applied to `origin3d`/`size3d`** (per the task contract): they appear only where no baked mesh in the `tel-geometry` manifest covers the record. Six of the 38 new structure records carry an ellipsoid placeholder (`nuc-ventral-striatum`, `nuc-dentate-gyrus`, `tract-fimbria`, `tract-corona-radiata`, `vent-interventricular-foramen`, `surf-planum-temporale`); every other new record, including the ventricular horns/atrium, the caudate and callosal sub-regions, the pallidal segments and the capsular limbs, gets its geometry from the parent baked mesh and therefore carries neither field.
+- **Not touched by this task:** `src/data/taxonomy.json`, `src/data/levels.json`, `src/data/sectionImages.ts`, any plate manifest/SVG, and every existing brainstem/diencephalon/cerebellum record. Nothing below y = +45 changed coordinates; this task added content and level references only.
+- **Verification run after the edits:** `npm run validate` → `0 awaiting authored records · tracts 23 record(s)`, **0 errors / 0 warnings**; `npm run check` (`tsc --noEmit`) exit 0 — both re-run after the waypoint correction, with the same result. The ad-hoc cross-checks (scratch harnesses, not committed) confirm: 46/46 telencephalon ids have both an authored record and a curated web-ref key; no `origin3d`/`size3d` or waypoint value falls outside the AMENDMENT B bounds (`x ±48`, `y −55…+85`, `z −75…+55`); every `levels[]` entry resolves in `levels.json`; every authored record carries a non-empty `function`, a `bloodSupply`, ≥ 1 complete `clinical` item (130 items across the 46, 73 of them naming an arterial territory), Blumenfeld-style `refs`, and `origin3d`/`size3d` only where no baked mesh exists; and the tract geometry check described in §9.6 (point-to-triangle distances to the registered meshes, ≤ 3.2 au worst case).

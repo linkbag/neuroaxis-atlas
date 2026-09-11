@@ -310,6 +310,98 @@ export function ctLayerStatus(): CtLayerStatus {
   return wellFormed ? 'available' : 'unavailable'
 }
 
+/* ------------------------------------------------- CT source coverage (v7) */
+
+/**
+ * ── CT COVERAGE HONESTY (v7, docs/TELENCEPHALON_PLAN.md §2/§9, plan C2/C3) ──
+ *
+ * The AMENDMENT B box reaches y = +85, but the Visible Human CT series is a
+ * HEAD-only scan whose own apex lands at canonical y ≈ 36.25 au — measured, and
+ * recorded in `ct-manifest.json` at `registration.residuals.coverageNote` and
+ * `intensity.sourceCoverage.superiorMostDataYAu`. The CT *grid* still spans the
+ * whole new box (dims [81,113,107]); what ends at y ≈ 36.25 is the DATA, and
+ * above it every station is background. So the CT layer is not "still loading"
+ * and not "no CT grid in this build" up there — it is genuinely blank, and the
+ * honest state is the one this block produces.
+ *
+ * The limit is READ FROM THE MANIFEST, never typed a second time: the note
+ * string is the manifest's own text and the number is its own measurement, so
+ * the toolbar/canvas statement cannot drift from the bake (plan C2).
+ */
+interface CtSourceCoverage {
+  superiorMostDataYAu?: number
+  fractionInsideFov?: number
+  stationsInsideFov?: number
+  totalStations?: number
+}
+
+/** The manifest's measured source-coverage block (absent in a schema-v1 CT). */
+function ctSourceCoverage(): CtSourceCoverage | null {
+  const coverage = (ctManifest as unknown as { intensity?: { sourceCoverage?: CtSourceCoverage } })
+    .intensity?.sourceCoverage
+  return coverage !== undefined && coverage !== null ? coverage : null
+}
+
+/**
+ * The manifest's own coverage narrative (`registration.residuals.coverageNote`)
+ * or null when this build declares none. Returned verbatim — it is the bake's
+ * measurement, not a paraphrase.
+ */
+export function ctCoverageNote(): string | null {
+  const residuals = (ctManifest as unknown as { registration?: { residuals?: { coverageNote?: unknown } } })
+    .registration?.residuals
+  const note = residuals?.coverageNote
+  return typeof note === 'string' && note.length > 0 ? note : null
+}
+
+/**
+ * The measured CT data limit along canonical y in au, or null when this build
+ * does not declare one. ONE reader for the number (plan C2: "do not type a
+ * second, drifting constant").
+ */
+export function ctSuperiorMostDataYAu(): number | null {
+  const value = ctSourceCoverage()?.superiorMostDataYAu
+  return typeof value === 'number' && Number.isFinite(value) ? value : null
+}
+
+/**
+ * True when `axis`/`value` is inside the CT GRID but beyond the CT SOURCE, i.e.
+ * the grid has stations there and every one of them is background. Used to keep
+ * `resolveSliceModality` from reporting a merely-empty plane as ordinary
+ * imagery while the toolbar states the real reason.
+ */
+export function beyondCtSourceCoverage(axis: PlaneAxis, value: number): boolean {
+  const limit = ctSuperiorMostDataYAu()
+  if (limit === null) return false
+  if (axis !== 'y') return false
+  return value > limit
+}
+
+/**
+ * The plain-English statement shown where the CT modality is requested above
+ * its measured coverage — the plan §9 requirement that the toolbar and the
+ * canvas say this plainly rather than showing a blank or a stale slice.
+ *
+ * Returns null when either (a) this build declares no coverage limit, or
+ * (b) the plane is inside the coverage. Requires the number, so a manifest
+ * without one can never produce a fabricated limit.
+ */
+export function ctCoverageStatement(axis: PlaneAxis, value: number): string | null {
+  const limit = ctSuperiorMostDataYAu()
+  if (limit === null) return null
+  if (!beyondCtSourceCoverage(axis, value)) return null
+  const fraction = ctSourceCoverage()?.fractionInsideFov
+  const fractionText =
+    typeof fraction === 'number' && Number.isFinite(fraction)
+      ? ` ${(fraction * 100).toFixed(1)} % of the canonical stations are inside the CT source FOV.`
+      : ''
+  return (
+    `the Visible Human CT series ends at canonical y ≈ ${limit.toFixed(2)} au — this plane is above it, `
+    + 'so no CT slice exists here for any canonical box. '
+    + `MRI is the modality of record at this level.${fractionText}`
+  )
+}
+
 /* -------------------------------------------------------- layer ids/status */
 
 export const STAIN_LAYER_ID = 'stain'
@@ -1389,15 +1481,28 @@ const ctLayer: SectionImageLayer = {
     return ctLayerStatus() === 'available'
   },
 
-  dataStatus() {
+  /**
+   * v7 coverage honesty (plan §9, C3): a CT plane ABOVE the series' measured
+   * apex is 'unavailable', not 'ready'. The grid is loaded and healthy there —
+   * the SOURCE simply never covered it — so reporting 'ready' would let the
+   * canvas imply a slice exists and then paint an all-background raster.
+   */
+  dataStatus(plane) {
     if (ctLayerStatus() !== 'available') return 'unavailable'
-    if (ctEntry.grid !== null) return 'ready'
+    if (ctEntry.grid !== null) {
+      return beyondCtSourceCoverage(plane.axis, plane.value) ? 'unavailable' : 'ready'
+    }
     return ctEntry.status === 'failed' || ctEntry.status === 'timeout' ? 'unavailable' : 'loading'
   },
 
   draw(ctx, view, plane, layerCtx) {
     if (layerCtx.modality !== 'ct') return false
     if (ctLayerStatus() !== 'available') return false
+    // Above the measured source coverage there is nothing to paint, and drawing
+    // the background stations would show an empty raster as if it were imagery.
+    // The layer declines; the canvas' honest hint and the toolbar's coverage
+    // statement name the reason (ctCoverageStatement).
+    if (beyondCtSourceCoverage(plane.axis, plane.value)) return false
     loadCtGrid()
     const grid = ctEntry.grid
     if (grid === null) return false
@@ -1576,7 +1681,7 @@ export interface SliceRenderResult {
 }
 
 /** Why a requested modality could not paint — surfaced in the ?pipdebug overlay. */
-export type SliceMissReason = 'unavailable' | 'no-anchor' | 'loading'
+export type SliceMissReason = 'unavailable' | 'no-anchor' | 'loading' | 'beyond-source'
 
 export interface SliceResolution {
   modality: SliceModality
@@ -1617,6 +1722,24 @@ function gridMissReason(entry: GridEntry): SliceMissReason {
 }
 
 /**
+ * The full miss reason for one GRID modality at one plane: the CT grid can be
+ * loaded and healthy and still have nothing to paint above its measured source
+ * coverage (see `ctCoverageStatement`), which is a state of the DATA, not of the
+ * fetch. Reported as its own reason so the diagnostics never claim CT is
+ * "loading" at a plane the source never covered.
+ */
+function gridMissReasonAt(
+  id: 'mri' | 'ct',
+  entry: GridEntry,
+  axis: PlaneAxis,
+  value: number,
+): SliceMissReason | undefined {
+  if (entry.grid === null) return gridMissReason(entry)
+  if (id === 'ct' && beyondCtSourceCoverage(axis, value)) return 'beyond-source'
+  return undefined
+}
+
+/**
  * Which modality the PiP sampler can actually paint at this plane, in the plan
  * §4 order. This is the sampler's counterpart of SectionCanvas'
  * resolveLayerFrame(): that one reads the layer REGISTRY (the canvas cannot
@@ -1647,19 +1770,19 @@ export function resolveSliceModality(
   }
   if (requested === 'ct') {
     if (!ctReady) return { modality: 'ct', reason: 'unavailable' }
-    return { modality: 'ct', reason: ctEntry.grid === null ? gridMissReason(ctEntry) : undefined }
+    return { modality: 'ct', reason: gridMissReasonAt('ct', ctEntry, axis, value) }
   }
   if (requested === 'mri') {
     if (!mriReady) return { modality: 'mri', reason: 'unavailable' }
-    return { modality: 'mri', reason: mriEntry.grid === null ? gridMissReason(mriEntry) : undefined }
+    return { modality: 'mri', reason: gridMissReasonAt('mri', mriEntry, axis, value) }
   }
   // 'auto' — real-first default (plan §4): the closest-match real imagery first
   // (a plate anchored at this plane, else the level-mapped micrograph the live
   // 2D canvas would show), then the continuous CT / MRI grids.
   const image = stain()
   if (image !== undefined) return { modality: 'stain', image }
-  if (ctReady) return { modality: 'ct', reason: ctEntry.grid === null ? gridMissReason(ctEntry) : undefined }
-  if (mriReady) return { modality: 'mri', reason: mriEntry.grid === null ? gridMissReason(mriEntry) : undefined }
+  if (ctReady) return { modality: 'ct', reason: gridMissReasonAt('ct', ctEntry, axis, value) }
+  if (mriReady) return { modality: 'mri', reason: gridMissReasonAt('mri', mriEntry, axis, value) }
   return { modality: 'none', reason: 'unavailable' }
 }
 
