@@ -471,15 +471,23 @@ try {
   })()`)
   String(explode).includes('set') ? ok('explode slider operable') : info(`explode slider: ${explode}`)
 
-  /* clip slider → PiP sync (the 3 dock sliders carry no labels — identify by range) */
+  /* clip slider → PiP sync.
+   *
+   * The 3D dock's three sliders carry no aria-label, so identify them by
+   * EXCLUSION rather than by their numeric range: the section-slider strip and
+   * the explode slider are explicitly excluded, and the dock's own order is
+   * X, Y, Z (ClipControls). Matching on `min === '-48'` (the pre-AMENDMENT-B
+   * sagittal range) silently stopped matching once the bounds widened. */
   const clipSync = await evaluate(`(() => {
-    const ranges = [...document.querySelectorAll('input[type=range]')];
-    const x = ranges.find(r => r.min === '-48' && r.max === '48');
-    if (!x) return 'no sagittal clip slider';
+    const dock = [...document.querySelectorAll('input[type=range]')].filter((r) =>
+      !r.closest('.section-plane-sliders') &&
+      !/explode/i.test((r.getAttribute('aria-label') || '') + ' ' + r.className));
+    const x = dock[0];
+    if (!x) return 'no clip sliders found in the 3D dock (found ' + dock.length + ')';
     const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
     setter.call(x, '12');
     x.dispatchEvent(new Event('input', { bubbles: true }));
-    return 'set x=12';
+    return 'set x=12 (dock slider range ' + x.min + '..' + x.max + ')';
   })()`)
   await sleep(1200)
   await evaluate(`(() => {

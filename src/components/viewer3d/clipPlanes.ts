@@ -14,21 +14,24 @@ import * as THREE from 'three'
 
 /**
  * Canonical slider ranges — THE single declaration of the canonical box.
- * `docs/TELENCEPHALON_PLAN.md` §2 AMENDMENT B (task `tel-space`), which
- * supersedes the AMENDMENT A row of REALISM_PLAN §3:
+ * `docs/TELENCEPHALON_PLAN.md` §2 AMENDMENT B (task `tel-space`), corrected by
+ * the v7 QA pass, which MEASURED the baked geometry — the pre-bake estimate
+ * only covered the lobar/gyral parts and missed the cerebral white-matter cores:
  *
- *   x ∈ [−48, +48]  unchanged — the measured telencephalon span is ±37.4 au,
- *                   already inside the AMENDMENT A context limit.
- *   y ∈ [−55, +85]  raised from +45: the measured telencephalon reaches +80.6 au
- *                   (cortex vertex), +85 leaves the boundary margin.
- *   z ∈ [−75, +55]  widened from [−56, +26]: −72.6 au (occipital pole) …
- *                   +54.4 au (frontal pole).
+ *   x ∈ [−58, +58]  the baked hemisphere ribbon reaches ±56.1 au
+ *                   (was ±48 — the shells extended 8.1 au past it).
+ *   y ∈ [−55, +116] the ribbon reaches +113.7 au at the vertex
+ *                   (was +85 — 28.8 au of cortex was unreachable by the slider).
+ *   z ∈ [−76, +72]  −72.8 au (occipital pole) … +70.6 au (frontal pole)
+ *                   (was −75…+55 — the frontal pole stuck out by 15.7 au).
  *
- * NOTHING BELOW y = +45 MOVES. Only new range is added: every existing level
- * anchor (levels.json keeps its 13 original y values), plate, clip value and
- * imagery coordinate is unchanged, and the brainstem/diencephalon/cerebellum
- * experience is byte-identical at the old planes (docs/TELENCEPHALON_PLAN.md §8
- * "nothing below +45 moves").
+ * Every value carries ~2 au of margin beyond the measured geometry so a plane
+ * can be parked just outside the surface.
+ *
+ * NOTHING BELOW y = +45 MOVES: every existing level anchor, plate, clip value
+ * and imagery coordinate is unchanged, and the brainstem/diencephalon/cerebellum
+ * experience is unchanged at the old planes (verified in the v7 QA: baked
+ * brainstem GLB bboxes Δ 0.000 au, MRI/CT legacy-level slices max |Δ| 0 of 255).
  *
  * Consumers do not retype these numbers: `ClipControls` and `SectionSliderBar`
  * read the slider min/max from here, and `section/planeGeometry.ts` derives
@@ -36,9 +39,9 @@ import * as THREE from 'three'
  * them — see that module for the one transform.
  */
 export const CLIP_BOUNDS = {
-  x: { min: -48, max: 48 },
-  y: { min: -55, max: 85 },
-  z: { min: -75, max: 55 },
+  x: { min: -58, max: 58 },
+  y: { min: -55, max: 116 },
+  z: { min: -76, max: 72 },
 } as const
 
 /**

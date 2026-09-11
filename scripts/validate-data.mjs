@@ -54,16 +54,20 @@ const DIRECTIONS = ['ascending', 'descending', 'mixed'];
 const ORIENTATIONS = ['transverse', 'sagittal', 'coronal'];
 
 /**
- * Canonical atlas-space bounds. AMENDMENT A (REALISM_PLAN §3) set the
- * brainstem/diencephalon extents; AMENDMENT B (TELENCEPHALON_PLAN §2) widened
- * them for the cerebral hemispheres: measured telencephalon extent is
- * x ±37.4, y −7.8…+80.6, z −72.6…+54.4 au, so y reaches +85 and z −75…+55.
+ * Canonical atlas-space bounds for authored records. AMENDMENT A (REALISM_PLAN
+ * §3) set the brainstem/diencephalon extents; AMENDMENT B (TELENCEPHALON_PLAN
+ * §2) widened them for the cerebral hemispheres, and the v7 QA pass corrected
+ * the numbers from the BAKED geometry (the pre-bake estimate missed the cerebral
+ * white-matter cores): the hemisphere ribbon reaches x ±56.1, y −6.8…+113.7,
+ * z −72.8…+70.6 au. ~2 au of margin included.
  * Nothing below y = +45 moved — the brainstem contract is unchanged.
+ * The runtime declaration is CLIP_BOUNDS in src/components/viewer3d/clipPlanes.ts;
+ * keep the two in step (the v7 QA bounds check compares them).
  */
 const AXIS_BOUNDS = [
-  { axis: 'x', min: -48, max: 48 },
-  { axis: 'y', min: -55, max: 85 },
-  { axis: 'z', min: -75, max: 55 },
+  { axis: 'x', min: -58, max: 58 },
+  { axis: 'y', min: -55, max: 116 },
+  { axis: 'z', min: -76, max: 72 },
 ];
 
 /* ---------------------------------------------------- diagnostics record */

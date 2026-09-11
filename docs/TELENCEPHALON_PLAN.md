@@ -45,12 +45,18 @@ Applying the live registration constants (`mmPerAu 1.2`, seam −0.655 mm, warp 
 | y | −7.8 … **+80.6** | −55 … +45 | **extend to +85** (cortex vertex) |
 | z | **−72.6** … **+54.4** | −56 … +26 | **extend to −75 … +55** (occipital pole … frontal pole) |
 
-**AMENDMENT B (binding for the v7 run):**
-- Canonical bounds become x ∈ [−48, +48] (unchanged context limit), **y ∈ [−55, +85]**, **z ∈ [−75, +55]**.
+**AMENDMENT B (binding for the v7 run — numbers CORRECTED by the v7 QA against the baked geometry):**
+- Canonical bounds become **x ∈ [−58, +58]**, **y ∈ [−55, +116]**, **z ∈ [−76, +72]**.
+  The estimate in the table above came from the lobar/gyral parts only; the v7 QA measured the
+  *baked* meshes and found the cerebral white-matter cores and the derived ribbon reach
+  **x ±56.1, y −6.8…+113.7, z −72.8…+70.6 au** — i.e. the first AMENDMENT B box
+  (x ±48, y +85, z +55) clipped 28.8 au of cortex at the vertex, 8.1 au laterally and
+  15.7 au at the frontal pole, leaving them unreachable by the clip sliders.
+  `scripts/verify/anatomy-qa.mjs` now asserts that every baked part lies inside `CLIP_BOUNDS`.
 - `levels.json` gains telencephalic transverse anchors above the diencephalon roof: **+48** (thalamostriate / body of lateral ventricle), **+58** (basal ganglia + internal capsule), **+68** (centrum semiovale), **+78** (high convexity). Existing 13 anchors keep their exact y values (nothing moves — the brainstem contract is untouched).
-- `ClipControls` / `SectionSliderBar` ranges: y [−55, +85], z [−75, +55], x [−48, +48]. Snap-to-level continues to snap y to level anchors.
-- Camera default distance ×1.4; the level ruler gains the four new levels; `CLIP_BOUNDS` in `clipPlanes.ts` is the single place they are declared.
-- MRI/CT grids re-baked over the new box (dims ≈ 45×117×108 uint8 ≈ 570 KB each; imaging payload 7.30 MB → ≈ 8.5 MB, so the cap rises to **10 MB** and must be stated in the README).
+- `ClipControls` / `SectionSliderBar` ranges: y [−55, +116], z [−76, +72], x [−58, +58]. Snap-to-level continues to snap y to level anchors.
+- Camera default distance ×1.4; the level ruler gains the four new levels; `CLIP_BOUNDS` in `clipPlanes.ts` is the single place they are declared (the validator's `AXIS_BOUNDS` mirrors it).
+- MRI/CT grids re-baked over the new box (dims 81×113×107 uint8 ≈ 956 KB each; imaging payload 7.30 MB → 8.71 MB, so the cap rises to **10 MB** and is stated in the README).
 
 ## 3. Data model
 
