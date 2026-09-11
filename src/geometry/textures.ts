@@ -121,11 +121,9 @@ function makeNormalTexture(data: Uint8Array, width: number, height: number): THR
 
 /** Fixed seeds — change these deliberately, never per call. */
 const SEED_TISSUE = 0x5eed01
-const SEED_FOLIA = 0x5eed02
 const SEED_STRIATION = 0x5eed03
 
 let tissueTexture: THREE.DataTexture | null = null
-let foliaTexture: THREE.DataTexture | null = null
 let striationTexture: THREE.DataTexture | null = null
 
 /**
@@ -146,33 +144,6 @@ export function getTissueNormalTexture(): THREE.DataTexture {
   tissueTexture = makeNormalTexture(normalsFromHeight(height, size, size, 8), size, size)
   tissueTexture.repeat.set(2, 2)
   return tissueTexture
-}
-
-/**
- * Cerebellar folia ridges, 1024×256. Ridge frequency runs along U (24 ridges
- * per U period, crests sharpened), with tileable fBm wobbling the ridge phase
- * along V so the striation reads organic rather than corrugated. Repeat is
- * left at (1, 1) — GLB recipes set their own repeat on a clone.
- */
-export function getFoliaNormalTexture(): THREE.DataTexture {
-  if (foliaTexture) return foliaTexture
-  const width = 1024
-  const height = 256
-  const ridges = 24
-  const field = new Float32Array(width * height)
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const u = x / width
-      const v = y / height
-      const wobble = (fbmTileable(u, v, 4, 3, SEED_FOLIA) - 0.5) * 0.55
-      const crest = 0.5 + 0.5 * Math.sin((u + wobble / ridges) * Math.PI * 2 * ridges)
-      const ridged = Math.pow(crest, 1.7) // sharp crest, rounded sulcus
-      const grain = fbmTileable(u, v, 16, 3, SEED_FOLIA + 7) * 0.18
-      field[y * width + x] = ridged * 0.82 + grain
-    }
-  }
-  foliaTexture = makeNormalTexture(normalsFromHeight(field, width, height, 2.8), width, height)
-  return foliaTexture
 }
 
 /**
@@ -202,14 +173,4 @@ export function getStriationNormalTexture(): THREE.DataTexture {
   striationTexture = makeNormalTexture(normalsFromHeight(field, width, height, 4), width, height)
   striationTexture.repeat.set(1, 3)
   return striationTexture
-}
-
-/** Dispose the singleton textures (host app teardown / tests only). */
-export function disposeProceduralTextures(): void {
-  tissueTexture?.dispose()
-  foliaTexture?.dispose()
-  striationTexture?.dispose()
-  tissueTexture = null
-  foliaTexture = null
-  striationTexture = null
 }

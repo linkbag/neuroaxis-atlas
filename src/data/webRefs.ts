@@ -332,6 +332,3 @@ export function getWebRefs(id: string, name: string, kind?: string, region?: str
   if (region && regionAcademic[region]) out.push(...regionAcademic[region])
   return out
 }
-
-/** Total curated links (for the References modal "browse sources" note). */
-export const webRefCount = Object.values(curated).reduce((n, a) => n + a.length, 0)

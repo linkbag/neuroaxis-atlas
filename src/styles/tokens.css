@@ -37,15 +37,6 @@
   --kind-surface: #64748b; /* surface slate */
   --kind-context: #94a3b8; /* context gray */
 
-  /* §6 named overrides */
-  --ov-red-nucleus: #b91c1c;
-  --ov-substantia-nigra: #1f2937;
-  --ov-substantia-nigra-reticulata: #374151;
-  --ov-locus-coeruleus: #1d4ed8;
-
-  /* Plate ink (§6 SVG contract stroke color) */
-  --plate-ink: #0f172a;
-
   /* Typography */
   --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;

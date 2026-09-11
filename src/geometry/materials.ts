@@ -128,11 +128,6 @@ export function enableSectionCapping<T extends THREE.Material>(
   return material
 }
 
-/** True when the material participates in section capping (audits/tests). */
-export function isSectionCapped(material: THREE.Material): boolean {
-  return sectionCapRegistry.has(material)
-}
-
 /**
  * The cap-face color of the FIRST capped material, or null when nothing has
  * opted in yet. The PiP paints one shared tissue face (a cut face is cut

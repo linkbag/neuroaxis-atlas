@@ -82,11 +82,6 @@ export function getAnatomyPart(slug: string): AnatomyPart | undefined {
   return partBySlug.get(slug)
 }
 
-/** Whether a committed v2 mesh exists for the slug. */
-export function hasAnatomyPart(slug: string): boolean {
-  return partBySlug.has(slug)
-}
-
 /* ------------------------------------------------- anatomy record contract */
 
 /**

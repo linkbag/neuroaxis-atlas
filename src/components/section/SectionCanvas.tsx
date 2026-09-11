@@ -70,6 +70,26 @@
  * The frame-varying remainder — the layer FRAME resolution (dataStatus is
  * async-arrival sensitive, so it must be re-asked every draw), the credit,
  * the hint and the interaction state — is deliberately NOT cached.
+ *
+ * Structure of a frame (QUALITY_PLAN §5 item 17, AUDIT §2.23):
+ * `draw()` was one 145-line function that also owned the canvas sizing,
+ * interaction and diagnostics. It is now a four-pass pipeline — the passes and
+ * their order are exactly as before, only the ownership moved:
+ *
+ *   1. `beginSectionFrame()`   TRANSFORM — hidden-tab guard, backing-store size
+ *                              and dpr, the SHARED `planeTransform`, and the
+ *                              memoized `RenderOrderCache`. Returns null when
+ *                              there is nothing to paint.
+ *   2. `drawSectionLayers()`   LAYERS — background, grid, and the real-imagery
+ *                              base plate (registry order + credit + hint).
+ *                              Returns whether contours overlay a real base.
+ *   3. `drawSectionContours()` CONTOURS — the cached visible parts in draw
+ *                              order, then the selected structure's label.
+ *   4. `drawSectionOverlays()` OVERLAYS — crosshair, orientation badge, plane
+ *                              readout, hover label, geometry-loading notice.
+ *
+ * Interaction (pointer, click, wheel, keyboard), the registry and the worker
+ * plumbing stay in the component below; none of them is part of a paint pass.
  */
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { getLevel, getTaxonomyEntry, levels, platesForLevel, shortLevelName } from '../../data/load'
@@ -1055,21 +1075,61 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     })
   }
 
-  function draw(): void {
+  /**
+   * Everything one painted frame needs, resolved once by `beginFrame`.
+   *
+   * `SectionCanvas.draw()` used to be a single 145-line function that owned the
+   * canvas sizing, the shared plane transform, the memoized render order, the
+   * imagery compositing, the contour pass, interaction state and the in-canvas
+   * overlays. `AUDIT §2.23` flagged it as a god function; `QUALITY_PLAN §5 item
+   * 17` asks for the split below. The order of the passes is unchanged — only
+   * the ownership moved:
+   *
+   *   beginSectionFrame  → canvas size/dpr + the SHARED plane transform + the
+   *                        memoized render order (the "transform" step)
+   *   drawSectionLayers  → base + real imagery compositing          ("layers")
+   *   drawSectionContours→ visible-part paths, selected label       ("contours")
+   *   drawSectionOverlays→ grid, crosshair, orientation, readout,
+   *                        hover label, geometry-loading notice    ("overlays")
+   */
+  interface SectionFrame {
+    canvas: HTMLCanvasElement
+    ctx: CanvasRenderingContext2D
+    /** CSS pixels of the canvas box (the transform's viewport). */
+    width: number
+    height: number
+    axis: PlaneAxis
+    planeValue: number
+    plane: PlaneSpec
+    transform: Transform
+    view: SectionView
+    /** Store snapshot for this frame — never re-read inside a pass. */
+    state: ReturnType<typeof useAtlasStore.getState>
+    /** Memoized per-plane order (QUALITY_PLAN §3 item 9). */
+    order: RenderOrderCache
+  }
+
+  /**
+   * Transform step: size the backing store, install the device-pixel transform
+   * and resolve the SHARED world→screen mapping plus the memoized render order.
+   * Returns null when there is nothing to paint (hidden tab, no canvas, box too
+   * small) — the caller then returns immediately, exactly as before.
+   */
+  function beginSectionFrame(): SectionFrame | null {
     // Perf guard: the tab is hidden — paint nothing (rAF is throttled to a
     // stop anyway; this also skips resize-driven and worker-result draws).
     // The visibilitychange listener below reschedules a draw on return.
-    if (typeof document !== 'undefined' && document.hidden) return
+    if (typeof document !== 'undefined' && document.hidden) return null
     const canvas = canvasRef.current
-    if (canvas === null) return
+    if (canvas === null) return null
     const ctx = canvas.getContext('2d')
-    if (ctx === null) return
+    if (ctx === null) return null
     const state = useAtlasStore.getState()
     const axis = state.sectionAxis
     const planeValue = state.clip[axis]
     const width = canvas.clientWidth
     const height = canvas.clientHeight
-    if (width <= 2 || height <= 2) return
+    if (width <= 2 || height <= 2) return null
     const dpr = Math.min(window.devicePixelRatio || 1, CANVAS_MAX_DPR)
     if (canvas.width !== Math.round(width * dpr) || canvas.height !== Math.round(height * dpr)) {
       canvas.width = Math.round(width * dpr)
@@ -1089,7 +1149,7 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
      * levelId and the per-part Path2D only when their key changed; every other
      * frame (hover, selection, credit, resize-free store writes, tab return)
      * reuses the arrays and the paths as they are. */
-    const renderOrder = ensureRenderOrder(renderOrderRef.current, {
+    const order = ensureRenderOrder(renderOrderRef.current, {
       axis,
       planeValue,
       transform,
@@ -1098,30 +1158,40 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       serial: contourSerialRef.current,
       registryLayers: getSectionImageLayerRegistry().list(),
     })
+    return { canvas, ctx, width, height, axis, planeValue, plane, transform, view, state, order }
+  }
 
+  /**
+   * Layers step: the base fill, the grid, then the real-imagery base plate.
+   *
+   * ONE modality per frame: `kind` is the store request, resolveLayerFrame()
+   * turns it into a single layer (auto = anchored photo → CT → MRI — see
+   * AUTO_MODALITY_ORDER) and the layers in turn paint only when
+   * `layerCtx.modality` matches their own tag. Layers are visited in ascending
+   * `priority`; the first one that reports having painted supplies the credit
+   * shown bottom-left.
+   *
+   * @returns `realBase` — whether the simulated contours composite ON TOP of
+   *          real imagery this frame (v3 rendering keeps them as the base).
+   */
+  function drawSectionLayers(frame: SectionFrame): boolean {
+    const { ctx, width, height, plane, state, order, view, transform } = frame
     ctx.fillStyle = BACKGROUND
     ctx.fillRect(0, 0, width, height)
 
     drawGrid(ctx, transform)
 
-    /* ---- real imagery: the section's BASE layer (v4 real-first, plan §4) ----
-     * ONE modality per frame: `kind` is the store request, resolveLayerFrame()
-     * turns it into a single layer (auto = anchored photo → CT → MRI — see
-     * AUTO_MODALITY_ORDER) and the layers in turn paint only when
-     * `layerCtx.modality` matches their own tag. Layers are visited in
-     * ascending `priority`; the first one that reports having painted supplies
-     * the credit shown bottom-left. */
     const underlay = state.sectionUnderlay
-    const levelId = renderOrder.levelId
+    const levelId = order.levelId
     // Already sorted (cached on the registry fingerprint); the FRAME itself is
     // re-resolved every draw because dataStatus is async-arrival sensitive.
-    const orderedLayers = renderOrder.orderedLayers
-    const frame = resolveLayerFrame(orderedLayers, underlay.kind, plane, levelId)
+    const orderedLayers = order.orderedLayers
+    const imageryFrame = resolveLayerFrame(orderedLayers, underlay.kind, plane, levelId)
     const layerCtx: SectionLayerContext = {
       opacity: underlay.opacity,
       levelId,
       kind: underlay.kind,
-      modality: frame.modality,
+      modality: imageryFrame.modality,
       windowMin: underlay.windowMin,
       windowMax: underlay.windowMax,
       ctWindowPreset: underlay.ctWindowPreset,
@@ -1148,7 +1218,7 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       // layer that reports a paint supplies the credit rendered bottom-left.
       const candidates: SectionImageLayer[] = [
         ...orderedLayers.filter((layer) => layer.modality === undefined),
-        ...(frame.layer !== null ? [frame.layer] : []),
+        ...(imageryFrame.layer !== null ? [imageryFrame.layer] : []),
       ]
       for (const layer of candidates) {
         const result = paint(layer)
@@ -1166,22 +1236,30 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     // base (v3 rendering, unchanged).
     const realBase = drewReal && underlay.realFirst
     frameDebugRef.current = {
-      modality: String(frame.modality ?? 'none'),
-      status: String(frame.status ?? 'n/a'),
+      modality: String(imageryFrame.modality ?? 'none'),
+      status: String(imageryFrame.status ?? 'n/a'),
       drewReal,
     }
-    const hint = imageryHint(underlay.kind, frame.modality, frame.status, drewReal)
+    const hint = imageryHint(underlay.kind, imageryFrame.modality, imageryFrame.status, drewReal)
     if (lastHintRef.current !== hint) {
       lastHintRef.current = hint
       setHint(hint)
     }
+    return realBase
+  }
 
-    /* ---- simulated contours: context → ventricle → nucleus ---- */
+  /**
+   * Contours step: the simulated section itself — context → ventricle →
+   * nucleus in the cached draw order — then the selected structure's label,
+   * which must sit over both the base plate and the contour fills.
+   */
+  function drawSectionContours(frame: SectionFrame, realBase: boolean): void {
+    const { ctx, transform, state, order } = frame
     const highlight = highlightIdSet({ selectedId: state.selectedId, syndromeId: state.syndromeId })
     const strokeOnly = loopsTotalRef.current > DEGRADE_LOOP_LIMIT
     // Cached (see ensureRenderOrder): the filter+sort and the Path2D per part
     // are rebuilt only when plane/axis/layers/selection/syndrome changed.
-    const visibleParts = renderOrder.visibleParts
+    const visibleParts = order.visibleParts
 
     for (const item of visibleParts) {
       const meta = item.meta
@@ -1200,11 +1278,17 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       if (item.meta.group !== state.selectedId) continue
       if (item.part.loops.length > 0) drawSelectedLabel(ctx, item.meta, item.part, transform)
     }
+  }
 
-    /* ---- crosshair at the other two sliders ---- */
+  /**
+   * Overlays step: everything drawn ON TOP of the section and already handled
+   * by the preceding passes — the crosshair at the other two sliders, the
+   * orientation badge, the plane readout, the hover label and the
+   * geometry-loading notice.
+   */
+  function drawSectionOverlays(frame: SectionFrame): void {
+    const { ctx, width, height, axis, planeValue, transform, state } = frame
     drawCrosshair(ctx, transform, axis, state.clip)
-
-    /* ---- in-canvas overlays ---- */
     drawOrientation(ctx, axis, transform)
     drawReadout(ctx, axis, planeValue, transform)
     drawHoverLabel(ctx, transform)
@@ -1219,6 +1303,14 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
         height - 9,
       )
     }
+  }
+
+  function draw(): void {
+    const frame = beginSectionFrame()
+    if (frame === null) return
+    const realBase = drawSectionLayers(frame)
+    drawSectionContours(frame, realBase)
+    drawSectionOverlays(frame)
   }
 
   function drawGrid(ctx: CanvasRenderingContext2D, transform: Transform): void {

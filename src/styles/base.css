@@ -201,17 +201,6 @@ button.chip:hover {
   white-space: nowrap;
 }
 
-.scaffold-note {
-  margin-top: var(--space-4);
-  padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md);
-  background: var(--bg-elevated);
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-}
-
 /* ------------------------------------------------------------ scrollbars */
 
 * {

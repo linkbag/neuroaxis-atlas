@@ -15,7 +15,6 @@
  * Original/schematic geometry only — no external anatomy datasets.
  */
 import * as THREE from 'three'
-import type { Region } from '../types'
 import { toCatmullRom } from './curves'
 
 /* ------------------------------------------------------------------ */
@@ -35,7 +34,7 @@ const BOW_ANCHORS: ReadonlyArray<readonly [number, number]> = [
 ]
 
 /** Ventral (＋z) offset of the brainstem axis at height y. */
-export function axisZ(y: number): number {
+function axisZ(y: number): number {
   if (y <= BOW_ANCHORS[0][0]) return BOW_ANCHORS[0][1]
   const last = BOW_ANCHORS[BOW_ANCHORS.length - 1]
   if (y >= last[0]) return last[1]
@@ -204,7 +203,7 @@ export function createCerebellumEnvelopes(): [THREE.BufferGeometry, THREE.Buffer
  * (y ≈ 19.5) through the midbrain flexure to the tent of the 4th ventricle
  * (y ≈ −13), riding the axis bow.
  */
-export function createCerebralAqueductGeometry(): THREE.BufferGeometry {
+function createCerebralAqueductGeometry(): THREE.BufferGeometry {
   const curve = toCatmullRom([
     [0, 19.5, -0.8],
     [0, 14, -2.2],
@@ -221,7 +220,7 @@ export function createCerebralAqueductGeometry(): THREE.BufferGeometry {
  * rhomboid cavity (x-radius 4.5, z-radius 1.9 at z ≈ −7.2) with a midline
  * ridge rising toward the fastigium.
  */
-export function createFourthVentricleTentGeometry(): THREE.BufferGeometry {
+function createFourthVentricleTentGeometry(): THREE.BufferGeometry {
   const cx = 0
   const cy = -21
   const cz = -7.2
@@ -246,43 +245,13 @@ export function createFourthVentricleTentGeometry(): THREE.BufferGeometry {
  * Third ventricle — narrow midline slit between the thalami (x-radius ≈ 1),
  * matching the vent-third-ventricle record extent (y 23→35, z ±5 around 0.5).
  */
-export function createThirdVentricleSlitGeometry(): THREE.BufferGeometry {
+function createThirdVentricleSlitGeometry(): THREE.BufferGeometry {
   return ellipsoid(1.1, 6, 5, 0, 29, 0.5, 28, 22)
 }
 
 /* ------------------------------------------------------------------ */
 /* Scene-facing bundle                                                 */
 /* ------------------------------------------------------------------ */
-
-/** One renderable envelope part with the record/region it belongs to. */
-export interface ContextEnvelopePart {
-  /** Linked record id (ctx-*) or a synthetic env-* id for pure context. */
-  id: string
-  region: Region
-  geometry: THREE.BufferGeometry
-}
-
-/**
- * All translucent context envelopes for SceneLayers, already positioned in
- * canonical space. Pure context shapes (no authored record) use synthetic
- * `env-*` ids; the thalamus/hypothalamus/cerebellum silhouettes carry the ids
- * of their ctx-* records so layer filters and selection highlighting apply.
- */
-export function buildContextEnvelopes(): ContextEnvelopePart[] {
-  const [thalamusRight, thalamusLeft] = createThalamusEnvelopes()
-  const [cerebRight, cerebLeft, vermis] = createCerebellumEnvelopes()
-  return [
-    { id: 'env-medulla', region: 'medulla', geometry: createMedullaEnvelope() },
-    { id: 'env-pons', region: 'pons', geometry: createPonsEnvelope() },
-    { id: 'env-midbrain', region: 'midbrain', geometry: createMidbrainEnvelope() },
-    { id: 'ctx-thalamus-envelope', region: 'diencephalon', geometry: thalamusRight },
-    { id: 'ctx-thalamus-envelope', region: 'diencephalon', geometry: thalamusLeft },
-    { id: 'ctx-hypothalamus-envelope', region: 'diencephalon', geometry: createHypothalamusEnvelope() },
-    { id: 'ctx-cerebellum', region: 'cerebellum', geometry: cerebRight },
-    { id: 'ctx-cerebellum', region: 'cerebellum', geometry: cerebLeft },
-    { id: 'ctx-cerebellum', region: 'cerebellum', geometry: vermis },
-  ]
-}
 
 /**
  * Geometry overrides for authored records whose 3D shape is more than an

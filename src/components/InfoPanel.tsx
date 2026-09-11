@@ -8,7 +8,7 @@
  * On phones (≤640px) the panel becomes a bottom sheet (styles in layout.css).
  */
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   dataStatus,
   getPlate,
@@ -298,8 +298,42 @@ function EmptyState() {
   )
 }
 
+/**
+ * True while the panel is a COLLAPSED BOTTOM SHEET.
+ *
+ * A11Y-CONTRACT (AUDIT §2.18, item 14): under 641 px `layout.css` turns this
+ * panel into a bottom sheet whose body is hidden by `transform:
+ * translateY(calc(100% - 46px))` — the `.info-scroll` content is off-screen but
+ * every link and level button inside it is still tabbable, so keyboard focus
+ * disappears into an invisible panel. The container gets `inert` while that is
+ * true (see the `<aside>` below).
+ *
+ * The reason this is a media query and not just `!sheetOpen`: the SAME class
+ * pair (`is-open` / `is-collapsed`) is applied at every breakpoint, and on a
+ * desktop rail the `.info-scroll` is always visible. Marking it inert there
+ * would remove keyboard access to the record details — the very defect being
+ * fixed, mirrored. So the condition is exactly "collapsed AND the sheet layout
+ * is in force".
+ */
+function useCollapsedSheet(): boolean {
+  const query = '(max-width: 640px)'
+  const [matches, setMatches] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
+  )
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const list = window.matchMedia(query)
+    const onChange = (event: MediaQueryListEvent) => setMatches(event.matches)
+    setMatches(list.matches)
+    list.addEventListener('change', onChange)
+    return () => list.removeEventListener('change', onChange)
+  }, [])
+  return matches
+}
+
 export default function InfoPanel() {
   const [sheetOpen, setSheetOpen] = useState(false)
+  const collapsedSheet = useCollapsedSheet() && !sheetOpen
   const selectedId = useAtlasStore((s) => s.selectedId)
   const record = selectedId !== null ? getStructure(selectedId) : undefined
   const entry = selectedId !== null ? getTaxonomyEntry(selectedId) : undefined
@@ -311,7 +345,15 @@ export default function InfoPanel() {
   const plate = getPlate(openPlate)
 
   return (
-    <aside className={`info-panel ${sheetOpen ? 'is-open' : 'is-collapsed'}`}>
+    <aside
+      className={`info-panel ${sheetOpen ? 'is-open' : 'is-collapsed'}`}
+      // A11Y-CONTRACT (AUDIT §2.18): while the sheet is collapsed the body is
+      // off-screen, so it must not be tabbable. `inert` (not `aria-hidden`,
+      // which would be a lie while its children stay focusable) is written as
+      // `''` / `undefined` so React adds the attribute only when needed; the
+      // cast is required because @types/react 18 does not declare `inert` yet.
+      {...({ inert: collapsedSheet ? '' : undefined } as Record<string, unknown>)}
+    >
       <div className="info-panel-bar">
         <h2 className="panel-title">Selection details</h2>
         <button

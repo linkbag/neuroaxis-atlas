@@ -484,18 +484,6 @@ export function extractContours(
   }
 }
 
-/** Signed shoelace area of a flat [u0,v0,…] path (absolute value). */
-export function polygonArea(path: readonly number[]): number {
-  const count = path.length / 2
-  if (count < 3) return 0
-  let sum = 0
-  for (let i = 0; i < count; i++) {
-    const j = (i + 1) % count
-    sum += path[i * 2] * path[j * 2 + 1] - path[j * 2] * path[i * 2 + 1]
-  }
-  return Math.abs(sum) / 2
-}
-
 /**
  * Even-odd point-in-polygon test across a set of flat loops of one part.
  * A point is inside the part when it lies inside an odd number of its loops

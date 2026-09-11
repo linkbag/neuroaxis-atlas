@@ -103,8 +103,7 @@
   text-transform: uppercase;
 }
 
-.slider-row output,
-.slider-value {
+.slider-row output {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--text-secondary);

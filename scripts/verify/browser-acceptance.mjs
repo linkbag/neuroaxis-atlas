@@ -3,43 +3,58 @@
  *   1. PiP restore control appears when the panel is hidden and brings it back.
  *   2. Plates-tab live section has plane sliders that actually move the section.
  *
- * Run: node .plate-scratch/cdp-acceptance.mjs [url]
+ * SELF-SUFFICIENT: if nothing answers at the target URL this starts the dev
+ * server itself, waits for HTTP 200, then stops it again on every exit path. An
+ * already-running server can still be targeted by passing its URL.
+ *
+ * Run: node scripts/verify/browser-acceptance.mjs [url]
+ * Exit: 0 all checks passed · 1 checks failed · 2 no Chrome · 3 no server ·
+ *       4 Chrome unusable (see scripts/verify/lib/startServer.mjs)
  */
-import { spawn } from 'node:child_process'
 import { existsSync, mkdirSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { EXIT, createLifecycle, killTree, launchChrome, startDevServer } from './lib/startServer.mjs'
 
 const URL_ = process.argv[2] ?? 'http://localhost:5173'
 const PORT = 9344
 const PROFILE = resolve('.plate-scratch/chrome-profile-accept')
 mkdirSync(PROFILE, { recursive: true })
 
-const CHROME = [
-  `${process.env.ProgramFiles}\\Google\\Chrome\\Application\\chrome.exe`,
-  `${process.env['ProgramFiles(x86)']}\\Google\\Chrome\\Application\\chrome.exe`,
-  `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
-].find((p) => p !== undefined && existsSync(p))
-
-const chrome = spawn(
-  CHROME,
-  [
-    '--headless=new',
-    `--remote-debugging-port=${PORT}`,
-    `--user-data-dir=${PROFILE}`,
-    '--no-first-run',
-    '--no-default-browser-check',
-    '--disable-extensions',
-    '--enable-unsafe-swiftshader',
-    '--window-size=1400,900',
-    'about:blank',
-  ],
-  { stdio: 'ignore' },
-)
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+const lifecycle = createLifecycle((message) => console.log(`  ·  ${message}`))
 const results = []
 const fail = (m) => results.push(`FAIL  ${m}`)
 const pass = (m) => results.push(`ok    ${m}`)
+
+const server = await startDevServer({
+  baseUrl: URL_,
+  lifecycle,
+  log: (message) => console.log(`  ·  ${message}`),
+  timeoutMs: 30_000,
+})
+if (server.failed === true) {
+  console.error(`\ncannot run: the dev server never answered HTTP 200 at ${URL_}`)
+  console.error(`exit ${EXIT.SERVER_UNAVAILABLE} (environment unusable — no check was run)`)
+  await lifecycle.dispose()
+  process.exit(EXIT.SERVER_UNAVAILABLE)
+}
+
+const launched = await launchChrome({
+  port: PORT,
+  profileDir: PROFILE,
+  windowSize: '1400,900',
+  log: (message) => console.log(`  ·  ${message}`),
+})
+if (!launched.ok) {
+  console.error(`\ncannot run: ${launched.reason}`)
+  console.error(`exit ${EXIT.BROWSER_UNAVAILABLE} (environment unusable — no check was run)`)
+  await lifecycle.dispose()
+  process.exit(EXIT.BROWSER_UNAVAILABLE)
+}
+lifecycle.add(async () => {
+  killTree(launched.chrome.pid)
+})
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 try {
   let page = null
@@ -222,11 +237,11 @@ try {
 } catch (error) {
   fail(`probe error: ${error instanceof Error ? error.message : String(error)}`)
 } finally {
-  chrome.kill()
+  await lifecycle.dispose()
 }
 
 console.log('\n=== v5 acceptance ===')
 for (const line of results) console.log(line)
 const failures = results.filter((r) => r.startsWith('FAIL')).length
 console.log(`\n${results.length - failures}/${results.length} checks passed`)
-process.exit(failures === 0 ? 0 : 1)
+process.exit(failures === 0 ? EXIT.OK : EXIT.CHECKS_FAILED)

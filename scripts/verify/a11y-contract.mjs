@@ -68,12 +68,75 @@ try {
 } catch {
   source = 'dist/'
 }
+const serverUp = source === BASE
 
 async function fetchText(url) {
   const res = await fetch(url, { signal: AbortSignal.timeout(20000) })
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`)
   return res.text()
 }
+
+/**
+ * Remove JS/TS comments from source text WITHOUT touching string contents.
+ *
+ * A regex is not enough here, and the failure mode is silent: a naive `//` strip
+ * deletes the rest of any line containing a URL literal
+ * (`createElementNS('http://www.w3.org/2000/svg', 'title')`) and — worse — sees
+ * the `//` in `useEffect, useMemo, useRef` and truncates the statement, so the
+ * `</*` of the NEXT comment then matches inside what is left and swallows the
+ * whole region. That is exactly how the `<title>` fact stopped being findable.
+ * This scanner tracks '  " and ` so a comment marker inside a string is text.
+ */
+function stripCommentsSafely(text) {
+  let out = ''
+  let quote = null
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i]
+    if (quote !== null) {
+      out += ch
+      if (ch === '\\') {
+        out += text[i + 1] ?? ''
+        i += 1
+        continue
+      }
+      if (ch === quote) quote = null
+      continue
+    }
+    if (ch === "'" || ch === '"' || ch === '`') {
+      quote = ch
+      out += ch
+      continue
+    }
+    if (ch === '/' && text[i + 1] === '/') {
+      while (i < text.length && text[i] !== '\n') i += 1
+      out += '\n'
+      continue
+    }
+    if (ch === '/' && text[i + 1] === '*') {
+      i += 2
+      while (i < text.length && !(text[i] === '*' && text[i + 1] === '/')) i += 1
+      i += 1
+      out += ' '
+      continue
+    }
+    out += ch
+  }
+  return out
+}
+
+/**
+ * The SOURCE reading: comments removed, single quotes unified to double quotes,
+ * and ALL whitespace preserved.
+ *
+ *  • comments are REMOVED, so no fact can be satisfied by prose ABOUT the fact;
+ *  • quotes are UNIFIED (the convention the table was written in), so a fact
+ *    written `'button'` and the same fact written `"button"` are one form; in
+ *    JSX the author's double quotes already are the normal form;
+ *  • whitespace is PRESERVED — the patterns contain `\s` classes, so the
+ *    whitespace-free reading used for the shipped bundle would break every one
+ *    that spans a line break.
+ */
+const sourceCode = (text) => stripCommentsSafely(text).replace(/'/g, '"')
 
 /* ---------------------------------------------------------------- 1. plates */
 
@@ -115,92 +178,138 @@ regionsWithoutName === 0
   ? ok('every plate region has a display name → every new button node in the AX tree is named (audit §H)')
   : bad(`${regionsWithoutName} plate region(s) have no display name — audit §H would fail`)
 
-/* ------------------------------------------------- 2. transformed components */
+/* -------------------------------------- 2. the contract, read from sources */
 
+/**
+ * MODULES lists every file the contract above reads. Kept explicit so a missing
+ * file fails loudly instead of quietly skipping its facts.
+ */
 const MODULES = [
   'src/components/PlateRenderer.tsx',
   'src/components/ReferencesModal.tsx',
   'src/components/SearchBox.tsx',
+  'src/components/InfoPanel.tsx',
   'src/App.tsx',
   'src/components/viewer3d/SectionPiP.tsx',
 ]
 
-/** [module, fact, regex against the NORMALISED module source] */
+/**
+ * The contract, as (module, fact, regex) triples.
+ *
+ * EVERY regex here matches attribute names, string literals or method names —
+ * never a minifier-renamable identifier — so the same expression is valid
+ * against the raw shared source AND against a Terser-mangled bundle. That is
+ * what lets one table serve both readings (see the two readers below); the
+ * previous version matched local function names and silently stopped working
+ * the moment `minify` was enabled (QUALITY_PLAN §3 item 12).
+ */
 const CONTRACT = [
   ['src/components/PlateRenderer.tsx', 'plate root is role="group", aria-labelled (no AX atom — PLAN DEV-13)',
-    /className:"plate-root",role:"group","aria-label":/],
+    /className="plate-root"[\s\S]{0,400}role="group"[\s\S]{0,400}aria-label/],
   ['src/components/PlateRenderer.tsx', 'regions are role="button"',
-    /setAttribute\("role","button"\)/],
+    /setAttribute\("role",\s*"button"\)/],
   ['src/components/PlateRenderer.tsx', 'regions carry a roving tabindex (exactly one "0")',
-    /setAttribute\("tabindex",el===stop\?"0":"-1"\)/],
-  ['src/components/PlateRenderer.tsx', 'region accessible name = its <title> display name',
-    /createElementNS\([\s\S]{0,60}?"title"\)[\s\S]{0,60}?appendChild\(title\)/],
+    /setAttribute\("tabindex"[\s\S]{0,90}\?\s*"0"\s*:\s*"-1"\)/],
+  ['src/components/PlateRenderer.tsx', 'region accessible name = the injected SVG <title>',
+    /createElementNS\("http:\/\/www\.w3\.org\/2000\/svg", "title"\)[\s\S]{0,200}textContent = entry\.name[\s\S]{0,200}appendChild\(title\)/],
   ['src/components/PlateRenderer.tsx', 'Arrow/Home/End roving keys handled on the plate root',
-    /NAV_KEYS[\s\S]{0,1400}?addEventListener\("keydown",onKeyDown\)/],
+    /new Set\(\[[^\]]*"ArrowDown"[^\]]*"Home"[^\]]*"End"[^\]]*\]\)[\s\S]{0,4000}addEventListener\("keydown", onKeyDown\)/],
   ['src/components/PlateRenderer.tsx', 'Enter and Space activate the focused region like a click',
-    /event\.key==="Enter"\|\|event\.key===""\|\|event\.key==="Spacebar"[\s\S]{0,1600}?selectRegion\(/],
+    /"Enter"\s*\|\|\s*event\.key\s*===\s*" "\s*\|\|\s*event\.key\s*===\s*"Spacebar"/],
   ['src/components/PlateRenderer.tsx', 'leader labels are keyboard-activatable too',
-    /onKeyDownLabel[\s\S]{0,400}?selectRegion\(/],
+    /onKeyDownLabel = \(event: KeyboardEvent\)[\s\S]{0,400}selectRegion\([\s\S]{0,300}label\.setAttribute\("role", "button"\)[\s\S]{0,300}label\.addEventListener\("keydown", onKeyDownLabel\)/],
   ['src/App.tsx', 'sidebar is inert while closed (not aria-hidden)',
-    /\{inert:sidebarOpen\?undefined:""\}/],
-  ['src/components/ReferencesModal.tsx', 'focus restored to the opener on close',
-    /opener\.isConnected[\s\S]{0,60}?opener\.focus\(/],
+    /inert:\s*sidebarOpen\s*\?\s*undefined\s*:\s*""/],
+  ['src/components/InfoPanel.tsx', 'collapsed bottom-sheet body is inert, not aria-hidden',
+    /inert:\s*collapsedSheet\s*\?\s*""\s*:\s*undefined/],
+  ['src/components/ReferencesModal.tsx', 'focus is captured per OPEN and restored on close',
+    /opener\.isConnected[^]{0,60}opener\.focus\(\{ preventScroll: true \}\)[\s\S]{0,120}\}, \[open\]\)/],
   ['src/components/ReferencesModal.tsx', 'Tab cycles inside the dialog (focus trap)',
-    /FOCUSABLE[\s\S]{0,300}?focusableIn/],
+    /const nodes = focusableIn\(dialog\)[\s\S]{0,300}event\.shiftKey/],
   ['src/components/ReferencesModal.tsx', 'Escape closes from inside the dialog',
-    /event\.key==="Escape"[\s\S]{0,120}?setReferencesOpen\(false\)/],
+    /"Escape"[\s\S]{0,140}setReferencesOpen\(false\)/],
   ['src/components/ReferencesModal.tsx', 'dialog is modal and labelled',
-    /role:"dialog","aria-modal":"true","aria-label":/],
+    /role="dialog"[\s\S]{0,80}aria-modal="true"[\s\S]{0,120}aria-label="References and bibliography"/],
   ['src/App.tsx', 'sidebar carries NO aria-hidden in code (comments stripped)',
     { stripComments: true, absent: true, re: /aria-hidden/ }],
   ['src/components/SearchBox.tsx', 'combobox exposes aria-activedescendant',
-    /"aria-activedescendant"/],
+    /aria-activedescendant=\{activeOptionId\}/],
   ['src/components/SearchBox.tsx', 'options carry stable ids',
     /searchbox-option-/],
   ['src/components/viewer3d/SectionPiP.tsx', 'narrow-viewport PiP tab is rendered',
-    /className:"pip-toggle"/],
+    /"pip-toggle"[\s\S]{0,120}"Show or hide the live section panel"/],
 ]
 
-if (source === BASE) {
-  for (const module of MODULES) {
-    let code
-    try {
-      code = await fetchText(`${BASE}/${module}`)
-    } catch (error) {
-      bad(`dev server did not transform ${module} (${error.message})`)
-      continue
-    }
-    const flat = normalize(code)
-    for (const [owner, fact, check] of CONTRACT) {
-      if (owner !== module) continue
-      const re = check instanceof RegExp ? check : check.re
-      const text = check instanceof RegExp || check.stripComments !== true ? flat : stripComments(code)
-      const hit = re.test(text)
-      const want = check instanceof RegExp || check.absent !== true
-      hit === want ? ok(`${module}: ${fact}`) : bad(`${module}: ${want ? 'MISSING' : 'STILL PRESENT —'} ${fact}`)
-    }
+/**
+ * READER 1 — the named facts, read from the SHARED SOURCE FILES.
+ *
+ * This is the authoritative reading and it needs no server: it is the same text
+ * `npm run build` compiles, so a fact missing here is missing from the product.
+ * The files are read once each and normalised (comments stripped, one quote
+ * style) before matching.
+ */
+for (const module of MODULES) {
+  if (!existsSync(resolve(module))) {
+    bad(`${module} does not exist — the contract cannot be checked`)
+    continue
   }
-  ok(`dev server transformed all ${MODULES.length} changed modules (esbuild pipeline, same as the build)`)
-} else {
-  const entry = readdirSync(resolve('dist/assets'))
-    .filter((f) => f.startsWith('index-') && f.endsWith('.js'))
-    .sort()
-    .pop()
+}
+for (const [owner, fact, check] of CONTRACT) {
+  const re = check instanceof RegExp ? check : check.re
+  const text = sourceCode(read(owner))
+  const hit = re.test(text)
+  const want = check instanceof RegExp || check.absent !== true
+  hit === want
+    ? ok(`${owner}: ${fact}`)
+    : bad(`${owner}: ${want ? 'MISSING' : 'STILL PRESENT —'} ${fact}`)
+}
+ok(`read ${MODULES.length} source modules (no dev server needed; the same text the build compiles)`)
+
+/**
+ * A small subset that must be present in the SHIPPED bundle. These are picked
+ * because minification cannot remove them (attribute names, string literals,
+ * literal `"0"`/`"true"`) — so a bundle miss is a real regression, not a
+ * mangling artefact.
+ */
+const BUNDLE_SPOT_CHECKS = [
+  ['plate root role="group" + aria-label', /"group"[\s\S]{0,200}"aria-label"/],
+  ['region role="button"', /"role",\s*"button"/],
+  ['roving tabindex literals', /"tabindex"[\s\S]{0,60}"0"[\s\S]{0,20}"-1"/],
+  ['Enter/Space activation', /"Spacebar"/],
+  ['accessible name from an SVG <title>', /"title"[\s\S]{0,80}appendChild/],
+  ['inert sidebar', /inert:/],
+  ['modal role/aria-modal', /"aria-modal":"true"|aria-modal="true"/],
+  ['combobox aria-activedescendant', /"aria-activedescendant"/],
+  ['stable option ids', /searchbox-option-\$\{/],
+  ['narrow PiP toggle tab', /"pip-toggle"/],
+]
+
+/**
+ * READER 2 — the SHIPPED bundle must still carry the contract.
+ *
+ * Reader 1 proves the source is right; this proves the artifact a user receives
+ * actually contains those attributes and strings. It is deliberately a SPOT
+ * check: every pattern here is minifier-stable (an attribute name, a string
+ * literal, or a literal "0"/"true"), so a miss is a real regression rather than
+ * a mangling artefact. It runs whether or not a dev server happens to be up.
+ */
+{
+  const entry = existsSync(resolve('dist/assets'))
+    ? readdirSync(resolve('dist/assets'))
+        .filter((f) => f.startsWith('index-') && f.endsWith('.js'))
+        .sort()
+        .pop()
+    : undefined
   if (entry === undefined) {
-    bad('no dist/assets/index-*.js found and no dev server reachable — run `npm run build` or start `npm run dev`')
+    info('no dist/assets/index-*.js — run `npm run build` to enable the shipped-bundle spot check')
   } else {
-    const flat = normalize(read(`dist/assets/${entry}`))
-    for (const [, fact, check] of CONTRACT) {
-      // A descriptor entry is an object ({ absent, stripComments, re }), not a
-      // RegExp: the `check.re` below covers it, but the negative ("must be
-      // absent") checks are dev-only, so they are skipped in bundle mode.
-      const re = check instanceof RegExp ? check : check.re
-      if (check instanceof RegExp === false && check.absent === true) continue
-      // The production bundle keeps identifiers, attributes and (with
-      // `minify:false`) comments; a named fact is enough here.
-      re.test(flat) ? ok(`bundle: ${fact}`) : bad(`bundle: MISSING ${fact}`)
+    const bundle = read(`dist/assets/${entry}`)
+    for (const [fact, re] of BUNDLE_SPOT_CHECKS) {
+      re.test(bundle)
+        ? ok(`shipped bundle (${entry}): ${fact}`)
+        : bad(`shipped bundle (${entry}) LOST: ${fact}`)
     }
-    info('dev server not reachable — checked the production bundle instead of live transforms')
+    info(`shipped-bundle spot check read dist/assets/${entry} (${Math.round(bundle.length / 1024)} kB)`)
   }
 }
 
@@ -271,6 +380,8 @@ for (const line of notes) console.log(line)
 for (const line of failures) console.log(line)
 console.log(
   `\n${passed} passed · ${failures.length} failed` +
-    `\n  source: ${source === BASE ? `live dev-server transforms (${BASE})` : 'built dist/ artifacts + sources'}`,
+    `\n  facts read from: the shared SOURCE files (${serverUp ? `${BASE} is up; ` : ''}` +
+    'the source reading is independent of any server)' +
+    `\n  shipped bundle spot check: ${existsSync(resolve('dist/assets')) ? 'dist/assets' : 'unavailable (run npm run build)'}`,
 )
 if (failures.length > 0) process.exitCode = 1

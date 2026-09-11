@@ -105,8 +105,6 @@ import {
   timedOutAnatomyCount,
 } from '../../geometry/anatomyAssets'
 import SceneLayers from './SceneLayers'
-import NucleusMesh from './NucleusMesh'
-import TractTube from './TractTube'
 import ClipControls from './ClipControls'
 import ExplodeSlider from './ExplodeSlider'
 import PlaneHelpers from './PlaneHelpers'
@@ -796,19 +794,4 @@ export default function Viewer3D() {
       ) : null}
     </div>
   )
-}
-
-/** Named re-exports for consumers that compose the pieces individually. */
-export {
-  SceneLayers,
-  NucleusMesh,
-  TractTube,
-  ClipControls,
-  ExplodeSlider,
-  PlaneHelpers,
-  PostFX,
-  SectionPiP,
-  SectionPiPPanel,
-  SectionPiPRestoreButton,
-  SectionPipHint,
 }

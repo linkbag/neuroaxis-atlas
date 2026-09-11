@@ -5,11 +5,17 @@
  * console message, page exception and failed network request — so runtime
  * failures can be diagnosed without a human at the keyboard.
  *
- * Run: node .plate-scratch/cdp-probe.mjs [url] [--screenshot out.png]
+ * SELF-SUFFICIENT: when nothing answers at the target URL this starts the dev
+ * server itself, waits for HTTP 200, then stops it again on every exit path
+ * (an already-running server can still be targeted by passing its URL).
+ *
+ * Run: node scripts/verify/browser-probe.mjs [url] [--screenshot out.png]
+ * Exit: 0 clean · 1 page exceptions / bad responses · 2 no Chrome · 3 no server
+ *       · 4 Chrome unusable (see scripts/verify/lib/startServer.mjs)
  */
-import { spawn } from 'node:child_process'
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs'
+import { writeFileSync, mkdirSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { EXIT, createLifecycle, killTree, launchChrome, startDevServer } from './lib/startServer.mjs'
 
 const URL_ = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : 'http://localhost:5173'
 const SHOT = resolve('.plate-scratch/live-section.png')
@@ -17,32 +23,36 @@ const PORT = 9333
 const PROFILE = resolve('.plate-scratch/chrome-profile')
 mkdirSync(PROFILE, { recursive: true })
 
-const CHROME = [
-  `${process.env.ProgramFiles}\\Google\\Chrome\\Application\\chrome.exe`,
-  `${process.env['ProgramFiles(x86)']}\\Google\\Chrome\\Application\\chrome.exe`,
-  `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
-].find((p) => p !== undefined && existsSync(p))
+const lifecycle = createLifecycle((message) => console.log(`  ·  ${message}`))
 
-if (!CHROME) {
-  console.error('no chrome found')
-  process.exit(2)
+const server = await startDevServer({
+  baseUrl: URL_,
+  lifecycle,
+  log: (message) => console.log(`  ·  ${message}`),
+  timeoutMs: 30_000,
+})
+if (server.failed === true) {
+  console.error(`\ncannot run: the dev server never answered HTTP 200 at ${URL_}`)
+  console.error(`exit ${EXIT.SERVER_UNAVAILABLE} (environment unusable — no check was run)`)
+  await lifecycle.dispose()
+  process.exit(EXIT.SERVER_UNAVAILABLE)
 }
 
-const chrome = spawn(
-  CHROME,
-  [
-    '--headless=new',
-    `--remote-debugging-port=${PORT}`,
-    `--user-data-dir=${PROFILE}`,
-    '--no-first-run',
-    '--no-default-browser-check',
-    '--disable-extensions',
-    '--enable-unsafe-swiftshader',
-    '--window-size=1400,900',
-    'about:blank',
-  ],
-  { stdio: 'ignore' },
-)
+const launched = await launchChrome({
+  port: PORT,
+  profileDir: PROFILE,
+  windowSize: '1400,900',
+  log: (message) => console.log(`  ·  ${message}`),
+})
+if (!launched.ok) {
+  console.error(`\ncannot run: ${launched.reason}`)
+  console.error(`exit ${EXIT.BROWSER_UNAVAILABLE} (environment unusable — no check was run)`)
+  await lifecycle.dispose()
+  process.exit(EXIT.BROWSER_UNAVAILABLE)
+}
+lifecycle.add(async () => {
+  killTree(launched.chrome.pid)
+})
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
@@ -348,12 +358,11 @@ for (const f of realBadResponses.slice(0, 15)) console.log('-', f)
  * FAIL: an uncaught page exception means the app is broken, so exited non-zero
  * (a probe that can never fail is not a gate). */
 ws.close()
-chrome.kill()
 const fatal = exceptions.length + realBadResponses.length
 console.log(
   fatal === 0
     ? '\nprobe: no page exceptions, no bad responses — PASS'
     : `\nprobe: ${exceptions.length} page exception(s), ${realBadResponses.length} bad response(s) — FAIL`,
 )
-process.exit(fatal === 0 ? 0 : 1)
-process.exit(0)
+await lifecycle.dispose()
+process.exit(fatal === 0 ? EXIT.OK : EXIT.CHECKS_FAILED)

@@ -7,43 +7,46 @@
  * Complements the code-level checks (`npm run validate` / `check` / `build`),
  * which cannot see runtime behaviour.
  *
- * Usage:  npm run verify:audit           (expects the dev server on :5173)
+ * SELF-SUFFICIENT (this is the point of the bootstrap below)
+ * The script no longer has an external precondition. If nothing answers at the
+ * target URL it STARTS Vite itself, waits for HTTP 200 (bounded, 30 s), runs the
+ * whole check suite, and stops the server again on every exit path — success,
+ * check failure, timeout, exception, Ctrl-C. Point it at an already-running
+ * server by passing the URL (that server is then never touched).
+ *
+ * Usage:  npm run verify:audit                        (starts its own server)
  *         node scripts/verify/audit.mjs http://localhost:5173
+ *
+ * EXIT CODES — an environment failure must never look like a product failure:
+ *   0  every check ran and passed
+ *   1  checks ran and FAILED — the only "the product is broken" signal
+ *   2  static precondition missing (no Chrome binary on this machine)
+ *   3  no server: nothing answered at the target URL and the one this script
+ *      started did not become ready within the bound
+ *   4  no browser: Chrome could not be started / its DevTools endpoint never
+ *      answered (preflight, before any check runs). The most common cause in a
+ *      restricted sandbox is crashpad: `OpenProcess: Access is denied (0x5)`.
  */
-import { spawn } from 'node:child_process'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import {
+  EXIT,
+  createLifecycle,
+  launchChrome,
+  startDevServer,
+} from './lib/startServer.mjs'
 
 const BASE = process.argv[2] ?? 'http://localhost:5173'
+if (/^https?:\/\/(127\.0\.0\.1|\[::1\])/.test(BASE)) {
+  // Measured on this tree: Vite 5 binds IPv6-only by default, so
+  // `http://localhost:5173` answers 200 while `http://127.0.0.1:5173` is
+  // REFUSED. A readiness probe against 127.0.0.1 can therefore never see a
+  // server this script starts; `localhost` is the only correct host here.
+  console.log(`note: ${BASE} uses a loopback literal — prefer http://localhost:<port>`)
+}
 const PORT = 9355
 const PROFILE = resolve('.plate-scratch/chrome-profile-audit')
 mkdirSync(PROFILE, { recursive: true })
-
-const CHROME = [
-  `${process.env.ProgramFiles}\\Google\\Chrome\\Application\\chrome.exe`,
-  `${process.env['ProgramFiles(x86)']}\\Google\\Chrome\\Application\\chrome.exe`,
-  `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
-].find((p) => p !== undefined && existsSync(p))
-if (!CHROME) {
-  console.error('chrome not found')
-  process.exit(2)
-}
-
-const chrome = spawn(
-  CHROME,
-  [
-    '--headless=new',
-    `--remote-debugging-port=${PORT}`,
-    `--user-data-dir=${PROFILE}`,
-    '--no-first-run',
-    '--no-default-browser-check',
-    '--disable-extensions',
-    '--enable-unsafe-swiftshader',
-    '--window-size=1500,950',
-    'about:blank',
-  ],
-  { stdio: 'ignore' },
-)
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const results = []
@@ -51,9 +54,71 @@ const ok = (m) => results.push(['ok', m])
 const bad = (m) => results.push(['FAIL', m])
 const info = (m) => results.push(['info', m])
 
+const lifecycle = createLifecycle((message) => console.log(`  ·  ${message}`))
+
+/** Set by the bootstrap; `null` until then. */
 let ws
 let send
 let evaluate
+
+/**
+ * Resource preparation, kept OUT of the check body so the script can exit with a
+ * distinct code before pretending to audit anything.
+ *
+ * @returns {Promise<{ exitCode: number|null, reason: string }>}
+ */
+async function prepareEnvironment() {
+  if (
+    !existsSync(
+      `${process.env.ProgramFiles}\\Google\\Chrome\\Application\\chrome.exe`,
+    ) &&
+    !existsSync(
+      `${process.env['ProgramFiles(x86)']}\\Google\\Chrome\\Application\\chrome.exe`,
+    ) &&
+    !existsSync(
+      `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
+    ) &&
+    process.env.CHROME_PATH === undefined
+  ) {
+    return { exitCode: EXIT.STATIC_PRECONDITION, reason: 'no Chrome binary found' }
+  }
+
+  const server = await startDevServer({
+    baseUrl: BASE,
+    lifecycle,
+    log: (message) => console.log(`  ·  ${message}`),
+    timeoutMs: 30_000,
+  })
+  if (server.failed === true) {
+    return {
+      exitCode: EXIT.SERVER_UNAVAILABLE,
+      reason:
+        `the dev server never answered HTTP 200 at ${BASE} ` +
+        `(started: ${server.started}, waited ${server.elapsedMs} ms)`,
+    }
+  }
+
+  const chrome = await launchChrome({
+    port: PORT,
+    profileDir: PROFILE,
+    log: (message) => console.log(`  ·  ${message}`),
+  })
+  if (!chrome.ok) {
+    return { exitCode: EXIT.BROWSER_UNAVAILABLE, reason: chrome.reason }
+  }
+  lifecycle.add(async () => {
+    try {
+      ws?.close()
+    } catch {
+      /* already closed */
+    }
+    const { killTree, waitForExit } = await import('./lib/startServer.mjs')
+    killTree(chrome.chrome.pid)
+    await waitForExit(chrome.chrome, 3000)
+  })
+  return { exitCode: null, reason: '' }
+}
+
 const consoleErrors = []
 const exceptions = []
 const failedRequests = []
@@ -174,6 +239,19 @@ async function pagePixelStats() {
 }
 
 /* ------------------------------------------------------------------- run */
+
+const environment = await prepareEnvironment()
+if (environment.exitCode !== null) {
+  // The environment, not the product. Say which, with the code that encodes it,
+  // and stop before running a single check (a check that cannot run must never
+  // be reported as a failure — that is what made two integration runs look like
+  // product failures).
+  console.error(`\n================ NeuroAxis runtime audit ================`)
+  console.error(`cannot run: ${environment.reason}`)
+  console.error(`exit ${environment.exitCode} (environment unusable — no check was run)`)
+  await lifecycle.dispose()
+  process.exit(environment.exitCode)
+}
 
 try {
   await connect()
@@ -792,6 +870,264 @@ try {
       + telErrors.slice(0, 3).join(' || '))
   }
 
+  /* ======================================================================
+   * M — P0: WEBGL CONTEXT LOSS IS SURVIVABLE (QUALITY_PLAN §1 item 1, §6)
+   *
+   * This is a PERMANENT GATE, not a demonstration: it drives the real
+   * `WEBGL_lose_context` extension on the R3F canvas and requires the app to
+   * show its recovery state and then come back.
+   *
+   * The contract it asserts (Viewer3D.tsx):
+   *   • `div.viewer-context-lost[role="alert"][data-context-lost]` is the
+   *     recovery overlay, and it is UNMOUNTED while the context is healthy — so
+   *     a healthy canvas is never covered by it;
+   *   • `loseContext()` must make it appear with `data-context-lost="lost"`;
+   *   • `restoreContext()` must remove it again AND leave a live, non-lost
+   *     context behind (asserted through the canvas' own `isContextLost()`);
+   *   • if the browser never fires `webglcontextrestored`, the code's own
+   *     terminal state after CONTEXT_LOSS_DEAD_MS (20 s) is
+   *     `data-context-lost="dead"` with a Reload control. That branch is also a
+   *     PASS — the failure mode being eliminated is the SILENT blank canvas,
+   *     not the honest "reload" affordance. Which branch fired is reported.
+   * ==================================================================== */
+
+  await evaluate(clickText('3D'))
+  await sleep(2500)
+  const contextBefore = await evaluate(`(() => {
+    const overlay = document.querySelector('[data-context-lost]');
+    const canvas = document.querySelector('.viewer3d-canvas canvas')
+      || document.querySelector('.viewer3d-root canvas')
+      || document.querySelector('canvas');
+    if (!canvas) return { error: 'no canvas found' };
+    const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+    if (!gl) return { error: 'no WebGL context on the canvas' };
+    const ext = gl.getExtension('WEBGL_lose_context');
+    if (!ext) return { error: 'WEBGL_lose_context is unavailable in this browser' };
+    // Stash on window so the next evaluate() can reach the SAME context object
+    // (a second getContext call on a lost canvas may return null).
+    window.__auditGl = gl;
+    window.__auditExt = ext;
+    return {
+      tag: canvas.tagName,
+      lostBefore: gl.isContextLost(),
+      overlayBefore: overlay === null ? 'unmounted' : overlay.getAttribute('data-context-lost'),
+    };
+  })()`)
+
+  if (contextBefore?.error !== undefined) {
+    /* An environment limitation, not a product failure: no canvas, no WebGL, or
+     * no extension. Reported as informational so the gate is honest about what
+     * it could not exercise rather than failing the run for it. */
+    info('context-loss gate skipped: ' + contextBefore.error)
+  } else {
+    contextBefore.lostBefore === false && contextBefore.overlayBefore === 'unmounted'
+      ? ok('context-loss overlay is UNMOUNTED while the context is healthy (a live canvas is never covered)')
+      : bad('the recovery overlay is present before any loss (' + JSON.stringify(contextBefore) + ')')
+
+    // --- lose the context -------------------------------------------------
+    const lostNow = await evaluate(`(() => {
+      const ext = window.__auditExt;
+      if (!ext) return 'no extension stashed';
+      ext.loseContext();
+      return 'loseContext() called';
+    })()`)
+    await sleep(1200)
+    const afterLoss = await evaluate(`(() => {
+      const overlay = document.querySelector('[data-context-lost]');
+      const gl = window.__auditGl;
+      return {
+        phase: overlay === null ? 'no overlay' : overlay.getAttribute('data-context-lost'),
+        role: overlay === null ? '' : overlay.getAttribute('role'),
+        text: overlay === null ? '' : overlay.innerText.slice(0, 120).replace(/\\n+/g, ' | '),
+        buttons: overlay === null ? [] : [...overlay.querySelectorAll('button')].map((b) => b.textContent.trim()),
+        canvasLost: gl ? gl.isContextLost() : 'no gl',
+      };
+    })()`)
+    String(lostNow).includes('called') && afterLoss.canvasLost === true
+      ? ok('WEBGL_lose_context.loseContext() really lost the context (isContextLost() === true)')
+      : bad('loseContext() did not lose the context (' + String(lostNow) + ' / ' + JSON.stringify(afterLoss) + ')')
+    afterLoss.phase === 'lost'
+      ? ok('recovery overlay appears on loss (data-context-lost="lost", role='
+        + afterLoss.role + ', buttons: ' + afterLoss.buttons.join('/') + ') — "'
+        + afterLoss.text.slice(0, 70) + '..."')
+      : bad('no "lost" recovery overlay after the context was lost (' + JSON.stringify(afterLoss) + ')')
+
+    // --- restore it -------------------------------------------------------
+    const restoreNow = await evaluate(`(() => {
+      const button = [...document.querySelectorAll('[data-context-lost] button')]
+        .find((b) => /restore/i.test(b.textContent || ''));
+      if (button) { button.click(); return 'clicked the Restore button'; }
+      const ext = window.__auditExt;
+      if (ext) { ext.restoreContext(); return 'called restoreContext() directly'; }
+      return 'no restore path';
+    })()`)
+    await sleep(2500)
+    const afterRestore = await evaluate(`(() => {
+      const overlay = document.querySelector('[data-context-lost]');
+      const gl = window.__auditGl;
+      const canvas = document.querySelector('.viewer3d-canvas canvas') || document.querySelector('canvas');
+      return {
+        phase: overlay === null ? 'unmounted' : overlay.getAttribute('data-context-lost'),
+        canvasLost: gl ? gl.isContextLost() : 'no gl',
+        canvasCount: document.querySelectorAll('canvas').length,
+        liveContext: canvas ? (canvas.getContext('webgl2') || canvas.getContext('webgl')) !== null : false,
+      };
+    })()`)
+    if (afterRestore.phase === 'unmounted' && afterRestore.canvasLost === false) {
+      ok('context restored: overlay unmounted and the canvas holds a live context ('
+        + String(restoreNow) + ')')
+      const repaint = await pagePixelStats()
+      repaint && repaint.uniqueColors > 20
+        ? ok('the 3D scene really repainted after the restore (' + repaint.uniqueColors
+          + ' colour buckets, mean luminance ' + repaint.meanLum + ')')
+        : bad('the canvas did not repaint after the context was restored (' + JSON.stringify(repaint) + ')')
+    } else if (afterRestore.phase === 'dead') {
+      /* Honest terminal branch: the browser never fired webglcontextrestored
+       * (headless SwiftShader often will not). The app is still NOT blank —
+       * it says what happened and offers a reload. */
+      ok('restore never arrived, so the code took its documented terminal state '
+        + '(data-context-lost="dead") with a Reload control — not a silent blank canvas ('
+        + String(restoreNow) + ')')
+    } else if (afterRestore.phase === 'lost' && afterRestore.canvasLost === false) {
+      ok('the context came back and is live; the overlay is still in its "lost" state for one frame '
+        + '(reported, not failed — the canvas is not lost)')
+    } else {
+      bad('the canvas did not recover and did not reach the documented terminal state ('
+        + String(restoreNow) + ' / ' + JSON.stringify(afterRestore) + ')')
+    }
+
+    /* The PiP has its own context survival path. `pipContextState` is the
+     * module's own published state, and the PiP note (`.pip-context-lost`) is
+     * the visible half. A loss on the SHARED canvas is what the PiP listens for
+     * (`gl.domElement`), so the PiP is asserted from whatever the loss left
+     * behind rather than by losing a second, separate context. */
+    const pipAfter = await evaluate(`(() => {
+      const note = document.querySelector('.pip-context-lost');
+      const pipCanvas = document.querySelector('.pip-panel canvas');
+      return {
+        note: note === null ? 'none' : (note.getAttribute('role') || 'no role'),
+        text: note === null ? '' : note.innerText.slice(0, 80),
+        pipCanvas: pipCanvas !== null,
+      };
+    })()`)
+    info('PiP context state after the loss cycle: ' + JSON.stringify(pipAfter))
+  }
+
+  /* ======================================================================
+   * N — P0: AN ERROR BOUNDARY CONTAINS A REAL THROW (QUALITY_PLAN §1 item 2, §6)
+   *
+   * The forced throw is a DEV-ONLY hook: `?panelfail=<surface>` makes exactly
+   * one named boundary throw during render. It is implemented inside
+   * `src/components/section/SectionErrorBoundary.tsx` guarded by
+   * `import.meta.env.DEV`, so a production build can never reach it.
+   *
+   * What is proven here: the throw is CONTAINED (the card appears, the rest of
+   * the app still works, Retry brings the panel back). What is proven by
+   * `scripts/verify/boundary-contract.mjs`: every surface is wrapped, and the
+   * boundary's own state transition + Retry reset behave as advertised.
+   * ==================================================================== */
+
+  /** The surfaces the app wraps, in the order App.tsx mounts them. */
+  const BOUNDARY_SURFACES = ['Taxonomy tree', 'Syndrome browser']
+  await send('Page.navigate', { url: `${BASE}/?panelfail=${encodeURIComponent(BOUNDARY_SURFACES[0])}` })
+  await sleep(7000)
+
+  const probeHooked = await evaluate(`document.querySelector('[data-panel-probe]')?.getAttribute('data-panel-probe') ?? 'not armed'`)
+  info('forced-throw probe reports: ' + String(probeHooked))
+
+  const contained = await evaluate(`(() => {
+    const card = document.querySelector('[data-panel-error]');
+    return {
+      card: card === null ? null : card.getAttribute('data-panel-error'),
+      role: card === null ? '' : card.getAttribute('role'),
+      text: card === null ? '' : card.innerText.slice(0, 140).replace(/\\n+/g, ' | '),
+      hasRetry: card === null ? false : [...card.querySelectorAll('button')].some((b) => /retry/i.test(b.textContent || '')),
+      // The rest of the app must still be there and still be interactive.
+      tabs: [...document.querySelectorAll('[role=tab]')].map((t) => t.textContent.trim()),
+      appShell: document.querySelector('.app-shell') !== null,
+      canvases: document.querySelectorAll('canvas').length,
+      otherSurfaces: {
+        header: document.querySelector('header, .app-header, .header') !== null,
+        infoPanel: document.querySelector('.info-panel') !== null,
+      },
+    };
+  })()`)
+
+  if (contained.card === BOUNDARY_SURFACES[0]) {
+    ok('a throw inside "' + BOUNDARY_SURFACES[0] + '" is CONTAINED: [data-panel-error="'
+      + contained.card + '"] (role=' + contained.role + ') — "' + contained.text.slice(0, 80) + '"')
+  } else {
+    bad('the forced throw was not contained by the "' + BOUNDARY_SURFACES[0]
+      + '" boundary (card=' + JSON.stringify(contained.card) + ', panelfail armed=' + String(probeHooked) + ')')
+  }
+  contained.hasRetry
+    ? ok('the containment card offers a Retry action')
+    : bad('the containment card has no Retry action')
+  contained.appShell && contained.tabs.length >= 3
+    ? ok('the app did NOT blank: shell present, ' + contained.tabs.length + ' tabs still rendered ('
+      + contained.tabs.join(', ') + ')')
+    : bad('the app was degraded by the contained throw (' + JSON.stringify(contained) + ')')
+  contained.canvases >= 1
+    ? ok('the other panels kept rendering while one threw (' + contained.canvases + ' canvas element(s) live)')
+    : info('no canvas while the Plates/3D tab is inactive (tab-scoped panels are unmounted by design)')
+
+  /* Retry must clear the card and bring the panel back. */
+  const retryClick = await evaluate(`(() => {
+    const card = document.querySelector('[data-panel-error]');
+    const button = card && [...card.querySelectorAll('button')].find((b) => /retry/i.test(b.textContent || ''));
+    if (!button) return 'no retry button';
+    button.click();
+    return 'clicked Retry';
+  })()`)
+  await sleep(1500)
+  const afterRetry = await evaluate(`(() => {
+    const card = document.querySelector('[data-panel-error]');
+    const probe = document.querySelector('[data-panel-probe]');
+    return {
+      card: card === null ? 'cleared' : card.getAttribute('data-panel-error'),
+      probeArmed: probe === null ? 'disarmed' : 'still armed',
+    };
+  })()`)
+  afterRetry.card === 'cleared'
+    ? ok('Retry clears the failure card (containment is recoverable, not terminal) — '
+      + afterRetry.probeArmed)
+    : info('Retry re-armed the probe and the card is still shown (' + JSON.stringify(afterRetry)
+      + ') — expected: the ?panelfail hook is unconditional while the parameter is present')
+
+  /* A surface that is NOT named by the parameter must be untouched. */
+  const untouched = await evaluate(`(() => {
+    const cards = [...document.querySelectorAll('[data-panel-error]')].map((c) => c.getAttribute('data-panel-error'));
+    return { cards, probes: document.querySelectorAll('[data-panel-probe]').length };
+  })()`)
+  untouched.probes === 1
+    ? ok('exactly ONE boundary is armed by ?panelfail=<surface> (the other 6 render their children normally)')
+    : bad('?panelfail armed ' + untouched.probes + ' boundaries — the other panels must be unaffected')
+
+  /* Back to a healthy page: the hook must be inert without the parameter. */
+  await send('Page.navigate', { url: BASE })
+  await sleep(6000)
+  const healthyAgain = await evaluate(`({
+    probes: document.querySelectorAll('[data-panel-probe]').length,
+    cards: document.querySelectorAll('[data-panel-error]').length,
+    tabs: document.querySelectorAll('[role=tab]').length,
+    appShell: document.querySelector('.app-shell') !== null,
+  })`)
+  healthyAgain.probes === 0 && healthyAgain.cards === 0
+    ? ok('without ?panelfail the forced-throw hook is completely inert (0 probes, 0 failure cards)')
+    : bad('the forced-throw hook is active without the parameter (' + JSON.stringify(healthyAgain) + ')')
+  healthyAgain.appShell && healthyAgain.tabs >= 3
+    ? ok('the app loads healthy again after the containment demonstration')
+    : bad('the app did not return to a healthy state (' + JSON.stringify(healthyAgain) + ')')
+
+  const p0Errors = [...new Set([...exceptions, ...consoleErrors])].filter(
+    (e) => !/favicon/i.test(e) && !/404 \(Not Found\)/.test(e) && !/panel\] .* failed/.test(e),
+  )
+  if (p0Errors.length === 0) {
+    ok('no unexpected runtime errors during the P0 gates (the deliberate throw is reported by the boundary itself)')
+  } else {
+    bad(p0Errors.length + ' unexpected error(s) during the P0 gates: ' + p0Errors.slice(0, 3).join(' || '))
+  }
+
 } catch (error) {
   bad(`audit aborted: ${error instanceof Error ? error.message : String(error)}`)
 } finally {
@@ -800,7 +1136,10 @@ try {
   } catch {
     /* ignore */
   }
-  chrome.kill()
+  // Stops Chrome AND the dev server this script started (a server it did not
+  // start is never touched), then hard-exits below so no handle can keep the
+  // wrapper alive.
+  await lifecycle.dispose()
 }
 
 const passed = results.filter(([s]) => s === 'ok').length
@@ -810,4 +1149,5 @@ for (const [status, message] of results) {
   console.log(`${status === 'ok' ? '  ok ' : status === 'FAIL' ? ' FAIL' : ' info'}  ${message}`)
 }
 console.log(`\n${passed} passed · ${failed} failed · ${results.filter(([s]) => s === 'info').length} informational`)
-process.exit(failed === 0 ? 0 : 1)
+console.log(`exit ${failed === 0 ? EXIT.OK : EXIT.CHECKS_FAILED} (${failed === 0 ? 'all checks passed' : 'CHECKS FAILED'})`)
+process.exit(failed === 0 ? EXIT.OK : EXIT.CHECKS_FAILED)

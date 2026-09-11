@@ -297,7 +297,15 @@
   }
 
   .pip-header {
+    /* Collapsed the header is hidden (the panel is just the toggle tab).
+       EXPANDED it must come back, or the axis / size / hide controls become
+       unreachable at exactly the width where the user just asked for the full
+       panel — the `:has()` re-show below is the other half of this rule. */
     display: none;
+  }
+
+  .pip-panel:has(.pip-toggle input:checked) .pip-header {
+    display: flex;
   }
 
   .pip-panel .pip-toggle {
@@ -388,6 +396,12 @@
 
 @media (max-width: 860px) {
   .pip-restore {
+    /* AUDIT §2.20 hit-target contract (≥24 px, the same rule the a11y gate
+       checks for `.pip-btn`): `padding: 3px 7px` alone measured ≈22.1 px tall,
+       i.e. just under the floor. An explicit minimum makes the control
+       reachable with a thumb at the width where it matters most. */
+    min-height: 24px;
+    min-width: 24px;
     padding: 3px 7px;
   }
 

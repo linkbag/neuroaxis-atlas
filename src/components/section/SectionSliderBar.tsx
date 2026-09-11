@@ -148,5 +148,3 @@ export default function SectionSliderBar() {
     </div>
   )
 }
-
-export { SectionSliderBar }

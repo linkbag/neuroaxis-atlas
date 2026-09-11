@@ -28,15 +28,6 @@ export function mirrorPoint(p: Vec3): Vec3 {
   return [-p[0], p[1], p[2]]
 }
 
-/**
- * Mirrored copy of a waypoint list for paired structures: every x flips sign and
- * the point order is reversed so the parametric direction (e.g. ascending flow)
- * is preserved on the mirrored instance.
- */
-export function mirroredWaypoints(waypoints: readonly Vec3[]): Vec3[] {
-  return [...waypoints].reverse().map(mirrorPoint)
-}
-
 /** Radial explode direction of a structure origin, per plan §5 (normalized xz). */
 export function explodeDirection(origin: Vec3): [number, number] {
   const len = Math.hypot(origin[0], origin[2])

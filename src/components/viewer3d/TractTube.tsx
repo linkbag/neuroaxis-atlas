@@ -439,22 +439,3 @@ export default function TractTube({ tract, highlight }: TractTubeProps) {
     </mesh>
   )
 }
-
-/** Test/inspection hook: number of cached tube geometries. */
-export function tubeCacheSize(): number {
-  return tubeCache.size
-}
-
-/**
- * Dispose every cached tube geometry and striation texture clone (host app
- * teardown only — factory materials dispose with their mesh instances). The
- * shared frame registry is cleared too: nothing may outlive the scene that
- * publishes into it.
- */
-export function disposeTubeCache(): void {
-  for (const geometry of tubeCache.values()) geometry.dispose()
-  tubeCache.clear()
-  for (const texture of striationClones.values()) texture.dispose()
-  striationClones.clear()
-  tractFrameRegistry.clear()
-}

@@ -293,11 +293,6 @@ function windowForPreset(preset: string): [number, number] | null {
   return null
 }
 
-/** Current CT window (HU) — [windowMin, windowMax] exactly as baked. */
-export function getCtWindow(): [number, number] {
-  return [ctWindow[0], ctWindow[1]]
-}
-
 /** Whether the CT modality has a grid to draw (manifest status or dims). */
 export type CtLayerStatus = 'available' | 'unavailable'
 

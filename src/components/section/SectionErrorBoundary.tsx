@@ -56,6 +56,63 @@ interface PanelErrorBoundaryState {
 }
 
 /**
+ * The query parameter the browser audit uses to force a throw in exactly one
+ * named surface: `?panelfail=Taxonomy%20tree`.
+ *
+ * WHY A TEST HOOK IS THE HONEST WAY TO PROVE CONTAINMENT
+ * `docs/QUALITY_PLAN.md` §6 asks for the containment demonstration itself, and a
+ * demonstration has to be runnable by a machine, not by a person editing code,
+ * re-running, and reverting — that is unrepeatable and leaves the tree dirty if
+ * anything goes wrong mid-run. This hook is the repeatable form of the same
+ * experiment.
+ *
+ * SAFETY — three independent guards, because a test hook that can reach
+ * production is a defect of its own:
+ *   1. `import.meta.env.DEV` is statically `false` in a production build, so
+ *      Vite/Terser removes the whole block. The hook cannot be reached in a
+ *      shipped bundle even by hand-editing the URL.
+ *   2. The parameter must be present. Without `?panelfail` nothing is armed.
+ *   3. The name must match THIS boundary's `name` exactly, so one surface fails
+ *      and every other panel proves it keeps working.
+ *
+ * The probe element it renders (`data-panel-probe="<name>"`) additionally gives
+ * the audit a positive signal that the hook is armed, so a *missing* card can
+ * never be mistaken for a passing containment check.
+ */
+export const PANEL_FAIL_PARAM = 'panelfail'
+
+/**
+ * True when this build is a dev build. Vite replaces `import.meta.env` with a
+ * literal object, so this folds to `false` in production and the hook below is
+ * removed by the minifier. The optional chain is defended because a NON-Vite
+ * consumer of this module exists: `scripts/verify/boundary-contract.mjs` imports
+ * this file directly under Node (to execute the boundary's real state
+ * transition), and there `import.meta.env` is undefined.
+ */
+function isDevBuild(): boolean {
+  const meta = import.meta as unknown as { env?: { DEV?: boolean } }
+  return meta.env?.DEV === true
+}
+
+/** Read `?panelfail` from the current URL. Dev-only; '' in every other case. */
+function panelFailTarget(): string {
+  if (!isDevBuild()) return ''
+  if (typeof window === 'undefined') return ''
+  try {
+    return new URLSearchParams(window.location.search).get(PANEL_FAIL_PARAM) ?? ''
+  } catch {
+    return ''
+  }
+}
+
+/** The armed probe: throws during render, so React's own boundary path runs. */
+function PanelFailureProbe({ name }: { name: string }): never {
+  throw new Error(
+    `audit probe: deliberate render failure in "${name}" (?${PANEL_FAIL_PARAM}=${name})`,
+  )
+}
+
+/**
  * The visible card. Inline styles on purpose: this boundary is mounted by
  * several panels whose stylesheets belong to other tasks, so it must render
  * correctly without depending on any stylesheet rule. `role="alert"` makes the
@@ -141,7 +198,22 @@ export class PanelErrorBoundary extends Component<PanelErrorBoundaryProps, Panel
 
   render(): ReactNode {
     const { error } = this.state
-    if (error === null) return this.props.children
+    if (error === null) {
+      const armed = panelFailTarget()
+      const name = this.props.name ?? 'Panel'
+      if (armed !== '' && armed === name) {
+        // The probe throws → React hands the error to getDerivedStateFromError →
+        // the failure branch below renders the card. The armed marker is a sibling
+        // because the throw discards the tree in the same pass.
+        return (
+          <>
+            <span hidden data-panel-probe={name} />
+            <PanelFailureProbe name={name} />
+          </>
+        )
+      }
+      return this.props.children
+    }
     if (this.props.fallback) return this.props.fallback(error, this.reset)
     return this.props.style === undefined ? (
       panelErrorCard(this.props.name ?? 'Panel', error.message, this.reset)

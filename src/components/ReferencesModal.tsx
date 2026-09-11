@@ -82,10 +82,19 @@ export default function ReferencesModal() {
   const dialogRef = useRef<HTMLDivElement | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
 
-  // A11Y-CONTRACT 1/3: capture the opener when the dialog mounts and give
-  // focus back to it when the dialog unmounts (never to a detached node).
+  // A11Y-CONTRACT 1/3: capture the opener when the dialog OPENS and give focus
+  // back to it when the dialog CLOSES (never to a detached node).
+  //
+  // The dependency is `open`, not `[]`: App.tsx keeps this component mounted for
+  // the whole session and the dialog's presence is `open` (`if (!open) return
+  // null` below). An empty-dep effect therefore ran once, at mount, when there
+  // was no dialog and no opener — so the auto-focus and the focus RESTORE both
+  // silently did nothing and focus fell to <body> on close. (Found by the v6
+  // closure audit; the trap, Escape and aria-modal were already correct.)
   useEffect(() => {
-    openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    if (!open) return undefined
+    openerRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null
     const dialog = dialogRef.current
     if (dialog !== null && !dialog.contains(document.activeElement)) {
       const close = dialog.querySelector<HTMLElement>('.modal-close')
@@ -97,7 +106,7 @@ export default function ReferencesModal() {
       openerRef.current = null
       if (opener !== null && opener.isConnected) opener.focus({ preventScroll: true })
     }
-  }, [])
+  }, [open])
 
   const onDialogKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Escape') {

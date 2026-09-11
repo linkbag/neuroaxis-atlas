@@ -109,9 +109,6 @@ export const allRecords: AtlasRecord[] = dedupeById(
   'structure/tract',
 )
 
-/** Alias matching the loader contract naming: every authored record. */
-export const allStructures: readonly AtlasRecord[] = allRecords
-
 /** Authored records for one region; tracts join the registry for their region. */
 export function byRegion(region: Region): AtlasRecord[] {
   return allRecords.filter((record) =>
@@ -185,8 +182,6 @@ export const ALL_REGIONS: readonly Region[] = [
   'cerebellum',
 ]
 export const ALL_KINDS: readonly Kind[] = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context']
-export const REGION_ORDER: readonly Region[] = ALL_REGIONS
-export const KIND_ORDER: readonly Kind[] = ALL_KINDS
 
 export const REGION_LABELS: Record<Region, string> = {
   telencephalon: 'Telencephalon (cerebral hemispheres)',
@@ -221,11 +216,6 @@ export function getPlate(id: string | null): PlateRecord | undefined {
 
 export function getSyndrome(id: string | null): SyndromeRecord | undefined {
   return id === null ? undefined : syndromes.find((s) => s.id === id)
-}
-
-/** All syndrome records (name-sorted; the `syndromes` const is the same list). */
-export function getSyndromes(): SyndromeRecord[] {
-  return syndromes
 }
 
 export function syndromesForStructure(id: string): SyndromeRecord[] {
