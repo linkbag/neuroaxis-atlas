@@ -318,7 +318,18 @@ export interface SectionImageLayerRegistry {
   list(): SectionImageLayer[]
 }
 
-const WINDOW_REGISTRY_KEY = 'sectionImageLayers'
+/*
+ * Window property the layer registry lives on: 'sectionImageLayers'.
+ *
+ * Deliberately NOT a module-level `const`: `imageLayers.ts` imports this module
+ * (for `registerSectionImageLayer`) and registers its layers at import time,
+ * which re-enters `getSectionImageLayerRegistry()` while this module's body is
+ * still evaluating. Reading a module-level `const` at that moment throws
+ * `ReferenceError: Cannot access 'WINDOW_REGISTRY_KEY' before initialization`
+ * (the v7 regression: the closure added a `./imageLayers` import here, which
+ * closes the cycle at module-init time). A literal inside the function has no
+ * initialization order to violate.
+ */
 
 function createLayerRegistry(): SectionImageLayerRegistry {
   const layers = new Map<string, SectionImageLayer>()
@@ -341,11 +352,13 @@ function createLayerRegistry(): SectionImageLayerRegistry {
  * is a module-singleton so registrations survive HMR.
  */
 export function getSectionImageLayerRegistry(): SectionImageLayerRegistry {
+  // Literal, not a module-level const — see the note above (init-order cycle).
+  const key = 'sectionImageLayers'
   const globalWindow = window as unknown as Record<string, unknown>
-  let registry = globalWindow[WINDOW_REGISTRY_KEY] as SectionImageLayerRegistry | undefined
+  let registry = globalWindow[key] as SectionImageLayerRegistry | undefined
   if (registry === undefined) {
     registry = createLayerRegistry()
-    Object.defineProperty(globalWindow, WINDOW_REGISTRY_KEY, {
+    Object.defineProperty(globalWindow, key, {
       value: registry,
       writable: true,
       configurable: true,

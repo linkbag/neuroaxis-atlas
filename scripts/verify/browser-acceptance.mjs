@@ -132,6 +132,20 @@ try {
       return b ? b.className + ' :: ' + b.textContent.trim() : 'absent';
     })()`)
 
+  // Deterministic start: this Chrome profile persists localStorage between runs,
+  // so a previous run's PiP-hidden / preset / modality choice would masquerade
+  // as a broken default (the audit's own lesson). Clear our keys and reload.
+  await evaluate(`(() => {
+    try {
+      for (const key of Object.keys(window.localStorage)) {
+        if (/neuroaxis/i.test(key)) window.localStorage.removeItem(key)
+      }
+    } catch (e) { /* storage unavailable */ }
+    return 'cleared';
+  })()`)
+  await send('Page.navigate', { url: URL_ })
+  await sleep(6000)
+
   if ((await pipVisible()) !== true) fail('PiP panel is not visible on first load (expected visible by default)')
   else pass('PiP panel visible by default')
 
@@ -211,7 +225,10 @@ try {
   const before = await evaluate(canvasStats)
   const moved = await evaluate(`(() => {
     const ranges = [...document.querySelectorAll('.section-plane-sliders input[type=range]')];
-    const target = ranges.find(r => /transverse/i.test(r.getAttribute('aria-label') || '')) || ranges[0];
+    // Use the SAGITTAL slider: with 'snap to levels' on (the default), the
+    // transverse plane snaps back to the nearest level anchor, so a +4 au move
+    // legitimately produces no plane change and no repaint. x/z never snap.
+    const target = ranges.find(r => /sagittal/i.test(r.getAttribute('aria-label') || '')) || ranges[0];
     if (!target) return 'no slider to move';
     const before = target.value;
     const next = String(Number(target.value) + 4);

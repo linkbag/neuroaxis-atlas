@@ -507,18 +507,24 @@ try {
     ? ok(`PiP axis switch + orientation badges (${pipAxes})`)
     : bad(`PiP axis controls: ${pipAxes}`)
 
-  /* C — selection + info panel content (tree is region → subdivision → structure) */
-  const clickContaining = (text) => `(() => {
-    const b = [...document.querySelectorAll('button')].find(x => x.textContent.includes(${JSON.stringify(text)}));
-    if (!b) return 'not found: ${text}';
-    b.click();
-    return b.textContent.trim().slice(0, 34);
+  /* C — selection + info panel content (tree is region → subdivision → structure)
+   *
+   * Scoped to the taxonomy nav and to the region/subdivision ROW classes: with
+   * the telencephalon added, a bare text match can land on a leaf, a chip or a
+   * context record instead of the group row that expands the subtree. */
+  const clickInTree = (text, opt = {}) => `(() => {
+    const root = document.querySelector('nav.tree') ?? document;
+    const nodes = [...root.querySelectorAll(${opt.rowsOnly ? "'[class*=tree-region], [class*=tree-subdivision], [class*=tree-group], [class*=tree-section]'" : "'button'"})];
+    const match = nodes.find(x => x.textContent.includes(${JSON.stringify(text)}));
+    if (!match) return 'not found: ${text}';
+    (match.tagName === 'BUTTON' ? match : match.querySelector('button') ?? match).click();
+    return match.textContent.trim().replace(/\\s+/g, ' ').slice(0, 40);
   })()`
-  const regionClick = await evaluate(clickContaining('Diencephalon'))
+  const regionClick = await evaluate(clickInTree('Diencephalon'))
   await sleep(900)
-  const groupClick = await evaluate(clickContaining('Thalamus'))
+  const groupClick = await evaluate(clickInTree('Thalamus', { rowsOnly: true }))
   await sleep(900)
-  const pickNucleus = await evaluate(clickContaining('Pulvinar'))
+  const pickNucleus = await evaluate(clickInTree('Pulvinar'))
   await sleep(1200)
   info(`tree navigation: region "${regionClick}" → group "${groupClick}" → node "${pickNucleus}"`)
   const panel = await evaluate(`(() => {
