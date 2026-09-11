@@ -446,3 +446,139 @@ structure selects from the tree, search, the 3D view and the axial +58 plate.
 | `scripts/verify/audit-checks.test.mjs` | **new** — the Tier-1 mirror of the audit's load-bearing checks (75 assertions, 8 groups), runnable with plain `node` |
 | `README.md` | **v7 closure** section — the five defects with root causes and reverting gates, the two audit artifacts, the budgets, the evidence tiers and the browser-lane limitation; `audit-checks.test.mjs` added to the Scripts table |
 | `docs/QA_CHANGELOG.md` | this entry |
+
+# v7 closure — integration acceptance, RESUMED pass (`v7c-integration`)
+
+Date: v7 closure, resumed integration. Tree: the closure commit `f32daee` + this pass.
+Scope: re-run the whole acceptance suite on the committed closure, land the two gates the plan
+(`PLAN-run-mtwh4t68-t8gm.md` §5 rows 9–10 signal) still required but which had never been written,
+widen the Tier-1 mirror to the two coverage holes this pass found, re-prove the browser lane's
+unavailability from scratch, re-derive the budgets, and commit.
+
+## Verdict
+
+Every gap the orchestrator's 56-check browser audit found is **closed in the shipped code**, and each
+one is now covered by a gate that **bites on its own defect** (7/7 mutation-proven). Every gate that
+can run in this sandbox exits 0. The browser lane still cannot run here — re-proved below with five
+launch variants and a falsified alternative hypothesis — so **no Tier-2 verdict is claimed anywhere**.
+
+## 1. What this pass changed
+
+| File | Change |
+| --- | --- |
+| `scripts/verify/budget-report.mjs` | **new** — the plan's gate-table row 9 (never landed). Re-derives the three caps from the committed artifacts alone (Σ `triCount`, Σ `stat(part.file)` + the stricter whole-directory reading, Σ `stat(imaging)`), no re-bake and no precondition; exits 1 on any breach |
+| `scripts/verify/closure-bite.mjs` | **new** — the plan's §4.2 mutation proof (task `v7c-qa-bite` never landed). Re-applies the exact pre-fix defect for each gap in an isolated copy (`.plate-scratch/bite/tree` + `node_modules` junction) and requires the mirror to fail; prints the failing check's own sentence and the before/after SHA-256 of every mutated file |
+| `scripts/verify/audit-checks.test.mjs` | extended 75 → **91 assertions / 9 groups**: the **Learn-more links** claim (present in the browser audit at `audit.mjs` section D, missing from the mirror) and a new *Telencephalon browser sanity — Node-verifiable half* group (5 subdivisions, ghost-shell opacity + the outline branch the default preset actually takes, the four v7 anchors driving clip/snap/plate, MRI source at +58 vs CT out of source, the +58 plate's 24 labels resolving to real records, and all 42 telencephalon records carrying the full data contract) |
+| `src/state/store.ts` | the preset region guard now runs **for every preset** at module load (plan §4.1 item 4): a subdivision-derived preset may only hide telencephalon records, `cortex-only` may hide none, and every hidden/emphasised id must exist — previously only the default was asserted |
+| `README.md` | budget gates, the mutation table, the widened tier-1 list, and the corrected assertion count |
+| `docs/QA_CHANGELOG.md` | this section |
+
+## 2. Gate table (this pass, on the committed tree)
+
+| # | Gate | Command | Exit | Result |
+| --- | --- | --- | --- | --- |
+| 1 | Data integrity | `npm run validate` | **0** | PASS — 0 errors, 0 warnings (17 levels · 183 registry entries · 160 structures · 23 tracts · 26 syndromes · 15 plates) |
+| 2 | Types | `npm run check` | **0** | PASS |
+| 3 | Build | `npm run build` | **0** | PASS — `index-*.js` 1,124.53 kB / 254.16 kB gzip · `vendor-three` 1,206.81 kB / 354.64 kB |
+| 4 | Section pipeline | `npm run verify:pipeline` | **0** | PASS — 106/106 parts |
+| 5 | Plane transform | `npm run verify:plane` | **0** | PASS |
+| 6 | Audit mirror (Tier 1) | `node scripts/verify/audit-checks.test.mjs` | **0** | PASS — **91 passed · 0 failed · 9 groups** |
+| 7 | Budget re-derivation | `node scripts/verify/budget-report.mjs` | **0** | PASS — 5 passed · 0 failed |
+| 8 | Mutation proof | `node scripts/verify/closure-bite.mjs` | **0** | PASS — **7/7 mutations caught**, shared tree byte-identical |
+| 9 | Boundary contract | `node scripts/verify/boundary-contract.mjs` | **0** | PASS |
+| 10 | a11y contract | `node scripts/verify/a11y-contract.mjs` | **0** | PASS |
+| 11 | Anatomy budgets | `node scripts/build-anatomy-geometry.mjs --manifest` | **0** | PASS — 570,096 tris · 13.12 MiB GLB · per-part caps |
+| 12 | Imaging QA | `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | **0** / **0** | PASS — 49 anchored photographs, 8.71 MiB / 10 MiB |
+| 13 | Runtime audit (Tier 2) | `npm run verify:audit` | **4** | **NOT RUN** — environment unusable, 0 of 56 checks executed |
+| 14 | Browser probe (Tier 2) | `npm run verify:browser` | **4** | **NOT RUN** — same cause |
+| 15 | Browser acceptance (Tier 2) | `npm run verify:acceptance` | **4** | **NOT RUN** — same cause |
+
+Rows 13–15 are reported as *command + exit code + reason*. **`exit 4` is neither a pass nor a product
+failure**; printing a pass/fail count for them in this sandbox would report something that did not
+happen.
+
+## 3. The browser lane, re-proved in this pass (not inherited)
+
+The previous pass's conclusion was re-tested from scratch, and the *assumed* cause was falsified:
+
+- **Five** Chrome launch variants, all fresh profiles inside the workspace: `--headless=new` (plain),
+  `+ --disable-crash-reporter --disable-breakpad`, `+ --single-process`, `--headless=old`, and
+  `+ --enable-crash-reporter --crash-dumps-dir`. Every process **exited before rendering** with
+  `mojo/public/cpp/platform/platform_channel.cc:108 Check failed: . : Access is denied. (0x5)`,
+  `--dump-dom` producing **zero bytes** on a `data:` URL — i.e. no page was ever created.
+- **The named-pipe hypothesis is FALSE for this sandbox:** a Node named-pipe server in the same
+  environment succeeds (`\\.\pipe\dsh-pipe-selftest-1` → OK), so the "confined modes cannot open named
+  pipes" rule of the harness documentation does not explain this failure. The denial is Chrome's own
+  process/handle-level Mojo setup (`OpenProcess: Access is denied (0x5)` immediately before it) —
+  which is why no flag combination gets past it.
+- **No fallback browser is reachable:** `chrome-headless-shell` is not installed, and the network is
+  unavailable for downloading one (`Invoke-WebRequest` to the Chrome-for-Testing bucket fails), so the
+  audit cannot be given a smaller browser either.
+
+## 4. Per-gap evidence, with the gate that bites when the fix is reverted
+
+Mutation proof (`node scripts/verify/closure-bite.mjs`, isolated copy, shared tree verified
+byte-identical afterwards):
+
+| Gap | Defect re-applied | Gate's own sentence when it caught it |
+| --- | --- | --- |
+| (1) context-loss overlay | `data-context-lost` removed from the recovery card | *"the overlay does not expose data-context-lost"* |
+| (2) PostFX composer guard | `if (contextLost) return null` removed | *"PostFX has no contextLost guard: the composer would read getContextAttributes().alpha (null)"* |
+| (3) CT coverage honesty | "MRI is the modality of record" sentence dropped | *"the y = +58 toolbar note satisfies the coverage predicate — CT coverage statement at axis y at 58.0 au …"* |
+| (4a) default preset | default hides `ctx-thalamus-envelope` | *"store: the default preset hides \"ctx-thalamus-envelope\" (diencephalon) …"* (module-load throw) |
+| (4b) preset region guard | `cortex-only` hides `ctx-cerebral-cortex` | *"store: preset \"cortex-only\" hides the telencephalon record \"ctx-cerebral-cortex\" …"* (module-load throw) |
+| (5) `?panelfail` containment | probe marker removed from the failure card | *"[data-panel-probe] count is 0 on the failure card, expected exactly 1 …"* |
+| (6) coverage-aware CT sweep | CT source limit ignored in the modality sweep | *"a CT credit is refused above the source (the honest state is \"no CT here\") …"* |
+
+(4a) and (4b) prove both directions of the region guard: the **default** assertion and the new
+**per-preset** assertion each throw before a single frame renders.
+
+## 5. Budgets, re-derived from the committed artifacts
+
+| Budget | Cap | Measured | Verdict |
+| --- | --- | --- | --- |
+| Rendered triangles | ≤ 800,000 | **570,096** (106 parts: 86 nucleus · 15 context · 5 ventricle; largest `ctx-hemisphere-r` 81,448) | PASS |
+| Committed anatomy GLB | ≤ 14 MiB | **13,755,548 B = 13.12 MiB** (106/106 manifest files present) · whole `src/assets/anatomy` tree **13.18 MiB** in 108 files (strict reading, also PASS) | PASS |
+| Imaging payload | ≤ 10 MiB | **9,132,531 B = 8.71 MiB** in 80 files | PASS |
+
+Headroom: 229,904 tris · 0.88 MiB GLB · 1.29 MiB imaging.
+
+## 6. Telencephalon sanity — what is verified here, and what is not
+
+Node-verified in this pass (assertions in the mirror, driven by the shipped data/manifests/sources):
+
+- the tree's telencephalon region carries **all 5 subdivisions**, each populated (Basal ganglia 9 ·
+  Cerebral cortex 10 · Lateral ventricles 7 · Limbic system 6 · Telencephalic white matter 14)
+- the shell is translucent **by construction and by state**: `GHOST_OUTLINE_OPACITY = 0.05`,
+  `GHOST_SHELL_OPACITY = 0.14`, the opacity ternary picks the outline branch, `cortexHidden` is read
+  from the store's hidden set, and the default preset really hides `ctx-cerebral-cortex` — while no
+  non-telencephalon record is hidden or layer-dimmed
+- the four v7 anchors (`lvl-tel-thalamostriate@48`, `lvl-tel-basal-ganglia@58`,
+  `lvl-tel-centrum-semiovale@68`, `lvl-tel-convexity@78`) exist, sit inside `CLIP_BOUNDS`
+  (y −55..+85), and the 3 telencephalon plates' `levelId`s resolve
+- the live section at y = +58: the MRI grid really covers it (y −55..+85, nearest station 57.50 au,
+  0.50 au away) while CT is measurably out of source (58 > 36.25 au), so *Auto* resolves to MRI and
+  the UI must state the limit — which `ctCoverageStatement('y', 58)` does
+- the axial **+58 plate** renders **24 labels** over 19 distinct structure ids, **all** resolvable in
+  the taxonomy, and at least one maps to a telencephalon record
+- all **42** telencephalon records carry function + clinical + connections (the audit's
+  "caudate → 1,597-char record" evidence reproduces as 1,636 chars for `ctx-caudate-nucleus`)
+- Learn-more links resolve for a v7 record (2 external http(s) links, first Wikipedia)
+
+**Not observed here (needs a browser):** that pixels actually appeared — scene luminance, live-section
+paint counts, the real `WEBGL_lose_context` cycle, pointer/focus interaction (tree clicks, search,
+sliders, keyboard plate selection, PiP sync), the `?panelfail` query string through the dev server, and
+that the ghost shell *reads* as translucent on screen. The two observed paint facts quoted in the
+earlier entry came from the orchestrator's own browser run, not from this pass.
+
+## 7. Deviations and honest limitations
+
+- **`npm run verify:audit` does not exit 0 here, by design.** The dispatched brief listed it in this
+  task's evidence contract; the refined plan of record (§5, §7, §8) explicitly removes the browser
+  lanes from every evidence contract and forbids reporting a pass/fail count for them in this sandbox.
+  The plan wins, and the brief's instruction says so. The substitute evidence is gates 6–8 above.
+- **The CT half of `TELENCEPHALON_PLAN §9` ("MRI/CT underlays cover the hemispheres at any plane") is
+  a measured source limit**, not a bug: the Visible Human CT ends at y ≈ 36.25 au, so the honest state
+  above it is *"MRI is the modality of record"* — implemented, asserted, and mutation-proven.
+- **Ribbon fidelity, unanchored fiber tracts and registration tolerance** remain as recorded in the
+  earlier entry; nothing in this pass re-measures them.

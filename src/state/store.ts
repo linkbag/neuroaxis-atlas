@@ -571,6 +571,67 @@ export const DEFAULT_LAYERS: AtlasLayers = defaultLayers()
   }
 }
 
+/**
+ * v7 closure (gap 4b) — the REGION GUARD, asserted for EVERY preset.
+ *
+ * The boot block above proves the *default* framing keeps the brainstem whole.
+ * This block proves the rule that makes that provable at all: a preset may only
+ * ever hide records of the region it is about. The audit's two dimmed rows
+ * (`ctx-thalamus-envelope`, `ctx-internal-medullary-lamina`) were diencephalon
+ * records, so the failure mode this guards against is real: `telSubdivisionIds`
+ * originally filtered on `subdivision` alone, and a subdivision-name collision
+ * would have let `Brainstem focus` hide a diencephalon record *silently* — the
+ * default's own assertion cannot see that, because it only inspects the default.
+ *
+ * Two directions, one per kind of preset (asserted, not documented):
+ *   • subdivision-derived presets (`brainstem-focus`) hide ONLY telencephalon
+ *     records — the region guard on `telSubdivisionIds`;
+ *   • `cortex-only` is the one preset whose declared purpose is hiding the deep
+ *     and brainstem family, so it must hide ZERO telencephalon records.
+ * Plus, for every preset: every id it hides or emphasises must exist in the
+ * taxonomy (a typo would otherwise hide nothing and fail open).
+ */
+{
+  const regionById = new Map(taxonomy.map((entry) => [entry.id, entry.region]))
+  /** Presets built from telencephalon subdivision names. */
+  const subdivisionDerived: ViewPreset[] = ['brainstem-focus']
+
+  for (const id of Object.keys(VIEW_PRESETS) as ViewPreset[]) {
+    const preset = VIEW_PRESETS[id]
+    for (const structureId of preset.hidden ?? []) {
+      const region = regionById.get(structureId)
+      if (region === undefined) {
+        throw new Error(
+          `store: preset "${id}" hides unknown structure "${structureId}" — a stale id hides nothing ` +
+            'and fails open (docs/TELENCEPHALON_PLAN.md §5)',
+        )
+      }
+      if (subdivisionDerived.includes(id) && region !== 'telencephalon') {
+        throw new Error(
+          `store: preset "${id}" hides "${structureId}" (${region}) — a subdivision-derived preset may ` +
+            'only hide telencephalon records, otherwise the brainstem disappears from a view whose ' +
+            'whole point is the brainstem (docs/TELENCEPHALON_PLAN.md §5/§9)',
+        )
+      }
+      if (id === 'cortex-only' && region === 'telencephalon') {
+        throw new Error(
+          `store: preset "cortex-only" hides the telencephalon record "${structureId}" — that preset ` +
+            'hides the deep/brainstem family, never its own subject ' +
+            '(docs/TELENCEPHALON_PLAN.md §5)',
+        )
+      }
+    }
+    for (const structureId of preset.emphasis ?? []) {
+      if (!regionById.has(structureId)) {
+        throw new Error(
+          `store: preset "${id}" emphasises unknown structure "${structureId}" — a stale id lifts ` +
+            'nothing and fails open (docs/TELENCEPHALON_PLAN.md §5)',
+        )
+      }
+    }
+  }
+}
+
 function sameSet<T>(reference: readonly T[], actual: ReadonlySet<T>): boolean {
   if (reference.length !== actual.size) return false
   return reference.every((value) => actual.has(value))

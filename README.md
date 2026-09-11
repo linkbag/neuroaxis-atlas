@@ -303,7 +303,12 @@ what was wrong, what was fixed, and — importantly — **which tier of evidence
 | 1 | `no "lost" recovery overlay after the context was lost` (`isContextLost() === true`, no `[data-context-lost]`) | The PostFX `alpha` throw (#2) was re-thrown by react-three-fiber's internal boundary into the DOM tree, so the `3D viewer` panel boundary unmounted **all of `Viewer3D`** — taking the overlay with it | The overlay is now rendered **outside** the `<Canvas>` subtree, and every canvas child sits in its own `CanvasSceneBoundary` (which renders `null`, the only fallback the THREE reconciler accepts) | `audit-checks.test.mjs` — *"the overlay is rendered OUTSIDE the R3F `<Canvas>` subtree"* / *"canvas children are wrapped in CanvasSceneBoundary"* |
 | 2 | `TypeError: Cannot read properties of null (reading 'alpha')` at `PostFX.tsx` | `postprocessing@6.36.7` reads `renderer.getContext().getContextAttributes().alpha` in `addPass` (`build/index.js:1002`) and `setRenderer` (`:864`); per the WebGL spec that call returns **`null`** while the context is lost, and React re-renders the R3F tree on the loss | `PostFX` returns `null` while lost (`contextLost` prop), so there is no pass to re-add; it remounts on restore against the new context | `audit-checks.test.mjs` — *"PostFX returns null while the context is lost"* / *"passes the live loss state into PostFX"* |
 | 3 | `CT coverage statement missing at y = +58` | **Check defect, not a product defect.** The statement already existed and was already wired; the check never proved the live section was pinned to the **y** axis before asserting | The check now pins the axis, proves `sectionAxis === 'y'`, and reports `{axis, planeValue, kind, notePresent}` before it asserts — and asserts the **honest** state above the measured limit instead of demanding a credit that cannot exist | `audit-checks.test.mjs` group (3) — driven by the real `ctCoverageStatement()` and the shipped `ct-manifest.json` |
-| 4 | `the default preset is not Brainstem focus` + `2 brainstem-family tree row(s) are dimmed` | **Check defect + a latent code gap.** The audit's profile persisted `neuroaxis.viewPreset`, so a returning preference decided the boot check. Separately, `telSubdivisionIds` filtered on `subdivision` **alone**, so a diencephalon record could be swept into a cortex preset's `hidden` set | The audit uses a **fresh profile per run** plus an explicit `localStorage.clear()` prologue, and asserts the boot state in its own block before any check clicks a preset. `telSubdivisionIds` now filters on `region === 'telencephalon'` **and** subdivision | `audit-checks.test.mjs` group (4) — the region guard and the "no brainstem row is layer-off" assertion |
+| 4 | `the default preset is not Brainstem focus` + `2 brainstem-family tree row(s) are dimmed` | **Check defect + a latent code gap.** The audit's profile persisted `neuroaxis.viewPreset`, so a returning preference decided the boot check. Separately, `telSubdivisionIds` filtered on `subdivision` **alone**, so a diencephalon record could be swept into a cortex preset's `hidden` set | The audit uses a **fresh profile per run** plus an explicit `localStorage.clear()` prologue, and asserts the boot state in its own block before any check clicks a preset. `telSubdivisionIds` now filters on `region === 'telencephalon'` **and** subdivision. The load-time guard was then widened by the closure: **every** preset is now swept at
+module load — a subdivision-derived preset may only hide telencephalon records, `cortex-only` may hide
+**no** telencephalon record (that is not its purpose), and every hidden/emphasised id must exist in the
+taxonomy. The mutation proof shows both directions throwing (`ctx-thalamus-envelope` on the default,
+`ctx-cerebral-cortex` on `cortex-only`) | `audit-checks.test.mjs` group (4) + `closure-bite.mjs`
+mutations (4a)/(4b) — the region guard and the "no brainstem row is layer-off" assertion |
 | 5 | `the forced throw was not contained by the "Taxonomy tree" boundary` + `?panelfail armed 0 boundaries` | **Two real defects.** (a) The probe marker was a *sibling* of the component that throws, so React discarded it in the render pass that threw — "armed" was unobservable. (b) `isDevBuild()` read `import.meta.env` through a **type-cast alias**, which esbuild erases; Vite's `vite:import-analysis` walks the transformed module for a literal `import.meta.<prop>` access, so no env object was injected and the hook was dead in the dev server | The marker moved **onto the failure card** (`panelErrorCard`), so `probes === 1` proves arming *and* containment as one fact; `isDevBuild()` reads the literal token. The latch is one-shot, consumed in `componentDidCatch`, so **Retry recovers** instead of re-throwing | `audit-checks.test.mjs` group (5) — drives the real boundary through the real throw and asserts `card=Taxonomy tree · probes=1 · retry=true`, then that Retry restores the children |
 
 Defects 1 and 2 share one cause: the effects stack must not crash while the context is lost, and a
@@ -335,8 +340,11 @@ real painted samples. The sweep gate fails if CT paints nothing on a covered pla
 | Imaging payload | ≤ 10 MiB | **9,132,531 B = 8.71 MiB / 80 files** | PASS |
 
 `node scripts/build-anatomy-geometry.mjs --manifest` is the authority for the anatomy rows and
-`node scripts/verify-imaging-v4.mjs` for the imaging row; `audit-checks.test.mjs` re-derives all
-three from the manifest and `statSync` and fails on any breach.
+`node scripts/verify-imaging-v4.mjs` for the imaging row. Two browser-free gates re-derive the same
+numbers **without any external precondition** (no `assets-src/`, no re-bake, no server):
+`node scripts/verify/budget-report.mjs` reads the committed manifest and `statSync`es the committed
+asset tree — printing the payload reading *and* the stricter whole-directory reading — and
+`audit-checks.test.mjs` cross-checks all three inside its own run. Both fail on any breach.
 
 ### Space integrity — nothing below y = +45 moved
 
@@ -375,15 +383,36 @@ the shipped sources**:
 
 | Tier | Gate | Runs without a browser |
 | --- | --- | --- |
-| **1 — binding** | `npm run validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `node scripts/verify/boundary-contract.mjs`, `node scripts/verify/a11y-contract.mjs`, `node scripts/verify/audit-checks.test.mjs`, `node scripts/build-anatomy-geometry.mjs --manifest`, `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | yes — these must exit 0 |
+| **1 — binding** | `npm run validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `node scripts/verify/boundary-contract.mjs`, `node scripts/verify/a11y-contract.mjs`, `node scripts/verify/audit-checks.test.mjs`, `node scripts/verify/budget-report.mjs`, `node scripts/verify/closure-bite.mjs`, `node scripts/build-anatomy-geometry.mjs --manifest`, `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | yes — these must exit 0 |
 | **2 — recorded, not asserted** | `npm run verify:audit`, `verify:browser`, `verify:acceptance` | **no** — reported as command + exit code + reason |
 
 `audit-checks.test.mjs` is a **mirror, not a browser test**: it proves the decision logic, the DOM
-contract in the shipped code and the shipped data/manifest facts — 75 assertions across 8 groups. It
-does **not** prove that pixels appeared. The runtime half of the audit (scene luminance, live-section
-paint counts, pointer and focus interaction, translucency of the ghost shell, and the real
-`WEBGL_lose_context` cycle) remains **unproven in a sandbox** and must be re-run with
+contract in the shipped code and the shipped data/manifest facts — 91 assertions across 9 groups,
+including the v1–v7 regression surfaces and the browser-free half of the telencephalon sanity
+checklist. It does **not** prove that pixels appeared. The runtime half of the audit (scene luminance,
+live-section paint counts, pointer and focus interaction, translucency of the ghost shell, and the
+real `WEBGL_lose_context` cycle) remains **unproven in a sandbox** and must be re-run with
 `npm run verify:audit` on a machine where Chrome can launch.
+
+### The closure is mutation-proven, not just asserted
+
+`node scripts/verify/closure-bite.mjs` re-introduces the **exact pre-fix defect** for every closed gap
+in an isolated copy of the tree (`.plate-scratch/bite/tree`, gitignored) and requires the mirror to
+fail with the expected text — a gate that cannot fail is not a gate:
+
+| Closed gap | Mutation re-applied | Result |
+| --- | --- | --- |
+| (1) context-loss overlay | drop `data-context-lost` from the recovery card | caught, `exit 1` |
+| (2) PostFX composer guard | let the composer mount while the context is lost | caught, `exit 1` |
+| (3) CT coverage honesty | keep the limit, drop "MRI is the modality of record" | caught, `exit 1` |
+| (4a) default preset | make *Brainstem focus* hide `ctx-thalamus-envelope` | caught — the store's load-time assertion throws |
+| (4b) preset region guard | make a **non-default** preset hide a telencephalon record | caught — the per-preset guard throws |
+| (5) `?panelfail` containment | render the failure card without its probe marker | caught, `exit 1` |
+| (6) coverage-aware CT sweep | ignore the CT source limit in the modality sweep | caught, `exit 1` |
+
+The script prints each mutation's exit code, the failing check's own sentence and the SHA-256 of the
+six mutated files **before and after** the run: 7/7 caught, the shared tree byte-identical, and the
+restored copy re-runs green (91 passed · 0 failed).
 
 ## Scripts
 
@@ -403,10 +432,16 @@ paint counts, pointer and focus interaction, translucency of the ghost shell, an
 | `npm run verify:pipeline` | Section-pipeline gate: slices every committed anatomy GLB through 13 planes and asserts the contour engine's loop/segment invariants (106/106 parts, no problems) |
 | `node scripts/verify/audit-checks.test.mjs` | **Audit check mirror, no browser** (v7 closure): runs the *same* pure predicates the runtime audit uses (`scripts/verify/checks.mjs`) against the **shipped manifests and the shipped sources** — CT coverage honesty driven by the real `ct-manifest.json` and `ctCoverageStatement()`, the brainstem-focus default and the preset region guard (imported from the real store), the `?panelfail` containment demonstration (drives the real `PanelErrorBoundary` through the real throw: `probes === 1`, correct surface, Retry recovers), the context-loss DOM contract including the "overlay is outside `<Canvas>`" and "PostFX returns null while lost" root causes, and the modality sweep in both directions. It also re-derives the three budget numbers and checks the telencephalon data/plate inventory. **This is a mirror, not a browser test**: it proves the decision logic and the shipped code contract, never that pixels appeared |
 | `npm run verify:audit` | **Self-sufficient runtime audit** (`scripts/verify/audit.mjs`): starts Vite itself when nothing answers at the target URL, drives headless Chrome over the DevTools Protocol through the whole feature surface, and stops the server again on every exit path. Includes the two P0 gates — simulated WebGL context loss via `WEBGL_lose_context` (overlay appears, canvas recovers) and a **forced render throw** through the dev-only `?panelfail=<surface>` hook (the failure is contained, the app keeps working, Retry restores the panel). Pass an existing URL to reuse a running server. **v7 closure:** every load-bearing verdict is now decided by `scripts/verify/checks.mjs`, the run uses a **fresh Chrome profile per run** plus a `localStorage`/`sessionStorage` clear before the boot read (so a persisted `neuroaxis.viewPreset` can never masquerade as a wrong default), and the CT/modality checks are coverage-aware |
+| `node scripts/verify/budget-report.mjs` | **Budget re-derivation gate, no precondition** (v7 closure): re-derives the three hard caps from the **committed** artifacts alone — Σ `parts[].triCount` against ≤ 800,000, Σ `stat(part.file)` against ≤ 14 MiB **plus** the stricter whole-`src/assets/anatomy` reading, and Σ `stat()` over `src/assets/imaging` against ≤ 10 MiB — prints the part mix and the largest mesh, and exits 1 on any breach. It deliberately does **not** re-bake: if a manifest and its assets ever disagreed, this gate and `build-anatomy-geometry.mjs --manifest` would say so independently |
+| `node scripts/verify/closure-bite.mjs` | **Mutation proof of the closure** (v7 closure): re-applies the exact pre-fix defect for each closed gap in an isolated copy of the tree (`.plate-scratch/bite/tree` + a `node_modules` junction) and requires `audit-checks.test.mjs` to **fail** with the expected text — 7/7 caught. Prints the failing check's own sentence, the exit code, and the SHA-256 of every mutated file before/after so "the shared tree was never touched" is measured (this sandbox blocks piped child stdio, so output is captured through file descriptors) |
 | `node scripts/verify/boundary-contract.mjs` | **Error-boundary gate, no browser** (`scripts/verify/boundary-contract.mjs`): loads the shipped boundary components through the installed TypeScript compiler and drives their real state transitions — healthy render returns the children unchanged, a throw renders the `role="alert"` card with `data-panel-error`, Retry clears the error, and all seven App-level surfaces plus both PlatesTab modes are wrapped. This is the same claim the audit's forced throw proves, for environments where Chrome cannot start |
 | `node scripts/verify/a11y-contract.mjs` | **a11y gate, no browser**: reads the shared source files and the shipped bundle for the keyboard/AX contract (plate regions focusable with an accessible name, `inert` hidden panels, modal trap/restore, `aria-activedescendant`, focus rings, ≥24 px hit targets, favicon) |
 
-All of `validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `a11y-contract`, `boundary-contract` and `audit-checks.test.mjs` must exit 0; `npm run validate` is the pre-commit data authority (plan §9).
+All of `validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `a11y-contract`,
+`boundary-contract`, `audit-checks.test.mjs`, `budget-report.mjs` and `closure-bite.mjs` must exit 0;
+`npm run validate` is the pre-commit data authority (plan §9). The two new gates are wired as `node`
+entry points on purpose — they have no external precondition, so they can be quoted as evidence from
+any checkout.
 
 **Exit codes of the browser lane** (`verify:audit`, `verify:acceptance`, `verify:browser`) — an environment failure must never look like a product failure:
 

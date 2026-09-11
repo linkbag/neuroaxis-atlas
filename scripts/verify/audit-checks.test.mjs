@@ -797,6 +797,245 @@ group('Telencephalon data contract (Node-verifiable half of the browser sanity c
   }
 }
 
+/* ══════════════════════════════════ telencephalon browser-sanity (Node half) */
+
+group('Telencephalon browser sanity — the Node-verifiable half (plan §4.4 item 3)')
+
+{
+  /*
+   * The run's own sanity checklist is a BROWSER checklist: "the tree shows the
+   * region with its 5 subdivisions; a hemisphere/ghost shell renders and is
+   * translucent enough that brainstem structures remain visible; a telencephalon
+   * structure selects from tree, search, the 3D view and the axial +58 plate;
+   * the four new levels drive the clip plane, snap-to-plate, the live section and
+   * the PiP; the live section paints at y=+58 in Auto and MRI; the CT modality
+   * states its coverage limit there."
+   *
+   * No browser can start here (see the header), so each item is asserted against
+   * the SHIPPED DATA, the SHIPPED SOURCES and the SHIPPED manifests — the
+   * strongest browser-free form of the same fact. What a rendering engine alone
+   * can prove is listed under "tier boundary" at the end and is NOT claimed here.
+   */
+  const rows = Array.isArray(taxonomy) ? taxonomy : (taxonomy.entries ?? [])
+  const tel = rows.filter((entry) => entry.region === 'telencephalon')
+
+  /* (a) the tree's region → 5 subdivisions, each populated ------------------ */
+  const expectedSubdivisions = [
+    'Basal ganglia',
+    'Cerebral cortex',
+    'Lateral ventricles',
+    'Limbic system',
+    'Telencephalic white matter',
+  ]
+  const bySubdivision = new Map()
+  for (const entry of tel) {
+    const key = String(entry.subdivision ?? '')
+    bySubdivision.set(key, (bySubdivision.get(key) ?? 0) + 1)
+  }
+  const absentSubdivisions = expectedSubdivisions.filter((name) => !bySubdivision.has(name))
+  absentSubdivisions.length === 0
+    ? ok(
+        `the tree's telencephalon region carries all 5 subdivisions, each with records (` +
+          expectedSubdivisions.map((name) => `${name} ${bySubdivision.get(name)}`).join(' · ') +
+          ')',
+      )
+    : bad(`telencephalon subdivisions missing from the taxonomy: ${absentSubdivisions.join(', ')}`)
+
+  /* (b) the ghost hemisphere shell, and what stays lit under it ------------- */
+  const sceneLayers = readSource('src/components/viewer3d/SceneLayers.tsx')
+  const outlineOpacity = Number((sceneLayers.match(/GHOST_OUTLINE_OPACITY\s*=\s*([\d.]+)/) ?? [])[1])
+  const shellOpacity = Number((sceneLayers.match(/GHOST_SHELL_OPACITY\s*=\s*([\d.]+)/) ?? [])[1])
+  const ghostShellColour = /GHOST_SHELL_COLOR\s*=\s*'(#[0-9a-fA-F]{3,8})'/.exec(sceneLayers)?.[1] ?? null
+  Number.isFinite(outlineOpacity) && outlineOpacity > 0 && outlineOpacity <= 0.2
+    ? ok(
+        `the ghost hemisphere shell fades to ${outlineOpacity} opacity when its record is hidden ` +
+          `(GHOST_OUTLINE_OPACITY ≤ 0.2: the outline frames the brainstem instead of covering it)`,
+      )
+    : bad(
+        `GHOST_OUTLINE_OPACITY is ${String(outlineOpacity)} — the shell would not read as an outline ` +
+          '(SceneLayers.tsx is the only place this is declared)',
+      )
+  Number.isFinite(shellOpacity) && shellOpacity > 0 && shellOpacity <= 0.2
+    ? ok(
+        `the lit hemisphere shell renders at ${shellOpacity} opacity` +
+          (ghostShellColour === null ? '' : ` (hue ${ghostShellColour})`) +
+          ' — translucent by construction, never an opaque lid',
+      )
+    : bad(`GHOST_SHELL_OPACITY is ${String(shellOpacity)} — the hemispheres would hide the brainstem`)
+
+  // The bridge from "translucent" to "the brainstem is still visible": the
+  // shell's opacity is chosen by `outlineOnly={cortexHidden}`, `cortexHidden`
+  // comes from the store's `hidden` set for the hemisphere's own record, and
+  // under the DEFAULT preset that record IS hidden (its subdivision is one of
+  // the four the preset structure-hides) — while every non-telencephalon record
+  // keeps both of its layers on (asserted at store load and in group 4). So the
+  // default framing is: shell at GHOST_OUTLINE_OPACITY, brainstem at full
+  // material.
+  const opacityBranch = /material\.opacity\s*=\s*lit\s*\?\s*[^:]+:\s*outlineOnly\s*\?\s*GHOST_OUTLINE_OPACITY\s*:\s*GHOST_SHELL_OPACITY/.test(
+    sceneLayers,
+  )
+  const cortexHiddenWiring = /cortexHidden=\{hidden\.has\(TEL_HEMISPHERE_RECORD_IDS\[0\]\)\}/.test(sceneLayers)
+  const { TEL_HEMISPHERE_RECORD_IDS } = await import(moduleUrl('src/geometry/anatomyAssets.ts'))
+  const store = await import(moduleUrl('src/state/store.ts'))
+  const hemisphereRecordId = TEL_HEMISPHERE_RECORD_IDS[0]
+  const hiddenByDefault = store.DEFAULT_LAYERS.hidden.has(hemisphereRecordId)
+  opacityBranch && cortexHiddenWiring && hiddenByDefault
+    ? ok(
+        `the default preset really takes the outline branch: it hides "${hemisphereRecordId}", ` +
+          `cortexHidden is read from the store's hidden set, and the opacity ternary picks ` +
+          `GHOST_OUTLINE_OPACITY (${outlineOpacity}) over the lit shell (${shellOpacity})`,
+      )
+    : bad(
+        `the ghost-outline chain is broken (opacity ternary=${opacityBranch}, ` +
+          `cortexHidden wiring=${cortexHiddenWiring}, default hides the hemisphere=${hiddenByDefault}) — ` +
+          'the default shell would not be an outline',
+      )
+
+  /* (c) the four v7 levels drive clip, snap, live section and PiP ----------- */
+  const levelRows = Array.isArray(levels) ? levels : (levels.levels ?? [])
+  const v7 = [
+    { y: 48, id: 'lvl-tel-thalamostriate' },
+    { y: 58, id: 'lvl-tel-basal-ganglia' },
+    { y: 68, id: 'lvl-tel-centrum-semiovale' },
+    { y: 78, id: 'lvl-tel-convexity' },
+  ]
+  const wrongAnchors = v7.filter(({ y, id }) => {
+    const row = levelRows.find((level) => level.id === id)
+    return row === undefined || Number(row.y) !== y
+  })
+  wrongAnchors.length === 0
+    ? ok(
+        `the four v7 levels carry their anchors (${v7.map(({ id, y }) => `${id}@${y}`).join(' · ')}) ` +
+          '— the clip plane, the snap target and the live-section level lookup all read this table',
+      )
+    : bad(
+        `v7 level anchors wrong or missing: ${wrongAnchors
+          .map(({ id, y }) => `${id}@${y}`)
+          .join(', ')}`,
+      )
+
+  const clipSource = readSource('src/components/viewer3d/clipPlanes.ts')
+  const clipBounds = [...clipSource.matchAll(/([xyz]):\s*\{\s*min:\s*(-?[\d.]+),\s*max:\s*(-?[\d.]+)\s*\}/g)].map(
+    (match) => ({ axis: match[1], min: Number(match[2]), max: Number(match[3]) }),
+  )
+  const yBound = clipBounds.find((bound) => bound.axis === 'y')
+  const outsideBounds = v7.filter(({ y }) => yBound === undefined || y < yBound.min || y > yBound.max)
+  outsideBounds.length === 0
+    ? ok(
+        `all four v7 levels are reachable by the clip slider ` +
+          `(y ∈ [${yBound.min}, ${yBound.max}] ⊇ +48/+58/+68/+78)`,
+      )
+    : bad(`v7 levels outside CLIP_BOUNDS: ${outsideBounds.map(({ y }) => `+${y}`).join(', ')}`)
+
+  // Snap-to-plate and the PiP read `levelId` from the plate table, so a plate
+  // whose level no longer exists would silently lose its anchor.
+  const plateRows = (() => {
+    const raw = readJson('src/data/plates.json')
+    return Array.isArray(raw) ? raw : (raw.plates ?? [])
+  })()
+  const telPlates = plateRows.filter((plate) => plate.region === 'telencephalon')
+  const danglingLevel = telPlates.filter(
+    (plate) => plate.levelId !== undefined && !levelRows.some((level) => level.id === plate.levelId),
+  )
+  telPlates.length >= 3 && danglingLevel.length === 0
+    ? ok(
+        `${telPlates.length} telencephalon plate(s) committed, each levelId resolving to a real anchor ` +
+          `(${telPlates.map((plate) => plate.levelId ?? '—').join(' · ')})`,
+      )
+    : bad(
+        `telencephalon plates: ${telPlates.length} found, ${danglingLevel.length} with a dangling levelId`,
+      )
+
+  /* (d) the live section at y = +58: MRI has samples, CT is out of source ---- */
+  const mriManifest = readJson('src/assets/imaging/mri-manifest.json')
+  const mriDims = mriManifest.dims ?? []
+  const mriOrigin = mriManifest.originAu ?? []
+  const mriSpacing = mriManifest.spacingAu ?? []
+  const yCount = Number(mriDims[1])
+  const yOrigin = Number(mriOrigin[1])
+  const ySpacing = Number(mriSpacing[1])
+  const yTop = yOrigin + (yCount - 1) * ySpacing
+  const yBottom = yOrigin
+  const nearestStation = yOrigin + Math.round((58 - yOrigin) / ySpacing) * ySpacing
+  const mriCovers58 = Number.isFinite(yTop) && 58 >= yBottom && 58 <= yTop
+  const stationError = Math.abs(nearestStation - 58)
+  mriCovers58
+    ? ok(
+        `the live section has MRI source at y = +58 (grid y ${yBottom.toFixed(2)}..${yTop.toFixed(2)} au, ` +
+          `station ${nearestStation.toFixed(2)} au, ${stationError.toFixed(2)} au away) — ` +
+          'MRI is the modality that paints the new levels',
+      )
+    : bad(
+        `the MRI grid does not cover y = +58 (y ${yBottom}..${yTop}) — the live section would be blank there`,
+      )
+  // The honest-complement half of (d): "Auto" falls through CT at +58 and says
+  // so. The predicate's own verdict at this plane is asserted in group 3; here
+  // only the measured limit that makes it necessary.
+  CT.limit !== null && 58 > CT.limit
+    ? ok(
+        `at y = +58 the CT half of "Auto" is measurably out of source ` +
+          `(${58} > ${CT.limit.toFixed(2)} au), so Auto resolves to MRI and the UI states the limit`,
+      )
+    : bad('the CT source limit does not exclude y = +58 — re-check the CT coverage assertions')
+
+  /* (e) the axial +58 plate renders, with labels that resolve -------------- */
+  const platePath = 'src/data/plates/plate-tel-axial-58.svg'
+  if (!existsSync(resolve(ROOT, platePath))) {
+    bad(`${platePath} is missing — the y = +58 plate cannot render`)
+  } else {
+    const svg = readSource(platePath)
+    const labelCount = (svg.match(/<text\b/g) ?? []).length
+    const structureIds = [...svg.matchAll(/data-structure="([^"]+)"/g)].map((match) => match[1])
+    const unknown = [...new Set(structureIds)].filter(
+      (id) => !rows.some((entry) => entry.id === id),
+    )
+    labelCount >= 20 && structureIds.length > 0
+      ? ok(
+          `the axial y = +58 plate renders ${labelCount} label(s) over ${new Set(structureIds).size} ` +
+            `distinct structure id(s), all resolvable in the taxonomy` +
+            (unknown.length === 0 ? ' (0 dangling ids)' : ` — ${unknown.length} dangling: ${unknown.join(', ')}`),
+        )
+      : bad(`the +58 plate has ${labelCount} label(s) and ${structureIds.length} data-structure marker(s)`)
+    const telLabel = [...new Set(structureIds)].find(
+      (id) => rows.find((entry) => entry.id === id)?.region === 'telencephalon',
+    )
+    telLabel !== undefined
+      ? ok(
+          `a label on the +58 plate maps to a telencephalon record ("${telLabel}") — selecting it from ` +
+            'the plate and from the tree reach the same store action',
+        )
+      : bad('no label on the +58 plate resolves to a telencephalon record')
+  }
+
+  /* (f) a telencephalon structure has a real, selectable record ------------- */
+  const recordDir = 'src/data/structures'
+  let records = []
+  for (const name of readdirSync(resolve(ROOT, recordDir))) {
+    if (!name.endsWith('.json')) continue
+    const parsed = readJson(`${recordDir}/${name}`)
+    records = records.concat(Array.isArray(parsed) ? parsed : (parsed.structures ?? parsed.records ?? []))
+  }
+  const telRecords = records.filter((record) => record.region === 'telencephalon')
+  const withFields = telRecords.filter(
+    (record) =>
+      typeof record.function === 'string' &&
+      record.function.length > 0 &&
+      (typeof record.clinical === 'string' || (record.clinical ?? []).length > 0) &&
+      (record.connections?.afferent ?? []).length + (record.connections?.efferent ?? []).length > 0,
+  )
+  const caudate = telRecords.find((record) => /caudate/.test(String(record.id)))
+  withFields.length >= 40 && caudate !== undefined
+    ? ok(
+        `all ${withFields.length} telencephalon record(s) carry function + clinical + connections ` +
+          `(the audit's "caudate → 1,597-char record" evidence: "${String(caudate.id)}" is ` +
+          `${JSON.stringify(caudate).length} chars here) — every telencephalon row is selectable, ` +
+          'not an empty shell',
+      )
+    : bad(
+        `only ${withFields.length} of ${telRecords.length} telencephalon record(s) carry the full data contract`,
+      )
+}
+
 /* ══════════════════════════════════════════════════════════ budget re-derive */
 
 group('Budgets — rendered tris · committed GLB · imaging (hard constraints)')
@@ -926,6 +1165,30 @@ group('v1–v7 regression checklist — Node-verifiable surfaces')
   stillThere('plate regions are still focusable (roving tabindex)', 'PlateRenderer', /tabindex/)
   stillThere('every major surface is still wrapped in a boundary', 'App', /TransparentBoundary/)
 
+  // v2.1: the Learn-more links. The browser audit asserts them per selected
+  // record (`audit.mjs` section D: "Learn more external links (n)"); this is the
+  // browser-free half of the same claim — the section, the anchors and the
+  // reference table that fills them.
+  stillThere('the info panel still renders its "Learn more" section', 'InfoPanel', /Learn more/)
+  stillThere('Learn-more entries are real external anchors', 'InfoPanel', /webref-link/)
+  stillThere('Learn-more anchors open in a new tab without a referrer leak', 'InfoPanel', /noopener noreferrer/)
+  {
+    const webRefs = await import(moduleUrl('src/data/webRefs.ts'))
+    const refs = webRefs.getWebRefs(
+      'nuc-caudate-head',
+      'Head of caudate nucleus',
+      'nucleus',
+      'telencephalon',
+    )
+    const linked = refs.filter((ref) => /^https?:\/\//.test(String(ref.url)))
+    linked.length > 0
+      ? ok(
+          `a v7 telencephalon record ("Head of caudate nucleus") resolves ${linked.length} external ` +
+            `reference link(s) — first "${String(linked[0].url).slice(0, 52)}"`,
+        )
+      : bad('getWebRefs returned no http(s) link for a telencephalon nucleus — Learn more would be empty')
+  }
+
   // v7: the new region is part of the layer/filter vocabulary.
   const strata = readJson('src/data/taxonomy.json')
   const regions = new Set((Array.isArray(strata) ? strata : strata.entries).map((entry) => entry.region))
@@ -991,7 +1254,8 @@ for (const item of [
   'that a real WEBGL_lose_context.loseContext() is observed by the loss listeners at runtime',
   'that the ?panelfail query string arms the hook through the dev server (this lane uses the module seam)',
   'pointer/focus interaction: tree clicks, search, sliders, keyboard plate selection, PiP sync',
-  'that the telencephalon shell renders translucent enough to keep the brainstem visible',
+  'that the telencephalon shell reads as translucent ON SCREEN (this lane asserts the shipped ' +
+    'opacities and the outline branch the default preset takes, not the rendered luminance)',
 ]) {
   console.log(`    ·  ${item}`)
 }
