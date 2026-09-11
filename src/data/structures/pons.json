@@ -805,5 +805,28 @@
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
     ]
+  },
+  {
+    "id": "ctx-pons-surface",
+    "name": "Pons (context surface)",
+    "synonyms": ["pontine envelope", "pontine block"],
+    "region": "pons",
+    "subdivision": "Surface landmarks",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "Renderable silhouette of the whole pons as one block: the massively expanded basis pontis coursing ventrally to the middle cerebellar peduncles laterally, the pontine tegmentum dorsally with the fourth-ventricle floor, the facial colliculus and the trigeminal, facial and vestibulocochlear root exits on its surface. It exists so the pons is a single named, selectable body in the 3D scene, not because it is a nucleus; its internal content belongs to the pontine nucleus, tract and surface records.",
+    "contextNote": "Envelope/context-surface record: the GLB silhouette ctx-pons-surface in src/assets/anatomy/anatomy-manifest.json is its 3D body (SceneLayers envelope slot env-pons), and its canonical-space extent below is that baked bbox. ctx-pontine-nuclei and ctx-pontine-fibers are the plate-2D sub-tags of its ventral part and stay 2D-only; no plate carries this tag.",
+    "connections": {
+      "afferent": ["See the individual pontine records — the envelope itself carries no fibers"]
+    },
+    "clinical": [],
+    "levels": ["lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
+    "origin3d": [0.079, -9.322, 1.861],
+    "size3d": [18.19, 15.18, 14.09],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\"",
+      "RadioGraphics 2019 — 'Midbrain, Pons, and Medulla: Anatomy and Syndromes'"
+    ]
   }
 ]

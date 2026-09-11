@@ -58,6 +58,32 @@
     ]
   },
   {
+    "id": "ctx-pineal",
+    "name": "Pineal body (context silhouette)",
+    "synonyms": [
+      "pineal silhouette",
+      "pineal-epithalamic envelope"
+    ],
+    "region": "diencephalon",
+    "subdivision": "Epithalamus",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "Renderable silhouette of the midline pineal-epithalamic block that sits between the habenular trigones in the posterior wall of the third ventricle, above the superior colliculi and rostral to the quadrigeminal cistern. It exists so the epithalamic dorsal midline is a named, selectable body in the 3D scene; the endocrine organ and its melatonin physiology belong to nuc-pineal-gland, and the habenular complex to nuc-habenula.",
+    "contextNote": "Envelope/context-surface record: the GLB silhouette ctx-pineal in src/assets/anatomy/anatomy-manifest.json is its 3D body (SceneLayers envelope slot env-pineal), and its canonical-space extent below is that baked bbox — note that the baked body is markedly larger than the endocrine gland it names, so it reads as an epithalamic block rather than a gland. Distinct from nuc-pineal-gland, which is the endocrine/clinical record; no plate carries this tag.",
+    "connections": {
+      "afferent": ["See nuc-pineal-gland and nuc-habenula — the silhouette itself carries no fibers"]
+    },
+    "clinical": [],
+    "levels": ["lvl-post-comm"],
+    "origin3d": [0.115, 19.392, -13.866],
+    "size3d": [3.16, 4.89, 6.28],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+    ]
+  },
+  {
     "id": "nuc-habenula",
     "name": "Habenular nuclei",
     "synonyms": [

@@ -960,5 +960,27 @@
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
       "Duke Neurobiology, Brainstem Sectional Anatomy Lab (brain.oit.duke.edu/lab03)"
     ]
+  },
+  {
+    "id": "ctx-medulla-surface",
+    "name": "Medulla (context surface)",
+    "synonyms": ["medullary envelope", "medulla oblongata block"],
+    "region": "medulla",
+    "subdivision": "Surface landmarks",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "Renderable silhouette of the medulla oblongata as one block: the ventral pyramids with their decussation, the olives produced by the inferior olivary complex, the dorsal column gracile and cuneate tubercles, the postolivary and preolivary sulci carrying the CN IX-XII rootlets, and the floor of the open fourth ventricle caudally. It exists so the medulla is a single named, selectable body in the 3D scene and on the plate outlines, not because it is a nucleus; the internal content belongs to its own records.",
+    "contextNote": "Envelope/context-surface record: the GLB silhouette ctx-medulla-surface in src/assets/anatomy/anatomy-manifest.json is its 3D body (SceneLayers envelope slot env-medulla), and its canonical-space extent below is that baked bbox. Not a nucleus — see the individual medullary nucleus, tract and surface records; no plate carries this tag.",
+    "connections": {
+      "afferent": ["See the individual medullary records; the envelope itself carries no fibers"]
+    },
+    "clinical": [],
+    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [-0.026, -32.634, 1.703],
+    "size3d": [11.11, 16.04, 10.77],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+    ]
   }
 ]

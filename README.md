@@ -201,8 +201,12 @@ Plan §5 makes this the usability core, so the defaults are the feature:
   placement are listed explicitly (`TEL_CONTENT_ONLY_IDS`) and excluded from the 3D body pass while
   staying fully reachable from the tree, search and plates. Before v7, 32 of the 38 telencephalon
   records would have drawn a unit sphere at `[0, 0, 0]`.
-- **Explode** separates the hemisphere shells outward on ±x — the shells use a **larger factor
-  than the nuclei** (they are envelopes, not structures), and the nucleus rule is unchanged.
+- **Explode** separates the hemisphere shells outward on ±x — **16 au per shell at 100 %**
+  (`HEMISPHERE_EXPLODE_FACTOR` in `src/components/viewer3d/SceneLayers.tsx`) against the nuclei's
+  **6 au** (`NucleusMesh`: `explodeDirection · explode · 6`). The larger factor is deliberate: a
+  ~110 au-wide envelope has to clear its twin rather than fan off an axis, and at 100 % the 32 au
+  gap exposes the corpus callosum, fornix and ventricles. The nucleus rule is unchanged, and every
+  other kind stays at its canonical position.
 - **CT coverage is stated, not hidden.** The Visible Human CT series is a **head-only scan whose
   own apex lands at canonical y ≈ 36.25 au** (measured; recorded in `ct-manifest.json` at
   `intensity.sourceCoverage.superiorMostDataYAu` and `registration.residuals.coverageNote`). Above

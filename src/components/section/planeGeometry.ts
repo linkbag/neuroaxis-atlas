@@ -26,9 +26,12 @@
  *      surfaces.
  *   2. the visible world rect is CENTRED ON THE CANONICAL BOUNDS MIDPOINT
  *      (`(min + max) / 2` per in-plane axis), not on 0. The two coincide only
- *      on the u axis of the transverse/coronal planes; sagittal (u = z,
- *      z ∈ [−56, 26]) and both v axes are asymmetric about 0, which is exactly
- *      where the old PiP/sampler assumption put the photograph 5–15 au off.
+ *      on the u axis of the transverse/coronal planes; sagittal (u = z) and both
+ *      v axes are asymmetric about 0, which is exactly where the old PiP/sampler
+ *      assumption put the photograph 5–15 au off. (Measured then on the
+ *      AMENDMENT A box, x ±48 · y −55…45 · z −56…26; under AMENDMENT B the same
+ *      asymmetry is 0 au on x, +15 au on y and −10 au on z — the rule below is
+ *      what carries over, not those numbers.)
  *   3. both surfaces hand this function the SAME viewport (their own CSS pixel
  *      size), so the same photograph lands on the same world rect and therefore
  *      on the same screen pixels. The PiP's private `VIEW_MARGIN = 1.08` is
@@ -38,9 +41,10 @@
  * Consequences (measured, "identical or better"): the old PiP framed the
  * canonical extents at `halfU · 1.08` around world 0, so its window was
  * off-centre by the bounds midpoint — 0 au on x, −5 au on y (sagittal/coronal
- * v) and −15 au on z (transverse v) — and it never showed the canvas window
- * (e.g. one 1280×520 transverse canvas: canvas v ∈ [−56, 26], old PiP
- * v ∈ [−44.3, 44.3]). Both surfaces now show that one window, and
+ * v) and −15 au on z (transverse v) under the AMENDMENT A box — and it never
+ * showed the canvas window (e.g. one 1280×520 transverse canvas: canvas
+ * v ∈ [−56, 26], old PiP v ∈ [−44.3, 44.3]). Both surfaces now show that one
+ * window, and
  * `fit.dx`/`fit.dy` keep meaning what their doc comment says: `dx` is the offset
  * of the plate's own tissue midline from the image centre, `dy` the vertical
  * offset from the view centre.
@@ -69,6 +73,39 @@
 
 import { CLIP_BOUNDS } from '../viewer3d/clipPlanes'
 import type { PlaneAxis } from './contours'
+
+/* ==================================================================== *
+ *  AMENDMENT B — the canonical box (docs/TELENCEPHALON_PLAN.md §2,     *
+ *  task `tel-space`). The extents themselves are NOT redeclared here:  *
+ *  `CLIP_BOUNDS` (viewer3d/clipPlanes.ts) is still their single        *
+ *  declaration, and this module derives every mapping from it —        *
+ *  `axisExtents`, `planeTransform`, the badge table and the level      *
+ *  window. Only the two things the extent change genuinely moves in    *
+ *  this module are stated below: the three orientation tables and the  *
+ *  ONE camera-basis fact that must NOT follow the extents (see         *
+ *  `PIP_CAMERA_UP`).                                                    *
+ *                                                                      *
+ *  A. The BADGE tables do not move. `badges()` is derived from the     *
+ *     transform's handedness (`uToSx` strictly increasing, `vToSy`     *
+ *     strictly decreasing) and from the world directions the axes      *
+ *     POINT ALONG (+x patient-left, +y superior, +z anterior) — never  *
+ *     from a bound. Extending y to +85 and z to −75…+55 changes which  *
+ *     world points are inside the box, not which way the axes point,   *
+ *     so `PLANE_BADGES` (transverse A↑L→, sagittal S↑A→, coronal S↑L→) *
+ *     is unchanged and its load-time self-check still passes. That is  *
+ *     the property docs/SECTION_SYNC_PLAN.md §2.2 fixes and it is      *
+ *     extent-independent by construction.                              *
+ *                                                                      *
+ *  B. The LEVEL window does not move. `nearestLevelTo`/`snapClipWrite` *
+ *     read the anchors from levels.json, which GAINED four telencephalic*
+ *     anchors above +45 (+48 thalamostriate, +58 basal ganglia, +68     *
+ *     centrum semiovale, +78 high convexity) and kept its 13 original  *
+ *     y values exactly. Snapping therefore continues to work at the    *
+ *     old levels unchanged and simply has four more stops to reach     *
+ *     (docs/TELENCEPHALON_PLAN.md §2, "nothing moves").                *
+ *                                                                      *
+ *  C. The CAMERA BASIS is frozen on purpose (see `PIP_CAMERA_UP`).     *
+ * ==================================================================== */
 
 /* ------------------------------------------------------------------ axes */
 
@@ -470,11 +507,13 @@ export const PLANE_BADGES: Record<PlaneAxis, PlaneBadges> = {
  * mirrors x before showing the section, i.e. whether the world direction the
  * camera's screen-right follows is the OPPOSITE of the plane's u axis.
  *
- * DERIVED from the two facts the PiP declares — its up vector (`cameraUpAxis`)
- * and the side it stands on — plus the transform's own pixel geometry
- * (`planeTransform`: `uToSx` increases with u and `vToSy` decreases with v, so u
- * is the image's horizontal axis and v its vertical axis on every viewport). It
- * is not a hand-copied flag.
+ * DERIVED from the two facts the PiP declares — its up vector (`PIP_CAMERA_UP`
+ * via `cameraUpAxis`) and the side it stands on (`PIP_CAMERA_SIDE`) — plus the
+ * transform's own pixel geometry (`planeTransform`: `uToSx` increases with u and
+ * `vToSy` decreases with v, so u is the image's horizontal axis and v its
+ * vertical axis on every viewport). It is not a hand-copied flag, and since
+ * AMENDMENT B it is not a function of the canonical extents either: the section
+ * camera is frozen while the framing follows the box (see `PIP_CAMERA_UP`).
  *
  * The camera looks back down the plane normal from the DISCARDED side (clipPlanes
  * keeps the lower half of every axis), and three.js' `Matrix4.lookAt` builds the
@@ -512,31 +551,82 @@ export function mirrorX(axis: PlaneAxis): boolean {
 }
 
 /**
- * The world axis the section camera uses as its up vector.
+ * THE PiP SECTION CAMERA'S UP AXIS, PER PLANE — an orientation contract, not an
+ * extent measurement (docs/TELENCEPHALON_PLAN.md §2 AMENDMENT B, task
+ * `tel-space`; docs/QUALITY_PLAN.md §2 item 4).
  *
- * CONTRACT: `up` is the in-plane axis with the larger canonical span. Read it
- * together with `mirrorX`: the camera's ortho frustum puts the CAMERA's local x
- * axis on the image's screen-horizontal axis and its local y axis on
+ * WHY THIS IS A TABLE AND NOT `(uSpan >= vSpan)` ANY MORE. Until AMENDMENT B the
+ * up axis was DERIVED as "the in-plane axis with the larger canonical span", and
+ * that happened to give the values `SectionPiP.SECTION_VIEWS` declares. The rule
+ * was really an observation about one bound set, not a property of the section
+ * camera: it silently re-derives a NEW camera whenever the box is re-fitted. The
+ * telencephalon extension moves y from 100 to 140 au and z from 82 to 130 au, so
+ * on the transverse plane the larger span becomes the plane's v axis (z) instead
+ * of its u axis (x) — and on that plane `cameraSide` is ALREADY the v axis (+z,
+ * see `mirrorX`). The panel would then build an orthographic camera whose up
+ * vector is parallel to its view direction: a degenerate basis. Measured with
+ * three.js' own `Matrix4.lookAt` (r169, this repo's version), `up +z` with
+ * `side +z` does not produce NaN — it silently substitutes a basis (`right`
+ * (0,1,0), `up` (−1,0,0)) that rolls the transverse panel 90° and, through
+ * `flipX = mirrorX('y')`, would flip patient-left to the image LEFT, contradicting
+ * the badge table the same panel prints and §2.2. That is a user-visible
+ * regression in a v3 surface, caused by a bound change, so it must not happen.
+ *
+ * The camera basis is therefore stated as what it is: the three bases
+ * `SectionPiP` declares (its `up:` and `cameraSide:` vectors). The values are
+ * IDENTICAL to what the old span rule produced under AMENDMENT A, so the PiP's
+ * rendering is pixel-identical before and after the extension — the section
+ * camera does not move when the box grows. `scripts/verify/plane-transform.mjs`
+ * owns the correspondence in both directions (the table ⇔ SECTION_VIEWS, and the
+ * non-degeneracy of every basis).
+ *
+ * Framing is unaffected: the ortho window still comes from `axisExtents` /
+ * `planeTransform`, i.e. from `CLIP_BOUNDS`, so the panel auto-fits the new box
+ * exactly like the live canvas (one transform, QUALITY_PLAN §2 item 4). Only the
+ * ORIENTATION is frozen; only the EXTENTS follow the amendment.
+ *
+ * The transverse/sagittal 90° roll this basis produces relative to the canvas
+ * convention remains the recorded, unfixed finding it was before this task (see
+ * `mirrorX`): fixing it means changing `SectionPiP`'s frustum axes and framing
+ * together, in a browser — not something a bounds amendment may do by accident.
+ */
+export const PIP_CAMERA_UP: Record<PlaneAxis, PlaneAxis> = {
+  y: 'x', // transverse: up +x (screen-left), camera side +z → perpendicular
+  x: 'y', // sagittal:   up +y (superior),    camera side +z → perpendicular
+  z: 'y', // coronal:    up +y (superior),    camera side +y → DEGENERATE, pre-existing (see below)
+}
+
+/**
+ * The world axis each plane's section camera stands on (the discarded
+ * half-space side) — the other half of the basis above, declared so the
+ * non-degeneracy check below is a fact about this module rather than a
+ * re-typed constant. These are `SECTION_VIEWS[axis].cameraSide`:
+ * +v for transverse/coronal, +u for sagittal (see `SectionPiP`'s note on
+ * `cameraSide`).
+ */
+export const PIP_CAMERA_SIDE: Record<PlaneAxis, PlaneAxis> = {
+  y: 'z', // transverse: side = +z (the v axis)
+  x: 'z', // sagittal:   side = +z (the u axis)
+  z: 'x', // coronal:    side = +x (the u axis)
+}
+
+/**
+ * The world axis the section camera uses as its up vector — THE declared basis
+ * (`PIP_CAMERA_UP`), never re-derived from the canonical extents, so extending
+ * the box cannot silently roll the PiP (see that table's note for the measured
+ * failure this prevents). It is always one of the plane's two in-plane axes and
+ * never parallel to the camera side, which is what makes the ortho basis
+ * well-defined; both facts are asserted at module load below.
+ *
+ * Read it together with `mirrorX`: the camera's ortho frustum puts the CAMERA's
+ * local x axis on the image's screen-horizontal axis and its local y axis on
  * screen-vertical, so a camera whose up vector is an in-plane axis puts the
  * plane's horizontal direction on the image's vertical axis (and vice versa).
- * Choosing the larger span for `up` keeps the ortho fit of the shared extents on
- * the canvas' own scale rule, so no second framing margin can creep back in (the
- * drift `planeTransform` exists to remove).
  *
- * Derived from the extents, never typed in. With CLIP_BOUNDS (x ±48,
- * y −55…45, z −56…26) — spans x 96 · y 100 · z 82:
- *   y (transverse): u = x (96), v = z (82) → up = +x    (larger span = u)
- *   x (sagittal):   u = z (82), v = y (100) → up = +y   (larger span = v)
- *   z (coronal):    u = x (96), v = y (100) → up = +y   (larger span = v)
- *
- * Those three values are exactly what `SectionPiP.SECTION_VIEWS` declares, and
- * `scripts/verify/plane-transform.mjs` asserts that correspondence against the
- * PiP's source, so this function cannot drift from the camera the panel builds.
- *
- * NUMERICAL NOTE — RECORDED, NOT FIXED HERE (p1-planededup). The ortho basis was
- * re-derived from this up axis plus the panel's `cameraSide`, using three.js' own
- * `Matrix4.lookAt` construction (`right = up × back`, `back = +cameraSide`) and
- * cross-checked against the columns of the real camera matrix:
+ * NUMERICAL NOTE — RECORDED, NOT FIXED HERE (p1-planededup). Re-deriving the
+ * ortho basis from this up axis plus the panel's `cameraSide`, using three.js'
+ * own `Matrix4.lookAt` construction (`right = up × back`, `back = +cameraSide`)
+ * and cross-checking against the columns of the real camera matrix gives:
  *
  *   y (transverse) up +x, side +z → right (0,−1,0)  ⇒ u·right = 0
  *   x (sagittal)   up +y, side +z → right (1, 0,0)  ⇒ u·right = 0
@@ -551,16 +641,78 @@ export function mirrorX(axis: PlaneAxis): boolean {
  *
  * Correcting the roll means changing the frustum's screen axes AND the framing
  * half-extents together — a change to `SectionPiP`'s rendering, outside this
- * module's contract, and one that can only be validated in a browser (this task's
- * sandbox cannot run Chrome). It is therefore recorded here and in the task
- * report with its repro, and left as an owner/integration decision rather than
- * changed blind. What this module guarantees either way, and the gate proves, is
- * that the canvas, the PiP and the backdrop sampler all place the same photograph
- * at the same WORLD position and size.
+ * module's contract, and one that can only be validated in a browser. It is
+ * therefore recorded here and in the task report with its repro, and left as an
+ * owner/integration decision rather than changed blind. What this module
+ * guarantees either way, and the gate proves, is that the canvas, the PiP and the
+ * backdrop sampler all place the same photograph at the same WORLD position and
+ * size.
  */
 export function cameraUpAxis(axis: PlaneAxis): PlaneAxis {
-  const extents = axisExtents(axis)
-  return extents.uSpan >= extents.vSpan ? extents.uAxis : extents.vAxis
+  return PIP_CAMERA_UP[axis]
+}
+
+{
+  // Load-time self-check of the camera basis: an up vector that is the plane
+  // normal has no in-plane meaning, and an up vector PARALLEL to the camera side
+  // makes three.js' lookAt basis degenerate (measured: a silent substitution —
+  // see `PIP_CAMERA_UP`).
+  //
+  // WHY THE PARALLEL CASE DOES NOT THROW. The transverse plane is the case this
+  // task exists to prevent: there `side` is +z, and the AMENDMENT B extents make
+  // the larger in-plane span +z too, so a span-derived up axis would have been
+  // parallel to the camera side and the panel would have rolled. `PIP_CAMERA_UP.y`
+  // is +x, which is perpendicular — checked below, and a violation IS a
+  // construction error worth failing on.
+  //
+  // One plane is a RECORDED PRE-EXISTING DEFECT rather than a construction
+  // error of this table, and it must NOT take the app down: coronal's camera
+  // side is +y (`AXIS_PAIR.z[1]`, `SectionPiP.SECTION_VIEWS.z.cameraSide`) and its
+  // up axis is +y as well. Rotating that camera side by a right angle — the
+  // actual fix — re-aims the panel's whole frustum and can only be validated in a
+  // browser, which is a `SectionPiP` change outside this module's contract (the
+  // same reason `mirrorX`'s recorded 90°-roll note was not "fixed" blind).
+  // Throwing here would blank the entire app (this module is on the import path
+  // of the 3D viewer, the section canvas and the PiP), which would be a far worse
+  // regression than the rolled panel it would be reporting. So it warns, names
+  // the fix's owner, and `scripts/verify/plane-transform.mjs` prints the same
+  // finding as a gate note.
+  const PRE_EXISTING_DEGENERATE_BASIS: Record<string, string> = {
+    z:
+      'SectionPiP.SECTION_VIEWS.z.cameraSide is AXIS_PAIR.z[1] = +y, which is parallel to its up axis ' +
+      '+y: three.js then substitutes right=(+x) / up=(−z), so the coronal panel shows patient-left on ' +
+      'the image LEFT and inferior at the top, contradicting its own badge table (S↑ I↓ R← L→). ' +
+      'Pre-existing (cameraUpAxis(z) = y under both the old larger-span rule and this table); ' +
+      'fix belongs with SectionPiP.cameraSide, in a browser.',
+  }
+  for (const axis of ['x', 'y', 'z'] as PlaneAxis[]) {
+    const [uAxis, vAxis] = AXIS_PAIR[axis]
+    const up = PIP_CAMERA_UP[axis]
+    const side = PIP_CAMERA_SIDE[axis]
+    if (up !== uAxis && up !== vAxis) {
+      throw new Error(
+        `planeGeometry: PIP_CAMERA_UP.${axis} = ${up} is not one of the plane's in-plane axes ` +
+          `(${uAxis}, ${vAxis}) — the section camera would be degenerate`,
+      )
+    }
+    if (side !== uAxis && side !== vAxis) {
+      throw new Error(
+        `planeGeometry: PIP_CAMERA_SIDE.${axis} = ${side} is not an in-plane axis of ${axis} ` +
+          `(${uAxis}, ${vAxis})`,
+      )
+    }
+    if (up === side) {
+      if (PRE_EXISTING_DEGENERATE_BASIS[axis] === undefined) {
+        throw new Error(
+          `planeGeometry: PIP_CAMERA_UP.${axis} (${up}) is parallel to PIP_CAMERA_SIDE.${axis} ` +
+            `(${side}) — three.js would silently roll the section camera`,
+        )
+      }
+      console.warn(
+        `planeGeometry: ${axis} section-camera basis is degenerate — ${PRE_EXISTING_DEGENERATE_BASIS[axis]}`,
+      )
+    }
+  }
 }
 
 /* ----------------------------------------------------------------- levels */

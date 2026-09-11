@@ -96,6 +96,27 @@ function isSolidKind(kind: StructureRecord['kind']): boolean {
  */
 const GHOST_SHELL_OPACITY = 0.14
 
+/**
+ * How far each hemisphere shell travels outward on ±x at `explode = 1`
+ * (docs/TELENCEPHALON_PLAN.md §5 / plan step 6: "hemisphere shells separate
+ * outward on ±x with a **documented, larger factor** than nuclei; keep the
+ * nuclei rule untouched").
+ *
+ * The nucleus rule (`NucleusMesh`) is `explodeDirection(anchor) · explode · 6`,
+ * so the largest nucleus offset is 6 au. A shell is ~110 au wide, 40 au deep and
+ * shares its midline with its twin, so 6 au would not separate the pair at all —
+ * it would read as a rendering jitter. 16 au is 2.67× the nucleus factor: at
+ * `explode = 1` the two shells sit 32 au apart, the interhemispheric structures
+ * (corpus callosum, fornix, ventricles) are exposed in the gap, and the shift
+ * stays well inside the ±48 au canonical box (shell bbox ±56 au → ±72 au) so
+ * nothing leaves the orbit/zoom envelope.
+ *
+ * Only the shells move: every other kind keeps exactly the v1 rule (`SceneLayers`
+ * draws them at their canonical position, nuclei radially off their own anchor),
+ * which is what "the nucleus rule is unchanged" means.
+ */
+const HEMISPHERE_EXPLODE_FACTOR = 16
+
 /** One ghost material per shell — module singletons, like the envelope pass. */
 const GHOST_SHELL_MATERIALS = TEL_HEMISPHERE_SHELLS.map(() =>
   createGhostShellMaterial(GHOST_SHELL_COLOR),
@@ -305,15 +326,18 @@ function ContextEnvelopes({ highlight }: { highlight: Set<string> | null }) {
  */
 function TelGhostShell({
   slug,
+  side,
   highlight,
   outlineOnly,
 }: {
   slug: string
+  side: 'left' | 'right'
   highlight: Set<string> | null
   outlineOnly: boolean
 }) {
   const regions = useAtlasStore((s) => s.layers.regions)
   const kinds = useAtlasStore((s) => s.layers.kinds)
+  const explode = useAtlasStore((s) => s.explode)
   const hoveredId = useAtlasStore((s) => s.hoveredId)
   const selectedId = useAtlasStore((s) => s.selectedId)
   const setHovered = useAtlasStore((s) => s.setHovered)
@@ -357,11 +381,17 @@ function TelGhostShell({
     selectStructure(recordId, { tab: null })
   }
 
+  // §5 explode: outward on ±x only. +x is patient-left, so the left shell travels
+  // that way and the right one mirrors it — the same sign convention the mirrored
+  // left/right records use everywhere else in the scene.
+  const offsetX = explode * HEMISPHERE_EXPLODE_FACTOR * (side === 'left' ? 1 : -1)
+
   return (
     <mesh
       name={slug}
       geometry={asset.geometry}
       material={material}
+      position={[offsetX, 0, 0]}
       renderOrder={-2}
       onPointerOver={handleOver}
       onPointerOut={handleOut}
@@ -378,6 +408,7 @@ function TelGhostShells({ highlight, cortexHidden }: { highlight: Set<string> | 
         <TelGhostShell
           key={shell.slug}
           slug={shell.slug}
+          side={shell.side}
           highlight={highlight}
           outlineOnly={cortexHidden}
         />
