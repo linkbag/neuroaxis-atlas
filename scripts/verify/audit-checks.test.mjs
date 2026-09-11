@@ -1208,7 +1208,10 @@ group('v1–v7 regression checklist — Node-verifiable surfaces')
   const plateRecords = readJson('src/data/plates.json')
   const records = Array.isArray(plateRecords) ? plateRecords : (plateRecords.plates ?? [])
   records.length === 15
-    ? ok(`plates.json still carries all 15 plate records (13 pre-existing + 2 v7)`)
+    ? ok(
+        'plates.json still carries all 15 plate records (12 pre-existing + 3 v7 ' +
+          'telencephalon: axial +58, sagittal hemisphere, coronal fornix)',
+      )
     : bad(`plates.json carries ${records.length} records, expected 15`)
 
   /*

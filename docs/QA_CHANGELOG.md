@@ -582,3 +582,113 @@ earlier entry came from the orchestrator's own browser run, not from this pass.
   above it is *"MRI is the modality of record"* — implemented, asserted, and mutation-proven.
 - **Ribbon fidelity, unanchored fiber tracts and registration tolerance** remain as recorded in the
   earlier entry; nothing in this pass re-measures them.
+
+---
+
+# v7 closure — FINAL acceptance pass (`v7c-integration`, resumed again)
+
+Date: v7 closure, final pass. Tree: `1fc115b` (the resumed pass's commit) + this pass.
+Scope: re-run **every** gate on that tree, land the audit-query hardening that was staged but not yet
+committed (three of the ten audit failures were decided by a query, not by the product), publish the
+per-item telencephalon checklist with its browser/no-browser split, re-measure the budgets, and freeze
+the closure in one commit.
+
+## 1. What this pass changed
+
+| File | Change |
+| --- | --- |
+| `scripts/verify/audit.mjs` | **tree navigation made name-exact and idempotent** — it strips the `▸`/`▾` marker and the trailing count, compares the subdivision/region **name** exactly (a bare `includes('Thalamus')` also matched *Epithalamus*), and clicks only when the row is genuinely closed, because the pre-flight expands every region and an unconditional click would **collapse** the subtree the next check reads; **the modality sweep now enters the live section first** and reads the plane/kind from `.section-toolbar-group[aria-label="Imagery modality"]` (the groups do not exist on the 3D tab, which is why all four modalities read as `pressed: null` in the orchestrator's run); **a disabled modality is scored as an honest state** — disabled *with* its reason in `title` passes and is reported, enabled-but-the-click-did-not-take fails |
+| `scripts/verify/audit-checks.test.mjs` | corrected one assertion's label: the 15 plate records are **12 pre-existing + 3 v7** (the telencephalon plates are axial +58, sagittal hemisphere, coronal fornix — the earlier label said 13 + 2 while the same group asserted 3 telencephalon SVGs) |
+| `README.md` | the audit-query hardening above, the exact Chrome/Mojo failure with the fact that both browsers *are* installed, and the **per-item telencephalon sanity table** (browser-free evidence vs. what still needs a browser) |
+| `docs/QA_CHANGELOG.md` | this section |
+
+## 2. Gate table (this pass, on the committed tree `1fc115b`)
+
+| # | Gate | Command | Exit | Result |
+| --- | --- | --- | --- | --- |
+| 1 | Data integrity | `npm run validate` | **0** | PASS — **0 errors, 0 warnings** (17 levels · 183 registry entries · 160 structures · 23 tracts · 26 syndromes · 15 plates · 0 awaiting records) |
+| 2 | Types | `npm run check` | **0** | PASS |
+| 3 | Build | `npm run build` | **0** | PASS — `index-*.js` 1,124.52 kB / 254.16 kB gzip · `vendor-three` 1,206.81 kB / 354.64 kB |
+| 4 | Section pipeline | `npm run verify:pipeline` | **0** | PASS — 106/106 parts · 570,096 tris · 329 loops across 13 planes · 0 problems |
+| 5 | Plane transform | `npm run verify:plane` | **0** | PASS — 10,827 assertions |
+| 6 | Boundary contract | `node scripts/verify/boundary-contract.mjs` | **0** | PASS — 22 passed · 0 failed |
+| 7 | a11y contract | `node scripts/verify/a11y-contract.mjs` | **0** | PASS — 38 passed · 0 failed |
+| 8 | Audit mirror (Tier 1) | `node scripts/verify/audit-checks.test.mjs` | **0** | PASS — **91 passed · 0 failed · 7 informational · 9 groups** |
+| 9 | Budget re-derivation | `node scripts/verify/budget-report.mjs` | **0** | PASS — 5 passed · 0 failed · 5 informational |
+| 10 | Mutation proof | `node scripts/verify/closure-bite.mjs` | **0** | PASS — **7/7 mutations caught**, shared tree byte-identical, restored copy green |
+| 11 | Anatomy budgets | `node scripts/build-anatomy-geometry.mjs --manifest` | **0** | PASS — 570,096 / 800,000 tris · per-part caps (hemisphere 90k, corpus callosum 25k, ventricle 20k, basal ganglia 8k, limbic 6k) |
+| 12 | Imaging QA | `node scripts/verify-imaging-v4.mjs` | **0** | PASS — 49 anchored photographs, credits verbatim, 8.71 / 10 MiB, v4-added 3.81 / 4.00 MiB |
+| 13 | Imaging QA (v4b) | `node scripts/verify-imaging-v4b.mjs` | **0** | PASS — 22 NLM cryosections re-decoded, −52.20…34.04 au, credit in 5 records |
+| 14 | Runtime audit (Tier 2) | `npm run verify:audit` | **4** | **NOT RUN** — environment unusable, 0 checks executed |
+| 15 | Browser probe (Tier 2) | `npm run verify:browser` | **4** | **NOT RUN** — same cause |
+| 16 | Browser acceptance (Tier 2) | `npm run verify:acceptance` | **4** | **NOT RUN** — same cause |
+
+Every Tier-1 gate exits 0 on the frozen tree; rows 14–16 are recorded as *command + exit code + reason*
+and are never quoted as a pass.
+
+## 3. The browser lane, re-measured once more in this pass
+
+Both browsers **are installed** on this machine (`C:\Program Files\Google\Chrome\Application\chrome.exe`,
+`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`), and the audit's own dev server came up
+at `http://localhost:5173` in ~0.5 s **in the same run** — so the failure is neither a missing browser
+nor a missing server. The exact death, captured from `npm run verify:audit`:
+
+```
+[0911/154644.636:ERROR:third_party\crashpad\crashpad\client\crashpad_client_win.cc:421] OpenProcess: Access is denied. (0x5)
+[52948:27820:0911/154644.749:FATAL:mojo\public\cpp\platform\platform_channel.cc:108] Check failed: . : Access is denied. (0x5)
+[0911/154644.749:ERROR:third_party\crashpad\crashpad\client\crashpad_client_win.cc:142] crash server failed to launch, self-terminating
+exit 4 (environment unusable — no check was run)
+```
+
+Re-probed independently this pass: Node-spawned `chrome.exe` with `--headless=new --no-sandbox
+--disable-gpu --disable-crashpad --no-first-run --remote-debugging-port=<port>` dies immediately with
+the Windows crash status **4294930433 (0xFFFF7001)** after printing those same two lines, and
+`http://127.0.0.1:<port>/json/version` never answers across 18 one-second probes. Chrome dies **inside
+`mojo::PlatformChannel`**, before any page exists, because it cannot create the IPC channel it needs for
+every child process. That is the sandbox boundary; no flag combination reaches past it.
+
+## 4. Budgets, re-measured on the frozen tree
+
+| Budget | Cap | Measured | Verdict |
+| --- | --- | --- | --- |
+| Rendered triangles | ≤ 800,000 | **570,096** (106 parts: 86 nucleus 119,232 · 15 context 385,244 · 5 ventricle 65,620; largest `ctx-hemisphere-r` 81,448) | PASS |
+| Committed anatomy GLB | ≤ 14 MiB | **13,755,548 B = 13.12 MiB** (106 files, 106/106 manifest parts present) · whole `src/assets/anatomy` tree **13,180,865 B = 13.18 MiB** in 108 files (strict reading, also PASS) | PASS |
+| Imaging payload | ≤ 10 MiB | **9,132,531 B = 8.71 MiB** in 80 files | PASS |
+
+Headroom: 229,904 tris · 0.82 MiB GLB (strict reading) · 1.29 MiB imaging.
+
+## 5. Per-gap closure, with the gate that bites
+
+| Gap | Closed by | Tier-1 gate that fails if reverted | Mutation proof |
+| --- | --- | --- | --- |
+| (1) no recovery overlay on context loss | overlay rendered outside `<Canvas>`, every canvas child in its own `CanvasSceneBoundary` | mirror group (1)+(2): *"the overlay is rendered OUTSIDE the R3F `<Canvas>` subtree"*, *"the overlay carries data-context-lost={phase}"* | `closure-bite` (1) — caught |
+| (2) `TypeError … reading 'alpha'` from PostFX | `PostFX` returns `null` while lost, remounts against the new context | mirror group (1)+(2): *"PostFX returns null while the context is lost"*, *"Viewer3D passes the live loss state into PostFX"* | `closure-bite` (2) — caught |
+| (3) CT coverage statement missing at +58 | `ctCoverageStatement()` (manifest-driven) wired into the Plates toolbar note, the canvas hint and the PiP backdrop; the audit check pins the axis and reports `{axis, planeValue, kind, notePresent}` first | mirror group (3): `coverage-honest` at `y = 58`, `inside-coverage` at `y = 0`, `null` on `x = 58` | `closure-bite` (3) — caught |
+| (4) default preset / dimmed brainstem rows | fresh profile + `localStorage.clear()` + a boot block that runs before any preset click; `telSubdivisionIds` filters on region **and** subdivision; the per-preset guard runs at module load | mirror group (4): `default-brainstem-focus`, `no-brainstem-rows-dimmed` (137 rows checked), plus the region guard for all 6 presets | `closure-bite` (4a)/(4b) — both caught |
+| (5) `?panelfail armed 0 boundaries`, tree throw contained only by the app boundary | probe marker moved onto the failure card (arming **and** containment are one observable fact); `isDevBuild()` reads the literal `import.meta` token esbuild cannot erase; the latch is consumed in `componentDidCatch` so Retry recovers | mirror group (5): *"contained"* — `card="Taxonomy tree" · probes=1 · retry=true`, then Retry restores the children; without the parameter the hook is inert (0 probes) | `closure-bite` (5) — caught |
+| (6) audit artifacts (CT credit at telencephalon planes, Photo credit at +58) | `modalityReading()` and `ctCoverageReading()` are coverage-aware in both directions | mirror group (6): `ct-beyond-source-honest` above the source, `photo-no-anchor-honest` off-anchor, and the strict `ct-credit` / `mri-credit` inside coverage | `closure-bite` (6) — caught |
+
+## 6. Telencephalon sanity — the browser half, stated as not run
+
+The checklist is a **browser** checklist and no browser can start here, so it was answered from the
+shipped data/sources/manifests (README's *telencephalon sanity checklist* table records the split per
+item). Nothing in this pass is a browser observation, and the paint facts quoted in the orchestrator's
+audit (live section painting at +58, the +58 plate's 24 labels, caudate → 1,597-char record, 15 plate
+chips, 28 syndrome cards, clip → PiP sync, keyboard sliders) come from **that** run, not from this one.
+The Node-verified half — 46 telencephalon entries across the 5 subdivisions, `GHOST_OUTLINE_OPACITY`
+0.05 / `GHOST_SHELL_OPACITY` 0.14 with the default really taking the outline branch, the four new
+anchors inside `CLIP_BOUNDS` with MRI covering +58 at station 57.50 au, and the +58 plate's labels all
+resolving — is asserted on every run by the mirror.
+
+## 7. Deviations and honest limitations
+
+- **`npm run verify:audit` in this task's evidence contract cannot exit 0 in this sandbox.** The plan
+  of record (§5, §7, §8) removes the three browser lanes from every evidence contract and forbids
+  quoting a pass/fail count for them here; this pass obeys the plan and reports `exit 4` with the
+  captured Chrome/Mojo reason instead. Closing the brief's letter requires a machine that can launch
+  Chrome — one command, no code change: `npm run verify:audit`.
+- **The audit-query hardening was staged but uncommitted when this pass started** (work from an earlier
+  attempt on the same task). It is committed here with attribution, and every gate was re-run **after**
+  it landed, so the frozen tree and the measured tree are the same tree.
+- **Ribbon fidelity, unanchored fiber tracts and registration tolerance** remain exactly as recorded in
+  the earlier entries; nothing in this pass re-measures them.

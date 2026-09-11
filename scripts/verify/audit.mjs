@@ -509,18 +509,35 @@ try {
 
   /* C — selection + info panel content (tree is region → subdivision → structure)
    *
-   * Scoped to the taxonomy nav and to the region/subdivision ROW classes: with
-   * the telencephalon added, a bare text match can land on a leaf, a chip or a
-   * context record instead of the group row that expands the subtree. */
+   * Matching rules learned from the live DOM:
+   *  - subdivision rows are `button.tree-sub-row` whose text is `▸Thalamus16`,
+   *    so a bare substring test matches `Epithalamus` too — strip the marker and
+   *    the count and compare the NAME exactly;
+   *  - leaves expose their name in `.tree-leaf-name`. */
   const clickInTree = (text, opt = {}) => `(() => {
     const root = document.querySelector('nav.tree') ?? document;
-    const nodes = [...root.querySelectorAll(${opt.rowsOnly ? "'[class*=tree-region], [class*=tree-subdivision], [class*=tree-group], [class*=tree-section]'" : "'button'"})];
-    const match = nodes.find(x => x.textContent.includes(${JSON.stringify(text)}));
-    if (!match) return 'not found: ${text}';
-    (match.tagName === 'BUTTON' ? match : match.querySelector('button') ?? match).click();
-    return match.textContent.trim().replace(/\\s+/g, ' ').slice(0, 40);
+    const clean = (s) => String(s || '').replace(/^[^A-Za-z]+/, '').replace(/\\d+\\s*$/, '').trim();
+    const wanted = ${JSON.stringify(text)}.toLowerCase();
+    if (${opt.rowsOnly ? 'true' : 'false'}) {
+      const row = [...root.querySelectorAll('button.tree-sub-row, button.tree-region-row')]
+        .find((b) => clean(b.textContent).toLowerCase() === wanted || clean(b.textContent).toLowerCase().startsWith(wanted + ' '));
+      if (!row) return 'not found: ${text}';
+      // Idempotent: the pre-flight check expands every region, so an
+      // unconditional click would COLLAPSE the subtree we need.
+      const expanded = row.getAttribute('aria-expanded');
+      const marker = (row.textContent || '').trim().charAt(0);
+      const isOpen = expanded === 'true' || marker === '▾';
+      if (!isOpen) row.click();
+      return (isOpen ? 'already open: ' : 'opened: ') + row.textContent.trim().replace(/\\s+/g, ' ').slice(0, 34);
+    }
+    const leaf = [...root.querySelectorAll('.tree-leaf-name')].find((n) => n.textContent.trim().toLowerCase() === wanted);
+    if (leaf) {
+      (leaf.closest('button') ?? leaf).click();
+      return 'leaf ' + leaf.textContent.trim();
+    }
+    return 'not found: ${text}';
   })()`
-  const regionClick = await evaluate(clickInTree('Diencephalon'))
+  const regionClick = await evaluate(clickInTree('Diencephalon', { rowsOnly: true }))
   await sleep(900)
   const groupClick = await evaluate(clickInTree('Thalamus', { rowsOnly: true }))
   await sleep(900)
@@ -653,6 +670,24 @@ try {
    * `checks.modalityReading`, which is fed the plane the section is ACTUALLY on
    * (axis + value), the credit, the canvas hint and the toolbar note. */
   const modalityResults = []
+  // The sweep must run with the live-section toolbar on screen: the plane
+  // reading below queries the toolbar's own groups, which do not exist on the
+  // 3D tab (that is what made every modality read as "pressed: null").
+  await evaluate(`(() => {
+    const plates = [...document.querySelectorAll('button')].find((b) => b.textContent.trim() === 'Plates')
+    if (plates) plates.click()
+  })()`)
+  await sleep(1200)
+  const ensureLive = await evaluate(`(() => {
+    const already = document.querySelector('.section-toolbar-group[aria-label="Imagery modality"]');
+    if (already) return 'already in live section';
+    const live = [...document.querySelectorAll('button')].find((b) => /^live section$/i.test(b.textContent.trim()));
+    if (!live) return 'live-section toggle not found';
+    live.click();
+    return 'entered live section';
+  })()`)
+  await sleep(4500)
+  info('modality sweep context: ' + String(ensureLive))
   const sectionPlaneReading = `(() => {
     const axisGroup = document.querySelector('.section-toolbar-group[aria-label="Section axis"]');
     const axisBtn = axisGroup
@@ -671,11 +706,21 @@ try {
     };
   })()`
   for (const label of ['CT', 'MRI', 'Photo', 'Simulated only']) {
-    await evaluate(`(() => {
-      const b = [...document.querySelectorAll('button')].find(x => x.textContent.trim() === ${JSON.stringify(label)});
-      if (b) b.click();
+    const clicked = await evaluate(`(() => {
+      const group = document.querySelector('.section-toolbar-group[aria-label="Imagery modality"]')
+        ?? document.querySelector('.section-toolbar-group[aria-label=\\"Imagery modality\\"]');
+      const scope = group ?? document;
+      const b = [...scope.querySelectorAll('button')].find((x) => x.textContent.trim() === ${JSON.stringify(label)});
+      if (!b) return { found: false };
+      const state = { found: true, disabled: !!b.disabled, title: (b.title || '').slice(0, 90), pressedBefore: b.getAttribute('aria-pressed') };
+      b.click();
+      return state;
     })()`)
     await sleep(3000)
+    if (clicked && clicked.found === false) {
+      bad(`the "${label}" modality button is not in the imagery toolbar`)
+      continue
+    }
     const stats = await evaluate(sectionStats)
     const planeState = await evaluate(sectionPlaneReading)
     const dom = await evaluate(`(() => ({
@@ -694,10 +739,18 @@ try {
     }
     modalityResults.push({ ...reading, label, pressed: planeState?.kindPressed ?? null })
     if (planeState?.kindPressed !== label) {
-      // A disabled control would make the sweep assert the imagery state of a
-      // modality that was never requested — say that instead of guessing.
-      bad('the "' + label + '" modality could not be selected (pressed: '
-        + String(planeState?.kindPressed) + ') — a disabled control must carry its reason in its title')
+      // Distinguish the two honest outcomes from a real defect:
+      //  - the control was DISABLED and carried its reason → correct behaviour;
+      //  - the control was ENABLED and the click still did not take → defect.
+      if (clicked && clicked.disabled) {
+        clicked.title
+          ? ok(`"${label}" is disabled at this plane and states why: "${clicked.title}"`)
+          : bad(`"${label}" is disabled without a reason in its title`)
+      } else {
+        bad('the "' + label + '" modality could not be selected (pressed: '
+          + String(planeState?.kindPressed) + ', disabled: ' + String(clicked?.disabled)
+          + ', title: "' + String(clicked?.title ?? '') + '")')
+      }
       continue
     }
     const verdict_ = modalityReading(reading, CT_COVERAGE)
@@ -949,6 +1002,19 @@ try {
   await sleep(1200)
   await evaluate(clickText('Live section'))
   await sleep(5000)
+  // Park the plane on a DIFFERENT telencephalic level first: an earlier check
+  // may already have left the slider on +58, in which case "set to 58" causes
+  // no repaint and the assertion would fail for the wrong reason.
+  const parkElsewhere = await evaluate(`(() => {
+    const r = [...document.querySelectorAll('.section-plane-sliders input[type=range]')]
+      .find((x) => /transverse/i.test(x.getAttribute('aria-label') || ''));
+    if (!r) return 'no transverse plane slider';
+    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    setter.call(r, '48');
+    r.dispatchEvent(new Event('input', { bubbles: true }));
+    return 'parked at ' + r.value;
+  })()`)
+  await sleep(2500)
   const beforeTel = await evaluate(sectionStats)
 
   const setTransverse = await evaluate(`(() => {

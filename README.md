@@ -331,6 +331,31 @@ assert the honest state instead:
 Inside its coverage the CT check is **unchanged and still strict**: it demands the NLM credit and
 real painted samples. The sweep gate fails if CT paints nothing on a covered plane.
 
+### The audit's own DOM queries were hardened too (so the browser re-run measures the product)
+
+Three of the ten failures were decided by a **query**, not by the product, and a query that misfires is
+indistinguishable from a defect in the report. The browser lane was therefore made deterministic about
+what it reads, not only about what it stores:
+
+- **Tree navigation is name-exact and idempotent.** With the telencephalon in the tree, a bare
+  `textContent.includes('Thalamus')` also matches *Epithalamus*, and an unconditional click on an
+  already-expanded subdivision row **collapses** the subtree the next check needs. `audit.mjs` now
+  strips the `▸`/`▾` marker and the count, compares the **name** exactly, and only clicks when the row
+  is actually closed (`aria-expanded`/marker read first).
+- **The modality sweep runs inside the live section.** The plane/kind readout is read from the
+  live-section toolbar's own groups (`.section-toolbar-group[aria-label="Imagery modality"]`), which do
+  not exist on the 3D tab — that is why every modality in the orchestrator's run read as
+  `pressed: null`. The sweep now enters the live section first and reports which context it measured.
+- **A disabled modality is an honest state, not a failure.** At planes where a modality genuinely
+  cannot paint (CT above `y ≈ 36.25 au`, Photo with no anchored plate), the check now distinguishes
+  *disabled with its reason in `title`* (correct behaviour) from *enabled but the click did not take*
+  (a real defect). The pre-fix check reported both as the same failure.
+
+The two telencephalon-specific audit gaps are closed as **checks**: the tree check scopes itself to the
+region → subdivision → structure rows that actually expand the subtree, and the predicate layer
+(`scripts/verify/checks.mjs`) is shared with the Node lane, so the browser lane cannot drift from the
+falsifiable mirror.
+
 ### Measured budgets (v7 closure, re-derived from the committed artifacts)
 
 | Budget | Cap | Measured | Verdict |
@@ -371,6 +396,13 @@ crashpad_client_win.cc:421  OpenProcess: Access is denied. (0x5)
 platform_channel.cc:108     Check failed: . : Access is denied. (0x5)
 ```
 
+Chrome dies **inside `mojo::PlatformChannel`** — it cannot create the IPC channel it uses for every
+child process — so this is the sandbox boundary, not a missing browser: both `chrome.exe`
+(`C:\Program Files\Google\Chrome\Application\`) and `msedge.exe` exist on this machine, and the audit's
+dev server reaches `http://localhost:5173` in ~0.5 s in the same run that then fails to start Chrome.
+A Node-spawned Chrome dies immediately with the Windows crash status **4294930433 (0xFFFF7001)** and its
+DevTools endpoint (`http://127.0.0.1:<port>/json/version`) never answers.
+
 This was measured against **four** launch variants — Chrome *and* Edge, `--headless=new` *and*
 legacy headless, all with `--no-sandbox --disable-crash-reporter --disable-breakpad` — every one
 exiting before its DevTools endpoint answered. **`exit 4` is neither a pass nor a product failure**;
@@ -393,6 +425,27 @@ checklist. It does **not** prove that pixels appeared. The runtime half of the a
 live-section paint counts, pointer and focus interaction, translucency of the ghost shell, and the
 real `WEBGL_lose_context` cycle) remains **unproven in a sandbox** and must be re-run with
 `npm run verify:audit` on a machine where Chrome can launch.
+
+### The telencephalon sanity checklist — what is proven here, per item
+
+The run's sanity checklist is a **browser** checklist. No browser can start here, so each item below is
+answered from the shipped data, sources and manifests (the strongest browser-free form of the same
+fact), and the one thing only a rendering engine can add is named explicitly. Nothing in the right-hand
+column is a browser observation.
+
+| Checklist item | Browser-free evidence (asserted on every run) | Still needs a browser |
+| --- | --- | --- |
+| The tree shows the region with its 5 subdivisions | taxonomy: 46 telencephalon entries in **Basal ganglia 9 · Cerebral cortex 10 · Lateral ventricles 7 · Limbic system 6 · Telencephalic white matter 14** (42 structures + 4 tracts) | that the rows paint and expand |
+| A hemisphere/ghost shell renders, translucent enough that the brainstem stays visible | `GHOST_OUTLINE_OPACITY = 0.05` (hidden record) and `GHOST_SHELL_OPACITY = 0.14` at hue `#9fb0c4`; the default preset really takes the outline branch (it hides `ctx-cerebral-cortex` and the ternary picks 0.05 over 0.14) | the rendered luminance — 0.05/0.14 are the shipped opacities, not a measured screen |
+| A telencephalon structure selects from the tree, search, the 3D view **and** the axial +58 plate | all four paths dispatch the same `selectStructure` action (regression group); a `data-structure` label on the +58 plate resolves to `ctx-cerebral-cortex`; "Head of caudate nucleus" resolves 2 external references | the click, focus and hover themselves |
+| The four new levels (+48/+58/+68/+78) drive the clip plane, snap-to-plate, the live section and the PiP | all four anchors exist with their ids (`lvl-tel-thalamostriate@48 · lvl-tel-basal-ganglia@58 · lvl-tel-centrum-semiovale@68 · lvl-tel-convexity@78`), sit inside `CLIP_BOUNDS` (y −55…+85), and keep the table strictly increasing so `nearestLevelTo` is unambiguous | that a dragged slider lands on them |
+| The live section paints at y = +58 in Auto and MRI | the MRI grid covers +58 (station 57.50 au, 0.50 au away, 100 % of stations inside the FOV) and the pip/section pipelines share one transform (`verify:plane`, 10 827 assertions) | the paint count on screen |
+| The CT modality states its coverage limit there | the shipped statement names `36.25 au` and "MRI is the modality of record", and is `null` inside coverage and on non-transverse axes | that the toolbar shows it at that plane |
+| The +58 axial plate renders its labels | `plate-tel-axial-58.svg` carries 24 labels over 19 distinct structure ids, all resolvable in the taxonomy, 0 dangling | that the SVG rasterises |
+
+The three telencephalon plates are committed as `plate-tel-axial-58.svg`, `plate-tel-sagittal-hemisphere.svg`
+and `plate-tel-coronal-fornix.svg` (15 plate records: 12 pre-existing + 3 v7; only the axial one carries a
+`levelId`, `lvl-tel-basal-ganglia`, which is what snap-to-plate reads).
 
 ### The closure is mutation-proven, not just asserted
 
