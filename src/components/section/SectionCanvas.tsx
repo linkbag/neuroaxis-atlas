@@ -61,6 +61,22 @@
  *    memoization contract below is preserved: switching the layer repaints, it
  *    does not invalidate the contour paths.
  *
+ * v10 (docs/SWARM_V10_PLAN.md §4/§5, task `cortical-divisions-quality`) — two
+ * behaviour changes, both in this file:
+ *  - the divisions STOP painting slivers and long thin wedges: `corticalLobes.ts`
+ *    absorbs every run below its documented floors (arc ≥ 10 au, drawn area
+ *    ≥ 25 au²), and here the label anchor competes by DRAWN AREA
+ *    (`labelAreaAu2`) instead of by vertex count, with the label pass gated on
+ *    `MIN_DIVISION_LABEL_AREA_AU2`. A division can therefore no longer be
+ *    *named* on a triangle — that was the reported "TEMPORAL on a wedge";
+ *  - `NO_CANVAS_LABEL_RECORD_IDS` suppresses the TEXT of the
+ *    `ctx-cerebral-cortex` context envelope while its contour and fill keep
+ *    drawing: `drawSelectedLabel`, `drawHoverLabel` and the
+ *    `.section-structure-chip` are gated on it, so the name is gone from the
+ *    canvas (Plates AND the PiP, which mounts this same component) and from the
+ *    accessibility tree. Every other context label — the thalamus envelope, the
+ *    level chips, the division labels — is untouched.
+ *
  * Performance: plane updates are quantized to 0.25 au and posted at
  * ≤ 15 Hz while dragging (trailing ack keeps the newest plane); draws are
  * rAF-coalesced; contour extraction happens ONLY in the worker — the main
@@ -144,6 +160,8 @@ import {
   CORTICAL_LOBES_FILL_ALPHA,
   CORTICAL_LOBES_STROKE_ALPHA,
   CORTICAL_LOBE_METHOD_NOTE,
+  MIN_DIVISION_LABEL_AREA_AU2,
+  corticalRunMetrics,
   splitLoopByDivisionPlane,
   type CorticalDivision,
 } from './corticalLobes'
@@ -152,6 +170,7 @@ import {
 // the toolbar can never state two different limits.
 import { ctCoverageStatement } from './imageLayers'
 import type { SectionContourPart, SectionWorkerRequest, SectionWorkerResponse, WorkerRegistryPart } from './contourWorker'
+import type { TaxonomyEntry } from '../../types'
 import {
   SECTION_KIND_ALPHA,
   SECTION_KIND_ORDER,
@@ -178,6 +197,28 @@ const CANVAS_MAX_DPR = 1.5
 
 /** Nearest-level window for the stain layer's levelId mapping (§2.3: ±1.5 au). */
 const LEVEL_MAP_WINDOW = 1.5
+
+/**
+ * v10 §5 — records whose TEXT this canvas does not draw, while every other pass
+ * (contour, fill, selection highlight, hit test) still treats them normally.
+ *
+ * `ctx-cerebral-cortex` ("Cerebral cortex (context envelope)", taxonomy.json) is
+ * the DERIVED cortical ribbon shell. Two reasons, both measured in the v10
+ * report:
+ *  1. the outline is self-evident — it IS the cortex, drawn as a grey envelope
+ *     around everything else, so naming it adds no information;
+ *  2. the name was drawn up to twice per frame (the selected-structure label AND
+ *     the hover label) and, being anchored at the centroid of the biggest loop,
+ *     it landed on top of the cortical-division labels — the text it collided
+ *     with is the one that does carry information.
+ * It is removed from the ACCESSIBILITY tree too, not just visually: the canvas
+ * is a single role="img" with a fixed aria-label and contributes no text, so the
+ * only accessible instance of the name this component owns is the
+ * `.section-structure-chip` below — which is why the chip is gated on the same
+ * set. The other context envelopes (thalamus, level chips, division labels) keep
+ * their labels.
+ */
+export const NO_CANVAS_LABEL_RECORD_IDS: ReadonlySet<string> = new Set(['ctx-cerebral-cortex'])
 
 /**
  * Real-first compositing (v4, plan §2 gap 1 + §4): when a real image drew and
@@ -694,6 +735,18 @@ function polygonAreaOf(path: number[]): number {
   return Math.abs(sum) / 2
 }
 
+/**
+ * The name the structure chip may show for a taxonomy entry, or null when that
+ * record's text is suppressed (`NO_CANVAS_LABEL_RECORD_IDS`, v10 §5). Module
+ * scope and pure so the chip's accessibility contract can be rendered and
+ * asserted without a browser — `scripts/verify/cortical-lobes.mjs` transpiles
+ * this function and the chip JSX out of the shipped source and renders them.
+ */
+function chipNameOf(entry: TaxonomyEntry | null | undefined): string | null {
+  if (entry == null) return null
+  return NO_CANVAS_LABEL_RECORD_IDS.has(entry.id) ? null : entry.name
+}
+
 /* ------------------------------------------------------------ component */
 
 /** Per-slug visibility gating shared by drawing and hit-testing. */
@@ -807,14 +860,19 @@ function createRenderOrderCache(): RenderOrderCache {
 interface LobeLayerEntry {
   /** One stroked path per same-division run (the division's boundaries). */
   paths: Path2D[]
-  /** Label anchor in the plane frame: the vertex of the division's longest run
-   *  closest to that run's centroid, so the label is ON the ribbon. */
+  /** Label anchor in the plane frame: the vertex of the division's LARGEST-AREA
+   *  run closest to that run's centroid, so the label is ON the ribbon. */
   labelU: number
   labelV: number
   /** Vertices of this division across the whole slice (diagnostics). */
   vertices: number
-  /** Vertex count of the longest run seen (label-anchor competition). */
-  longestRun: number
+  /**
+   * Drawn area (au²) of the run that won the label anchor — the area the canvas
+   * actually fills for that run (v10: the competition is by AREA, not by vertex
+   * count: a long thin wedge can out-count a division's body while enclosing
+   * almost nothing, which is how "TEMPORAL" ended up on a triangle).
+   */
+  labelAreaAu2: number
 }
 
 /**
@@ -841,9 +899,11 @@ function createLobeLayerCache(): LobeLayerCache {
  * Build the division geometry for one frame: split every cortical-ribbon loop
  * into consecutive same-division runs (corticalLobes.splitLoopByDivisionPlane —
  * the plane value is the canonical coordinate on the plane's own axis, which the
- * in-plane loop cannot carry), stroke each run into a Path2D through the SAME
- * `transform` every other pass uses, and keep the longest run's inner vertex as
- * the label anchor.
+ * in-plane loop cannot carry). Since v10 that splitter also drops runs below the
+ * documented arc/area floors (absorbed into their neighbour), so what is stroked
+ * here is never a sliver. Each run is stroked into a Path2D through the SAME
+ * `transform` every other pass uses, and the LARGEST-AREA run's inner vertex
+ * becomes the label anchor (v10 §4: by drawn area, see `LobeLayerEntry`).
  */
 function buildLobeLayer(
   cache: LobeLayerCache,
@@ -867,14 +927,14 @@ function buildLobeLayer(
       for (const run of runs) {
         const points = run.points
         const count = points.length / 2
-        if (count < 2) continue
+        if (count < 3) continue
         total += count
         const entry = (entries[run.division] ??= {
           paths: [],
           labelU: Number.NaN,
           labelV: Number.NaN,
           vertices: 0,
-          longestRun: 0,
+          labelAreaAu2: 0,
         })
         entry.vertices += count
         const path = new Path2D()
@@ -888,13 +948,15 @@ function buildLobeLayer(
             (transform.v0 - points[i * 2 + 1]) * transform.scale,
           )
         }
-        if (count >= 3) path.closePath()
+        path.closePath()
         entry.paths.push(path)
-        // Label anchor: the INNER vertex of the division's LONGEST run, so the
-        // label always sits on the widest piece of that division in the slice
-        // (a 2-vertex sliver at a boundary can never win the anchor).
-        if (count >= 3 && count > entry.longestRun) {
-          entry.longestRun = count
+        // Label anchor: the INNER vertex of the division's LARGEST-AREA run, so
+        // the label always sits on the widest piece of that division in the
+        // slice — measured with the SAME metric the splitter's floors use, so a
+        // pass/fail decision and the anchor can never disagree.
+        const metrics = corticalRunMetrics(points)
+        if (metrics.areaAu2 > entry.labelAreaAu2) {
+          entry.labelAreaAu2 = metrics.areaAu2
           let cu = 0
           let cv = 0
           for (let i = 0; i < count; i++) {
@@ -1632,13 +1694,18 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       for (const path of entry.paths) ctx.stroke(path)
     }
     ctx.globalAlpha = 1
-    // Labels: one per division, on the ribbon, with a dark plate behind them.
+    // Labels: one per division per plane, on the ribbon, with a dark plate
+    // behind them — and only when the division actually has a body here. Since
+    // v10 the splitter already drops sub-threshold runs, so this floor is the
+    // second, independent guard that makes "TEMPORAL" on a 5 au² triangle
+    // impossible (the gate asserts it and re-derives the winner itself).
     ctx.font = '600 11px system-ui, sans-serif'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     for (const division of divisions) {
       const entry = cache.entries[division] as LobeLayerEntry
       if (!Number.isFinite(entry.labelU)) continue
+      if (entry.labelAreaAu2 < MIN_DIVISION_LABEL_AREA_AU2) continue
       const { sx, sy } = lobeLabelPosition(entry, transform)
       if (sx < 24 || sy < 12 || sx > transform.width - 24 || sy > transform.height - 12) continue
       const text = CORTICAL_DIVISION_SHORT_LABELS[division]
@@ -1809,6 +1876,10 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     part: SectionContourPart,
     transform: Transform,
   ): void {
+    // v10 §5: the cortex context envelope is labelled by its own contour, not by
+    // text — and its text collided with the division labels. The CONTOUR is
+    // untouched (drawPart paints it); only this name is suppressed.
+    if (NO_CANVAS_LABEL_RECORD_IDS.has(meta.group)) return
     let loop = part.loops[0]
     let bestArea = -1
     for (const candidate of part.loops) {
@@ -1913,6 +1984,9 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   function drawHoverLabel(ctx: CanvasRenderingContext2D, transform: Transform): void {
     const hover = hoverRef.current
     if (hover === null || !contoursRef.current.has(hover.slug)) return
+    // v10 §5: same suppression as drawSelectedLabel — hovering the cortex
+    // envelope still highlights it, but it never prints its name again.
+    if (NO_CANVAS_LABEL_RECORD_IDS.has(hover.group)) return
     const entry = getTaxonomyEntry(hover.group)
     const name = entry?.name ?? hover.group
     const sx = (hover.u - transform.u0) * transform.scale
@@ -2174,6 +2248,16 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const selectedEntry = selectedId !== null ? getTaxonomyEntry(selectedId) : null
   const showHoveredEntry = hoveredEntry != null && hoveredEntry.id !== selectedId
   /**
+   * v10 §5 — the chip is the ONE accessible instance of a structure name this
+   * component owns (the canvas itself is a role="img" with a fixed aria-label
+   * and no text), so suppressing the cortex envelope's label only in the paint
+   * pass would leave it readable in the accessibility tree. `chipNameOf` returns
+   * null for a record in `NO_CANVAS_LABEL_RECORD_IDS`, for BOTH the selected and
+   * the hovered slot; selection and hover highlighting are untouched.
+   */
+  const selectedChipName = chipNameOf(selectedEntry)
+  const hoveredChipName = chipNameOf(hoveredEntry)
+  /**
    * v9 §2 — which divisions the canvas actually put on screen this frame. Read
    * from the drawn cache, so the legend lists what was painted (never a
    * division the rule produced but this plane does not contain).
@@ -2410,11 +2494,11 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
           ≈ {plateChip.label} ({plateChip.distance.toFixed(1)} au) — open
         </button>
       )}
-      {(selectedEntry != null || showHoveredEntry) && (
+      {(selectedChipName !== null || (showHoveredEntry && hoveredChipName !== null)) && (
         <div className="section-structure-chip">
-          {selectedEntry != null && <span className="is-selected">{selectedEntry.name}</span>}
-          {showHoveredEntry && hoveredEntry != null && (
-            <span className="is-hovered">{hoveredEntry.name}</span>
+          {selectedChipName !== null && <span className="is-selected">{selectedChipName}</span>}
+          {showHoveredEntry && hoveredChipName !== null && (
+            <span className="is-hovered">{hoveredChipName}</span>
           )}
         </div>
       )}

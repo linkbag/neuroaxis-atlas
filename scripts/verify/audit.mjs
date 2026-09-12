@@ -52,7 +52,7 @@
  * same predicates synthetic readings and the SHIPPED manifests, so the checks are
  * falsifiable without a browser and cannot drift from the assertions run here.
  */
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
   EXIT,
@@ -118,6 +118,234 @@ console.log(
 )
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+/* ========================================================================
+ * v10 — SOURCE FACTS the new browser assertions are DERIVED from.
+ *
+ * The five v10 items are all "the app must follow a single declaration", so the
+ * browser checks below must not retype any number: they read the shipped source
+ * ONCE here (plain text, no TS loader — this file must stay loadable in Node
+ * with no build step) and compare what the PAGE reports against it.
+ *
+ *   CLIP_BOUNDS        (viewer3d/clipPlanes.ts)  → the canonical box the plane
+ *                        helpers must span, and the one the DOM clip sliders
+ *                        publish (their min/max ARE these numbers).
+ *   SECTION_PIP_SIZE_* (state/store.ts)          → the clamp window the four
+ *                        corner drags must obey.
+ *   MIN_DIVISION_*     (section/corticalLobes.ts) → the run-quality floors whose
+ *                        user-visible consequence (which divisions a plane
+ *                        reports as drawn) the container sweep asserts.
+ *   REFERENCE_PLANES   (verify/cortical-lobes.mjs) → the plane grid the artefact
+ *                        measurements were made on (PLAN.md §4).
+ * ====================================================================== */
+
+/** The shipped text of one repo file, or null when it is missing. */
+function readSourceFile(relativePath) {
+  try {
+    return readFileSync(resolve(relativePath), 'utf8')
+  } catch (error) {
+    return null
+  }
+}
+
+/** `export const NAME = 12` (or a bare `NAME = 12`) out of a source text, or null. */
+function numericConstantOf(sourceText, name) {
+  if (sourceText === null) return null
+  const exported = new RegExp(`export const ${name}\\s*(?::[^=]*)?=\\s*(-?[0-9]+(?:\\.[0-9]+)?)`).exec(sourceText)
+  if (exported !== null) return Number(exported[1])
+  const loose = new RegExp(`${name}\\s*=\\s*(-?[0-9]+(?:\\.[0-9]+)?)`).exec(sourceText)
+  return loose === null ? null : Number(loose[1])
+}
+
+const CLIP_PLANES_SOURCE = readSourceFile('src/components/viewer3d/clipPlanes.ts')
+const CLIP_BOUNDS_SOURCE = (() => {
+  const bounds = {}
+  if (CLIP_PLANES_SOURCE === null) return bounds
+  for (const axis of ['x', 'y', 'z']) {
+    const match = new RegExp(
+      `\\b${axis}:\\s*\\{\\s*min:\\s*(-?[0-9.]+)\\s*,\\s*max:\\s*(-?[0-9.]+)\\s*\\}`,
+    ).exec(CLIP_PLANES_SOURCE)
+    if (match !== null) bounds[axis] = { min: Number(match[1]), max: Number(match[2]) }
+  }
+  return bounds
+})()
+const CLIP_BOUNDS_DECLARATIONS = (() => {
+  if (CLIP_PLANES_SOURCE === null) return null
+  return (CLIP_PLANES_SOURCE.match(/export const CLIP_BOUNDS/g) ?? []).length
+})()
+
+/** `width: 224` out of one object literal's text, or null. */
+function objectFieldOf(objectLiteral, field) {
+  if (objectLiteral === null || objectLiteral === undefined) return null
+  const match = new RegExp(`\\b${field}:\\s*(-?[0-9]+(?:\\.[0-9]+)?)`).exec(objectLiteral)
+  return match === null ? null : Number(match[1])
+}
+
+const STORE_SOURCE = readSourceFile('src/state/store.ts')
+const PIP_SIZE_LITERALS = {
+  min: /SECTION_PIP_SIZE_MIN:[^=]*=\s*\{([^}]*)\}/.exec(STORE_SOURCE ?? '')?.[1] ?? null,
+  max: /SECTION_PIP_SIZE_MAX:[^=]*=\s*\{([^}]*)\}/.exec(STORE_SOURCE ?? '')?.[1] ?? null,
+}
+const PIP_SIZE_SOURCE = {
+  min: {
+    width: objectFieldOf(PIP_SIZE_LITERALS.min, 'width'),
+    height: objectFieldOf(PIP_SIZE_LITERALS.min, 'height'),
+  },
+  max: {
+    width: objectFieldOf(PIP_SIZE_LITERALS.max, 'width'),
+    height: objectFieldOf(PIP_SIZE_LITERALS.max, 'height'),
+  },
+}
+
+/**
+ * v10 §2 — the four divisions, read out of the shipped store source (the single
+ * declaration the Legend builds its rows from). The union of their `regions` IS
+ * `ALL_REGIONS`: the store asserts that partition at module load, so the browser
+ * check can use it as the app's own region list rather than retyping one.
+ */
+const DIVISIONS_SOURCE = (() => {
+  const block = /export const DIVISIONS[\s\S]*?=\s*\[([\s\S]*?)\n\]/.exec(STORE_SOURCE ?? '')?.[1] ?? ''
+  const out = []
+  for (const match of block.matchAll(/id:\s*'([a-z]+)',\s*label:\s*'([^']+)',\s*regions:\s*\[([^\]]*)\]/g)) {
+    out.push({
+      id: match[1],
+      label: match[2],
+      regions: [...match[3].matchAll(/'([^']+)'/g)].map((inner) => inner[1]),
+    })
+  }
+  return out
+})()
+const ALL_REGIONS_FROM_DIVISIONS = [...new Set(DIVISIONS_SOURCE.flatMap((division) => division.regions))]
+
+/**
+ * The taxonomy TREE labels its region rows with `REGION_LABELS` (data/load.ts),
+ * not with the region id — 'Telencephalon (cerebral hemispheres)',
+ * 'Mesencephalon (midbrain)', 'Cerebral vasculature' — while the LEGEND renders
+ * the bare id (`<span>{region}</span>`). The division sweep reads the tree, so it
+ * needs the app's own label table to map a tree row back to its region; retyping
+ * the names here would drift the moment the panel copy changes.
+ */
+const REGION_LABELS_SOURCE = (() => {
+  const text = readSourceFile('src/data/load.ts') ?? ''
+  const block = /export const REGION_LABELS[^=]*=\s*\{([\s\S]*?)\n\}/.exec(text)?.[1] ?? ''
+  const out = {}
+  for (const match of block.matchAll(/([a-z]+):\s*'([^']+)'/g)) out[match[1]] = match[2]
+  return out
+})()
+const REGION_LABEL_TO_REGION = (() => {
+  const out = {}
+  for (const [region, label] of Object.entries(REGION_LABELS_SOURCE)) out[label.trim().toLowerCase()] = region
+  return out
+})()
+
+const CORTICAL_SOURCE = readSourceFile('src/components/section/corticalLobes.ts')
+const DIVISION_FLOORS = {
+  runAu: numericConstantOf(CORTICAL_SOURCE, 'MIN_DIVISION_RUN_AU'),
+  areaAu2: numericConstantOf(CORTICAL_SOURCE, 'MIN_DIVISION_AREA_AU2'),
+  labelAreaAu2: numericConstantOf(CORTICAL_SOURCE, 'MIN_DIVISION_LABEL_AREA_AU2'),
+}
+const DIVISION_LEGEND_LABELS = (() => {
+  const block = /CORTICAL_DIVISION_LABELS[^=]*=\s*\{([^}]*)\}/.exec(CORTICAL_SOURCE ?? '')?.[1] ?? ''
+  const out = {}
+  for (const match of block.matchAll(/([a-z]+):\s*'([^']+)'/g)) out[match[1]] = match[2]
+  return out
+})()
+
+const PLANE_HELPERS_SOURCE = readSourceFile('src/components/viewer3d/PlaneHelpers.tsx')
+const HELPER_GRID_CELL_AU = numericConstantOf(PLANE_HELPERS_SOURCE, 'GRID_CELL_AU')
+
+/**
+ * The transverse planes the v10 artefact report names (PLAN.md §4 lines 208–235:
+ * the architect's measured wedges/slivers), each with the divisions the SHIPPED
+ * v10 rule actually paints there.
+ *
+ * `drawn` is NOT the architect's pre-fix table and NOT a hand-written guess: it is
+ * measured with the shipped classifier + shipped splitter over the shipped ribbon
+ * GLBs (`.dsh-scratch/review-qa-cort/artefact-planes.mjs`, which loads
+ * `corticalLobes.ts` and runs `contours.extractContours` — the SAME function the
+ * section worker calls, so the set is the one the canvas receives) and covers
+ * BOTH ribbons, because the section canvas paints `ctx-hemisphere-l` and
+ * `ctx-hemisphere-r` while the committed gate's own per-plane tables slice the
+ * left ribbon only. That difference is why this table is not the architect's:
+ * at y = 14 and y = 16 the right ribbon carries a real limbic body (401.4 /
+ * 212.1 au²), and at y = 32 temporal keeps a 141.5 au² run after absorption — a
+ * check that had asserted "limbic absent at y = 14" or "temporal absent at y = 32"
+ * from the pre-fix table would have been WRONG about the shipped rule.
+ * The load-bearing cases are the planes where the classifier still cuts a
+ * division that the floors then remove: y = 26 (limbic), y = 30/32/34 (insula and
+ * limbic) — that is the user's sliver class, and it must stay gone.
+ */
+const ARTEFACT_PLANES = [
+  {
+    value: 6,
+    drawn: ['frontal', 'limbic', 'occipital', 'parietal', 'temporal'],
+    note: 'limbic has a real body here (99.1 au²) and must survive; insula is not classified at all',
+  },
+  {
+    value: 14,
+    drawn: ['frontal', 'insula', 'limbic', 'occipital', 'parietal', 'temporal'],
+    note: 'the pre-fix LIMBIC wedge plane: limbic now comes from the right ribbon body (401.4 au²), so all six have a body',
+  },
+  {
+    value: 26,
+    drawn: ['frontal', 'insula', 'occipital', 'parietal', 'temporal'],
+    note: 'limbic is classified here but every span is sub-threshold — it must not be painted',
+  },
+  {
+    value: 30,
+    drawn: ['frontal', 'occipital', 'parietal', 'temporal'],
+    note: 'pre-fix insula 0.55 au² and limbic 3.5–17.9 au² wedges: both cut, both must stay unpainted',
+  },
+  {
+    value: 32,
+    drawn: ['frontal', 'occipital', 'parietal', 'temporal'],
+    note: 'the user’s orange TEMPORAL triangle plane (pre-fix 5.50 au²) plus insula 10.6 au²: both sub-threshold, both must stay unpainted',
+  },
+  {
+    value: 34,
+    drawn: ['frontal', 'occipital', 'parietal', 'temporal'],
+    note: 'pre-fix insula 0.8 au²',
+  },
+]
+
+/** The taxonomy (one JSON file, already used by the Node-only mirror). */
+const TAXONOMY_ENTRIES = (() => {
+  const raw = readSourceFile('src/data/taxonomy.json')
+  if (raw === null) return []
+  try {
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : (parsed.entries ?? parsed.records ?? [])
+  } catch (error) {
+    return []
+  }
+})()
+const CORTEX_RECORD_NAME = TAXONOMY_ENTRIES.find((e) => e.id === 'ctx-cerebral-cortex')?.name ?? null
+
+/**
+ * v10 §5 — the ONE record whose canvas text is suppressed. Read from the shipped
+ * SectionCanvas source rather than retyped, so the browser check follows the
+ * constant the app actually uses.
+ */
+const SUPPRESSED_CANVAS_LABEL_IDS = (() => {
+  const text = readSourceFile('src/components/section/SectionCanvas.tsx')
+  const block = /NO_CANVAS_LABEL_RECORD_IDS[^=]*=\s*new Set\(\[([^\]]*)\]\)/.exec(text ?? '')
+  if (block === null) return []
+  return [...block[1].matchAll(/'([^']+)'/g)].map((m) => m[1])
+})()
+
+console.log(
+  '  ·  v10 source facts: CLIP_BOUNDS ' +
+    `x[${CLIP_BOUNDS_SOURCE.x?.min ?? '?'}, ${CLIP_BOUNDS_SOURCE.x?.max ?? '?'}] ` +
+    `y[${CLIP_BOUNDS_SOURCE.y?.min ?? '?'}, ${CLIP_BOUNDS_SOURCE.y?.max ?? '?'}] ` +
+    `z[${CLIP_BOUNDS_SOURCE.z?.min ?? '?'}, ${CLIP_BOUNDS_SOURCE.z?.max ?? '?'}] · ` +
+    `declaration sites ${CLIP_BOUNDS_DECLARATIONS ?? '?'} · grid cell ${HELPER_GRID_CELL_AU ?? '?'} au · ` +
+    `division floors ${DIVISION_FLOORS.runAu ?? '?'} au / ${DIVISION_FLOORS.areaAu2 ?? '?'} au2 (label ` +
+    `${DIVISION_FLOORS.labelAreaAu2 ?? '?'} au2) · PiP clamp ` +
+    `${PIP_SIZE_SOURCE.min.width ?? '?'}x${PIP_SIZE_SOURCE.min.height ?? '?'}…` +
+    `${PIP_SIZE_SOURCE.max.width ?? '?'}x${PIP_SIZE_SOURCE.max.height ?? '?'} px · ` +
+    `suppressed canvas label ids [${SUPPRESSED_CANVAS_LABEL_IDS.join(', ') || 'none'}]`,
+)
+
 const results = []
 const ok = (m) => results.push(['ok', m])
 const bad = (m) => results.push(['FAIL', m])
@@ -346,6 +574,222 @@ async function pagePixelStats() {
   return stats
 }
 
+/* ======================================================================
+ * v10 — THE THREE.JS SCENE BRIDGE (items 1 and 2).
+ *
+ * WHY THIS EXISTS. Items 1 and 2 are claims about what the RENDERED 3D scene
+ * contains ("the helper quads span CLIP_BOUNDS", "soloing a division leaves only
+ * that division painted"), and the app exposes no debug global, no DOM
+ * representation of a helper sheet and no per-mesh DOM node — a screenshot cannot
+ * decide either claim (item 3's own measurement shows why for the helpers: at the
+ * app's default camera the sheets are CLOSE TO or BEHIND the eye, so their
+ * projected bounding boxes cover the whole viewport for the pre-v10 box AND for
+ * the v10 box alike; the numbers are in the review record, and `verify:plane-
+ * helper-extent` is the authoritative extent gate).
+ *
+ * The bridge is three.js' OWN documented extension point: `Object3D`/`Scene` and
+ * `WebGLRenderer` constructors dispatch an 'observe' CustomEvent on
+ * `window.__THREE_DEVTOOLS__` when that global exists (three r169,
+ * `build/three.cjs`). Installing a listener adds NO product code, changes no
+ * product behaviour and is inert in a normal browser: the app never defines the
+ * global itself, so nothing is overwritten.
+ *
+ * It must be installed BEFORE the app's modules run, hence
+ * `Page.addScriptToEvaluateOnNewDocument` right after the DevTools session is up
+ * (see the v10 block after `connect()`): the hook is read in the three.js
+ * constructors, i.e. at scene/renderer creation time.
+ * ====================================================================== */
+const THREE_BRIDGE = `(() => {
+  if (window.__auditThreeObserved !== undefined) return;
+  window.__auditThreeObserved = [];
+  window.__THREE_DEVTOOLS__ = {
+    dispatchEvent(event) {
+      try {
+        if (event !== null && event !== undefined && event.type === 'observe' && event.detail) {
+          window.__auditThreeObserved.push(event.detail);
+        }
+      } catch (error) { /* the bridge must never throw into the app */ }
+    },
+  };
+})()`
+
+/**
+ * Bind the page's live scene to `window.__auditScene` and report how it was
+ * found. Several scenes can be observed (post-processing builds its own), so the
+ * probe prefers the one that actually holds the app's scene graph.
+ */
+const SCENE_PROBE = `(() => {
+  const observed = Array.isArray(window.__auditThreeObserved) ? window.__auditThreeObserved : [];
+  const scenes = observed.filter((o) => o != null && o.isScene === true);
+  const alive = (s) => {
+    try {
+      return s.getObjectByName('scene-layers') !== null || s.getObjectByName('clip-plane-helpers') !== null;
+    } catch (error) { return false; }
+  };
+  const scene = scenes.filter(alive)[0] ?? scenes[0] ?? null;
+  window.__auditScene = scene;
+  return { observed: observed.length, scenes: scenes.length, bound: scene !== null };
+})()`
+
+/**
+ * The helper sheets as THREE reads them back: each sheet group's own position,
+ * its quad's `planeGeometry` parameters and its grid's local extents. This is the
+ * rendered geometry, not a copy of the source.
+ */
+const HELPER_PROBE = `(() => {
+  const scene = window.__auditScene;
+  if (scene == null) return null;
+  const group = scene.getObjectByName('clip-plane-helpers');
+  if (group === null) return { sheets: 0, list: [] };
+  const sheets = group.children.map((child) => {
+    const mesh = child.children.find((c) => c.isMesh === true) ?? null;
+    const lines = child.children.find((c) => c.isLineSegments === true) ?? null;
+    const params = mesh !== null && mesh.geometry != null ? mesh.geometry.parameters : null;
+    let grid = null;
+    if (lines !== null && lines.geometry != null && lines.geometry.attributes.position !== undefined) {
+      const a = lines.geometry.attributes.position.array;
+      let uMin = Infinity, uMax = -Infinity, vMin = Infinity, vMax = -Infinity;
+      const uLines = [], vLines = [];
+      for (let i = 0; i + 2 < a.length; i += 3) {
+        uMin = Math.min(uMin, a[i]); uMax = Math.max(uMax, a[i]);
+        vMin = Math.min(vMin, a[i + 1]); vMax = Math.max(vMax, a[i + 1]);
+      }
+      const uniq = (values) => {
+        const sorted = values.slice().sort((p, q) => p - q);
+        const out = [];
+        for (const value of sorted) {
+          if (out.length === 0 || Math.abs(out[out.length - 1] - value) > 1e-4) out.push(value);
+        }
+        return out;
+      };
+      for (let i = 0; i + 2 < a.length; i += 3) { uLines.push(a[i]); vLines.push(a[i + 1]); }
+      const uu = uniq(uLines), vv = uniq(vLines);
+      grid = {
+        uMin, uMax, vMin, vMax,
+        vertices: a.length / 3,
+        uCount: uu.length,
+        vCount: vv.length,
+        uStep: uu.length > 1 ? (uu[uu.length - 1] - uu[0]) / (uu.length - 1) : 0,
+        vStep: vv.length > 1 ? (vv[vv.length - 1] - vv[0]) / (vv.length - 1) : 0,
+      };
+    }
+    let raycastHits = null;
+    try { const out = []; mesh.raycast({}, out); raycastHits = out.length; } catch (error) { raycastHits = 'threw'; }
+    return {
+      name: child.name,
+      visible: child.visible,
+      position: [child.position.x, child.position.y, child.position.z],
+      quad: params === null ? null : { width: params.width, height: params.height, segments: params.widthSegments },
+      grid,
+      quadOpacity: mesh === null || mesh.material == null ? null : mesh.material.opacity,
+      quadSide: mesh === null || mesh.material == null ? null : mesh.material.side,
+      quadColor: mesh === null || mesh.material == null || mesh.material.color == null ? null : '#' + mesh.material.color.getHexString(),
+      gridOpacity: lines === null || lines.material == null ? null : lines.material.opacity,
+      gridColor: lines === null || lines.material == null || lines.material.color == null ? null : '#' + lines.material.color.getHexString(),
+      gridRenderOrder: lines === null ? null : lines.renderOrder,
+      quadRenderOrder: mesh === null ? null : mesh.renderOrder,
+      raycastHits,
+    };
+  });
+  return { sheets: sheets.length, groupVisible: group.visible, list: sheets };
+})()`
+
+/**
+ * Every visible structure mesh in the live scene, by name (a multiset). Used to
+ * compare the two independent ways of asking for "only this division": the
+ * division SOLO action and the per-region checkboxes. Nothing is mapped through
+ * a slug→region table — the comparison is between two renderings of the same
+ * request, so it cannot drift from the app's own naming.
+ */
+const VISIBLE_MESH_NAMES = `(() => {
+  const scene = window.__auditScene;
+  if (scene == null) return null;
+  const names = [];
+  scene.traverse((o) => {
+    if (o.visible === false) return;
+    if (!(o.isMesh === true || o.isInstancedMesh === true)) return;
+    if (!o.name) return;
+    let hidden = false;
+    for (let p = o.parent; p != null; p = p.parent) {
+      if (p.visible === false) { hidden = true; break; }
+    }
+    if (!hidden) names.push(o.name);
+  });
+  names.sort();
+  return names;
+})()`
+
+/** The three dock clip sliders (ClipControls renders x, then z, then y). */
+const DOCK_SLIDERS = `(() => {
+  const dock = [...document.querySelectorAll('input[type=range]')].filter((r) =>
+    !r.closest('.section-plane-sliders') &&
+    !/explode/i.test((r.getAttribute('aria-label') || '') + ' ' + r.className));
+  return dock.map((r, index) => ({ index, min: Number(r.min), max: Number(r.max), value: Number(r.value) }));
+})()`
+
+/**
+ * ONE REAL POINTER DRAG through the browser's input pipeline (v10 item 3).
+ * `Input.dispatchMouseEvent` is the same channel a user's mouse uses, so Blink
+ * synthesises the pointer events React's handlers listen for — this is a drag, not
+ * a call to the handler.
+ */
+async function dragPointer(from, to, steps = 6) {
+  await send('Input.dispatchMouseEvent', {
+    type: 'mouseMoved', x: from.x, y: from.y, button: 'none', buttons: 0,
+  })
+  await send('Input.dispatchMouseEvent', {
+    type: 'mousePressed', x: from.x, y: from.y, button: 'left', buttons: 1, clickCount: 1,
+  })
+  for (let i = 1; i <= steps; i++) {
+    const t = i / steps
+    await send('Input.dispatchMouseEvent', {
+      type: 'mouseMoved',
+      x: from.x + (to.x - from.x) * t,
+      y: from.y + (to.y - from.y) * t,
+      button: 'left',
+      buttons: 1,
+    })
+    await sleep(25)
+  }
+  await send('Input.dispatchMouseEvent', {
+    type: 'mouseReleased', x: to.x, y: to.y, button: 'left', buttons: 0, clickCount: 1,
+  })
+  await sleep(260)
+}
+
+/** The PiP panel's real box (window AND card), its handles, and the stored size. */
+const PIP_BOX_PROBE = `(() => {
+  const panel = document.querySelector('.pip-panel');
+  if (panel === null) return null;
+  const w = panel.querySelector('.pip-window');
+  if (w === null) return null;
+  const r = w.getBoundingClientRect();
+  const c = panel.getBoundingClientRect();
+  let stored = null;
+  try { stored = window.localStorage.getItem('neuroaxis.sectionPipSize'); } catch (error) { stored = 'unavailable'; }
+  const preset = panel.classList.contains('pip-large') ? 'large'
+    : panel.classList.contains('pip-small') ? 'small' : 'custom';
+  return {
+    left: r.left, top: r.top, right: r.right, bottom: r.bottom,
+    width: Math.round(r.width), height: Math.round(r.height),
+    card: { left: c.left, top: c.top, right: c.right, bottom: c.bottom, width: Math.round(c.width) },
+    preset,
+    stored,
+    handles: [...panel.querySelectorAll('.pip-resizer')].map((b) => {
+      const h = b.getBoundingClientRect();
+      return {
+        corner: b.getAttribute('data-pip-corner'),
+        label: b.getAttribute('aria-label') || '',
+        title: b.getAttribute('title') || '',
+        cx: h.left + h.width / 2,
+        cy: h.top + h.height / 2,
+        w: Math.round(h.width),
+        h: Math.round(h.height),
+      };
+    }),
+  };
+})()`
+
 /* ------------------------------------------------------------------- run */
 
 const environment = await prepareEnvironment()
@@ -363,6 +807,17 @@ if (environment.exitCode !== null) {
 
 try {
   await connect()
+
+  /* v10: install the three.js scene bridge on every NEW document, i.e. before
+     the app's own modules construct the scene and the renderer. The bridge is
+     three.js' documented extension point (see the header of THREE_BRIDGE above)
+     and adds nothing to the product: it listens for the 'observe' events three
+     already dispatches when the global exists. */
+  const bridgeInstall = await send('Page.addScriptToEvaluateOnNewDocument', { source: THREE_BRIDGE })
+  info(
+    'v10 three.js scene bridge installed before the first navigation' +
+      (bridgeInstall === undefined || bridgeInstall === null ? ' (DevTools returned no identifier)' : ''),
+  )
 
   /* ======================================================================
    * A0 — DETERMINISTIC CLEAN BOOT + THE DEFAULT-PRESET GATE
@@ -520,9 +975,14 @@ try {
     pipBoot.stateLine.length > 0
       ? ok(`the panel states its own imagery situation at boot ("${pipBoot.stateLine}")`)
       : bad('the panel has no imagery state line (.pip-imagery-state)')
-    pipBoot.resizer === 1
-      ? ok('the panel exposes exactly one resize handle (.pip-resizer)')
-      : bad(`expected 1 resize handle, found ${pipBoot.resizer}`)
+    /* v10 item 3: the panel now carries FOUR corner handles. This assertion is
+       RE-POINTED (not deleted): through v9 it required exactly one
+       `.pip-resizer`; the item is "drag all 4 corners", so the same selector
+       must count 4, and the geometry each one owns is asserted in block Q3
+       below with real pointer drags. */
+    pipBoot.resizer === 4
+      ? ok('the panel exposes all four corner resize handles (.pip-resizer × 4)')
+      : bad(`expected 4 resize handles, found ${pipBoot.resizer}`)
   }
 
   const threeStats = await pagePixelStats()
@@ -2491,6 +2951,1211 @@ try {
   sizeAfterReset.width === 224 && sizeAfterReset.height === 170
     ? ok(`the panel is left at its named small stop (224×170, ${sizeReset})`)
     : info(`the panel is left at ${JSON.stringify(sizeAfterReset)} (${sizeReset})`)
+
+  /* ======================================================================
+   * Q — v10: THE FIVE USER ITEMS, RE-POINTED AT THE NEW BEHAVIOUR
+   *
+   * (docs/SWARM_V10_PLAN.md §1–§5, PLAN.md §1–§5; run task `review-qa`.)
+   * Every sub-block states what it FALSIFIES, in the style of the v9 block above.
+   * The claims only the orchestrator's lane can observe are named in the run's
+   * review report, not pretended here.
+   *
+   *  Q0  the scene bridge bound (no bridge ⇒ the two scene assertions FAIL
+   *      loudly instead of passing vacuously).
+   *  Q1  item 1 — the three helper quads, read back from the RENDERED three.js
+   *      scene, span the CLIP_BOUNDS rectangle of their two in-plane axes: the
+   *      extents equal the spans the app's own dock sliders publish (read from
+   *      the DOM, never retyped here), the quads sit on the box midpoints, each
+   *      sheet is at the clip value its slider was parked on, and the grid cell
+   *      is the documented constant in au. A revert to the pre-v10 brainstem box
+   *      (96×82 / 82×100 / 96×100 au) fails the first of those.
+   *  Q2  item 2 — each SOLO leaves exactly that division on, seen in the legend
+   *      checkboxes, in the taxonomy tree's dim state AND in the rendered scene;
+   *      the scene after a solo is IDENTICAL to the scene after asking for the
+   *      same regions through the per-region checkboxes (two independent paths,
+   *      one render); nothing is persisted.
+   *  Q3  item 3 — four handles with distinct names, reachable by a real pointer,
+   *      and REAL drags (DevTools input pipeline) that resize by exactly the
+   *      corner's rule and stop on the store's clamp.
+   *  Q4  item 4 — the cortical-division layer at the exact planes PLAN.md §4
+   *      measured the artefacts on: a division that existed there ONLY as a
+   *      sub-threshold wedge is no longer reported as drawn, a division with a
+   *      real body at the same plane still is, and Plates and PiP agree.
+   *  Q5  item 5 — the cortex envelope's text is gone from the section canvas'
+   *      OWN accessibility subtree (Plates AND PiP) while its contour is still
+   *      drawn and hit-testable, and the suppression is specific (the thalamus
+   *      envelope keeps its label).
+   *  Q6  hygiene — no console error, no exception, app alive.
+   * ==================================================================== */
+
+  const v10ErrorsBefore = exceptions.length + consoleErrors.length
+  const sameStringList = (a, b) =>
+    Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((v, i) => v === b[i])
+  /** Read a probe until two consecutive readings agree (r3f commits + renders). */
+  const stableRead = async (expression, tries = 4) => {
+    let previous = await evaluate(expression)
+    for (let i = 0; i < tries; i++) {
+      await sleep(350)
+      const next = await evaluate(expression)
+      if (JSON.stringify(next) === JSON.stringify(previous)) return next
+      previous = next
+    }
+    return previous
+  }
+
+  /* ---------------------------------------------------------------- Q0 */
+  await evaluate(clickText('3D'))
+  await sleep(2500)
+  const sceneProbe = await stableRead(SCENE_PROBE, 3)
+  const sceneReady = sceneProbe !== null && sceneProbe.bound === true
+  sceneReady
+    ? ok(
+      'v10 scene bridge: three.js scene bound for the rendered-geometry assertions (' +
+        sceneProbe.observed + ' observed three object(s), ' + sceneProbe.scenes + ' scene(s))',
+    )
+    : bad(
+      'v10 scene bridge could not bind a three.js scene (' + JSON.stringify(sceneProbe) + ') — the helper-extent ' +
+        'and division-paint checks below CANNOT run, and they are reported as failures rather than skipped',
+    )
+
+  /* ---------------------------------------------------------------- Q1 */
+  const sourceSpan = (axis) => {
+    const bound = CLIP_BOUNDS_SOURCE[axis]
+    return bound === undefined ? null : bound.max - bound.min
+  }
+  const sourceMid = (axis) => {
+    const bound = CLIP_BOUNDS_SOURCE[axis]
+    return bound === undefined ? null : (bound.min + bound.max) / 2
+  }
+  const AXIS_INDEX = { x: 0, y: 1, z: 2 }
+  const boundsReady =
+    CLIP_BOUNDS_DECLARATIONS === 1 && ['x', 'y', 'z'].every((axis) => CLIP_BOUNDS_SOURCE[axis] !== undefined)
+  boundsReady
+    ? ok(
+      'item 1 source contract: CLIP_BOUNDS is declared exactly once (' + CLIP_BOUNDS_DECLARATIONS +
+        ' site in viewer3d/clipPlanes.ts) — x[' + CLIP_BOUNDS_SOURCE.x.min + ', ' + CLIP_BOUNDS_SOURCE.x.max +
+        '] · y[' + CLIP_BOUNDS_SOURCE.y.min + ', ' + CLIP_BOUNDS_SOURCE.y.max +
+        '] · z[' + CLIP_BOUNDS_SOURCE.z.min + ', ' + CLIP_BOUNDS_SOURCE.z.max + ']',
+    )
+    : bad(
+      'the canonical box declaration could not be read from clipPlanes.ts (' + CLIP_BOUNDS_DECLARATIONS +
+        ' declaration site(s); bounds ' + JSON.stringify(CLIP_BOUNDS_SOURCE) + ')',
+    )
+  const dockRanges = await evaluate(DOCK_SLIDERS)
+  const dockAxes = (Array.isArray(dockRanges) ? dockRanges : []).map((slider) => {
+    const axis = ['x', 'y', 'z'].find(
+      (candidate) =>
+        CLIP_BOUNDS_SOURCE[candidate] !== undefined &&
+        Math.abs(slider.min - CLIP_BOUNDS_SOURCE[candidate].min) < 1e-6 &&
+        Math.abs(slider.max - CLIP_BOUNDS_SOURCE[candidate].max) < 1e-6,
+    )
+    return { ...slider, axis: axis ?? null }
+  })
+  const dockSpanTable = dockAxes.filter((slider) => slider.axis !== null)
+  const sliderSpansAreBounds =
+    dockSpanTable.length === 3 &&
+    ['x', 'y', 'z'].every((axis) =>
+      dockSpanTable.some(
+        (slider) => slider.axis === axis && Math.abs(slider.max - slider.min - sourceSpan(axis)) < 1e-6,
+      ),
+    )
+  sliderSpansAreBounds
+    ? ok(
+      'item 1 DOM contract: the three dock clip sliders publish CLIP_BOUNDS itself — ' +
+        dockSpanTable.map((s) => s.axis + '[' + s.min + ', ' + s.max + ']').join(' · '),
+    )
+    : bad(
+      'the dock clip sliders do not match CLIP_BOUNDS (' + JSON.stringify(dockAxes) + ') — the helper-extent ' +
+        'comparison would compare against the wrong box',
+    )
+
+  const helperToggle = await evaluate(`(() => {
+    const label = [...document.querySelectorAll('label')].find((l) => /Show plane helper/i.test(l.textContent || ''));
+    if (label === null) return { before: null, after: null, note: 'no "Show plane helper" label in the clipping dock' };
+    const input = label.querySelector('input[type=checkbox]');
+    if (input === null) return { before: null, after: null, note: 'the "Show plane helper" label has no checkbox' };
+    const before = input.checked;
+    if (input.checked !== true) input.click();
+    return { before, after: input.checked, note: 'toggled the dock checkbox' };
+  })()`)
+  await sleep(1200)
+  const parkSheets = await evaluate(`(() => {
+    const bounds = ${JSON.stringify(CLIP_BOUNDS_SOURCE)};
+    const wanted = { x: 12, z: 0, y: 58 };
+    const dock = [...document.querySelectorAll('input[type=range]')].filter((r) =>
+      !r.closest('.section-plane-sliders') &&
+      !/explode/i.test((r.getAttribute('aria-label') || '') + ' ' + r.className));
+    const axisOf = (r) => {
+      for (const axis of ['x', 'y', 'z']) {
+        const b = bounds[axis];
+        if (b && Math.abs(Number(r.min) - b.min) < 1e-6 && Math.abs(Number(r.max) - b.max) < 1e-6) return axis;
+      }
+      return null;
+    };
+    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    const readback = {};
+    for (const r of dock) {
+      const axis = axisOf(r);
+      if (axis === null) continue;
+      setter.call(r, String(wanted[axis]));
+      r.dispatchEvent(new Event('input', { bubbles: true }));
+      readback[axis] = Number(r.value);
+    }
+    return readback;
+  })()`)
+  await sleep(1500)
+  const helperOn = await evaluate(HELPER_PROBE)
+  if (!sceneReady) {
+    bad('item 1: the helper extents could not be read from the rendered scene (no scene bridge)')
+  } else if (helperOn === null || helperOn.sheets !== 3) {
+    bad(
+      'item 1: the "Show plane helper" toggle did not put three clip-plane sheets in the scene (' +
+        JSON.stringify(helperOn) + ' / ' + JSON.stringify(helperToggle) + ')',
+    )
+  } else {
+    ok(
+      'item 1: the three clip-plane helper sheets are in the rendered scene with the helper toggle ON (' +
+        JSON.stringify(helperToggle) + ')',
+    )
+    for (const sheet of helperOn.list) {
+      const axisMatch = /^clip-helper-([xyz])$/.exec(String(sheet.name))
+      const axis = axisMatch === null ? null : axisMatch[1]
+      if (axis === null || sheet.quad === null || sheet.grid === null) {
+        bad('item 1: helper sheet ' + JSON.stringify(sheet.name) + ' is not a clip-helper-<axis> group with a quad and a grid: ' + JSON.stringify(sheet))
+        continue
+      }
+      const inPlane = ['x', 'y', 'z'].filter((candidate) => candidate !== axis)
+      const expected = {
+        u: { span: sourceSpan(inPlane[0]), mid: sourceMid(inPlane[0]) },
+        v: { span: sourceSpan(inPlane[1]), mid: sourceMid(inPlane[1]) },
+      }
+      const quadMatches =
+        Math.abs(sheet.quad.width - expected.u.span) < 1e-6 && Math.abs(sheet.quad.height - expected.v.span) < 1e-6
+      quadMatches
+        ? ok(
+          'item 1: the ' + axis + '-plane helper quad spans its CLIP_BOUNDS rectangle — ' +
+            sheet.quad.width.toFixed(3) + ' au (' + inPlane[0] + ') x ' + sheet.quad.height.toFixed(3) +
+            ' au (' + inPlane[1] + '), read from the rendered planeGeometry',
+        )
+        : bad(
+          'item 1: the ' + axis + '-plane helper quad is ' + sheet.quad.width.toFixed(3) + ' x ' +
+            sheet.quad.height.toFixed(3) + ' au while its in-plane CLIP_BOUNDS rectangle is ' +
+            expected.u.span.toFixed(3) + ' x ' + expected.v.span.toFixed(3) + ' au (a second hardcoded box?)',
+        )
+      const gridCoversQuad =
+        Math.abs(sheet.grid.uMin + sheet.quad.width / 2) < 1e-3 &&
+        Math.abs(sheet.grid.uMax - sheet.quad.width / 2) < 1e-3 &&
+        Math.abs(sheet.grid.vMin + sheet.quad.height / 2) < 1e-3 &&
+        Math.abs(sheet.grid.vMax - sheet.quad.height / 2) < 1e-3
+      gridCoversQuad
+        ? ok(
+          'item 1: the ' + axis + '-plane grid covers its quad exactly (u ' + sheet.grid.uMin.toFixed(3) + '…' +
+            sheet.grid.uMax.toFixed(3) + ', v ' + sheet.grid.vMin.toFixed(3) + '…' + sheet.grid.vMax.toFixed(3) +
+            '; ' + sheet.grid.uCount + ' x ' + sheet.grid.vCount + ' lines)',
+        )
+        : bad(
+          'item 1: the ' + axis + '-plane grid does not cover its quad (grid u ' +
+            JSON.stringify([sheet.grid.uMin, sheet.grid.uMax]) + ' vs quad ' +
+            JSON.stringify([-sheet.quad.width / 2, sheet.quad.width / 2]) + ')',
+        )
+      const cellTarget = HELPER_GRID_CELL_AU
+      if (cellTarget === null) {
+        bad('item 1: GRID_CELL_AU could not be read from PlaneHelpers.tsx — the legibility rule is unverified')
+      } else {
+        const cellOk =
+          Math.abs(sheet.grid.uStep - cellTarget) / cellTarget < 0.15 &&
+          Math.abs(sheet.grid.vStep - cellTarget) / cellTarget < 0.15
+        cellOk
+          ? ok(
+            'item 1: the ' + axis + '-plane grid spacing is constant in au, not in line count — ' +
+              sheet.grid.uStep.toFixed(3) + ' au x ' + sheet.grid.vStep.toFixed(3) + ' au cells (target ' + cellTarget + ' au)',
+          )
+          : bad(
+            'item 1: the ' + axis + '-plane grid cell is ' + sheet.grid.uStep.toFixed(3) + ' x ' +
+              sheet.grid.vStep.toFixed(3) + ' au where the source declares ' + cellTarget + ' au',
+          )
+      }
+      const parkU = parkSheets === null || parkSheets === undefined ? null : parkSheets[inPlane[0]]
+      const parkV = parkSheets === null || parkSheets === undefined ? null : parkSheets[inPlane[1]]
+      const parkAxis = parkSheets === null || parkSheets === undefined ? null : parkSheets[axis]
+      const centreOk =
+        (parkU === undefined || parkU === null || Math.abs(sheet.position[AXIS_INDEX[inPlane[0]]] - expected.u.mid) < 1e-6) &&
+        (parkV === undefined || parkV === null || Math.abs(sheet.position[AXIS_INDEX[inPlane[1]]] - expected.v.mid) < 1e-6)
+      centreOk
+        ? ok(
+          'item 1: the ' + axis + '-plane helper is centred on the box midpoints, not on 0 (' + inPlane[0] + ' ' +
+            sheet.position[AXIS_INDEX[inPlane[0]]].toFixed(2) + ' = mid ' + expected.u.mid.toFixed(2) + ', ' +
+            inPlane[1] + ' ' + sheet.position[AXIS_INDEX[inPlane[1]]].toFixed(2) + ' = mid ' + expected.v.mid.toFixed(2) + ')',
+        )
+        : bad(
+          'item 1: the ' + axis + '-plane helper is not centred on the box midpoints (' + JSON.stringify(sheet.position) +
+            ' vs mid ' + JSON.stringify([expected.u.mid, expected.v.mid]) + ')',
+        )
+      const sitsOnPlane =
+        parkAxis === undefined || parkAxis === null || Math.abs(sheet.position[AXIS_INDEX[axis]] - parkAxis) < 0.51
+      sitsOnPlane
+        ? ok(
+          'item 1: the ' + axis + '-plane helper sits at the clip value its slider was parked on (' + axis + ' = ' +
+            sheet.position[AXIS_INDEX[axis]].toFixed(2) + ' for slider ' + String(parkAxis) + ')',
+        )
+        : bad(
+          'item 1: the ' + axis + '-plane helper sits at ' + sheet.position[AXIS_INDEX[axis]].toFixed(2) +
+            ' while its slider reads ' + String(parkAxis),
+        )
+      const visualOk =
+        Math.abs(sheet.quadOpacity - 0.07) < 1e-9 &&
+        Math.abs(sheet.gridOpacity - 0.22) < 1e-9 &&
+        sheet.quadColor === '#38bdf8' &&
+        sheet.gridColor === '#38bdf8' &&
+        sheet.quadRenderOrder === 30 &&
+        sheet.gridRenderOrder === 31 &&
+        sheet.quadSide === 2 &&
+        sheet.raycastHits === 0
+      visualOk
+        ? ok(
+          'item 1: the ' + axis + '-plane helper keeps its visual + raycast contract (#38bdf8, quad 0.07 / grid 0.22, ' +
+            'renderOrder 30/31, DoubleSide, 0 raycast hits)',
+        )
+        : bad(
+          'item 1: the ' + axis + '-plane helper visual/raycast contract changed (' + JSON.stringify({
+            quadOpacity: sheet.quadOpacity, gridOpacity: sheet.gridOpacity, quadColor: sheet.quadColor,
+            gridColor: sheet.gridColor, quadRenderOrder: sheet.quadRenderOrder, gridRenderOrder: sheet.gridRenderOrder,
+            quadSide: sheet.quadSide, raycastHits: sheet.raycastHits,
+          }) + ')',
+        )
+    }
+  }
+  /* off again: a helper that cannot be switched off is a regression of its own. */
+  const helperOffToggle = await evaluate(`(() => {
+    const label = [...document.querySelectorAll('label')].find((l) => /Show plane helper/i.test(l.textContent || ''));
+    const input = label === null ? null : label.querySelector('input[type=checkbox]');
+    if (input === null) return 'no checkbox';
+    if (input.checked !== false) input.click();
+    return 'checked ' + input.checked;
+  })()`)
+  await sleep(1000)
+  const helperOff = await evaluate(HELPER_PROBE)
+  if (!sceneReady) {
+    bad('item 1: the helper OFF state could not be read from the scene')
+  } else {
+    helperOff !== null && helperOff.sheets === 0
+      ? ok('item 1: switching the helper off removes all three sheets from the scene (' + String(helperOffToggle) + ')')
+      : bad('item 1: the helper sheets survive the toggle being switched off (' + JSON.stringify(helperOff) + ')')
+  }
+  /* restore the toggle the audit found, so the panel/help state at the end of the
+     run is the state the earlier blocks left it in. */
+  if (helperToggle?.before === true) {
+    await evaluate(`(() => {
+      const label = [...document.querySelectorAll('label')].find((l) => /Show plane helper/i.test(l.textContent || ''));
+      const input = label === null ? null : label.querySelector('input[type=checkbox]');
+      if (input !== null && input.checked !== true) input.click();
+      return 'restored';
+    })()`)
+    await sleep(700)
+    info('item 1: the helper toggle was ON before these checks, and is restored ON after them')
+  }
+  /* ---------------------------------------------------------------- Q2 */
+  const DIVISION_ROWS_PROBE = `(() => {
+    const rows = [...document.querySelectorAll('[data-division-action="toggle"]')];
+    return rows.map((input) => {
+      const row = input.closest('.legend-division');
+      const solo = row === null ? null : row.querySelector('[data-division-action="solo"]');
+      return {
+        id: input.getAttribute('data-division'),
+        checked: input.checked,
+        name: input.getAttribute('aria-label') || '',
+        soloName: solo === null ? '' : (solo.getAttribute('aria-label') || ''),
+        soloTag: solo === null ? null : solo.tagName,
+        rowText: row === null ? '' : (row.textContent || '').trim(),
+      };
+    });
+  })()`
+  const divisionRows = await evaluate(DIVISION_ROWS_PROBE)
+  const divisionIds = DIVISIONS_SOURCE.map((division) => division.id)
+  const divisionRowsOk =
+    Array.isArray(divisionRows) && divisionRows.length === divisionIds.length &&
+    divisionIds.every((id) => divisionRows.some((row) => row.id === id)) &&
+    divisionRows.every((row) => row.soloTag === 'BUTTON' && row.name.length > 0 && row.soloName.length > 0) &&
+    new Set(divisionRows.map((row) => row.name)).size === divisionRows.length &&
+    new Set(divisionRows.map((row) => row.soloName)).size === divisionRows.length
+  divisionRowsOk
+    ? ok(
+      'item 2: the legend carries all ' + divisionRows.length + ' divisions, each with a checkbox AND a solo button and a distinct ' +
+        'accessible name pair (' + divisionRows.map((row) => row.id).join(', ') + ')',
+    )
+    : bad(
+      'item 2: the division control is incomplete in the DOM (' + JSON.stringify(divisionRows) +
+        ' vs the store\'s own ids ' + JSON.stringify(divisionIds) + ')',
+    )
+  const namesNameTheirDivision = DIVISIONS_SOURCE.every((division) => {
+    const row = (divisionRows ?? []).find((candidate) => candidate.id === division.id)
+    return row !== undefined && row.name.includes(division.label) && row.soloName.includes(division.label)
+  })
+  namesNameTheirDivision
+    ? ok('item 2: every division control names its own division in the accessible name (e.g. "' + String(divisionRows?.[0]?.soloName) + '")')
+    : bad('item 2: a division control does not name its division (' + JSON.stringify((divisionRows ?? []).map((row) => row.soloName)) + ')')
+  const axV10 = await send('Accessibility.getFullAXTree')
+  const axNodesV10 = axV10?.nodes ?? []
+  const axDivisionNames = axNodesV10
+    .map((node) => node.name?.value ?? '')
+    .filter((name) => typeof name === 'string' && /^(Show only|Toggle) the .* division/.test(name))
+  axDivisionNames.length >= divisionIds.length * 2
+    ? ok(
+      'item 2: the accessibility tree exposes all ' + divisionIds.length * 2 + ' named division controls (' +
+        axDivisionNames.slice(0, 3).join(' · ') + '…)',
+    )
+    : bad(
+      'item 2: the accessibility tree carries ' + axDivisionNames.length + ' named division control(s), expected ' +
+        divisionIds.length * 2 + ' (' + JSON.stringify(axDivisionNames) + ')',
+    )
+  /* The region rows only: the legend also carries kind rows, and those must NOT
+     be touched by the division sweep. The region NAMES come from the divisions
+     themselves — the store asserts that they partition ALL_REGIONS. */
+  const regionNames = ALL_REGIONS_FROM_DIVISIONS
+  /** A taxonomy-tree region row is labelled with `REGION_LABELS`, not the id. */
+  const treeRegionOf = (label) => {
+    const key = String(label ?? '').trim().toLowerCase()
+    return REGION_LABEL_TO_REGION[key] ?? key
+  }
+  const REGION_ROW_PROBE = `(() => {
+    const regions = ${JSON.stringify(regionNames)};
+    const out = {};
+    for (const row of document.querySelectorAll('.legend-row.legend-toggle')) {
+      if (row.closest('.legend-divisions') !== null) continue;
+      const input = row.querySelector('input[type=checkbox]');
+      if (input === null) continue;
+      const text = (row.textContent || '').trim();
+      if (!regions.includes(text)) continue;
+      out[text] = input.checked;
+    }
+    return out;
+  })()`
+  const setRegionToggles = (desired) => evaluate(`(() => {
+    const regions = ${JSON.stringify(regionNames)};
+    const desired = ${JSON.stringify(desired)};
+    const clicked = [];
+    for (const row of document.querySelectorAll('.legend-row.legend-toggle')) {
+      if (row.closest('.legend-divisions') !== null) continue;
+      const input = row.querySelector('input[type=checkbox]');
+      if (input === null) continue;
+      const text = (row.textContent || '').trim();
+      if (!regions.includes(text)) continue;
+      if (!Object.prototype.hasOwnProperty.call(desired, text)) continue;
+      if (input.checked !== desired[text]) { input.click(); clicked.push((desired[text] ? 'on:' : 'off:') + text); }
+    }
+    return clicked.length === 0 ? 'no change needed' : clicked.join(', ');
+  })()`)
+  const regionBaseline = await evaluate(REGION_ROW_PROBE)
+  const regionRowCount = Object.keys(regionBaseline ?? {}).length
+  regionRowCount === regionNames.length
+    ? ok(
+      'item 2 DOM contract: the legend still exposes one checkbox per region (' + regionRowCount + ' of ' +
+        regionNames.length + ' — the division control is additive, the per-region rows survive)',
+    )
+    : bad(
+      'item 2: the legend exposes ' + regionRowCount + ' region checkbox(es), expected ' + regionNames.length +
+        ' (' + JSON.stringify(regionBaseline) + ')',
+    )
+  const storageBaseline = await evaluate(
+    `(() => { try { return Object.keys(window.localStorage); } catch (error) { return ['unavailable']; } })()`,
+  )
+  const DIVISION_STATE_PROBE = `(() => {
+    const checked = {};
+    for (const input of document.querySelectorAll('[data-division-action="toggle"]')) {
+      checked[input.getAttribute('data-division')] = input.checked;
+    }
+    const leaves = [];
+    for (const region of document.querySelectorAll('.tree-region')) {
+      const name = ((region.querySelector('.tree-region-name') || {}).textContent || '').trim().toLowerCase();
+      let on = 0, off = 0;
+      for (const row of region.querySelectorAll('.tree-leaf-row')) {
+        if (row.classList.contains('is-off')) off += 1; else on += 1;
+      }
+      leaves.push({ region: name, on, off });
+    }
+    return { checked, leaves };
+  })()`
+  const expandTreeForV10 = async () => {
+    await evaluate(`(() => {
+      for (const region of document.querySelectorAll('.tree-region')) {
+        const row = region.querySelector('.tree-region-row');
+        if (row && row.getAttribute('aria-expanded') !== 'true') row.click();
+      }
+      return 'regions opened';
+    })()`)
+    await sleep(900)
+    await evaluate(`(() => {
+      for (const sub of document.querySelectorAll('.tree-sub-row')) {
+        if (sub.getAttribute('aria-expanded') !== 'true') sub.click();
+      }
+      return 'subdivisions opened';
+    })()`)
+    await sleep(1600)
+  }
+  await expandTreeForV10()
+  const soloSweep = []
+  if (!sceneReady) {
+    bad('item 2: the division solo sweep needs the scene bridge and could not run — reported as a failure, not skipped')
+  } else {
+    for (const division of DIVISIONS_SOURCE) {
+      const soloClick = await evaluate(`(() => {
+        const button = document.querySelector('[data-division-action="solo"][data-division="' + ${JSON.stringify(division.id)} + '"]');
+        if (button === null) return 'no solo button for ' + ${JSON.stringify(division.id)};
+        button.click();
+        return 'clicked solo';
+      })()`)
+      await sleep(900)
+      const state = await evaluate(DIVISION_STATE_PROBE)
+      const soloMeshes = await stableRead(VISIBLE_MESH_NAMES, 3)
+      /* The SAME request through the per-region checkboxes: every region off,
+         then exactly this division's regions on. Two independent UI paths. */
+      const offAll = {}
+      for (const name of regionNames) offAll[name] = false
+      const offAllResult = await setRegionToggles(offAll)
+      await sleep(900)
+      const onDivision = {}
+      for (const name of division.regions) onDivision[name] = true
+      const onDivisionResult = await setRegionToggles(onDivision)
+      await sleep(1000)
+      const regionPathMeshes = await stableRead(VISIBLE_MESH_NAMES, 3)
+      const checkedTrue = Object.entries(state?.checked ?? {}).filter(([, value]) => value === true).map(([id]) => id)
+      const checkedOk = checkedTrue.length === 1 && checkedTrue[0] === division.id
+      checkedOk
+        ? ok(
+          'item 2: solo("' + division.id + '") leaves exactly that division ticked and every other unticked (' +
+            JSON.stringify(state?.checked) + ')',
+        )
+        : bad(
+          'item 2: solo("' + division.id + '") left the legend checkboxes in ' + JSON.stringify(state?.checked) +
+            ' (expected only "' + division.id + '")',
+        )
+      const outside = (state?.leaves ?? []).filter((row) => !division.regions.includes(treeRegionOf(row.region)))
+      const inside = (state?.leaves ?? []).filter((row) => division.regions.includes(treeRegionOf(row.region)))
+      const outsideDimmed = outside.length > 0 && outside.every((row) => row.on === 0 && row.off > 0)
+      const insideLit = inside.length > 0 && inside.every((row) => row.on > 0)
+      outsideDimmed && insideLit
+        ? ok(
+          'item 2: the taxonomy tree follows solo("' + division.id + '") — ' +
+            outside.map((row) => treeRegionOf(row.region) + ' ' + row.off + '/' + (row.on + row.off) + ' dimmed').join(', ') +
+            ' · lit: ' + inside.map((row) => treeRegionOf(row.region) + ' ' + row.on).join(', '),
+        )
+        : bad(
+          'item 2: the tree does not follow solo("' + division.id + '") (outside ' + JSON.stringify(outside) +
+            ', inside ' + JSON.stringify(inside) + ', label map ' + JSON.stringify(REGION_LABELS_SOURCE) + ')',
+        )
+      const meshesEqual = sameStringList(soloMeshes, regionPathMeshes)
+      meshesEqual
+        ? ok(
+          'item 2: the rendered 3D scene after solo("' + division.id + '") is IDENTICAL to the scene after asking for the same ' +
+            'regions through the per-region checkboxes — ' + (Array.isArray(soloMeshes) ? soloMeshes.length : -1) +
+            ' visible mesh(es), same names (' + String(offAllResult) + ' | ' + String(onDivisionResult) + ')',
+        )
+        : bad(
+          'item 2: solo("' + division.id + '") does not paint what its own region set paints (' +
+            JSON.stringify(soloMeshes) + ' vs ' + JSON.stringify(regionPathMeshes) + ')',
+        )
+      soloSweep.push({ id: division.id, meshes: Array.isArray(soloMeshes) ? soloMeshes.length : -1, click: String(soloClick) })
+      await setRegionToggles(regionBaseline ?? {})
+      await sleep(700)
+    }
+    const everySoloNonEmpty = soloSweep.every((entry) => entry.meshes > 0)
+    everySoloNonEmpty
+      ? ok('item 2: every solo leaves a non-empty scene (' + soloSweep.map((entry) => entry.id + ' ' + entry.meshes).join(', ') + ' visible meshes)')
+      : bad('item 2: a solo produced an empty 3D scene (' + JSON.stringify(soloSweep) + ')')
+    const storageAfter = await evaluate(
+      `(() => { try { return Object.keys(window.localStorage); } catch (error) { return ['unavailable']; } })()`,
+    )
+    const divisionKeys = (Array.isArray(storageAfter) ? storageAfter : []).filter((key) => /division/i.test(key))
+    divisionKeys.length === 0
+      ? ok(
+        'item 2: the division control persists nothing (localStorage keys before/after the sweep: ' +
+          JSON.stringify(storageBaseline) + ' -> ' + JSON.stringify(storageAfter) + ')',
+      )
+      : bad('item 2: the division control wrote ' + JSON.stringify(divisionKeys) + ' — a solo is a view filter, not a boot preference')
+    const restoredRegions = await evaluate(REGION_ROW_PROBE)
+    JSON.stringify(restoredRegions) === JSON.stringify(regionBaseline)
+      ? ok('item 2: the v10 sweep left the app\'s own region layers exactly as it found them (' + JSON.stringify(restoredRegions) + ')')
+      : bad('item 2: the v10 sweep did not restore the region layers (' + JSON.stringify(restoredRegions) + ' vs ' + JSON.stringify(regionBaseline) + ')')
+    /* keyboard: a real checkbox + a real Space keypress, on the solo's own result.
+       Self-calibrating: Space is first sent to a PLAIN checkbox ("Show plane
+       helper"), so a CDP delivery problem is reported as an unverified path
+       rather than as a product failure — and a working calibration makes the
+       division checkbox assertion a real one. */
+    const pressSpace = async () => {
+      await send('Input.dispatchKeyEvent', {
+        type: 'keyDown', key: ' ', code: 'Space', windowsVirtualKeyCode: 32, text: ' ', unmodifiedText: ' ',
+      })
+      await send('Input.dispatchKeyEvent', { type: 'keyUp', key: ' ', code: 'Space', windowsVirtualKeyCode: 32 })
+    }
+    const helperCheckboxState = `(() => {
+      const label = [...document.querySelectorAll('label')].find((l) => /Show plane helper/i.test(l.textContent || ''));
+      const input = label === null ? null : label.querySelector('input[type=checkbox]');
+      if (input === null) return null;
+      input.focus();
+      return { checked: input.checked, focused: document.activeElement === input };
+    })()`
+    const calibrationBefore = await evaluate(helperCheckboxState)
+    await pressSpace()
+    await sleep(500)
+    const calibrationAfter = await evaluate(helperCheckboxState)
+    const spaceDelivered =
+      calibrationBefore !== null && calibrationAfter !== null && calibrationBefore.checked !== calibrationAfter.checked
+    if (spaceDelivered) await pressSpace()
+    await evaluate(`(() => {
+      const button = document.querySelector('[data-division-action="solo"][data-division="mesencephalon"]');
+      if (button !== null) button.click();
+      return 'soloed mesencephalon';
+    })()`)
+    await sleep(800)
+    const keyboardFocus = await evaluate(`(() => {
+      const input = document.querySelector('[data-division-action="toggle"][data-division="mesencephalon"]');
+      if (input === null) return 'no mesencephalon checkbox';
+      input.focus();
+      return document.activeElement === input ? 'focused' : 'not focused';
+    })()`)
+    await pressSpace()
+    await sleep(700)
+    const afterSpace = await evaluate(`(() => {
+      const input = document.querySelector('[data-division-action="toggle"][data-division="mesencephalon"]');
+      return input === null ? null : input.checked;
+    })()`)
+    if (!spaceDelivered) {
+      info(
+        'item 2: the CDP Space key did not toggle a plain checkbox either (' + JSON.stringify(calibrationBefore) + ' -> ' +
+          JSON.stringify(calibrationAfter) + ') — the division checkbox keyboard path is UNVERIFIED here, not failed',
+      )
+    } else if (String(keyboardFocus) === 'focused' && afterSpace === false) {
+      ok(
+        'item 2: the division checkbox is keyboard operable (a real Space keypress unticked the division the solo had just ' +
+          'ticked; the same keypress toggled the calibration checkbox)',
+      )
+    } else {
+      bad('item 2: the division checkbox did not respond to Space (' + String(keyboardFocus) + ' -> ' + String(afterSpace) + ')')
+    }
+    await setRegionToggles(regionBaseline ?? {})
+    await sleep(700)
+  }
+
+  /* ---------------------------------------------------------------- Q3 */
+  const SIZE_CLICK = `(() => {
+    const panel = document.querySelector('.pip-panel');
+    const button = panel === null ? null : [...panel.querySelectorAll('button')].find((x) => /^Panel size/.test(x.getAttribute('title') || ''));
+    if (button === null) return 'no size button';
+    button.click();
+    return 'clicked ' + (button.getAttribute('title') || '').slice(0, 30);
+  })()`
+  const pipMin = { width: PIP_SIZE_SOURCE.min.width, height: PIP_SIZE_SOURCE.min.height }
+  const pipMax = { width: PIP_SIZE_SOURCE.max.width, height: PIP_SIZE_SOURCE.max.height }
+  const resetPipToMin = async () => {
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const box = await evaluate(PIP_BOX_PROBE)
+      if (box !== null && pipMin.width !== null && box.width === pipMin.width && box.height === pipMin.height) return box
+      await evaluate(SIZE_CLICK)
+      await sleep(500)
+    }
+    return await evaluate(PIP_BOX_PROBE)
+  }
+  const EXPECTED_CORNER_RULE = {
+    nw: { dw: -1, dh: -1, label: 'north-west', moves: 'left + top', pins: 'right + bottom' },
+    ne: { dw: 1, dh: -1, label: 'north-east', moves: 'right + top', pins: 'left + bottom' },
+    sw: { dw: -1, dh: 1, label: 'south-west', moves: 'left + bottom', pins: 'right + top' },
+    se: { dw: 1, dh: 1, label: 'south-east', moves: 'right + bottom', pins: 'left + top' },
+  }
+  /**
+   * The pointer vector used per corner. Each is chosen so that (a) the pointer
+   * STAYS INSIDE the 1500×950 viewport (the handle sits at a panel corner, so a
+   * drag toward the window edge would leave the page and DevTools would clamp
+   * it) and (b) the resulting size stays inside the store's clamp window, so the
+   * arithmetic is asserted unclamped. Each corner gets a DISTINCT (dw, dh), so a
+   * swapped corner or a flipped sign is caught rather than cancelled.
+   */
+  const CORNER_DRAGS = {
+    nw: { dx: 48, dy: 24 },
+    ne: { dx: -24, dy: 48 },
+    sw: { dx: 48, dy: -24 },
+    se: { dx: -24, dy: -48 },
+  }
+  const cornerIds = Object.keys(EXPECTED_CORNER_RULE)
+  const pipCornersBox = await evaluate(PIP_BOX_PROBE)
+  const dragReport = []
+  /** The named "large" stop (348×262), so no corner drag can hit a clamp bound. */
+  const startFromLarge = async () => {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const box = await evaluate(PIP_BOX_PROBE)
+      if (box !== null && box.width >= 300 && box.height >= 240) return box
+      await evaluate(SIZE_CLICK)
+      await sleep(500)
+    }
+    return await evaluate(PIP_BOX_PROBE)
+  }
+  if (pipCornersBox === null) {
+    bad('item 3: the PiP panel is not in the 3D tab, so the four corner handles could not be probed')
+  } else {
+    const handles = pipCornersBox.handles ?? []
+    const handleIds = handles.map((handle) => handle.corner)
+    const fourHandles =
+      handles.length === 4 && cornerIds.every((corner) => handleIds.includes(corner)) &&
+      new Set(handles.map((handle) => handle.label)).size === 4 &&
+      handles.every((handle) => handle.label.includes(EXPECTED_CORNER_RULE[handle.corner]?.label ?? '###'))
+    fourHandles
+      ? ok(
+        'item 3: all four corner handles are rendered, one per corner, with distinct accessible names naming their corner (' +
+          handles.map((handle) => handle.corner).join(', ') + ')',
+      )
+      : bad('item 3: expected four handles named nw/ne/sw/se, found ' + JSON.stringify(handles.map((h) => ({ corner: h.corner, label: h.label }))))
+    const sizedNames = handles.filter((handle) => handle.label.includes(pipCornersBox.width + '×' + pipCornersBox.height)).length
+    sizedNames === handles.length && handles.length === 4
+      ? ok('item 3: every handle carries the LIVE size in its accessible name (' + pipCornersBox.width + '×' + pipCornersBox.height + ' px)')
+      : bad('item 3: only ' + sizedNames + '/' + handles.length + ' handles carry the live size in their accessible name')
+    const hitTest = await evaluate(`(() => {
+      const out = {};
+      for (const handle of document.querySelectorAll('.pip-panel .pip-resizer')) {
+        const r = handle.getBoundingClientRect();
+        const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        out[handle.getAttribute('data-pip-corner')] = top === null ? 'nothing'
+          : (top === handle || handle.contains(top) ? 'the handle' : top.tagName + '.' + String(top.className).slice(0, 40));
+      }
+      return out;
+    })()`)
+    const allHittable = cornerIds.every((corner) => hitTest?.[corner] === 'the handle')
+    allHittable
+      ? ok('item 3: each handle is the topmost element at its own centre, so a real pointer reaches all four')
+      : bad('item 3: some handle centres are covered (' + JSON.stringify(hitTest) + ') — a drag there would hit another element')
+    for (const corner of cornerIds) {
+      const rule = EXPECTED_CORNER_RULE[corner]
+      const vector = CORNER_DRAGS[corner]
+      await resetPipToMin()
+      const before = await startFromLarge()
+      if (before === null) {
+        bad('item 3: could not read the PiP box before the ' + corner + ' drag')
+        continue
+      }
+      const handle = (before.handles ?? []).find((candidate) => candidate.corner === corner)
+      if (handle === undefined) {
+        bad('item 3: no handle for corner ' + corner)
+        continue
+      }
+      await dragPointer({ x: handle.cx, y: handle.cy }, { x: handle.cx + vector.dx, y: handle.cy + vector.dy })
+      const after = await evaluate(PIP_BOX_PROBE)
+      if (after === null) {
+        bad('item 3: the PiP panel vanished during the ' + corner + ' drag')
+        continue
+      }
+      const expectedDw = rule.dw * vector.dx
+      const expectedDh = rule.dh * vector.dy
+      const deltaWidth = after.width - before.width
+      const deltaHeight = after.height - before.height
+      const deltaLeft = Math.round((after.left - before.left) * 10) / 10
+      const deltaTop = Math.round((after.top - before.top) * 10) / 10
+      const deltaRight = Math.round((after.right - before.right) * 10) / 10
+      const deltaBottom = Math.round((after.bottom - before.bottom) * 10) / 10
+      const cardDeltaRight = Math.round((after.card.right - before.card.right) * 10) / 10
+      const cardDeltaBottom = Math.round((after.card.bottom - before.card.bottom) * 10) / 10
+      const storedAfter = (() => {
+        try { return JSON.parse(after.stored ?? 'null') } catch (error) { return null }
+      })()
+      const regime = Math.abs(deltaLeft + deltaWidth) < 0.75 && Math.abs(deltaTop + deltaHeight) < 0.75
+        ? 'window-driven card (the window is the widest element, so its left/top edge carries the whole change)'
+        : Math.abs(deltaLeft + deltaWidth / 2) < 0.75 && Math.abs(deltaTop + deltaHeight / 2) < 0.75
+          ? 'centred in a wider card (the header is the widest element, so the window grows about its own centre)'
+          : 'NEITHER documented regime'
+      dragReport.push({
+        corner, vector, expectedDw, expectedDh, deltaWidth, deltaHeight, deltaLeft, deltaTop, deltaRight,
+        deltaBottom, cardDeltaRight, cardDeltaBottom, regime,
+      })
+      const sizeOk = deltaWidth === expectedDw && deltaHeight === expectedDh
+      sizeOk
+        ? ok(
+          'item 3: dragging the ' + corner + ' handle by (' + vector.dx + ', ' + vector.dy + ') resizes the window by (' +
+            expectedDw + ', ' + expectedDh + ') px — ' + before.width + '×' + before.height + ' → ' + after.width + '×' + after.height,
+        )
+        : bad(
+          'item 3: the ' + corner + ' drag did not apply its own rule — expected (' + expectedDw + ', ' + expectedDh +
+            ') px for a (' + vector.dx + ', ' + vector.dy + ') drag, measured (' + deltaWidth + ', ' + deltaHeight + ')',
+        )
+      const storedMatches = storedAfter !== null && storedAfter.width === after.width && storedAfter.height === after.height
+      storedMatches
+        ? ok('item 3: the ' + corner + ' drag is persisted through the store key (neuroaxis.sectionPipSize = ' + after.stored + ')')
+        : bad('item 3: the ' + corner + ' drag left the store at ' + String(after.stored) + ' but the window is ' + after.width + '×' + after.height)
+      const cardDocked = Math.abs(cardDeltaRight) < 0.75 && Math.abs(cardDeltaBottom) < 0.75
+      cardDocked
+        ? ok(
+          'item 3: the ' + corner + ' drag leaves the docked card edges alone (Δcard.right ' + cardDeltaRight +
+            ' px, Δcard.bottom ' + cardDeltaBottom + ' px) — the panel stays pinned to the viewport bottom-right',
+        )
+        : bad(
+          'item 3: the ' + corner + ' drag moved a docked card edge (Δcard.right ' + cardDeltaRight + ', Δcard.bottom ' +
+            cardDeltaBottom + ')',
+        )
+      const regimeOk = regime !== 'NEITHER documented regime'
+      regimeOk
+        ? ok(
+          'item 3: the ' + corner + ' drag moves the window box exactly as the dock allows — Δleft ' + deltaLeft +
+            ' px / -Δwidth ' + -deltaWidth + ', Δtop ' + deltaTop + ' / -Δheight ' + -deltaHeight +
+            ' (' + regime + ')',
+        )
+        : bad(
+          'item 3: the ' + corner + ' drag moved the window box in no documented way (Δleft ' + deltaLeft +
+            ', -Δwidth ' + -deltaWidth + ', -Δwidth/2 ' + -deltaWidth / 2 + ', Δtop ' + deltaTop + ', -Δheight ' +
+            -deltaHeight + ')',
+        )
+      if (corner === 'nw') {
+        const followsDirection = deltaLeft > 0 && deltaTop > 0
+        followsDirection
+          ? ok(
+            'item 3: the north-west handle moves TOWARD the pointer on both axes (Δleft +' + deltaLeft + ', Δtop +' +
+              deltaTop + ' for a +' + vector.dx + '/+' + vector.dy + ' drag) while the opposite corner stays put',
+          )
+          : bad('item 3: the north-west handle did not move toward the pointer (Δleft ' + deltaLeft + ', Δtop ' + deltaTop + ')')
+      }
+      const labelCarriesSize = (after.handles ?? []).every((h) => h.label.includes(after.width + '×' + after.height))
+      labelCarriesSize
+        ? ok('item 3: after the ' + corner + ' drag every handle re-states the new live size')
+        : bad('item 3: a handle did not update its accessible name after the ' + corner + ' drag')
+    }
+    info(
+      'item 3 screen-space readout: ' +
+        (dragReport.length === 0 ? 'no drag ran' : dragReport.map((entry) => entry.corner + ' (' + entry.vector.dx + ',' +
+          entry.vector.dy + ') -> Δsize(' + entry.deltaWidth + ',' + entry.deltaHeight + ') expected(' + entry.expectedDw + ',' +
+          entry.expectedDh + ') Δedges L' + entry.deltaLeft + ' T' + entry.deltaTop + ' Δcard R' + entry.cardDeltaRight +
+          ' B' + entry.cardDeltaBottom).join(' · ')),
+    )
+    info(
+      'item 3 layout note (PLAN.md §3 says "the opposite corner stays put"; the panel is CSS-docked `right/bottom`): ' +
+        (dragReport.length === 0 ? 'no drag ran' : dragReport[0].regime) +
+        ' — measured with the north-west drag: Δleft ' + dragReport[0].deltaLeft + ' px for Δwidth ' + dragReport[0].deltaWidth + ' px',
+    )
+    const maxStart = await startFromLarge()
+    const nwHandle = (maxStart?.handles ?? []).find((handle) => handle.corner === 'nw')
+    if (maxStart === null || nwHandle === undefined) {
+      bad('item 3: the clamp drag could not start (no north-west handle)')
+    } else {
+      await dragPointer({ x: nwHandle.cx, y: nwHandle.cy }, { x: 2, y: 2 }, 8)
+      const clamped = await evaluate(PIP_BOX_PROBE)
+      const clampOk =
+        clamped !== null && pipMax.width !== null && clamped.width === pipMax.width && clamped.height === pipMax.height
+      clampOk
+        ? ok(
+          'item 3: an oversized drag stops exactly on the store clamp (' + clamped.width + '×' + clamped.height +
+            ' = SECTION_PIP_SIZE_MAX) instead of escaping it',
+        )
+        : bad(
+          'item 3: the oversized drag did not stop on the clamp window (' +
+            JSON.stringify({ width: clamped?.width, height: clamped?.height }) + ' vs max ' + JSON.stringify(pipMax) + ')',
+        )
+      const labelAtMax = clamped !== null && (clamped.handles ?? []).every((h) => h.label.includes(clamped.width + '×' + clamped.height))
+      labelAtMax
+        ? ok('item 3: the handles report the clamped size (' + clamped.width + '×' + clamped.height + ' px)')
+        : bad('item 3: the handles do not report the clamped size')
+    }
+    /* the keyboard path on a NON-first handle (one shared handler, four buttons).
+       The size is brought back to the named large stop first: the clamp drag above
+       left the window ON its upper bound, where +16 px is legitimately clipped. */
+    await resetPipToMin()
+    await startFromLarge()
+    const keyboardSecond = await evaluate(`(() => {
+      const handle = document.querySelector('.pip-panel .pip-resizer[data-pip-corner="nw"]');
+      if (handle === null) return 'no north-west handle';
+      handle.focus();
+      return document.activeElement === handle ? 'focused' : 'not focused';
+    })()`)
+    const beforeKeyboard = await evaluate(PIP_BOX_PROBE)
+    await pressKey('ArrowRight', 'ArrowRight', 39)
+    await pressKey('ArrowUp', 'ArrowUp', 38)
+    await sleep(600)
+    const afterKeyboard = await evaluate(PIP_BOX_PROBE)
+    const keyboardOk =
+      String(keyboardSecond) === 'focused' && beforeKeyboard !== null && afterKeyboard !== null &&
+      afterKeyboard.width === beforeKeyboard.width + 16 && afterKeyboard.height === beforeKeyboard.height - 16
+    keyboardOk
+      ? ok(
+        'item 3: the north-west handle is keyboard operable too (+16 px wide, -16 px tall: ' + beforeKeyboard.width +
+          '×' + beforeKeyboard.height + ' → ' + afterKeyboard.width + '×' + afterKeyboard.height + ')',
+      )
+      : bad(
+        'item 3: the north-west handle did not resize from the keyboard (' + String(keyboardSecond) + ', ' +
+          JSON.stringify({ w: beforeKeyboard?.width, h: beforeKeyboard?.height }) + ' → ' +
+          JSON.stringify({ w: afterKeyboard?.width, h: afterKeyboard?.height }) + ')',
+      )
+    const leftAtMin = await resetPipToMin()
+    leftAtMin !== null && pipMin.width !== null && leftAtMin.width === pipMin.width
+      ? ok('item 3: the panel is left at its named small stop after the corner drags (' + leftAtMin.width + '×' + leftAtMin.height + ')')
+      : info('item 3: the panel is left at ' + JSON.stringify({ w: leftAtMin?.width, h: leftAtMin?.height }) + ' after the corner drags')
+  }
+
+  /* ---------------------------------------------------------------- Q4 */
+  const ensurePlatesLiveSection = async () => {
+    await evaluate(clickText('Plates'))
+    await sleep(1500)
+    const present = await evaluate(`document.querySelector('.section-canvas-wrap') !== null`)
+    if (present !== true) {
+      await evaluate(clickText('Live section'))
+      await sleep(4500)
+    }
+  }
+  const LOBE_LEGEND_ROWS = `(() => {
+    const rows = (legend) => legend === null ? null : [...legend.querySelectorAll('.section-lobes-row')].map((n) => (n.textContent || '').trim());
+    const panel = document.querySelector('.pip-panel');
+    const plates = [...document.querySelectorAll('.section-lobes-legend')].find((legend) => legend.closest('.pip-panel') === null) ?? null;
+    const panelLegend = panel === null ? null : panel.querySelector('.section-lobes-legend');
+    const toggle = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null) ?? null;
+    const chip = panel === null ? null : panel.querySelector('.section-structure-chip');
+    return {
+      plates: rows(plates),
+      platesPressed: toggle === null ? null : toggle.getAttribute('aria-pressed'),
+      pip: rows(panelLegend),
+      pipReadout: panel === null ? null : ((panel.querySelector('.pip-readout') || {}).textContent || '').trim(),
+      pipChip: chip === null ? '' : (chip.textContent || '').trim(),
+      pipChipPresent: chip !== null,
+      pipSectionChips: panel === null ? -1 : panel.querySelectorAll('.section-canvas-wrap').length,
+    };
+  })()`
+  await ensurePlatesLiveSection()
+  const snapOff = await evaluate(`(() => {
+    const label = [...document.querySelectorAll('label')].find((l) => /Snap to levels/i.test(l.textContent || ''));
+    const input = label === null ? null : label.querySelector('input[type=checkbox]');
+    if (input === null) return 'no "Snap to levels" checkbox';
+    const before = input.checked;
+    if (input.checked === true) input.click();
+    return 'snap ' + before + ' -> ' + input.checked;
+  })()`)
+  await sleep(500)
+  const lobesOnPlates = await evaluate(`(() => {
+    const button = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null);
+    if (button === null) return 'no cortical-division toggle in the Plates live section';
+    if (button.getAttribute('aria-pressed') !== 'true') button.click();
+    return 'aria-pressed ' + button.getAttribute('aria-pressed');
+  })()`)
+  await sleep(1200)
+  const pipOnTransverse = await evaluate(`(() => {
+    const panel = document.querySelector('.pip-panel');
+    if (panel === null) return 'no PiP panel';
+    const button = [...panel.querySelectorAll('button')].find((b) => (b.textContent || '').trim() === 'Y');
+    if (button === null) return 'no Y axis button in the panel';
+    button.click();
+    return 'clicked Y';
+  })()`)
+  await sleep(1100)
+  const lobeLabelToDivision = {}
+  for (const [division, label] of Object.entries(DIVISION_LEGEND_LABELS)) lobeLabelToDivision[label] = division
+  const artefactSweep = []
+  for (const plane of ARTEFACT_PLANES) {
+    await evaluate(`(() => {
+      const slider = [...document.querySelectorAll('.section-plane-sliders input[type=range]')].find((x) => /transverse/i.test(x.getAttribute('aria-label') || ''));
+      if (!slider) return 'no transverse slider';
+      const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+      setter.call(slider, String(${JSON.stringify(plane.value)}));
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+      return 'set ' + slider.value;
+    })()`)
+    await sleep(2400)
+    const reading = await evaluate(LOBE_LEGEND_ROWS)
+    const planeNow = await evaluate(`(() => {
+      const slider = [...document.querySelectorAll('.section-plane-sliders input[type=range]')].find((x) => /transverse/i.test(x.getAttribute('aria-label') || ''));
+      return slider === null ? null : Number(slider.value);
+    })()`)
+    const rows = reading?.plates ?? null
+    const drawn = Array.isArray(rows) ? rows.map((label) => lobeLabelToDivision[label] ?? label) : null
+    const landed = planeNow !== null && Math.abs(planeNow - plane.value) < 0.01
+    artefactSweep.push({ plane: plane.value, landed, drawn })
+    if (!landed) {
+      bad(
+        'item 4: the transverse slider could not be parked on y = ' + plane.value + ' au (it reads ' + String(planeNow) +
+          ', snap: ' + String(snapOff) + ') — the artefact-plane assertion did NOT run',
+      )
+      continue
+    }
+    if (drawn === null) {
+      bad('item 4: the Plates cortical-division legend is missing at y = ' + plane.value + ' (' + String(lobesOnPlates) + ')')
+      continue
+    }
+    const missing = plane.drawn.filter((division) => !drawn.includes(division))
+    const extra = drawn.filter((division) => !plane.drawn.includes(division))
+    missing.length === 0 && extra.length === 0
+      ? ok(
+        'item 4: at y = ' + plane.value + ' au the layer paints exactly the divisions the floor rule leaves there (' +
+          drawn.join(', ') + ') — ' + plane.note,
+      )
+      : bad(
+        'item 4: at y = ' + plane.value + ' au the painted divisions are ' + JSON.stringify(drawn) +
+          ' where the shipped rule leaves ' + JSON.stringify(plane.drawn) +
+          (extra.length > 0 ? ' — {' + extra.join(', ') + '} is a sub-threshold patch painted again' : '') +
+          (missing.length > 0 ? ' — {' + missing.join(', ') + '} has a floor-clearing body but is not painted' : '') +
+          ' (' + plane.note + ')',
+      )
+    const pipPlaneMatches = new RegExp('y\\s*=\\s*' + plane.value + '(\\D|$)').test(String(reading?.pipReadout))
+    const surfacesAgree =
+      pipPlaneMatches && Array.isArray(reading?.pip) && rows.length === reading.pip.length &&
+      rows.every((label, index) => label === reading.pip[index])
+    surfacesAgree
+      ? ok(
+        'item 4: the Plates canvas and the PiP agree at y = ' + plane.value + ' au (' + rows.length + ' row(s): ' +
+          (reading.pip.join(', ') || 'none') + '; panel readout "' + String(reading.pipReadout) + '")',
+      )
+      : bad(
+        'item 4: the two surfaces disagree at y = ' + plane.value + ' au (Plates ' + JSON.stringify(rows) + ' vs PiP ' +
+          JSON.stringify(reading?.pip) + ', panel readout "' + String(reading?.pipReadout) + '", ' + String(pipOnTransverse) + ')',
+      )
+  }
+  info(
+    'item 4 sweep (' + String(snapOff) + ', ' + String(pipOnTransverse) + ', ' + String(lobesOnPlates) + '): ' +
+      artefactSweep.map((entry) => 'y=' + entry.plane + (entry.landed ? '' : '(NOT REACHED)') + ' [' +
+        (entry.drawn ?? []).join('+') + ']').join(' · '),
+  )
+
+  /* ---------------------------------------------------------------- Q5 */
+  const canvasWrapText = `(() => {
+    const wrap = [...document.querySelectorAll('.section-canvas-wrap')].find((w) => w.closest('.pip-panel') === null) ?? null;
+    if (wrap === null) return null;
+    const chip = wrap.parentElement === null ? null : wrap.parentElement.querySelector('.section-structure-chip');
+    const info = document.querySelector('.info-name');
+    return {
+      wrapText: (wrap.textContent || '').trim(),
+      ariaLabel: wrap.getAttribute('aria-label') || '',
+      chipText: chip === null ? '' : (chip.textContent || '').trim(),
+      chipPresent: chip !== null,
+      infoName: info === null ? null : (info.textContent || '').trim(),
+    };
+  })()`
+  const selectTreeLeaf = (name) => evaluate(`(() => {
+    const wanted = ${JSON.stringify(name)};
+    for (const row of document.querySelectorAll('.tree-leaf-row')) {
+      const label = ((row.querySelector('.tree-leaf-name') || {}).textContent || '').trim();
+      if (label === wanted) { row.click(); return 'clicked ' + wanted; }
+    }
+    return 'leaf not found in the tree: ' + wanted;
+  })()`)
+  const cortexName = CORTEX_RECORD_NAME
+  const thalamusName = TAXONOMY_ENTRIES.find((entry) => entry.id === 'ctx-thalamus-envelope')?.name ?? null
+  const suppressedOk =
+    SUPPRESSED_CANVAS_LABEL_IDS.length === 1 && cortexName !== null && SUPPRESSED_CANVAS_LABEL_IDS[0] === 'ctx-cerebral-cortex'
+  suppressedOk
+    ? ok(
+      'item 5 source contract: SectionCanvas suppresses exactly the record "' + SUPPRESSED_CANVAS_LABEL_IDS[0] + '" (' +
+        String(cortexName) + ')',
+    )
+    : bad(
+      'item 5: the suppressed-label set read as ' + JSON.stringify(SUPPRESSED_CANVAS_LABEL_IDS) + ' (cortex name ' +
+        String(cortexName) + ', taxonomy entries read: ' + TAXONOMY_ENTRIES.length + ')',
+    )
+  await ensurePlatesLiveSection()
+  await expandTreeForV10()
+  const platesCanvasBefore = await evaluate(canvasStatsFor(PLATES_CANVAS))
+  const selectCortex = await selectTreeLeaf(cortexName)
+  await ensurePlatesLiveSection()
+  await sleep(2400)
+  const cortexSelected = await evaluate(canvasWrapText)
+  const platesCanvasCortex = await evaluate(canvasStatsFor(PLATES_CANVAS))
+  if (cortexName === null || cortexSelected === null) {
+    bad('item 5: the cortex record or the Plates canvas could not be reached (' + String(selectCortex) + ')')
+  } else {
+    const chipHasName = cortexSelected.chipText.includes(cortexName)
+    const wrapHasName =
+      cortexSelected.wrapText.includes(cortexName) || cortexSelected.ariaLabel.includes(cortexName)
+    !chipHasName && !wrapHasName
+      ? ok(
+        'item 5: with "' + cortexName + '" selected the canvas chip reads "' + cortexSelected.chipText +
+          '" and the canvas wrapper carries no such text ("' + cortexSelected.wrapText.slice(0, 40) + '")',
+      )
+      : bad(
+        'item 5: the cortex name still reaches the canvas DOM (chip "' + cortexSelected.chipText + '" / wrapper "' +
+          cortexSelected.wrapText.slice(0, 120) + '")',
+      )
+    cortexSelected.infoName === cortexName
+      ? ok('item 5: the tree click really selected the suppressed record (info panel "' + String(cortexSelected.infoName) + '")')
+      : info(
+        'item 5: the info panel reads "' + String(cortexSelected.infoName) + '" instead of "' + cortexName + '" (' +
+          String(selectCortex) + ') — the canvas DOM assertions above still hold for that selection',
+      )
+    const canvasRepainted =
+      platesCanvasBefore !== null && platesCanvasCortex !== null && platesCanvasBefore.hash !== platesCanvasCortex.hash
+    canvasRepainted
+      ? ok(
+        'item 5: selecting the cortex still repaints the section (hash ' + platesCanvasBefore.hash + ' -> ' +
+          platesCanvasCortex.hash + '), i.e. its contour/highlight is still drawn while its text is gone',
+      )
+      : bad(
+        'item 5: selecting the cortex changed NOTHING on the canvas (hash ' + String(platesCanvasCortex?.hash) +
+          ') — the contour of the suppressed record looks filtered too',
+      )
+    const axScoped = await (async () => {
+      try {
+        const doc = await send('DOM.getDocument', { depth: 0 })
+        const rootId = doc?.root?.nodeId
+        if (rootId === undefined) return { error: 'no document root' }
+        const found = await send('DOM.querySelector', { nodeId: rootId, selector: '.section-canvas-wrap' })
+        if (!found?.nodeId) return { error: 'no .section-canvas-wrap node' }
+        const partial = await send('Accessibility.getPartialAXTree', { nodeId: found.nodeId, fetchRelatives: true })
+        const names = (partial?.nodes ?? []).map((node) => node.name?.value ?? '').filter((name) => typeof name === 'string')
+        return { names }
+      } catch (error) {
+        return { error: error instanceof Error ? error.message : String(error) }
+      }
+    })()
+    if (axScoped.error !== undefined) {
+      bad('item 5: the scoped accessibility tree of the section canvas could not be read (' + axScoped.error + ')')
+    } else {
+      const axHasName = axScoped.names.some((name) => name.includes(cortexName))
+      !axHasName
+        ? ok(
+          'item 5: the canvas\' own accessibility subtree (' + axScoped.names.length + ' node(s)) carries no cortex label — ' +
+            'names ' + JSON.stringify(axScoped.names.slice(0, 4)),
+        )
+        : bad('item 5: the cortex label is still in the canvas accessibility subtree (' + JSON.stringify(axScoped.names) + ')')
+    }
+    const hoverSweep = await evaluate(`(async () => {
+      const canvas = [...document.querySelectorAll('.section-canvas')].find((c) => c.closest('.pip-panel') === null) ?? null;
+      if (canvas === null) return { error: 'no Plates canvas' };
+      const r = canvas.getBoundingClientRect();
+      const seen = [];
+      for (let iy = 1; iy <= 6; iy++) {
+        for (let ix = 1; ix <= 6; ix++) {
+          const x = r.left + (r.width * ix) / 7;
+          const y = r.top + (r.height * iy) / 7;
+          canvas.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, bubbles: true, pointerId: 1, pointerType: 'mouse' }));
+          await new Promise((resolve) => setTimeout(resolve, 45));
+          const chip = document.querySelector('.section-structure-chip');
+          const text = chip === null ? '' : (chip.textContent || '').trim();
+          if (text.length > 0) seen.push(text);
+        }
+      }
+      canvas.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true, pointerId: 1, pointerType: 'mouse' }));
+      return { hovered: [...new Set(seen)] };
+    })()`)
+    if (hoverSweep?.error !== undefined) {
+      bad('item 5: the hover sweep could not run (' + hoverSweep.error + ')')
+    } else {
+      const hoverShowsCortex = (hoverSweep.hovered ?? []).some((text) => text.includes(cortexName))
+      !hoverShowsCortex
+        ? ok(
+          'item 5: 36 hover positions across the Plates canvas produce no chip naming the cortex (' +
+            (hoverSweep.hovered ?? []).length + ' distinct hovered structure(s) ' +
+            JSON.stringify((hoverSweep.hovered ?? []).slice(0, 4)) + ')',
+        )
+        : bad('item 5: hovering still announces the cortex label (' + JSON.stringify(hoverSweep.hovered) + ')')
+    }
+    const hitProof = await evaluate(`(async () => {
+      const canvas = [...document.querySelectorAll('.section-canvas')].find((c) => c.closest('.pip-panel') === null) ?? null;
+      if (canvas === null) return { error: 'no Plates canvas' };
+      const wanted = ${JSON.stringify(cortexName)};
+      const r = canvas.getBoundingClientRect();
+      const tried = [];
+      for (let iy = 1; iy <= 7; iy++) {
+        for (let ix = 1; ix <= 7; ix++) {
+          const x = r.left + (r.width * ix) / 8;
+          const y = r.top + (r.height * iy) / 8;
+          canvas.dispatchEvent(new MouseEvent('click', { clientX: x, clientY: y, bubbles: true }));
+          await new Promise((resolve) => setTimeout(resolve, 70));
+          const name = ((document.querySelector('.info-name') || {}).textContent || '').trim();
+          tried.push(name);
+          if (name === wanted) {
+            const chip = document.querySelector('.section-structure-chip');
+            return { point: { x, y }, hit: name, chip: chip === null ? '' : (chip.textContent || '').trim() };
+          }
+        }
+      }
+      return { hit: null, tried: [...new Set(tried)].slice(0, 8) };
+    })()`)
+    if (hitProof?.hit === cortexName) {
+      ok(
+        'item 5: the cortex contour is still hit-testable — a click at (' + Math.round(hitProof.point.x) + ', ' +
+          Math.round(hitProof.point.y) + ') resolves to "' + hitProof.hit + '" while the canvas chip stays "' +
+          String(hitProof.chip) + '"',
+      )
+    } else if (hitProof?.error !== undefined) {
+      bad('item 5: the canvas hit test could not be driven (' + hitProof.error + ')')
+    } else {
+      bad(
+        'item 5: no canvas point resolved to the cortex record (' + JSON.stringify(hitProof?.tried) +
+          ') — its contour may be filtered out of the render',
+      )
+    }
+    if (thalamusName === null) {
+      info('item 5: the thalamus envelope record was not found in taxonomy.json — the specificity half is unverified')
+    } else {
+      await selectTreeLeaf(thalamusName)
+      await ensurePlatesLiveSection()
+      await sleep(2000)
+      const thalamusChip = await evaluate(canvasWrapText)
+      const keepsThalamus = thalamusChip !== null && thalamusChip.chipText.includes(thalamusName)
+      keepsThalamus
+        ? ok(
+          'item 5: the suppression is specific — selecting "' + thalamusName + '" still prints its own chip ("' +
+            thalamusChip.chipText + '")',
+        )
+        : bad(
+          'item 5: the thalamus envelope lost its label too (' + JSON.stringify(thalamusChip?.chipText) +
+            ') — the suppression is too broad',
+        )
+      await evaluate(clickText('3D'))
+      await sleep(3200)
+      const pipThalamus = await evaluate(LOBE_LEGEND_ROWS)
+      const pipThalamusChip = String(pipThalamus?.pipChip ?? '')
+      const selectCortexAgain = await selectTreeLeaf(cortexName)
+      await sleep(2400)
+      const pipCortex = await evaluate(LOBE_LEGEND_ROWS)
+      const pipCortexChip = String(pipCortex?.pipChip ?? '')
+      pipThalamusChip.includes(thalamusName) && !pipCortexChip.includes(cortexName)
+        ? ok(
+          'item 5: the PiP mounts the same component and honours the rule — with the thalamus selected its chip reads "' +
+            pipThalamusChip.slice(0, 46) + '"; with the cortex selected (' + String(selectCortexAgain) + ') it reads "' +
+            (pipCortexChip.length === 0 ? '(empty)' : pipCortexChip.slice(0, 40)) + '"',
+        )
+        : bad(
+          'item 5: the PiP does not honour the label rule (thalamus chip "' + pipThalamusChip + '" / cortex chip "' +
+            pipCortexChip + '")',
+        )
+    }
+    /* honesty: the OTHER surfaces on this screen that still speak the name */
+    await ensurePlatesLiveSection()
+    await sleep(1200)
+    const otherSurfaces = await evaluate(`(() => {
+      const name = ${JSON.stringify(cortexName)};
+      const hits = [];
+      const treeNames = [...document.querySelectorAll('.tree-leaf-name')].map((n) => (n.textContent || '').trim());
+      if (treeNames.some((text) => text === name)) hits.push('taxonomy tree row');
+      const panel = document.querySelector('.info-panel');
+      if (panel !== null && (panel.innerText || '').includes(name)) hits.push('info rail');
+      const svgTitles = [...document.querySelectorAll('svg title')].map((t) => (t.textContent || '').trim());
+      if (svgTitles.some((text) => text === name)) hits.push('plate SVG <title> (exact record name)');
+      const plateLabels = [...document.querySelectorAll('.plate-label')].map((t) => (t.textContent || '').trim());
+      const cortexPlate = plateLabels.filter((text) => /cerebral cortex/i.test(text));
+      if (cortexPlate.length > 0) hits.push('authored plate label text x' + cortexPlate.length + ' (' + cortexPlate[0].replace(/\\s+/g, ' ').slice(0, 40) + ')');
+      return { hits };
+    })()`)
+    const others = Array.isArray(otherSurfaces?.hits) ? otherSurfaces.hits : []
+    others.length === 0
+      ? ok('item 5: no other surface on this screen still renders the string "' + cortexName + '"')
+      : info(
+        'item 5 SCOPED HONESTY — the section canvas (Plates and PiP) is clean, but the same screen still carries the name in: ' +
+          others.join(' · ') + '. PLAN.md §5 lines 289–296 flag the authored plate SVGs as outside every task\'s write list, ' +
+          'and the tree/info rail legitimately name the selected record.',
+      )
+  }
+
+  /* ---------------------------------------------------------------- Q6 */
+  const v10ErrorsAfter = exceptions.length + consoleErrors.length
+  const v10NewErrors = [...exceptions.slice(v10ErrorsBefore), ...consoleErrors.slice(v10ErrorsBefore)]
+  v10NewErrors.length === 0
+    ? ok('v10 hygiene: the five item checks produced no console error and no page exception')
+    : bad('v10 hygiene: ' + v10NewErrors.length + ' runtime error(s) during the v10 checks: ' + v10NewErrors.slice(0, 3).join(' || '))
+  const appStillAlive = await evaluate(`({
+    root: document.getElementById('root')?.childElementCount ?? -1,
+    tabs: [...document.querySelectorAll('button')].map((b) => b.textContent.trim()).filter((t) => /^(3D|Plates|Syndromes)$/.test(t)),
+    canvas: document.querySelector('.viewer3d-canvas canvas') !== null || document.querySelector('.viewer3d-root canvas') !== null,
+    pip: document.querySelector('.pip-panel') !== null,
+    sections: document.querySelectorAll('.section-canvas').length,
+  })`)
+  appStillAlive.root > 0 && appStillAlive.tabs.length === 3 && appStillAlive.pip
+    ? ok('v10 hygiene: the app is fully alive after the five item checks (' + JSON.stringify(appStillAlive) + ')')
+    : bad('v10 hygiene: the app is not in its documented shape after the v10 checks (' + JSON.stringify(appStillAlive) + ')')
+  info(
+    'v10 sweep summary: item 1 helpers ' + (helperOn === null ? 'n/a' : helperOn.sheets + ' sheet(s)') +
+      ' · item 2 solos ' + soloSweep.length +
+      ' · item 3 corner drags ' + dragReport.length +
+      ' · item 4 planes ' + (artefactSweep.length === 0 ? 'none' : artefactSweep.map((entry) => entry.plane + (entry.landed ? '' : '!')).join(',')) +
+      ' · item 5 suppressed ids [' + SUPPRESSED_CANVAS_LABEL_IDS.join(', ') + ']',
+  )
 
 } catch (error) {
   bad(`audit aborted: ${error instanceof Error ? error.message : String(error)}`)

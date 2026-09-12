@@ -1301,5 +1301,138 @@ and keep the means) and to format/compare the `fittedFit` scale numerically.
 | `npm run verify:anatomy` | **not runnable in the agent sandbox** — `anatomy-qa.mjs:294` spawns PowerShell with piped stdio and the sandbox denies it (`spawnSync powershell EPERM`, errno −4048), so it aborts **before printing its verdict**. No agent may claim 27/27 from here; the orchestrator records it |
 | browser lanes (`verify:audit` / `verify:acceptance` / `verify:browser`) | **not run and not claimed** — Chrome cannot start in the sandbox (exit 4, "no check was run"). Every behaviour claim that needs a page (the somatotopy patches and labels render, the cortical-division layer and legend paint, the corrected photographs look aligned, images-off paints only the simulated section, the panel paints the section and resizes/persists, no plane helper appears in it) is marked **orchestrator-verified only** |
 
+---
+
+## 13. v10 — display/UI round 2 (plane-helper extent, division visibility, four-corner PiP resize, cortical-division quality, the dropped cortex label)
+
+**Appended by the v10 `integrate-docs` task** (`docs/SWARM_V10_PLAN.md` §8 is that run's closure). §1–§12 above
+are the dated v6/v7/v8/v9 reconciliations and **none of them was edited, renumbered or restated**. Every number
+here was recomputed from `src/data` and the shipped sources at close-out by the integrator's own sweep — not
+copied from a task report. Where a task report disagreed with the recomputation, the recomputation is written here.
+
+### 13.1 Measured delta — **no content record changed**
+
+v10 is a **display, control and rule** run: it adds no structure, tract, level, plate, syndrome or registry entry,
+and it renames/moves nothing.
+
+| quantity | v9 close-out | v10 close-out | how |
+| --- | --- | --- | --- |
+| registry entries (`taxonomy.json`) | 236 | **236** (unchanged) | `npm run validate` |
+| entries awaiting an authored record | 0 | **0** | `npm run validate` |
+| `structures/*.json` | 17 files / 213 records | **17 files / 213 records** (unchanged) | `npm run validate` |
+| tracts / syndromes / plates / levels | 23 / 26 / 15 / 17 | **23 / 26 / 15 / 17** (unchanged) | `npm run validate` |
+| registry entries by region | — | diencephalon **39** · telencephalon **85** · midbrain **25** · pons **35** · medulla **33** · cerebellum **5** · vasculature **14** (= 236) | registry read (Node, this task) |
+| registry entries of `kind:"context"` | 45 | **45** (1 of them, `ctx-cerebral-cortex`, loses its *canvas* text — §13.3; the record itself is unchanged) | registry read |
+| `npm run validate` | 0 errors, 0 warnings | **0 errors, 0 warnings** | gate |
+
+The only content-shaped artefacts v10 introduces are **UI controls and labels** (§13.2) and the **one suppressed
+canvas label** (§13.3); the divisions themselves are a **grouping of the existing region taxonomy**, not new
+content (§13.2).
+
+### 13.2 The new control: a division-level visibility group (checkbox + solo per division)
+
+The Legend's *Layer toggles* group gained a **Divisions** group — one row per division, built from the store's
+`DIVISIONS` table (never a hand-typed list), each row carrying a real checkbox (`data-division-action="toggle"`)
+and a real **Solo** button (`data-division-action="solo"`). The grouping is **over the taxonomy `region` field**,
+so it divides exactly the 236 registry entries:
+
+| division (`data-division`) | label shown | regions it contains | registry entries it groups |
+| --- | --- | --- | --- |
+| `prosencephalon` | Prosencephalon (forebrain) | telencephalon + diencephalon | 85 + 39 = **124** |
+| `mesencephalon` | Mesencephalon (midbrain) | midbrain | **25** |
+| `rhombencephalon` | Rhombencephalon (hindbrain) | pons + cerebellum + medulla | 35 + 5 + 33 = **73** |
+| `vasculature` | Cerebral vasculature | vasculature (its own system, never folded into a division) | **14** |
+
+The four divisions **partition** the seven regions — every registry entry belongs to exactly one division, and the
+store asserts it at module load (a region added later cannot silently fall outside the control). The two actions:
+the **checkbox** sets exactly its regions (all on when incomplete, all off when complete), the **Solo** button
+leaves exactly its regions on and everything else off — measured values and the 7-state behaviour trace are in
+`docs/SWARM_V10_PLAN.md` §8.3. Boot is unchanged: a fresh boot still reports the **`brainstem-focus`** preset with
+the `vasculature` **region** off (the v8 rule) and the `vessel` **kind** on, so the four checkboxes boot
+`[true, true, true, false]`. Nothing is persisted — a solo is a transient view filter, and there is no storage key
+for it.
+
+**Content-shaped limit.** This is a **display grouping over the taxonomy regions**, not an anatomical claim: the
+grouping follows the reference figure's embryological three-vesicle scheme and the region field as committed. The
+`vasculature` row is the vascular *system*, not a brain vesicle, which is why it is a peer row rather than a
+member of a division.
+
+### 13.3 The one suppressed canvas label — `ctx-cerebral-cortex`
+
+| what | value |
+| --- | --- |
+| record | `ctx-cerebral-cortex` — **"Cerebral cortex (context envelope)"**, region `telencephalon`, subdivision *Cerebral cortex*, `kind:"context"`, colour `#94a3b8` (unchanged) |
+| what is suppressed | **the canvas TEXT only** — both canvas label sites (selected + hover) and the `.section-structure-chip`, in the Plates canvas **and** in the simulated-section panel (it mounts the same component), and out of the canvas' accessibility subtree |
+| what is kept | the record's **contour and fill** (`drawPart`), its tree/search/info-panel presence, its plate regions, and every other context label — **45 context records exist, 44 keep their canvas label** (thalamus envelope, level chips, division labels included) |
+| proof | a real `react-dom` render in `npm run verify:cortical-lobes`: cortex selected ⇒ chip markup `""`; thalamus envelope selected ⇒ 102-char markup with `.section-structure-chip` present |
+| **still carries the string** (recorded, not hidden) | the **info rail** and the **taxonomy tree** announce the record name; `PlateRenderer.tsx:106-108` injects an `<svg><title>` with `entry.name` onto the plate's `[data-structure="ctx-cerebral-cortex"]` group; and the three authored telencephalon plate SVGs draw their **own** hand-written labels — `plate-tel-axial-58.svg:53` *"Cerebral cortex / (cortical ribbon)"*, `plate-tel-coronal-fornix.svg:65` *"(envelope)"*, `plate-tel-sagittal-hemisphere.svg:58` *"Cerebral cortex (medial surface)"* |
+
+The plate SVGs and `PlateRenderer` were outside every v10 task's write scope; this document records them as the
+remaining surfaces rather than pretending the string is gone from the app.
+
+### 13.4 The cortical-division content per plane (item 4's result, measured)
+
+The division layer paints the **derived** cortical ribbon (`ctx-hemisphere-l/-r`); v10 changed the **run rule**,
+not the classification (`CORTICAL_BOUNDARIES` was re-checked, not re-fitted). Floors, all documented in
+`src/components/section/corticalLobes.ts`: **arc ≥ 10 au (12 mm)**, **drawn area ≥ 25 au²**,
+**label area ≥ 25 au²**. Whole-ribbon vertex shares are unchanged from v9: frontal **44.30 %**, parietal **21.63 %**,
+temporal **17.60 %**, occipital **9.27 %**, limbic **3.86 %**, insula **3.34 %**.
+
+Runs per reference plane after the rule (the arcs and areas per division are tabulated in
+`docs/SWARM_V10_PLAN.md` §8.5; `npm run verify:cortical-lobes` prints the same table):
+
+| plane | loops | painted runs | raw spans | raw sub-threshold | dropped loops | division shares of the sampled cross-section |
+| --- | --- | --- | --- | --- | --- | --- |
+| y=0 | 3 | 3 | 8 | 5 | 1 | occipital 43.6 % · temporal 38.8 % · limbic 16.5 % · parietal 1.1 % |
+| y=14 | 1 | 5 | 8 | 2 | 0 | temporal 53.2 % · occipital 17.5 % · insula 15.2 % · frontal 12.7 % · limbic 1.4 % |
+| y=30 | 2 | 5 | 10 | 5 | 0 | temporal 43.6 % · parietal 25.8 % · occipital 14.0 % · frontal 13.3 % · insula 3.4 % |
+| y=48 | 3 | 8 | 11 | 3 | 0 | parietal 38.2 % · frontal 32.1 % · temporal 16.4 % · occipital 7.2 % · limbic 6.1 % |
+| y=58 | 2 | 5 | 7 | 2 | 0 | frontal 49.6 % · parietal 39.0 % · limbic 9.3 % · occipital 1.1 % · temporal 1.0 % |
+| y=68 | 1 | 2 | 4 | 1 | 0 | frontal 55.1 % · parietal 44.8 % · occipital 0.1 % |
+| y=78 | 4 | 2 | 4 | 2 | 2 | frontal 100.0 % |
+| x=6 | 4 | 10 | 11 | 1 | 0 | frontal 60.7 % · parietal 27.6 % · occipital 10.5 % · limbic 1.2 % |
+| z=0 | 2 | 5 | 7 | 2 | 0 | frontal 68.7 % · temporal 17.7 % · limbic 7.7 % · insula 6.0 % |
+| z=40 | 1 | 2 | 2 | 0 | 0 | parietal 77.8 % · frontal 22.2 % |
+| y=−46 / −24 / −8 | — | — | — | — | — | **miss the ribbon entirely** (ribbon y extent −6.8 … +113.7) |
+
+Totals over the 13 reference planes: **13 → 10 planes carry a division**, **23 loops → 47 painted runs** (from 80
+before the rule), **22 raw spans absorbed**, **3 whole loops dropped** (32 vertices, every one sub-threshold,
+area ≤ 23.87 au²), and a sliver census that is **zero everywhere** — no painted run with `arc < 2 / < 5 / < 10 au`,
+none with `area < 1 / < 10 au²`, none with a single own vertex. Over the 34-plane user grid: **548 → 265 runs**,
+199 absorbed, 33 dropped loops, 174 labels, 0 painted division without a label-eligible run.
+
+**Content-shaped limits (recorded).** The three reference planes y = −46/−24/−8 carry no division because the
+ribbon does not reach them; the derived shell has **no insular surface**, so the insula paints the deepest
+available limen tissue (2.11 % of sampled area, 3.34 % of vertices); absorption re-labels the absorbed stretch with
+the **neighbour's** division along 10–25 au of contour; a whole loop that is a single sub-threshold stretch is
+**unpainted** (3 of 13 reference planes, 33 of 49 user-grid planes); the committed gate samples **one** ribbon
+while the canvas paints both; and **6 cases** over 218 planes × both ribbons were traced where an absorption
+collapses a body that cleared both floors and a later pass hands it to a different division (the gate asserts
+nothing about that class).
+
+### 13.5 Verification performed in this task (all non-browser)
+
+| gate | result |
+| --- | --- |
+| `npm run validate` | **exit 0 — 0 errors, 0 warnings** · 236 registry entries (0 awaiting a record) · 17 files / 213 records · 23 tracts · 26 syndromes · 15 plates · 17 levels |
+| `npm run check` | **exit 0** |
+| `npm run build` | **exit 0** (`✓ built in 10.88s`) |
+| `npm run verify:pipeline` | **exit 0 — 138/138 parts · 599,204 triangles · 386 loops across 13 planes · 0 problems** |
+| `npm run verify:plane` | **exit 0 — 10,827 assertions** |
+| `npm run verify:plane-helper-extent` | **exit 0 — 196 passed / 0 failed** (new npm script, wired by this task) |
+| `npm run verify:division-toggles` | **exit 0 — 250 passed / 0 failed** (new npm script, wired by this task) |
+| `npm run verify:somatotopy` | **exit 0 — 45/45** |
+| `npm run verify:cortical-lobes` | **exit 0 — 519/519 assertions** (was 200; prints §13.4's per-plane table and the zero-sliver census) |
+| `npm run verify:pip-contract` | **exit 0 — 187 passed / 0 failed** (was 83; group F covers the four corners and their geometry, 6/6 mutations caught) |
+| `npm run verify:audit-checks` | **exit 0 — 92 passed · 0 failed · 7 informational · 9 groups** — **green now**; the v9 note that this gate was red is superseded by the documented vascular exemption *plus* the assertion that pins it (see README's tier table) |
+| `npm run verify:closure-bite` | **exit 0 — 7/7 mutations caught**, shared tree byte-identical, restored copy 92/0 |
+| `npm run verify:boundary-contract` | **exit 0 — 22/22** |
+| `npm run verify:a11y-contract` | **exit 0 — 38/38** |
+| `npm run verify:budget-report` | **exit 0 — 599,204 tris · GLB 13.82 MiB · imaging 9.02 MiB**, all inside their caps |
+| `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | **exit 0** — 9.02 MiB in 82 files (cap 10) · 22 cryosections −52.20 … 34.04 au |
+| `npm run verify:anatomy` | **exit 1 — environment, not product**: `spawnSync powershell EPERM` before any verdict (the sandbox denies a child's piped stdio); red at base, no v10 task owns the file |
+| `npm run verify:imaging-fit` | **exit 1 — environment, not product**: `FAIL the fitter could not be re-run: spawnSync node EPERM` (**0 assertions run**); red at base and unchanged by this run |
+| browser lanes (`verify:audit` / `verify:acceptance` / `verify:browser`) | **not run and not claimed** — `verify:audit` prints its non-browser half here (`v10 source facts: CLIP_BOUNDS x[-58, 58] y[-55, 116] z[-76, 72] · declaration sites 1 · grid cell 4 au · division floors 10 au / 25 au2 (label 25 au2) · PiP clamp 224x170…880x640 px · suppressed canvas label ids [ctx-cerebral-cortex]`) and then exits **4** ("no check was run", Chrome dies in `mojo::PlatformChannel`). Every rendered-pixel claim of items 1–5 is therefore **orchestrator-verified only** |
+
 
 

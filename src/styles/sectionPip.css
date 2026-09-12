@@ -26,6 +26,15 @@
  *   • `.pip-orient` badges, `.pip-offnote` and the new lines are positioned
  *     INSIDE the window, so they are laid out over the section, not beside it.
  *
+ * ── v10 ITEM 3 (all four corners resize) CHANGED THREE THINGS HERE ──────────
+ *   • `.pip-resizer` became the SHARED box for four handles, one per corner,
+ *     with the per-corner anchors and cursors in the `.pip-resizer--*` rules
+ *     below (see the long comment there for why the south-east anchor shares the
+ *     base selector);
+ *   • the two bottom-left text lines moved up out of the 24 px band the SW/SE
+ *     handles occupy (`.pip-offnote` 20 → 48 px, `.pip-imagery-state` 4 → 26 px);
+ *   • nothing else about the window, the dock or the ≤900 px layout moved.
+ *
  * Depends only on tokens.css variables.
  */
 
@@ -241,14 +250,22 @@
  * informational — the section still renders from the slider planes. Stacked
  * above the imagery-state line in the window's bottom-left corner, ellipsised
  * with the full sentence in the title, so it never covers the middle of the
- * section (where the anatomy is) and never collides with the resizer.
+ * section (where the anatomy is).
+ *
+ * v10 item 3 moved BOTH bottom-left lines up out of the 24 px band the corner
+ * handles occupy: the south-west handle now covers `bottom: 0 … 24px` at
+ * `left: 0 … 24px` exactly where these lines used to sit (they are
+ * `pointer-events: none`, so the handle stayed *clickable* — but the handle
+ * would have been painted over their first characters, which is a legibility
+ * regression, not a functional one). The handles are `z-index: 3`, the lines
+ * `z-index: 2`, and the two line slots are 26 px and 48 px from the bottom.
  */
 .pip-offnote {
   position: absolute;
   z-index: 2;
-  bottom: 20px;
+  bottom: 48px;
   left: 4px;
-  max-width: calc(100% - 28px);
+  max-width: calc(100% - 8px);
   font-size: 0.62rem;
   padding: 2px 8px;
   border-radius: 999px;
@@ -267,14 +284,16 @@
  * real-slice credit line used to occupy ("real imagery is switched off" when the
  * user chose Simulated only, "kept in the Plates tab (<modality>)" otherwise —
  * the panel never paints imagery at all). `pointer-events: none` so it cannot
- * swallow a click meant for the section underneath it.
+ * swallow a click meant for the section underneath it, and — since v10 item 3 —
+ * 26 px above the bottom edge so the south-west corner handle does not sit on
+ * top of it (see `.pip-offnote` above).
  */
 .pip-imagery-state {
   position: absolute;
   z-index: 2;
-  bottom: 4px;
+  bottom: 26px;
   left: 4px;
-  max-width: calc(100% - 28px);
+  max-width: calc(100% - 8px);
   font-size: 0.62rem;
   line-height: 1.35;
   padding: 1px 6px;
@@ -289,17 +308,35 @@
 }
 
 /*
- * v9 item 5 requirement 4 — the resize handle. Bottom-right corner, ≥24 px so it
- * is a real hit target (the same floor `.pip-btn` and `.pip-restore` meet), with
- * the diagonal-resize cursor and `touch-action: none` so a pointer drag on a
- * touchscreen resizes instead of scrolling the page. It is a real <button>, so
- * the keyboard path (arrows, Shift ×4) and the accessible name come for free.
+ * v10 item 3 — the FOUR corner resize handles (NW / NE / SW / SE).
+ *
+ * Each is ≥24×24 px (the same hit-target floor `.pip-btn` and `.pip-restore`
+ * meet), `touch-action: none` so a touch drag resizes instead of scrolling the
+ * page, and a real <button> — so the keyboard path (arrows, Shift ×4) and the
+ * accessible name come for free, and each one's name says WHICH corner it is.
+ *
+ * THE CURSORS are the two diagonals a corner drag follows:
+ * `nwse-resize` (↖↘) for the north-west/south-east pair and `nesw-resize` (↗↙)
+ * for the north-east/south-west pair.
+ *
+ * WHY THE SOUTH-EAST ANCHOR IS GROUPED WITH THE BASE SELECTOR: the first handle
+ * in DOM order is the south-east one (`PIP_CORNER_ORDER` in SectionPiP.tsx) and
+ * it keeps the BARE `class="pip-resizer"` — that exact attribute value is what
+ * the v9 contract assertion in `scripts/verify/pip-contract.mjs` matches, and
+ * `document.querySelector('.pip-panel .pip-resizer')` (the browser lane's
+ * handle, `audit.mjs:661,671`) resolves to it. A second class on that one button
+ * would turn the attribute into `class="pip-resizer pip-resizer--se"` and break
+ * both, so its corner rule shares this selector list instead. The `--se`
+ * selector stays IN the list rather than being dropped, so all four corners are
+ * named the same way here and the gate can read the four anchors as one table.
+ *
+ * The base rule comes FIRST and the corner rules after it: at equal specificity
+ * a later rule wins, which is what lets each corner's own `cursor` override the
+ * base box.
  */
 .pip-resizer {
   position: absolute;
   z-index: 3;
-  right: 0;
-  bottom: 0;
   display: inline-flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -307,13 +344,40 @@
   height: 24px;
   padding: 0 2px 1px 0;
   border: none;
-  border-radius: var(--radius-sm) 0 var(--radius-md) 0;
   background: color-mix(in srgb, var(--bg-panel) 70%, transparent);
   color: var(--text-secondary);
   font-size: 0.7rem;
   line-height: 1;
-  cursor: nwse-resize;
   touch-action: none;
+}
+
+.pip-resizer--nw {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+  border-radius: 0 0 var(--radius-sm) 0;
+}
+
+.pip-resizer--ne {
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+  border-radius: 0 0 0 var(--radius-sm);
+}
+
+.pip-resizer--sw {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+  border-radius: 0 var(--radius-sm) 0 var(--radius-md);
+}
+
+.pip-resizer,
+.pip-resizer--se {
+  right: 0;
+  bottom: 0;
+  cursor: nwse-resize;
+  border-radius: var(--radius-sm) 0 var(--radius-md) 0;
 }
 
 .pip-resizer:hover {

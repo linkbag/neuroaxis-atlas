@@ -558,6 +558,18 @@ export interface AtlasActions {
   setExplode: (value: number) => void
   toggleRegionLayer: (region: Region) => void
   toggleKindLayer: (kind: Kind) => void
+  /**
+   * v10 §2 — the division control (docs/SWARM_V10_PLAN.md §2). Three thin
+   * actions over the pure functions above; each one writes ONLY `layers.regions`
+   * and touches neither storage nor any other layer field. `toggleDivision` is
+   * what the Legend's checkbox calls (all of the division on when it is
+   * incomplete, all of it off when it is complete); `soloDivision` is the
+   * one-click isolation the item is about.
+   */
+  applyDivision: (id: DivisionId) => void
+  clearDivision: (id: DivisionId) => void
+  toggleDivision: (id: DivisionId) => void
+  soloDivision: (id: DivisionId) => void
   applyViewPreset: (preset: ViewPreset) => void
   setLabelVisibility: (value: boolean) => void
   /** Open (or close) a syndrome card; opening also highlights its structures everywhere. */
@@ -986,6 +998,177 @@ export function viewPresetOf(layers: AtlasLayers): ViewPreset | null {
   return null
 }
 
+/* =============== v10 §2 — DIVISION-level visibility (the reference figure) ===
+ *
+ * The user's item 2: "allow the user to turn on and off just telencephalon,
+ * mesencephalon etc. (see division in the reference figure); right now
+ * everything is on in the 3D/2D views, and can be too overwhelming."
+ *
+ * WHY THIS IS ADDITIVE ONLY. `regions`/`kinds`/`hidden`/`emphasis` ARE the whole
+ * layer model (see `AtlasLayers` above) and every existing consumer — the 3D
+ * scene, the plates, the tree's `layerOff()`, the boot assertions below,
+ * `viewPresetOf`, the header — is written against exactly those four fields. A
+ * division is therefore NOT a fifth field to be persisted and reconciled: it is a
+ * *labelling of the seven existing regions*, and every division action resolves
+ * to a plain region-set write. That is what makes the per-region toggles, the
+ * presets and the browser audit keep working byte-for-byte.
+ *
+ * WHAT THE FOUR DIVISIONS ARE (docs/SWARM_V10_PLAN.md §2's table, and the
+ * reference figure's own grouping — the standard embryological three-vesicle
+ * scheme plus the vascular system):
+ *
+ *   prosencephalon (forebrain)  = telencephalon + diencephalon
+ *   mesencephalon (midbrain)    = midbrain
+ *   rhombencephalon (hindbrain) = pons + cerebellum (metencephalon)
+ *                                 + medulla (myelencephalon)
+ *   cerebral vasculature        = vasculature — its OWN system, never folded
+ *                                 into a division (v8's rule: the arteries are a
+ *                                 separate overlay, hidden by default)
+ *
+ * The four divisions PARTITION all seven regions of `ALL_REGIONS`: every region
+ * belongs to exactly one, and the block after these functions asserts that at
+ * module load, so a region added later can never be silently orphaned from the
+ * control (that failure mode is invisible in the UI — the row simply would not
+ * exist).
+ *
+ * NO PERSISTENCE, BY DESIGN. There is no storage key for a division and there
+ * must not be one: a persisted solo would hand a returning visitor a tree in
+ * which six of seven regions look switched off, which is exactly the v7 audit
+ * failure mode documented at `initialLayers` above. A division choice is a
+ * transient view filter, not a boot preference.
+ */
+
+/** The four divisions of the reference figure. */
+export type DivisionId = 'prosencephalon' | 'mesencephalon' | 'rhombencephalon' | 'vasculature'
+
+export const DIVISIONS: readonly { id: DivisionId; label: string; regions: readonly Region[] }[] = [
+  {
+    id: 'prosencephalon',
+    label: 'Prosencephalon (forebrain)',
+    regions: ['telencephalon', 'diencephalon'],
+  },
+  { id: 'mesencephalon', label: 'Mesencephalon (midbrain)', regions: ['midbrain'] },
+  {
+    id: 'rhombencephalon',
+    label: 'Rhombencephalon (hindbrain)',
+    regions: ['pons', 'cerebellum', 'medulla'],
+  },
+  { id: 'vasculature', label: 'Cerebral vasculature', regions: ['vasculature'] },
+]
+
+/** The regions of one division, as a fresh array the caller may keep. */
+export function divisionRegions(id: DivisionId): readonly Region[] {
+  return DIVISIONS.find((division) => division.id === id)?.regions ?? []
+}
+
+/**
+ * Every division a region belongs to — the inverse map the UI needs (a region row
+ * can name its division) and the only place the "one region, one division" rule
+ * is expressed for readers. Returns an empty array for a region no division
+ * claims, which the load-time block below turns into a hard failure instead of a
+ * silently missing control.
+ */
+export function divisionsOf(region: Region): readonly DivisionId[] {
+  return DIVISIONS.filter((division) => division.regions.includes(region)).map(
+    (division) => division.id,
+  )
+}
+
+/**
+ * Is every region of the division layer-on? This is the checkbox's `checked`
+ * reading and the decision input of the UI's toggle, so "the box is ticked" and
+ * "the division is on" are one fact rather than two guesses.
+ */
+export function divisionLayersOn(layers: AtlasLayers, id: DivisionId): boolean {
+  const regions = divisionRegions(id)
+  return regions.length > 0 && regions.every((region) => layers.regions.has(region))
+}
+
+/** The one field every division action writes: a new region set, nothing else. */
+function withRegions(layers: AtlasLayers, regions: ReadonlySet<Region>): AtlasLayers {
+  return { regions: new Set<Region>(regions), kinds: layers.kinds, hidden: layers.hidden, emphasis: layers.emphasis }
+}
+
+/**
+ * The division's regions ON, everything else exactly as it was — a UNION, not an
+ * assignment (the v10 §2 "checkbox path": a division row turns its own regions on
+ * and never silently switches a user's other regions off).
+ */
+export function applyDivisionLayers(layers: AtlasLayers, id: DivisionId): AtlasLayers {
+  const regions = new Set<Region>(layers.regions)
+  for (const region of divisionRegions(id)) regions.add(region)
+  return withRegions(layers, regions)
+}
+
+/** The division's regions OFF, everything else exactly as it was. */
+export function clearDivisionLayers(layers: AtlasLayers, id: DivisionId): AtlasLayers {
+  const regions = new Set<Region>(layers.regions)
+  for (const region of divisionRegions(id)) regions.delete(region)
+  return withRegions(layers, regions)
+}
+
+/**
+ * Exactly the division's regions on and EVERY other region off — the solo
+ * action, which is the point of item 2 ("everything on is too overwhelming").
+ * `kinds`, `hidden` and `emphasis` are untouched: they belong to the preset
+ * framing and to v8's vascular rule, and a view filter must not rewrite them.
+ */
+export function soloDivisionLayers(layers: AtlasLayers, id: DivisionId): AtlasLayers {
+  return withRegions(layers, new Set<Region>(divisionRegions(id)))
+}
+
+/**
+ * The checkbox toggle, as one pure function: all regions of the division on when
+ * any of them is off, all off when the division is complete. Commutative and
+ * idempotent per state — `toggle(toggle(layers))` restores the region set
+ * exactly, which is what the committed check asserts.
+ */
+export function toggleDivisionLayers(layers: AtlasLayers, id: DivisionId): AtlasLayers {
+  return divisionLayersOn(layers, id) ? clearDivisionLayers(layers, id) : applyDivisionLayers(layers, id)
+}
+
+/**
+ * Boot-time invariant of the division table (same contract as the blocks below:
+ * asserted at module load, in Node and in the browser alike).
+ *
+ * The subject is the rule that makes the control complete: the four divisions
+ * partition `ALL_REGIONS` — no region in two divisions (a "one division" row that
+ * actually toggles another division's region is a silent, unexplainable state) and
+ * none in no division (a region the control simply cannot reach). Vasculature is
+ * asserted explicitly, because folding the arteries into the rhombencephalon is
+ * exactly the error the item's wording warns against.
+ */
+{
+  for (const region of ALL_REGIONS) {
+    const owners = divisionsOf(region)
+    if (owners.length !== 1) {
+      throw new Error(
+        `store: region "${region}" belongs to ${owners.length} divisions (${owners.join(', ') || 'none'}) ` +
+          '— the four divisions must partition ALL_REGIONS exactly, or the division control cannot ' +
+          'switch it (docs/SWARM_V10_PLAN.md §2)',
+      )
+    }
+  }
+  for (const division of DIVISIONS) {
+    for (const region of division.regions) {
+      if (!ALL_REGIONS.includes(region)) {
+        throw new Error(
+          `store: division "${division.id}" claims "${region}", which is not in ALL_REGIONS — the row ` +
+            'would toggle a region no layer set can hold (docs/SWARM_V10_PLAN.md §2)',
+        )
+      }
+    }
+  }
+  const vascularOwners = divisionsOf('vasculature')
+  if (vascularOwners.length !== 1 || vascularOwners[0] !== 'vasculature') {
+    throw new Error(
+      `store: the vasculature region is grouped into ${vascularOwners.join(', ') || 'no division'} — the ` +
+        'arterial system is its own division and is never swept into a brain division ' +
+        '(docs/SWARM_V10_PLAN.md §2, docs/NEUROATLAS_V8_PLAN.md §2)',
+    )
+  }
+}
+
 const DEFAULT_LEVEL = getLevel('lvl-olivary')
 /**
  * Default clip state — the AMENDMENT A values, deliberately untouched by the
@@ -1099,6 +1282,18 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
       else kinds.add(kind)
       return { layers: { ...s.layers, kinds } }
     }),
+
+  // v10 §2 — division actions. Deliberately NOT persisted (see the DIVISIONS
+  // block above): a solo is a temporary view filter, and `set` publishes a new
+  // layer object so every consumer (3D scene, plates, tree) follows through the
+  // one field it already reads.
+  applyDivision: (id) => set((s) => ({ layers: applyDivisionLayers(s.layers, id) })),
+
+  clearDivision: (id) => set((s) => ({ layers: clearDivisionLayers(s.layers, id) })),
+
+  toggleDivision: (id) => set((s) => ({ layers: toggleDivisionLayers(s.layers, id) })),
+
+  soloDivision: (id) => set((s) => ({ layers: soloDivisionLayers(s.layers, id) })),
 
   applyViewPreset: (preset) => {
     // Persisted like the quality toggle (v7, plan step 4): the preset is a user

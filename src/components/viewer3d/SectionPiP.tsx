@@ -27,11 +27,40 @@
  *     `"pip-toggle"` within 120 characters of
  *     `"Show or hide the live section panel"`, which is why that pair stays
  *     spelled exactly like this in the JSX below;
- *   • **NEW — a resizable window** (`▴/▾` preset cycle + a corner drag handle +
- *     arrow keys), persisted as `neuroaxis.sectionPipSize` in the store;
+ *   • **NEW — a resizable window** (`▴/▾` preset cycle + FOUR corner drag
+ *     handles + arrow keys), persisted as `neuroaxis.sectionPipSize` in the
+ *     store (v10 item 3 — see the corner block below for the arithmetic and for
+ *     the dock caveat that limits what "opposite corner fixed" can mean);
  *   • **NEW — the imagery state line** inside the window, stating in words that
  *     this panel is simulated-only and where the real imagery lives (item 4's
  *     legibility requirement applied to this surface).
+ *
+ * ── v10 ITEM 3: ALL FOUR CORNERS RESIZE, OPPOSITE CORNER FIXED ─────────────
+ * The window used to have ONE handle, in its bottom-right corner. It now has
+ * four (NW / NE / SW / SE), each a real `<button>` with its own accessible name,
+ * so any corner can be dragged — and the arithmetic is that corner's own:
+ * dragging NW moves the window's top and left edges while the SE corner stays
+ * put, dragging SE moves the bottom and right edges while NW stays put, and
+ * likewise for NE and SW. `PIP_CORNER_EDGES` is the four-row table of which
+ * edges each corner moves and which it pins; `pipsizeFromCornerDrag` implements
+ * it; the JSX calls that function, so no sign lives in the view layer.
+ *
+ * What is deliberately UNCHANGED: the size still passes through the STORE's own
+ * `clampSectionPipSize` (224×170 … 880×640 — never re-implemented here), the
+ * keyboard path (arrows, Shift = ×4) works from whichever handle has focus, the
+ * `▴/▾` cycle, the `neuroaxis.sectionPipSize` persistence and the aria-label
+ * that carries the live size.
+ *
+ * THE LIMIT, stated rather than implied: `.pip-panel` is DOCKED to the viewport's
+ * bottom-right (`sectionPip.css`: `right/bottom: var(--space-3)`) and no module
+ * in this run owns a panel-position field (`Viewer3D.tsx` has none, `store.ts`
+ * has none). So what the user sees is the corner arithmetic applied inside a box
+ * whose own right/bottom edges the dock pins — a window that grows extends left
+ * and up. "The opposite corner stays put" is therefore asserted as the geometry
+ * this panel implements (the dragged corner follows the pointer, the opposite
+ * corner's two edges do not move), which is exactly what
+ * `scripts/verify/pip-contract.mjs` §F checks — not as a screen-space invariant
+ * that would require moving the dock.
  *
  * ── WHAT WAS RETIRED, AND WHY (the deliberate removal the plan asks for) ─────
  * The previous version of this file was a ~1,700-line GPU rig: a private
@@ -73,8 +102,10 @@
  * deleted machinery does not appear in the source any more).
  * **Orchestrator-verified only** (Chrome cannot run in the agent sandbox): that
  * the panel really paints the simulated section, that the resizer really moves
- * the box and survives a reload, that the guard really drops imagery pixels in a
- * live page, and that no plane helper is on screen.
+ * the box and survives a reload, that a real pointer drag on EACH of the four
+ * corner handles moves the box (and that the opposite corner's edges do not
+ * move on screen), that the guard really drops imagery pixels in a live page,
+ * and that no plane helper is on screen.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent, RefObject } from 'react'
@@ -354,6 +385,146 @@ export function pipSizeAfterCycle(current: SectionPipSize): SectionPipSize {
 }
 
 /* ------------------------------------------------------------------ */
+/* v10 item 3 — the four resize corners (pure, exported for the gate)  */
+/* ------------------------------------------------------------------ */
+
+/** Keyboard resize step (CSS px); Shift multiplies it by four. Read by the
+ *  keyboard handler below AND by the four handles' tooltips, so the "Shift ×4"
+ *  claim in the UI and the arithmetic are the same number. */
+const RESIZE_KEY_STEP = 16
+
+/**
+ * One of the four window corners a resize handle belongs to. Compass names in
+ * SCREEN space (the window's own top-left is `nw`), deliberately not canonical
+ * anatomy axes: this is a 2D-panel affordance, and the section's own
+ * L/R/A/P/S/I orientation is carried by the `.pip-orient` badges.
+ */
+export type PipCorner = 'nw' | 'ne' | 'sw' | 'se'
+
+/** A window edge, as a corner drag moves it or pins it. */
+export type PipEdge = 'top' | 'right' | 'bottom' | 'left'
+
+/**
+ * The order the four handles are RENDERED in — the SOUTH-EAST handle FIRST, on
+ * purpose:
+ *
+ *   • `document.querySelector('.pip-panel .pip-resizer')` is the browser lane's
+ *     handle (`scripts/verify/audit.mjs:661,671,2415`) and `querySelector`
+ *     returns the FIRST match in document order, so the south-east handle — the
+ *     one handle the panel shipped with through v9 — stays the element whose
+ *     focus and rect the keyboard-resize block (`audit.mjs:679-712`) measures;
+ *   • that first handle also keeps the BARE `class="pip-resizer"`, which is the
+ *     literal the v9 `verify:pip-contract` assertion matches (the other three
+ *     add their `pip-resizer--nw` / `--ne` / `--sw` modifier — see the JSX and
+ *     the corner comment in `sectionPip.css`);
+ *   • the remaining three read in natural order: north-west, north-east,
+ *     south-west.
+ *
+ * Every handle carries the class TOKEN `.pip-resizer`, so
+ * `querySelectorAll('.pip-resizer').length` counts all four (the review-qa task
+ * re-points that browser assertion from 1 to 4).
+ */
+export const PIP_CORNER_ORDER: readonly PipCorner[] = ['se', 'nw', 'ne', 'sw']
+
+/**
+ * Which window edges each corner's drag MOVES and which it PINS. One rule:
+ *   the dragged corner moves diagonally, the two edges meeting at it move with
+ *   it, and the OPPOSITE corner — both of its edges — stays fixed.
+ *
+ *   nw → moves left + top,     fixes right + bottom (the SE corner stays put)
+ *   ne → moves right + top,    fixes left + bottom  (the SW corner stays put)
+ *   sw → moves left + bottom,  fixes right + top    (the NE corner stays put)
+ *   se → moves right + bottom, fixes left + top     (the NW corner stays put)
+ *
+ * THE DOCK CAVEAT (see the file header): the panel is docked to the viewport's
+ * bottom-right, so on screen a grown window extends up/left. This table is the
+ * arithmetic the panel implements and what `verify:pip-contract` §F asserts.
+ */
+export const PIP_CORNER_EDGES: Record<
+  PipCorner,
+  { moves: readonly PipEdge[]; fixed: readonly PipEdge[] }
+> = {
+  nw: { moves: ['left', 'top'], fixed: ['right', 'bottom'] },
+  ne: { moves: ['right', 'top'], fixed: ['left', 'bottom'] },
+  sw: { moves: ['left', 'bottom'], fixed: ['right', 'top'] },
+  se: { moves: ['right', 'bottom'], fixed: ['left', 'top'] },
+}
+
+/** Screen-space name of each corner — the accessible names are built from it,
+ *  so "each handle names its corner" is a property of this table. */
+export const PIP_CORNER_LABELS: Record<PipCorner, string> = {
+  nw: 'north-west',
+  ne: 'north-east',
+  sw: 'south-west',
+  se: 'south-east',
+}
+
+/**
+ * The size after dragging ONE corner by (dx, dy) CSS px, with the opposite
+ * corner held fixed. Pure and exported so the gate can assert the arithmetic
+ * without a DOM, and so the sign of each corner lives in exactly one place:
+ *
+ *   • an EAST corner (ne, se) owns the RIGHT edge, so `+dx` (dragging right)
+ *     grows the width; a WEST corner (nw, sw) owns the LEFT edge, where `+dx`
+ *     SHRINKS it;
+ *   • a SOUTH corner (sw, se) owns the BOTTOM edge, so `+dy` grows the height; a
+ *     NORTH corner (nw, ne) owns the TOP edge, where `+dy` shrinks it.
+ *
+ * The sum goes through the STORE's own `clampSectionPipSize` — the panel never
+ * re-implements the 224×170 … 880×640 window. An extreme drag therefore stops
+ * ON a bound, and a non-finite pointer coordinate cannot escape the window
+ * either: the clamp is total, so NaN/∞ come back as that module's documented
+ * fallback (the default box / the bound) rather than as a corrupt size.
+ */
+export function pipsizeFromCornerDrag(
+  corner: PipCorner,
+  start: SectionPipSize,
+  dx: number,
+  dy: number,
+): SectionPipSize {
+  const deltaWidth = corner === 'ne' || corner === 'se' ? dx : -dx
+  const deltaHeight = corner === 'sw' || corner === 'se' ? dy : -dy
+  return clampSectionPipSize({
+    width: start.width + deltaWidth,
+    height: start.height + deltaHeight,
+  })
+}
+
+/**
+ * A handle's accessible name. Exported and total so the gate can assert the
+ * per-corner naming from the shipped function AND that every handle carries the
+ * live size — `audit.mjs:696` reads `aria-label.indexOf('W×H')` off the first
+ * handle and the a11y lane requires a name on each of the four.
+ */
+export function pipResizerLabel(corner: PipCorner, size: SectionPipSize): string {
+  return (
+    `Resize the simulated-section panel from its ${PIP_CORNER_LABELS[corner]} corner ` +
+    `(${size.width}×${size.height} px, ` +
+    `${SECTION_PIP_SIZE_MIN.width}–${SECTION_PIP_SIZE_MAX.width} wide, ` +
+    `${SECTION_PIP_SIZE_MIN.height}–${SECTION_PIP_SIZE_MAX.height} tall)`
+  )
+}
+
+/** A handle's tooltip: which corner it is, that the opposite corner stays put,
+ *  and the keyboard path (the two documented steps, from the same constant). */
+export function pipResizerTitle(corner: PipCorner): string {
+  return (
+    `Drag this ${PIP_CORNER_LABELS[corner]} corner to resize — the opposite corner stays put · ` +
+    `arrow keys move by ${RESIZE_KEY_STEP} px (Shift ×4) · remembered across reloads`
+  )
+}
+
+/** The decorative glyph on each handle (`aria-hidden`: the name comes from
+ *  `pipResizerLabel`, so the glyph never reaches the accessibility tree). The
+ *  south-east glyph is the one the single v9 handle wore. */
+const PIP_CORNER_GLYPHS: Record<PipCorner, string> = {
+  se: '◢',
+  sw: '◣',
+  nw: '◤',
+  ne: '◥',
+}
+
+/* ------------------------------------------------------------------ */
 /* SectionPiPPanel — the dockable DOM panel                            */
 /* ------------------------------------------------------------------ */
 
@@ -372,9 +543,6 @@ export interface SectionPiPPanelProps {
 }
 
 const AXIS_ORDER: SectionAxis[] = ['x', 'y', 'z']
-
-/** Keyboard resize step (CSS px); Shift multiplies it by four. */
-const RESIZE_KEY_STEP = 16
 
 /**
  * Below this window width the header switches to its COMPACT form
@@ -416,9 +584,11 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
    * per-viewport disclosure that resets with the page (see `sectionPip.css`).
    */
   const [expanded, setExpanded] = useState(false)
-  /** Live drag state (pointer id + the baseline box the drag started from). */
+  /** Live drag state: the pointer, WHICH CORNER it grabbed, and the baseline
+   *  box that drag started from (measured from the DOM, not from the store). */
   const dragRef = useRef<{
     pointerId: number
+    corner: PipCorner
     startX: number
     startY: number
     width: number
@@ -466,9 +636,9 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
     }
   }, [visible])
 
-  /* ---- resize: corner drag (pointer) + arrow keys ---- */
+  /* ---- resize: four corner drags (pointer) + arrow keys ---- */
   const onResizePointerDown = useCallback(
-    (event: ReactPointerEvent<HTMLButtonElement>) => {
+    (corner: PipCorner, event: ReactPointerEvent<HTMLButtonElement>) => {
       const rect = windowRef?.current?.getBoundingClientRect() ?? null
       const box =
         rect !== null && rect.width > 0 && rect.height > 0
@@ -476,6 +646,7 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
           : size
       dragRef.current = {
         pointerId: event.pointerId,
+        corner,
         startX: event.clientX,
         startY: event.clientY,
         width: box.width,
@@ -494,10 +665,19 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
     (event: ReactPointerEvent<HTMLButtonElement>) => {
       const drag = dragRef.current
       if (drag === null || drag.pointerId !== event.pointerId) return
-      setSectionPipSize({
-        width: drag.width + (event.clientX - drag.startX),
-        height: drag.height + (event.clientY - drag.startY),
-      })
+      // WHICH corner was grabbed decides the sign of each axis and therefore
+      // which two edges move while the opposite corner stays put. The baseline
+      // is the box the drag STARTED from (measured from the DOM above), so the
+      // result never accumulates frame-to-frame drift, and the clamp stays the
+      // store's own `clampSectionPipSize` — no second size rule here.
+      setSectionPipSize(
+        pipsizeFromCornerDrag(
+          drag.corner,
+          { width: drag.width, height: drag.height },
+          event.clientX - drag.startX,
+          event.clientY - drag.startY,
+        ),
+      )
     },
     [setSectionPipSize],
   )
@@ -511,6 +691,12 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
       /* already released (or never captured) — nothing to undo */
     }
   }, [])
+  /**
+   * Keyboard resize — the SAME handler on all four handles, on purpose: an
+   * arrow key moves one window edge by ±16 px (Shift ×4) whichever corner has
+   * focus, so the four buttons cannot drift apart and a future change to
+   * `PIP_CORNER_ORDER` cannot strand the path the browser lane drives.
+   */
   const onResizeKeyDown = useCallback(
     (event: ReactKeyboardEvent<HTMLButtonElement>) => {
       const step = event.shiftKey ? RESIZE_KEY_STEP * 4 : RESIZE_KEY_STEP
@@ -588,8 +774,8 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
           className="pip-btn"
           aria-pressed={preset === 'large'}
           title={
-            `Panel size — ${size.width}×${size.height} px (drag the corner handle for any size; ` +
-            'the choice is remembered)'
+            `Panel size — ${size.width}×${size.height} px (drag ANY of the four corner handles for ` +
+            'any size; the choice is remembered)'
           }
           onClick={() => setSectionPipSize(pipSizeAfterCycle(size))}
         >
@@ -673,22 +859,44 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
         >
           {imageryText}
         </span>
-        {/* Resizable window (item 5 requirement 4): a real button, so the size is
-            keyboard-operable (arrows, Shift = ×4) as well as draggable, and it is
-            the element that carries the control's accessible name. */}
-        <button
-          type="button"
-          className="pip-resizer"
-          aria-label={`Resize the simulated-section panel (${size.width}×${size.height} px, ${SECTION_PIP_SIZE_MIN.width}–${SECTION_PIP_SIZE_MAX.width} wide, ${SECTION_PIP_SIZE_MIN.height}–${SECTION_PIP_SIZE_MAX.height} tall)`}
-          title={`Drag to resize · arrow keys move by ${RESIZE_KEY_STEP} px (Shift ×4) · remembered across reloads`}
-          onPointerDown={onResizePointerDown}
-          onPointerMove={onResizePointerMove}
-          onPointerUp={onResizePointerUp}
-          onPointerCancel={onResizePointerUp}
-          onKeyDown={onResizeKeyDown}
-        >
-          <span aria-hidden="true">◢</span>
-        </button>
+        {/* Resizable window (v10 item 3): FOUR corner handles, so ANY corner can
+            be dragged — each one a real <button>, so the size is keyboard-
+            operable (arrows, Shift = ×4) from whichever corner has focus as well
+            as draggable, and each button carries its own accessible name (which
+            corner it is + the live size, built by `pipResizerLabel`).
+
+            PROPERTIES THAT ARE LOAD-BEARING, not styling choices:
+              • the render order is `PIP_CORNER_ORDER`, and the SOUTH-EAST handle
+                is first — it is what
+                `document.querySelector('.pip-panel .pip-resizer')` returns for
+                the browser lane's focus + rect reads;
+              • that first handle keeps the BARE `class="pip-resizer"` (the other
+                three add `pip-resizer--nw` / `--ne` / `--sw`), which is the
+                literal the v9 `verify:pip-contract` assertion matches. The
+                south-east corner's CSS rule is therefore grouped with the base
+                `.pip-resizer` selector instead of needing a `--se` class here —
+                see the corner block in `sectionPip.css`;
+              • `data-pip-corner` makes each handle's corner readable from the
+                DOM (the gate reads it; a screenshot reader never has to guess);
+              • all four share ONE key handler, so the arrow-key path cannot
+                drift between handles. */}
+        {PIP_CORNER_ORDER.map((corner) => (
+          <button
+            key={corner}
+            type="button"
+            className={corner === 'se' ? 'pip-resizer' : `pip-resizer pip-resizer--${corner}`}
+            data-pip-corner={corner}
+            aria-label={pipResizerLabel(corner, size)}
+            title={pipResizerTitle(corner)}
+            onPointerDown={(event) => onResizePointerDown(corner, event)}
+            onPointerMove={onResizePointerMove}
+            onPointerUp={onResizePointerUp}
+            onPointerCancel={onResizePointerUp}
+            onKeyDown={onResizeKeyDown}
+          >
+            <span aria-hidden="true">{PIP_CORNER_GLYPHS[corner]}</span>
+          </button>
+        ))}
       </div>
     </div>
   )

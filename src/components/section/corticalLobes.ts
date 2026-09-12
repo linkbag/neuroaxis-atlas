@@ -121,6 +121,67 @@
  *   literature — the cingulate band is the 1–2 gyrus strip the probe could
  *   measure, not the whole limbic lobe.
  *
+ * v10 RUN RULE (the sliver/triangle fix; docs/SWARM_V10_PLAN.md §4, PLAN.md §4)
+ * --------------------------------------------------------------------------
+ * A *run* is a maximal stretch of ONE loop carrying ONE classification. Painting
+ * a short stretch — or a long thin one — is what put a green LIMBIC patch at
+ * the inferior midline and an orange TEMPORAL triangle on the lateral edge: the
+ * fitted boundaries cross the ribbon at a shallow angle there, so a run can be
+ * 2 vertices long, or 60 vertices long and still enclose 3.5 au².
+ *
+ *   MIN_DIVISION_RUN_AU         = 10   own-vertex ARC LENGTH floor, au (= 12 mm)
+ *   MIN_DIVISION_AREA_AU2       = 25   DRAWN-area floor, au² — the polygon the
+ *                                      canvas actually fills and strokes
+ *   MIN_DIVISION_LABEL_AREA_AU2 = 25   the area a division must clear to carry
+ *                                      a label; DELIBERATELY equal to the paint
+ *                                      floor, so "painted ⇒ has a label-eligible
+ *                                      run" is a theorem (paint ≥ label), not a
+ *                                      census. The gate asserts the inequality.
+ *
+ * A run below EITHER floor is ABSORBED into the neighbour it was cut from (or,
+ * for the first span of the ring, deferred into the next one), so the spans
+ * still tile the loop exactly once and no vertex is dropped. The splitter
+ * iterates to a FIXPOINT: absorption changes the drawn polygon of the span that
+ * grew, and a single pass can therefore leave a new sub-threshold span behind.
+ *
+ * WHY 10 au of arc. Measured (`.dsh-scratch/v10-arch/runs-probe.mjs`): run arc
+ * medians are 25.98 (temporal) / 30.30 (frontal) / 45.17 (occipital) au and the
+ * artefact population sits at 0.00–9.99 au, so 10 au (12 mm) is narrower than
+ * one gyrus on this ribbon — nothing a reader would name is lost.
+ *
+ * WHY 25 au² of DRAWN area, and not the 10 au² PLAN.md §4 first proposed. The
+ * wedge probe (`.dsh-scratch/v10-arch/wedge-probe.mjs`) showed the worst
+ * artefact is not short at all: y = 32 temporal is 65.5 au of arc for 5.50 au²
+ * of drawn area. A 10 au² floor removes those, but it still leaves divisions
+ * painted whose best run is 11–24 au² — measured on this build (probe
+ * `.dsh-scratch/v10-cdq/probe.mjs`): 2 plane/division cases at the 13 reference
+ * planes plus 9 over the 34-plane user grid. That is the small-patch class the
+ * user reported, and with a 25 au² label floor those cases would be painted but
+ * unlabelled. Both floors are therefore 25 au².
+ *
+ * MEASURED EFFECT of this rule (`.dsh-scratch/v10-cdq/probe.mjs`, reference
+ * planes / the 34-plane user grid, this build): 80 → 47 runs and 548 → 265 runs;
+ * 22 / 199 spans absorbed; 3 / 33 whole loops dropped as sub-threshold; 0 painted
+ * runs below either floor; 0 painted division without a label-eligible run. A
+ * whole loop that is ONE division stretch below the floors has no neighbour to
+ * absorb into, so it is not painted at all and stays in the context fill: every
+ * such loop measured has a drawn area ≤ 23.87 au² (< the 25 au² floor), vertex
+ * count 3–14 and arc 0.60–18.51 au, i.e. a splinter of the cross-section, not a
+ * territory. The pre-v10 splitter painted runs of a single own vertex (arc
+ * 0.00 au, stroke invisible) — 9 of them over the 34-plane user grid, 0 at the
+ * 13 reference planes — because its one-vertex absorption could not fire on the
+ * FIRST range of a loop.
+ *
+ * NOTHING IN `CORTICAL_BOUNDARIES` MOVED (v10, re-checked, not re-fitted). The
+ * fit is not the cause of the wedges: each one is a fitted boundary crossing the
+ * ribbon at a shallow angle, and re-fitting the same semi-plane/ellipsoid/plane
+ * primitives cannot remove the resulting 2–4 vertex stretches. The evidence is
+ * in the gate: with the classification untouched, 23 of the 72 maximal spans at
+ * the 13 reference planes (210 of 497 over the user grid) are below a floor, and
+ * absorbing exactly those leaves 47 runs that all clear it. The 17 boundary spot
+ * checks in `scripts/verify/cortical-lobes.mjs` still pin the same divisions at
+ * the same coordinates, to exact float equality.
+ *
  * LIMIT (what this rule CANNOT do)
  * --------------------------------
  *  1. It divides the DERIVED ribbon, not a gyral map (see the top of the file).
@@ -138,6 +199,16 @@
  *     root and one ellipse per point, no iteration, no lookup table. It is
  *     evaluated on the main thread over the worker's contour vertices (see
  *     SectionCanvas), so the worker protocol is untouched.
+ *  5. A whole loop that is ONE sub-threshold stretch is not painted (v10 run
+ *     rule): the layer paints territories, not splinters. Its vertices stay in
+ *     the taxonomy context fill, so a plane where the ribbon is cut into a
+ *     12 au² fragment shows that fragment uncoloured — measured, 3 of the 13
+ *     reference planes and 33 of 34 user-grid planes have such a fragment.
+ *  6. Absorption re-labels the absorbed stretch with the NEIGHBOUR's division.
+ *     Where a boundary crosses the ribbon at a shallow angle the colour is
+ *     therefore the neighbour's along 10–25 au of contour, which is the same
+ *     approximation the fitted boundaries already make, stated rather than
+ *     hidden.
  *
  * The store field that toggles this layer is `sectionLobes` (plan §6). It is
  * OWNED BY TASK 4 (`src/state/store.ts`); this module is its interface and
@@ -270,6 +341,80 @@ export const CORTICAL_LOBE_METHOD_NOTE =
   'fissure, parieto-occipital plane, insular limen, callosal/collateral bands) — ' +
   'a geometric approximation, not a gyral or cytoarchitectonic map.'
 
+/* ------------------------------------------------------ v10 run-quality floors */
+
+/**
+ * Minimum ARC LENGTH of a run's own vertices, in au (1 au = 1.2 mm), for the run
+ * to be painted at all. 10 au = 12 mm, narrower than one gyrus on this ribbon
+ * (run arc medians measured: 25.98 temporal / 30.30 frontal / 45.17 occipital);
+ * the whole sliver population the v10 report measured sits at 0.00–9.99 au.
+ */
+export const MIN_DIVISION_RUN_AU = 10
+
+/**
+ * Minimum DRAWN AREA of a run, in au² — the shoelace area of the polygon the
+ * canvas fills and strokes (`run.points`, closed: the shared junction vertex
+ * plus the run's own vertices). This is the floor that removes the long thin
+ * wedges: y = 32 temporal is 65.5 au of arc and only 5.50 au² of area, so an
+ * arc floor alone cannot see it. PLAN.md §4 first proposed 10 au² here; the
+ * measurement that moved it to 25 is in the file header (v10 run rule).
+ */
+export const MIN_DIVISION_AREA_AU2 = 25
+
+/**
+ * Minimum drawn area (au²) for a division to carry its name in the section.
+ * DELIBERATELY EQUAL to `MIN_DIVISION_AREA_AU2`: because every painted run
+ * clears the paint floor, "this division is painted ⇒ it has a run at or above
+ * the label floor" is then a theorem rather than a hope, which is exactly what
+ * makes "TEMPORAL written on a triangle" impossible. The gate asserts the
+ * inequality, so changing one number alone cannot silently break it.
+ */
+export const MIN_DIVISION_LABEL_AREA_AU2 = 25
+
+/** A loop with fewer vertices than this cannot carry a polygon at all. */
+const MIN_LOOP_VERTICES = 3
+
+/** Measured quality of ONE run path — the numbers the floors are applied to. */
+export interface CorticalRunMetrics {
+  /**
+   * Arc length (au) of the run's OWN vertices — the shared junction vertex is
+   * excluded, so this is the stretch the run contributes, not its neighbour's
+   * last segment. A run of one own vertex has arc 0 (the pre-v10 degenerate
+   * "run" was exactly that: an invisible stroke).
+   */
+  arcAu: number
+  /** Shoelace area (au²) of the drawn path (junction + own vertices, closed). */
+  areaAu2: number
+  /** Own vertices (`points.length / 2 − 1`). */
+  vertices: number
+}
+
+/**
+ * corticalRunMetrics — the ONE measurement of a run path, exported so the
+ * splitter's own floors and `scripts/verify/cortical-lobes.mjs` cannot disagree
+ * about what "too short" or "too thin" means. Pure, allocation-free.
+ */
+export function corticalRunMetrics(points: readonly number[]): CorticalRunMetrics {
+  const count = Math.floor(points.length / 2)
+  let arcAu = 0
+  for (let i = 2; i < count; i++) {
+    arcAu += Math.hypot(
+      points[i * 2] - points[(i - 1) * 2],
+      points[i * 2 + 1] - points[(i - 1) * 2 + 1],
+    )
+  }
+  let areaAu2 = 0
+  if (count >= 3) {
+    let sum = 0
+    for (let i = 0; i < count; i++) {
+      const j = (i + 1) % count
+      sum += points[i * 2] * points[j * 2 + 1] - points[j * 2] * points[i * 2 + 1]
+    }
+    areaAu2 = Math.abs(sum) / 2
+  }
+  return { arcAu, areaAu2, vertices: Math.max(0, count - 1) }
+}
+
 /* ------------------------------------------------------------ the rule */
 
 /**
@@ -340,30 +485,48 @@ export interface CorticalRun {
   points: number[]
 }
 
+/** One maximal same-division stretch of the loop, in ROTATED local indices. */
+interface RunSpan {
+  division: CorticalDivision
+  /** First own vertex (local index). */
+  start: number
+  /** One past the last own vertex (local index). */
+  end: number
+}
+
 /**
- * splitRuns — the shared splitter. Classify every vertex of ONE closed loop,
- * cut it on division changes, and make every run a STROKEABLE, CONTINUOUS path:
+ * splitRuns — the shared splitter (v10: with the run-quality floors).
  *
- *  - each run starts at the previous run's last vertex, so consecutive runs
- *    share exactly one vertex and the outline never breaks at a boundary (the
- *    first run starts at the loop's last vertex, which closes the ring);
- *  - a one-vertex sliver (the 0.25 au quantization can leave a single contour
- *    vertex past a boundary) has no stroke: it is absorbed into its predecessor
- *    and the following run starts at the sliver's vertex, so the chain stays
- *    continuous and NO classified vertex is dropped;
- *  - no ring-closing merge is performed: merging the head into the tail would
- *    reorder the runs (the tail belongs at the END of the loop), so the ring is
- *    closed by the shared junction vertex above instead. A division that wraps
- *    the loop's start therefore appears as its head run and again as its tail
- *    run — two strokes of one division, which is what the geometry is.
+ * 1. Classify every vertex of ONE closed loop and cut it into MAXIMAL
+ *    same-division spans. The ring is rotated to start at a division change
+ *    first, so the loop's head and tail are never the same division: a stretch
+ *    that crosses the loop's start index is one span, not two half-stretches
+ *    that both look too short.
+ * 2. Absorb every span below the floors (`corticalRunMetrics`: arc <
+ *    MIN_DIVISION_RUN_AU, drawn area < MIN_DIVISION_AREA_AU2, or fewer than two
+ *    own vertices) into the neighbour it was cut from — the predecessor, or the
+ *    successor when the span opens the ring. Absorption only ever MERGES two
+ *    adjacent spans, so the kept spans still tile the loop exactly once and no
+ *    vertex is lost or moved off the contour.
+ * 3. Iterate to a FIXPOINT, merging spans that absorption made adjacent and
+ *    same-division, and re-measuring after each merge: the drawn polygon of a
+ *    span changes when its boundaries move (the closing chord changes), so one
+ *    pass can leave a fresh sub-threshold span behind. Every merge removes one
+ *    span, so `spans.length + 1` passes are provably enough.
+ * 4. A loop that reduces to ONE span which is still below the floors is
+ *    DROPPED (no run at all): it is a single homogeneous stretch with no
+ *    neighbour to absorb into, i.e. a splinter of the cross-section rather than
+ *    a territory. It keeps its taxonomy context fill; the gate counts every
+ *    dropped loop and asserts it really is sub-threshold.
+ * 5. Emit each kept span as a strokeable, CONTINUOUS path: a run starts at the
+ *    vertex before its own first vertex (the junction it shares with the run
+ *    before it) and continues through its own vertices in loop order, so
+ *    consecutive runs join without a gap and the ring closes.
  *
- * Accounting identity (asserted by scripts/verify/cortical-lobes.mjs):
- *     Σ run.points.length / 2 === loop vertices + runs − absorbed slivers
- * because each of the `runs` paths duplicates exactly one junction vertex, and
- * an absorbed sliver contributes its vertex to the neighbour instead of to a run
- * of its own. `splitRunsAccounting` below exposes the two counters the script
- * needs for that identity.
- * Internal to the three exports below.
+ * Accounting identity (asserted by scripts/verify/cortical-lobes.mjs), per
+ * PAINTED loop:  Σ run.points.length / 2 === loop vertices + runs,
+ * because the spans partition the loop's vertices exactly once and each run
+ * path duplicates exactly one junction vertex.
  */
 function splitRuns(
   loop: number[],
@@ -371,54 +534,101 @@ function splitRuns(
   planeValue: number | null,
 ): CorticalRun[] {
   const count = Math.floor(loop.length / 2)
-  if (count < 2) return []
+  if (count < MIN_LOOP_VERTICES) return []
   const divisions: CorticalDivision[] = new Array(count)
   for (let i = 0; i < count; i++) {
     const [x, y, z] = planePointToCanonical(axis, planeValue ?? 0, loop[i * 2], loop[i * 2 + 1])
     divisions[i] = classifyCorticalPoint(x, y, z)
   }
-  /* 1. Cut the loop into same-division vertex ranges [start, end). */
-  const ranges: { division: CorticalDivision; start: number; end: number }[] = []
-  let start = 0
-  for (let i = 1; i <= count; i++) {
-    if (i < count && divisions[i] === divisions[start]) continue
-    const previous = ranges[ranges.length - 1]
-    if (i - start === 1 && previous !== undefined) {
-      // A one-vertex range has no stroke: extend the previous range over it so
-      // the drawn outline stays continuous and its vertex stays accounted for.
-      previous.end = i
-    } else {
-      ranges.push({ division: divisions[start], start, end: i })
+  /* 1. Rotate the ring to a division change, then cut maximal spans. */
+  let offset = 0
+  for (let i = 1; i < count; i++) {
+    if (divisions[i] !== divisions[i - 1]) {
+      offset = i
+      break
     }
-    start = i
   }
-  /* 2. Emit each range as a path that STARTS at the junction vertex it shares
-   *    with the range before it, so consecutive strokes join without a gap. */
-  const runs: CorticalRun[] = []
-  for (let r = 0; r < ranges.length; r++) {
-    const range = ranges[r]
-    const junction = (range.start - 1 + count) % count
+  /** Loop index of rotated local index `t` (t = −1 is the vertex before t = 0). */
+  const rot = (t: number): number => (offset + t + count) % count
+  const spans: RunSpan[] = []
+  let start = 0
+  for (let t = 1; t < count; t++) {
+    const previous = divisions[rot(t - 1)]
+    if (divisions[rot(t)] !== previous) {
+      spans.push({ division: previous, start, end: t })
+      start = t
+    }
+  }
+  spans.push({ division: divisions[rot(count - 1)], start, end: count })
+  /** The path the canvas paints for a span: junction + own vertices. */
+  const spanPath = (span: RunSpan): number[] => {
+    const junction = rot(span.start - 1)
     const points: number[] = [loop[junction * 2], loop[junction * 2 + 1]]
-    for (let k = range.start; k < range.end; k++) points.push(loop[k * 2], loop[k * 2 + 1])
-    runs.push({ division: range.division, points })
+    for (let t = span.start; t < span.end; t++) {
+      const i = rot(t)
+      points.push(loop[i * 2], loop[i * 2 + 1])
+    }
+    return points
   }
-  return runs
+  const undersized = (span: RunSpan): boolean => {
+    const metrics = corticalRunMetrics(spanPath(span))
+    return (
+      metrics.vertices < 2 ||
+      metrics.arcAu < MIN_DIVISION_RUN_AU ||
+      metrics.areaAu2 < MIN_DIVISION_AREA_AU2
+    )
+  }
+  /* 2 + 3. Absorb to a fixpoint. */
+  const maxPasses = spans.length + 1
+  for (let pass = 0; pass < maxPasses; pass++) {
+    for (let k = 1; k < spans.length; ) {
+      if (spans[k].division === spans[k - 1].division) {
+        // Absorption can make two spans of one division adjacent: paint them as
+        // ONE run, else a boundary stroke would be drawn inside a division.
+        spans[k - 1].end = spans[k].end
+        spans.splice(k, 1)
+      } else {
+        k += 1
+      }
+    }
+    let victim = -1
+    for (let k = 0; k < spans.length; k++) {
+      if (undersized(spans[k])) {
+        victim = k
+        break
+      }
+    }
+    if (victim < 0) break
+    /* 4. One span left and still too small: nothing to absorb into. */
+    if (spans.length === 1) return []
+    if (victim === 0) {
+      // The span that opens the ring has no predecessor inside the loop: defer
+      // it into the next span (the pre-v10 bug was to keep it as a "run").
+      spans[1].start = spans[0].start
+      spans.splice(0, 1)
+    } else {
+      spans[victim - 1].end = spans[victim].end
+      spans.splice(victim, 1)
+    }
+  }
+  /* 5. Emit. */
+  return spans.map((span) => ({ division: span.division, points: spanPath(span) }))
 }
 
 /**
  * splitLoopByDivision — walk ONE closed contour loop (flat `[u, v, …]` in the
  * plane frame, the exact format `contourWorker` returns) and split it into
- * consecutive same-division runs. The loop is CLOSED, so the last run continues
- * into the first; when they share a division they are merged, and the caller
- * gets a partition of the loop with no duplicated vertex.
+ * consecutive same-division runs that clear the v10 run-quality floors. The loop
+ * is CLOSED, so it is rotated to begin at a division change before it is cut;
+ * a division that wraps the original start index is therefore ONE run, not a
+ * head/tail pair that each look too short.
  *
- * Runs of a single point are absorbed into the previous run, so the runs are a
- * TRUE PARTITION of the loop: every classified vertex lands in exactly one run
- * and the drawn outline stays continuous. The consequence
- * `scripts/verify/cortical-lobes.mjs` asserts is therefore exact — for every
- * loop, `Σ run.points.length / 2 === loop.length / 2`, and when the closing
- * merge fires it drops exactly ONE duplicated endpoint, so the identity the
- * script checks is `Σ runs === loop vertices − merges`.
+ * The kept spans tile the loop exactly once, so for every PAINTED loop the
+ * accounting is exact: `Σ run.points.length / 2 === loop vertices + runs`
+ * (each run path duplicates exactly one junction vertex). A loop that reduces to
+ * a single sub-threshold span returns `[]` — see the v10 run rule in the header;
+ * `scripts/verify/cortical-lobes.mjs` enumerates those loops and asserts each
+ * one really is below the floors.
  *
  * IMPORTANT — the plane's own coordinate. A loop in the plane frame carries the
  * two IN-PLANE axes; the coordinate ON the plane axis is not in the loop, and
@@ -445,13 +655,16 @@ export function splitLoopByDivisionPlane(
   return splitRuns(loop, axis, planeValue)
 }
 
-/** The division a whole loop belongs to when it is homogeneous, else null. */
+/**
+ * The division a whole loop belongs to when it is homogeneous, else null.
+ *
+ * Derived from the RAW loop, not from the runs: since v10 a homogeneous loop
+ * below the run-quality floors is painted as nothing, and whether the layer
+ * paints it must not change what the geometry says the loop is.
+ */
 export function homogeneousDivision(loop: number[], axis: PlaneAxis, planeValue: number): CorticalDivision | null {
-  const runs = splitRuns(loop, axis, planeValue)
-  if (runs.length !== 1) return null
-  // A single run can also come from a loop whose other vertices were dropped as
-  // one-vertex runs, so confirm against the raw loop rather than the runs.
   const count = Math.floor(loop.length / 2)
+  if (count < MIN_LOOP_VERTICES) return null
   let division: CorticalDivision | null = null
   for (let i = 0; i < count; i++) {
     const [x, y, z] = planePointToCanonical(axis, planeValue, loop[i * 2], loop[i * 2 + 1])
