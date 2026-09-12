@@ -12,11 +12,13 @@ import type { Kind, Region } from '../types'
 import {
   ALL_KINDS,
   ALL_REGIONS,
+  arteriesForSyndrome,
   getLevel,
   getPlate,
   getSyndrome,
   platesForLevel,
   taxonomy,
+  territoryOf,
 } from '../data/load'
 // The canonical slider ranges — the single declaration of the canonical box
 // (AMENDMENT B, docs/TELENCEPHALON_PLAN.md §2). Imported for the load-time
@@ -41,6 +43,8 @@ export type ViewPreset =
   | 'deep-structures'
   | 'whole-brain'
   | 'cortex-only'
+  /** v8: the arterial cast (docs/NEUROATLAS_V8_PLAN.md §2). */
+  | 'vasculature'
 /** Rendering-quality tier (realism plan §1 Layer 3 post section, post-fx task). */
 export type RenderQuality = 'high' | 'balanced'
 
@@ -386,6 +390,29 @@ function nonTelencephalonIds(): string[] {
   return taxonomy.filter((entry) => entry.region !== 'telencephalon').map((entry) => entry.id)
 }
 
+/* ------------------------------------------------- v8 cerebral vasculature */
+
+/** Every vessel record id (the `vasculature` region of the registry). */
+const VASCULAR_IDS: readonly string[] = taxonomy
+  .filter((entry) => entry.region === 'vasculature')
+  .map((entry) => entry.id)
+
+/**
+ * Every region except `vasculature` — the layer set of a preset that keeps the
+ * vascular overlay OFF (docs/NEUROATLAS_V8_PLAN.md §2: the arteries are hidden in
+ * the default Brainstem-focus and Cortex-only framings and visible in
+ * Whole-brain and the Vasculature preset).
+ *
+ * The vascular layer is switched off through the REGION layer rather than
+ * through 14 structure ids in `hidden`, and that is deliberate: `hidden` is what
+ * the presets' region guard inspects ("a subdivision-derived preset may only hide
+ * telencephalon records"), and hiding an artery is not a statement about the
+ * telencephalon — it is a statement about the vascular LAYER, which is exactly
+ * what a region set expresses. It also means the tree dims the vascular rows
+ * through the same `layerOff()` rule the user sees for every other region.
+ */
+const NON_VASCULAR_REGIONS: readonly Region[] = ALL_REGIONS.filter((region) => region !== 'vasculature')
+
 const CORTEX_IDS = telSubdivisionIds('Cerebral cortex')
 const BASAL_GANGLIA_IDS = telSubdivisionIds('Basal ganglia')
 const LIMBIC_IDS = telSubdivisionIds('Limbic system')
@@ -444,7 +471,7 @@ export const VIEW_PRESETS: Record<ViewPreset, ViewPresetDefinition> = {
     hint:
       'Brainstem-first default: the hemispheres stay as a faint translucent outline '
       + 'while the brainstem, diencephalon and cerebellum carry the view',
-    regions: ALL_REGIONS,
+    regions: NON_VASCULAR_REGIONS,
     kinds: ALL_KINDS,
     hidden: new Set(CORTEX_PRESET_IDS),
   },
@@ -469,9 +496,31 @@ export const VIEW_PRESETS: Record<ViewPreset, ViewPresetDefinition> = {
   'cortex-only': {
     label: 'Cortex only',
     hint: 'The cerebral cortex and its hemispheres, with the deep and brainstem structures hidden',
-    regions: ALL_REGIONS,
+    regions: NON_VASCULAR_REGIONS,
     kinds: ALL_KINDS,
     hidden: new Set(nonTelencephalonIds()),
+  },
+  /**
+   * v8 (docs/NEUROATLAS_V8_PLAN.md §2) — the arterial cast.
+   *
+   * The circle of Willis and its trunks with the brain they supply kept as a
+   * faint outline: vessels, the surface records and the context envelopes (which
+   * is what draws the translucent brain the cast sits inside), and nothing else.
+   * Every nucleus, tract and ventricle is layer-off by KIND, so "vessels alone"
+   * needs no per-structure hiding and stays true as records are added.
+   *
+   * No `emphasis`: the emphasis lift marks a subject inside a fuller scene, and
+   * in this preset the vessel layer IS the scene. (`isSolidKind` also excludes
+   * `vessel` — vessels render translucent, so the solid-kind lift would not apply
+   * anyway.)
+   */
+  vasculature: {
+    label: 'Vasculature',
+    hint:
+      'The circle of Willis and the major cerebral arteries as an arterial cast, '
+      + 'with the brain they supply as a faint outline',
+    regions: ALL_REGIONS,
+    kinds: ['vessel', 'surface', 'context'],
   },
 }
 
@@ -541,6 +590,15 @@ export const DEFAULT_LAYERS: AtlasLayers = defaultLayers()
  *     condition `TaxonomyTree`'s `layerOff()` uses to emit `is-off`. A future
  *     edit that narrowed the default's `kinds` (e.g. to `['nucleus']`) would dim
  *     brainstem rows silently; it now fails at module load instead.
+ *
+ * ── v8 AMENDMENT: the vascular layer (docs/NEUROATLAS_V8_PLAN.md §2) ─────────
+ * The loop below skips the `vasculature` region, and the block then asserts
+ * exactly what that exemption is allowed to mean: the vascular REGION layer is
+ * OFF in the default framing (§2's "hidden by default in Brainstem focus"), no
+ * vessel is hidden at STRUCTURE level (so the region toggle is the only thing
+ * holding it back), and `all` / `whole-brain` / `vasculature` each carry both the
+ * region and the `vessel` kind with no vessel hidden — without which the overlay
+ * could be invisible everywhere while every other assertion still passed.
  */
 {
   const preset = viewPresetOf(DEFAULT_LAYERS)
@@ -551,7 +609,14 @@ export const DEFAULT_LAYERS: AtlasLayers = defaultLayers()
     )
   }
   for (const entry of taxonomy) {
-    if (entry.region === 'telencephalon') continue
+    // v8 exempts the vascular overlay from this invariant — and pays for the
+    // exemption with the assertions right below. The subject of this block is the
+    // NEURAXIS PARENCHYMA: "the brainstem must stay visible at default framing"
+    // is a statement about the anatomy the view is named for, and an artery is
+    // not a brainstem nucleus. The vascular layer is a separate overlay system by
+    // design (docs/NEUROATLAS_V8_PLAN.md §2) and hiding it by default is the
+    // plan's own requirement, so it cannot also be a violation of this rule.
+    if (entry.region === 'telencephalon' || entry.region === 'vasculature') continue
     if (DEFAULT_LAYERS.hidden.has(entry.id)) {
       throw new Error(
         `store: the default preset hides "${entry.id}" (${entry.region}) — the brainstem must stay ` +
@@ -567,6 +632,53 @@ export const DEFAULT_LAYERS: AtlasLayers = defaultLayers()
           '— that row would render dimmed (is-off) at default framing, where the brainstem must be ' +
           'the visual focus (docs/TELENCEPHALON_PLAN.md §5/§9)',
       )
+    }
+  }
+
+  /* v8 — what the vascular exemption is allowed to mean, asserted. -------------- */
+  if (VASCULAR_IDS.length === 0) {
+    throw new Error(
+      'store: no `vasculature` region records in the registry — the vascular layer, its preset and ' +
+        'this whole block would be asserting nothing (docs/NEUROATLAS_V8_PLAN.md §2)',
+    )
+  }
+  // (a) OFF at default framing, through the REGION layer only. A structure-level
+  //     hide would be the wrong mechanism (it would collide with the region
+  //     guard below) and would also make the vascular region toggle inconsistent:
+  //     the row would say "region on" while its meshes stayed hidden.
+  if (DEFAULT_LAYERS.regions.has('vasculature')) {
+    throw new Error(
+      'store: the default preset turns the vasculature REGION layer on — the arterial overlay is ' +
+        'hidden at default framing by region, not by structure, so this is the one switch that may ' +
+        'express it (docs/NEUROATLAS_V8_PLAN.md §2)',
+    )
+  }
+  for (const id of VASCULAR_IDS) {
+    if (DEFAULT_LAYERS.hidden.has(id)) {
+      throw new Error(
+        `store: the default preset hides the vessel "${id}" at STRUCTURE level — vessels are hidden ` +
+          'by the region layer, so a structure-level hide would keep hiding them after the user ' +
+          'switches the vascular region on (docs/NEUROATLAS_V8_PLAN.md §2)',
+      )
+    }
+  }
+  // (b) ON in every preset whose declared subject includes the vasculature. This
+  //     is the half that makes the exemption safe: a future edit that dropped
+  //     either the region or the `vessel` kind from these presets would leave the
+  //     vascular layer invisible EVERYWHERE (hidden by default, and hidden in the
+  //     presets that promise it), which no other check in this file would notice.
+  for (const id of ['all', 'whole-brain', 'vasculature'] as const) {
+    const def = VIEW_PRESETS[id]
+    if (!def.regions.includes('vasculature')) {
+      throw new Error(`store: preset "${id}" excludes the vasculature REGION layer — the vascular overlay would be unreachable (docs/NEUROATLAS_V8_PLAN.md §2)`)
+    }
+    if (!def.kinds.includes('vessel')) {
+      throw new Error(`store: preset "${id}" excludes the "vessel" KIND layer — the vascular overlay would be unreachable (docs/NEUROATLAS_V8_PLAN.md §2)`)
+    }
+    for (const vesselId of VASCULAR_IDS) {
+      if (def.hidden?.has(vesselId)) {
+        throw new Error(`store: preset "${id}" hides the vessel "${vesselId}" — a preset that carries the vascular layer may not hide vessels (docs/NEUROATLAS_V8_PLAN.md §2)`)
+      }
     }
   }
 }
@@ -845,12 +957,34 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
 /**
  * The id set that should stay lit while everything else dims: an open syndrome
  * wins over a plain selection (plan §1.1 feature 10).
+ *
+ * v8 additions (docs/NEUROATLAS_V8_PLAN.md §2 "selecting an artery highlights its
+ * territory structures" and "the syndromes already map arteries → structures"):
+ *  - opening a syndrome also lights the ARTERIES that name it in their `supply`
+ *    (no syndrome card lists a vessel in `structures[]` — see load.ts), so the
+ *    clinical card and the vessel it belongs to light each other;
+ *  - selecting an artery also lights its `territory`, which is what makes an
+ *    occlusion's footprint readable: select the PCA and the midbrain/thalamic
+ *    structures it supplies come up with it, in 3D, on the plates and in the
+ *    live section (all three read this one set).
+ *
+ * Both are additive: with no vessels in play the function returns exactly what it
+ * returned before v8.
  */
 export function highlightIdSet(state: Pick<AtlasState, 'selectedId' | 'syndromeId'>): Set<string> | null {
   if (state.syndromeId !== null) {
     const syndrome = getSyndrome(state.syndromeId)
-    if (syndrome && syndrome.structures.length > 0) return new Set(syndrome.structures)
+    if (syndrome) {
+      const ids = new Set(syndrome.structures)
+      for (const arteryId of arteriesForSyndrome(state.syndromeId)) ids.add(arteryId)
+      if (ids.size > 0) return ids
+    }
   }
-  if (state.selectedId !== null) return new Set([state.selectedId])
+  if (state.selectedId !== null) {
+    const territory = territoryOf(state.selectedId)
+    return territory.length > 0
+      ? new Set([state.selectedId, ...territory])
+      : new Set([state.selectedId])
+  }
   return null
 }

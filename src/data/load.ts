@@ -156,6 +156,34 @@ for (const syndrome of syndromes) {
   }
 }
 
+/**
+ * v8 — the REVERSE index: a record's own `supply` field names the syndrome cards
+ * whose arterial territory it is (docs/NEUROATLAS_V8_PLAN.md §1a).
+ *
+ * The forward map above can only answer "which syndromes list this structure?",
+ * and no syndrome record lists an artery: the syndrome cards were authored long
+ * before the vessels existed and their `structures[]` are the structures an
+ * occlusion damages. An artery therefore declares the relationship from its own
+ * side (`vasc-posterior-cerebral-artery.supply` includes `syn-dejerine-roussy`),
+ * and this index makes the link bidirectional — the artery's panel lists those
+ * syndromes, and opening one of them lights the artery that causes it.
+ */
+const syndromesBySupply = new Map<string, SyndromeRecord[]>()
+for (const record of structures) {
+  const supply = record.supply
+  if (!Array.isArray(supply)) continue
+  for (const syndromeId of supply) {
+    const syndrome = syndromes.find((s) => s.id === syndromeId)
+    if (syndrome === undefined) continue
+    const list = syndromesBySupply.get(record.id)
+    if (list) {
+      if (!list.includes(syndrome)) list.push(syndrome)
+    } else {
+      syndromesBySupply.set(record.id, [syndrome])
+    }
+  }
+}
+
 const svgByText = new Map<string, string>()
 for (const [key, value] of Object.entries(plateSvgModules)) {
   if (typeof value === 'string') svgByText.set(key.replace(/^\.\//, ''), value)
@@ -180,6 +208,7 @@ export const ALL_REGIONS: readonly Region[] = [
   'pons',
   'medulla',
   'cerebellum',
+  'vasculature',
 ]
 export const ALL_KINDS: readonly Kind[] = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context']
 
@@ -190,6 +219,7 @@ export const REGION_LABELS: Record<Region, string> = {
   pons: 'Pons',
   medulla: 'Medulla',
   cerebellum: 'Cerebellum',
+  vasculature: 'Cerebral vasculature',
 }
 
 /* -------------------------------------------------------------- selectors */
@@ -218,8 +248,38 @@ export function getSyndrome(id: string | null): SyndromeRecord | undefined {
   return id === null ? undefined : syndromes.find((s) => s.id === id)
 }
 
+/**
+ * Syndromes a record participates in: the cards that list it as a structure, plus
+ * (v8) the cards its own `supply` field names. Deduplicated by id, forward list
+ * first, so an artery whose supply names a syndrome that ALSO lists it as a
+ * structure appears once.
+ */
 export function syndromesForStructure(id: string): SyndromeRecord[] {
-  return syndromesByStructure.get(id) ?? []
+  const forward = syndromesByStructure.get(id)
+  const reverse = syndromesBySupply.get(id)
+  if (reverse === undefined) return forward ?? []
+  if (forward === undefined) return reverse
+  return [...forward, ...reverse.filter((s) => !forward.includes(s))]
+}
+
+/**
+ * v8 — the arteries whose supply includes this syndrome (the reverse of
+ * `syndromesForStructure`), so opening a syndrome card can light the artery that
+ * causes it. Ordered by record-id order for a stable highlight set.
+ */
+export function arteriesForSyndrome(syndromeId: string): string[] {
+  const out: string[] = []
+  for (const [recordId, list] of syndromesBySupply) {
+    if (list.some((s) => s.id === syndromeId)) out.push(recordId)
+  }
+  return out.sort()
+}
+
+/** v8 — the territory (structure ids) a record supplies, or an empty array. */
+export function territoryOf(recordId: string): string[] {
+  const record = recordById.get(recordId)
+  const territory = record && 'territory' in record ? record.territory : undefined
+  return Array.isArray(territory) ? territory : []
 }
 
 export function platesForLevel(levelId: string): PlateRecord[] {

@@ -20,6 +20,7 @@ import { getTaxonomyEntry } from '../../data/load'
 import {
   getManifest,
   useAnatomyAsset,
+  anatomySlugsForRecord,
   ANATOMY_RECORD_LINKS,
   TEL_HEMISPHERE_RECORD_IDS,
   type AnatomyAssetStatus,
@@ -85,15 +86,29 @@ const TEL_SLUG_OVERRIDES: Record<string, { group: string; region: Region }> = ((
   }
   for (const [recordId, link] of Object.entries(ANATOMY_RECORD_LINKS)) {
     if (link.body === null) continue
-    assign(link.body, recordId, link.region)
-    // Paired bodies are committed as BOTH `…-l` and `…-r` GLBs, while
-    // ANATOMY_RECORD_LINKS names only the `-l` mesh (SceneLayers mirrors that
-    // one geometry into the right-hand slot). The section worker loads EVERY
-    // committed GLB, so the `-r` twin needs the same override or its contours
-    // would paint outside every region filter.
-    if (link.body.endsWith('-l')) {
-      assign(`${link.body.slice(0, -2)}-r`, recordId, link.region)
+    // v8: iterate the record's ACTUAL body list per side rather than `link.body`
+    // alone. A record may now own several meshes per side (the MCA's M1+M2, the
+    // PCA's P1+P2 through `also`/`alsoRight`) and may name its right side
+    // explicitly (`bodyRight`). Every one of those slugs is a committed GLB the
+    // section worker loads, and a slug missing from this table resolves to
+    // `region: null` — which the canvas reads as "no region filter applies to
+    // me", i.e. it would paint the MCA's M2 segment even with the vascular layer
+    // switched off. Deriving from the same helper `SceneLayers` uses keeps the 3D
+    // pass and the section pass from disagreeing about which record a mesh is.
+    const sides = anatomySlugsForRecord(recordId)
+    if (sides === null) continue
+    for (const slug of sides.left) {
+      assign(slug, recordId, link.region)
+      // Paired bodies are committed as BOTH `…-l` and `…-r` GLBs, while
+      // ANATOMY_RECORD_LINKS names only the `-l` mesh (SceneLayers mirrors that
+      // one geometry into the right-hand slot). The section worker loads EVERY
+      // committed GLB, so the `-r` twin needs the same override or its contours
+      // would paint outside every region filter.
+      if (slug.endsWith('-l')) {
+        assign(`${slug.slice(0, -2)}-r`, recordId, link.region)
+      }
     }
+    for (const slug of sides.right ?? []) assign(slug, recordId, link.region)
   }
   // The hemisphere shells group under the cortex record — the same id the ghost
   // pass makes clickable — so a section contour of the shell highlights with the

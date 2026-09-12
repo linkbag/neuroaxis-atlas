@@ -306,5 +306,150 @@
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
     ]
+  },
+  {
+    "id": "nuc-accumbens",
+    "name": "Nucleus accumbens",
+    "synonyms": ["NAc", "nucleus accumbens septi", "accumbens nucleus", "ventral striatum (accumbens core and shell)"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The best-defined subregion of the ventral (limbic) striatum, sitting at the junction of the caudate head, putamen and septal area beneath the anterior limb of the internal capsule: its shell (medial, infralimbic) mediates the unconditioned, motivational response to reward through the extended amygdala, while its core (lateral, prelimbic) mediates cue-conditioned, goal-directed approach and the instrumental invigoration of behaviour. It is the anatomical convergence point where motivation becomes movement — the ventral counterpart of the dorsal striatum's direct/indirect pathway architecture, with the same medium spiny neuron composition and the same reliance on dopamine, but receiving limbic rather than sensorimotor cortex.",
+    "contextNote": "Authored at a documented plane: the accumbens is the medial-ventral part of the striatal cast at the level of the anterior limb of the internal capsule (x ≈ 12.5, y ≈ 27, z ≈ 30, an anchor placed on the baked caudate/putamen casts by the v8 content-authoring run; it is the record-level companion of `nuc-ventral-striatum`, which stays the region-level concept). v8 `tel-deep-geometry` may bake a dedicated accumbens volume.",
+    "connections": {
+      "afferent": [
+        "Corticostriate fibres from the infralimbic, prelimbic and orbitofrontal cortex (the shell/core division mirrors this input)",
+        "Hippocampal (subicular) fibres through the fornix and amygdala fibres through the stria terminalis and the ventral amygdalofugal pathway",
+        "Mesolimbic dopamine from the ventral tegmental area — the natural-reward and drug-reward substrate — plus serotonergic raphe and noradrenergic input"
+      ],
+      "efferent": [
+        "Ventral pallidum (nuc-ventral-pallidum), then the mediodorsal thalamus and anterior cingulate/prefrontal cortex (the limbic basal-ganglia loop)",
+        "Lateral hypothalamus and brainstem effector regions (feeding, autonomic and locomotor drive); substantia nigra pars reticulata from the core",
+        "Ventral tegmental area through the accumbens-ventral pallidal-VTA loop that gates burst firing"
+      ]
+    },
+    "bloodSupply": "The anterior perforated substance: the recurrent artery of Heubner (anterior cerebral artery) and the medial lenticulostriate branches of the middle cerebral artery meet here, which makes the accumbens the watershed of the two anterior territories. Venous drainage runs through the anterior cerebral and striate veins to the basal vein and the cavernous sinus.",
+    "clinical": [
+      {
+        "syndrome": "Addiction and incentive salience",
+        "findings": "Repeated exposure to drugs of abuse produces lasting changes in accumbens dopamine transmission and medium spiny neuron plasticity that transform a hedonic 'liking' signal into pathological 'wanting' (incentive salience) and cue-driven relapse; the region is the shared anatomical target of opioids, psychostimulants, nicotine and alcohol.",
+        "note": "Circuit-level (functional and preclinical literature), not a focal lesion syndrome"
+      },
+      {
+        "syndrome": "Accumbens deep brain stimulation for refractory depression and OCD",
+        "findings": "Chronic high-frequency stimulation of the nucleus accumbens/ventral capsule improves treatment-resistant depression and obsessive-compulsive symptoms in selected patients, evidence that the limbic striatum gates mood and compulsion as well as reward.",
+        "note": "Investigational/selected therapy, not a spontaneous syndrome"
+      },
+      {
+        "syndrome": "Ventral striatal infarct (Heubner territory)",
+        "findings": "Small infarcts supply disinhibition, apathy or obsessive-compulsive behaviour and can unmask mania; they usually accompany an anterior cerebral artery infarct of the caudate head.",
+        "vascular": "Recurrent artery of Heubner (anterior cerebral artery) or medial lenticulostriate arteries"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-basal-ganglia"],
+    "origin3d": [12.5, 27, 30],
+    "size3d": [3, 3, 4],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "nuc-ventral-pallidum",
+    "name": "Ventral pallidum",
+    "synonyms": ["VP", "ventral pallidum (substantia innominata component)", "pallidum, ventral part"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The limbic counterpart of the dorsal pallidal segments, lying in the substantia innominata beneath the anterior commissure and continuous with the subcommissural part of the globus pallidus: it is the principal output nucleus of the ventral striatopallidal system, receiving GABAergic input from the accumbens shell and core and relaying it — through a thalamic route to the mediodorsal nucleus and cortex, and through a descending route to the lateral hypothalamus and brainstem — into motivated behaviour. Its neurons encode hedonic 'liking' reactions (the taste-reactivity substrate) and, with the mediodorsal thalamus, the reward-prediction signal that keeps behaviour directed at a goal.",
+    "contextNote": "Authored at a documented plane: the ventral-most part of the pallidal cast at the level of the anterior commissure (x ≈ 20.5, y ≈ 23, z ≈ 14, an anchor placed on the baked globus-pallidus cast by the v8 content-authoring run). The dorsal GPe/GPi records start above this level; the two are anatomically continuous.",
+    "connections": {
+      "afferent": [
+        "Nucleus accumbens (nuc-accumbens) shell and core — the striatopallidal (GABA/enkephalin) projection of the limbic loop",
+        "Ventral striatum (nuc-ventral-striatum) and the extended amygdala (central nucleus and bed nucleus of the stria terminalis)",
+        "Dopaminergic and glutamatergic modulation from the ventral tegmental area, basolateral amygdala and prefrontal cortex"
+      ],
+      "efferent": [
+        "Mediodorsal thalamus (nuc-md), then the anterior cingulate and medial prefrontal cortex — the limbic cortico-striato-pallido-thalamo-cortical loop",
+        "Lateral hypothalamus and ventral tegmental area (the descending route that gates feeding and locomotor drive); pedunculopontine nucleus",
+        "Reciprocal connections with the accumbens and the subthalamic nucleus"
+      ]
+    },
+    "bloodSupply": "The anterior perforated substance and the region of the anterior commissure: the recurrent artery of Heubner (anterior cerebral artery) and medial lenticulostriate branches of the middle cerebral artery, with the anterior choroidal artery reaching the region of the substantia innominata from behind. Venous drainage into the basal vein of Rosenthal.",
+    "clinical": [
+      {
+        "syndrome": "Hedonic deficit and blunted reward (ventral pallidum lesion)",
+        "findings": "Lesions of the ventral pallidum abolish the normal orofacial 'liking' reactions to sweet taste without changing the ability to detect it, and produce a profound loss of goal-directed drive — the strongest causal evidence that the ventral pallidum carries the hedonic component of reward.",
+        "note": "Lesion and animal literature; in humans the region is affected by stroke of the anterior perforated substance and by neurodegeneration"
+      },
+      {
+        "syndrome": "Ventral pallidal/substantia innominata infarction",
+        "findings": "Infarcts here form part of the Heubner/medial lenticulostriate territory and cause apathy, disinhibition or obsessive-compulsive behaviour, adding a motivational deficit to the motor findings of an anterior cerebral artery stroke.",
+        "vascular": "Recurrent artery of Heubner or medial lenticulostriate arteries"
+      },
+      {
+        "syndrome": "Ventral pallidum in the extended amygdala and addiction circuitry",
+        "findings": "The ventral pallidum is a relay of the extended amygdala, so its plasticity contributes to withdrawal-related negative affect and to cue-induced relapse after abstinence.",
+        "note": "Circuit-level observation rather than a focal syndrome"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "origin3d": [20.5, 23, 14],
+    "size3d": [2.5, 2, 4],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "nuc-claustrum",
+    "name": "Claustrum",
+    "synonyms": ["claustrum (nucleus)", "nucleus claustri", "claustrum dorsale"],
+    "region": "telencephalon",
+    "subdivision": "Basal ganglia",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "A thin, sheet-like band of deep gray matter between the putamen medially and the insular cortex laterally, separated from the putamen by the external capsule and from the insula by the extreme capsule. Although classically grouped with the basal ganglia, it is a cortico-cortical hub: it receives an exceptionally broad projection from almost every cortical area and returns a topographically organized one, and its neurons respond to the conjunction of stimuli across modalities. Current views assign it a role in the binding and salience of multimodal information and in the coordination of cortical networks (including the slow-wave oscillation between claustrum and cortex), which is why minute bilateral lesions have been reported to disrupt consciousness.",
+    "contextNote": "Authored at a documented plane: the lamina between the baked putamen cast and the insular cortex of the hemisphere ribbon (x ≈ 31, y ≈ 36, z ≈ 12, derived from the putamen lateral surface and the insular surface of `ctx-hemisphere-l`, probed by the v8 content-authoring run). The claustrum is 1–2 units thick and is not separable in the baked meshes; the record is the honest representation.",
+    "connections": {
+      "afferent": [
+        "Widespread corticoclaustral projections from sensory (visual, auditory, somatosensory), motor and prefrontal cortex — nearly the entire neocortical sheet, with a rough topographic order",
+        "Subcortical input from the intralaminar thalamic nuclei and the amygdala; neuromodulatory input from the brainstem"
+      ],
+      "efferent": [
+        "Reciprocal, topographically organized claustrocortical projections returning to the same cortical areas (the substrate of the proposed binding function)",
+        "Local projections to the putamen and the adjacent insular cortex; subcortical projections to the amygdala and the intralaminar thalamus"
+      ]
+    },
+    "bloodSupply": "Insular (M2) branches of the middle cerebral artery and the lateral lenticulostriate arteries reach the claustrum and the adjacent external/extreme capsules; the region is a common site of involvement in MCA insular infarction and in lenticulostriate haemorrhage.",
+    "clinical": [
+      {
+        "syndrome": "Claustrum and the loss of consciousness (case report literature)",
+        "findings": "A small bilateral claustral lesion following status epilepticus and a small unilateral lesion in a patient who abruptly lost consciousness have been reported as evidence that the claustrum coordinates the cortical networks required for conscious awareness — a provocative but single-case observation.",
+        "note": "Case-report level evidence; not a vascular syndrome"
+      },
+      {
+        "syndrome": "Insular/claustral infarction (MCA M2 territory)",
+        "findings": "The insula and claustrum are infarcted in the majority of MCA occlusions because the M2 branches arise first; the result is usually a large MCA syndrome with autonomic instability rather than an isolated claustral deficit.",
+        "vascular": "Middle cerebral artery, insular (M2) branches"
+      },
+      {
+        "syndrome": "Claustrocortical epilepsy and insular seizures",
+        "findings": "Seizures arising in the operculo-insular/claustral region cause unpleasant throat and chest sensations, dyspnoea, laryngeal constriction and autonomic signs, often misdiagnosed as panic attacks.",
+        "note": "Epileptic rather than vascular; the claustrum is part of the ictal network"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral", "lvl-tel-thalamostriate", "lvl-tel-basal-ganglia"],
+    "origin3d": [31, 36, 12],
+    "size3d": [1, 4, 8],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
   }
 ]

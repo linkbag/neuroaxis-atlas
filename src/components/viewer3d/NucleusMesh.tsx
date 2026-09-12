@@ -50,6 +50,10 @@ const KIND_OPACITY: Record<StructureRecord['kind'], number> = {
 function hintForKind(kind: StructureRecord['kind']): MaterialHint {
   if (kind === 'ventricle') return 'csf'
   if (kind === 'context') return 'context'
+  // v8: a vessel record with no manifest hint still gets the arterial cast
+  // material rather than the gray-matter nucleus preset (the baked vessel parts
+  // all declare `materialHint: 'vasculature'`; this covers the mesh-less ones).
+  if (kind === 'vessel') return 'vasculature'
   return 'nucleus'
 }
 

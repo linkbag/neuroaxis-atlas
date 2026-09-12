@@ -801,3 +801,264 @@ single-item records; `nuc-cochlear-dorsal` as the single citation exception amon
 `kind:"context"` surface silhouettes, and authoring clinical items for a surface
 shell is a content decision rather than a QA fix (see
 `docs/QUALITY_PLAN.md §8.6` item 2).
+
+---
+
+## 11. v8 deep content (run `content-authoring`) — functional cortices, striatal depth, hippocampal subfields, optic pathway, ventricular segments, cerebral vasculature
+
+**Appended by the v8 `content-authoring` task** (`docs/NEUROATLAS_V8_PLAN.md` §3, task #4 in §6). §1–§10 above are the dated v6/v7 reconciliations and **none of them was edited, renumbered or restated**; this section is the new state, measured from `src/data` after the edits. Where a number here differs from a number above, the number above is the older measurement, not an error.
+
+### 11.1 Measured delta (recounted from `src/data`, not copied)
+
+| quantity | before this task | after this task |
+| --- | --- | --- |
+| registry entries (`taxonomy.json`) | 183 (telencephalon 46) | **206** (telencephalon **69**) |
+| registry entries awaiting an authored record | 0 of 183 | **0 of 206** |
+| `structures/*.json` | 11 files, 160 records | **15 files, 183 records** |
+| `tracts.json` | 23 records | **23** (one record enriched, none added) |
+| `levels.json` anchors | 17 | **17** (unchanged — no new level was needed) |
+| `npm run validate` | 0 errors, 0 warnings | **0 errors, 1 warning** while staged (the single warning was the intentionally staged vasculature file, §11.8) — **since §11.13: 0 errors, 0 warnings** |
+| `npm run check` | exit 0 | **exit 0** |
+| staged-but-not-loaded vessel records | 0 | **14** in `src/data/structures-pending/vasculature.json` — **0 since §11.13** (landed as `src/data/structures/vasculature.json`) |
+
+**43 ids registered, 43 records authored or enriched**: 23 new registry rows for ids in regions the validator already accepts (`telencephalon`), and 14 vessel ids whose registry rows land with the `vasculature` region enum (§11.8). The 23 rows were appended by an append-only, idempotent script (`.dsh-scratch/v8-content/register-v8-ids.mjs`, scratch — not committed); it edits only the closing bracket of `taxonomy.json`, skips any id already present, and refuses to write if a display name would collide.
+
+### 11.2 New record fields introduced by v8 (contract extension — `docs/DATA_CONTRACT.md` §2/§4 is the frozen v1 shape, and nothing in it was changed)
+
+| field | applies to | meaning | validator impact |
+| --- | --- | --- | --- |
+| `anchors: { gyrus: string, mesh: string }` | the 12 cortical functional areas | the host gyrus the area occupies, plus the baked mesh that currently stands in for it | **none** — unknown fields are ignored by `validate-data.mjs`; a JSON-only field is deliberate (see the note below) |
+| `meshes: false` | records the plan requires as record-only (hippocampal subfields, optic pathway, vessels, cortical areas) | explicit "no mesh of its own" | ignored |
+| `territory: string[]` | the 14 vessel records | the structure ids the artery supplies (the highlight set when an artery is selected) | validated by the author's own check, not the schema validator |
+| `supply: string[]` | the 14 vessel records | the **existing syndrome-card ids** whose arterial territory is this artery (e.g. `syn-lateral-pontine` for the AICA) | same |
+| `contextNote` (existing field, now also used for placement) | every mesh-less v8 record | "Authored structure — schematic placement" plus the plane/coordinate the record is anchored at | already validated (optional non-empty string) |
+
+Deliberate decision, recorded so the next task does not reinvent it: these fields are **JSON-only for now**, because `src/types.ts` is another task's write scope in this run and the v8 geometry is not yet landed. `npm run check` is unaffected (it does not type the JSON payloads — `load.ts` casts them), and the fields are additive, so typing them later is a non-breaking change. `anchors.mesh` is honest about the current bake: BodyParts3D has **no per-gyrus mesh** (no precentral/postcentral/calcarine/Heschl part exists in `anatomy-manifest.json`), and the cortical ribbon answers clicks as `ctx-cerebral-cortex` (`SceneLayers.tsx`, `TEL_HEMISPHERE_RECORD_IDS`). Every cortical-area `origin3d` was therefore probed from the baked `ctx-hemisphere-l` ribbon by the authoring run, not guessed.
+
+### 11.3 Cortical functional areas — 12 (`src/data/structures/telencephalon-cortical-areas.json`, all `kind:"context"`, subdivision `Functional cortical areas`)
+
+| slug | area | host gyrus (`anchors.gyrus`) | `origin3d` | levels (y) |
+| --- | --- | --- | --- | --- |
+| `ctx-v1` | Primary visual cortex (V1) | calcarine cortex (cuneus above, lingual gyrus below) | [9.5, 17, −60] | +19 +28 +36 +78 |
+| `ctx-v2` | Secondary visual cortex (V2) | prestriate cortex around the striate area | [16.4, 33, −50] | +19 +28 +78 |
+| `ctx-a1` | Primary auditory cortex (A1) | transverse temporal gyri of Heschl | [32, 29.5, −4] | +28 +36 +48 |
+| `ctx-a2` | Secondary auditory cortex (A2) | planum temporale | [35, 33.5, 2] | +28 +36 +48 |
+| `ctx-wernicke` | Wernicke's area | posterior superior temporal gyrus + temporoparietal junction | [43.6, 30, −28] | +28 +36 +48 |
+| `ctx-broca` | Broca's area | posterior inferior frontal gyrus (pars opercularis/triangularis) | [36, 33.5, 42.5] | +36 +48 +58 |
+| `ctx-m1` | Primary motor cortex (M1) | precentral gyrus | [43.2, 66.5, 19] | +58 +68 +78 |
+| `ctx-s1` | Primary somatosensory cortex (S1) | postcentral gyrus | [42.4, 68.2, −1.7] | +58 +68 +78 |
+| `ctx-premotor` | Premotor cortex | lateral precentral cortex anterior to the precentral gyrus | [38.6, 70.8, 34.2] | +58 +68 +78 |
+| `ctx-sma` | Supplementary motor area (SMA) | medial superior frontal gyrus (mesial area 6) | [6, 82.8, 22.6] | +68 +78 |
+| `ctx-entorhinal` | Entorhinal cortex | anterior parahippocampal gyrus (uncus + anterior cortex) | [21.7, 9.5, 20.5] | +8 +14 +19 |
+| `ctx-frontal-eye-fields` | Frontal eye fields | posterior middle frontal gyrus (area 8) | [36, 71.3, 35.5] | +68 +78 |
+
+Every record carries `function`, `connections.afferent/efferent`, `bloodSupply`, `clinical[]` and `refs[]` in the established v6/v7 style. The clinical content required by the brief is present verbatim where named: V1 lesion → **cortical blindness with macular sparing** and Anton syndrome; Wernicke → **fluent aphasia**; Broca → **non-fluent aphasia**; M1/S1 → motor/sensory deficits; A1 → cortical deafness (bilateral) and pure word deafness; entorhinal → **perforant path origin**, Alzheimer (Braak I–II) and HSV encephalitis. Blood supply follows the territory: V1/V2 = **PCA (calcarine branch, macular sparing)**, A1/A2/Wernicke/Broca/M1/S1/premotor/FEF = **MCA** (superior or inferior division as appropriate), SMA = **ACA (callosomarginal/pericallosal)**, entorhinal = **PCA (hippocampal branches)** with anterior choroidal at the uncal end.
+
+### 11.4 Basal ganglia depth — 3 new records (`telencephalon-basal-ganglia.json`)
+
+| slug | name | kind | `origin3d` / `size3d` | pathway role |
+| --- | --- | --- | --- | --- |
+| `nuc-accumbens` | Nucleus accumbens | nucleus | [12.5, 27, 30] / [3, 3, 4] | shell = unconditioned reward, core = cue-conditioned approach; limbic striatum |
+| `nuc-ventral-pallidum` | Ventral pallidum | nucleus | [20.5, 23, 14] / [2.5, 2, 4] | limbic output nucleus: accumbens → MD thalamus / lateral hypothalamus; hedonic "liking" |
+| `nuc-claustrum` | Claustrum | nucleus | [31, 36, 12] / [1, 4, 8] | cortico-cortical hub between putamen and insula (external / extreme capsules) |
+
+**Deviation, stated plainly:** the plan and the task brief list **GPi, GPe and the nucleus accumbens** as new depth records. GPi and GPe already exist, authored and registered, as `nuc-globus-pallidus-internus` and `nuc-globus-pallidus-externus` (subdivision `Basal ganglia`), and *nothing* in the current data uses the short ids `nuc-gpi` / `nuc-gpe` — so authoring "GPi/GPe records" again would have produced four duplicate display names and two duplicate ids (a hard validator error). They were **not** duplicated: their `function`/`connections`/`clinical` already state the direct (GPi) and indirect (GPe) pathway roles and the hemiballismus association the brief asks for. Likewise the nucleus accumbens already had a broader concept record, `nuc-ventral-striatum`; the new `nuc-accumbens` is the plan's subregion record and says so in its `contextNote`, which points at the concept record so the two are not conflated. **Net effect for the task's five named structures: GPi ✓ (existing, verified), GPe ✓ (existing, verified), accumbens ✓ (new), ventral pallidum ✓ (new), claustrum ✓ (new).**
+
+### 11.5 Hippocampal formation — 4 new records + 1 enriched (`telencephalon-hippocampal-subfields.json`)
+
+| slug | field | `origin3d` | placement | key clinical |
+| --- | --- | --- | --- | --- |
+| `nuc-subiculum` | Subiculum | [20.7, 11.8, 0.6] | medial-concave surface of the hippocampal body | mesial temporal sclerosis (seizure-onset zone) |
+| `nuc-ca1` | CA1 (Sommer sector) | [24.8, 13.8, −0.9] | dorsal-lateral body | **most vulnerable to hypoxia/ischaemia**; sclerosis |
+| `nuc-ca2-ca3` | CA2 and CA3 fields | [28.1, 13, −4.1] | lateral convexity | mossy-fibre sprouting; CA2 = resistant sector |
+| `nuc-ca4` | CA4 (hilus of the dentate gyrus) | [25.1, 12.7, −1.2] | core of the body | hilar cell loss → dentate gate failure |
+| `nuc-dentate-gyrus` | Dentate gyrus (**existing** v7 record, enriched) | [16, 14, −2] | — | gained `meshes:false` + the placement note |
+
+All four new records carry `meshes: false` **and** a `contextNote` beginning "Authored structure — schematic placement", which is the plan's §2.4/§5 honesty requirement; the pickable volume stays `nuc-hippocampus` in every case. The trisynaptic circuit is stated in the records: entorhinal (layer II) → **perforant path** → dentate granule cells → **mossy fibres** → CA3 → **Schaffer collaterals** → CA1 → subiculum → entorhinal/fornix, with the temporoammonic path noted as the trisynaptic-bypassing input to CA1. `nuc-dentate-gyrus` is **not** duplicated (it was already registered as `nuc-dentate-gyrus` and authored in v7; the brief's five names are covered by four new records plus this enrichment).
+
+### 11.6 Optic pathway — 3 new records + 1 enriched
+
+| slug | name | kind | where | anchor / course |
+| --- | --- | --- | --- | --- |
+| `tract-optic-nerve` | Optic nerve | tract (new) | `telencephalon-optic-pathway.json` | 5 waypoints, orbital/intracranial course to the chiasm (x≈11→2, y 19→23.5, z 33→23.5) |
+| `ctx-optic-chiasm` | Optic chiasm (chiasmatic crossing) | context (new) | `telencephalon-optic-pathway.json` | midline [0, 23.5, 23.5]; deliberately distinct from the v6 **landmark** record `surf-optic-chiasm` (diencephalon) |
+| `tract-optic-tract` | Optic tract | tract (new) | `telencephalon-optic-pathway.json` | 6 waypoints from the chiasm around the peduncle to `nuc-lgn` |
+| `tract-optic-radiation` | Optic radiation (**existing** v7 record, enriched) | tract | `tracts.json` | `levels[]` extended to `lvl-thalamus-rostral`, `lvl-tel-thalamostriate`, `lvl-tel-convexity` so the radiation is reachable at every level it crosses |
+
+Connections run **retina → optic nerve → chiasm → tract → LGN → optic radiation → V1**, and the clinical content covers **bitemporal hemianopia** (chiasm), **incongruous homonymous hemianopia** (tract, with the pupillary sign), and the **quadrantanopias** (Meyer loop = superior, dorsal bundle = inferior; complete radiation = congruent hemianopia). Note that the chiasm now has two ids by design: `surf-optic-chiasm` is the surface landmark used by the v6 sagittal plate, `ctx-optic-chiasm` is the crossing/fibre record — the registry keeps both, and no plate slug changed.
+
+### 11.7 Ventricular segments — 1 new record + 4 with new plane anchors
+
+| slug | record | `origin3d` | splitter plane documented in `contextNote` |
+| --- | --- | --- | --- |
+| `vent-lateral-ventricle-frontal-horn` | existing (enriched) | [7.2, 42.6, 31] | anterior to z = +25 |
+| `vent-lateral-ventricle-body` | **new** (`telencephalon-ventricle-segments.json`) | [5.5, 50.2, 10.7] | z = +25 … z = −6 |
+| `vent-lateral-ventricle-atrium` | existing (enriched) | [17.2, 32.5, −14.8] | z = −6 … z = −24, above y = +22 |
+| `vent-lateral-ventricle-occipital-horn` | existing (enriched) | [18.7, 25.3, −34.2] | posterior to z = −24 |
+| `vent-lateral-ventricle-temporal-horn` | existing (enriched) | [24.8, 15.4, −9.1] | below y = +22 |
+
+All five anchors are the **measured centroids of the segments they name**, probed from the baked `tel-lateral-ventricle-l` cast (bbox x −0.03…32.3, y 5.6…59.3, z −53.2…37.5) by the authoring run; the splitter planes in the `contextNote`s are the geometry contract the bake must hit. Four of the five segments were already authored in v7 with full clinical content and were **enriched, not rewritten**; only the **body** segment was missing.
+
+### 11.8 Cerebral vasculature — 14 records, **staged** (`src/data/structures-pending/vasculature.json`)
+
+**Ids are aligned with `docs/VASC_INVENTORY.md` (task `vasc-acquire`), not invented here.** That document was produced in parallel with this task and its §3/§3.1 tables name the exact atlas record each group of extracted artery meshes belongs to (`vasc-…-artery` style). This task's first draft used shorter ids (`vasc-basilar`, `vasc-posterior-cerebral`, …); they were renamed to match, so that the registry row, the record, the render wiring and the bake all use one identifier per artery (`.dsh-scratch/v8-content/align-vasc-ids.mjs`, scratch). Two deliberate notes on that alignment:
+
+- **The internal carotid artery keeps a record** (`vasc-internal-carotid-artery`) even though the inventory maps `FJ1682`/`FJ1682M` to "no atlas record": the inventory itself flags this as a content decision ("If the content task wants a `vasc-internal-carotid-artery` record, the verified mesh is already on disk"). The task brief asks for every Willis/major artery, the carotid is the feeding trunk of the whole anterior circulation and the commonest source of embolic stroke, so the record exists and its `contextNote` states exactly that.
+- **The posterior choroidal record is named after the mesh that exists**: the archive carries one element pair for the posterior medial choroidal artery (`FJ1727`/`FJ1727M`, FMA 50630), not a separate lateral element, so the record id is `vasc-posterior-medial-choroidal-artery` and the record's `synonyms`/`function` still teach both medial and lateral branches. `vasc-lenticulostriate-arteries` is the same situation from the other side: BP3D has no lenticulostriate concept, the inventory files the anterolateral central branches as MCA support (`FJ1662`/`FJ1662M`, `FJ1663`/`FJ1663M`), and the record documents that in its `contextNote` rather than pretending to own a mesh.
+
+| slug | artery | laterality | territory (ids) | `supply` (syndrome cards) |
+| --- | --- | --- | --- | --- |
+| `vasc-internal-carotid-artery` | Internal carotid artery | paired | 14 | weber, hypothalamic, tuberothalamic, hemiballismus |
+| `vasc-vertebral-artery` | Vertebral artery | paired | 13 | lateral-medullary, medial-medullary, hemimedullary, central-horner |
+| `vasc-basilar-artery` | Basilar artery | midline | 16 | locked-in, one-and-a-half, millard-gubler, foville, ino, peduncular-hallucinosis |
+| `vasc-anterior-cerebral-artery` | Anterior cerebral artery | paired | 13 | hypothalamic |
+| `vasc-anterior-communicating-artery` | Anterior communicating artery | midline | 7 | hypothalamic, tuberothalamic |
+| `vasc-middle-cerebral-artery` | Middle cerebral artery | paired | 17 | parkinson, lateral-medullary |
+| `vasc-posterior-communicating-artery` | Posterior communicating artery | paired | 8 | hemiballismus, tuberothalamic, hypothalamic, weber |
+| `vasc-posterior-cerebral-artery` | Posterior cerebral artery | paired | 17 | dejérine-roussy, percheron, tuberothalamic, weber, benedikt, claude, nothnagel, parinaud, peduncular-hallucinosis |
+| `vasc-superior-cerebellar-artery` | Superior cerebellar artery | paired | 12 | cerebellar, nothnagel |
+| `vasc-anterior-inferior-cerebellar-artery` | Anterior inferior cerebellar artery | paired | 15 | lateral-pontine, millard-gubler, foville |
+| `vasc-posterior-inferior-cerebellar-artery` | Posterior inferior cerebellar artery | paired | 13 | lateral-medullary, central-horner, hemimedullary |
+| `vasc-lenticulostriate-arteries` | Lenticulostriate arteries | paired | 13 | hemiballismus, weber |
+| `vasc-anterior-choroidal-artery` | Anterior choroidal artery | paired | 12 | hemiballismus |
+| `vasc-posterior-medial-choroidal-artery` | Posterior medial choroidal artery | paired | 9 | dejérine-roussy |
+
+Every record carries `region:"vasculature"`, `kind:"vessel"`, `subdivision` (Anterior circulation / Posterior circulation / Circle of Willis / Deep perforators), `laterality`, a crimson palette colour (`#b91c1c` trunks and midline links, `#dc2626` distal cortical/cerebellar branches, `#991b1b` deep perforators and the vertebral artery), `function`, `connections.afferent/efferent`, `bloodSupply`, `clinical[]` (what an infarct there causes), `territory[]`, `supply[]`, `levels[]`, `origin3d`/`size3d` and `refs[]`.
+
+**Why staged, and exactly how they land.** **STATUS: LANDED (§11.13).** The staging this section describes is over — the three steps below were executed by the orchestrator after the run stopped, and `npm run validate` is now **0 errors, 0 warnings**. The text is kept verbatim because it is the record of *why* the records were staged and what landing them required. `region:"vasculature"` was not yet in the validator's `REGIONS`, in `types.ts` `Region`, or in `load.ts` `ALL_REGIONS`/`REGION_LABELS` ("Cerebral vasculature") — that enum work was the `vasc-region-platform` task's scope and this task was instructed not to touch `src/types.ts` or `scripts/validate-data.mjs`. A record file under `src/data/structures/` with an unknown region would therefore have been a **hard validation error**, so the records lived in `src/data/structures-pending/vasculature.json`, outside every validator group. Landing them was mechanically three steps, and nothing in the file needed editing:
+
+1. `vasc-region-platform` adds `'vasculature'` to the three enums (`types.ts`, `load.ts` ×2, `validate-data.mjs` `REGIONS`) with the label **"Cerebral vasculature"**.
+2. Register the 14 ids: `node .dsh-scratch/v8-content/register-v8-ids.mjs --with-vessels` (append-only, idempotent, skips ids another task already added — the registry rows carry exactly the names, colours, subdivisions and lateralities in the table above, so the validator's registry cross-check cannot report drift).
+3. `git mv src/data/structures-pending/vasculature.json src/data/structures/telencephalon-vasculature.json` — the records then load through the existing `import.meta.glob('./structures/*.json')`.
+
+`npm run validate` reported **1 warning** for the staged file while it was staged: `structures-pending/vasculature.json :: (classification) — JSON file not in a known group … parsed only`. It was genuinely non-blocking (the group is "parsed only", the file's JSON is valid, and the validator exited 0), and it disappeared the moment step 3 landed (§11.13). This was the **only** warning in the repository, and it was chosen over the alternatives deliberately: an undeclared `.json` inside `structures/` would warn the same way while also polluting the loaded group, and a file outside `src/data/` would not be where the brief requires it.
+
+`docs/VASC_INVENTORY.md` was **not present** when this task began (the tree was scanned before it landed); the parallel `vasc-acquire` task published it during this run, and it is now the authoritative source for the artery list, the FMA/element ids and the record-id names — §3/§3.1 of that document is what the ids above were aligned to. Every artery here therefore has a verified BP3D mesh pair behind it: internal carotid `FJ1682`/`FJ1682M`, vertebral `FJ1725`/`FJ1725M`, basilar `FJ1672` (alt. `FJ1844`), anterior cerebral `FJ1654`/`FJ1654M`, anterior communicating `FJ1655`, middle cerebral (sphenoid `FJ1692`/`FJ1692M`, insular `FJ1660`/`FJ1660M`, `FJ1694`/`FJ1694M`, plus 34 terminal branch elements), posterior communicating `FJ1713`/`FJ1713M`, posterior cerebral (`P1` `FJ1723`/`FJ1723M`, `P2–P3` `FJ1714`/`FJ1714M`), superior cerebellar `FJ1726`/`FJ1726M` (+ lateral `FJ1683`/`FJ1683M`, medial `FJ1688`/`FJ1688M`), anterior inferior cerebellar `FJ1656`/`FJ1656M`, posterior inferior cerebellar (26 elements), anterior choroidal `FJ1658`/`FJ1658M`, posterior medial choroidal `FJ1727`/`FJ1727M`. The two exceptions are stated in each record's own `contextNote`: `vasc-lenticulostriate-arteries` (no BP3D concept; the anterolateral central branches `FJ1662`/`FJ1662M`, `FJ1663`/`FJ1663M` are filed by the inventory as MCA support) and `vasc-internal-carotid-artery` (the inventory maps those meshes to "no record" and explicitly leaves the record decision to the content task — taken here, with the reason recorded). No source material was invented: every syndrome name, territory id and FMA reference above resolves against the committed data or against `docs/VASC_INVENTORY.md`.
+
+### 11.9 Web references — every new id curated (`src/data/webRefs.ts`)
+
+43 curated entries were added: 12 cortical areas, 4 hippocampal subfields, 3 basal-ganglia records, 3 optic-pathway records, 1 ventricular segment, and 14 vessels — plus the pre-existing per-segment entries for the four lateral-ventricle segments that v7 had already curated (no duplicate keys; `npm run check` is exit 0, which is what catches a duplicated object key in TypeScript). **The vessel entries are load-bearing**: `getWebRefs()` deliberately emits *no* automatic Wikipedia fallback for `kind === 'vessel'`, so an uncurated artery would render an empty "learn more" panel. Journal-level entries were verified against Crossref/PubMed before being added: Felleman & Van Essen 1991 (visual areas), Amaral & Witter 1989 (hippocampal formation), Catani et al. 2005 (perisylvian language networks), Haber & Knutson 2010 (reward circuit), Schmahmann 2003 (vascular syndromes of the thalamus), plus the pre-existing Scoville & Milner 1957, Alexander/DeLong/Strick 1986, Catani & ffytche 2005, Catani & Thiebaut de Schotten 2008 and Damkier et al. 2013.
+
+### 11.10 What this task deliberately did **not** do
+
+- It did **not** touch `src/types.ts`, `scripts/validate-data.mjs`, `src/data/load.ts`, `plates.json`, any `plates/*.svg`, or any `src/components/**` file — all owned by other tasks in this run.
+- It did **not** duplicate `nuc-globus-pallidus-internus` / `nuc-globus-pallidus-externus` / `nuc-dentate-gyrus` / `surf-optic-chiasm` (all pre-existing), and it did **not** invent `nuc-gpi` / `nuc-gpe` ids that no data, plate or code refers to.
+- It did **not** author new meshes or GLBs (geometry is `tel-deep-geometry` / `vasc-register-bake`), and it did **not** claim any: every record that has no baked part says so in `meshes:false` + `contextNote`.
+- It did **not** move anything below y = +45: no existing record's `origin3d`, level anchor, plate or clip value was changed. The only edits to pre-existing records were **additive** (`origin3d`/`size3d` added to four ventricular segments; `meshes`/`contextNote` added to `nuc-dentate-gyrus`; `levels[]` extended on `tract-optic-radiation`; `synonyms` extended on `nuc-dentate-gyrus`).
+
+### 11.11 Verification performed (all non-browser gates)
+
+| gate | result |
+| --- | --- |
+| `npm run validate` | **exit 0** — 0 errors, 1 warning (the staged vasculature file, §11.8), 206 registry entries (0 awaiting a record), 15 structure files / 183 records, 23 tracts, 26 syndromes, 15 plates |
+| `npm run check` | **exit 0** (`tsc --noEmit`, catches the duplicate `webRefs` key class of error) |
+| `.dsh-scratch/v8-content/check-v8-records.mjs` (scratch, author's own semantic gate) | **all passed** — every new id registered; no display-name or colour drift against the registry; every `anchors.mesh` is a real baked manifest part; every `supply` syndrome id and every `territory` structure id resolves; a curated webRef exists for every new id; every mesh-less v8 record is flagged; every `origin3d` inside the AMENDMENT B bounds (x ±58, y −55…116, z −76…72) |
+| browser lanes (`verify:audit` / `verify:browser` / `verify:acceptance`) | **not run and not claimed** — Chrome is sandbox-denied for agents; the orchestrator owns that lane. What to check there: the new `ctx-*` areas appear in the Telencephalon tree under *Functional cortical areas*, selecting one shows its record and highlights the hemisphere ribbon (the current stand-in for the host gyrus), and the ventricles/hippocampal subfields are selectable from the tree. |
+
+### 11.12 Independent re-verification of §11 (`verify-content-authoring.mjs`) — added in the resumed pass
+
+§11.1–§11.11 were written by the run's first pass. The **resumed pass re-derived every claim in them from scratch** rather than trusting the earlier text, with a gate written *against the task brief* instead of against the author's own check (`.dsh-scratch/v8-content/verify-content-authoring.mjs`, scratch — **453 assertions, 0 failures**). It re-checks the per-category counts, the exact brief ids, `kind`/`subdivision`/`region` on every new record, the named clinical facts, level-id resolution, `territory`/`supply` id resolution, webRef coverage, and the registry state. Two findings worth recording:
+
+1. **The validator warning is a property of the staged directory, not of the filename.** The resumed pass briefly renamed the file to `structures-pending/structures-vasculature.json` on the theory that the `structures-` prefix would satisfy the validator's group classifier, then reverted it (hash identical, `318ae8c0…`). `validate-data.mjs` classifies by *path* (`f.startsWith('structures/')`), so **no filename inside `src/data/structures-pending/` can avoid the warning** — moving the records out of `src/data` is the only alternative, and the brief requires them there. The warning therefore stays until `vasc-region-platform` lands the `vasculature` enum and `integration-v8` performs the `git mv` of §11.8 step 3, at which point it disappears with no further edit.
+2. **"Nothing below y=+45 moved" is now machine-checked, not asserted.** Node cannot spawn `git` in the agent sandbox (`spawnSync git EPERM`), so `.dsh-scratch/v8-content/git-dump.ps1` + `split-head-records.mjs` dump the committed v1–v7 data (183 records from 12 files) as per-record JSON, and the verifier compares by id: every committed record still exists, **no committed numeric value changed** (this is the actual proof that no coordinate moved), `levels.json` anchors are unchanged in count and value, and every committed registry row is byte-identical (append-only). The only pre-existing records that gained anything are exactly the five disclosed in §11.7 and §11.5 — `nuc-dentate-gyrus` (`meshes`, `contextNote`) and the four ventricular horns/atrium (`origin3d`, `size3d`, `contextNote`) — plus `tract-optic-radiation`, whose `levels[]` was extended (§11.6). Every other pre-existing record is untouched.
+
+| re-verification gate | result |
+| --- | --- |
+| `.dsh-scratch/v8-content/verify-content-authoring.mjs` (brief-shaped acceptance) | **exit 0 — 453 passed, 0 failed.** 12/12 cortical areas with `anchors.gyrus` + clinical + bloodSupply + levels + refs; GPi/GPe roles present on the existing ids and **no** duplicate `nuc-gpi`/`nuc-gpe` invented; 4 hippocampal subfields all `meshes:false` + schematic-placement note; 3 optic records + the enriched radiation with bitemporal hemianopia / quadrantanopia / retina→V1; all 5 ventricular segments with plane anchors + the interventricular foramen; 14 vessels with `region:"vasculature"`, `kind:"vessel"`, frozen-slug conformance, resolving `territory`/`supply`, laterality, levels and curated webRefs (PCA→Percheron/dejerine-roussy, AICA→lateral pontine, SCA→cerebellar all confirmed) |
+| `.dsh-scratch/v8-content/check-v8-records.mjs` | **exit 0** after fixing a shadowed-reporter bug (the mesh-less honesty branch declared `const note` over the module-level `note()` reporter, so a mesh-less-without-flag failure would have been swallowed instead of reported; the message now also names the offending id) |
+| `npm run verify:pipeline` | **exit 0** — unchanged v7 baseline **106/106 parts · 570,096 triangles · 329 loops · 0 problems** (this task authors no geometry, so any change here would have been a regression) |
+| `git diff --check HEAD` | clean — no whitespace errors, and `git status` shows **no file outside this task's write scope modified** |
+
+---
+
+## 11.13 v8 closure — the orchestrator's landing, platform and render wiring
+
+**Context.** The v8 run stopped with `vasc-acquire` and `vasc-register-bake` complete,
+`content-authoring` failed on its own evidence contract (its work landed anyway — §11.1–§11.12 above), and
+`vasc-region-platform` / `vasc-render` / `tel-deep-geometry` / `integration-v8` blocked and never dispatched.
+The remaining work was executed directly by the orchestrator, with no swarm in the loop. This section is that
+record: what landed, what it is wired to, what was verified, and what is deliberately still open.
+
+### 11.13.1 Platform — the `vasculature` region is legal
+
+| file | change |
+| --- | --- |
+| `src/types.ts` | `Region` gains `'vasculature'` |
+| `src/data/load.ts` | `ALL_REGIONS` gains it; `REGION_LABELS` gains **"Cerebral vasculature"** |
+| `scripts/validate-data.mjs` | `REGIONS` gains it (the enum the validator checks `record.region`/`entry.region` against) |
+| `src/data/structures/vasculature.json` | the 14 staged records moved here from `src/data/structures-pending/` (plain move — `git mv` refused because the staged directory was untracked), so they load through the existing `import.meta.glob('./structures/*.json')` |
+| `src/data/taxonomy.json` | **14 registry rows appended**, derived field-by-field from the records themselves (`.dsh-scratch/v8/vasc-registry.mjs`, scratch). Deriving rather than retyping is the point: the validator cross-checks registry against record, so a hand-copied name/colour/subdivision would have been a drift source with no upside. Append-only and idempotent, one object per line in the file's own style (no whole-file reformat). |
+
+`npm run validate` → **exit 0, 0 errors, 0 warnings**, 220 registry entries (0 awaiting an authored record),
+16 structure files / 197 records. **The repository's only warning is gone.**
+
+### 11.13.2 Render — the arterial layer reaches the scene
+
+| area | change |
+| --- | --- |
+| `src/geometry/materials.ts` | `MATERIAL_HINTS` gains `'vasculature'`; new **`createVesselMaterial`** (crimson, `roughness 0.34`, `clearcoat 0.3`, translucent 0.5, `DoubleSide` so a translucent tube shows no open interior, fresnel rim, section cut face in `VESSEL_CAP_COLOR #7f1d1d` instead of the shared tissue cap); `makeAnatomyMaterial` dispatches the hint. |
+| `src/components/viewer3d/NucleusMesh.tsx` | `hintForKind('vessel')` → `'vasculature'`, so a vessel record with **no** manifest hint still gets the arterial material (the mesh-less ones). |
+| `src/geometry/anatomyAssets.ts` | `AnatomyRecordLink` gains **`also`/`bodyRight`/`alsoRight`** + the **`anatomySlugsForRecord`** helper (per-side body lists; `right: null` = mirror, i.e. exactly the v1–v7 rule for every link that predates v8); **17 new links** — 14 vessel records + the 3 optic-pathway records; **`RECORD_MATERIAL_OVERRIDES`** restores the kind-implied hint for the optic parts the bake emitted with `materialHint:'vasculature'` (two tracts → `white-matter`, chiasm → `context`). |
+| `src/components/viewer3d/SceneLayers.tsx` | the body pass now draws **every body of a record per side**: explicit right-side bodies where the two sides are not mirror images (arteries — the circle of Willis is asymmetric), and both segments of the MCA/PCA under the one record. A record that is `midline` but names a right body (the chiasm) draws both halves. |
+| `src/components/section/sectionAssets.ts` | the section-worker slug table is derived from `anatomySlugsForRecord` instead of `link.body` alone. **This was a real bug, caught before it shipped:** the MCA's M2 and the PCA's P2 slugs were absent from the table, and a slug with no entry resolves to `region: null` — which the live-section canvas reads as "no region filter applies", so those two segments would have painted in the section view even with the vascular layer switched off. |
+| `src/state/store.ts` | new **`vasculature` preset** (arterial cast: vessels + surface records + context envelopes, everything else layer-off by *kind*); **`brainstem-focus`** and **`cortex-only`** now use the non-vascular region set, so the overlay is hidden at default framing through the REGION layer rather than through 14 structure ids (which the presets' own region guard would have read as a statement about the telencephalon). The load-time assertion that every non-telencephalon record stays layer-on in the default is **amended to exempt the vascular region — and pays for it with three new assertions**: the vascular region layer is off in the default, no vessel is hidden at structure level, and *All* / *Whole brain* / *Vasculature* each carry both the region and the `vessel` kind with no vessel hidden (without which the overlay could be unreachable everywhere while every other check still passed). |
+| `src/components/Header.tsx` | *Vasculature* added to the preset button order, next to *Whole brain*. |
+| `src/components/Legend.tsx`, `src/styles/tokens.css` | a **Cerebral arteries** palette swatch and the `--kind-vessel` token; the region and kind layer toggles pick the new entries up automatically (`ALL_REGIONS`/`ALL_KINDS`). |
+
+### 11.13.3 What v8 did **not** finish: per-segment geometry
+
+`tel-deep-geometry` never ran, and the orchestrator did not attempt it. **GPi/GPe, the caudate's head/body/tail
+and the lateral ventricle's horns/atrium/body are records that share their parent's committed mesh** — they are
+selectable, annotated, tree-visible and painted by the live section under the parent body, but selecting GPe
+highlights the pallidum rather than a separate outer segment. Carving them properly means an SDF/CSG split of a
+committed solid (a shell for GPe around GPi; a plane-clipped caudate; horn-clipped ventricle casts), each of which
+has to stay watertight, inside its per-part triangle cap and inside the parent's bounding box before it can be
+committed — a geometry task with its own verification, and one that touches bodies whose bbox invariance is
+asserted by `verify:anatomy`. It is recorded here, in the README's *Honest limits (v8)*, and in
+`docs/NEUROATLAS_V8_PLAN.md` §9 as the first item of the remaining v8 work.
+
+### 11.13.4 Verification (orchestrator run, after the wiring above)
+
+| gate | result |
+| --- | --- |
+| `npm run validate` | **exit 0 — 0 errors, 0 warnings** · 220 registry entries · 16 files / 197 records |
+| `npm run check` | **exit 0** |
+| `npm run build` | **exit 0** (15.9 s) |
+| `npm run verify:pipeline` | **exit 0 — 138/138 parts · 599,204 triangles · 386 loops across 13 planes · 0 problems** |
+| `npm run verify:plane` | **exit 0 — 10,827 assertions** |
+| `npm run verify:anatomy` | **exit 0 — 27 passed · 0 failed** (brainstem envelope bboxes unchanged, MRI/CT legacy-level content `max |Δ| 0 of 255`, every baked part inside `CLIP_BOUNDS`, budgets: 599,204 ≤ 800k tris, GLB 13.89 MB ≤ 14 MB, imaging 8.71 MB ≤ 10 MB) |
+| browser lanes | run by the orchestrator after this record was written; results in §11.14 |
+
+### 11.14 Browser lanes (the orchestrator's own runs — the one lane agents cannot execute)
+
+Both lanes drive real Chrome over CDP against a real dev server. They are the evidence for everything §11.13
+claims about the *running app*, as opposed to the data and the geometry.
+
+| lane | result |
+| --- | --- |
+| `npm run verify:acceptance` | **exit 0 — 9/9 checks passed.** PiP visible by default, hides on ×, the "Live section ▸" restore pill returns it, the hidden state survives a reload; the Plates-tab plane sliders are present with their canonical ranges (x −58…58, z −76…72, y −55…116); a slider move repaints the section (painted 901 → 901 with the MRI layer credited); no page exceptions. |
+| `npm run verify:audit` | **exit 0 — 68 passed · 0 failed · 16 informational.** Includes the 12 new v8 checks below, and re-confirms the whole v4→v7 surface: modality sweep (CT / MRI / Photo / Simulated-only with each state's own reason), CT coverage honesty above y ≈ 36.25 au, the telencephalon tree and its 7 subdivisions, the +58 plate, the WebGL context-loss overlay and its documented terminal state, the `?panelfail` containment (exactly one armed boundary, Retry clears it, other panels keep rendering), zero unexpected runtime errors, zero failed requests, zero 4xx/5xx. |
+
+**The 12 v8 checks (all `ok`)** — the vascular layer's DOM contract, end to end:
+
+| # | check | reading |
+| --- | --- | --- |
+| 1 | the tree carries the vascular region | "Cerebral vasculature", count **14** |
+| 2 | the default Brainstem-focus framing has the region layer **off** | hidden by region, not by structure |
+| 3 | the legend agrees with the tree | region `vasculature` off, kind `vessel` on — one layer state, two surfaces |
+| 4 | the palette documents the new family | "Cerebral arteries" row present |
+| 5 | the *Vasculature* preset switches the region **on** | in the tree and the legend |
+| 6 | it is the arterial cast, not "everything" | nuclei layer-off, vessels on |
+| 7 | the region expands into its circulations | Anterior circulation · Circle of Willis · Deep perforators · Posterior circulation |
+| 8 | an artery selected from the tree opens its record | "Posterior cerebral artery" |
+| 9 | the record reports its **territory** | **17** selectable structures (V1, V2, occipital lobe, …) |
+| 10 | the record names the **syndromes it causes** | **9** cards via the vessel→syndrome `supply` index (Déjérine-Roussy, Artery-of-Percheron, Tuberothalamic…) |
+| 11 | it carries its clinical significance | what an infarct there causes |
+| 12 | returning to Brainstem focus hides the layer again | the region toggle is the only switch (round trip) |
+
+Checks 9–12 are the ones a missing semicolon had silently skipped on the first run of this block (they were
+parsed into the previous ternary's never-evaluated alternate branch and reported nothing at all — 66 → **68**
+after the fix; see `docs/NEUROATLAS_V8_PLAN.md` §9.4). Their absence was caught because the count did not
+match the number of checks written, which is why the audit prints a count rather than only a verdict.
+
+

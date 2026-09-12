@@ -11,12 +11,15 @@ import { useAtlasStore, viewPresetOf, VIEW_PRESETS, type RenderQuality, type Vie
  * Preset button order. v1–v6 presets first (their behaviour is unchanged), then
  * the four v7 telencephalon-aware presets of docs/TELENCEPHALON_PLAN.md §5 —
  * whose FIRST entry, Brainstem focus, is also the default layer state a fresh
- * visitor boots into (state/store.ts DEFAULT_LAYERS).
+ * visitor boots into (state/store.ts DEFAULT_LAYERS) — then v8's Vasculature,
+ * which sits next to Whole brain because those are the two framings that carry
+ * the arterial layer (docs/NEUROATLAS_V8_PLAN.md §2).
  */
 const PRESET_ORDER: ViewPreset[] = [
   'brainstem-focus',
   'deep-structures',
   'whole-brain',
+  'vasculature',
   'cortex-only',
   'all',
   'nuclei',

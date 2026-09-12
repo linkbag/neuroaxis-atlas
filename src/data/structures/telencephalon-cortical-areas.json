@@ -1,0 +1,638 @@
+[
+  {
+    "id": "ctx-v1",
+    "name": "Primary visual cortex (V1)",
+    "synonyms": ["V1", "striate cortex", "Brodmann area 17", "calcarine cortex", "area striata", "primary visual area"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "Primary visual cortex — the striate cortex of Brodmann area 17, wrapped around the banks of the calcarine fissure on the medial occipital surface and reaching the occipital pole with the macular representation. It receives the geniculostriate projection from the lateral geniculate nucleus as a precise retinotopic map (the macula occupies a disproportionate posterior share, the monocular temporal crescent the anterior-most part), and it is the first cortical stage of form, orientation and spatial-frequency analysis — layer IVc receives the magno/parvo input, and the stripe of Gennari marks the line of Baillarger that gives the cortex its name.",
+    "anchors": {
+      "gyrus": "calcarine cortex — the banks of the calcarine fissure (cuneus above, lingual gyrus below)",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "Lateral geniculate nucleus (nuc-lgn) via the optic radiation (tract-optic-radiation) — magnocellular layers 1–2 and parvocellular layers 3–6, with the koniocellular intercalated layers to the CO blobs of layers II/III",
+        "Corticocortical feedback from V2, V3, V4/MT and the pulvinar/lateral posterior nucleus",
+        "Callosal fibres along the vertical meridian representation, connecting the two occipital poles"
+      ],
+      "efferent": [
+        "V2 and V3 (the dorsal and ventral streams begin here: MT/parietal 'where' versus V4/temporal 'what')",
+        "Corticothalamic feedback to the LGN; occipitopontine fibres to the pontine nuclei",
+        "Claustrocortical and pulvinar-projecting feedback loops"
+      ]
+    },
+    "bloodSupply": "Posterior cerebral artery — the calcarine branch (with a parieto-occipital contribution to the cuneus). The occipital pole usually has a dual supply from PCA and MCA collaterals, which is why PCA occlusion spares macular vision; bilateral PCA infarction destroys the calcarine cortex on both sides and produces cortical blindness.",
+    "clinical": [
+      {
+        "syndrome": "PCA infarct with homonymous hemianopia and macular sparing",
+        "findings": "Contralateral homonymous hemianopia that spares central (macular) vision because the occipital pole has a dual PCA/MCA supply, whereas the anterior calcarine cortex — carrying the monocular temporal crescent — is infarcted only by PCA occlusion.",
+        "vascular": "Posterior cerebral artery (calcarine branch)"
+      },
+      {
+        "syndrome": "Cortical blindness with Anton syndrome",
+        "findings": "Bilateral V1 destruction causes total loss of vision with denial of blindness and confabulated visual descriptions; the pupils and optokinetic responses remain normal, proving the lesion is cortical.",
+        "vascular": "Bilateral posterior cerebral arteries or basilar-tip embolism"
+      },
+      {
+        "syndrome": "Cortical visual impairment of the preterm infant",
+        "findings": "Periventricular leukomalacia involving the optic radiations and striate cortex produces visual impairment out of proportion to the ocular examination, with preserved pupillary responses.",
+        "note": "Ischaemic white-matter injury of prematurity rather than territorial infarction"
+      }
+    ],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [9.5, 17, -60],
+    "size3d": [4, 4, 5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "ctx-v2",
+    "name": "Secondary visual cortex (V2)",
+    "synonyms": ["V2", "Brodmann area 18", "prestriate cortex", "secondary visual area"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "The first visual association area, wrapped around V1 on the medial and lateral occipital surface (Brodmann 18). It is the site of the thick-pale-thin cytochrome-oxidase stripe system: the thick stripes project to MT/V5 for motion, the thin stripes to V4 for colour, and the pale interstripes carry form and depth — the anatomical reason the dorsal 'where/how' and ventral 'what' streams separate so early. V2 also completes the representation of the vertical meridian and the far periphery that V1 leaves incomplete, and it is the cortical source of the visual filling-in that makes a physiological blind spot imperceptible.",
+    "anchors": {
+      "gyrus": "prestriate cortex — the medial occipital gyri and the lateral occipital surface surrounding the striate cortex (cuneus, lingual and lateral occipital gyri)",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "V1 (ctx-v1) via short corticocortical (U-fibre) connections, retinotopically matched (callosal fibres at the vertical meridian)",
+        "Pulvinar and lateral posterior nucleus (nuc-lateral-posterior) — the extrageniculate route",
+        "Feedback from V3, V4 and MT"
+      ],
+      "efferent": [
+        "MT/V5 (motion) via the thick stripes and V4 (colour) via the thin stripes",
+        "V3 and the lateral occipital complex; occipitopontine and corticothalamic feedback to the pulvinar"
+      ]
+    },
+    "bloodSupply": "Posterior cerebral artery — parieto-occipital and calcarine branches supply the medial prestriate cortex; the lateral occipital branches reach the lateral prestriate surface, and the MCA/PCA border zone runs along the lateral occipital convexity (a watershed strip).",
+    "clinical": [
+      {
+        "syndrome": "PCA infarct with preserved V1 but damaged prestriate cortex",
+        "findings": "Lesions that spare the calcarine cortex but involve prestriate cortex leave elementary vision (acuity, fields) relatively intact while producing visual agnosia for form, colour or motion — the dissociation that defines the association cortices.",
+        "vascular": "Posterior cerebral artery (parieto-occipital branches)"
+      },
+      {
+        "syndrome": "Cerebral achromatopsia (V4 territory)",
+        "findings": "Bilateral ventral occipitotemporal lesions abolish colour perception while luminance vision is preserved — a striking demonstration that colour is computed after V1, downstream of the V2 thin stripes.",
+        "vascular": "Bilateral posterior cerebral artery (ventral occipitotemporal branches)"
+      },
+      {
+        "syndrome": "Akinetopsia (MT/V5 territory)",
+        "findings": "Bilateral lesions of the human MT/V5 complex cause the loss of visual motion perception — moving objects appear to jump — while static vision is retained.",
+        "note": "Rare focal lesion or bilateral PCA infarction; the dorsal-stream counterpart of achromatopsia"
+      }
+    ],
+    "levels": ["lvl-post-comm", "lvl-thalamus-mid", "lvl-tel-convexity"],
+    "origin3d": [16.4, 33, -50],
+    "size3d": [6, 6, 6],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'"
+    ]
+  },
+  {
+    "id": "ctx-a1",
+    "name": "Primary auditory cortex (A1)",
+    "synonyms": ["A1", "Brodmann area 41", "Heschl's gyrus", "transverse temporal gyrus", "primary auditory area"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "Primary auditory cortex, buried on the superior temporal plane in the transverse temporal gyri of Heschl at the floor of the sylvian fissure. It receives the auditory radiation from the medial geniculate nucleus as a tonotopic map (low frequencies anterolateral, high frequencies posteromedial) and performs the first cortical analysis of frequency, intensity and temporal structure; because the projection from the cochlear nuclei onward is bilateral, a unilateral A1 lesion does not cause deafness. Its core is surrounded by the belt and parabelt fields that feed A2 and Wernicke's area.",
+    "anchors": {
+      "gyrus": "transverse temporal gyri of Heschl — the superior surface of the superior temporal gyrus on the temporal plane",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "Medial geniculate nucleus (nuc-mgn) via the auditory radiation — tonotopic, with the core field receiving the lemniscal (ventral MGN) projection",
+        "Contralateral A1 through the corpus callosum and the commissure of the inferior colliculus (binaural interaction)",
+        "Non-lemniscal (diffuse) input from the dorsal MGN and the pulvinar"
+      ],
+      "efferent": [
+        "Belt and parabelt auditory association cortex, then A2/planum temporale (ctx-a2) and Wernicke's area (ctx-wernicke)",
+        "Corticothalamic feedback to the MGN and descending (corticofugal) projections to the inferior colliculus, superior olivary complex and cochlear nuclei",
+        "Prefrontal and premotor targets for the auditory-motor (vocal) loop"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, inferior (temporopolar/posterior temporal) division — the superior temporal plane is reached by the temporopolar and anterior temporal branches, and the posterior part borders the PCA territory. Embolic MCA occlusion is therefore the usual cause of a cortical auditory lesion.",
+    "clinical": [
+      {
+        "syndrome": "Bilateral A1 destruction — cortical deafness",
+        "findings": "Bilateral lesions of the primary auditory cortex produce apparent deafness with intact brainstem auditory evoked potentials: the ear hears but the cortex cannot decode. Unilateral A1 lesions cause only subtle deficits (impaired localization and temporal discrimination) because the pathway is bilateral from the cochlear nuclei onward.",
+        "vascular": "Bilateral middle cerebral artery infarction (or bilateral temporal injury of any cause)"
+      },
+      {
+        "syndrome": "Pure word deafness (auditory verbal agnosia)",
+        "findings": "Bilateral lesions of A1 and the surrounding belt, or disconnection of both Heschl's gyri from Wernicke's area, leave spontaneous speech, reading and writing intact while spoken words cannot be understood or repeated.",
+        "vascular": "Bilateral MCA inferior-division infarction"
+      },
+      {
+        "syndrome": "Auditory hallucinations and tinnitus of cortical origin",
+        "findings": "Irritative lesions and epileptic discharges of the temporal plane produce formed auditory hallucinations; A1 hyperexcitability is implicated in the cortical component of tinnitus.",
+        "note": "Epileptic/functional rather than vascular"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate"],
+    "origin3d": [32, 29.5, -4],
+    "size3d": [4, 3, 6],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Auditory System'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "ctx-a2",
+    "name": "Secondary auditory cortex (A2, planum temporale)",
+    "synonyms": ["A2", "Brodmann area 42", "auditory association cortex", "planum temporale", "belt and parabelt auditory cortex"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "Auditory association cortex on the planum temporale behind Heschl's gyrus: the belt and parabelt fields that compute what the primary area has already encoded — spectrotemporal patterns, pitch sequences, voice identity and the phonemic categories of speech. It sits at the posterior end of the superior temporal plane and, on the left, is the anatomical core of Wernicke's area; the leftward planum temporale asymmetry is one of the best-documented structural asymmetries of the human brain and the classic correlate of language lateralization.",
+    "anchors": {
+      "gyrus": "planum temporale — the posterior superior temporal plane behind Heschl's gyrus (registered separately as surf-planum-temporale)",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "A1 (ctx-a1) belt fields, tonotopically organized",
+        "Corticocortical input from the superior temporal gyrus and the supramarginal/angular cortex",
+        "Callosal input from the contralateral auditory association cortex"
+      ],
+      "efferent": [
+        "Arcuate/superior longitudinal fasciculus (tract-superior-longitudinal-fasciculus) to Broca's area (ctx-broca) — the dorsal language stream for articulation",
+        "Uncinate fasciculus and extreme capsule to the inferior frontal and orbitofrontal cortex — the ventral stream for meaning",
+        "Descending corticofugal modulation of the MGN and inferior colliculus"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, inferior (posterior temporal) division — the posterior temporal and angular branches supply the superior temporal plane; the posterior extremity borders the PCA territory through the temporo-occipital branches.",
+    "clinical": [
+      {
+        "syndrome": "Wernicke aphasia",
+        "findings": "Destruction of the posterior superior temporal plane and the adjacent superior temporal gyrus produces fluent but empty speech with impaired comprehension and repetition, anosognosia for the deficit and paraphasic errors.",
+        "vascular": "Middle cerebral artery, inferior (posterior temporal) division"
+      },
+      {
+        "syndrome": "Auditory agnosia for non-verbal sound (amusia, environmental sound agnosia)",
+        "findings": "Bilateral A2/planum lesions can preserve speech comprehension while abolishing the recognition of music and environmental sounds, showing that the association fields hold separate representations for each sound class.",
+        "note": "Bilateral cortical lesion; also reported with unilateral right-sided lesions for amusia"
+      },
+      {
+        "syndrome": "Developmental language disorder and dyslexia",
+        "findings": "Loss or reversal of the normal leftward planum temporale asymmetry is reported in developmental dyslexia and some language-impaired populations, and the region is a target of speech-therapy imaging studies.",
+        "note": "Developmental structural association — not a lesion syndrome"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate"],
+    "origin3d": [35, 33.5, 2],
+    "size3d": [3.5, 3.5, 5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Auditory System'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "ctx-wernicke",
+    "name": "Wernicke's area",
+    "synonyms": ["Wernicke area", "Brodmann area 22 (posterior)", "receptive speech area", "posterior superior temporal language area"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "The receptive language area of the posterior superior temporal gyrus (with the planum temporale and the supramarginal gyrus of the temporoparietal junction): it maps sound onto meaning, storing the phonological and lexical representations that allow a heard or read word to be recognised. Left-hemisphere dominant in ~95% of right-handers, it is the second node of the classic language circuit — input arrives from A1/A2 through the auditory association cortex, and output leaves through the arcuate/superior longitudinal fasciculus to Broca's area and through the extreme capsule and uncinate fasciculus to semantic regions of the temporal pole and orbitofrontal cortex.",
+    "anchors": {
+      "gyrus": "posterior superior temporal gyrus, extending onto the planum temporale and the supramarginal gyrus of the inferior parietal lobule",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "A1/A2 and the auditory association cortex (ctx-a1, ctx-a2) through the superior temporal gyrus",
+        "Visual word-form area via the inferior longitudinal fasciculus and the splenium (reading)",
+        "Pulvinar and lateral posterior nucleus; posterior cingulate via the cingulum"
+      ],
+      "efferent": [
+        "Arcuate/superior longitudinal fasciculus (tract-superior-longitudinal-fasciculus) to Broca's area — the dorsal phonological stream",
+        "Ventral stream (extreme capsule/uncinate fasciculus) to the anterior temporal semantic hub and inferior frontal cortex",
+        "Inferior parietal (angular gyrus) for reading and writing routes"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, inferior (posterior temporal/parietal) division — the posterior temporal branches supply the superior temporal gyrus and the angular branch the temporoparietal junction. This is the classic embolic MCA territory infarct of the dominant hemisphere.",
+    "clinical": [
+      {
+        "syndrome": "Wernicke aphasia (fluent aphasia)",
+        "findings": "Fluent, prosodically normal but empty speech with impaired comprehension and impaired repetition, plentiful phonemic and semantic paraphasias, neologisms and anosognosia: the patient is unaware that the output is incomprehensible. Reading and writing are usually comparably impaired.",
+        "vascular": "Middle cerebral artery, inferior division (posterior temporal branches)"
+      },
+      {
+        "syndrome": "Conduction aphasia (arcuate fasciculus disconnection)",
+        "findings": "Fluent speech with intact comprehension but strikingly impaired repetition, with frequent self-corrections — the disconnection syndrome between Wernicke's and Broca's areas.",
+        "vascular": "MCA territory infarct involving the supramarginal gyrus and the arcuate/superior longitudinal fasciculus"
+      },
+      {
+        "syndrome": "Transcortical sensory aphasia",
+        "findings": "Impaired comprehension with preserved repetition (the perisylvian language core is intact but disconnected from meaning): a watershed lesion between MCA and PCA territories around the temporoparietal junction.",
+        "vascular": "MCA/PCA border-zone (watershed) infarction"
+      }
+    ],
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate"],
+    "origin3d": [43.6, 30, -28],
+    "size3d": [4, 4, 6],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Auditory System'"
+    ]
+  },
+  {
+    "id": "ctx-broca",
+    "name": "Broca's area",
+    "synonyms": ["Broca area", "Brodmann areas 44 and 45", "motor speech area", "inferior frontal gyrus, opercular and triangular parts"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "The motor speech area of the posterior inferior frontal gyrus (pars opercularis and triangularis, Brodmann 44/45): it retrieves and sequences the articulatory programmes for words and assembles them into grammatical utterances. It is the output node of the dorsal language stream, receiving the arcuate/superior longitudinal fasciculus from Wernicke's area, and it also serves non-speech functions including action observation, imitation and the syntactic component of comprehension; the adjacent precentral cortex supplies the face and tongue motor representation that actually executes the movement.",
+    "anchors": {
+      "gyrus": "posterior inferior frontal gyrus (pars opercularis and pars triangularis), immediately anterior and inferior to the precentral face area",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "Arcuate/superior longitudinal fasciculus from Wernicke's area and the inferior parietal lobule",
+        "Premotor cortex (ctx-premotor) and SMA (ctx-sma) for the initiation and sequencing of speech",
+        "Thalamocortical input from VA/VL, MD and the anterior thalamic nuclei; dopaminergic input from the midbrain"
+      ],
+      "efferent": [
+        "Corticobulbar fibres to the cranial-nerve motor nuclei of the face, lips, jaw and tongue (via the genu and posterior limb of the internal capsule, through tract-corticobulbar)",
+        "Corticostriate fibres to the caudate head and putamen; callosal fibres to the contralateral inferior frontal cortex",
+        "Feedback to Wernicke's area and to the inferior parietal lobule"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior (frontal) division — the ascending frontal/opercular branches reach the inferior frontal gyrus; the adjacent insular M2 branches and the recurrent artery of Heubner supply the underlying caudate head and anterior limb of the internal capsule. Dominant-hemisphere MCA superior-division infarction is the usual cause of the syndrome.",
+    "clinical": [
+      {
+        "syndrome": "Broca aphasia (non-fluent aphasia)",
+        "findings": "Effortful, telegraphic, agrammatic speech with relatively preserved comprehension, intact awareness of the deficit and, when the adjacent precentral cortex is involved, a contralateral face-and-arm weakness: the classic inferior (frontal) division MCA infarct of the dominant hemisphere.",
+        "vascular": "Middle cerebral artery, superior division (ascending frontal branches)"
+      },
+      {
+        "syndrome": "Aphemia (pure motor speech disorder)",
+        "findings": "A small opercular lesion can abolish articulate speech while writing, comprehension and even singing are preserved — proof that Broca's area runs the articulatory programme rather than language itself.",
+        "vascular": "Small cortical branch infarct of the precentral/opercular region"
+      },
+      {
+        "syndrome": "Non-fluent primary progressive aphasia",
+        "findings": "Progressive atrophy of the left inferior frontal and insular cortex produces effortful, agrammatic speech with preserved single-word comprehension — the neurodegenerative analogue of Broca aphasia.",
+        "note": "Neurodegenerative (frontotemporal lobar degeneration), not vascular"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral", "lvl-tel-thalamostriate", "lvl-tel-basal-ganglia"],
+    "origin3d": [36, 33.5, 42.5],
+    "size3d": [4, 4.5, 5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'"
+    ]
+  },
+  {
+    "id": "ctx-m1",
+    "name": "Primary motor cortex (M1)",
+    "synonyms": ["M1", "Brodmann area 4", "precentral gyrus", "primary motor area", "motor strip"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "Primary motor cortex on the precentral gyrus (Brodmann 4): the giant Betz cells of layer V issue the corticospinal and corticobulbar fibres that produce voluntary movement, and the somatotopic map of the motor homunculus runs from the medial surface (foot and leg, in the ACA territory) over the vertex (trunk, arm, hand) to the lateral convexity (face, tongue and larynx, in the MCA territory) — the anatomical reason a proximal limb deficit with a spared leg localizes to the convexity. Its activity reflects the coding of force and direction of movement, with the hand and face representations disproportionately large.",
+    "anchors": {
+      "gyrus": "precentral gyrus — the anterior wall of the central sulcus, medial surface foot representation included",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "VA/VL thalamus (nuc-va, nuc-vl) — the cerebellothalamocortical and pallidothalamocortical motor loops",
+        "S1 (ctx-s1) and premotor/SMA (ctx-premotor, ctx-sma) corticocortical input; callosal fibres from the contralateral M1 for proximal and axial muscles",
+        "Pulvinar and intralaminar thalamic modulation"
+      ],
+      "efferent": [
+        "Corticospinal tract (tract-corticospinal-lateral) via the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid",
+        "Corticobulbar tract (tract-corticobulbar) to the cranial-nerve motor nuclei, with crossed dominance for the lower face and genioglossus",
+        "Corticostriate fibres to the putamen (somatotopic), corticopontine fibres to the pontine nuclei, and corticothalamic feedback"
+      ]
+    },
+    "bloodSupply": "MCA superior division supplies the lateral convexity (hand, face and arm); ACA callosomarginal/pericallosal branches supply the medial surface and the vertex (foot, leg and bladder representation). The MCA/ACA border runs along the superior convexity, which is why proximal limb weakness with a spared hand and face suggests a watershed infarct rather than a territorial one.",
+    "clinical": [
+      {
+        "syndrome": "MCA superior-division infarct with contralateral hemiparesis",
+        "findings": "Face-and-arm-predominant contralateral weakness with gaze deviation toward the lesion and (dominant hemisphere) Broca aphasia; the leg is relatively spared because the medial motor strip is ACA territory.",
+        "vascular": "Middle cerebral artery, superior division"
+      },
+      {
+        "syndrome": "ACA territory infarct with leg-predominant weakness",
+        "findings": "Contralateral foot and leg weakness with abulia, urinary incontinence and grasp reflex when the medial motor strip, supplementary motor area and anterior cingulate are all infarcted.",
+        "vascular": "Anterior cerebral artery (pericallosal and callosomarginal branches)"
+      },
+      {
+        "syndrome": "Jacksonian march and Todd paresis",
+        "findings": "An irritative M1 lesion (tumour, arteriovenous malformation, epileptogenic focus) produces a focal motor seizure that marches along the homunculus, and the post-ictal state leaves a transient contralateral paresis (Todd paralysis) that mimics a stroke.",
+        "note": "Structural/epileptic; the march follows the somatotopic map described above"
+      }
+    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
+    "origin3d": [43.2, 66.5, 19],
+    "size3d": [4, 5, 7],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "ctx-s1",
+    "name": "Primary somatosensory cortex (S1)",
+    "synonyms": ["S1", "Brodmann areas 3a, 3b, 1 and 2", "postcentral gyrus", "primary somatosensory area", "sensory strip"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "Primary somatosensory cortex on the postcentral gyrus: area 3b receives the dense thalamocortical projection from VPL/VPM and constructs the somatotopic map of discriminative touch, while areas 3a (muscle spindle and joint proprioception), 1 and 2 elaborate texture, shape, vibration and limb position. The hand, lips and tongue occupy a disproportionate share of the strip (the sensory homunculus mirrors the motor one), and this cortex is the necessary substrate for stereognosis, graphaesthesia and two-point discrimination — the functions whose loss defines a cortical rather than a peripheral sensory deficit.",
+    "anchors": {
+      "gyrus": "postcentral gyrus — the posterior wall of the central sulcus, including the medial paracentral lobule representation of the foot and genitalia",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "VPL (nuc-vpl) for the body and VPM (nuc-vpm) for the face via the thalamocortical radiations — the medial lemniscus and spinothalamic terminations",
+        "S2 and the posterior parietal cortex (areas 5 and 7) via corticocortical fibres; callosal input from the contralateral S1",
+        "Pulvinar and lateral posterior nucleus (somatosensory association) and intralaminar thalamic modulation"
+      ],
+      "efferent": [
+        "M1 (ctx-m1) and premotor cortex — the sensorimotor transformation for grasping and reaching",
+        "Posterior parietal lobule (supramarginal and angular gyri) for the body schema and spatial attention",
+        "Corticospinal and corticopontine fibres (postcentral contributions), corticothalamic feedback to VPL/VPM"
+      ]
+    },
+    "bloodSupply": "MCA superior division supplies the lateral postcentral gyrus (hand, face and arm); ACA supplies the medial paracentral surface (foot and leg). The MCA/PCA border lies posteriorly along the parietal surface, so a watershed infarct between them can spare the primary strip while producing a higher-order sensory syndrome.",
+    "clinical": [
+      {
+        "syndrome": "Postcentral (S1) lesion",
+        "findings": "Contralateral loss of discriminative sensation with crude touch preserved: graphaesthesia, stereognosis, two-point discrimination and vibration are lost, and the patient has sensory ataxia of the hand without weakness (the 'cortical sensory' pattern).",
+        "vascular": "MCA superior division or a small cortical branch infarct"
+      },
+      {
+        "syndrome": "Pseudothalamic (parietal) pain syndrome",
+        "findings": "Lesions of the postcentral cortex and underlying white matter produce spontaneous burning pain and hyperpathia on the contralateral side, sometimes with a raised threshold — the cortical counterpart of the Déjérine-Roussy thalamic syndrome.",
+        "vascular": "MCA superior division (parietal cortical infarct or haemorrhage)"
+      },
+      {
+        "syndrome": "Sensory Jacksonian seizure and Todd sensory deficit",
+        "findings": "Irritative S1 lesions produce a marching paraesthesia that follows the sensory homunculus, with a post-ictal contralateral sensory loss.",
+        "note": "Structural/epileptic, following the somatotopic map"
+      }
+    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
+    "origin3d": [42.4, 68.2, -1.7],
+    "size3d": [4, 5, 7],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Somatosensory Pathways'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "ctx-premotor",
+    "name": "Premotor cortex",
+    "synonyms": ["PM", "Brodmann area 6 (lateral)", "lateral area 6", "premotor area"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "The lateral part of Brodmann area 6, immediately anterior to M1 on the lateral convexity: it selects and prepares movements in response to sensory (especially visual) cues, programmes the posture and proximal limb orientation that a reach requires, and contains the dorsal and ventral premotor fields with their mirror-neuron populations for action observation and imitation. Unlike M1 it works through movement sets and sequences rather than single muscles, and its output is largely routed through M1 and the corticospinal system.",
+    "anchors": {
+      "gyrus": "lateral precentral cortex anterior to the precentral gyrus (posterior parts of the superior and middle frontal gyri, area 6)",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "VA/VL thalamus (motor loops including the cerebellothalamic projection)",
+        "Posterior parietal cortex (areas 5 and 7) for the visual and somesthetic guidance of movement; prefrontal cortex for rule-based selection",
+        "Corticocortical input from M1, S1 and the SMA (ctx-m1, ctx-s1, ctx-sma)"
+      ],
+      "efferent": [
+        "M1 (ctx-m1) — the principal route to the corticospinal tract",
+        "Direct corticospinal and corticoreticular projections for axial and proximal control; corticostriate fibres to the putamen",
+        "Corticopontine fibres to the pontine nuclei (the lateral third of the crus cerebri) and corticothalamic feedback"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior (frontal) division — the ascending frontal branches and the precentral (rolandic) branch supply the premotor convexity; the MCA/ACA border zone runs along the superior convexity just above it.",
+    "clinical": [
+      {
+        "syndrome": "Premotor (MCA superior-division) infarct",
+        "findings": "Contralateral apraxia of the proximal limb with relatively preserved strength and a mild, disproportionately proximal weakness; grasping and reaching are disorganized even though the muscles work.",
+        "vascular": "Middle cerebral artery, superior division (precentral branches)"
+      },
+      {
+        "syndrome": "Ideomotor apraxia from premotor/association lesions",
+        "findings": "Loss of the ability to perform learned gestures to command (with preserved ability to perform them spontaneously) after dominant-hemisphere premotor and parietal lesions.",
+        "vascular": "MCA superior and inferior division involvement, or a watershed lesion"
+      },
+      {
+        "syndrome": "Frontal-lobe ataxia (ataxic hemiparesis)",
+        "findings": "A lesion straddling the premotor cortex and the underlying frontopontocerebellar fibres produces contralateral leg weakness with marked gait and limb ataxia — the classic ataxic hemiparesis lacunar syndrome, mimicking a cerebellar lesion.",
+        "vascular": "Lenticulostriate or anterior choroidal lacunar infarct of the internal capsule/corona radiata"
+      }
+    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
+    "origin3d": [38.6, 70.8, 34.2],
+    "size3d": [4, 5, 5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'"
+    ]
+  },
+  {
+    "id": "ctx-sma",
+    "name": "Supplementary motor area (SMA)",
+    "synonyms": ["SMA", "Brodmann area 6 (medial)", "medial area 6", "M2"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "The medial part of Brodmann area 6 on the dorsomedial surface of the hemisphere, in front of the medial M1 foot representation: it plans and internally sequences complex, self-initiated (rather than stimulus-triggered) movement, holds bimanual coordination and postural set, and links motivation to action through its dense connections with the cingulate motor areas and the basal-ganglia loop. The pre-SMA anteriorly is involved in the selection and switching of action sets; activity here precedes movement onset, which is why it is regarded as the cortical origin of the readiness potential.",
+    "anchors": {
+      "gyrus": "medial superior frontal gyrus / medial aspect of the superior frontal gyrus above the cingulate sulcus (mesial area 6, posterior part)",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "VA/VL thalamus (the striato-pallido-thalamocortical motor loop)",
+        "Cingulate motor areas and the anterior cingulate (limbic-motor interface)",
+        "Prefrontal cortex, posterior parietal cortex and the contralateral SMA through the corpus callosum"
+      ],
+      "efferent": [
+        "M1 and the premotor cortex (ctx-m1, ctx-premotor); direct corticospinal projections to the cervical cord (particularly for the hand)",
+        "Corticostriate fibres to the putamen (its sensorimotor territory) and corticopontine fibres (medial third of the crus cerebri, frontopontine component)",
+        "Corticothalamic feedback and descending projections to the brainstem reticular formation"
+      ]
+    },
+    "bloodSupply": "Anterior cerebral artery — the callosomarginal and pericallosal branches at the medial surface, with the venous drainage into the superior sagittal sinus. The SMA lies in the ACA territory, adjacent to the ACA/MCA border zone on the convexity.",
+    "clinical": [
+      {
+        "syndrome": "SMA syndrome (ACA territory infarct)",
+        "findings": "Contralateral leg weakness plus transient mutism or severely reduced spontaneous speech with preserved repetition and comprehension, and contralateral grasp reflex or alien-limb behaviour; the mutism characteristically recovers over days to weeks.",
+        "vascular": "Anterior cerebral artery (callosomarginal/pericallosal branches), sometimes from vasospasm after subarachnoid haemorrhage"
+      },
+      {
+        "syndrome": "Alien limb phenomenon",
+        "findings": "Lesions of the SMA and its callosal connections (including the anterior cerebral artery territory and the callosal variant) release limb behaviour that the patient does not own: the hand performs apparently purposeful movements that are attributed to someone else.",
+        "vascular": "ACA territory infarction, including the callosal disconnection variant"
+      },
+      {
+        "syndrome": "Akinetic mutism and abulia with bilateral lesions",
+        "findings": "Bilateral SMA/anterior cingulate damage produces a profound loss of spontaneous movement and speech, with eyes open and sleep-wake cycles preserved — the extreme of the apathy-abulia spectrum.",
+        "vascular": "Bilateral ACA infarction (often a single ACA from a hypoplastic A1, or vasospasm of both A2 segments)"
+      }
+    ],
+    "levels": ["lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
+    "origin3d": [6, 82.8, 22.6],
+    "size3d": [4, 5, 6],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "ctx-entorhinal",
+    "name": "Entorhinal cortex",
+    "synonyms": ["Brodmann area 28", "Brodmann area 34", "anterior parahippocampal cortex", "area entorhinalis"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "The gateway cortex of the hippocampal formation: the anterior part of the parahippocampal gyrus (Brodmann 28 laterally, 34 medially) receives the convergent, highly processed output of every association area through the perirhinal and postrhinal cortices and funnels it into the hippocampus along the perforant path. It carries the head-direction signal, grid cells and spatial-context representations, and it is the anatomical reason episodic memory depends on the medial temporal lobe; its layers II and III are the origin of the perforant path and its layer V is the hippocampal output route back to the neocortex.",
+    "anchors": {
+      "gyrus": "anterior parahippocampal gyrus — the uncus and the anterior parahippocampal cortex medial to the collateral sulcus (registered as surf-parahippocampal-gyrus)",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "Perirhinal (area 35/36) and postrhinal cortex, carrying the output of unimodal and polymodal association areas of all four lobes",
+        "Amygdala, orbitofrontal cortex and the anterior cingulate; cholinergic and noradrenergic input from the basal forebrain and locus coeruleus",
+        "Cingulum (tract-cingulum) from the posterior cingulate and retrosplenial cortex"
+      ],
+      "efferent": [
+        "Perforant path to the dentate gyrus and the CA fields (nuc-dentate-gyrus, nuc-ca1, nuc-ca2-ca3) — the first leg of the trisynaptic circuit",
+        "Layer V output to the neocortical association areas (the return route of the memory trace) and to the presubiculum/parasubiculum",
+        "Reciprocal connections to the perirhinal cortex, amygdala and olfactory cortex"
+      ]
+    },
+    "bloodSupply": "Posterior cerebral artery — the hippocampal and anterior temporal branches (with the anterior choroidal artery from the internal carotid supplying the uncal end, and the PCA temporal branches posteriorly). The territory is the reason PCA infarction impairs memory as well as vision.",
+    "clinical": [
+      {
+        "syndrome": "Alzheimer disease (Braak stages I–II begin here)",
+        "findings": "Neurofibrillary tangles appear first in the entorhinal cortex and then spread through the hippocampal circuit to the posterior cingulate and neocortex, which is the anatomical reason episodic memory fails before other cognitive domains.",
+        "note": "Neurodegenerative staging (Braak), not vascular"
+      },
+      {
+        "syndrome": "Herpes simplex encephalitis",
+        "findings": "Bilateral (usually asymmetric) necrotizing infection of the medial temporal lobes including the entorhinal cortex and hippocampus produces fever, headache, seizures and profound anterograde amnesia; it is the classic infectious cause of a dense amnestic syndrome.",
+        "note": "Infectious (HSV-1 via the olfactory route); contrast-enhancing medial temporal lesions are the imaging signature"
+      },
+      {
+        "syndrome": "PCA territory infarct with amnesia",
+        "findings": "Infarction of the entorhinal and hippocampal territory adds memory loss to the contralateral homonymous hemianopia of PCA occlusion; bilateral involvement causes a persistent amnestic state.",
+        "vascular": "Posterior cerebral artery (hippocampal and anterior temporal branches)"
+      }
+    ],
+    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
+    "origin3d": [21.7, 9.5, 20.5],
+    "size3d": [3, 3.5, 5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+    ]
+  },
+  {
+    "id": "ctx-frontal-eye-fields",
+    "name": "Frontal eye fields",
+    "synonyms": ["FEF", "frontal eye field", "Brodmann area 8", "area 8 (frontal)"],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#0ea5e9",
+    "function": "The cortical centre for voluntary, purposeful saccades, in the posterior middle frontal gyrus at the junction of the precentral and superior frontal sulci (Brodmann 8). It transforms the intention to look — a remembered location, a target chosen from a visual scene, or a planned scan — into a command that reaches the contralateral paramedian pontine reticular formation (PPRF) and the superior colliculus, and it also carries a smooth-pursuit and a visual-attention signal. Its descending pathway crosses in the midbrain to reach the contralateral horizontal gaze centre, which is why a destructive frontal lesion deviates the eyes toward the side of the lesion.",
+    "anchors": {
+      "gyrus": "posterior part of the middle frontal gyrus at the junction of the precentral and superior frontal sulci (area 8)",
+      "mesh": "ctx-hemisphere-l"
+    },
+    "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
+    "connections": {
+      "afferent": [
+        "Posterior parietal cortex (area 7, lateral intraparietal area) and the middle temporal visual area for target selection",
+        "Prefrontal (dorsolateral) cortex for task rules and the supplementary eye field for sequence learning",
+        "Thalamic input from MD and the pulvinar/lateral posterior nucleus"
+      ],
+      "efferent": [
+        "Contralateral PPRF (nuc-pprf) and the superior colliculus (nuc-superior-colliculus) via the corticotectal and frontopontine routes — the final common path for horizontal saccades",
+        "Caudate nucleus (the oculomotor striatal territory) and the pontine nuclei; corticothalamic feedback"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior (frontal) division — the precentral and ascending frontal branches; the frontal eye field lies at the anterior edge of the MCA territory, immediately behind the ACA/MCA border on the convexity.",
+    "clinical": [
+      {
+        "syndrome": "Destructive frontal lesion with ipsilateral gaze deviation",
+        "findings": "An acute destructive lesion of the frontal eye field (MCA infarct) leaves both eyes looking toward the side of the lesion and away from the hemiparesis, because the unopposed contralateral FEF drives gaze across; the deviation is transient and can be overcome by the oculocephalic manoeuvre.",
+        "vascular": "Middle cerebral artery, superior division (frontal branches)"
+      },
+      {
+        "syndrome": "Epileptic (irritative) versive seizure",
+        "findings": "An irritative FEF lesion drives the eyes away from the lesion — the mirror image of the destructive deficit — often as the first manifestation of a frontal-lobe seizure, followed by head version and a Jacksonian march.",
+        "note": "Epileptic rather than vascular; the direction of deviation is the localizing sign"
+      },
+      {
+        "syndrome": "Saccadic palsy of the horizontal gaze centres",
+        "findings": "Lesions that disconnect the FEF from the PPRF (including the PPRF itself in the dorsal pons) abolish voluntary saccades to the contralateral side while reflex (vestibular) eye movements are preserved.",
+        "vascular": "Basilar paramedian perforators (PPRF infarct) or MCA territory infarction of the FEF"
+      }
+    ],
+    "levels": ["lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
+    "origin3d": [36, 71.3, 35.5],
+    "size3d": [3.5, 4, 4],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brainstem II: Eye Movements and Pupillary Control'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  }
+]

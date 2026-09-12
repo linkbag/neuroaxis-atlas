@@ -1,0 +1,58 @@
+[
+  {
+    "id": "vent-lateral-ventricle-body",
+    "name": "Body of the lateral ventricle",
+    "synonyms": ["central part of the lateral ventricle", "pars centralis ventriculi lateralis", "cellula media"],
+    "region": "telencephalon",
+    "subdivision": "Lateral ventricles",
+    "kind": "ventricle",
+    "laterality": "paired",
+    "color": "#06b6d4",
+    "function": "The central part of the lateral ventricle — the long horizontal segment between the frontal horn (at the interventricular foramen) and the atrium, roofed by the body of the corpus callosum and floored by the thalamus medially and the caudate nucleus laterally, with the choroid plexus running along its floor through the choroidal fissure. It is the segment that defines the thalamostriate groove: the thalamostriate vein and the stria terminalis mark the caudothalamic junction along its floor, the vein of Galen's tributaries (internal cerebral veins) run in the tela choroidea above the thalamus, and the subependymal venous angle at the foramen of Monro is the surgical landmark for the anterior third ventricle. Its width and the height of the corpus callosum above it are the standard measures of ventricular enlargement.",
+    "contextNote": "Authored at a documented plane: the body is the segment of the lateral-ventricle cast that the v8 bake splits between the frontal horn and the atrium — the splitter planes are z = +25 (foramen/body boundary, measured from the baked cast) and z = −6 (atrium boundary), which reproduce the segment's measured extent y 40.1…59.3, z −6…27.9, centroid (5.5, 50.2, 10.7) probed from tel-lateral-ventricle-l by the v8 content-authoring run. The plane anchors are recorded so the split is documented rather than implicit (docs/NEUROATLAS_V8_PLAN.md §1c, §4.5).",
+    "connections": {
+      "afferent": [
+        "Interventricular foramen (vent-interventricular-foramen) anteriorly — CSF arriving from the third ventricle and from the frontal horn",
+        "Choroid plexus of the lateral ventricle (vent-choroid-plexus-lateral), which occupies the floor of the body from the foramen posteriorly"
+      ],
+      "efferent": [
+        "Atrium (vent-lateral-ventricle-atrium) posteriorly, then the temporal horn, the cerebral aqueduct and the fourth ventricle",
+        "Venous drainage of the ependymal surface through the thalamostriate and internal cerebral veins, which converge at the venous angle behind the foramen of Monro"
+      ]
+    },
+    "bloodSupply": "Anterior choroidal artery (internal carotid) and the lateral posterior choroidal artery (posterior cerebral artery) supply the choroid plexus and the subependymal tissue of the body through the choroidal fissure; the adjacent thalamus is supplied by the posterior choroidal and thalamogeniculate branches, and the adjacent caudate body by the lenticulostriate arteries. Venous drainage is through the thalamostriate vein into the internal cerebral vein.",
+    "clinical": [
+      {
+        "syndrome": "Central neurocytoma (foramen of Monro/body of the lateral ventricle)",
+        "findings": "A calcified, enhancing intraventricular mass attached to the septum pellucidum at the level of the foramen of Monro in a young adult causes intermittent obstructive hydrocephalus and headache; it is the classic tumour of the ventricular body in this age group.",
+        "vascular": "Choroidal feeders (anterior/posterior choroidal arteries) at surgery"
+      },
+      {
+        "syndrome": "Thalamostriate vein displacement as a mass sign",
+        "findings": "On coronal imaging the thalamostriate vein and the internal cerebral vein form the venous angle at the foramen of Monro; their displacement distinguishes an intraventricular mass (displacing the vein laterally) from a thalamic mass (displacing it medially).",
+        "note": "Imaging localizing sign rather than a disease"
+      },
+      {
+        "syndrome": "Subependymal spread and ependymal enhancement",
+        "findings": "Tumour cells and infection spread along the ependyma of the body and the subependymal plate, producing linear enhancement; the same subependymal germinal matrix is the origin of periventricular nodular heterotopia and the site of germinal-matrix haemorrhage at the caudothalamic groove.",
+        "note": "Neoplastic/infectious, or developmental for heterotopia"
+      },
+      {
+        "syndrome": "Body dilatation in obstructive hydrocephalus",
+        "findings": "Because the body is bounded above by the corpus callosum and below by the thalamus, its disproportionate enlargement with an upgoing third ventricle on sagittal MRI is the hallmark of aqueductal stenosis, and it produces the 'Mickey Mouse' appearance of the frontal horns on axial imaging.",
+        "note": "CSF dynamics and imaging interpretation"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia"
+    ],
+    "origin3d": [5.5, 50.2, 10.7],
+    "size3d": [3, 5, 8],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  }
+]

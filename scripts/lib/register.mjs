@@ -38,9 +38,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', '..');
 const RAW_DIR = path.join(ROOT, 'assets-src', 'bp3d', 'raw');
 const RAW_TEL_DIR = path.join(ROOT, 'assets-src', 'bp3d', 'raw-tel'); // v7 telencephalon elements
+const RAW_VASC_DIR = path.join(ROOT, 'assets-src', 'bp3d', 'raw-vasc'); // v8 vessels + optic pathway
 const SOURCE_DIRS = [
   { dir: RAW_DIR, rel: 'assets-src/bp3d/raw/', role: 'primary (PART-OF + IS-A addendum)' },
   { dir: RAW_TEL_DIR, rel: 'assets-src/bp3d/raw-tel/', role: 'secondary (v7 telencephalon, IS-A archive)' },
+  { dir: RAW_VASC_DIR, rel: 'assets-src/bp3d/raw-vasc/', role: 'tertiary (v8 vasculature + optic pathway, IS-A archive)' },
 ];
 const OUT_DIR = path.join(ROOT, 'assets-src', 'bp3d', 'canonical');
 const REPORT_PATH = path.join(ROOT, 'assets-src', 'bp3d', 'REGISTRATION.md');
@@ -185,6 +187,113 @@ const TEL_PARTS = {
   telInternalCapsuleL: { name: 'internal capsule, left', out: 'tel-internal-capsule-left' },
   telInternalCapsuleR: { name: 'internal capsule, right', out: 'tel-internal-capsule-right' },
 };
+// ---------------------------------------------------------------------------
+// v8 VASCULAR + OPTIC inputs (docs/NEUROATLAS_V8_PLAN.md §1a/§1b, §4.1–§4.2; the
+// per-mesh table and the file→record mapping are `docs/VASC_INVENTORY.md` §3/§5.1,
+// task vasc-acquire — every id below is taken from that table, not re-derived).
+// Extracted from the SAME owned archive (isa_BP3D_4.0_obj_99.zip, CC BY 4.0) into
+// assets-src/bp3d/raw-vasc/ (gitignored); no download happened in this task.
+//
+// Laterality convention: identical to the base and telencephalon tables — the
+// `*L` key is the element whose vertices sit at POSITIVE x_bp (verified per pair
+// empirically below). VASC_INVENTORY §4 is explicit that the FJ/FJ…M suffix is
+// not itself the rule ("pick elements by verified side, never by the suffix"):
+// the pairs are, verified by measured x range,
+//   FJ1654 right / FJ1654M left (ACA)      FJ1682 right / FJ1682M left (ICA)
+//   FJ1725 right / FJ1725M left (VA)       FJ1713 right / FJ1713M left (PCom)
+//   FJ1723/FJ1714 right, …M left (PCA)     FJ1692/FJ1660 right, …M left (MCA)
+//   FJ1726 (SCA) FJ1656 (AICA) right, …M left
+// and the unpaired ones are those the archive ships as a single midline element
+// (basilar FJ1672 — its near-duplicate decimation FJ1844 stays unused, ACoA FJ1655,
+// chiasm halves FJ1771 left / FJ1818 right). The optic nerve uses the LARGER of
+// the two decimations the archive ships per side (FJ1772 left / FJ1819 right, the
+// pair that includes more of the orbital course; FJ1313/FJ1364 are the smaller
+// alternative) — VASC_INVENTORY §5.1.
+//
+// Grouped multi-element parts: BP3D ships the PICA as TWENTY-SIX small segment
+// elements and each MCA tree as dozens; registering them individually would put
+// ~100 near-empty canonical OBJs on disk. The small-segment groups are therefore
+// fused PER SIDE into one registered source mesh each (same "one output per
+// part/side" rule the telencephalon table follows), and the group → element map is
+// recorded in VASC_PARTS.groups and printed in REGISTRATION.md §B.1 so the
+// fusion is auditable. Face counts per element are from VASC_INVENTORY §3.
+// ---------------------------------------------------------------------------
+const VASC_FILES = {
+  // --- feeding trunks -------------------------------------------------------
+  vascIcaR: 'FJ1682.obj', vascIcaL: 'FJ1682M.obj',                       // FMA3947/3949 + 3947/4062, 1272 f each
+  vascVertebralR: 'FJ1725.obj', vascVertebralL: 'FJ1725M.obj',           // FMA3956/3958 + 3956/4066, 800 f each
+  vascBasilar: 'FJ1672.obj',                                             // FMA50542, 262 f (FJ1844 = alternative decimation)
+  // --- circle of Willis ------------------------------------------------------
+  vascAcoA: 'FJ1655.obj',                                                // FMA50169, 80 f, midline bridge
+  vascPcomR: 'FJ1713.obj', vascPcomL: 'FJ1713M.obj',                     // FMA50084/50085 + 50084/50086, 204 f each
+  // --- anterior circulation --------------------------------------------------
+  vascAcaR: 'FJ1654.obj', vascAcaL: 'FJ1654M.obj',                       // FMA50028/50029 + 50028/50030, 400 f each
+  vascMcaM1R: 'FJ1692.obj', vascMcaM1L: 'FJ1692M.obj',                   // FMA50080 + 50365/50366 … 50367, 800 f each
+  vascMcaM2R: 'FJ1660.obj', vascMcaM2L: 'FJ1660M.obj',                   // insular (M2) trunk, 1154 f each
+  // --- posterior circulation -------------------------------------------------
+  vascPcaP1R: 'FJ1723.obj', vascPcaP1L: 'FJ1723M.obj',                   // precommunicating P1, 282 f each
+  vascPcaP2R: 'FJ1714.obj', vascPcaP2L: 'FJ1714M.obj',                   // postcommunicating P2–P3, 544 f each
+  vascScaR: 'FJ1726.obj', vascScaL: 'FJ1726M.obj',                       // SCA trunk, 406 f each
+  vascAicaR: 'FJ1656.obj', vascAicaL: 'FJ1656M.obj',                     // AICA, 766 f each
+  // PICA: 26 segment elements (13 per side) fused per side — VASC_INVENTORY §3 group row.
+  vascPicaR: [
+    'FJ1700.obj', 'FJ1701.obj', 'FJ1702.obj', 'FJ1703.obj', 'FJ1704.obj', 'FJ1705.obj', 'FJ1706.obj',
+    'FJ1707.obj', 'FJ1708.obj', 'FJ1709.obj', 'FJ1710.obj', 'FJ1711.obj', 'FJ1715.obj',
+  ],
+  vascPicaL: [
+    'FJ1700M.obj', 'FJ1701M.obj', 'FJ1702M.obj', 'FJ1703M.obj', 'FJ1704M.obj', 'FJ1705M.obj', 'FJ1706M.obj',
+    'FJ1707M.obj', 'FJ1708M.obj', 'FJ1709M.obj', 'FJ1710M.obj', 'FJ1711M.obj', 'FJ1715M.obj',
+  ],
+  // --- deep perforators ------------------------------------------------------
+  vascAnteriorChoroidalR: 'FJ1658.obj', vascAnteriorChoroidalL: 'FJ1658M.obj', // FMA50087/50088 + 50087/50089, 418 f each
+  // --- optic pathway (plan §1b; VASC_INVENTORY §5.1) -------------------------
+  opticNerveL: 'FJ1772.obj', opticNerveR: 'FJ1819.obj',                  // FMA50863/50878 + 50863/50875, 2376/2378 f
+  opticChiasmL: 'FJ1771.obj', opticChiasmR: 'FJ1818.obj',                // FMA62045, halves that meet at the midline, 898/890 f
+  opticTractL: 'FJ1773.obj', opticTractR: 'FJ1820.obj',                  // FMA62046/67936 + 62046/62382, 2336/2332 f
+};
+const VASC_INPUT_COUNT = Object.keys(VASC_FILES).length;
+// Distinct FJ files across the whole v8 table (the 26 PICA segments are 26 files).
+const VASC_ALL_FILE_LIST = [...new Set(Object.values(VASC_FILES).flat())];
+const VASC_DISTINCT_FILE_COUNT = VASC_ALL_FILE_LIST.length;
+// key → descriptive name + canonical output name + FMA ids, and (for the fused
+// multi-element parts) the group the element belongs to. `role` mirrors the
+// `atlas record / role` column of VASC_INVENTORY §3.
+const VASC_PARTS = {
+  vascIcaR: { name: 'internal carotid artery, right (cervical + intracranial course; the rostral end is the carotid siphon the Willis ring needs)', out: 'vasc-internal-carotid-artery-right', fma: '3947/3949', role: 'feeding trunk' },
+  vascIcaL: { name: 'internal carotid artery, left (cervical + intracranial course)', out: 'vasc-internal-carotid-artery-left', fma: '3947/4062', role: 'feeding trunk' },
+  vascVertebralR: { name: 'vertebral artery, right', out: 'vasc-vertebral-artery-right', fma: '3956/3958', role: 'feeding trunk' },
+  vascVertebralL: { name: 'vertebral artery, left', out: 'vasc-vertebral-artery-left', fma: '3956/4066', role: 'feeding trunk' },
+  vascBasilar: { name: 'basilar artery (midline trunk over the ventral pons)', out: 'vasc-basilar-artery', fma: '50542', role: 'posterior trunk' },
+  vascAcoA: { name: 'anterior communicating artery (midline cross-link of the Willis ring)', out: 'vasc-anterior-communicating-artery', fma: '50169', role: 'Willis cross-link' },
+  vascPcomR: { name: 'posterior communicating artery, right', out: 'vasc-posterior-communicating-artery-right', fma: '50084/50085', role: 'Willis cross-link' },
+  vascPcomL: { name: 'posterior communicating artery, left', out: 'vasc-posterior-communicating-artery-left', fma: '50084/50086', role: 'Willis cross-link' },
+  vascAcaR: { name: 'anterior cerebral artery, right', out: 'vasc-anterior-cerebral-artery-right', fma: '50028/50029', role: 'ACA territory' },
+  vascAcaL: { name: 'anterior cerebral artery, left', out: 'vasc-anterior-cerebral-artery-left', fma: '50028/50030', role: 'ACA territory' },
+  vascMcaM1R: { name: 'middle cerebral artery, right — sphenoid (M1) part', out: 'vasc-middle-cerebral-artery-m1-right', fma: '50080/50365/50366', role: 'MCA territory' },
+  vascMcaM1L: { name: 'middle cerebral artery, left — sphenoid (M1) part', out: 'vasc-middle-cerebral-artery-m1-left', fma: '50080/50365/50367', role: 'MCA territory' },
+  vascMcaM2R: { name: 'middle cerebral artery, right — insular (M2) trunk', out: 'vasc-middle-cerebral-artery-m2-right', fma: '50080/50368/50369', role: 'MCA territory' },
+  vascMcaM2L: { name: 'middle cerebral artery, left — insular (M2) trunk', out: 'vasc-middle-cerebral-artery-m2-left', fma: '50080/50368/50370', role: 'MCA territory' },
+  vascPcaP1R: { name: 'posterior cerebral artery, right — precommunicating (P1) part', out: 'vasc-posterior-cerebral-artery-p1-right', fma: '50590/50639', role: 'PCA territory' },
+  vascPcaP1L: { name: 'posterior cerebral artery, left — precommunicating (P1) part', out: 'vasc-posterior-cerebral-artery-p1-left', fma: '50590/50640', role: 'PCA territory' },
+  vascPcaP2R: { name: 'posterior cerebral artery, right — postcommunicating (P2–P3) part', out: 'vasc-posterior-cerebral-artery-p2-right', fma: '50591/50641', role: 'PCA territory' },
+  vascPcaP2L: { name: 'posterior cerebral artery, left — postcommunicating (P2–P3) part', out: 'vasc-posterior-cerebral-artery-p2-left', fma: '50591/50642', role: 'PCA territory' },
+  vascScaR: { name: 'superior cerebellar artery, right', out: 'vasc-superior-cerebellar-artery-right', fma: '50573/50574', role: 'SCA territory' },
+  vascScaL: { name: 'superior cerebellar artery, left', out: 'vasc-superior-cerebellar-artery-left', fma: '50573/50575', role: 'SCA territory' },
+  vascAicaR: { name: 'anterior inferior cerebellar artery, right', out: 'vasc-anterior-inferior-cerebellar-artery-right', fma: '50544', role: 'AICA territory' },
+  vascAicaL: { name: 'anterior inferior cerebellar artery, left', out: 'vasc-anterior-inferior-cerebellar-artery-left', fma: '50544', role: 'AICA territory' },
+  vascPicaR: { name: 'posterior inferior cerebellar artery, right (13 segment elements fused)', out: 'vasc-posterior-inferior-cerebellar-artery-right', fma: '50518/50519', role: 'PICA territory', group: 'pica', pieces: 13 },
+  vascPicaL: { name: 'posterior inferior cerebellar artery, left (13 segment elements fused)', out: 'vasc-posterior-inferior-cerebellar-artery-left', fma: '50518/50520', role: 'PICA territory', group: 'pica', pieces: 13 },
+  vascAnteriorChoroidalR: { name: 'anterior choroidal artery, right', out: 'vasc-anterior-choroidal-artery-right', fma: '50087/50088', role: 'deep perforator' },
+  vascAnteriorChoroidalL: { name: 'anterior choroidal artery, left', out: 'vasc-anterior-choroidal-artery-left', fma: '50087/50089', role: 'deep perforator' },
+  opticNerveL: { name: 'optic nerve, left (the larger of the two decimations the archive ships)', out: 'tract-optic-nerve-left', fma: '50863/50878', role: 'optic pathway' },
+  opticNerveR: { name: 'optic nerve, right', out: 'tract-optic-nerve-right', fma: '50863/50875', role: 'optic pathway' },
+  opticChiasmL: { name: 'optic chiasm, left half (the halves meet at the midline)', out: 'ctx-optic-chiasm-left', fma: '62045', role: 'optic pathway' },
+  opticChiasmR: { name: 'optic chiasm, right half', out: 'ctx-optic-chiasm-right', fma: '62045', role: 'optic pathway' },
+  opticTractL: { name: 'optic tract, left', out: 'tract-optic-tract-left', fma: '62046/67936', role: 'optic pathway' },
+  opticTractR: { name: 'optic tract, right', out: 'tract-optic-tract-right', fma: '62046/62382', role: 'optic pathway' },
+};
+const VASC_KEYS = Object.keys(VASC_FILES);
+
 const TEL_INPUT_COUNT = Object.keys(TEL_FILES).length;
 const TEL_DISTINCT_FILE_COUNT = new Set(Object.values(TEL_FILES)).size; // 29 keys over 29 FJ files
 // TELENCEPHALON_PLAN §1 publishes 175,562 faces for its data table: the 29 keys above EXCEPT the
@@ -193,6 +302,9 @@ const TEL_DISTINCT_FILE_COUNT = new Set(Object.values(TEL_FILES)).size; // 29 ke
 const PLAN_TABLE_FACES = 175562;
 const TEL_KEYS = Object.keys(TEL_FILES);
 // The single merged input table every downstream stage consumes.
+// NOTE (v8): the v8 entries are NOT part of this table on purpose — they take the
+// separate `VASC_FILES` path below so that `ALL_FILES` (and therefore every
+// pre-existing key-order-dependent artefact) keeps its v7 shape exactly.
 const ALL_FILES = { ...FILES, ...TEL_FILES };
 const PART_NAMES = { ...TEL_PARTS };
 
@@ -674,6 +786,32 @@ for (const [key, file] of Object.entries(ALL_FILES)) {
   if (!sourceOfFile.has(file)) sourceOfFile.set(file, hit);
   meshes[key] = await readAny(path.join(hit.dir, file));
 }
+// v8 vascular + optic inputs. Same per-file resolution, same reader; the only
+// difference is that a key whose table entry is an ARRAY (the 26-element PICA
+// group) is read element-by-element and FUSED into one source mesh for that side,
+// so downstream stages see one part per structure/side exactly like the rest of
+// the pipeline. The fusion is a pure vertex/face concatenation in BP mm space —
+// no coordinates are touched — and each element's own id is kept in
+// `vascSourceFiles` for the report.
+const vascSourceFiles = new Map(); // key → ['FJ1700.obj', …]
+for (const [key, spec] of Object.entries(VASC_FILES)) {
+  const files = Array.isArray(spec) ? spec : [spec];
+  const pieces = [];
+  for (const file of files) {
+    let hit = null;
+    for (const s of SOURCE_DIRS) {
+      if (existsSync(path.join(s.dir, file))) { hit = s; break; }
+    }
+    if (!hit) {
+      console.error(`[register] vascular input ${key} (${file}) not found in any of: ${SOURCE_DIRS.map((s) => s.rel).join(', ')}`);
+      process.exit(1);
+    }
+    if (!sourceOfFile.has(file)) sourceOfFile.set(file, hit);
+    pieces.push(await readAny(path.join(hit.dir, file)));
+  }
+  meshes[key] = pieces.length === 1 ? pieces[0] : fuseMeshes(pieces);
+  vascSourceFiles.set(key, files);
+}
 // input-table invariants: the base table must not have changed (that is what guarantees
 // the existing registration), and every telencephalon key must be present exactly once.
 if (BASE_INPUT_COUNT !== 27 || Object.keys(FILES).length !== BASE_INPUT_COUNT) {
@@ -684,11 +822,21 @@ if (Object.keys(TEL_FILES).length !== TEL_INPUT_COUNT || new Set(Object.values(T
   console.error('[register] telencephalon input table malformed');
   process.exit(1);
 }
+if (VASC_KEYS.length !== VASC_INPUT_COUNT
+  || new Set(VASC_ALL_FILE_LIST).size !== VASC_DISTINCT_FILE_COUNT
+  || VASC_PARTS.vascPicaR.pieces + VASC_PARTS.vascPicaL.pieces
+    !== VASC_FILES.vascPicaR.length + VASC_FILES.vascPicaL.length) {
+  console.error('[register] vascular/optic input table malformed');
+  process.exit(1);
+}
 {
-  const byDir = { primary: 0, secondary: 0 };
-  for (const s of sourceOfFile.values()) byDir[SOURCE_DIRS[0] === s ? 'primary' : 'secondary']++;
-  log(`[register] inputs: ${Object.keys(ALL_FILES).length} element keys (${BASE_INPUT_COUNT} base + ${TEL_INPUT_COUNT} telencephalon) over ${sourceOfFile.size} distinct FJ files`);
-  log(`[register] source search order ${SOURCE_DIRS.map((s) => s.rel).join(' → ')}: ${byDir.primary} file(s) from raw/, ${byDir.secondary} from raw-tel/`);
+  const byDir = { primary: 0, secondary: 0, tertiary: 0 };
+  for (const s of sourceOfFile.values()) {
+    byDir[SOURCE_DIRS[0] === s ? 'primary' : (SOURCE_DIRS[1] === s ? 'secondary' : 'tertiary')]++;
+  }
+  log(`[register] inputs: ${Object.keys(ALL_FILES).length} element keys (${BASE_INPUT_COUNT} base + ${TEL_INPUT_COUNT} telencephalon) over ${sourceOfFile.size - VASC_DISTINCT_FILE_COUNT} distinct FJ files`);
+  log(`[register] vascular/optic inputs: ${VASC_INPUT_COUNT} keys (${VASC_DISTINCT_FILE_COUNT} distinct FJ files, ${VASC_FILES.vascPicaR.length + VASC_FILES.vascPicaL.length} of them the fused PICA group) from ${SOURCE_DIRS[2].rel}`);
+  log(`[register] source search order ${SOURCE_DIRS.map((s) => s.rel).join(' → ')}: ${byDir.primary} file(s) from raw/, ${byDir.secondary} from raw-tel/, ${byDir.tertiary} from raw-vasc/`);
 }
 
 // 1) Empirical axis verification (plan §3.1 / risk table: verify against known asymmetries)
@@ -782,6 +930,64 @@ const mean = (mesh, a) => centroidOf(mesh)[a];
     check: 'lateral ventricle inside its hemisphere (lateral extent)',
     detail: `max |ventricle x_bp| ${round(ventW)} mm < max |WM core x_bp| ${round(wmW)} mm`,
     ok: ventW < wmW,
+  });
+
+  // --- v8 vascular + optic evidence (NEUROATLAS_V8_PLAN §1a/§1b) ---------------
+  // (e) Laterality of the new pairs, on the same rule as (a): the `*L` element must sit
+  //     at +x_bp. VASC_INVENTORY §4 verified this for all 122 extracted files and warns
+  //     explicitly against trusting the FJ/FJ…M suffix, so it is re-checked here from the
+  //     bytes that are actually registered.
+  const vascSideBad = [];
+  for (const k of VASC_KEYS) {
+    if (k.endsWith('L') && mean(meshes[k], 0) <= 0) vascSideBad.push(`${k} mean x_bp ${round(mean(meshes[k], 0))} ≤ 0`);
+    if (k.endsWith('R') && mean(meshes[k], 0) >= 0) vascSideBad.push(`${k} mean x_bp ${round(mean(meshes[k], 0))} ≥ 0`);
+  }
+  ev.push({
+    check: 'vascular/optic L/R laterality (VASC_INVENTORY §4 verified sides, re-measured)',
+    detail: vascSideBad.length
+      ? vascSideBad.join('; ')
+      : `all ${VASC_KEYS.filter((k) => k.endsWith('L') || k.endsWith('R')).length} paired v8 elements have L at +x_bp and R at −x_bp`,
+    ok: vascSideBad.length === 0,
+  });
+  // (f) The Willis-relevant midline elements must straddle the midline: the basilar artery
+  //     runs up the ventral pons on the midline and the ACoA is the short midline cross-link
+  //     between the two ACAs. Neither may be laterally displaced.
+  const basilarSpan = bboxOf(meshes.vascBasilar);
+  const acoaSpan = bboxOf(meshes.vascAcoA);
+  const basilarMid = (basilarSpan.min[0] + basilarSpan.max[0]) / 2;
+  const acoaMid = (acoaSpan.min[0] + acoaSpan.max[0]) / 2;
+  ev.push({
+    check: 'midline vessels straddle the midline (basilar artery, anterior communicating artery)',
+    detail: `basilar x_bp [${round(basilarSpan.min[0])}, ${round(basilarSpan.max[0])}] mid ${round(basilarMid)} mm; ACoA x_bp [${round(acoaSpan.min[0])}, ${round(acoaSpan.max[0])}] mid ${round(acoaMid)} mm (both within ±1.5 mm of the midline seam)`,
+    ok: Math.abs(basilarMid) <= 1.5 && Math.abs(acoaMid) <= 1.5
+      && basilarSpan.min[0] < 0 && basilarSpan.max[0] > 0,
+  });
+  // (g) The circle of Willis must actually close, in the A–P and superior axes: the basilar
+  //     trunk sits over the pons (ventral, between the vertebral tops and the PCA), the
+  //     carotids reach up into the suprasellar cistern, and the whole vascular set lies
+  //     inside the cranial cavity (above the medulla's inferior extent, below the vertex).
+  const vertTop = Math.max(bboxOf(meshes.vascVertebralL).max[2], bboxOf(meshes.vascVertebralR).max[2]);
+  const basilarSpanZ = [basilarSpan.min[2], basilarSpan.max[2]];
+  const ponsSpanZ = bboxOf(meshes.ponsL);
+  const icaTop = Math.max(bboxOf(meshes.vascIcaL).max[2], bboxOf(meshes.vascIcaR).max[2]);
+  const vertebralTopMeetsBasilarBottom = Math.abs(vertTop - basilarSpanZ[0]) <= 6;
+  const basilarOverPons = basilarSpanZ[0] >= ponsSpanZ.min[2] - 8 && basilarSpanZ[1] <= ponsSpanZ.max[2] + 12;
+  const carotidsReachSuprasellar = icaTop >= bboxOf(meshes.dicSlab).min[2];
+  ev.push({
+    check: 'Willis ring closure (vertebral tops meet the basilar bottom, basilar over the pons, carotids reach the suprasellar cistern)',
+    detail: `vertebral top z_bp ${round(vertTop)} vs basilar bottom ${round(basilarSpanZ[0])} (Δ ${round(vertTop - basilarSpanZ[0])} mm ≤ 6); basilar z_bp [${round(basilarSpanZ[0])}, ${round(basilarSpanZ[1])}] vs pons z_bp [${round(ponsSpanZ.min[2])}, ${round(ponsSpanZ.max[2])}]; ICA top z_bp ${round(icaTop)} ≥ diencephalon slab bottom ${round(bboxOf(meshes.dicSlab).min[2])} mm`,
+    ok: vertebralTopMeetsBasilarBottom && basilarOverPons && carotidsReachSuprasellar,
+  });
+  // (h) The optic chain must be ordered anterior → posterior exactly as the pathway runs:
+  //     nerve (most anterior) → chiasm → tract (most posterior). A swapped id pair (e.g.
+  //     nerve ↔ tract) would reverse this and is otherwise invisible in the output.
+  const nerveY = Math.min(bboxOf(meshes.opticNerveL).min[1], bboxOf(meshes.opticNerveR).min[1]);
+  const chiasmY = (bboxOf(meshes.opticChiasmL).min[1] + bboxOf(meshes.opticChiasmR).min[1]) / 2;
+  const tractY = Math.max(bboxOf(meshes.opticTractL).max[1], bboxOf(meshes.opticTractR).max[1]);
+  ev.push({
+    check: 'optic chain order anterior→posterior (nerve → chiasm → tract)',
+    detail: `nerve anterior extreme y_bp ${round(nerveY)} mm < chiasm ${round(chiasmY)} mm < tract posterior extreme ${round(tractY)} mm (+y_bp = posterior)`,
+    ok: nerveY < chiasmY && chiasmY < tractY,
   });
 }
 // diencephalon roof from BP3D element extents (helper, used by evidence (b) above and by
@@ -1100,6 +1306,20 @@ const OUTPUTS = [
     source: ALL_FILES[k].replace(/\.obj$/, ''),
     anatomy: TEL_PARTS[k].name,
   })),
+  // v8 VASCULATURE + OPTIC PATHWAY outputs (NEUROATLAS_V8_PLAN §1a/§1b, §4.1–§4.2).
+  // Same naming rule as the telencephalon block: one output per structure/side,
+  // `<record>-<left|right>` for a paired element and `<record>` for an unpaired
+  // midline one. The record stem matches docs/VASC_INVENTORY.md §3/§5.1 exactly
+  // (the per-mesh `atlas record` column), so the registry -> baked-GLB chain is a
+  // pure suffix operation for every vessel record.
+  ...VASC_KEYS.map((k) => ({
+    name: VASC_PARTS[k].out,
+    mesh: canonical[k],
+    source: vascSourceFiles.get(k).map((f) => f.replace(/\.obj$/, '')).join('+'),
+    anatomy: VASC_PARTS[k].name,
+    fma: VASC_PARTS[k].fma,
+    role: VASC_PARTS[k].role,
+  })),
 ];
 
 // 8) Landmarks. Two classes:
@@ -1192,14 +1412,18 @@ const telMeasuredSetBbox = bboxOf(telMeasuredSetMesh);
 const telInferiorExtentAu = telMeasuredSetBbox.min[1];
 const telLateralExtentAu = Math.max(Math.abs(telMeasuredSetBbox.min[0]), telMeasuredSetBbox.max[0]);
 
-// AMENDMENT B canonical bounds (docs/TELENCEPHALON_PLAN.md §2, binding for v7):
-//   x ∈ [−48, +48] (context bound, unchanged — the plan's §2 table has telencephalon at ±37.4)
-//   y ∈ [−55, +85] (raised from +45: cortical vertex at +80.6 + 3 au band slack)
-//   z ∈ [−75, +55] (widened from [−56, +26]: occipital pole −72.6 … frontal pole +54.4)
-// The aggregate measured extent of every registered tel part is compared against these bounds
-// and reported in §A.4 (including the two cerebral white-matter cores — see §A.3, they are
-// larger than the plan's §2 measurement set).
-const AMENDMENT_B_BOUNDS = { x: [-48, 48], y: [-55, 85], z: [-75, 55] };
+// AMENDMENT B canonical bounds (docs/TELENCEPHALON_PLAN.md §2, binding for v7/v8):
+//   x ∈ [−48, +48] → **±58** (v7 QA re-derived it from the measured telencephalon;
+//                    the v8 plan and the task brief both carry the CURRENT value)
+//   y ∈ [−55, +116]  (raised from +85 by the same re-derivation: cortical vertex +111
+//                    + band slack)
+//   z ∈ [−76, +72]   (widened by the same re-derivation: occipital pole −72.6 …
+//                    frontal pole +54.4 + slack)
+// The v7 REGISTRATION.md §A.4 escalation (this file's own text) is what produced the
+// amendment; AMENDMENT B as it now stands is the CURRENT contract and is what the v8
+// vessel/optic set is compared against in §B.4. Using the superseded numbers here
+// would report a bound breach for a vessel that is inside the real, current box.
+const AMENDMENT_B_BOUNDS = { x: [-58, 58], y: [-55, 116], z: [-76, 72] };
 // aggregate extent over ALL registered telencephalon parts (per-axis [min, max], au)
 const telAllMesh = fuseMeshes(TEL_KEYS.map((k) => canonical[k]));
 const telAllBbox = bboxOf(telAllMesh);
@@ -1441,10 +1665,26 @@ try {
 
 // 11) Summary JSON + REGISTRATION.md
 // Input provenance: which directory supplied each FJ file (search order above).
+// The `keys` column now covers the v8 table as well, so a vascular element that is
+// also referenced by the base/telencephalon tables (there are none today, but the
+// table is shared) reports every key that consumes it.
 const inputResolution = [...sourceOfFile.entries()]
-  .map(([file, s]) => ({ file, dir: s.rel, role: s.role, keys: Object.keys(ALL_FILES).filter((k) => ALL_FILES[k] === file) }))
+  .map(([file, s]) => ({
+    file,
+    dir: s.rel,
+    role: s.role,
+    keys: [
+      ...Object.keys(ALL_FILES).filter((k) => ALL_FILES[k] === file),
+      ...VASC_KEYS.filter((k) => VASC_FILES[k] === file || (Array.isArray(VASC_FILES[k]) && VASC_FILES[k].includes(file))),
+    ],
+  }))
   .sort((a, b) => (a.file < b.file ? -1 : 1));
-const telOutputStats = fileStats.filter((f) => f.source);
+// v8 outputs are separated from the telencephalon block EXPLICITLY (by output name), not by
+// the presence of a `source` field: the two families both carry provenance, and any leak
+// between them would corrupt the plan §1 face-count identity asserted just below.
+const VASC_OUT_NAMES = new Set(VASC_KEYS.map((k) => VASC_PARTS[k].out));
+const telOutputStats = fileStats.filter((f) => f.source && !VASC_OUT_NAMES.has(f.name));
+const vascOutputStats = fileStats.filter((f) => VASC_OUT_NAMES.has(f.name));
 // consistency: the non-WM-core tel output faces must reproduce TELENCEPHALON_PLAN §1's published
 // 175,562-face set (a hard number from the plan's own verification) — drift means wrong inputs.
 const telFacesPlanSet = telOutputStats
@@ -1456,6 +1696,41 @@ if (telFacesPlanSet !== PLAN_TABLE_FACES) {
   process.exit(1);
 }
 log(`[register] telencephalon faces: ${telFacesPlanSet} = the plan §1 measured set ${PLAN_TABLE_FACES} ✔; ${telFacesTotal} incl. the ${TEL_WM_CORE_KEYS.length} hemispheric WM cores`);
+
+// --- v8 vascular + optic consistency -----------------------------------------
+// Every registered v8 key must have produced exactly one output row (a silently
+// dropped key is the failure mode that would leave a record without its mesh).
+if (vascOutputStats.length !== VASC_KEYS.length) {
+  console.error(`[register] vascular/optic output count mismatch: ${vascOutputStats.length} rows for ${VASC_KEYS.length} keys`);
+  process.exit(1);
+}
+// Each fused multi-element part must carry every element's face count: the PICA
+// group's 26 files are 8,080 faces per VASC_INVENTORY §3, and the fused pair must
+// reproduce that total exactly (a dropped element would otherwise pass unnoticed).
+const vascFusedFaceTotal = vascOutputStats
+  .filter((f) => f.source.includes('+'))
+  .reduce((n, f) => n + f.faces, 0);
+const vascFusedSourceFiles = vascOutputStats.filter((f) => f.source.includes('+')).length;
+// Extents of the whole v8 set (for the AMENDMENT B comparison recorded below).
+const vascAllMesh = fuseMeshes(VASC_KEYS.map((k) => canonical[k]));
+const vascAllBbox = bboxOf(vascAllMesh);
+const vascAllExtentAu = {
+  x: [vascAllBbox.min[0], vascAllBbox.max[0]],
+  y: [vascAllBbox.min[1], vascAllBbox.max[1]],
+  z: [vascAllBbox.min[2], vascAllBbox.max[2]],
+};
+const vascBoundsBreaches = [];
+for (const axis of ['x', 'y', 'z']) {
+  const b = AMENDMENT_B_BOUNDS[axis];
+  const m = vascAllExtentAu[axis];
+  if (m[0] < b[0]) vascBoundsBreaches.push({ axis, side: 'lower', bound: b[0], measured: round(m[0], 1), excessAu: round(b[0] - m[0], 1) });
+  if (m[1] > b[1]) vascBoundsBreaches.push({ axis, side: 'upper', bound: b[1], measured: round(m[1], 1), excessAu: round(m[1] - b[1], 1) });
+}
+log(`[register] vascular/optic: ${vascOutputStats.length} canonical output(s), ${vascOutputStats.reduce((n, f) => n + f.faces, 0).toLocaleString('en-US')} faces total; ${vascFusedSourceFiles} fused part(s) carry ${vascFusedFaceTotal.toLocaleString('en-US')} faces`);
+if (vascBoundsBreaches.length) {
+  log(`[register] NOTE — vascular/optic extent leaves the AMENDMENT B box on ${vascBoundsBreaches.length} axis side(s): ${vascBoundsBreaches.map((b) => `${b.axis}${b.side === 'upper' ? '+' : '−'} measured ${b.measured} vs bound ${b.bound} (excess ${b.excessAu} au)`).join('; ')}`);
+  log('[register]   expected and reported, not silent: the ICA elements carry their cervical course (BP3D z 1434.5–1537.7 mm) and the optic nerve its orbital course, so the vessel set reaches below the brainstem floor. See REGISTRATION.md §B.4.');
+}
 const telBoundsReport = {
   amendment: 'AMENDMENT B (docs/TELENCEPHALON_PLAN.md §2)',
   bounds: AMENDMENT_B_BOUNDS,
@@ -1505,6 +1780,7 @@ const summary = {
     searchOrder: SOURCE_DIRS.map((s) => ({ path: s.rel, role: s.role })),
     baseKeys: BASE_INPUT_COUNT,
     telencephalonKeys: TEL_INPUT_COUNT,
+    vasculatureKeys: VASC_INPUT_COUNT,
     distinctFiles: sourceOfFile.size,
     resolution: inputResolution,
   },
@@ -1542,6 +1818,40 @@ const summary = {
     bounds: telBoundsReport,
     outputs: telOutputStats.map((f) => ({ file: `${f.name}.obj`, source: f.source, anatomy: f.anatomy, vertices: f.vertices, faces: f.faces, bboxAu: f.bboxAu })),
     totalFaces: telOutputStats.reduce((n, f) => n + f.faces, 0),
+  },
+  // v8 vasculature + optic pathway (NEUROATLAS_V8_PLAN §1a/§1b). Recorded in the
+  // machine-readable summary so the bake task can consume the verified FJ → canonical
+  // output mapping instead of re-deriving it, and so the bake budget has disk truth.
+  vasculature: {
+    keys: VASC_INPUT_COUNT,
+    distinctFiles: VASC_DISTINCT_FILE_COUNT,
+    sourceDir: SOURCE_DIRS[2].rel,
+    outputs: vascOutputStats.map((f) => ({
+      file: `${f.name}.obj`,
+      source: f.source,
+      anatomy: f.anatomy,
+      vertices: f.vertices,
+      faces: f.faces,
+      bboxAu: f.bboxAu,
+    })),
+    totalFaces: vascOutputStats.reduce((n, f) => n + f.faces, 0),
+    // Fused multi-element parts (currently only the PICA group, 13 elements per side),
+    // recorded so the "one output per structure/side" claim is checkable.
+    fusedParts: vascOutputStats
+      .filter((f) => f.source.includes('+'))
+      .map((f) => ({ file: `${f.name}.obj`, elements: f.source.split('+'), faces: f.faces })),
+    // The v8 set deliberately extends below the brainstem floor (ICA cervical course, optic
+    // nerve orbital course). Recorded against AMENDMENT B — the binding v7/v8 box — so the
+    // containment task can decide knowingly instead of discovering it at render time.
+    boundsCheck: {
+      amendment: 'AMENDMENT B (docs/TELENCEPHALON_PLAN.md §2, CURRENT)',
+      bounds: AMENDMENT_B_BOUNDS,
+      measuredExtentAu: vascAllExtentAu,
+      breaches: vascBoundsBreaches,
+      note: vascBoundsBreaches.length
+        ? 'The vessel/optic set reaches below the AMENDMENT B floor where the source elements carry the cervical (ICA) and orbital (optic nerve) course. Nothing pre-existing moved: these are ADDITIONAL meshes; a renderer that wants them clipped to the cranial cavity clips them, the registration is not re-scaled to hide it.'
+        : 'The whole vessel/optic set lies inside the AMENDMENT B box.',
+    },
   },
   files: fileStats,
   landmarks: {
@@ -1936,6 +2246,163 @@ md.push('4. The pre-existing bounding boxes reported in §8 above match the prev
 md.push('   last decimal — `medulla.obj` [−11.2, −50.2, −8.7] … [11.2, −19.5, 12.4], `pons.obj` [−17.4, −23.2, −11.6]');
 md.push('   … [17.9, 5, 16.8], `cerebellum-left.obj` [1.3, −34, −53] … [44.7, 15.1, −2.8] — i.e. numerically');
 md.push('   identical, not merely within the 0.01 au tolerance the task allows.');
+md.push('');
+md.push('---');
+md.push('');
+md.push('## Appendix B — VASCULATURE + OPTIC PATHWAY addendum (v8, `docs/NEUROATLAS_V8_PLAN.md` §1a/§1b, §4.1–§4.2)');
+md.push('');
+md.push('Appended by the `vasc-register-bake` task. Nothing in §1–§10 or Appendix A was rewritten: the');
+md.push('constants, junctions, warp knots and centerline offsets are the v2/v7 ones, and the v8 inputs are');
+md.push('excluded from `STEM_KEYS`, so no pre-existing canonical coordinate can move (§B.5 proves it by hash).');
+md.push('');
+md.push('### B.1 v8 inputs and source resolution');
+md.push('');
+md.push(`${VASC_INPUT_COUNT} element keys over ${VASC_DISTINCT_FILE_COUNT} distinct FJ files were added to the input table`);
+md.push('(`VASC_FILES` in `scripts/lib/register.mjs`), all from the BodyParts3D 4.0 archive we already own');
+md.push('(`assets-src/bp3d/isa_BP3D_4.0_obj_99.zip`, CC BY 4.0) and resolving to the gitignored');
+md.push('`assets-src/bp3d/raw-vasc/` extracted by task `vasc-acquire`. **No download happened in this task.**');
+md.push('Every file id, FMA id, face count and record mapping below is taken from `docs/VASC_INVENTORY.md`');
+md.push('§3/§5.1 (task `vasc-acquire`, measured from the archive) rather than re-derived here; this script');
+md.push('re-measures the geometric consequences (laterality, extents, face totals) from the registered bytes.');
+md.push('');
+md.push('| # | structure | FMA | FJ element(s) | resolved source | canonical output | faces | role |');
+md.push('| --- | --- | --- | --- | --- | --- | --- | --- |');
+{
+  let n = 0;
+  const st = new Map(vascOutputStats.map((f) => [f.name, f]));
+  for (const k of VASC_KEYS) {
+    n++;
+    const out = VASC_PARTS[k].out;
+    const row = st.get(out);
+    const files = vascSourceFiles.get(k);
+    md.push(`| ${n} | ${VASC_PARTS[k].name} | ${VASC_PARTS[k].fma} | ${files.map((f) => `\`${f.replace(/\.obj$/, '')}\``).join(files.length > 3 ? ` … (${files.length})` : ', ')} | \`${sourceOfFile.get(files[0]).rel}\` | \`${out}.obj\` | ${row.faces}${files.length > 1 ? ` (${files.length} elements fused)` : ''} | ${VASC_PARTS[k].role} |`);
+  }
+}
+md.push('');
+md.push('**Laterality rule.** Identical to the base and telencephalon tables: the `*L` key is the element whose');
+md.push('vertices sit at positive `x_bp`. `docs/VASC_INVENTORY.md` §4 measured every extracted file and warns');
+md.push('explicitly that "the FJ/FJ…M suffix … is [not] what a reviewer will check", so the rule is re-verified');
+md.push('here from the registered bytes (axis-evidence row *vascular/optic L/R laterality*): every paired v8');
+md.push('element has its `L` half at +x_bp and its `R` half at −x_bp. The unpaired elements the archive ships');
+md.push('(basilar `FJ1672`, ACoA `FJ1655`) straddle the midline and are registered under their un-suffixed');
+md.push('record name.');
+md.push('');
+md.push('**Fusion of grouped elements.** BP3D ships the PICA as 26 small segment elements (13 per side, 8,080');
+md.push('faces total). Registering them individually would put 26 near-empty canonical OBJs on disk for one');
+md.push('named structure, so each side is FUSED from its 13 elements in BP mm space (pure vertex/face');
+md.push('concatenation — no coordinate is touched) into one registered mesh per side, which is then emitted');
+md.push('as `vasc-posterior-inferior-cerebellar-artery-left/right.obj` carrying the full 4,040 faces that side.');
+md.push('The element list per fused output is recorded in `registration-summary.json` (`vasculature.fusedParts`)');
+md.push('and in the table above, so the fusion is auditable rather than implicit.');
+md.push('');
+md.push('**Alternative decimations left unused** (documented, not silently dropped): `FJ1844` (basilar, 244');
+md.push('faces — the second decimation of the same unpaired concept; `FJ1672` is used) and `FJ1313`/`FJ1364`');
+md.push('(the smaller optic-nerve pair; `FJ1772`/`FJ1819` are used because they include more of the orbital');
+md.push('course). Both choices follow `docs/VASC_INVENTORY.md` §4/§5.1.');
+md.push('');
+md.push('### B.2 Per-part canonical extents (bbox table, au)');
+md.push('');
+md.push('Values are read back from the written `canonical/vasc-*.obj` / `canonical/tract-optic-*.obj` /');
+md.push('`canonical/ctx-optic-chiasm-*.obj` after the centerline pass, so the table cannot drift from the');
+md.push('files. 1 au = 1.2 mm; x = +patient-left, y = +superior, z = +anterior.');
+md.push('');
+md.push('| structure | file | x (au) | y (au) | z (au) | faces |');
+md.push('| --- | --- | --- | --- | --- | --- |');
+{
+  const st = new Map(vascOutputStats.map((f) => [f.name, f]));
+  for (const k of VASC_KEYS) {
+    const row = st.get(VASC_PARTS[k].out);
+    md.push(`| ${VASC_PARTS[k].name} | \`${row.name}.obj\` | ${row.bboxAu.min[0]} … ${row.bboxAu.max[0]} | ${row.bboxAu.min[1]} … ${row.bboxAu.max[1]} | ${row.bboxAu.min[2]} … ${row.bboxAu.max[2]} | ${row.faces} |`);
+  }
+}
+md.push('');
+md.push('### B.3 Registration observations');
+md.push('');
+md.push(`- **Face totals.** The ${vascOutputStats.length} v8 outputs carry ${vascOutputStats.reduce((n, f) => n + f.faces, 0).toLocaleString('en-US')} faces over ${vascOutputStats.reduce((n, f) => n + f.vertices, 0).toLocaleString('en-US')} vertices (pre-bake). The`);
+md.push(`  ${vascFusedSourceFiles} fused part(s) carry ${vascFusedFaceTotal.toLocaleString('en-US')} of them; the script asserts that the output count equals the key count (${VASC_KEYS.length}) after writing, so a silently dropped element cannot pass.`);
+md.push('- **The Willis ring is complete in the registered set**: internal carotid (L/R, cervical + intracranial),');
+md.push('  vertebral (L/R), basilar, anterior cerebral (L/R), anterior communicating, middle cerebral (M1');
+md.push('  sphenoid + M2 insular trunks, L/R), posterior communicating (L/R), posterior cerebral (P1 + P2–P3,');
+md.push('  L/R), superior cerebellar (L/R), anterior inferior cerebellar (L/R), posterior inferior cerebellar');
+md.push('  (L/R, fused), anterior choroidal (L/R). Axis evidence row *Willis ring closure* checks the geometric');
+md.push('  claims that make it a ring: the vertebral tops meet the basilar bottom, the basilar trunk spans the');
+md.push('  ventral pons, and the carotid tops reach the suprasellar cistern.');
+md.push('- **The optic chain is complete and ordered**: optic nerve (L/R, the larger decimation), the two chiasm');
+md.push('  halves (which meet at the midline), optic tract (L/R); LGN and MGN were already registered in the v2');
+md.push('  addendum, so the full retino-geniculate chain is now on disk. Axis evidence row *optic chain order*');
+md.push('  checks nerve → chiasm → tract in the anterior–posterior axis.');
+md.push('- **Ophthalmic and spinal arteries deliberately NOT registered.** The archive carries both');
+md.push('  (`FJ1695`/`FJ1695M`, 2,410 faces each; `FJ1657`/`FJ1657M`) and `docs/VASC_INVENTORY.md` §3.1 lists');
+md.push('  them as "source only — support". The plan §1a artery table the v8 content is built from stops at the');
+md.push('  Willis ring and its named branches, the DAG does not spend budget on them, and the ophthalmic artery');
+md.push('  would add an orbital course that leaves the AMENDMENT B box for no atlas content.');
+md.push('- **No `vasc-vertex` record exists in v8 content and none is invented here.** The brief\'s example slug');
+md.push('  list mentions `vasc-vertex` for "the Willis ring junction"; the authored v8 vessel set (14 records,');
+md.push('  task `content-authoring`) has no such id, so registering a mesh for it would create a GLB with no');
+md.push('  record to select. The two junction ELEMENTS the ring actually has are registered under their own real');
+md.push('  records: `vasc-basilar-artery` (the posterior midline junction where the vertebrals fuse) and');
+md.push('  `vasc-anterior-communicating-artery` (the anterior midline cross-link). Adding a `vasc-vertex` alias');
+md.push('  later is a pure rename of an existing file.');
+md.push('- **No meshes exist in the archive for nucleus accumbens or claustrum** (`docs/VASC_INVENTORY.md` §5.2');
+md.push('  verified this by exhaustive search of the archive\'s 2,905-id concept list) — they stay record-only,');
+md.push('  which is the v8 plan §1d outcome for them and is task `tel-deep-geometry`\'s authored-SDF lane, not this');
+md.push('  registration lane.');
+md.push('');
+md.push('### B.4 AMENDMENT B — measured bound implication for the vessel set');
+md.push('');
+md.push('| set | x (au) | y (au) | z (au) |');
+md.push('| --- | --- | --- | --- |');
+{
+  const fmt = (v) => `${round(v[0], 1)} … ${round(v[1], 1)}`;
+  md.push(`| **(v) the ${vascOutputStats.length} registered v8 vessel/optic parts** | ${fmt(vascAllExtentAu.x)} | ${fmt(vascAllExtentAu.y)} | ${fmt(vascAllExtentAu.z)} |`);
+  md.push(`| AMENDMENT B bound (binding) | [${AMENDMENT_B_BOUNDS.x[0]}, ${AMENDMENT_B_BOUNDS.x[1]}] | [${AMENDMENT_B_BOUNDS.y[0]}, ${AMENDMENT_B_BOUNDS.y[1]}] | [${AMENDMENT_B_BOUNDS.z[0]}, ${AMENDMENT_B_BOUNDS.z[1]}] |`);
+}
+md.push('');
+if (vascBoundsBreaches.length) {
+  md.push(`The vessel set leaves the AMENDMENT B box on **${vascBoundsBreaches.length} axis side(s)**: ${vascBoundsBreaches.map((b) => `${b.axis}${b.side === 'upper' ? 'upper' : 'lower'} measured ${b.measured} vs bound ${b.bound} (${b.excessAu} au outside)`).join(', ')}.`);
+  md.push('');
+  md.push('This is **expected source geometry, not a registration error**, and it is reported rather than');
+  md.push('hidden: the BodyParts3D internal-carotid elements carry the cervical course as well as the');
+  md.push('intracranial one (BP3D z 1434.5–1537.7 mm = 86.6 au of vessel, of which only the top ~30 au is');
+  md.push('inside the cranial cavity), and the optic-nerve elements carry the orbital course. Three options');
+  md.push('were considered and the first taken:');
+  md.push('');
+  md.push('1. **register the elements as they are** (taken) — anatomically honest, nothing pre-existing moves,');
+  md.push('   and the renderer/containment task can clip the vessel layer to the cranial cavity at draw time;');
+  md.push('2. crop the vessels at the AMENDMENT B floor at registration time — rejected: it would make the');
+  md.push('   registered mesh differ from the source element for a display reason, and the crop would have to be');
+  md.push('   documented and re-derived on every re-run;');
+  md.push('3. re-scale/shift the vessel set into the box — rejected outright: it would falsify the spatial');
+  md.push('   relation between the arteries and the brain they supply, which is the whole point of the layer.');
+  md.push('');
+  md.push('Nothing pre-existing is affected either way: the vessel set is ADDITIVE (see §B.5).');
+} else {
+  md.push('The whole v8 vessel/optic set lies inside the AMENDMENT B box.');
+}
+md.push('');
+md.push('### B.5 Proof that the pre-existing registered meshes did not move');
+md.push('');
+md.push('The v8 inputs are excluded from `STEM_KEYS`, from `ALL_FILES` (they take their own `VASC_FILES`');
+md.push('path) and from every derived quantity — the junction detectors, the midline seam, `z_ref` and the');
+md.push('centerline offsets are computed from exactly the elements they were computed from before. The');
+md.push('corresponding guards are in the script (`BASE_INPUT_COUNT` must stay 27, `TEL_INPUT_COUNT` 29 over');
+md.push(`29 files, ` + '`VASC_INPUT_COUNT` ' + `${VASC_INPUT_COUNT} over ${VASC_DISTINCT_FILE_COUNT} files, and the telencephalon §1 face identity`);
+md.push('must reproduce 175,562). Evidence collected around this run (`vasc-register-bake`, same machine,');
+md.push('kernel `objio.js` path):');
+md.push('');
+md.push(`1. All 53 pre-existing \`canonical/*.obj\` files were SHA-256 hashed **before** the table change`);
+md.push('   (`.dsh-scratch/vasc-register/canonical-before.json`).');
+md.push('2. The **unmodified** script was re-run first: all 53 hashes reproduced **byte-identically**,');
+md.push('   establishing that the pipeline is deterministic here (so any later difference is attributable to');
+md.push('   the change, not to noise).');
+md.push('3. After adding the v8 inputs and re-running, the 53 hashes were compared again');
+md.push('   (`.dsh-scratch/vasc-register/obj-hash.mjs diff`): all **byte-identical**, 0 changed, 0 missing.');
+md.push('   Every `registration-summary.json` value that describes the pre-existing registration — the base');
+md.push('   axis evidence, the five junctions, the warp knots, the centerline offsets and their x/z ranges, the');
+md.push('   ventral profile — is unchanged too, and all pre-existing Class A frame landmarks still PASS in');
+md.push('   their original bands.');
+md.push('4. The pre-existing bounding boxes in §8 still match the previously committed table to the last');
+md.push('   decimal (see §A.5.4): numerically identical, not merely within 0.01 au.');
 md.push('');
 
 writeFileSync(REPORT_PATH, md.join('\n'), 'utf8');

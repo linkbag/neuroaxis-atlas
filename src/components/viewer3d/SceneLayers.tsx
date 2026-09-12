@@ -41,9 +41,10 @@ import {
 } from '../../geometry/envelope'
 import { createContextMaterial, createGhostShellMaterial } from '../../geometry/materials'
 import {
-  anatomySlugForRecord,
+  anatomySlugsForRecord,
   isGhostOrContentOnly,
   useAnatomyAsset,
+  RECORD_MATERIAL_OVERRIDES,
   TEL_HEMISPHERE_RECORD_IDS,
   TEL_HEMISPHERE_SHELLS,
 } from '../../geometry/anatomyAssets'
@@ -473,41 +474,50 @@ export default function SceneLayers() {
         // `anatomySlug` a record hands NucleusMesh is always either a real
         // committed GLB or the record id itself (which is a manifest slug for
         // the whole v1–v6 set, so nothing below y = +45 changes).
-        const anatomySlug = anatomySlugForRecord(record.id) ?? record.id
+        //
+        // v8: a record may now own MORE THAN ONE body per side (the MCA's
+        // M1+M2, the PCA's P1+P2) and may name its right side explicitly
+        // (`bodyRight`) where the two sides are not mirror images (every
+        // artery). `anatomySlugsForRecord` answers both; a null right side is
+        // the v1–v7 mirror, which is what every link that predates v8 returns.
+        const sides = anatomySlugsForRecord(record.id)
+        const leftSlugs = sides ? sides.left : [record.id]
+        const rightSlugs = sides ? sides.right : null
+        const hintOverride = RECORD_MATERIAL_OVERRIDES[record.id]
         const emphasised = emphasis.has(record.id) && isSolidKind(record.kind)
-        if (record.laterality === 'paired') {
-          return (
-            <Fragment key={record.id}>
-              <NucleusMesh
-                record={record}
-                highlight={highlight}
-                geometry={override}
-                anatomySlug={anatomySlug}
-                emphasised={emphasised}
-              />
-              <NucleusMesh
-                record={record}
-                mirrored
-                highlight={highlight}
-                geometry={override}
-                anatomySlug={anatomySlug}
-                emphasised={emphasised}
-              />
-            </Fragment>
-          )
-        }
-        return (
+        const body = (slug: string, mirrored: boolean, key: string) => (
           <NucleusMesh
-            key={record.id}
+            key={key}
             record={record}
+            mirrored={mirrored}
             highlight={highlight}
             geometry={override}
-            anatomySlug={anatomySlug}
+            anatomySlug={slug}
+            materialHint={hintOverride}
             emphasised={emphasised}
           />
         )
+        // Draw the right side when the record is paired OR when it named explicit
+        // right bodies (the chiasm is `midline` in the registry — it is a crossing
+        // — yet its two hemi-chiasm meshes are both real geometry).
+        if (record.laterality === 'paired' || rightSlugs !== null) {
+          return (
+            <Fragment key={record.id}>
+              {leftSlugs.map((slug) => body(slug, false, slug))}
+              {(rightSlugs ?? leftSlugs).map((slug) => body(slug, rightSlugs === null, `${slug}::right`))}
+            </Fragment>
+          )
+        }
+        return <Fragment key={record.id}>{leftSlugs.map((slug) => body(slug, false, slug))}</Fragment>
       })}
       {visibleTracts.map((tract) => (
+        // v8 note: a tract that owns a committed body is drawn by the STRUCTURE
+        // pass above, not here — `visibleStructures` is fed by every file under
+        // `src/data/structures/`, and that includes the tract-SHAPED records that
+        // live there (the optic nerve, the optic tract, the fornix). This loop is
+        // `src/data/tracts.json` only, whose 23 records stay procedural, exactly
+        // as REALISM_PLAN §7 decided ("tracts stay procedural"). So: no baked-body
+        // branch here, and nothing below y = +45 changes.
         <TractTube key={tract.id} tract={tract} highlight={highlight} />
       ))}
     </group>

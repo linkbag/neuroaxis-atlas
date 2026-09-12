@@ -1,16 +1,17 @@
 # NeuroAxis — 3D Brainstem Atlas
 
-**An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum) — with the telencephalon (cerebral hemispheres, basal ganglia, limbic system, ventricles) layered on from v7** — selectable 3D nuclei and fiber tracts, labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
+**An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum) — with the telencephalon (cerebral hemispheres, basal ganglia, limbic system, ventricles) layered on from v7, and the cerebral vasculature (circle of Willis and the major cerebral arteries) plus the deep functional/projection content from v8** — selectable 3D nuclei and fiber tracts, labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
 ## Features
 
 - **Realistic v2 rendering** — real-scan-derived brainstem/diencephalon/cerebellum envelopes, organically sculpted nuclei, CSF spaces, PBR lighting with SSAO/bloom/SMAA, and a High/Balanced quality toggle (details below).
 - **3D viewer** — orbit / zoom / pan; click-select any nucleus, tract, ventricle, or surface landmark; hover labels; global selection shared with every other panel.
-- **Region & system layers** — toggle diencephalon / midbrain / pons / medulla / cerebellum **/ telencephalon** and nuclei / tracts / ventricles / surface / context; presets *Brainstem focus* (default), *Deep structures*, *Whole brain*, *Cortex only*, *All*, *Nuclei*, *Tracts*, *Clinical motor*.
+- **Region & system layers** — toggle diencephalon / midbrain / pons / medulla / cerebellum **/ telencephalon / vasculature** and nuclei / tracts / ventricles / surface / context / **vessel**; presets *Brainstem focus* (default), *Deep structures*, *Whole brain*, ***Vasculature***, *Cortex only*, *All*, *Nuclei*, *Tracts*, *Clinical motor*.
 - **Exploded view** — slider fans nuclei radially off the brainstem axis while tracts and envelopes stay put.
 - **Clipping planes** — sagittal / coronal / transverse cuts over the full canonical range with a plane-helper toggle; the transverse slider snaps to plate levels.
 - **Live section sync (v3/v4)** — every clip slider also drives a GPU picture-in-picture live section (bottom-right of the 3D view) and a worker-computed 2D live-section canvas in the *Plates* tab, both showing **real imagery as the base layer** — real section photographs on their anchored planes, a continuous real head CT volume, and a continuous T1 MRI at any plane, with a modality toolbar (Auto real-first / MRI / CT / Photo / Simulated only), CT brain–bone windows, and the active modality's credit always visible — details below.
 - **Telencephalon (v7)** — the cerebral hemispheres, basal ganglia, limbic structures, lateral ventricles and telencephalic white matter (22 new meshes, 46 registry entries, 4 new levels, 3 new plates) layered onto the same canonical space, with the hemispheres as a translucent **ghost cortex** so the brainstem stays the subject of the app. New presets *Brainstem focus* (the default) / *Deep structures* / *Whole brain* / *Cortex only* — details in [Telencephalon (v7)](#telencephalon-v7--the-rest-of-the-brain).
+- **Cerebral vasculature & deep content (v8)** — the **circle of Willis and the major cerebral arteries** as 14 records over **32 new real meshes** (arteries + optic pathway), each with its territory and the syndromes it causes, under a new *Vasculature* preset; plus the telencephalon's deep granularity — 12 functional cortical areas (V1, V2, A1, A2, Wernicke, Broca, M1, S1, premotor, SMA, entorhinal, FEF), 4 hippocampal subfields, the optic pathway, the ventricular segments and the striatal/pallidal subdivisions — details in [Cerebral vasculature & deep content (v8)](#cerebral-vasculature--deep-content-v8--the-arterial-layer-and-the-telencephalon-at-brainstem-granularity).
 - **12 interactive 2D plates** — 9 transverse levels (pyramidal decussation → mid-thalamus), 1 midline sagittal profile, 2 coronal slices; every labeled region highlights on hover and selects everywhere on click; leader-line labels toggle on/off. **(v7 adds 3 more — 15 total:** axial +58, sagittal hemisphere, coronal fornix.)
 - **2D ↔ 3D sync** — selecting a plate (or level-ruler entry) moves the 3D transverse clipping plane to that level and reveals the plane helper; dragging the plane keeps the level ruler and plate sync indicator in step.
 - **Structure browser** — region → subdivision → structure taxonomy tree plus case-insensitive search over names and synonyms (try "STN", "MLF", "pulvinar").
@@ -51,7 +52,7 @@ The 3D scene was upgraded from schematic primitives ("blobs" + lathe envelopes) 
 - **Quality toggle** — *High* (post composer, dpr ≤ 2) vs *Balanced* (no composer, dpr ≤ 1.5) in the header; persisted in `localStorage`, auto-downgrades without WebGL2.
 - **Fallback contract** — the runtime loader (`src/geometry/anatomyAssets.ts`) resolves each slug's GLB through the manifest; any slug without a committed mesh (and every tract — tubes stay procedural) renders its v1 primitive, so the app never blanks.
 
-**Committed assets & budgets**: `src/assets/anatomy/` holds 84 GLBs + `anatomy-manifest.json` (10 envelopes · 3 CSF spaces · 71 nuclei; **320,296 triangles · 7.40 MiB**), inside the plan §2.7 (Amendment A) budget: ≤ 700k tris, ≤ 8 MiB total, per-part caps (envelope 1.5 MiB · CSF 0.8 MiB · nucleus 60 KiB · nuclei 2.5 MiB). `node scripts/build-anatomy-geometry.mjs --manifest` re-verifies all of it and exits non-zero on any violation.
+**Committed assets & budgets (v2 milestone; current totals — 138 GLBs · 599,204 triangles · 13.82 MiB — are in [Cerebral vasculature & deep content (v8)](#cerebral-vasculature--deep-content-v8--the-arterial-layer-and-the-telencephalon-at-brainstem-granularity))**: at the v2 commit `src/assets/anatomy/` held 84 GLBs + `anatomy-manifest.json` (10 envelopes · 3 CSF spaces · 71 nuclei; **320,296 triangles · 7.40 MiB**), inside the plan §2.7 (Amendment A) budget: ≤ 700k tris, ≤ 8 MiB total, per-part caps (envelope 1.5 MiB · CSF 0.8 MiB · nucleus 60 KiB · nuclei 2.5 MiB). `node scripts/build-anatomy-geometry.mjs --manifest` re-verifies all of it and exits non-zero on any violation.
 
 **Re-baking** (deterministic, Node-only — raw BP3D downloads stay in gitignored `assets-src/`):
 
@@ -466,6 +467,106 @@ fail with the expected text — a gate that cannot fail is not a gate:
 The script prints each mutation's exit code, the failing check's own sentence and the SHA-256 of the
 six mutated files **before and after** the run: 7/7 caught, the shared tree byte-identical, and the
 restored copy re-runs green (91 passed · 0 failed).
+
+## Cerebral vasculature & deep content (v8) — the arterial layer, and the telencephalon at brainstem granularity
+
+**What v8 adds.** Two things the atlas was missing: the **cerebral vasculature** (circle of Willis and
+the major cerebral arteries) as a layer of its own, and the **deep content** that brings the
+telencephalon to the naming granularity the brainstem already had — functional cortical areas,
+hippocampal subfields, the optic pathway, the ventricular segments, and the striatal/pallidal
+subdivisions. The arterial meshes are **real BodyParts3D 4.0 geometry** (CC BY 4.0), registered into
+the canonical space by the same script as every other envelope and baked by the same CLI.
+
+### The arterial layer
+
+- **32 new baked meshes** — 26 artery elements (both sides where the artery is paired) + the 6 optic-pathway
+  meshes — taking the committed set to **138 GLBs · 599,204 triangles · 13.82 MiB**, verified by
+  `npm run verify:pipeline` (138/138 parts, 0 problems) and `npm run verify:anatomy` (including
+  *every baked part lies inside `CLIP_BOUNDS`*, so the clip sliders can reach all of it).
+- **One record per named artery, with its territory and its syndromes.** 14 records
+  (`vasc-internal-carotid-artery` … `vasc-posterior-medial-choroidal-artery`) each carry the structures
+  they supply (`territory`), the **existing syndrome cards** whose arterial territory they are
+  (`supply` — PCA → Déjérine-Roussy / Percheron / Weber / Benedikt, AICA → lateral pontine / Millard-Gubler,
+  SCA → cerebellar, PICA → lateral medullary / central Horner), laterality, a crimson shade, and level chips.
+  Selecting an artery highlights its territory structures; opening a syndrome lights the artery that causes it.
+- **The circle of Willis is a real ring, not a set of stubs.** BP3D carries one element per side, so each
+  paired artery names its **right side explicitly** (`bodyRight`) instead of being mirrored — the circle is
+  asymmetric and mirroring the left carotid would put the right one at the wrong calibre and course. The MCA
+  and PCA each own **two segments per side** (M1+M2, P1+P2) under the one record, so selecting either segment
+  selects and lights the whole artery.
+- **A material that reads as an artery.** `createVesselMaterial` — crimson, `roughness 0.34` +
+  `clearcoat 0.3` against the tissue presets' 0.85–0.95, translucent at 0.5 with a fresnel-lit rim, and its
+  section cut face painted in the arterial wall's own tone (`#7f1d1d`) rather than the shared tissue cap.
+- **A `Vasculature` view preset** — the arterial cast with the brain it supplies kept as a faint outline
+  (vessels + surface records + context envelopes; every nucleus, tract and ventricle is layer-off by *kind*).
+  The overlay is **hidden in the default Brainstem-focus framing by the region layer** and visible in
+  *All*, *Whole brain* and *Vasculature* — asserted at module load both ways, so it can neither leak into the
+  default view nor become unreachable (see `state/store.ts`: the vascular exemption is paid for with its own
+  assertions).
+
+### Deep content (records, annotated)
+
+| Group | Records | Notes |
+| --- | --- | --- |
+| Functional cortical areas | 12 (`ctx-v1`, `ctx-v2`, `ctx-a1`, `ctx-a2`, `ctx-wernicke`, `ctx-broca`, `ctx-m1`, `ctx-s1`, `ctx-premotor`, `ctx-sma`, `ctx-entorhinal`, `ctx-frontal-eye-fields`) | each anchored to its host gyrus mesh, with function, connections, blood supply, levels and refs |
+| Hippocampal subfields | 4 (`nuc-subiculum`, `nuc-ca1`, `nuc-ca2-ca3`, `nuc-ca4`) | **record-only** — placed schematic markers, flagged as such |
+| Optic pathway | 3 (`tract-optic-nerve`, `ctx-optic-chiasm`, `tract-optic-tract`) | **real meshes**; the pre-existing optic radiation keeps its own record |
+| Ventricular segments | 1 new (`vent-lateral-ventricle-body`) + subdivisions | the lateral ventricle is a real cast with horns/atrium/body named as records |
+| Striatal / pallidal depth | `nuc-accumbens`, `nuc-ventral-pallidum`, `nuc-claustrum`, `nuc-globus-pallidus-internus`/`-externus`, `nuc-caudate-head`/`-body`/`-tail` | records exist and are annotated; the segments share their parent mesh (see *Honest limits*) |
+| Cerebral vasculature | 14 | the table above |
+
+**Where the optic pathway renders from.** The optic nerve, chiasm and tract are `tract`/`context` records that
+live in `src/data/structures/`, which means they resolve their baked bodies through the same body pass the
+nuclei use — the six optic meshes are real geometry, so the optic nerve is a nerve and not a swept tube. Their
+baked parts carry `materialHint: 'vasculature'` (the v8 bake emitted them alongside the arteries), so
+`RECORD_MATERIAL_OVERRIDES` restores the hint their own kind implies: pale CNS white matter for the two tracts,
+the neutral context preset for the chiasmatic crossing. An optic nerve in arterial crimson would have been a
+false statement about the tissue.
+
+### Honest limits (v8)
+
+- **The striatal/ventricular subdivisions share their parent mesh.** `nuc-globus-pallidus-externus`,
+  `nuc-caudate-head`/`-body`/`-tail` and the lateral-ventricle horns/atrium are fully recorded, annotated and
+  selectable, but their **geometry is the one committed mesh of their parent structure** — selecting GPe
+  highlights the pallidum, not a separate outer segment. Splitting them needs per-segment meshes (see below).
+- **Some v8 records are record-only, deliberately.** The four hippocampal subfields and
+  `vasc-lenticulostriate-arteries` own no mesh: each renders a **sized schematic placement marker** at its
+  authored `origin3d`/`size3d` and says so in its own `contextNote`. For the lenticulostriate arteries this is
+  the anatomy's own limit — BodyParts3D has no lenticulostriate concept (the vessel is documented from the MCA's
+  anterolateral central branches, which the inventory files under the MCA).
+- **The vascular source has a cervical tail that the atlas crops.** The registered ICA/vertebral elements carry
+  their neck course down to `y ≈ −97 au`, well outside the canonical box. The **bake crops the two trunks at
+  `y = −45 au`**, so nothing rendered leaves `CLIP_BOUNDS`; the canonical source keeps the full element and the
+  deviation is recorded in `assets-src/bp3d/REGISTRATION.md` §B.4 rather than hidden.
+- **`vasc-lenticulostriate-arteries` has no mesh, and the MCA's branch mesh is not it.** BP3D's MCA elements
+  include the anterolateral central branches, but carving them out as "the lenticulostriate arteries" would
+  assert a segmentation the source does not make.
+- **No vascular imaging is layered into the section view.** The real-imagery layers (MRI, CT, cryosections) are
+  unchanged: they are tissue modalities, and no vessel-annotated dataset (MRA/CTA) is committed.
+- **What v8 deliberately did not do: carve the sub-nuclei their own meshes.** GPi/GPe, the three caudate parts and
+  the four ventricular segments each remain one mesh with several records pointing at it. Doing it properly means
+  an SDF/CSG split of a committed solid (a *shell* for GPe around GPi, a *plane-clipped* caudate head/body/tail,
+  horn-clipped ventricle casts), each of which must stay watertight, inside its per-part triangle cap and inside
+  the parent's bounding box before it can be committed — a geometry task with its own verification, not a
+  content task. It is the first item of the remaining v8 work, and the records already in place are what it
+  will point at.
+
+### Evidence (v8)
+
+| Gate | Result |
+| --- | --- |
+| `npm run validate` | **exit 0 — 0 errors, 0 warnings** (220 registry entries, 0 awaiting a record; 16 structure files / 197 records) |
+| `npm run check` | **exit 0** |
+| `npm run build` | **exit 0** |
+| `npm run verify:pipeline` | **exit 0 — 138/138 parts · 599,204 triangles · 386 loops across 13 planes · 0 problems** |
+| `npm run verify:plane` | **exit 0 — 10,827 assertions** |
+| `npm run verify:anatomy` | **exit 0 — 27 passed · 0 failed** (bbox invariance for the brainstem envelopes, MRI/CT content invariant, every baked part inside `CLIP_BOUNDS`, budgets) |
+| `npm run verify:acceptance` / `verify:audit` | browser lanes, re-run by the orchestrator after this change (see *Verification* below) |
+
+The single warning the content task left behind (a deliberately staged
+`src/data/structures-pending/vasculature.json`) is **gone**: the `vasculature` region is now legal in
+`types.ts` / `load.ts` / `validate-data.mjs`, the 14 registry rows were appended from the records themselves
+(so registry and record cannot drift), and the file moved into `src/data/structures/`.
 
 ## Scripts
 

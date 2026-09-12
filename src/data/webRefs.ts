@@ -284,6 +284,189 @@ const curated: Record<string, WebRef[]> = {
     { ...TRACTOGRAPHY_ATLAS },
     { ...DISCONNECTION },
   ],
+
+  // ---- v8: functional cortical areas (anchored to their host gyri) ----
+  // Each area carries its own Wikipedia article plus one journal entry: the
+  // classical hierarchy paper for the visual areas (Felleman & Van Essen 1991,
+  // which defines V1/V2 and the dorsal-ventral streams) and the canonical
+  // hippocampal-formation review for the entorhinal cortex, which is the
+  // anatomical origin of the perforant path described in that record.
+  'ctx-v1': [
+    { source: 'wikipedia', label: 'Wikipedia — Visual cortex', url: wiki('Visual cortex') },
+    { source: 'journal', label: 'Felleman & Van Essen 1991 — Distributed hierarchical processing in the primate cerebral cortex (Cereb Cortex)', url: 'https://doi.org/10.1093/cercor/1.1.1' },
+  ],
+  'ctx-v2': [
+    { source: 'wikipedia', label: 'Wikipedia — Visual cortex (V2)', url: wiki('Visual cortex') },
+    { source: 'journal', label: 'Felleman & Van Essen 1991 — Distributed hierarchical processing in the primate cerebral cortex (Cereb Cortex)', url: 'https://doi.org/10.1093/cercor/1.1.1' },
+  ],
+  'ctx-a1': [
+    { source: 'wikipedia', label: 'Wikipedia — Auditory cortex', url: wiki('Auditory cortex') },
+    { source: 'wikipedia', label: "Wikipedia — Heschl's gyrus", url: wiki("Heschl's gyrus") },
+  ],
+  'ctx-a2': [
+    { source: 'wikipedia', label: 'Wikipedia — Planum temporale', url: wiki('Planum temporale') },
+    { source: 'wikipedia', label: 'Wikipedia — Auditory cortex', url: wiki('Auditory cortex') },
+  ],
+  'ctx-wernicke': [
+    { source: 'wikipedia', label: "Wikipedia — Wernicke's area", url: wiki("Wernicke's area") },
+    { source: 'wikipedia', label: 'Wikipedia — Receptive aphasia', url: wiki('Receptive aphasia') },
+    { ...DISCONNECTION },
+  ],
+  'ctx-broca': [
+    { source: 'wikipedia', label: "Wikipedia — Broca's area", url: wiki("Broca's area") },
+    { source: 'wikipedia', label: 'Wikipedia — Expressive aphasia', url: wiki('Expressive aphasia') },
+    { source: 'journal', label: 'Catani et al. 2005 — Perisylvian language networks of the human brain (Ann Neurol)', url: 'https://doi.org/10.1002/ana.20319' },
+  ],
+  'ctx-m1': [
+    { source: 'wikipedia', label: 'Wikipedia — Primary motor cortex', url: wiki('Primary motor cortex') },
+    { source: 'wikipedia', label: 'Wikipedia — Corticospinal tract', url: wiki('Corticospinal tract') },
+  ],
+  'ctx-s1': [
+    { source: 'wikipedia', label: 'Wikipedia — Postcentral gyrus', url: wiki('Postcentral gyrus') },
+    { source: 'wikipedia', label: 'Wikipedia — Somatosensory system', url: wiki('Somatosensory system') },
+  ],
+  'ctx-premotor': [
+    { source: 'wikipedia', label: 'Wikipedia — Premotor cortex', url: wiki('Premotor cortex') },
+    { source: 'wikipedia', label: 'Wikipedia — Apraxia', url: wiki('Apraxia') },
+  ],
+  'ctx-sma': [
+    { source: 'wikipedia', label: 'Wikipedia — Supplementary motor area', url: wiki('Supplementary motor area') },
+    { source: 'wikipedia', label: 'Wikipedia — Alien hand syndrome', url: wiki('Alien hand syndrome') },
+  ],
+  'ctx-entorhinal': [
+    { source: 'wikipedia', label: 'Wikipedia — Entorhinal cortex', url: wiki('Entorhinal cortex') },
+    { source: 'wikipedia', label: 'Wikipedia — Perforant path', url: wiki('Perforant path') },
+    { source: 'journal', label: 'Amaral & Witter 1989 — The three-dimensional organization of the hippocampal formation: a review of anatomical data (Neuroscience)', url: 'https://doi.org/10.1016/0306-4522(89)90424-7' },
+  ],
+  'ctx-frontal-eye-fields': [
+    { source: 'wikipedia', label: 'Wikipedia — Frontal eye fields', url: wiki('Frontal eye fields') },
+    { source: 'wikipedia', label: 'Wikipedia — Saccade', url: wiki('Saccade') },
+  ],
+
+  // ---- v8: basal ganglia depth ----
+  'nuc-accumbens': [
+    { source: 'wikipedia', label: 'Wikipedia — Nucleus accumbens', url: wiki('Nucleus accumbens') },
+    { source: 'wikipedia', label: 'Wikipedia — Reward system', url: wiki('Reward system') },
+    { ...BG_LOOPS },
+  ],
+  'nuc-ventral-pallidum': [
+    { source: 'wikipedia', label: 'Wikipedia — Ventral pallidum', url: wiki('Ventral pallidum') },
+    { source: 'wikipedia', label: 'Wikipedia — Substantia innominata', url: wiki('Substantia innominata') },
+    { source: 'journal', label: 'Haber & Knutson 2010 — The reward circuit: linking primate anatomy and human imaging (Neuropsychopharmacology)', url: 'https://doi.org/10.1038/npp.2009.129' },
+  ],
+  'nuc-claustrum': [
+    { source: 'wikipedia', label: 'Wikipedia — Claustrum', url: wiki('Claustrum') },
+    { source: 'wikipedia', label: 'Wikipedia — Extreme capsule', url: wiki('Extreme capsule') },
+  ],
+
+  // ---- v8: hippocampal formation (record-only subfields) ----
+  'nuc-subiculum': [
+    { source: 'wikipedia', label: 'Wikipedia — Subiculum', url: wiki('Subiculum') },
+    { source: 'journal', label: 'Amaral & Witter 1989 — The three-dimensional organization of the hippocampal formation: a review of anatomical data (Neuroscience)', url: 'https://doi.org/10.1016/0306-4522(89)90424-7' },
+  ],
+  'nuc-ca1': [
+    { source: 'wikipedia', label: 'Wikipedia — Hippocampus anatomy (CA fields)', url: wiki('Hippocampus anatomy') },
+    { source: 'wikipedia', label: 'Wikipedia — Hypoxic ischemic encephalopathy (selective neuronal necrosis)', url: wiki('Hypoxic-ischemic encephalopathy') },
+    { ...HIPPOCAMPAL_LESION },
+  ],
+  'nuc-ca2-ca3': [
+    { source: 'wikipedia', label: 'Wikipedia — Hippocampus anatomy (CA fields)', url: wiki('Hippocampus anatomy') },
+    { source: 'wikipedia', label: 'Wikipedia — Mossy fiber (hippocampus)', url: wiki('Mossy fiber (hippocampus)') },
+    { ...HIPPOCAMPAL_LESION },
+  ],
+  'nuc-ca4': [
+    { source: 'wikipedia', label: 'Wikipedia — Dentate gyrus', url: wiki('Dentate gyrus') },
+    { source: 'wikipedia', label: 'Wikipedia — Temporal lobe epilepsy', url: wiki('Temporal lobe epilepsy') },
+    { source: 'journal', label: 'Amaral & Witter 1989 — The three-dimensional organization of the hippocampal formation: a review of anatomical data (Neuroscience)', url: 'https://doi.org/10.1016/0306-4522(89)90424-7' },
+  ],
+
+  // ---- v8: optic pathway ----
+  'tract-optic-nerve': [
+    { source: 'wikipedia', label: 'Wikipedia — Optic nerve', url: wiki('Optic nerve') },
+    { source: 'wikipedia', label: 'Wikipedia — Optic neuritis', url: wiki('Optic neuritis') },
+  ],
+  'ctx-optic-chiasm': [
+    { source: 'wikipedia', label: 'Wikipedia — Optic chiasm', url: wiki('Optic chiasm') },
+    { source: 'wikipedia', label: 'Wikipedia — Bitemporal hemianopsia', url: wiki('Bitemporal hemianopsia') },
+  ],
+  'tract-optic-tract': [
+    { source: 'wikipedia', label: 'Wikipedia — Optic tract', url: wiki('Optic tract') },
+    { source: 'wikipedia', label: 'Wikipedia — Lateral geniculate nucleus', url: wiki('Lateral geniculate nucleus') },
+  ],
+
+  // ---- v8: ventricular segments of the lateral ventricle ----
+  // The five segments were already curated above (frontal horn, atrium,
+  // occipital horn, temporal horn in the v7 telencephalon block); only the body
+  // segment is new here, and it carries the same article as its four siblings
+  // with the CSF-secretion review rather than a duplicated wiki target.
+  'vent-lateral-ventricle-body': [
+    { source: 'wikipedia', label: 'Wikipedia — Lateral ventricles (body)', url: wiki('Lateral ventricles') },
+    { source: 'wikipedia', label: 'Wikipedia — Thalamostriate vein', url: wiki('Thalamostriate vein') },
+    { ...CSF_SECRETION },
+  ],
+
+  // ---- v8: cerebral vasculature (circle of Willis + major trunks) ----
+  // These are the only curated entries the vessel records rely on: getWebRefs()
+  // deliberately emits no automatic Wikipedia fallback for `vessel` kind, so
+  // every artery must appear here to keep the "learn more" panel honest.
+  'vasc-internal-carotid-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Internal carotid artery', url: wiki('Internal carotid artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Carotid artery dissection', url: wiki('Carotid artery dissection') },
+  ],
+  'vasc-vertebral-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Vertebral artery', url: wiki('Vertebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Vertebral artery dissection', url: wiki('Vertebral artery dissection') },
+  ],
+  'vasc-basilar-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Basilar artery', url: wiki('Basilar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Locked-in syndrome', url: wiki('Locked-in syndrome') },
+  ],
+  'vasc-anterior-cerebral-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Anterior cerebral artery', url: wiki('Anterior cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Anterior cerebral artery syndrome', url: wiki('Anterior cerebral artery syndrome') },
+  ],
+  'vasc-anterior-communicating-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Anterior communicating artery', url: wiki('Anterior communicating artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Subarachnoid hemorrhage', url: wiki('Subarachnoid hemorrhage') },
+  ],
+  'vasc-middle-cerebral-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Middle cerebral artery', url: wiki('Middle cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Middle cerebral artery syndrome', url: wiki('Middle cerebral artery syndrome') },
+  ],
+  'vasc-posterior-communicating-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior communicating artery', url: wiki('Posterior communicating artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Posterior communicating artery aneurysm (third-nerve palsy)', url: wiki('Oculomotor nerve palsy') },
+  ],
+  'vasc-posterior-cerebral-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior cerebral artery', url: wiki('Posterior cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Posterior cerebral artery syndrome', url: wiki('Posterior cerebral artery syndrome') },
+    { source: 'journal', label: 'Schmahmann 2003 — Vascular syndromes of the thalamus (Stroke)', url: 'https://doi.org/10.1161/01.STR.0000087786.38997.9E' },
+  ],
+  'vasc-superior-cerebellar-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Superior cerebellar artery', url: wiki('Superior cerebellar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Cerebellar stroke syndrome', url: wiki('Cerebellar stroke syndrome') },
+  ],
+  'vasc-anterior-inferior-cerebellar-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Anterior inferior cerebellar artery', url: wiki('Anterior inferior cerebellar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Lateral pontine syndrome', url: wiki('Lateral pontine syndrome') },
+  ],
+  'vasc-posterior-inferior-cerebellar-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior inferior cerebellar artery', url: wiki('Posterior inferior cerebellar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Lateral medullary syndrome', url: wiki('Lateral medullary syndrome') },
+  ],
+  'vasc-lenticulostriate-arteries': [
+    { source: 'wikipedia', label: 'Wikipedia — Lenticulostriate arteries', url: wiki('Lenticulostriate arteries') },
+    { source: 'wikipedia', label: 'Wikipedia — Lacunar stroke', url: wiki('Lacunar stroke') },
+  ],
+  'vasc-anterior-choroidal-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Anterior choroidal artery', url: wiki('Anterior choroidal artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Internal capsule', url: wiki('Internal capsule') },
+  ],
+  'vasc-posterior-medial-choroidal-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior choroidal arteries', url: wiki('Posterior choroidal artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Choroid plexus', url: wiki('Choroid plexus') },
+    { ...CSF_SECRETION },
+  ],
 }
 
 /** Authoritative journal overview for the brainstem regions (RSNA RadioGraphics 2019). */

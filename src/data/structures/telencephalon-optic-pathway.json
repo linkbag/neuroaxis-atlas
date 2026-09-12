@@ -1,0 +1,152 @@
+[
+  {
+    "id": "tract-optic-nerve",
+    "name": "Optic nerve",
+    "synonyms": ["nervus opticus", "cranial nerve II (intracranial and orbital segments)", "CN II"],
+    "region": "telencephalon",
+    "subdivision": "Optic pathway",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "meshes": false,
+    "contextNote": "Authored structure — schematic placement: the v8 content-authoring run anchors the optic nerve on the intracranial course between the optic canal and the chiasm (x ≈ 7, y ≈ 21, z ≈ 28). The subarachnoid (intracranial) segment is the part clinically relevant to raised intracranial pressure and to sellar/suprasellar disease; BP3D carries orbital and intracranial optic-nerve meshes that the v8 geometry tasks add as `vasc-`/optic parts (docs/NEUROATLAS_V8_PLAN.md §1b, §4).",
+    "direction": "ascending",
+    "modality": "Special sensory — vision; retinal ganglion-cell axons carrying the retinotopic map of the contralateral visual field half",
+    "origin": "Retinal ganglion cells (the innermost retinal layer, whose axons converge at the optic disc, having relayed photoreceptor and bipolar-cell signals through the retina)",
+    "target": "Optic chiasm, where the nasal (crossing) and temporal (uncrossed) fibres separate; the record continues as the optic tract after the chiasm",
+    "decussation": "Not in the nerve itself: within each optic nerve all fibres are ipsilateral. The nasal half of each retina (52–55 % of the fibres) crosses in the optic chiasm immediately distal to the nerve, so the two optic nerves become the two optic tracts at that point.",
+    "function": "The second cranial nerve is not a peripheral nerve but a central white-matter tract evaginated from the diencephalon, wrapped in meninges and bathed in CSF along its intracranial segment — which is why it swells in papilloedema and is compressed by suprasellar masses. It carries the axons of roughly one million retinal ganglion cells from each eye and conveys the entire visual signal from photoreceptors to the brain, with the macula occupying about two-thirds of the fibres and the temporal crescent the far nasal periphery. Its fibres are organized retinotopically, so the pattern of a partial lesion (altitudinal, arcuate, central scotoma) localizes the damage along the visual pathway.",
+    "clinical": [
+      {
+        "syndrome": "Optic neuritis",
+        "findings": "Subacute painful monocular visual loss with reduced colour vision, an afferent pupillary defect (Marcus Gunn pupil) and a central scotoma; the commonest presentation of demyelinating disease and the classic first symptom of multiple sclerosis, with the nerve enhancing on MRI and vision recovering over weeks.",
+        "note": "Inflammatory/demyelinating (anti-AQP4 or MOG antibody disease in atypical cases), not vascular"
+      },
+      {
+        "syndrome": "Papilloedema and optic atrophy from raised intracranial pressure",
+        "findings": "Raised intracranial pressure is transmitted along the optic-nerve sheath, causing bilateral disc swelling, transient visual obscurations and enlarged blind spots; prolonged compression produces optic atrophy and permanent visual loss — the reason fundoscopy is mandatory in every headache assessment.",
+        "vascular": "Not vascular — CSF pressure transmitted through the optic-nerve sheath (the sheath is continuous with the subarachnoid space)"
+      },
+      {
+        "syndrome": "Anterior ischaemic optic neuropathy (AION)",
+        "findings": "Infarction of the anterior optic nerve from occlusion of the short posterior ciliary arteries produces sudden painless monocular loss with an altitudinal field defect and a swollen disc (arteritic, giant-cell arteritis, in the elderly; non-arteritic otherwise).",
+        "vascular": "Short posterior ciliary arteries (ophthalmic artery); the arteritic form accompanies giant-cell arteritis"
+      },
+      {
+        "syndrome": "Optic-nerve compression by a sellar or suprasellar lesion",
+        "findings": "A pituitary adenoma, craniopharyngioma or meningioma compressing the intracranial optic nerve causes monocular visual loss with a central or junctional scotoma, often before any endocrine symptom.",
+        "note": "Compressive; the junctional scotoma (ipsilateral central plus contralateral temporal defect) localizes the lesion to the nerve-chiasm junction"
+      }
+    ],
+    "waypoints": [
+      [11, 19, 33],
+      [9, 20, 30],
+      [7, 21, 27],
+      [4, 22, 25],
+      [2, 23.5, 23.5]
+    ],
+    "tubeRadius": 0.55,
+    "levels": ["lvl-thalamus-rostral", "lvl-tel-thalamostriate"],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+    ]
+  },
+  {
+    "id": "ctx-optic-chiasm",
+    "name": "Optic chiasm (chiasmatic crossing)",
+    "synonyms": ["optic chiasm", "chiasma opticum", "chiasmatic decussation"],
+    "region": "telencephalon",
+    "subdivision": "Optic pathway",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "meshes": false,
+    "contextNote": "Authored structure — schematic placement: the chiasmatic crossing is anchored at the midline just above the sella (x = 0, y ≈ 23.5, z ≈ 23.5), immediately anterior to the `surf-optic-chiasm` landmark record that carries the surface/landmark role (x = 0, y = 29, z = 10 in the diencephalon group). The two records are deliberately distinct: the surface landmark marks the structure on the plates, this context record carries the fibre-crossing semantics and the clinical territory of the chiasm. BP3D's optic-chiasm mesh (FMA 90717, BP5710) is registered by the v8 geometry tasks.",
+    "function": "The X-shaped midline crossing where the two optic nerves exchange their nasal retinal fibres: about 53 % of the axons (the nasal retina of each eye, which subserves the temporal visual field of that eye) cross to the contralateral side, while the temporal retinal fibres stay ipsilateral. The result is the fundamental reorganization of the visual pathway — from that point onward every structure carries the contralateral half-field rather than the contralateral eye. The crossing is topographically ordered (the macular fibres occupy the central and posterior part, the inferior nasal fibres loop forward into the contralateral nerve — Wilbrand's knee — and the dorsal fibres pass posteriorly), and the chiasm sits directly above the pituitary sella between the internal carotid arteries, which is why sellar masses compress it from below and in front.",
+    "connections": {
+      "afferent": [
+        "Optic nerves (tract-optic-nerve) from both eyes — nasal fibres crossing and temporal fibres passing through uncrossed",
+        "No other afferent: the chiasm is a pure crossing point, and its blood supply comes from the superior hypophyseal arteries and the internal carotid branches above the sella"
+      ],
+      "efferent": [
+        "Optic tracts (tract-optic-tract) — each tract now carries the contralateral visual half-field: temporal retina ipsilaterally, nasal retina contralaterally",
+        "Fibres of the retinohypothalamic tract leave the chiasm region to reach the suprachiasmatic nucleus for circadian photoentrainment"
+      ]
+    },
+    "bloodSupply": "The superior hypophyseal arteries (branches of the internal carotid) and the prechiasmal branches of the ophthalmic and anterior cerebral arteries form a rich anastomotic supply, which is why the chiasm tolerates gradual compression before failing; sudden compression or surgical devascularization causes acute bitemporal loss. The chiasm lies immediately above the diaphragma sellae between the two internal carotid arteries.",
+    "clinical": [
+      {
+        "syndrome": "Bitemporal hemianopia (chiasmatic syndrome)",
+        "findings": "Compression of the crossing nasal fibres produces loss of the temporal (peripheral) field of both eyes, beginning superiorly and progressing to a complete bitemporal hemianopia; the patient bumps into objects on both sides and may not notice until it is advanced. The classic cause is a pituitary adenoma growing out of the sella, followed by craniopharyngioma, meningioma of the tuberculum sellae and a suprasellar/parasellar aneurysm.",
+        "note": "Compressive rather than vascular — a chiasmal lesion is diagnosed by the pattern of the field defect (bitemporal, respecting the vertical midline, chiasmal compression from below starts superiorly)"
+      },
+      {
+        "syndrome": "Junctional scotoma (nerve-chiasm junction lesion)",
+        "findings": "A lesion at the junction of one optic nerve and the chiasm damages the ipsilateral optic nerve and the crossing fibres of the contralateral inferior nasal retina (Wilbrand's knee): a central scotoma in one eye with a superior temporal defect in the other localizes the lesion precisely, and is almost pathognomonic of a suprasellar mass.",
+        "note": "Compressive; the pattern, not the field loss alone, is the localizing sign"
+      },
+      {
+        "syndrome": "Chiasmal apoplexy (pituitary apoplexy)",
+        "findings": "Sudden haemorrhagic infarction of a pituitary adenoma expands into the chiasm within minutes, producing acute bitemporal visual loss with severe headache, meningism, ophthalmoplegia and, in the catastrophic form, adrenal crisis — a neurosurgical emergency.",
+        "vascular": "Pituitary apoplexy (haemorrhagic infarction of an adenoma); the chiasm is compressed rather than infarcted"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral"],
+    "origin3d": [0, 23.5, 23.5],
+    "size3d": [3.5, 1.2, 1.5],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Hypothalamus: Autonomic, Hormonal and Emotional Functions'"
+    ]
+  },
+  {
+    "id": "tract-optic-tract",
+    "name": "Optic tract",
+    "synonyms": ["tractus opticus", "postchiasmatic optic pathway", "optic tract (chiasm to lateral geniculate nucleus)"],
+    "region": "telencephalon",
+    "subdivision": "Optic pathway",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#a78bfa",
+    "meshes": false,
+    "contextNote": "Authored structure — schematic placement: the tract runs from the posterolateral chiasm around the cerebral peduncle to the lateral geniculate nucleus, anchored at x ≈ 13, y ≈ 22.5, z ≈ 8 with waypoints that follow the diencephalic surface. BP3D carries optic-tract meshes (FMA 62491/10451, BP5706/10451) that the v8 geometry tasks register; the record is complete without them.",
+    "direction": "ascending",
+    "modality": "Special sensory — vision; the contralateral visual half-field, with the nasal retinal fibres crossed at the chiasm and the temporal fibres uncrossed",
+    "origin": "Optic chiasm (each tract is the continuation of the ipsilateral temporal and contralateral nasal fibres)",
+    "target": "Lateral geniculate nucleus (nuc-lgn) — the great majority of fibres; a minority ends in the superior colliculus (nuc-superior-colliculus), the pretectal area (nuc-pretectal) for the pupillary light reflex and the suprachiasmatic nucleus for circadian photoentrainment",
+    "decussation": "Complete by this point: the tract itself does not cross. Each optic tract carries the whole contralateral visual half-field, and its fibres are rearranged inside the lateral geniculate nucleus, where the laminae segregate the crossed and uncrossed inputs for the same point in visual space.",
+    "function": "The postchiasmatic segment of the visual pathway: it sweeps from the chiasm around the cerebral peduncle beneath the temporal lobe, hugging the diencephalon, and delivers a retinotopically ordered fibre bundle to the lateral geniculate nucleus. The tract carries the entire contralateral half-field, and its fibres are sorted into the laminated structure of the LGN (layers 1, 4, 6 from the contralateral eye and 2, 3, 5 from the ipsilateral eye) before the geniculostriate relay to V1. Its close relation to the uncus and the medial temporal lobe explains the congruity of the visual defects of temporal-lobe surgery, and its course alongside the internal capsule and the third nerve explains the classic syndromes of the region.",
+    "clinical": [
+      {
+        "syndrome": "Incongruous contralateral homonymous hemianopia",
+        "findings": "A complete or partial optic-tract lesion produces a contralateral homonymous hemianopia that is characteristically incongruous (the two eyes' defects differ in size and shape, because the crossing and non-crossing fibres are not yet perfectly aligned for corresponding retinal points) — the field defect that distinguishes a tract lesion from a cortical one, where the defects are congruent.",
+        "vascular": "Posterior cerebral artery (thalamogeniculate/anterior temporal branches) or anterior choroidal artery (which supplies the tract's lateral part and the adjacent internal capsule and optic radiation)"
+      },
+      {
+        "syndrome": "Riddoch phenomenon and the tract's asymmetric pupillary defect",
+        "findings": "Because a minority of tract fibres carry the pupillary light reflex afferents to the pretectum, an optic-tract lesion can produce a subtle contralateral relative afferent pupillary defect (the pupillary sign described by Bell) in addition to the hemianopia — absent in lesions behind the LGN.",
+        "vascular": "Posterior cerebral artery territory; the pupillary fibres leave the tract before the LGN"
+      },
+      {
+        "syndrome": "Incipient or incomplete hemianopia with macular sparing patterns",
+        "findings": "Slowly growing sellar/suprasellar or temporal-lobe lesions produce a partial hemianopia that is often misinterpreted as chiasmal or retinal disease; because the macular fibres occupy a large central portion of the tract and the LGN is organized with the macula posterolaterally, careful perimetry is required to localize the level.",
+        "note": "Compressive (tumour) rather than vascular; the pattern of field loss is the localizing tool"
+      }
+    ],
+    "waypoints": [
+      [4, 23, 20],
+      [8, 22.5, 16],
+      [12, 22, 10],
+      [14, 21.5, 3],
+      [16, 21.2, -4],
+      [16.5, 21.2, -7.5]
+    ],
+    "tubeRadius": 0.6,
+    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  }
+]

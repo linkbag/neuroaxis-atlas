@@ -47,7 +47,7 @@ const PLATE_ID_RE = /^plate-[a-z0-9-]+$/;
 const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const HEX_RE = /^#[0-9a-f]{6}$/;
 
-const REGIONS = ['telencephalon', 'diencephalon', 'midbrain', 'pons', 'medulla', 'cerebellum'];
+const REGIONS = ['telencephalon', 'diencephalon', 'midbrain', 'pons', 'medulla', 'cerebellum', 'vasculature'];
 const KINDS = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context'];
 const LATERALITIES = ['midline', 'paired'];
 const DIRECTIONS = ['ascending', 'descending', 'mixed'];

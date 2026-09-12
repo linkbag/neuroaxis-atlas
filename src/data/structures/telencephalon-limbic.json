@@ -57,12 +57,14 @@
   {
     "id": "nuc-dentate-gyrus",
     "name": "Dentate gyrus",
-    "synonyms": ["gyrus dentatus", "fascia dentata"],
+    "synonyms": ["gyrus dentatus", "fascia dentata", "dentate gyrus of the hippocampal formation (CA5)"],
     "region": "telencephalon",
     "subdivision": "Limbic system",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
+    "meshes": false,
+    "contextNote": "Authored structure — schematic placement: the dentate gyrus is a 1–2 mm cytoarchitectural blade (granule-cell layer plus hilus) that has no separate baked mesh. The record is positioned on the medial concave edge of the baked hippocampal cast (x ≈ 21.5, y ≈ 12, z ≈ −9, probed from ctx-hippocampus-l by the v8 content-authoring run), and the pickable volume stays `nuc-hippocampus`. The v8 plan (§1f, §2.4) makes this honest record-level granularity explicit.",
     "function": "The thin, three-layered (allocortical) blade of cortex tucked between the hippocampus and the subiculum: it is the first relay of the trisynaptic circuit, receiving the perforant path and sending mossy fibres to CA3, and it is one of the very few sites of adult neurogenesis in the human brain. Its granule-cell layer acts as a pattern separator that converts similar experiences into distinguishable memory codes.",
     "connections": {
       "afferent": [

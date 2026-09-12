@@ -1527,6 +1527,150 @@ try {
     bad(p0Errors.length + ' unexpected error(s) during the P0 gates: ' + p0Errors.slice(0, 3).join(' || '))
   }
 
+  /* ============== v8: the cerebral-vasculature layer =====================
+   * docs/NEUROATLAS_V8_PLAN.md §2. The vascular overlay is a REGION of its own,
+   * hidden at default framing through the region layer and shown by the
+   * Whole-brain and Vasculature presets; selecting an artery reports its
+   * territory and the syndromes it causes. What is checked here is the DOM
+   * contract — the data itself is gated by validate / verify:pipeline /
+   * verify:anatomy, and the highlight rule by store.highlightIdSet's own
+   * assertions at module load.
+   */
+  const vascularState = `(() => {
+    const regionRow = [...document.querySelectorAll('.tree-region')].find(
+      (r) => r.querySelector('.tree-region-name')?.textContent?.trim() === 'Cerebral vasculature')
+    const legend = (label) => {
+      const row = [...document.querySelectorAll('.legend-row.legend-toggle')].find(
+        (l) => l.textContent.trim() === label)
+      const input = row?.querySelector('input')
+      return input ? !!input.checked : null
+    }
+    return {
+      regionRowFound: !!regionRow,
+      regionOff: regionRow ? regionRow.classList.contains('is-off') : null,
+      regionCount: regionRow ? Number(regionRow.querySelector('.tree-count')?.textContent ?? NaN) : null,
+      legendVasculature: legend('vasculature'),
+      legendVessel: legend('vessel'),
+      legendNucleus: legend('nucleus'),
+      swatch: [...document.querySelectorAll('.legend-row')].some(
+        (r) => r.textContent.trim() === 'Cerebral arteries'),
+      presetButton: [...document.querySelectorAll('button')].some(
+        (b) => b.textContent.trim() === 'Vasculature'),
+    }
+  })()`
+
+  await evaluate(clickText('Brainstem focus'))
+  await sleep(500)
+  const vascDefault = await evaluate(vascularState)
+  if (!vascDefault.regionRowFound) {
+    bad('the taxonomy tree has no "Cerebral vasculature" region row — the v8 region did not reach the tree')
+  } else {
+    vascDefault.regionCount === 14
+      ? ok('the tree carries the vascular region with all 14 artery records ("Cerebral vasculature", count 14)')
+      : bad(`the vascular region row reports ${vascDefault.regionCount} records, expected 14`)
+    vascDefault.regionOff === true
+      ? ok('the default Brainstem-focus framing has the vascular region layer OFF (hidden by region, plan §2)')
+      : bad('the default framing does not have the vascular region layer off — the arterial overlay would sit on the brainstem by default')
+  }
+  vascDefault.legendVasculature === false && vascDefault.legendVessel === true
+    ? ok('the legend agrees with the tree: region "vasculature" off, kind "vessel" on (the two surfaces read one layer state)')
+    : bad('legend layer state disagrees with the tree (' + JSON.stringify({
+        vasculature: vascDefault.legendVasculature, vessel: vascDefault.legendVessel,
+      }) + ')')
+  vascDefault.swatch
+    ? ok('the palette legend documents the new "Cerebral arteries" family')
+    : bad('the palette legend has no "Cerebral arteries" row')
+
+  if (!vascDefault.presetButton) {
+    bad('the header has no "Vasculature" preset button')
+  } else {
+    await evaluate(clickText('Vasculature'))
+    await sleep(700)
+    const vascOn = await evaluate(vascularState)
+    vascOn.regionOff === false && vascOn.legendVasculature === true
+      ? ok('the Vasculature preset switches the vascular region layer ON in both the tree and the legend')
+      : bad('the Vasculature preset did not turn the vascular region on (' + JSON.stringify(vascOn) + ')')
+    vascOn.legendNucleus === false
+      ? ok('the Vasculature preset is the arterial cast: nuclei are layer-off by kind, vessels are on')
+      : bad('the Vasculature preset leaves the nucleus kind layer on — it is not the cast view the plan describes')
+
+    // Open the vascular region in the tree, then select an artery through it.
+    await evaluate(`(() => {
+      const region = [...document.querySelectorAll('.tree-region')].find(
+        (r) => r.querySelector('.tree-region-name')?.textContent?.trim() === 'Cerebral vasculature')
+      region?.querySelector('.tree-region-row')?.click()
+      return !!region
+    })()`)
+    await sleep(400)
+    const subdivisionOpened = await evaluate(`(() => {
+      const region = [...document.querySelectorAll('.tree-region')].find(
+        (r) => r.querySelector('.tree-region-name')?.textContent?.trim() === 'Cerebral vasculature')
+      const sub = [...(region?.querySelectorAll('.tree-sub-row') ?? [])].find(
+        (s) => s.querySelector('.tree-sub-name')?.textContent?.trim() === 'Posterior circulation')
+      sub?.click()
+      return [...(region?.querySelectorAll('.tree-sub-name') ?? [])].map((n) => n.textContent.trim())
+    })()`)
+    subdivisionOpened.includes('Posterior circulation')
+      ? ok('the vascular region expands into its circulations (' + subdivisionOpened.join(' · ') + ')')
+      : bad('the vascular region has no "Posterior circulation" subdivision (' + JSON.stringify(subdivisionOpened) + ')')
+    await sleep(400)
+    const selected = await evaluate(`(() => {
+      const leaf = [...document.querySelectorAll('.tree-leaf-row')].find(
+        (b) => b.querySelector('.tree-leaf-name')?.textContent?.trim() === 'Posterior cerebral artery')
+      if (!leaf) return null
+      leaf.click()
+      return leaf.querySelector('.tree-leaf-name').textContent.trim()
+    })()`)
+    if (selected === null) {
+      bad('the vascular region tree has no "Posterior cerebral artery" leaf')
+    } else {
+      await sleep(700)
+      const arteryPanel = await evaluate(`(() => {
+        const sections = [...document.querySelectorAll('.info-section')]
+        const heading = (h) => sections.find(
+          (s) => s.querySelector('h3')?.textContent?.trim() === h)
+        const territory = heading('Territory (structures supplied)')
+        const syndromes = heading('Involved in syndromes')
+        return {
+          name: document.querySelector('.info-name')?.textContent?.trim() ?? '',
+          territoryChips: territory ? [...territory.querySelectorAll('.chip')].map((c) => c.textContent.trim()) : null,
+          syndromeChips: syndromes ? [...syndromes.querySelectorAll('.chip')].map((c) => c.textContent.trim()) : null,
+          hasClinical: heading('Clinical significance') !== undefined,
+        }
+      })()`)
+      arteryPanel.name === 'Posterior cerebral artery'
+        ? ok('selecting an artery from the tree opens its own record (info panel: "' + arteryPanel.name + '")')
+        : bad('the selected artery did not reach the info panel (got "' + arteryPanel.name + '")')
+      // NOTE: these two conditions are bound to consts on purpose. Written as bare
+      // `(expr) >= n ? ok : bad` statements they would be parsed as a CALL of the
+      // previous line's `bad(...)` (no semicolons in this file, and a statement
+      // starting with `(` never gets an automatic semicolon) — the ternary's
+      // alternate branch would swallow them and both checks would silently never
+      // run. A statement that starts with an identifier cannot do that.
+      const territoryCount = arteryPanel.territoryChips?.length ?? 0
+      const syndromeCount = arteryPanel.syndromeChips?.length ?? 0
+      territoryCount >= 5
+        ? ok('the artery record reports its territory as ' + territoryCount
+            + ' selectable structures (' + arteryPanel.territoryChips.slice(0, 3).join(', ') + '…)')
+        : bad('the artery record has no usable territory list (' + JSON.stringify(arteryPanel.territoryChips) + ')')
+      syndromeCount >= 1
+        ? ok('the artery names the syndromes it causes — the vessel→syndrome `supply` index is live ('
+            + syndromeCount + ': ' + arteryPanel.syndromeChips.slice(0, 3).join(', ') + ')')
+        : bad('the artery record lists no syndromes — the `supply` reverse index is not wired')
+      arteryPanel.hasClinical
+        ? ok('the artery carries its clinical significance (what an infarct there causes)')
+        : bad('the artery record has no clinical section')
+    }
+
+    // Round trip: back to the default, the overlay must be off again.
+    await evaluate(clickText('Brainstem focus'))
+    await sleep(500)
+    const vascBack = await evaluate(vascularState)
+    vascBack.regionOff === true && vascBack.legendVasculature === false
+      ? ok('returning to Brainstem focus hides the vascular layer again (the region toggle is the only switch)')
+      : bad('the vascular layer did not return to off (' + JSON.stringify(vascBack) + ')')
+  }
+
 } catch (error) {
   bad(`audit aborted: ${error instanceof Error ? error.message : String(error)}`)
 } finally {

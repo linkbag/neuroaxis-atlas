@@ -63,6 +63,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import manifestJson from '../assets/anatomy/anatomy-manifest.json'
 import type { Region } from '../types'
+import type { MaterialHint } from './materials'
 import type { AnatomyManifest, AnatomyPart } from './generated'
 
 /* ------------------------------------------------------------- manifest */
@@ -135,6 +136,27 @@ export interface AnatomyRecordLink {
    *              placeholder (see `TEL_CONTENT_ONLY_IDS`).
    */
   render: AnatomyRender
+  /**
+   * v8 — further bodies of the SAME side drawn under this record (MCA M1+M2,
+   * PCA P1+P2). One record may own several meshes: the segments are one artery,
+   * so selecting either segment selects the artery and both light together.
+   * Absent = the record draws `body` alone, exactly as in v1–v7.
+   */
+  also?: readonly string[]
+  /**
+   * v8 — the explicit right-side body. When present the mirrored instance is NOT
+   * a mirror: it loads these slugs verbatim.
+   *
+   * Arteries are the reason this exists. BP3D carries one element per side and
+   * the bake committed both (`…-l` and `…-r`), so mirroring the left vessel
+   * would put the right one at the wrong calibre and course — the circle of
+   * Willis is famously asymmetric, and the ICA's cavernous/supraclinoid course
+   * is not a reflection. Every v1–v7 link leaves this undefined and therefore
+   * keeps the mirror exactly as before (`bodyRight` absent ⇒ mirrored `body`).
+   */
+  bodyRight?: string
+  /** v8 — further RIGHT-side bodies, mirroring `also` (see `also`). */
+  alsoRight?: readonly string[]
 }
 
 /**
@@ -243,6 +265,93 @@ const LINKS: Record<string, AnatomyRecordLink> = {
   'vent-lateral-ventricle-temporal-horn': { body: 'tel-lateral-ventricle-l', region: 'telencephalon', paired: true, render: 'none' },
   'vent-lateral-ventricle-atrium': { body: 'tel-lateral-ventricle-l', region: 'telencephalon', paired: true, render: 'none' },
   'vent-choroid-plexus-lateral': { body: 'ctx-choroid-plexus-l', region: 'telencephalon', paired: true, render: 'none' },
+
+  /* --- v8 optic pathway (chiasmatic crossing + the two pre/postchiasmatic
+     segments; the OPTIC RADIATION is a v7 white-matter tract and is unchanged).
+     The record kind is `tract`/`context`, but the bake filed these six parts
+     under materialHint 'vasculature' because they were produced by the same v8
+     script — `RECORD_MATERIAL_OVERRIDES` below is what keeps the optic nerve
+     pale (myelinated CNS white matter) instead of crimson (arterial).
+     `ctx-optic-chiasm` keeps its registry laterality `midline` (it IS the
+     crossing); its body is nevertheless the two hemi-chiasm meshes, which is
+     exactly what `bodyRight` without mirroring expresses. ------------------ */
+  'tract-optic-nerve': { body: 'tract-optic-nerve-l', bodyRight: 'tract-optic-nerve-r', region: 'telencephalon', paired: true, render: 'body' },
+  'tract-optic-tract': { body: 'tract-optic-tract-l', bodyRight: 'tract-optic-tract-r', region: 'telencephalon', paired: true, render: 'body' },
+  'ctx-optic-chiasm': { body: 'ctx-optic-chiasm-l', bodyRight: 'ctx-optic-chiasm-r', region: 'telencephalon', paired: true, render: 'body' },
+
+  /* --- v8 cerebral vasculature: the circle of Willis and its trunks --------
+     docs/NEUROATLAS_V8_PLAN.md §1a/§2. One record per named artery, one element
+     set per side (`body` + `bodyRight`), two segments under the MCA and the PCA
+     (`also`/`alsoRight`). `vasc-lenticulostriate-arteries` is deliberately
+     ABSENT: BP3D has no lenticulostriate concept (its record's `contextNote`
+     says so), so the record renders its schematic placement marker at the
+     anterior perforated substance rather than borrowing the MCA's branches. */
+  'vasc-internal-carotid-artery': { body: 'vasc-internal-carotid-artery-l', bodyRight: 'vasc-internal-carotid-artery-r', region: 'vasculature', paired: true, render: 'body' },
+  'vasc-vertebral-artery': { body: 'vasc-vertebral-artery-l', bodyRight: 'vasc-vertebral-artery-r', region: 'vasculature', paired: true, render: 'body' },
+  'vasc-basilar-artery': { body: 'vasc-basilar-artery', region: 'vasculature', paired: false, render: 'body' },
+  'vasc-anterior-cerebral-artery': { body: 'vasc-anterior-cerebral-artery-l', bodyRight: 'vasc-anterior-cerebral-artery-r', region: 'vasculature', paired: true, render: 'body' },
+  'vasc-anterior-communicating-artery': { body: 'vasc-anterior-communicating-artery', region: 'vasculature', paired: false, render: 'body' },
+  'vasc-middle-cerebral-artery': {
+    body: 'vasc-middle-cerebral-artery-m1-l',
+    also: ['vasc-middle-cerebral-artery-m2-l'],
+    bodyRight: 'vasc-middle-cerebral-artery-m1-r',
+    alsoRight: ['vasc-middle-cerebral-artery-m2-r'],
+    region: 'vasculature',
+    paired: true,
+    render: 'body',
+  },
+  'vasc-posterior-communicating-artery': { body: 'vasc-posterior-communicating-artery-l', bodyRight: 'vasc-posterior-communicating-artery-r', region: 'vasculature', paired: true, render: 'body' },
+  'vasc-posterior-cerebral-artery': {
+    body: 'vasc-posterior-cerebral-artery-p1-l',
+    also: ['vasc-posterior-cerebral-artery-p2-l'],
+    bodyRight: 'vasc-posterior-cerebral-artery-p1-r',
+    alsoRight: ['vasc-posterior-cerebral-artery-p2-r'],
+    region: 'vasculature',
+    paired: true,
+    render: 'body',
+  },
+  'vasc-superior-cerebellar-artery': { body: 'vasc-superior-cerebellar-artery-l', bodyRight: 'vasc-superior-cerebellar-artery-r', region: 'vasculature', paired: true, render: 'body' },
+  'vasc-anterior-inferior-cerebellar-artery': { body: 'vasc-anterior-inferior-cerebellar-artery-l', bodyRight: 'vasc-anterior-inferior-cerebellar-artery-r', region: 'vasculature', paired: true, render: 'body' },
+  'vasc-posterior-inferior-cerebellar-artery': { body: 'vasc-posterior-inferior-cerebellar-artery-l', bodyRight: 'vasc-posterior-inferior-cerebellar-artery-r', region: 'vasculature', paired: true, render: 'body' },
+  'vasc-anterior-choroidal-artery': { body: 'vasc-anterior-choroidal-artery-l', bodyRight: 'vasc-anterior-choroidal-artery-r', region: 'vasculature', paired: true, render: 'body' },
+  'vasc-posterior-medial-choroidal-artery': { body: 'vasc-posterior-medial-choroidal-artery-l', bodyRight: 'vasc-posterior-medial-choroidal-artery-r', region: 'vasculature', paired: true, render: 'body' },
+}
+
+/**
+ * v8 — the baked `materialHint` a record must NOT inherit.
+ *
+ * The manifest hint is normally authoritative (`NucleusMesh`: manifest hint →
+ * `hintForKind`), and it should be: it is measured at bake time. The exception is
+ * a record whose baked parts were produced by another family's script — the six
+ * optic parts carry `materialHint: 'vasculature'` because the v8 bake emitted
+ * them alongside the arteries, and an optic nerve rendered in arterial crimson
+ * would be a false statement about the tissue. Each override below is the hint
+ * the record's OWN kind implies: CNS white matter for the two tracts, the neutral
+ * context preset for the chiasmatic crossing.
+ */
+export const RECORD_MATERIAL_OVERRIDES: Readonly<Record<string, MaterialHint>> = {
+  'tract-optic-nerve': 'white-matter',
+  'tract-optic-tract': 'white-matter',
+  'ctx-optic-chiasm': 'context',
+}
+
+/**
+ * The bodies one record draws, per side (`body`/`also` left, `bodyRight`/
+ * `alsoRight` right). `right: null` means "the right side is the left side
+ * mirrored on −x" — the v1–v7 behaviour, and still the answer for every record
+ * that does not name an explicit right body.
+ */
+export function anatomySlugsForRecord(
+  recordId: string,
+): { left: string[]; right: string[] | null } | null {
+  const link = LINKS[recordId]
+  if (!link) return null
+  const left = [link.body, ...(link.also ?? [])].filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
+  if (left.length === 0) return null
+  const right = link.bodyRight === undefined
+    ? null
+    : [link.bodyRight, ...(link.alsoRight ?? [])].filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
+  return { left, right: right !== null && right.length > 0 ? right : null }
 }
 
 /**

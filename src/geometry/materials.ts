@@ -36,7 +36,7 @@ import { getStriationNormalTexture, getTissueNormalTexture } from './textures'
 /* Material-hint dispatch (anatomy-manifest.json §4)                   */
 /* ------------------------------------------------------------------ */
 
-export const MATERIAL_HINTS = ['gray-matter', 'white-matter', 'csf', 'nucleus', 'context'] as const
+export const MATERIAL_HINTS = ['gray-matter', 'white-matter', 'csf', 'nucleus', 'context', 'vasculature'] as const
 export type MaterialHint = (typeof MATERIAL_HINTS)[number]
 
 /* ------------------------------------------------------------------ */
@@ -192,6 +192,16 @@ export const DEFAULT_GRAY_MATTER = '#b7a8a4'
 export const DEFAULT_NUCLEUS = '#c08497'
 export const CSF_COLOR = '#06b6d4'
 export const CONTEXT_COLOR = '#94a3b8'
+/**
+ * v8 arterial family default (docs/NEUROATLAS_V8_PLAN.md §2 "artery color family
+ * (crimson)"). Individual vessel records carry their own `color` — the trunks and
+ * midline links `#b91c1c`, the distal cortical/cerebellar branches `#dc2626`, the
+ * deep perforators and the vertebral artery `#991b1b` — so this is only the
+ * fallback for a vessel record that carries none.
+ */
+export const VESSEL_COLOR = '#b91c1c'
+/** Cut face of a sectioned artery: the arterial wall's own tone, not tissue. */
+export const VESSEL_CAP_COLOR = '#7f1d1d'
 
 /* ------------------------------------------------------------------ */
 /* The factory                                                         */
@@ -398,6 +408,59 @@ export function createGhostShellMaterial(color: string = '#9fb0c4'): THREE.MeshP
   return track(material)
 }
 
+/**
+ * v8 cerebral vasculature: the arterial cast (docs/NEUROATLAS_V8_PLAN.md §2).
+ *
+ * What makes an artery read as an artery rather than as one more gray blob:
+ *  - **Smooth, glossy surface.** `roughness: 0.34` + `clearcoat 0.3` against the
+ *    tissue presets' 0.85–0.95, so the vessels catch a specular streak while
+ *    every parenchymal structure stays matte. That contrast is what lets the
+ *    circle of Willis read as a cast sitting *inside* the brain.
+ *  - **Crimson, emissive-bearing.** `emissive` is set to the record's own color
+ *    at zero intensity, so `NucleusMesh`'s selection/syndrome/emphasis lift
+ *    (which mutates `emissiveIntensity`) works exactly as it does for every
+ *    other kind — an artery lights up when selected, its territory lights with
+ *    it, and nothing here has to know about that contract.
+ *  - **`DoubleSide`, so the lumen is closed.** `KIND_OPACITY.vessel` is 0.5, i.e.
+ *    vessels are translucent in the viewer (they must be legible through the
+ *    cortex and through the ghost shells), and a translucent open-ended tube
+ *    shows its own interior. The bake produces watertight solids, so drawing both
+ *    faces costs little and removes the "flat ribbon" look at grazing angles.
+ *  - **`depthWrite: false`** for the same reason every other translucent preset
+ *    in this file has it: `NucleusMesh` sets `depthWrite = KIND_OPACITY >= 1`, so
+ *    the factory default only governs direct consumers, but it must agree with
+ *    the viewer's rule or the same mesh would sort differently in two places.
+ *
+ * The cut face of a sectioned artery is painted `VESSEL_CAP_COLOR` (the arterial
+ * wall's own tone) rather than the shared tissue cap: on the live-section PiP an
+ * artery cut in the plane should not read as gray matter.
+ */
+export function createVesselMaterial(color: string = VESSEL_COLOR): THREE.MeshPhysicalMaterial {
+  const material = new THREE.MeshPhysicalMaterial({
+    color,
+    roughness: 0.34,
+    metalness: 0.04,
+    sheen: 0.3,
+    sheenColor: SHEEN_PINKISH,
+    sheenRoughness: 0.5,
+    clearcoat: 0.3,
+    clearcoatRoughness: 0.45,
+    emissive: color,
+    emissiveIntensity: 0,
+    transparent: true,
+    opacity: 0.5,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    normalMap: getTissueNormalTexture(),
+    envMapIntensity: 0.7,
+    clippingPlanes: ALL_CLIP_PLANES,
+  })
+  material.normalScale.set(0.02, 0.02)
+  applyFresnelOpacity(material, { boost: 1.5, power: 2.6 })
+  enableSectionCapping(material, VESSEL_CAP_COLOR)
+  return track(material)
+}
+
 /* ------------------------------------------------------------------ */
 /* Manifest-hint dispatch                                              */
 /* ------------------------------------------------------------------ */
@@ -418,6 +481,8 @@ export function makeAnatomyMaterial(hint: MaterialHint | string, color?: string)
       return createCsfMaterial(color ?? CSF_COLOR)
     case 'context':
       return createContextMaterial(color ?? CONTEXT_COLOR)
+    case 'vasculature':
+      return createVesselMaterial(color ?? VESSEL_COLOR)
     case 'nucleus':
     default:
       return createNucleusMaterial(color ?? DEFAULT_NUCLEUS)

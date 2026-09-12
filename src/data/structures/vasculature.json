@@ -1,0 +1,1213 @@
+[
+  {
+    "id": "vasc-internal-carotid-artery",
+    "name": "Internal carotid artery",
+    "synonyms": [
+      "ICA",
+      "arteria carotis interna",
+      "cervical/petrous/cavernous/supraclinoid internal carotid"
+    ],
+    "region": "vasculature",
+    "subdivision": "Anterior circulation",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#b91c1c",
+    "function": "The anterior feeding trunk of the cerebral circulation: it enters the skull through the carotid canal, runs through the cavernous sinus (where it is related to cranial nerves III, IV, V1, V2 and VI) and turns upward and backward through the dural ring to become the supraclinoid segment, giving off the ophthalmic, posterior communicating and anterior choroidal arteries before dividing into the anterior and middle cerebral arteries at the carotid bifurcation. Its four segments (cervical, petrous, cavernous, supraclinoid) each generate a distinct syndrome, and together with the vertebrobasilar system it completes the circle of Willis at the base of the brain.",
+    "territory": [
+      "surf-frontal-lobe",
+      "surf-parietal-lobe",
+      "surf-temporal-lobe",
+      "surf-insula",
+      "nuc-putamen",
+      "nuc-caudate-head",
+      "nuc-globus-pallidus-internus",
+      "nuc-globus-pallidus-externus",
+      "nuc-accumbens",
+      "ctx-internal-capsule",
+      "tract-internal-capsule-anterior-limb",
+      "tract-internal-capsule-posterior-limb",
+      "ctx-cerebral-cortex",
+      "tract-optic-radiation"
+    ],
+    "supply": [
+      "syn-weber",
+      "syn-hypothalamic",
+      "syn-tuberothalamic",
+      "syn-hemiballismus"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. Meshes: `FJ1682` (right) / `FJ1682M` (left), 1,272 faces each, FMA 3947/3949/4062 — the inventory lists the carotid as source-only because its table starts at the intracranial trunks, and notes that \"if the content task wants a `vasc-internal-carotid-artery` record, the verified mesh is already on disk\": this is that record. The carotid siphon the Willis ring needs is the rostral end of these same elements.",
+    "connections": {
+      "afferent": [
+        "Common carotid artery at the carotid bifurcation (the anterior circulation's inflow)",
+        "Collateral inflow through the circle of Willis: the anterior communicating artery from the contralateral side, and the posterior communicating artery from the posterior cerebral artery — the two routes that can rescue a failing carotid territory"
+      ],
+      "efferent": [
+        "Ophthalmic artery (orbit and retina — the origin of amaurosis fugax), posterior communicating artery (vasc-posterior-communicating-artery), anterior choroidal artery (vasc-anterior-choroidal-artery)",
+        "Terminal bifurcation into the anterior cerebral artery (vasc-anterior-cerebral-artery) and the middle cerebral artery (vasc-middle-cerebral-artery); medial and lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) arise from the proximal segments"
+      ]
+    },
+    "bloodSupply": "Supplied by the vasa vasorum of its wall in the neck and by the caroticotympanic and capsular branches intracranially; the cavernous segment is surrounded by the cavernous sinus and its nerves, and the supraclinoid segment by the subarachnoid space, which is why aneurysms here bleed into the subarachnoid space or into the sinus.",
+    "clinical": [
+      {
+        "syndrome": "Carotid territory infarction (ICA occlusion)",
+        "findings": "Occlusion of the internal carotid produces the largest infarcts of all — a combined ACA/MCA territory deficit with contralateral hemiplegia, hemianaesthesia, hemianopia, gaze deviation and (dominant hemisphere) global aphasia; embolism from an atherosclerotic plaque at the bifurcation is the usual mechanism, and the deficit may be stepwise rather than sudden.",
+        "vascular": "Internal carotid artery (with middle cerebral artery territory dominance)"
+      },
+      {
+        "syndrome": "Amaurosis fugax and ocular ischaemic syndrome",
+        "findings": "Transient monocular blindness ('a curtain coming down') from emboli to the ophthalmic/retinal circulation, or chronic hypoperfusion of the eye with venous stasis retinopathy — a direct marker of ipsilateral carotid stenosis.",
+        "vascular": "Ophthalmic artery (first branch of the internal carotid) from an internal carotid plaque"
+      },
+      {
+        "syndrome": "Cavernous sinus syndrome",
+        "findings": "A cavernous-carotid aneurysm or fistula compresses cranial nerves III, IV, V1, V2 and VI within the sinus, producing ophthalmoplegia, ptosis, facial sensory loss in the first two divisions, a pulsatile bruit and (with a fistula) proptosis and chemosis with arterialized conjunctival veins.",
+        "vascular": "Internal carotid artery (cavernous segment) — the segment whose wall IS the sinus"
+      },
+      {
+        "syndrome": "Carotid dissection",
+        "findings": "A tear in the cervical internal-carotid wall (spontaneous, traumatic or connective-tissue related) creates an intramural haematoma with ipsilateral neck/face pain, Horner syndrome, pulsatile tinnitus and a risk of embolism, especially in patients under 50.",
+        "vascular": "Internal carotid artery (cervical segment)"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-basal-ganglia"
+    ],
+    "origin3d": [
+      24,
+      22,
+      26
+    ],
+    "size3d": [
+      3,
+      5,
+      6
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "vasc-vertebral-artery",
+    "name": "Vertebral artery",
+    "synonyms": [
+      "arteria vertebralis",
+      "V1–V4 segments of the vertebral artery"
+    ],
+    "region": "vasculature",
+    "subdivision": "Posterior circulation",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#991b1b",
+    "function": "The paired feeding trunk of the posterior circulation: each artery ascends through the transverse foramina of the cervical vertebrae (V1/V2), loops laterally behind the atlas and then pierces the dura to run upward and medially in front of the medulla (V4). Its branches supply the cervical cord, the lateral medulla and the inferior cerebellum, and the two vertebral arteries unite at the pontomedullary junction to form the basilar artery — the union being the last point where the posterior circulation is still paired.",
+    "territory": [
+      "nuc-spinal-trigeminal",
+      "tract-spinal-trigeminal",
+      "nuc-solitarius-caudal",
+      "nuc-dmv",
+      "nuc-ambiguus",
+      "nuc-inferior-olive-principal",
+      "nuc-inferior-olive-medial",
+      "tract-spinothalamic",
+      "tract-icp",
+      "nuc-vestibular-inferior",
+      "ctx-cerebellum",
+      "nuc-dentate",
+      "vent-fourth-ventricle"
+    ],
+    "supply": [
+      "syn-lateral-medullary",
+      "syn-medial-medullary",
+      "syn-hemimedullary",
+      "syn-central-horner"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The territory listed is the vertebral/PICA complex; the anterior spinal artery (ventral medulla) is reported in the PICA record's clinical notes. Meshes: `FJ1725` (right) / `FJ1725M` (left), 800 faces each, FMA 3956/3958/4066 — both tops meet the basilar bottom at z ≈ 1503 mm (inventory §3.2).",
+    "connections": {
+      "afferent": [
+        "Subclavian artery (the first branch of the subclavian on each side) — the inflow of the posterior circulation",
+        "Muscular and radicular branches along the cervical course"
+      ],
+      "efferent": [
+        "Posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) — the largest branch, supplying the lateral medulla and inferior cerebellum",
+        "Anterior spinal artery (the paired ventral branches that join in the midline) and small posterior spinal/paramedian medullary perforators",
+        "Basilar artery (vasc-basilar-artery) — formed by the union of the two vertebral arteries at the pontomedullary junction"
+      ]
+    },
+    "bloodSupply": "Its wall is supplied by the vasa vasorum of the periosteal and dural sleeves along the cervical loop; the V4 segment lies in the subarachnoid space in front of the medulla, where it is adjacent to the hypoglossal rootlets, the vertebral venous plexus and the lower cranial nerves.",
+    "clinical": [
+      {
+        "syndrome": "Lateral medullary (Wallenberg) syndrome",
+        "findings": "Vertebral artery occlusion at the origin of the posterior inferior cerebellar artery infarcts the dorsolateral medulla: vertigo, nystagmus, ipsilateral Horner syndrome and ataxia, loss of pain-temperature on the ipsilateral face and the contralateral body, dysphagia, hoarseness and diminished gag reflex with intact strength.",
+        "vascular": "Vertebral artery at the PICA origin (or the PICA itself)"
+      },
+      {
+        "syndrome": "Medial medullary syndrome",
+        "findings": "Infarction of the paramedian medullary territory supplied by the anterior spinal/vertebral arteries produces contralateral hemiparesis (pyramid) sparing the face, contralateral loss of position and vibration sense (medial lemniscus) and ipsilateral tongue weakness (hypoglossal nerve) — the classic alternating brainstem syndrome.",
+        "vascular": "Anterior spinal artery or paramedian vertebral branches"
+      },
+      {
+        "syndrome": "Vertebral artery dissection and subarachnoid haemorrhage",
+        "findings": "Cervical dissection causes posterior-circulation transient ischaemic attacks and stroke in young adults with neck pain and occipital headache; rupture of an intracranial vertebral aneurysm fills the subarachnoid space around the brainstem and can present with a devastating brainstem infarct.",
+        "vascular": "Vertebral artery (cervical segment for dissection, V4 for aneurysm)"
+      },
+      {
+        "syndrome": "Bow hunter syndrome (positional vertebrobasilar insufficiency)",
+        "findings": "Occlusion or compression of the contralateral vertebral artery with head rotation (a variant of the atlantoaxial anatomy) causes vertigo, diplopia and syncope on turning the head.",
+        "vascular": "Vertebral artery (V2/V3 segment at the atlantoaxial level)"
+      }
+    ],
+    "levels": [
+      "lvl-spinal-medulla",
+      "lvl-pyramid-decuss",
+      "lvl-sensory-decuss",
+      "lvl-olivary",
+      "lvl-pontomedullary"
+    ],
+    "origin3d": [
+      6,
+      -34,
+      4
+    ],
+    "size3d": [
+      3,
+      12,
+      4
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "vasc-basilar-artery",
+    "name": "Basilar artery",
+    "synonyms": [
+      "arteria basilaris",
+      "basilar trunk"
+    ],
+    "region": "vasculature",
+    "subdivision": "Posterior circulation",
+    "kind": "vessel",
+    "laterality": "midline",
+    "color": "#b91c1c",
+    "function": "The single midline trunk of the posterior circulation, formed at the pontomedullary junction by the union of the two vertebral arteries and running in the prepontine cistern along the ventral surface of the pons to divide into the two posterior cerebral arteries at the interpeduncular fossa. It supplies the whole basis pontis through crowded paramedian and circumferential perforators, gives off the anterior inferior cerebellar arteries and the superior cerebellar arteries, and its paramedian branches feed the medial lemniscus, the corticospinal and corticobulbar fibres, the abducens nucleus, the paramedian pontine reticular formation and the cranial-nerve nuclei of the pons — so its occlusion can destroy the entire ventral brainstem at once.",
+    "territory": [
+      "ctx-pontine-nuclei",
+      "ctx-pontine-fibers",
+      "tract-corticospinal-lateral",
+      "tract-corticobulbar",
+      "tract-medial-lemniscus",
+      "nuc-abducens",
+      "nuc-facial",
+      "nuc-pprf",
+      "nuc-trigeminal-motor",
+      "nuc-principal-sensory-v",
+      "nuc-vestibular-medial",
+      "nuc-vestibular-superior",
+      "tract-mlf",
+      "nuc-locus-coeruleus",
+      "nuc-pontine-reticular",
+      "surf-interpeduncular-fossa"
+    ],
+    "supply": [
+      "syn-locked-in",
+      "syn-one-and-a-half",
+      "syn-millard-gubler",
+      "syn-foville",
+      "syn-ino",
+      "syn-peduncular-hallucinosis"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The territories above are the paramedian and circumferential perforator beds, which are the ones that produce the named syndromes. Meshes: `FJ1672` (262 faces) primary, `FJ1844` (244 faces) the documented alternative — two decimations of the same unpaired concept, both straddling the midline by 1.5–1.9 mm (inventory §4).",
+    "connections": {
+      "afferent": [
+        "Union of the two vertebral arteries (vasc-vertebral-artery) at the pontomedullary junction",
+        "Retrograde flow through the posterior communicating arteries from the anterior circulation — the collateral route that keeps a basilar occlusion survivable in some patients"
+      ],
+      "efferent": [
+        "Anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery) — the circumferential branch at the pontomedullary/pontine junction",
+        "Superior cerebellar artery (vasc-superior-cerebellar-artery) — the last named branch before the bifurcation",
+        "Paired posterior cerebral arteries (vasc-posterior-cerebral-artery) as the terminal bifurcation; numerous paramedian and short/long circumferential perforators to the pons"
+      ]
+    },
+    "bloodSupply": "Its wall is supplied by small vasa vasorum from the pontine perforators; the artery lies within the prepontine cistern, surrounded by CSF, which is why aneurysms of its apex present with subarachnoid haemorrhage and a third-nerve palsy, and why the basilar apex is the classic target of endovascular thrombectomy in acute basilar occlusion.",
+    "clinical": [
+      {
+        "syndrome": "Locked-in syndrome (basilar occlusion)",
+        "findings": "Occlusion of the basilar artery with infarction of the basis pontis but sparing of the tegmentum leaves the patient conscious with intact vertical eye movements and blinking but completely paralysed and anarthric — quadriplegia, aphonia and preserved awareness, often misdiagnosed as coma.",
+        "vascular": "Basilar artery (paramedian pontine perforators, basis pontis)"
+      },
+      {
+        "syndrome": "One-and-a-half syndrome",
+        "findings": "A dorsal pontine lesion involving the paramedian pontine reticular formation and the adjacent medial longitudinal fasciculus abolishes horizontal gaze to one side and adduction on the other, leaving abduction with nystagmus in the only surviving direction; brainstem infarction (basilar perforators or a small tegmental haemorrhage) is the commonest cause.",
+        "vascular": "Basilar artery paramedian perforators (dorsal caudal pons)"
+      },
+      {
+        "syndrome": "Millard-Gubler and Foville syndromes",
+        "findings": "Ventral pontine infarction produces an alternating syndrome: ipsilateral facial weakness (facial nucleus/nerve) or conjugate gaze palsy (abducens nucleus/PPRF) with contralateral hemiparesis (corticospinal tract) and, in the full Foville form, contralateral sensory loss (medial lemniscus).",
+        "vascular": "Basilar artery paramedian perforators (caudal pons), sometimes the anterior inferior cerebellar artery"
+      },
+      {
+        "syndrome": "Top-of-the-basilar syndrome",
+        "findings": "Embolic occlusion of the basilar apex infarcts the midbrain, thalamus and occipital cortex together: somnolence, peduncular hallucinosis, vertical gaze palsy, pupillary abnormality, memory loss and cortical blindness with relative sparing of motor function.",
+        "vascular": "Basilar artery apex (with posterior cerebral artery territory)"
+      }
+    ],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic"
+    ],
+    "origin3d": [
+      0,
+      -12,
+      6
+    ],
+    "size3d": [
+      2.5,
+      14,
+      4
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "vasc-anterior-cerebral-artery",
+    "name": "Anterior cerebral artery",
+    "synonyms": [
+      "ACA",
+      "arteria cerebri anterior",
+      "A1/A2/A3 segments of the anterior cerebral artery",
+      "pericallosal artery (A2/A3)"
+    ],
+    "region": "vasculature",
+    "subdivision": "Anterior circulation",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#dc2626",
+    "function": "The medial-surface artery of the cerebral hemisphere: it arises from the internal carotid, runs medially above the optic chiasm through the interhemispheric fissure, is joined to its fellow by the anterior communicating artery (completing the anterior part of the circle of Willis) and then continues as the pericallosal artery above the corpus callosum, giving the callosomarginal branch. It supplies the medial frontal and parietal surfaces, the foot and leg representation of the motor and sensory strips at the vertex, the supplementary motor area and the anterior corpus callosum — so its occlusion produces the leg-predominant, behaviourally distinctive syndrome rather than a hemiplegia.",
+    "territory": [
+      "surf-frontal-lobe",
+      "surf-limbic-lobe",
+      "surf-cingulate-gyrus",
+      "ctx-corpus-callosum",
+      "tract-corpus-callosum-genu",
+      "tract-corpus-callosum-body",
+      "ctx-sma",
+      "ctx-m1",
+      "ctx-s1",
+      "nuc-caudate-head",
+      "nuc-accumbens",
+      "nuc-ventral-pallidum",
+      "tract-internal-capsule-anterior-limb"
+    ],
+    "supply": [
+      "syn-hypothalamic"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. There is no dedicated syndrome card for ACA occlusion in the current data set, so `supply` lists only the hypothalamic perforator card; the ACA clinical picture is documented in full in the clinical array and in the territory structures' own clinical items. Meshes: `FJ1654` (right) / `FJ1654M` (left), 400 faces each, FMA 50028/50029/50030 — one bilateral cast split per side, mirror-exact in 208 of 213 vertices.",
+    "connections": {
+      "afferent": [
+        "Internal carotid artery (vasc-internal-carotid-artery) at the carotid bifurcation (A1 segment)",
+        "Anterior communicating artery (vasc-anterior-communicating-artery) — the interhemispheric cross-link that allows one ACA to supply both hemispheres"
+      ],
+      "efferent": [
+        "Recurrent artery of Heubner (vasc-lenticulostriate-arteries family) and medial lenticulostriate perforators to the caudate head, accumbens and anterior limb of the internal capsule",
+        "Orbitofrontal, frontopolar, callosomarginal and pericallosal branches along the medial surface; the pericallosal artery continues to the splenium and the precuneus",
+        "Small medial striate and hypothalamic (anterior communicating) perforators to the optic chiasm, hypothalamus and septum"
+      ]
+    },
+    "bloodSupply": "The A1 segment is supplied by its own perforators and lies above the optic chiasm in the subarachnoid space; aneurysms of the anterior communicating complex are the commonest cause of non-traumatic subarachnoid haemorrhage and are the classic source of a visual or amnestic deficit from rupture (chiasmatic and hypothalamic compression).",
+    "clinical": [
+      {
+        "syndrome": "ACA territory infarct",
+        "findings": "Contralateral leg-predominant weakness and sensory loss with abulia, urinary incontinence, grasp reflex and, when the supplementary motor area is involved, mutism that recovers over days; the arm and face are relatively spared and consciousness is preserved.",
+        "vascular": "Anterior cerebral artery (pericallosal and callosomarginal branches)"
+      },
+      {
+        "syndrome": "Callosal disconnection syndrome",
+        "findings": "Infarction of the anterior corpus callosum (a branch territory of the pericallosal artery) leaves the patient with an alien hand, agraphia of the left hand, apraxia to verbal command in the left hand and left-hand anomia — the modern disconnection syndrome.",
+        "vascular": "Anterior cerebral artery (pericallosal branches to the corpus callosum)"
+      },
+      {
+        "syndrome": "Anterior communicating aneurysm rupture",
+        "findings": "Rupture fills the interhemispheric and basal cisterns, producing sudden severe headache, meningism and, in about a third of survivors, an amnestic syndrome with personality change from hypothalamic and septal injury; visual loss is uncommon but recognized with large aneurysms compressing the chiasm.",
+        "vascular": "Anterior communicating artery / A1–A2 junction"
+      },
+      {
+        "syndrome": "Bilateral ACA infarction (akinetic mutism)",
+        "findings": "A single ACA supplying both hemispheres (hypoplastic or absent contralateral A1) or vasospasm of both A2 segments infarcts both medial surfaces: profound abulia or akinetic mutism with bilateral leg weakness, incontinence and grasp reflexes.",
+        "vascular": "Anterior cerebral artery (with a hypoplastic contralateral A1 as the anatomical predisposition)"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      8,
+      30,
+      24
+    ],
+    "size3d": [
+      3,
+      4,
+      8
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'"
+    ]
+  },
+  {
+    "id": "vasc-anterior-communicating-artery",
+    "name": "Anterior communicating artery",
+    "synonyms": [
+      "ACom",
+      "arteria communicans anterior",
+      "ACoA"
+    ],
+    "region": "vasculature",
+    "subdivision": "Circle of Willis",
+    "kind": "vessel",
+    "laterality": "midline",
+    "color": "#991b1b",
+    "function": "The short midline cross-link between the two anterior cerebral arteries that closes the anterior part of the circle of Willis: it allows flow to be redistributed between the hemispheres, so that one carotid can perfuse both medial surfaces — the anatomical reason unilateral carotid occlusion is often neurologically silent. It is also the commonest site of intracranial saccular aneurysm (approximately 30–35 % of all ruptured aneurysms) because the vessel sits at a bifurcation where haemodynamic stress is maximal, and it gives rise to the small hypothalamic, septal and chiasmatic perforators that supply the anterior hypothalamus and the optic chiasm region.",
+    "territory": [
+      "ctx-m1",
+      "ctx-s1",
+      "ctx-sma",
+      "surf-cingulate-gyrus",
+      "ctx-corpus-callosum",
+      "tract-corpus-callosum-genu",
+      "ctx-cerebral-cortex"
+    ],
+    "supply": [
+      "syn-hypothalamic",
+      "syn-tuberothalamic"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The `territory` list documents the structures whose supply depends on the cross-flow this artery permits (both ACAs and the anterior hypothalamus), which is the functional meaning of the vessel. Mesh: `FJ1655`, 80 faces, FMA 50169 — one element spanning the midline (x −4.16…+2.71 mm).",
+    "connections": {
+      "afferent": [
+        "Both anterior cerebral arteries (vasc-anterior-cerebral-artery) — normally flowing from the dominant A1 across the midline"
+      ],
+      "efferent": [
+        "Both A2 segments of the anterior cerebral artery, permitting collateral supply of the contralateral medial hemisphere",
+        "Small hypothalamic, septal and chiasmatic perforators to the anterior hypothalamus, septum pellucidum and optic chiasm region"
+      ]
+    },
+    "bloodSupply": "Its wall is nourished by small perforator twigs and it lies in the subarachnoid space above the chiasm between the two A1 segments; the surrounding cistern is the site of the blood that produces the headache and meningism of its rupture.",
+    "clinical": [
+      {
+        "syndrome": "Anterior communicating aneurysm rupture with subarachnoid haemorrhage",
+        "findings": "Sudden severe headache with meningism and loss of consciousness; the associated deficits are the ones of the territory it feeds — visual loss from chiasmal compression, an amnestic-Korsakoff-like state and personality change from hypothalamic and septal injury, and frontal-lobe signs from the interhemispheric haematoma.",
+        "vascular": "Anterior communicating artery (the commonest site of ruptured intracranial aneurysm)"
+      },
+      {
+        "syndrome": "Anterior communicating artery infarction with hypothalamic dysfunction",
+        "findings": "Occlusion of the artery (surgically, or by embolus) removes the perforator supply to the anterior hypothalamus: memory loss, personality change, diabetes insipidus, thermoregulatory and autonomic instability.",
+        "vascular": "Anterior communicating artery perforators"
+      },
+      {
+        "syndrome": "Collateral rescue of a failing carotid territory",
+        "findings": "When one internal carotid occludes slowly, flow crosses through the anterior communicating artery and keeps both medial hemispheres perfused — often with no deficit at all, which is why the circle is described as a functional rather than an anatomical anastomosis.",
+        "vascular": "Anterior communicating artery (the collateral channel, with both A1/A2 segments acting as the donor and recipient limbs)",
+        "note": "Physiological collateral rather than a disease"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-tel-basal-ganglia"
+    ],
+    "origin3d": [
+      0,
+      29,
+      25
+    ],
+    "size3d": [
+      4,
+      1.5,
+      2
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "vasc-middle-cerebral-artery",
+    "name": "Middle cerebral artery",
+    "synonyms": [
+      "MCA",
+      "arteria cerebri media",
+      "M1/M2/M3/M4 segments of the middle cerebral artery",
+      "sylvian artery"
+    ],
+    "region": "vasculature",
+    "subdivision": "Anterior circulation",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#dc2626",
+    "function": "The largest and clinically most important cerebral artery: it runs laterally through the sylvian fissure (M1, giving off the lenticulostriate perforators), over the insula (M2 insular branches) and out onto the lateral convexity (M3/M4), supplying the entire lateral surface of the hemisphere — the motor and sensory strips for the face and arm, Broca's and Wernicke's areas, the insula, the temporal convexity and the lateral occipital cortex. It also gives the deep perforators that supply the basal ganglia and internal capsule, so an MCA occlusion commonly produces both a cortical and a deep (capsular) infarct, which is the anatomical basis of the classic dense hemiplegia with aphasia or neglect.",
+    "territory": [
+      "surf-frontal-lobe",
+      "surf-parietal-lobe",
+      "surf-temporal-lobe",
+      "surf-insula",
+      "ctx-broca",
+      "ctx-wernicke",
+      "ctx-m1",
+      "ctx-s1",
+      "ctx-premotor",
+      "nuc-putamen",
+      "nuc-caudate-body",
+      "nuc-accumbens",
+      "nuc-claustrum",
+      "ctx-internal-capsule",
+      "tract-internal-capsule-posterior-limb",
+      "tract-corona-radiata",
+      "tract-optic-radiation"
+    ],
+    "supply": [
+      "syn-parkinson",
+      "syn-lateral-medullary"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The two `supply` entries are the syndrome cards whose arterial territory is named as MCA in the existing data (`syn-lateral-medullary` cites the MCA among its alternatives); the MCA's own named syndromes are documented in the clinical array and in the territory structures. Meshes: the sphenoid (M1) part `FJ1692`/`FJ1692M` (800 faces each), the insular (M2) parts (`FJ1660`/`FJ1660M`, `FJ1694`/`FJ1694M`), and the 34 terminal M2–M4 branch elements the inventory groups under this record (FMA 50080/50081/50365–50370); the generic MCA branch/zone elements (44 files) are listed as source-only support.",
+    "connections": {
+      "afferent": [
+        "Internal carotid artery (vasc-internal-carotid-artery) at the carotid bifurcation",
+        "Collateral flow through the circle of Willis (anterior communicating and posterior communicating arteries) and, in the acute setting, through leptomeningeal anastomoses from the ACA and PCA on the convexity"
+      ],
+      "efferent": [
+        "Lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) from M1 — the deep supply to the putamen, caudate and internal capsule",
+        "Orbitofrontal and temporopolar branches, anterior temporal branches, insular (M2) branches, and the superior and inferior division trunks that fan out over the convexity",
+        "The anterior choroidal artery (vasc-anterior-choroidal-artery) arises nearby from the internal carotid and shares the deep territory"
+      ]
+    },
+    "bloodSupply": "Its wall and the perforators arising from M1 are nourished by the surrounding subarachnoid CSF and small vasa vasorum; the MCA is the commonest site of embolic occlusion (the embolus travels the straightest path from the carotid), of MCA-territory thrombectomy, and of dissection-related and vasospasm-related infarction.",
+    "clinical": [
+      {
+        "syndrome": "Complete MCA territory infarct",
+        "findings": "Contralateral hemiplegia and hemianaesthesia with gaze deviation toward the lesion, homonymous hemianopia and (dominant hemisphere) global aphasia, or (non-dominant) anosognosia and hemispatial neglect; a large infarct also causes drowsiness from oedema and mass effect. The face and arm are more affected than the leg because the leg representation lies at the vertex in the ACA territory.",
+        "vascular": "Middle cerebral artery (M1 occlusion, often embolic from the heart or the carotid)"
+      },
+      {
+        "syndrome": "Superior (frontal) division infarct",
+        "findings": "Contralateral face-and-arm-predominant weakness with Broca aphasia (dominant) or gaze deviation and neglect (non-dominant), with the leg spared — the classic 'inferior-to-the-sylvian-fissure-sparing' pattern.",
+        "vascular": "Middle cerebral artery, superior division"
+      },
+      {
+        "syndrome": "Inferior (parietotemporal) division infarct",
+        "findings": "Wernicke aphasia (dominant) or hemispatial neglect and anosognosia (non-dominant) with a contralateral superior quadrantanopia from Meyer-loop involvement, and a less severe motor deficit.",
+        "vascular": "Middle cerebral artery, inferior division"
+      },
+      {
+        "syndrome": "Malignant MCA infarction",
+        "findings": "A large MCA infarct with space-occupying oedema between days 2 and 5 causes progressive drowsiness, pupillary dilation and herniation — the indication for decompressive hemicraniectomy, and the reason large infarcts are monitored rather than simply observed.",
+        "vascular": "Middle cerebral artery (with mass effect rather than a new occlusion)"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      26,
+      24,
+      16
+    ],
+    "size3d": [
+      3,
+      4,
+      8
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "vasc-posterior-communicating-artery",
+    "name": "Posterior communicating artery",
+    "synonyms": [
+      "PCom",
+      "arteria communicans posterior",
+      "PCoA",
+      "posterior communicating artery (P1–P2 junction link)"
+    ],
+    "region": "vasculature",
+    "subdivision": "Circle of Willis",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#b91c1c",
+    "function": "The posterior limb of the circle of Willis: a short vessel running backward from the supraclinoid internal carotid to join the posterior cerebral artery at the P1–P2 junction, so that the anterior and posterior circulations can share flow. It is the single most important collateral in carotid occlusive disease — a large, fetal-type posterior communicating artery supplies the entire posterior cerebral territory when the basilar contribution is small — and it gives off the premammillary perforators that supply the anterior thalamus, the posterior hypothalamus, the optic tract, the subthalamic nucleus and the posterior limb of the internal capsule.",
+    "territory": [
+      "nuc-thalamic-anterior",
+      "nuc-va",
+      "nuc-vl",
+      "nuc-subthalamic",
+      "ctx-hypothalamus-envelope",
+      "nuc-mammillary-body",
+      "tract-optic-tract",
+      "nuc-pulvinar"
+    ],
+    "supply": [
+      "syn-hemiballismus",
+      "syn-tuberothalamic",
+      "syn-hypothalamic",
+      "syn-weber"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. Its perforators — not the vessel itself — are the ones that infarct the thalamus and subthalamic region, which is why the `supply` list is dominated by thalamic and subthalamic syndrome cards. Meshes: `FJ1713` (right) / `FJ1713M` (left), 204 faces each, FMA 50084/50085/50086.",
+    "connections": {
+      "afferent": [
+        "Internal carotid artery (vasc-internal-carotid-artery), supraclinoid segment",
+        "Retrograde flow from the posterior cerebral artery in the fetal-type configuration, and from the basilar in the adult configuration"
+      ],
+      "efferent": [
+        "Posterior cerebral artery (vasc-posterior-cerebral-artery) at the P1–P2 junction — the anastomosis that defines the circle",
+        "Premammillary (anterior thalamoperforating) and tuberothalamic perforators to the anterior and medial thalamus, the hypothalamus, the optic tract and the subthalamic nucleus; small branches to the posterior limb of the internal capsule and the oculomotor nerve"
+      ]
+    },
+    "bloodSupply": "Its wall is supplied by small vasa vasorum and it lies in the subarachnoid space below the optic tract and medial to the uncus; it is the second commonest site of saccular aneurysm, which characteristically presents with a painful third-nerve palsy because the oculomotor nerve runs immediately above it.",
+    "clinical": [
+      {
+        "syndrome": "Posterior communicating aneurysm with third-nerve palsy",
+        "findings": "An aneurysm at the carotid-posterior communicating junction compresses the oculomotor nerve where it passes beside the vessel: a painful, pupil-involving third-nerve palsy with ptosis, a divergent eye and diplopia — the classic 'posterior communicating' presentation, and one of the few genuinely urgent diplopias.",
+        "vascular": "Posterior communicating artery (junction with the internal carotid)"
+      },
+      {
+        "syndrome": "Tuberothalamic (anterior thalamoperforating) infarct",
+        "findings": "Occlusion of the premammillary perforators infarcts the anterior thalamic nuclei and gives the tuberothalamic syndrome: apathy and abulia, disorientation, memory loss and, on the left, a transcortical-like aphasia.",
+        "vascular": "Posterior communicating artery (premammillary perforators)"
+      },
+      {
+        "syndrome": "Hemiballismus from subthalamic perforator occlusion",
+        "findings": "A small infarct of the subthalamic nucleus — classically from a perforator of the posterior communicating or anterior choroidal artery — releases the indirect-pathway brake and produces violent, involuntary, proximal flinging movements of the contralateral limbs.",
+        "vascular": "Posterior communicating artery or anterior choroidal artery perforators to the subthalamic nucleus"
+      },
+      {
+        "syndrome": "Fetal-type posterior communicating artery and posterior-circulation infarction",
+        "findings": "In about 20 % of people the posterior cerebral artery is supplied predominantly by the internal carotid through a large posterior communicating artery; in that configuration carotid occlusion infarcts the occipital lobe and thalamus as well as the anterior territory — the reason the vascular anatomy must be established before any carotid intervention.",
+        "vascular": "Posterior communicating artery (fetal-type configuration of the posterior cerebral artery)",
+        "note": "Anatomical variant that changes the territory of a carotid occlusion"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid"
+    ],
+    "origin3d": [
+      14,
+      22.5,
+      8
+    ],
+    "size3d": [
+      3.5,
+      2,
+      5
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+    ]
+  },
+  {
+    "id": "vasc-posterior-cerebral-artery",
+    "name": "Posterior cerebral artery",
+    "synonyms": [
+      "PCA",
+      "arteria cerebri posterior",
+      "P1/P2/P3 segments of the posterior cerebral artery",
+      "calcarine artery (P3 branch)"
+    ],
+    "region": "vasculature",
+    "subdivision": "Posterior circulation",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#dc2626",
+    "function": "The artery of the visual cortex and the posterior diencephalon: it arises from the basilar bifurcation, curves around the midbrain (P2) and divides into the calcarine, parieto-occipital and posterior temporal branches (P3) that supply the medial and inferior occipital lobe, the medial temporal lobe and the posterior thalamus, while its paramedian and thalamogeniculate perforators supply the midbrain tectum and tegmentum, the thalamus and the medial geniculate body. Its occlusion therefore produces the classic visual syndrome (contralateral homonymous hemianopia with macular sparing) together with the memory, thalamic and midbrain deficits of the structures it feeds along the way.",
+    "territory": [
+      "ctx-v1",
+      "ctx-v2",
+      "surf-occipital-lobe",
+      "surf-parahippocampal-gyrus",
+      "ctx-entorhinal",
+      "nuc-hippocampus",
+      "nuc-ca1",
+      "nuc-subiculum",
+      "tract-optic-radiation",
+      "nuc-vpl",
+      "nuc-pulvinar",
+      "nuc-lgn",
+      "nuc-mgn",
+      "nuc-superior-colliculus",
+      "nuc-pretectal",
+      "vent-lateral-ventricle-atrium",
+      "vent-choroid-plexus-lateral"
+    ],
+    "supply": [
+      "syn-dejerine-roussy",
+      "syn-percheron",
+      "syn-tuberothalamic",
+      "syn-weber",
+      "syn-benedikt",
+      "syn-claude",
+      "syn-nothnagel",
+      "syn-parinaud",
+      "syn-peduncular-hallucinosis"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The long `supply` list is not an over-claim: the existing syndrome cards overwhelmingly cite PCA perforator territories (thalamic, midbrain and peduncular), which is exactly what this artery supplies. Meshes: the precommunicating P1 part `FJ1723`/`FJ1723M` (282 faces each; FMA 50590/50639/50640) and the postcommunicating P2–P3 part `FJ1714`/`FJ1714M` (544 faces each; FMA 50591/50641/50642) — P1 extent [8.6, 3.2, 5.5] mm versus P2 [11.2, 36.9, 10.1] mm, which is how the inventory verifies the segment split.",
+    "connections": {
+      "afferent": [
+        "Basilar artery (vasc-basilar-artery) at the basilar bifurcation (P1)",
+        "Posterior communicating artery (vasc-posterior-communicating-artery) at the P1–P2 junction — the anterior-posterior anastomosis, and the dominant inflow in the fetal-type configuration"
+      ],
+      "efferent": [
+        "Posterior thalamoperforating (paramedian) arteries, thalamogeniculate arteries and the posterior choroidal arteries (medial and lateral) to the thalamus and choroid plexus",
+        "Temporal branches (hippocampal, anterior and posterior temporal) to the medial temporal lobe, and the calcarine and parieto-occipital branches to the visual cortex",
+        "Midbrain perforators to the colliculi, pretectum, red nucleus, oculomotor nucleus and crus cerebri"
+      ]
+    },
+    "bloodSupply": "Its wall is supplied by small vasa vasorum; the P2 segment encircles the midbrain in the ambient cistern, adjacent to the oculomotor and trochlear nerves (the anatomical reason a PCA aneurysm or a PCA infarct with swelling causes a third- or fourth-nerve palsy), and its cortical branches are the target of occipital leptomeningeal collateral flow from the MCA.",
+    "clinical": [
+      {
+        "syndrome": "PCA infarct with homonymous hemianopia",
+        "findings": "Contralateral homonymous hemianopia with macular sparing (the occipital pole has a dual PCA/MCA supply), often with preserved awareness of the deficit unless both hemispheres are involved; involvement of the splenium adds alexia without agraphia on the left, and involvement of the pulvinar or thalamus adds hemisensory loss.",
+        "vascular": "Posterior cerebral artery (calcarine branch)"
+      },
+      {
+        "syndrome": "Artery-of-Percheron paramedian thalamic infarction",
+        "findings": "A single paramedian thalamic artery arising from one P1 supplies both medial thalami: bilateral infarction produces sudden coma or hypersomnia, a severe amnestic syndrome, vertical gaze palsy, skew deviation and, often, marked apathy — the classic 'top of the basilar' thalamic syndrome.",
+        "vascular": "Posterior cerebral artery (P1 paramedian perforators, artery of Percheron)"
+      },
+      {
+        "syndrome": "Déjérine-Roussy thalamic pain syndrome",
+        "findings": "Infarction of the thalamogeniculate territory (VPL/VPM and the adjacent white matter) produces contralateral hemianaesthesia followed by spontaneous, burning, hyperpathic pain with allodynia — the archetype of central post-stroke pain.",
+        "vascular": "Posterior cerebral artery (thalamogeniculate branches)"
+      },
+      {
+        "syndrome": "Bilateral PCA infarction with cortical blindness and amnesia",
+        "findings": "Embolic occlusion of the basilar apex or both PCAs destroys both occipital cortices and the medial temporal lobes: cortical blindness (sometimes denied — Anton syndrome), a dense anterograde amnesia and, with midbrain involvement, vertical gaze palsy.",
+        "vascular": "Bilateral posterior cerebral arteries (or the basilar apex)"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      12,
+      16,
+      -2
+    ],
+    "size3d": [
+      3,
+      4,
+      8
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'"
+    ]
+  },
+  {
+    "id": "vasc-superior-cerebellar-artery",
+    "name": "Superior cerebellar artery",
+    "synonyms": [
+      "SCA",
+      "arteria cerebellaris superior"
+    ],
+    "region": "vasculature",
+    "subdivision": "Posterior circulation",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#dc2626",
+    "function": "The artery of the superior cerebellar surface and the deep cerebellar nuclei: it arises from the upper basilar just below the bifurcation, encircles the midbrain below the oculomotor and trochlear nerves and supplies the superior vermis and hemisphere, the dentate and interposed nuclei, the superior cerebellar peduncle and — through its small perforators — the caudal midbrain tegmentum. Its intimate relation to the trochlear nerve and to the superior cerebellar peduncle explains why its occlusion produces a cerebellar syndrome with brainstem signs, and why it is the classic cause of the 'cerebellar' infarct that compresses the brainstem and requires decompression.",
+    "territory": [
+      "ctx-cerebellum",
+      "nuc-dentate",
+      "nuc-interposed",
+      "nuc-fastigial",
+      "surf-vermis",
+      "tract-scp",
+      "tract-scp-decussation",
+      "nuc-superior-colliculus",
+      "nuc-inferior-colliculus",
+      "nuc-pretectal",
+      "nuc-trochlear",
+      "nuc-red-nucleus"
+    ],
+    "supply": [
+      "syn-cerebellar",
+      "syn-nothnagel"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The existing `syn-cerebellar` card cites the SCA for the dentate/SCP complex, which is the association this record makes visible. Meshes: the trunk `FJ1726`/`FJ1726M` (406 faces each, FMA 50573/50574/50575) plus the lateral (`FJ1683`/`FJ1683M`) and medial (`FJ1688`/`FJ1688M`) branches listed as support.",
+    "connections": {
+      "afferent": [
+        "Basilar artery (vasc-basilar-artery) just proximal to its bifurcation"
+      ],
+      "efferent": [
+        "Superior cerebellar and vermian cortical branches, and the deep branches to the dentate, interposed and fastigial nuclei and the superior cerebellar peduncle",
+        "Small perforating branches to the caudal midbrain tegmentum (the collicular/quadrigeminal territory shared with the PCA) and to the trochlear nerve"
+      ]
+    },
+    "bloodSupply": "Its wall is supplied by small vasa vasorum within the ambient and quadrigeminal cisterns; the artery lies immediately below the trochlear nerve and above the trigeminal root, which is why aneurysms here present with a fourth-nerve palsy or with trigeminal neuralgia-like facial pain.",
+    "clinical": [
+      {
+        "syndrome": "Superior cerebellar artery infarct with cerebellar syndrome",
+        "findings": "Vertigo and vomiting, ipsilateral limb and gait ataxia, dysmetria and dysdiadochokinesia with an intention tremor, and — because the dentate nucleus and superior cerebellar peduncle are involved — a marked cerebellar syndrome that may be accompanied by contralateral pain and thermal sensory loss from adjacent spinothalamic involvement.",
+        "vascular": "Superior cerebellar artery (tract-scp and nuc-dentate territory)"
+      },
+      {
+        "syndrome": "SCA territory infarct with brainstem compression",
+        "findings": "A large SCA infarct with oedema can compress the fourth ventricle and the brainstem, producing hydrocephalus and progressive drowsiness — the cerebellar infarct that requires posterior fossa decompression.",
+        "vascular": "Superior cerebellar artery (with mass effect)"
+      },
+      {
+        "syndrome": "Nothnagel syndrome (collicular/quadrigeminal)",
+        "findings": "Combined SCA and collicular PCA branch occlusion destroys the superior cerebellar peduncle and the tectum: ipsilateral cerebellar ataxia with a contralateral oculomotor palsy and impaired vertical gaze — a dorsal midbrain-plus-cerebellum syndrome.",
+        "vascular": "Superior cerebellar artery and collicular branches of the posterior cerebral artery"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      12,
+      8,
+      -2
+    ],
+    "size3d": [
+      5,
+      3,
+      8
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebellum'"
+    ]
+  },
+  {
+    "id": "vasc-anterior-inferior-cerebellar-artery",
+    "name": "Anterior inferior cerebellar artery",
+    "synonyms": [
+      "AICA",
+      "arteria cerebellaris inferior anterior"
+    ],
+    "region": "vasculature",
+    "subdivision": "Posterior circulation",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#dc2626",
+    "function": "The artery of the cerebellopontine angle: it arises from the lower basilar artery, loops around the pontomedullary junction and supplies the middle cerebellar peduncle, the flocculus and the anteroinferior cerebellar surface, together with the labyrinth through its internal auditory (labyrinthine) branch. Its long cisternal course around the facial and vestibulocochlear nerves is what makes it both a common cause of a combined cochleovestibular and brainstem syndrome in stroke, and the vessel most often implicated in neurovascular compression of the facial nerve (hemifacial spasm) and the vestibulocochlear nerve (vestibular paroxysmia).",
+    "territory": [
+      "tract-mcp",
+      "ctx-cerebellum",
+      "surf-vermis",
+      "nuc-cochlear-ventral",
+      "nuc-cochlear-dorsal",
+      "nuc-vestibular-superior",
+      "nuc-vestibular-medial",
+      "nuc-vestibular-inferior",
+      "nuc-facial",
+      "nuc-principal-sensory-v",
+      "nuc-spinal-trigeminal",
+      "tract-spinal-trigeminal",
+      "surf-cn7-exit",
+      "surf-cn8-exit",
+      "vent-fourth-ventricle"
+    ],
+    "supply": [
+      "syn-lateral-pontine",
+      "syn-millard-gubler",
+      "syn-foville"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The existing `syn-lateral-pontine` card names the AICA territory (including its labyrinthine branches) explicitly, which is the mapping this record renders visible. Meshes: `FJ1656` (right) / `FJ1656M` (left), 766 faces each, FMA 50544.",
+    "connections": {
+      "afferent": [
+        "Basilar artery (vasc-basilar-artery) at the pontomedullary/pontine junction level"
+      ],
+      "efferent": [
+        "Internal auditory (labyrinthine) artery to the cochlea and vestibular labyrinth — the branch whose occlusion causes the deafness of the syndrome",
+        "Cerebellar branches to the flocculus, the anteroinferior cerebellar hemisphere and the middle cerebellar peduncle",
+        "Pontine tegmental branches to the facial and vestibulocochlear nuclei, the spinal trigeminal nucleus and tract, and the middle cerebellar peduncle"
+      ]
+    },
+    "bloodSupply": "Its wall is supplied by vasa vasorum in the cerebellopontine angle cistern; because the artery loops into the internal auditory canal with the facial and vestibulocochlear nerves, it is the vessel implicated in neurovascular compression syndromes and the one at risk during cerebellopontine-angle surgery.",
+    "clinical": [
+      {
+        "syndrome": "Lateral pontine (AICA) syndrome",
+        "findings": "Sudden vertigo with vomiting, ipsilateral sensorineural deafness and tinnitus (labyrinthine branch), ipsilateral facial paralysis and loss of lacrimation (facial nucleus and superior salivatory fibres), ipsilateral facial pain-temperature loss (spinal trigeminal) and ipsilateral limb ataxia (middle cerebellar peduncle), with contralateral body pain-temperature loss and Horner syndrome — the full syndrome requires occlusion of the AICA at its origin.",
+        "vascular": "Anterior inferior cerebellar artery, including its internal auditory branch"
+      },
+      {
+        "syndrome": "AICA infarction with isolated audiovestibular loss",
+        "findings": "A small AICA or labyrinthine branch occlusion can present as sudden deafness with vertigo and no other neurological sign, which is why sudden sensorineural hearing loss in a vascular patient is investigated as a posterior-circulation event.",
+        "vascular": "Anterior inferior cerebellar artery (internal auditory/labyrinthine branch)"
+      },
+      {
+        "syndrome": "Hemifacial spasm and vestibular paroxysmia",
+        "findings": "Vascular compression of the facial nerve root by an AICA loop causes involuntary synchronous contractions of the ipsilateral facial muscles; the same mechanism on the vestibulocochlear nerve causes brief spells of vertigo — both treated by microvascular decompression.",
+        "vascular": "Anterior inferior cerebellar artery (a looping branch compressing the facial or vestibulocochlear nerve at the brainstem root entry zone)",
+        "note": "Neurovascular compression rather than arterial occlusion"
+      }
+    ],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle"
+    ],
+    "origin3d": [
+      10,
+      -16,
+      -4
+    ],
+    "size3d": [
+      5,
+      4,
+      6
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brainstem II: Eye Movements and Pupillary Control'"
+    ]
+  },
+  {
+    "id": "vasc-posterior-inferior-cerebellar-artery",
+    "name": "Posterior inferior cerebellar artery",
+    "synonyms": [
+      "PICA",
+      "arteria cerebellaris inferior posterior"
+    ],
+    "region": "vasculature",
+    "subdivision": "Posterior circulation",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#dc2626",
+    "function": "The artery of the lateral medulla and the inferior cerebellar surface: it arises from the vertebral artery (occasionally from the basilar) and makes a characteristic caudal loop around the tonsil before supplying the inferior vermis, the inferior cerebellar hemisphere and the dorsolateral medulla. Because its medullary branches supply the vestibular nuclei, the spinal trigeminal nucleus and tract, the nucleus ambiguus, the solitary nucleus, the inferior cerebellar peduncle, the spinothalamic tract and the descending sympathetic fibres in one territory, its occlusion produces the single most famous brainstem stroke syndrome — and it is also the artery whose absence must be checked before vertebral sacrifice.",
+    "territory": [
+      "ctx-cerebellum",
+      "surf-vermis",
+      "tract-icp",
+      "nuc-vestibular-inferior",
+      "tract-spinal-trigeminal",
+      "nuc-spinal-trigeminal",
+      "nuc-ambiguus",
+      "nuc-solitarius-caudal",
+      "nuc-dmv",
+      "tract-spinothalamic",
+      "tract-hypothalamospinal",
+      "nuc-medullary-reticular",
+      "vent-fourth-ventricle"
+    ],
+    "supply": [
+      "syn-lateral-medullary",
+      "syn-central-horner",
+      "syn-hemimedullary"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The existing `syn-lateral-medullary` and `syn-central-horner` cards name the PICA/vertebral territory explicitly. Meshes: 26 elements in the inventory (8,080 faces), the largest mesh set of any single artery — the trunk and its tonsillomedullary, telovelotonsillar and cortical segments. FMA 50518/50519/50520.",
+    "connections": {
+      "afferent": [
+        "Vertebral artery (vasc-vertebral-artery) — the usual origin, at the level of the olive, with a caudal loop that descends to the foramen magnum before turning up",
+        "Anastomotic flow from the anterior inferior cerebellar artery and the superior cerebellar artery along the cerebellar surface (the reason cerebellar infarcts can be smaller than the territory suggests)"
+      ],
+      "efferent": [
+        "Tonsillomedullary and telovelotonsillar segments with medullary branches to the dorsolateral medulla (vestibular nuclei, spinal trigeminal complex, nucleus ambiguus, solitary nucleus, inferior cerebellar peduncle, spinothalamic and hypothalamospinal tracts)",
+        "Cortical branches to the inferior vermis and the inferior cerebellar hemisphere"
+      ]
+    },
+    "bloodSupply": "Its wall is supplied by vasa vasorum within the cisterna magna; the artery's relationship to the tonsil and the fourth ventricle makes it the artery of the far-lateral approach and the vessel whose injury during foramen-magnum surgery causes a cerebellar infarct.",
+    "clinical": [
+      {
+        "syndrome": "Lateral medullary (Wallenberg) syndrome",
+        "findings": "Vertigo, nausea and nystagmus (vestibular nuclei), ipsilateral facial pain and temperature loss (spinal trigeminal), contralateral body pain and temperature loss (spinothalamic tract), dysphagia, hoarseness and absent gag reflex (nucleus ambiguus), ipsilateral Horner syndrome (descending sympathetic fibres), ipsilateral limb ataxia (inferior cerebellar peduncle) and impaired taste (solitary nucleus) — with strength, vibration sense and consciousness spared.",
+        "vascular": "Posterior inferior cerebellar artery (or the vertebral artery at its origin)"
+      },
+      {
+        "syndrome": "PICA territory cerebellar infarct with oedema",
+        "findings": "A large cerebellar infarct can obstruct the fourth ventricle and compress the brainstem, producing hydrocephalus, impaired consciousness and brainstem signs — the indication for posterior fossa decompression, and the reason a 'benign' lateral medullary syndrome is monitored for deterioration.",
+        "vascular": "Posterior inferior cerebellar artery (with mass effect)"
+      },
+      {
+        "syndrome": "PICA aneurysm and subarachnoid haemorrhage",
+        "findings": "Aneurysms of the vertebral-PICA junction present with sudden headache, meningism and, frequently, a lateral medullary deficit from mass effect or vasospasm.",
+        "vascular": "Vertebral artery / posterior inferior cerebellar artery junction"
+      }
+    ],
+    "levels": [
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      9,
+      -28,
+      -8
+    ],
+    "size3d": [
+      5,
+      5,
+      6
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  },
+  {
+    "id": "vasc-lenticulostriate-arteries",
+    "name": "Lenticulostriate arteries",
+    "synonyms": [
+      "arteriae lenticulostriatae",
+      "lateral lenticulostriate arteries",
+      "medial lenticulostriate arteries",
+      "recurrent artery of Heubner (medial group)"
+    ],
+    "region": "vasculature",
+    "subdivision": "Deep perforators",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#991b1b",
+    "function": "The deep perforating arteries that supply the basal ganglia and the internal capsule: the lateral group arises from the proximal (M1) middle cerebral artery and pierces the anterior perforated substance to run through the putamen to the internal capsule, while the medial group (including the recurrent artery of Heubner) arises from the anterior cerebral artery and supplies the caudate head, the nucleus accumbens and the anterior limb of the capsule. They are end arteries — there are no anastomoses at their destinations — and they are the vessels of lacunar infarction and of hypertensive intracerebral haemorrhage, which is why the same anatomy explains both the commonest ischaemic and the commonest haemorrhagic deep lesion.",
+    "territory": [
+      "nuc-putamen",
+      "nuc-caudate-head",
+      "nuc-caudate-body",
+      "nuc-globus-pallidus-externus",
+      "nuc-globus-pallidus-internus",
+      "nuc-accumbens",
+      "nuc-ventral-pallidum",
+      "nuc-claustrum",
+      "ctx-internal-capsule",
+      "tract-internal-capsule-anterior-limb",
+      "tract-internal-capsule-genu",
+      "tract-internal-capsule-posterior-limb",
+      "tract-corona-radiata"
+    ],
+    "supply": [
+      "syn-hemiballismus",
+      "syn-weber"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. This record is a two-vessel functional concept (lateral group from the MCA, medial group including Heubner's artery from the ACA) rather than a single named trunk, and it is classified `paired` because both groups are bilateral; the `origin3d` anchor sits at the anterior perforated substance. Meshes: no dedicated BP3D concept exists. The nearest elements are the anterolateral central branches of the middle cerebral artery (`FJ1662`/`FJ1662M`, `FJ1663`/`FJ1663M`, FMA 50376–50378), which the inventory files as MCA `half+support` rather than as their own record; the remaining lenticulostriate elements are inside its 44-element \"generic MCA branch/zone\" group. The record is therefore documented as a two-vessel functional concept whose geometry the render task takes from the MCA branch set.",
+    "connections": {
+      "afferent": [
+        "Proximal middle cerebral artery (vasc-middle-cerebral-artery, M1 segment) for the lateral group",
+        "Proximal anterior cerebral artery (vasc-anterior-cerebral-artery, A1 segment) for the medial group, of which the recurrent artery of Heubner is the largest and most constant branch"
+      ],
+      "efferent": [
+        "Lateral group: through the putamen to the internal capsule (posterior limb), the adjacent caudate body and the lateral globus pallidus",
+        "Medial group (Heubner): to the caudate head, the nucleus accumbens/ventral striatum and the anterior limb of the internal capsule — the territory whose loss produces the abulia of an anterior cerebral infarct",
+        "No anastomoses at the target: the perforators are functional end arteries, which is the anatomical reason small vessel occlusion produces a discrete lacune rather than a collateralized partial infarct"
+      ]
+    },
+    "bloodSupply": "Supplied by their parent trunks; the perforators traverse the anterior perforated substance, a cribriform plate of grey matter at the base of the brain through which they enter the basal ganglia — the surgical landmark that identifies them, and the plane where an aneurysm or a hypertensive bleed at the bifurcation tears them.",
+    "clinical": [
+      {
+        "syndrome": "Hypertensive putaminal haemorrhage",
+        "findings": "Rupture of a lateral lenticulostriate artery causes sudden contralateral hemiplegia and hemisensory loss with gaze deviation toward the lesion and, when large, depressed consciousness and transtentorial herniation — the commonest site of hypertensive intracerebral haemorrhage.",
+        "vascular": "Lateral lenticulostriate arteries (middle cerebral artery)"
+      },
+      {
+        "syndrome": "Lacunar infarction with a pure motor or pure sensory syndrome",
+        "findings": "Lipohyalinosis of a single perforator produces a small infarct in the internal capsule, corona radiata or pons: a pure motor hemiparesis, a pure sensory stroke, ataxic hemiparesis or a dysarthria-clumsy hand syndrome — with no cortical signs (no aphasia, no neglect, no field defect).",
+        "vascular": "Lenticulostriate or other deep perforating arteries (small-vessel disease)"
+      },
+      {
+        "syndrome": "Capsular warning syndrome",
+        "findings": "Repeated, stereotyped episodes of pure motor or sensorimotor deficit that resolve within minutes, followed by a permanent lacunar infarct in the same territory — a stuttering occlusion of a single lenticulostriate artery that must be recognized as impending stroke.",
+        "vascular": "A single lenticulostriate perforator (middle cerebral artery)"
+      },
+      {
+        "syndrome": "Caudate haemorrhage with intraventricular extension",
+        "findings": "Bleeding from the caudothalamic groove perforators ruptures into the lateral ventricle, producing headache, meningism, a reduced level of consciousness and hydrocephalus rather than a focal hemiplegia.",
+        "vascular": "Medial lenticulostriate and Heubner territory perforators"
+      }
+    ],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-basal-ganglia"
+    ],
+    "origin3d": [
+      16,
+      28,
+      20
+    ],
+    "size3d": [
+      4,
+      5,
+      6
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+    ]
+  },
+  {
+    "id": "vasc-anterior-choroidal-artery",
+    "name": "Anterior choroidal artery",
+    "synonyms": [
+      "AChA",
+      "arteria choroidea anterior",
+      "anterior choroidal artery (cisternal and plexal segments)"
+    ],
+    "region": "vasculature",
+    "subdivision": "Deep perforators",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#991b1b",
+    "function": "A small but surgically notorious artery arising from the internal carotid just above the posterior communicating artery: it runs backward below the optic tract, gives off the uncal, hippocampal and pallidal branches, and enters the temporal horn of the lateral ventricle through the choroidal fissure to supply the choroid plexus. Its territory is a compact bundle of functionally unrelated structures — the posterior limb of the internal capsule, the optic radiation (retrolenticular part), the globus pallidus, the hippocampus, the amygdala, the tail of the caudate and the temporal-horn plexus — which is why its occlusion produces the 'capsular triad' of hemiplegia, hemianaesthesia and hemianopia rather than a single clean syndrome.",
+    "territory": [
+      "ctx-internal-capsule",
+      "tract-internal-capsule-posterior-limb",
+      "tract-optic-radiation",
+      "nuc-globus-pallidus-internus",
+      "nuc-globus-pallidus-externus",
+      "nuc-caudate-tail",
+      "nuc-amygdala",
+      "nuc-hippocampus",
+      "nuc-subiculum",
+      "vent-lateral-ventricle-temporal-horn",
+      "vent-choroid-plexus-lateral",
+      "tract-optic-tract"
+    ],
+    "supply": [
+      "syn-hemiballismus"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. It is in the atlas record set because its territory is cited repeatedly by the existing structure records (internal capsule, optic radiation, hippocampus, pallidum) and it is one of the classic syndrome-producing perforators. Meshes: `FJ1658` (right) / `FJ1658M` (left), 418 faces each, FMA 50087/50088/50089.",
+    "connections": {
+      "afferent": [
+        "Internal carotid artery (vasc-internal-carotid-artery), supraclinoid segment, just above the posterior communicating artery"
+      ],
+      "efferent": [
+        "Cisternal branches to the optic tract, the uncus, the amygdala, the hippocampus and the globus pallidus",
+        "Plexal branches entering the temporal horn through the choroidal fissure to supply the choroid plexus of the temporal horn and atrium",
+        "Retrolenticular branches to the optic radiation and the posterior limb of the internal capsule — the fibres whose loss defines the capsular triad"
+      ]
+    },
+    "bloodSupply": "Supplied by its parent carotid trunk; the artery runs in the ambient cistern below the optic tract, immediately above the posterior communicating artery, and is at risk during temporal-lobe surgery, aneurysm clipping and choroid plexus surgery (its injury causes an infarct of the internal capsule and a post-operative hemiplegia).",
+    "clinical": [
+      {
+        "syndrome": "Anterior choroidal artery infarct (the capsular triad)",
+        "findings": "Contralateral hemiplegia, hemianaesthesia and hemianopia occur together because the posterior limb of the internal capsule, the thalamocortical sensory fibres and the optic radiation all fall within the territory; the incomplete forms (pure motor, pure sensory, or a quadrantanopia alone) are more common than the full triad.",
+        "vascular": "Anterior choroidal artery"
+      },
+      {
+        "syndrome": "Hippocampal and amygdalar infarction with memory loss",
+        "findings": "Involvement of the uncal, hippocampal and amygdalar branches adds a memory deficit and, occasionally, seizures to the capsular findings — the anatomical reason the anterior choroidal territory appears in the clinical notes of the amygdala, hippocampus and temporal horn.",
+        "vascular": "Anterior choroidal artery (cisternal branches)"
+      },
+      {
+        "syndrome": "Anterior choroidal aneurysm and surgical risk",
+        "findings": "Aneurysms of the anterior choroidal artery are rare but their clipping risks the artery itself; because it is an end-artery territory with no useful anastomoses, occlusion during surgery produces an immediate, dense capsular hemiplegia.",
+        "vascular": "Anterior choroidal artery (iatrogenic occlusion)"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid"
+    ],
+    "origin3d": [
+      16,
+      20,
+      12
+    ],
+    "size3d": [
+      4,
+      4,
+      5
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'"
+    ]
+  },
+  {
+    "id": "vasc-posterior-medial-choroidal-artery",
+    "name": "Posterior medial choroidal artery",
+    "synonyms": [
+      "arteria choroidea posterior medialis",
+      "medial posterior choroidal artery",
+      "posterior choroidal arteries (with its lateral companion)",
+      "lateral posterior choroidal artery"
+    ],
+    "region": "vasculature",
+    "subdivision": "Deep perforators",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#991b1b",
+    "function": "The choroidal supply of the posterior circulation: the medial posterior choroidal artery arises from the P2 segment of the posterior cerebral artery and runs medially above the tectum to the third ventricle and the interventricular foramen region, while the lateral posterior choroidal artery arises more distally and runs laterally into the lateral ventricle to supply the choroid plexus of the body, the atrium (its glomus) and the temporal horn. Together they supply the choroid plexus of the lateral and third ventricles, the posterior thalamus and habenula region, and the adjacent fornix and pulvinar — the territory that makes the plexus a vascular as well as a CSF structure.",
+    "territory": [
+      "vent-choroid-plexus-lateral",
+      "vent-lateral-ventricle-atrium",
+      "vent-lateral-ventricle-body",
+      "vent-third-ventricle",
+      "nuc-pulvinar",
+      "nuc-mgn",
+      "nuc-habenula",
+      "tract-fornix",
+      "nuc-thalamic-reticular"
+    ],
+    "supply": [
+      "syn-dejerine-roussy"
+    ],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. This record is the paired medial/lateral posterior choroidal concept, which the existing ventricular and plexus records already cite by name in their `bloodSupply` fields. Mesh: `FJ1727`/`FJ1727M`, 880 faces each, FMA 50630/50672/50673 (\"posterior medial choroidal artery\" in the archive). Its lateral companion is not a separate element in the archive, so the record documents both branches and names this id after the one mesh that exists.",
+    "connections": {
+      "afferent": [
+        "Posterior cerebral artery (vasc-posterior-cerebral-artery) — the medial artery from the proximal P2 segment, the lateral from the distal P2"
+      ],
+      "efferent": [
+        "Choroid plexus of the lateral ventricle (body, atrium/glomus and temporal horn) and of the third ventricle — the vascular pedicle of the plexus in the posterior half of the ventricular system",
+        "Perforating branches to the pulvinar, the medial and lateral geniculate bodies, the habenula and the posterior thalamus"
+      ]
+    },
+    "bloodSupply": "Supplied by the posterior cerebral artery; the arteries run in the velum interpositum and the choroidal fissure, adjacent to the internal cerebral veins, and they are the feeding vessels of choroid plexus tumours and the target of pre-operative embolization.",
+    "clinical": [
+      {
+        "syndrome": "Choroid plexus tumour supply",
+        "findings": "Choroid plexus papillomas and carcinomas, and intraventricular meningiomas of the trigone, are fed by the posterior choroidal arteries (and the anterior choroidal artery anteriorly); recognizing the pedicle is what makes embolization and surgical control possible.",
+        "vascular": "Posterior choroidal arteries (with the anterior choroidal artery)"
+      },
+      {
+        "syndrome": "Posterior choroidal territory infarction",
+        "findings": "Occlusion produces infarction of the posterior thalamus and the adjacent plexus, adding hemisensory loss, visual field defects and memory disturbance to the picture of a posterior cerebral artery infarct; isolated occlusion is uncommon because the artery arises from the PCA itself.",
+        "vascular": "Posterior cerebral artery (posterior choroidal branches)"
+      },
+      {
+        "syndrome": "Intraventricular haemorrhage from the choroidal vessels",
+        "findings": "The choroidal arteries are the source of intraventricular haemorrhage in the premature (germinal matrix) and of blood in the ventricles in adults with hypertension or vascular malformation; blood in the ventricle is what produces hydrocephalus.",
+        "vascular": "Choroidal arteries (with the germinal matrix in neonates)"
+      }
+    ],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid"
+    ],
+    "origin3d": [
+      14,
+      18,
+      -6
+    ],
+    "size3d": [
+      4,
+      4,
+      6
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+    ]
+  }
+]

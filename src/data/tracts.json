@@ -708,7 +708,7 @@
     "waypoints": [[18, 16, -6], [23, 20, 6], [27, 15, 12], [28, 14, -14], [24, 20, -34], [20, 27, -52], [13, 30, -66]],
     "tubeRadius": 0.7,
     "color": "#a78bfa",
-    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid"],
+    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate", "lvl-tel-convexity"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Visual System\"",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Cerebral Hemispheres and Vascular Supply\""

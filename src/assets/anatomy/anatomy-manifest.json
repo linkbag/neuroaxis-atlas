@@ -553,6 +553,56 @@
       }
     },
     {
+      "slug": "ctx-optic-chiasm-l",
+      "file": "ctx-optic-chiasm-l.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 1560,
+      "centroid": [
+        3.008,
+        14.319,
+        18.507
+      ],
+      "bbox": {
+        "min": [
+          0.024,
+          10.4,
+          14.27
+        ],
+        "max": [
+          6.252,
+          18.623,
+          23.466
+        ]
+      }
+    },
+    {
+      "slug": "ctx-optic-chiasm-r",
+      "file": "ctx-optic-chiasm-r.glb",
+      "kind": "context",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 1592,
+      "centroid": [
+        -2.901,
+        14.268,
+        18.563
+      ],
+      "bbox": {
+        "min": [
+          -6.063,
+          10.409,
+          14.257
+        ],
+        "max": [
+          0.219,
+          18.623,
+          23.458
+        ]
+      }
+    },
+    {
       "slug": "ctx-pineal",
       "file": "ctx-pineal.glb",
       "kind": "context",
@@ -2574,6 +2624,756 @@
           -4.815,
           107.673,
           65.867
+        ]
+      }
+    },
+    {
+      "slug": "tract-optic-nerve-l",
+      "file": "tract-optic-nerve-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 2204,
+      "centroid": [
+        13.197,
+        3.914,
+        36.732
+      ],
+      "bbox": {
+        "min": [
+          0.792,
+          -5.144,
+          16.701
+        ],
+        "max": [
+          26.998,
+          16.193,
+          63.178
+        ]
+      }
+    },
+    {
+      "slug": "tract-optic-nerve-r",
+      "file": "tract-optic-nerve-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 2212,
+      "centroid": [
+        -13.058,
+        3.866,
+        36.83
+      ],
+      "bbox": {
+        "min": [
+          -26.939,
+          -5.139,
+          16.798
+        ],
+        "max": [
+          -0.438,
+          16.131,
+          63.177
+        ]
+      }
+    },
+    {
+      "slug": "tract-optic-tract-l",
+      "file": "tract-optic-tract-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 2080,
+      "centroid": [
+        12.969,
+        14.88,
+        4.67
+      ],
+      "bbox": {
+        "min": [
+          0.746,
+          10.729,
+          -11.116
+        ],
+        "max": [
+          21.037,
+          18.392,
+          20.035
+        ]
+      }
+    },
+    {
+      "slug": "tract-optic-tract-r",
+      "file": "tract-optic-tract-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 2096,
+      "centroid": [
+        -12.935,
+        14.849,
+        4.498
+      ],
+      "bbox": {
+        "min": [
+          -20.952,
+          10.725,
+          -11.109
+        ],
+        "max": [
+          -0.535,
+          18.392,
+          20.009
+        ]
+      }
+    },
+    {
+      "slug": "vasc-anterior-cerebral-artery-l",
+      "file": "vasc-anterior-cerebral-artery-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 432,
+      "centroid": [
+        5.555,
+        14.962,
+        26.286
+      ],
+      "bbox": {
+        "min": [
+          1.825,
+          10.58,
+          22.486
+        ],
+        "max": [
+          12.981,
+          23.064,
+          32.762
+        ]
+      }
+    },
+    {
+      "slug": "vasc-anterior-cerebral-artery-r",
+      "file": "vasc-anterior-cerebral-artery-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 428,
+      "centroid": [
+        -4.47,
+        15.108,
+        26.305
+      ],
+      "bbox": {
+        "min": [
+          -10.845,
+          10.606,
+          22.496
+        ],
+        "max": [
+          -0.723,
+          23.075,
+          32.77
+        ]
+      }
+    },
+    {
+      "slug": "vasc-anterior-choroidal-artery-l",
+      "file": "vasc-anterior-choroidal-artery-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 476,
+      "centroid": [
+        19.923,
+        10.726,
+        12.491
+      ],
+      "bbox": {
+        "min": [
+          10.583,
+          8.136,
+          -2.055
+        ],
+        "max": [
+          28.264,
+          15.332,
+          19.853
+        ]
+      }
+    },
+    {
+      "slug": "vasc-anterior-choroidal-artery-r",
+      "file": "vasc-anterior-choroidal-artery-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 460,
+      "centroid": [
+        -18.212,
+        10.638,
+        12.693
+      ],
+      "bbox": {
+        "min": [
+          -27.261,
+          8.136,
+          -2.05
+        ],
+        "max": [
+          -8.9,
+          15.323,
+          19.854
+        ]
+      }
+    },
+    {
+      "slug": "vasc-anterior-communicating-artery",
+      "file": "vasc-anterior-communicating-artery.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 76,
+      "centroid": [
+        0.126,
+        12.112,
+        24.92
+      ],
+      "bbox": {
+        "min": [
+          -2.206,
+          11.932,
+          24.507
+        ],
+        "max": [
+          2.277,
+          12.352,
+          25.4
+        ]
+      }
+    },
+    {
+      "slug": "vasc-anterior-inferior-cerebellar-artery-l",
+      "file": "vasc-anterior-inferior-cerebellar-artery-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 488,
+      "centroid": [
+        9.11,
+        -20.198,
+        7.773
+      ],
+      "bbox": {
+        "min": [
+          0.554,
+          -22.601,
+          -5.881
+        ],
+        "max": [
+          21.63,
+          -14.229,
+          14.203
+        ]
+      }
+    },
+    {
+      "slug": "vasc-anterior-inferior-cerebellar-artery-r",
+      "file": "vasc-anterior-inferior-cerebellar-artery-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 528,
+      "centroid": [
+        -9.125,
+        -20.007,
+        6.661
+      ],
+      "bbox": {
+        "min": [
+          -20.286,
+          -22.611,
+          -5.859
+        ],
+        "max": [
+          0.641,
+          -14.237,
+          13.852
+        ]
+      }
+    },
+    {
+      "slug": "vasc-basilar-artery",
+      "file": "vasc-basilar-artery.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 592,
+      "centroid": [
+        0.323,
+        -8.041,
+        13.892
+      ],
+      "bbox": {
+        "min": [
+          -0.847,
+          -21.089,
+          11.283
+        ],
+        "max": [
+          1.408,
+          5.585,
+          16.781
+        ]
+      }
+    },
+    {
+      "slug": "vasc-internal-carotid-artery-l",
+      "file": "vasc-internal-carotid-artery-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 1760,
+      "centroid": [
+        15.059,
+        -16.792,
+        26.225
+      ],
+      "bbox": {
+        "min": [
+          9.42,
+          -46,
+          16.118
+        ],
+        "max": [
+          25.568,
+          11.796,
+          39.786
+        ]
+      }
+    },
+    {
+      "slug": "vasc-internal-carotid-artery-r",
+      "file": "vasc-internal-carotid-artery-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 1828,
+      "centroid": [
+        -13.772,
+        -16.408,
+        26.148
+      ],
+      "bbox": {
+        "min": [
+          -24.617,
+          -46,
+          16.102
+        ],
+        "max": [
+          -7.781,
+          12.002,
+          39.784
+        ]
+      }
+    },
+    {
+      "slug": "vasc-middle-cerebral-artery-m1-l",
+      "file": "vasc-middle-cerebral-artery-m1-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 676,
+      "centroid": [
+        25.296,
+        14.639,
+        22.858
+      ],
+      "bbox": {
+        "min": [
+          12.231,
+          9.353,
+          18.355
+        ],
+        "max": [
+          36.502,
+          24.448,
+          26.481
+        ]
+      }
+    },
+    {
+      "slug": "vasc-middle-cerebral-artery-m1-r",
+      "file": "vasc-middle-cerebral-artery-m1-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 692,
+      "centroid": [
+        -23.945,
+        14.658,
+        22.863
+      ],
+      "bbox": {
+        "min": [
+          -36.164,
+          9.355,
+          18.358
+        ],
+        "max": [
+          -10.86,
+          24.452,
+          26.485
+        ]
+      }
+    },
+    {
+      "slug": "vasc-middle-cerebral-artery-m2-l",
+      "file": "vasc-middle-cerebral-artery-m2-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 444,
+      "centroid": [
+        34.132,
+        25.792,
+        22.972
+      ],
+      "bbox": {
+        "min": [
+          31.955,
+          18.183,
+          19.871
+        ],
+        "max": [
+          36.188,
+          33.275,
+          25.452
+        ]
+      }
+    },
+    {
+      "slug": "vasc-middle-cerebral-artery-m2-r",
+      "file": "vasc-middle-cerebral-artery-m2-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 476,
+      "centroid": [
+        -33.377,
+        25.459,
+        22.812
+      ],
+      "bbox": {
+        "min": [
+          -35.706,
+          17.775,
+          19.575
+        ],
+        "max": [
+          -30.872,
+          33.194,
+          25.468
+        ]
+      }
+    },
+    {
+      "slug": "vasc-posterior-cerebral-artery-p1-l",
+      "file": "vasc-posterior-cerebral-artery-p1-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 248,
+      "centroid": [
+        3.51,
+        6.879,
+        11.24
+      ],
+      "bbox": {
+        "min": [
+          0.417,
+          4.22,
+          9.925
+        ],
+        "max": [
+          7.628,
+          8.827,
+          12.656
+        ]
+      }
+    },
+    {
+      "slug": "vasc-posterior-cerebral-artery-p1-r",
+      "file": "vasc-posterior-cerebral-artery-p1-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 236,
+      "centroid": [
+        -1.843,
+        6.846,
+        11.228
+      ],
+      "bbox": {
+        "min": [
+          -5.366,
+          4.146,
+          9.931
+        ],
+        "max": [
+          0.601,
+          8.82,
+          12.6
+        ]
+      }
+    },
+    {
+      "slug": "vasc-posterior-cerebral-artery-p2-l",
+      "file": "vasc-posterior-cerebral-artery-p2-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 788,
+      "centroid": [
+        12.007,
+        6.938,
+        -0.671
+      ],
+      "bbox": {
+        "min": [
+          6.763,
+          4.026,
+          -16.527
+        ],
+        "max": [
+          15.12,
+          13.456,
+          12.435
+        ]
+      }
+    },
+    {
+      "slug": "vasc-posterior-cerebral-artery-p2-r",
+      "file": "vasc-posterior-cerebral-artery-p2-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 792,
+      "centroid": [
+        -10.637,
+        6.826,
+        -0.27
+      ],
+      "bbox": {
+        "min": [
+          -14.022,
+          3.752,
+          -16.584
+        ],
+        "max": [
+          -4.996,
+          13.506,
+          12.428
+        ]
+      }
+    },
+    {
+      "slug": "vasc-posterior-communicating-artery-l",
+      "file": "vasc-posterior-communicating-artery-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 192,
+      "centroid": [
+        8.486,
+        6.539,
+        17.005
+      ],
+      "bbox": {
+        "min": [
+          5.998,
+          5.366,
+          11.617
+        ],
+        "max": [
+          10.759,
+          8.191,
+          22.299
+        ]
+      }
+    },
+    {
+      "slug": "vasc-posterior-communicating-artery-r",
+      "file": "vasc-posterior-communicating-artery-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 204,
+      "centroid": [
+        -6.855,
+        6.604,
+        16.758
+      ],
+      "bbox": {
+        "min": [
+          -9.485,
+          5.351,
+          11.581
+        ],
+        "max": [
+          -4.043,
+          8.172,
+          22.302
+        ]
+      }
+    },
+    {
+      "slug": "vasc-posterior-inferior-cerebellar-artery-l",
+      "file": "vasc-posterior-inferior-cerebellar-artery-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 544,
+      "centroid": [
+        17.258,
+        -29.09,
+        -10.981
+      ],
+      "bbox": {
+        "min": [
+          6.394,
+          -32.327,
+          -28.002
+        ],
+        "max": [
+          40.025,
+          -22.498,
+          2.138
+        ]
+      }
+    },
+    {
+      "slug": "vasc-posterior-inferior-cerebellar-artery-r",
+      "file": "vasc-posterior-inferior-cerebellar-artery-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 584,
+      "centroid": [
+        -16.171,
+        -29.332,
+        -11.647
+      ],
+      "bbox": {
+        "min": [
+          -35.174,
+          -33.003,
+          -26.598
+        ],
+        "max": [
+          -5.758,
+          -25.901,
+          2.161
+        ]
+      }
+    },
+    {
+      "slug": "vasc-superior-cerebellar-artery-l",
+      "file": "vasc-superior-cerebellar-artery-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 680,
+      "centroid": [
+        11.198,
+        -0.231,
+        10.774
+      ],
+      "bbox": {
+        "min": [
+          0.41,
+          -4.112,
+          -2.1
+        ],
+        "max": [
+          18.457,
+          1.777,
+          16.917
+        ]
+      }
+    },
+    {
+      "slug": "vasc-superior-cerebellar-artery-r",
+      "file": "vasc-superior-cerebellar-artery-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 664,
+      "centroid": [
+        -9.764,
+        -0.23,
+        10.964
+      ],
+      "bbox": {
+        "min": [
+          -17.108,
+          -4.107,
+          -2.108
+        ],
+        "max": [
+          0.784,
+          1.769,
+          16.815
+        ]
+      }
+    },
+    {
+      "slug": "vasc-vertebral-artery-l",
+      "file": "vasc-vertebral-artery-l.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 1524,
+      "centroid": [
+        15.695,
+        -33.388,
+        5.281
+      ],
+      "bbox": {
+        "min": [
+          0.54,
+          -45.8,
+          -2.294
+        ],
+        "max": [
+          28.108,
+          -19.872,
+          13.601
+        ]
+      }
+    },
+    {
+      "slug": "vasc-vertebral-artery-r",
+      "file": "vasc-vertebral-artery-r.glb",
+      "kind": "vessel",
+      "source": "bp3d+sculpt",
+      "materialHint": "vasculature",
+      "triCount": 1552,
+      "centroid": [
+        -14.677,
+        -33.3,
+        5.284
+      ],
+      "bbox": {
+        "min": [
+          -27.417,
+          -45.8,
+          -2.304
+        ],
+        "max": [
+          0.535,
+          -19.852,
+          13.606
         ]
       }
     },

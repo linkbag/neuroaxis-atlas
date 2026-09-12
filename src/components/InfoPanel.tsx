@@ -164,6 +164,46 @@ function WebRefList({ id, name, kind, region }: { id: string; name: string; kind
   )
 }
 
+/**
+ * v8 — a vessel's territory (docs/NEUROATLAS_V8_PLAN.md §1a/§2).
+ *
+ * The tissue an artery supplies is the answer to "why does this vessel matter?",
+ * and it is also the one field that makes the vascular layer more than decoration:
+ * selecting the artery lights these structures everywhere (see
+ * `store.highlightIdSet`), and each chip opens that structure's own record. The
+ * ids are taxonomy ids, so the label is the registry's own name — a chip whose id
+ * does not resolve still renders (as the raw id) rather than disappearing, because
+ * a hole in a territory list is a content bug the reader should be able to see.
+ */
+function TerritoryList({ record }: { record: StructureRecord }) {
+  const selectStructure = useAtlasStore((s) => s.selectStructure)
+  const territory = record.territory
+  if (!territory || territory.length === 0) return null
+  const named = territory.map((id) => ({ id, name: getTaxonomyEntry(id)?.name ?? id }))
+  return (
+    <section className="info-section">
+      <h3>Territory (structures supplied)</h3>
+      <div className="chip-row">
+        {named.map(({ id, name }) => (
+          <button
+            key={id}
+            type="button"
+            className="chip"
+            title={`Open ${name}`}
+            onClick={() => selectStructure(id)}
+          >
+            {name}
+          </button>
+        ))}
+      </div>
+      <p className="hint">
+        Selecting this artery lights the structures above everywhere — 3D, plates and the live
+        section — and dims the rest.
+      </p>
+    </section>
+  )
+}
+
 function StructureDetails({ record }: { record: StructureRecord }) {
   const connections = record.connections
   return (
@@ -172,6 +212,8 @@ function StructureDetails({ record }: { record: StructureRecord }) {
         <h3>Function (neurophysiology)</h3>
         <p>{record.function}</p>
       </section>
+
+      <TerritoryList record={record} />
 
       {connections && ((connections.afferent?.length ?? 0) > 0 || (connections.efferent?.length ?? 0) > 0) && (
         <section className="info-section">

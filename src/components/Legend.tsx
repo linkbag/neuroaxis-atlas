@@ -17,6 +17,11 @@ const KIND_SWATCHES: { label: string; token: string }[] = [
   { label: 'Ventricles / CSF', token: 'var(--kind-ventricle)' },
   { label: 'Surface landmarks', token: 'var(--kind-surface)' },
   { label: 'Context envelopes', token: 'var(--kind-context)' },
+  // v8 (docs/NEUROATLAS_V8_PLAN.md §2): the arterial family. Each vessel record
+  // carries its own crimson shade (trunks and midline links #b91c1c, distal
+  // cortical/cerebellar branches #dc2626, deep perforators and the vertebral
+  // artery #991b1b); this swatch is the family's base tone.
+  { label: 'Cerebral arteries', token: 'var(--kind-vessel)' },
 ]
 
 export default function Legend() {

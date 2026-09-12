@@ -15,7 +15,8 @@ export type Region =
   | 'midbrain'
   | 'pons'
   | 'medulla'
-  | 'cerebellum';
+  | 'cerebellum'
+  | 'vasculature';
 export type Kind = 'nucleus' | 'tract' | 'ventricle' | 'surface' | 'vessel' | 'context';
 export type Laterality = 'midline' | 'paired';
 export type Vec3 = [number, number, number];
@@ -35,6 +36,23 @@ export interface StructureRecord {
   size3d?: Vec3;                     // ellipsoid radii
   refs?: string[];                   // e.g. "Blumenfeld, 2nd ed., Ch. 'Diencephalon…'"
   contextNote?: string;              // for context records
+  /**
+   * v8 (docs/NEUROATLAS_V8_PLAN.md §1a) — the cerebral-vasculature fields.
+   *
+   * `territory` is the territory the record supplies (structure ids — the viewer
+   * lights them when the record is selected), `supply` the syndrome-card ids whose
+   * arterial territory this record IS (so an artery and its syndromes light each
+   * other), and `meshes: false` the explicit "this record owns no mesh of its own"
+   * flag, which keeps a record out of the body pass and out of the origin.
+   *
+   * They are typed here rather than left as JSON-only fields because the viewer
+   * reads all three: `load.ts` turns `supply` into the reverse syndrome index,
+   * `store.highlightIdSet` lights a territory / an artery, and `InfoPanel` renders
+   * the territory chips.
+   */
+  territory?: string[];
+  supply?: string[];
+  meshes?: boolean;
 }
 
 export interface TractRecord {
