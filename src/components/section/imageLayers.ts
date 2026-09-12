@@ -102,6 +102,26 @@
  * `getLayerLinks` provides the "open source ↗" link-outs (plan §2.3) for
  * integration to render as chips.
  *
+ * ── v9 MEASURED REGISTRATION (task `imaging-registration`) ────────────────
+ * WHAT CHANGED: this module now applies a DISPLAY-TIME registration correction
+ * that `scripts/fit-imaging-affine.mjs` measured, instead of only drawing a
+ * fixed inherited affine. `gridDisplayCorrection(modality)` reads the
+ * manifest's `registration.display` and `drawGridToView` moves/scale the
+ * destination rect by it; `resolvedFit(image)` prefers a plate's
+ * `fittedFit` over its committed `fit` and `drawStainToView` uses it.
+ * WHAT STAYED FROZEN: `ct.bin`, `mri-t1.bin` and both manifests'
+ * `dims`/`originAu`/`spacingAu` — `npm run verify:anatomy` compares those bytes
+ * at canonical points against `54be95a` and requires `max |Δ| 0 of 255`, so the
+ * correction is applied where the slice is DRAWN, never to the data (PLAN.md
+ * §7.3). No image file is re-encoded and no GLB is touched.
+ * WHAT THE MEASUREMENT FOUND, and the UI states rather than hides:
+ * `imagingAlignmentNote(modality)` and `plateAlignmentNote()` build their
+ * strings from these same numbers — CT and MRI carry `applied: false` with
+ * their measured residuals, 7 of 24 measurable photo plates carry an accepted
+ * correction, and 49 JPEG plates were not measurable at all (no decoder).
+ * `scripts/verify/imaging-fit.mjs` re-runs the fitter and fails if any committed
+ * number diverges.
+ *
  * Attribution sources (verbatim strings): docs/SECTION_SYNC_PLAN.md §1,
  * src/data/sectionImages.ts (UBC_CREDIT / BMM_CREDIT / COMMONS_CT_CREDIT),
  * mri-manifest.json (`source` / `license`, dataset CC0 — no attribution
@@ -130,6 +150,7 @@ import {
   sectionImages,
   sectionImagesForLevel,
   type SectionImage,
+  type SectionImageFit,
 } from '../../data/sectionImages'
 import { levels } from '../../data/load'
 import { useAtlasStore } from '../../state/store'
@@ -151,6 +172,8 @@ interface MriManifest {
   spacingAu?: number[]
   source?: string
   license?: string
+  /** v9: the measured display-registration block (see gridRegistrationDisplay). */
+  registration?: { display?: ManifestFitDisplay }
 }
 
 const mriManifest = mriManifestJson as unknown as MriManifest
@@ -206,6 +229,174 @@ const CT_MANIFEST_WINDOW: [number, number] = (() => {
 /** Static-import asset URLs for the two baked uint8 grids. */
 const MRI_BIN_URL = mriT1Url
 const CT_BIN_URL = ctGridUrl
+
+/** The measured display corrections, resolved ONCE at module load from the
+ *  committed manifests (see gridDisplayCorrection). Identity unless the
+ *  manifest's own measurement was accepted, so an unapplied fit cannot move an
+ *  image by accident. */
+const mriDisplayCorrection = gridDisplayCorrection('mri')
+const ctDisplayCorrection = gridDisplayCorrection('ct')
+
+/* ---------------------------------------------------- imaging registration */
+
+/**
+ * ── MEASURED REGISTRATION (v9, task `imaging-registration`) ───────────────
+ *
+ * This module is THE single place the real-image layers are sampled, so it is
+ * also the single place a display-time registration correction is applied. The
+ * numbers come from `scripts/fit-imaging-affine.mjs`, which measures the ATLAS
+ * brain mask (the committed GLB contours through the section pipeline's own
+ * clipping, rasterised by `planeGeometry.planeTransform`) against each image's
+ * OWN mask, and fits the transform that minimises the mismatch. Nothing here is
+ * hand-tuned and nothing here can drift: `scripts/verify/imaging-fit.mjs`
+ * re-runs that fitter and requires the committed numbers to match to
+ * `FIT_TOLERANCE`.
+ *
+ * What the fitter measured on the committed data (see the manifests'
+ * `registration.display.residuals` and `imagingAlignmentNote()` for the live
+ * strings):
+ *  - CT and MRI: **no correction is applied.** A single modality-wide
+ *    similarity that raises overlap also moves the centroid AWAY from the atlas
+ *    (CT: mean ROI IoU +0.20 for a +2.3 au mean residual; MRI: +0.19 for
+ *    +8.4 au), because the image mask is the head's soft-tissue envelope while
+ *    the atlas mask is a brain. Their manifests carry `applied: false`, the
+ *    measured residuals and the reason.
+ *  - 7 of the 24 measurable UBC photograph plates gained BOTH overlap and
+ *    centroid alignment and are applied here through `image.fit` (see
+ *    `src/data/sectionImages.ts`); the other 17 kept their committed placement
+ *    and each carries its own measured reason there.
+ *  - 49 JPEG plates were NOT measured at all: no JPEG decoder exists in this
+ *    repo and no dependency may be added.
+ */
+
+/** Re-check tolerance the manifests' numbers were verified to (au for the
+ *  residuals, IoU for the overlaps). Pinned here so the UI can state it. */
+export const FIT_TOLERANCE = { iou: 1e-9, au: 1e-9 }
+
+/** One modality's measured registration block, as the manifests carry it. */
+export interface ManifestFitDisplay {
+  applied: boolean
+  reason: string
+  parameters: { su: number; sv: number; duAu: number; dvAu: number }
+  residuals: {
+    planesFitted: number
+    improved: number
+    worsened: number
+    unchanged: number
+    roiIouBefore: number
+    roiIouAfterPerPlaneWinners: number
+    roiIouWithChosenCorrection: number
+    meanCentroidResidualBeforeAu: number
+    meanCentroidResidualAfterPerPlaneWinnersAu: number
+    meanCentroidResidualWithChosenCorrectionAu: number
+    maxCentroidResidualBeforeAu: number
+    maxCentroidResidualAfterPerPlaneWinnersAu: number
+    note?: string
+  }
+  applicability?: { imageMaskIsBrain: boolean; reason: string; meanAtlasCoverageBefore: number }
+  [key: string]: unknown
+}
+
+/** The `registration.display` block of one grid's manifest, or null when the
+ *  manifest predates the v9 measurement (a bare v8 manifest). */
+export function gridRegistrationDisplay(modality: 'ct' | 'mri'): ManifestFitDisplay | null {
+  const manifest = modality === 'ct' ? ctManifest : mriManifest
+  const display = (manifest as { registration?: { display?: unknown } }).registration?.display
+  if (display === null || typeof display !== 'object') return null
+  const block = display as ManifestFitDisplay
+  if (typeof block.applied !== 'boolean' || typeof block.residuals !== 'object') return null
+  return block
+}
+
+/**
+ * The CT/MRI placement correction this module APPLIES at draw time, in the world
+ * frame of `drawGridToView`: identity unless the manifest's measurement was
+ * accepted (`applied: true`). Returning identity for an unapplied block is the
+ * point: the UI can state the measured residual without the image moving.
+ */
+export interface GridDisplayCorrection {
+  applied: boolean
+  su: number
+  sv: number
+  duAu: number
+  dvAu: number
+  /** The measured block the correction came from, or null. */
+  display: ManifestFitDisplay | null
+}
+
+export function gridDisplayCorrection(modality: 'ct' | 'mri'): GridDisplayCorrection {
+  const display = gridRegistrationDisplay(modality)
+  if (display === null || !display.applied) {
+    return { applied: false, su: 1, sv: 1, duAu: 0, dvAu: 0, display }
+  }
+  const p = display.parameters
+  const finite = Number.isFinite(p?.su) && Number.isFinite(p?.sv) && Number.isFinite(p?.duAu) && Number.isFinite(p?.dvAu)
+  if (!finite || p.su <= 0 || p.sv <= 0) {
+    // A malformed block must not move the image: fall back to identity.
+    return { applied: false, su: 1, sv: 1, duAu: 0, dvAu: 0, display }
+  }
+  return { applied: true, su: p.su, sv: p.sv, duAu: p.duAu, dvAu: p.dvAu, display }
+}
+
+/**
+ * The honest alignment statement for one modality, built from the MEASURED
+ * numbers in the committed manifests — never a blanket disclaimer and never a
+ * second, drifting constant (PLAN.md §7.8: "the note says the number instead of
+ * a blanket disclaimer"). Returns null when this build carries no measurement.
+ *
+ * The two numbers are deliberately different in kind and the string says which
+ * is which: `overlap` is the ROI IoU between the atlas brain mask and the
+ * image's own head-soft-tissue mask (small BY CONSTRUCTION — the image mask is
+ * a head, the atlas mask is a brain), and `residual` is the centroid offset in
+ * canonical au (1 au = 1.2 mm), which is the number that carries the units.
+ */
+export function imagingAlignmentNote(modality: 'ct' | 'mri'): string | null {
+  const display = gridRegistrationDisplay(modality)
+  if (display === null) return null
+  const r = display.residuals
+  const label = modality === 'ct' ? 'CT' : 'MRI'
+  const maskNote =
+    modality === 'ct'
+      ? 'the CT head-soft-tissue mask (uint8 ≥ 8, no-data 0 excluded)'
+      : 'the T1 head-soft-tissue mask (uint8 ≥ 40)'
+  const applied = display.applied
+    ? `a fitted correction is applied (scale ${display.parameters.su.toFixed(4)} / ${display.parameters.sv.toFixed(4)}, Δ ${display.parameters.duAu.toFixed(2)} / ${display.parameters.dvAu.toFixed(2)} au)`
+    : 'no correction is applied — the committed placement is kept'
+  return (
+    `${label}: ${applied}. Measured against the atlas brain mask on ${r.planesFitted} reference planes (mean overlap ${r.roiIouBefore.toFixed(3)} → ` +
+    `${r.roiIouAfterPerPlaneWinners.toFixed(3)} ROI IoU with the per-plane best fit; ${r.improved} improved, ${r.worsened} got worse, ${r.unchanged} unchanged), ` +
+    `mean centroid offset ${r.meanCentroidResidualBeforeAu.toFixed(2)} → ${r.meanCentroidResidualWithChosenCorrectionAu.toFixed(2)} au, max ${r.maxCentroidResidualBeforeAu.toFixed(2)} au. ` +
+    `The overlap is small by construction: ${maskNote} is a whole head and the atlas mask is a brain. ` +
+    `Method: node scripts/fit-imaging-affine.mjs --report (deterministic coarse-to-fine search, no RNG, no network); re-checked by node scripts/verify/imaging-fit.mjs.`
+  )
+}
+
+/**
+ * The measured photo-plate registration statement: how many of the committed
+ * photographic plates were measured at all, how many the fitter's gate improved
+ * BOTH statistics for (and therefore moved), and — with the count — how many
+ * could not be measured for want of a decoder. Every number is measured; no
+ * plate is described as registered when it was not.
+ */
+export function plateAlignmentNote(): string {
+  const plates = sectionImages.filter((image) => image.fit !== undefined || image.fittedFit !== undefined)
+  const fitted = plates.filter((image) => image.fittedFit !== undefined)
+  const withResidual = fitted.filter((image) => Number.isFinite(image.fittedFit?.residualAu))
+  const worst = withResidual.reduce<number>(
+    (max, image) => Math.max(max, image.fittedFit?.residualAu ?? 0),
+    0,
+  )
+  const best = withResidual.reduce<number>(
+    (min, image) => Math.min(min, image.fittedFit?.residualAu ?? Number.POSITIVE_INFINITY),
+    Number.POSITIVE_INFINITY,
+  )
+  return (
+    `Photographs: every plate keeps its own committed scale/midline fit. ${fitted.length} of ${plates.length} plate records carry a fitted correction that improved BOTH the ` +
+    `overlap with the atlas brain mask and the centroid offset to it (residual after the fit: min ${Number.isFinite(best) ? best.toFixed(2) : 'n/a'} au, worst ${worst.toFixed(2)} au) — ` +
+    `the rest were measured and their committed placement was kept, each with its own measured reason in src/data/sectionImages.ts. ` +
+    `NOT measured at all: JPEG plates (no JPEG decoder exists in this repository and no dependency may be added) and level-mapped micrographs with no anchored plane.`
+  )
+}
 
 /* --------------------------------------------------- integration options */
 
@@ -718,6 +909,11 @@ function getStainImage(image: SectionImage): HTMLImageElement | undefined {
  *    the canonical midline; `dy` is the vertical offset from the view centre
  *    and `mirrorX` flips the plate. This is what makes the plane-anchored UBC
  *    horizontal/coronal photographs land on their `planeValue`.
+ *    **v9 (task `imaging-registration`): the affine used is `image.fittedFit`
+ *    when the fitter measured and accepted one for this plate, else the
+ *    committed `fit`.** `resolvedFit()` below is the ONE place that choice is
+ *    made, so the plate's placement cannot differ between the registered layer
+ *    and the PiP sampler path (both call this function).
  *  - else the default extent-box fit: the full visible world rect, which
  *    centers the midline and puts anterior/superior at the top.
  *
@@ -725,6 +921,12 @@ function getStainImage(image: SectionImage): HTMLImageElement | undefined {
  * or the computed rect is degenerate). `stamp` (a SectionImageLayer) receives
  * the drawn entry's exact credit + source link before painting.
  */
+function resolvedFit(image: SectionImage): SectionImageFit | undefined {
+  const measured = image.fittedFit
+  if (measured !== undefined && Number.isFinite(measured.scale) && measured.scale > 0) return measured
+  return image.fit
+}
+
 function drawStainToView(
   ctx: CanvasRenderingContext2D,
   view: SectionView,
@@ -736,7 +938,8 @@ function drawStainToView(
   if (img === undefined) return false
 
   const legacy = imageLayerOptions.stainFits[image.id]
-  const fit = legacy === undefined && image.axis === sectionAxisOf(view.axis) ? image.fit : undefined
+  const resolved = resolvedFit(image)
+  const fit = legacy === undefined && image.axis === sectionAxisOf(view.axis) ? resolved : undefined
 
   let sx: number
   let sy: number
@@ -870,6 +1073,8 @@ interface GridManifest {
   license?: string
   credit?: string
   attribution?: string
+  /** v9: the measured display-registration block (see gridRegistrationDisplay). */
+  registration?: { display?: ManifestFitDisplay }
 }
 
 /**
@@ -1337,6 +1542,20 @@ function renderGridSlice(
 /**
  * Draw a grid slice (MRI or CT) into a SectionView at its canonical world
  * rect. Shared by the registered layers and by renderSliceToCanvas.
+ *
+ * ── v9 MEASURED DISPLAY CORRECTION (task `imaging-registration`) ───────────
+ * `correction` (default: whatever the modality's own manifest measured and
+ * accepted) is applied HERE, to the destination rect, so the grid's committed
+ * `.bin` payload and its `dims`/`originAu`/`spacingAu` stay byte-identical —
+ * `npm run verify:anatomy` compares those bytes at canonical points against
+ * `54be95a` and requires `max |Δ| 0 of 255`, and a re-bake would move them
+ * (PLAN.md §7.3). The correction is a similarity about the centre of the grid's
+ * own canonical rectangle: `p' = c + (p − c − Δ)·k`, so `k > 1` draws the image
+ * LARGER. On the committed data the CT and MRI manifests carry
+ * `applied: false` (the fitter measured that raising overlap also moved the
+ * centroid away from the atlas — the image mask is a head, the atlas mask is a
+ * brain), and identity is what this function then draws: the parameters are
+ * read, the placement does not move, and the UI states the measured residual.
  */
 function drawGridToView(
   ctx: CanvasRenderingContext2D,
@@ -1348,15 +1567,30 @@ function drawGridToView(
   upsample: number,
   opacity: number,
   colorize?: (sample: number, out: [number, number, number]) => void,
+  correction?: GridDisplayCorrection,
 ): boolean {
   const slice = renderGridSlice(grid, plane.axis, plane.value, wMin, wMax, upsample, colorize)
   if (slice === null) return false
 
   const rect = gridPlaneRect(grid, plane.axis)
-  const sx0 = view.uToSx(rect.uMin)
-  const sy0 = view.vToSy(rect.vMax)
-  const width = view.uToSx(rect.uMax) - sx0
-  const height = view.vToSy(rect.vMin) - sy0
+  const apply = correction ?? { applied: false, su: 1, sv: 1, duAu: 0, dvAu: 0, display: null }
+  // The grid's own in-plane rect centre — the reference point the manifest's
+  // parameters are expressed against (registration.display.frameCenterAu).
+  const centerU = (rect.uMin + rect.uMax) / 2
+  const centerV = (rect.vMin + rect.vMax) / 2
+  const su = apply.applied ? apply.su : 1
+  const sv = apply.applied ? apply.sv : 1
+  const duAu = apply.applied ? apply.duAu : 0
+  const dvAu = apply.applied ? apply.dvAu : 0
+  const uMin = centerU + (rect.uMin - centerU - duAu) * su
+  const uMax = centerU + (rect.uMax - centerU - duAu) * su
+  const vMin = centerV + (rect.vMin - centerV - dvAu) * sv
+  const vMax = centerV + (rect.vMax - centerV - dvAu) * sv
+
+  const sx0 = view.uToSx(uMin)
+  const sy0 = view.vToSy(vMax)
+  const width = view.uToSx(uMax) - sx0
+  const height = view.vToSy(vMin) - sy0
   if (!(width > 0.5 && height > 0.5)) return false
 
   ctx.save()
@@ -1447,6 +1681,8 @@ const mriLayer: SectionImageLayer = {
       wMax,
       imageLayerOptions.mriUpsample,
       layerCtx.opacity,
+      undefined,
+      mriDisplayCorrection,
     )
   },
 }
@@ -1512,6 +1748,7 @@ const ctLayer: SectionImageLayer = {
       imageLayerOptions.ctUpsample,
       layerCtx.opacity,
       ctColorizeFromWindow(window),
+      ctDisplayCorrection,
     )
   },
 }
@@ -1886,6 +2123,8 @@ export function renderSliceToCanvas(
         wMax,
         options.upsample ?? imageLayerOptions.mriUpsample,
         opacity,
+        undefined,
+        mriDisplayCorrection,
       )
       if (drew) {
         credit = MRI_CREDIT
@@ -1908,6 +2147,7 @@ export function renderSliceToCanvas(
         options.upsample ?? imageLayerOptions.ctUpsample,
         opacity,
         ctColorizeFromWindow(window),
+        ctDisplayCorrection,
       )
       if (drew) {
         credit = CT_CREDIT

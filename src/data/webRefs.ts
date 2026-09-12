@@ -60,6 +60,30 @@ const CSF_SECRETION: WebRef = {
   url: 'https://doi.org/10.1152/physrev.00004.2013',
 }
 
+/**
+ * v9 somatotopy sources. The two DOIs are the primary evidence for the map the
+ * 16 segment records describe: Penfield & Boldrey's electrical-stimulation
+ * series is where the homunculus comes from, and the fMRI papers are where its
+ * modern (and partly revised) form comes from. All three DOIs were resolved.
+ */
+const PENFIELD_BOLDREY: WebRef = {
+  source: 'journal',
+  label: 'Penfield & Boldrey 1937 — Somatic motor and sensory representation in the cerebral cortex of man as studied by electrical stimulation (Brain)',
+  url: 'https://doi.org/10.1093/brain/60.4.389',
+}
+
+const FLESHER_HAND_KNOB: WebRef = {
+  source: 'journal',
+  label: 'Yousry et al. 1997 — Localization of the motor hand area to a knob on the precentral gyrus: a new landmark (Brain)',
+  url: 'https://doi.org/10.1093/brain/120.1.141',
+}
+
+const KAAS_SOMATOSENSORY: WebRef = {
+  source: 'journal',
+  label: 'Kaas 1993 — The functional organization of somatosensory cortex in primates (Ann Anat)',
+  url: 'https://doi.org/10.1016/S0940-9602(11)80212-8',
+}
+
 /** Curated map: slug → web refs. Titles are the exact Wikipedia article titles. */
 const curated: Record<string, WebRef[]> = {
   // ---- Diencephalon: Thalamus ----
@@ -466,6 +490,99 @@ const curated: Record<string, WebRef[]> = {
     { source: 'wikipedia', label: 'Wikipedia — Posterior choroidal arteries', url: wiki('Posterior choroidal artery') },
     { source: 'wikipedia', label: 'Wikipedia — Choroid plexus', url: wiki('Choroid plexus') },
     { ...CSF_SECRETION },
+  ],
+
+  // ---- v9: the somatotopic map of the M1 / S1 strips ----
+  // Every one of the 16 segment ids is curated. They all resolve to `'context'`
+  // kind, and getWebRefs() skips the automatic Wikipedia fallback for `'vessel'`
+  // ONLY — context silhouettes are given a fallback like any other kind — so a
+  // fallback here would have produced 16 links to a machine-cleaned display name
+  // ("Primary motor cortex (M1) — hand representation" → a non-existent article).
+  // Curating them is therefore required, not optional. The two stripes point at
+  // their parent area's page, every segment points at the shared homunculus /
+  // somatotopy pages, and the journals are the stimulation and imaging sources
+  // for the map itself (all four DOIs resolved).
+  'ctx-m1-toe': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Paracentral lobule', url: wiki('Paracentral lobule') },
+    { ...PENFIELD_BOLDREY },
+  ],
+  'ctx-m1-leg': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Paracentral lobule', url: wiki('Paracentral lobule') },
+    { ...PENFIELD_BOLDREY },
+  ],
+  'ctx-m1-trunk': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Somatotopic arrangement', url: wiki('Somatotopic arrangement') },
+    { ...PENFIELD_BOLDREY },
+  ],
+  'ctx-m1-arm': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Corticospinal tract', url: wiki('Corticospinal tract') },
+    { ...PENFIELD_BOLDREY },
+  ],
+  'ctx-m1-hand': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Primary motor cortex', url: wiki('Primary motor cortex') },
+    { ...PENFIELD_BOLDREY },
+    { ...FLESHER_HAND_KNOB },
+  ],
+  'ctx-m1-face': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Corticobulbar tract', url: wiki('Corticobulbar tract') },
+    { ...PENFIELD_BOLDREY },
+  ],
+  'ctx-m1-tongue': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Hypoglossal nerve', url: wiki('Hypoglossal nerve') },
+    { ...PENFIELD_BOLDREY },
+  ],
+  'ctx-m1-larynx': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Primary motor cortex', url: wiki('Primary motor cortex') },
+    { source: 'journal', label: 'Simonyan & Horwitz 2011 — Laryngeal motor cortex and control of speech in humans (Neuroscientist)', url: 'https://doi.org/10.1177/1073858410386727' },
+  ],
+  'ctx-s1-toe': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Postcentral gyrus', url: wiki('Postcentral gyrus') },
+    { ...KAAS_SOMATOSENSORY },
+  ],
+  'ctx-s1-leg': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Dorsal column–medial lemniscus pathway', url: wiki('Dorsal column–medial lemniscus pathway') },
+    { ...KAAS_SOMATOSENSORY },
+  ],
+  'ctx-s1-trunk': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Somatotopic arrangement', url: wiki('Somatotopic arrangement') },
+    { ...KAAS_SOMATOSENSORY },
+  ],
+  'ctx-s1-arm': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Posterior column–medial lemniscus pathway', url: wiki('Dorsal column–medial lemniscus pathway') },
+    { ...KAAS_SOMATOSENSORY },
+  ],
+  'ctx-s1-hand': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Two-point discrimination', url: wiki('Two-point discrimination') },
+    { ...KAAS_SOMATOSENSORY },
+    { ...FLESHER_HAND_KNOB },
+  ],
+  'ctx-s1-face': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Postcentral gyrus', url: wiki('Postcentral gyrus') },
+    { ...KAAS_SOMATOSENSORY },
+  ],
+  'ctx-s1-tongue': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Taste', url: wiki('Taste') },
+    { ...KAAS_SOMATOSENSORY },
+  ],
+  'ctx-s1-larynx': [
+    { source: 'wikipedia', label: 'Wikipedia — Cortical homunculus', url: wiki('Cortical homunculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Postcentral gyrus', url: wiki('Postcentral gyrus') },
+    { ...KAAS_SOMATOSENSORY },
   ],
 }
 

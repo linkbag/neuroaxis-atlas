@@ -139,7 +139,30 @@ export const SECTION_UNDERLAY_KINDS: readonly SectionUnderlayKind[] = [
   'none',
 ]
 
-/** Button labels for the same order (real-first first, simulated-only last). */
+/**
+ * Button labels for the same order (real-first first, simulated-only last).
+ *
+ * ── v9 item 4 (`section-ux`): why `none` keeps the bare text ────────────────
+ * The images-off state had to become legible, and the plan's first choice was to
+ * relabel this entry `'Simulated only (no imagery)'`. That change was NOT made,
+ * and the reason is measured rather than stylistic: four call sites in three
+ * gate scripts match this button by its EXACT text, and two of those scripts are
+ * owned by no task in the v9 plan (so nobody could repair them):
+ *
+ *   • scripts/verify/audit.mjs:656 — `/^(Auto \(real-first\)|MRI|CT|Photo|Simulated only)$/`
+ *   • scripts/verify/audit.mjs:716 — clicks the button whose text is exactly `Simulated only`
+ *   • scripts/verify/checks.mjs:523 — `if (requested === 'Simulated only')`
+ *   • scripts/verify/browser-probe.mjs:274 — the same exact-text sweep
+ *
+ * A suffix makes the regex fail and the comparison fall through to
+ * `unknown-modality`, i.e. `verify:audit` / `verify:browser` would report a
+ * product failure that is really a relabelling. The legibility the user asked
+ * for is delivered instead through the three surfaces that ARE in this task's
+ * scope, all fed by ONE string (`SECTION_UNDERLAY_KIND_DESCRIPTIONS.none`):
+ * the button's accessible name (`aria-label`), the live-section toolbar's state
+ * line, and the panel's own imagery line. The accessible name still CONTAINS the
+ * visible label, so WCAG 2.5.3 (label in name) holds.
+ */
 export const SECTION_UNDERLAY_KIND_LABELS: Record<SectionUnderlayKind, string> = {
   auto: 'Auto (real-first)',
   mri: 'MRI',
@@ -147,6 +170,39 @@ export const SECTION_UNDERLAY_KIND_LABELS: Record<SectionUnderlayKind, string> =
   stain: 'Photo',
   none: 'Simulated only',
 }
+
+/**
+ * What each modality button actually DOES, in one sentence — the v9 item 4
+ * "a label that says what it does" text, kept next to the short button label so
+ * the two can never drift. Used as the button's accessible name / tooltip, in
+ * the live-section toolbar's imagery state line and in the panel's imagery line.
+ */
+export const SECTION_UNDERLAY_KIND_DESCRIPTIONS: Record<SectionUnderlayKind, string> = {
+  auto: 'Auto (real-first): draw the best real modality that covers this plane, else the simulated section',
+  mri: 'MRI: draw the real T1w MRI slice at this plane',
+  ct: 'CT: draw the real CT slice at this plane (brain / bone window)',
+  stain: 'Photo: draw the real photographed section at this plane',
+  none: 'Simulated only (no imagery): draw the simulated section and nothing external',
+}
+
+/**
+ * The one images-off statement (v9 item 4). Renderers of the state use this
+ * string VERBATIM instead of retyping it, so the toolbar, the panel and the
+ * backdrop hint can never describe the same state three different ways. It says
+ * what is switched off, not merely that no imagery was found: the whole point of
+ * the item is that "off" and "unavailable" are different states.
+ */
+export const IMAGERY_OFF_STATEMENT =
+  'real imagery is switched off — the simulated section is shown on its own'
+
+/**
+ * The panel's own statement (v9 item 5). The simulated-section panel never
+ * paints a CT/MRI slice or a photograph, whatever the Plates tab's modality is,
+ * so its line names the withholding rather than a coverage limit.
+ */
+export const PIP_IMAGERY_WITHHELD_STATEMENT =
+  'real imagery is withheld in this panel — the simulated section is shown on its own; ' +
+  'the Plates tab draws the overlay for the same plane'
 
 /** CT display-window presets baked into `ct-manifest.json` → `windows`. */
 export type CtWindowPreset = 'brain' | 'bone'
@@ -189,6 +245,91 @@ export interface SectionUnderlay {
 
 /** localStorage key persisting underlay prefs (same pattern as quality). */
 export const SECTION_UNDERLAY_STORAGE_KEY = 'neuroaxis.sectionUnderlay'
+
+/* ------------------------------------------- v9 §2/§4/§5: store additions */
+/* (plan §6 table: `sectionLobes`, `sectionPipSize` — both owned by task      */
+/*  `section-ux`; `SectionCanvas` already READS `sectionLobes` defensively,   */
+/*  so landing the field here is what makes its own toggle authoritative.)    */
+
+/**
+ * localStorage key persisting the cortical-division layer toggle (v9 §2, plan
+ * §6). `'1'`/`'0'`; absent means off. `SectionCanvas` reads the same key as its
+ * fallback, so the layer works in either direction and the persisted preference
+ * survives a hot update — see its `readLobeLayerFlag`.
+ */
+export const SECTION_LOBES_STORAGE_KEY = 'neuroaxis.sectionLobes'
+
+/** localStorage key persisting the simulated-section panel's window size (v9 §5).
+ *  JSON `{width, height}` in CSS px; clamped on read, never trusted. */
+export const SECTION_PIP_SIZE_STORAGE_KEY = 'neuroaxis.sectionPipSize'
+
+/**
+ * The panel's window size (CSS px) — v9 §5 requirement 4: "the user can change
+ * the panel's size; the choice persists across reloads".
+ */
+export interface SectionPipSize {
+  width: number
+  height: number
+}
+
+/**
+ * The size window the panel clamps every size to. The bounds are the plan's
+ * (§5.4 item 4, `[224, 880] × [170, 640]`): the minimum is the old `pip-small`
+ * box — below it the section stops being readable — and the maximum is roughly
+ * half the viewer pane on a 1440 px-wide window, so the panel can never swallow
+ * the model it annotates.
+ */
+export const SECTION_PIP_SIZE_MIN: SectionPipSize = { width: 224, height: 170 }
+export const SECTION_PIP_SIZE_MAX: SectionPipSize = { width: 880, height: 640 }
+export const DEFAULT_SECTION_PIP_SIZE: SectionPipSize = { ...SECTION_PIP_SIZE_MIN }
+
+/** The two named stops the `▴/▾` button cycles through (the older CSS presets). */
+export const SECTION_PIP_SIZE_PRESETS: Record<'small' | 'large', SectionPipSize> = {
+  small: { width: 224, height: 170 },
+  large: { width: 348, height: 262 },
+}
+
+/**
+ * Clamp one size into the window above. Pure, exported and total (any input,
+ * including NaN/Infinity/negative/non-integer, comes back as an integer inside
+ * the bounds) — it is applied on READ from localStorage as well as on every
+ * drag frame, because `neuroaxis.sectionPipSize` is a user-writable value.
+ */
+export function clampSectionPipSize(size: Partial<SectionPipSize> | null | undefined): SectionPipSize {
+  const bound = (value: unknown, min: number, max: number, fallback: number): number => {
+    if (typeof value !== 'number' || !Number.isFinite(value)) return fallback
+    return Math.min(max, Math.max(min, Math.round(value)))
+  }
+  const source = size ?? {}
+  return {
+    width: bound(source.width, SECTION_PIP_SIZE_MIN.width, SECTION_PIP_SIZE_MAX.width, DEFAULT_SECTION_PIP_SIZE.width),
+    height: bound(
+      source.height,
+      SECTION_PIP_SIZE_MIN.height,
+      SECTION_PIP_SIZE_MAX.height,
+      DEFAULT_SECTION_PIP_SIZE.height,
+    ),
+  }
+}
+
+/** True when `size` is byte-for-byte one of the named presets. */
+export function sectionPipSizePresetOf(size: SectionPipSize): 'small' | 'large' | 'custom' {
+  for (const name of ['small', 'large'] as const) {
+    const preset = SECTION_PIP_SIZE_PRESETS[name]
+    if (preset.width === size.width && preset.height === size.height) return name
+  }
+  return 'custom'
+}
+
+/**
+ * The next stop of the `▴/▾` size button: small → large → small, and any custom
+ * (dragged) size returns to the small stop. Pure, so the cycle is testable.
+ */
+export function nextSectionPipSize(size: SectionPipSize): SectionPipSize {
+  return sectionPipSizePresetOf(size) === 'small'
+    ? { ...SECTION_PIP_SIZE_PRESETS.large }
+    : { ...SECTION_PIP_SIZE_PRESETS.small }
+}
 
 /**
  * Version stamped into the persisted payload. A payload without it was written
@@ -292,6 +433,67 @@ function persistSectionUnderlay(settings: SectionUnderlay): void {
   }
 }
 
+/**
+ * v9 §2 — the cortical-division layer toggle. `'1'`/`'0'`; anything else (absent,
+ * corrupt, storage disabled) is OFF, which is the plan's default (§6 table).
+ */
+function initialSectionLobes(): boolean {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const raw = window.localStorage.getItem(SECTION_LOBES_STORAGE_KEY)
+      if (raw === '1') return true
+      if (raw === '0') return false
+    }
+  } catch {
+    /* private mode — the layer still works, it just does not stick */
+  }
+  return false
+}
+
+/** Persist the layer toggle in the same `'1'`/`'0'` form the canvas reads. */
+function persistSectionLobes(on: boolean): void {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(SECTION_LOBES_STORAGE_KEY, on ? '1' : '0')
+    }
+  } catch {
+    /* storage unavailable — the toggle still applies for this session */
+  }
+}
+
+/**
+ * v9 §5 — the panel's window size. Parsed and CLAMPED on read (a stored value is
+ * user-writable: a missing field, a string, NaN, a 10 000 px box or malformed
+ * JSON must all resolve to a usable size rather than to a broken panel).
+ */
+function initialSectionPipSize(): SectionPipSize {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const raw = window.localStorage.getItem(SECTION_PIP_SIZE_STORAGE_KEY)
+      if (raw !== null) {
+        const parsed: unknown = JSON.parse(raw)
+        if (parsed !== null && typeof parsed === 'object') {
+          return clampSectionPipSize(parsed as Partial<SectionPipSize>)
+        }
+      }
+    }
+  } catch {
+    /* private mode / malformed JSON — fall through to the default */
+  }
+  return { ...DEFAULT_SECTION_PIP_SIZE }
+}
+
+/** Persist the panel size (same best-effort contract as the other keys). */
+function persistSectionPipSize(size: SectionPipSize): void {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(SECTION_PIP_SIZE_STORAGE_KEY, JSON.stringify(size))
+    }
+  } catch {
+    /* storage unavailable — the size still applies for this session */
+  }
+}
+
 export interface AtlasLayers {
   regions: Set<Region>
   kinds: Set<Kind>
@@ -339,6 +541,10 @@ export interface AtlasState {
   sectionAxis: SectionAxis
   /** v3: real-imaging underlay knobs for the section canvas (plan §2.3). */
   sectionUnderlay: SectionUnderlay
+  /** v9 §2 (plan §6): the cortical-division layer, on the 2D live section. */
+  sectionLobes: boolean
+  /** v9 §5 (plan §6): the simulated-section panel's window size, in CSS px. */
+  sectionPipSize: SectionPipSize
 }
 
 export interface AtlasActions {
@@ -370,6 +576,18 @@ export interface AtlasActions {
    * (brain/bone).
    */
   setSectionUnderlay: (partial: Partial<SectionUnderlay>) => void
+  /**
+   * v9 §2 — switch the cortical-division layer of the 2D live section and
+   * persist it (`neuroaxis.sectionLobes`, `'1'`/`'0'`). `SectionCanvas` calls
+   * this through the store when the field exists (its own fallback keeps the
+   * toggle working if it does not).
+   */
+  setSectionLobes: (on: boolean) => void
+  /**
+   * v9 §5 — set the simulated-section panel's window size, clamped to
+   * `[224, 880] × [170, 640]` and persisted (`neuroaxis.sectionPipSize`).
+   */
+  setSectionPipSize: (size: Partial<SectionPipSize>) => void
   /** Level-ruler / level-chip navigation: cut the plane + open the level's plate. */
   gotoLevel: (levelId: string) => void
 }
@@ -833,6 +1051,8 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
   quality: initialQuality(),
   sectionAxis: 'y',
   sectionUnderlay: initialSectionUnderlay(),
+  sectionLobes: initialSectionLobes(),
+  sectionPipSize: initialSectionPipSize(),
 
   selectStructure: (id, opts) =>
     set((s) => ({
@@ -941,6 +1161,25 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
       return { sectionUnderlay: merged }
     }),
 
+  setSectionLobes: (on) => {
+    // Persist first (best effort), then publish: the canvas' own fallback reads
+    // the same key, so a failed write must not block the toggle itself.
+    persistSectionLobes(on)
+    set({ sectionLobes: on })
+  },
+
+  setSectionPipSize: (size) =>
+    set((s) => {
+      // Field-wise merge with the CURRENT size (a partial write or a NaN from a
+      // broken drag must never silently reset the other dimension), then clamp.
+      const merged = clampSectionPipSize({
+        width: isFiniteNumber(size.width) ? size.width : s.sectionPipSize.width,
+        height: isFiniteNumber(size.height) ? size.height : s.sectionPipSize.height,
+      })
+      persistSectionPipSize(merged)
+      return { sectionPipSize: merged }
+    }),
+
   gotoLevel: (levelId) =>
     set((s) => {
       const level = getLevel(levelId)
@@ -953,6 +1192,75 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
       }
     }),
 }))
+
+/* ------------------------------------- v9 §5: the panel's imagery scope */
+
+/**
+ * ── WHY THIS EXISTS ────────────────────────────────────────────────────────
+ * v9 item 5 requires the simulated-section panel to show the simulated section
+ * and NOTHING ELSE: "no CT/MRI slice or photograph ever, independently of the
+ * Plates tab's modality". The panel's content is a `SectionCanvas` instance
+ * (plan §0a — one renderer, no duplicated draw code), and `SectionCanvas` reads
+ * `state.sectionUnderlay.kind` verbatim: it is task `cortical-lobes`' file and
+ * takes no imagery prop. So the only way to have THAT instance resolve the
+ * images-off state — without forking the renderer, without touching another
+ * task's file, and without pretending the imagery is unavailable — is to hold
+ * the store's imagery request in the images-off state while the panel's canvas
+ * is mounted.
+ *
+ * WHAT THIS DELIBERATELY DOES NOT DO:
+ *  • it never calls `persistSectionUnderlay`, so `neuroaxis.sectionUnderlay`
+ *    (the user's own choice, schemaVersion 2) is untouched on disk — a reload
+ *    while the panel is up still restores the Plates tab's modality;
+ *  • it is reference-counted and idempotent, so a StrictMode double-mount or a
+ *    second panel instance cannot leak the override;
+ *  • the release writes only the `kind` back onto whatever the live object is at
+ *    that moment, so a write that happened WHILE the scope was held (an opacity
+ *    or window change) is kept rather than clobbered by the saved snapshot.
+ *
+ * The scope is paired with an independent, unconditional pixel guard in
+ * `viewer3d/PipSection.tsx` (no `drawImage` can reach the panel's canvas at
+ * all), so the guarantee does not depend on this override being applied — it is
+ * the difference between "the panel does not ask for imagery" and "the panel
+ * cannot receive it".
+ */
+export const sectionPipImageryScope: {
+  /** How many panel canvases currently hold the scope (0 = inactive). */
+  depth: number
+  /** The user's own underlay while the scope is held (null when inactive). */
+  saved: SectionUnderlay | null
+} = { depth: 0, saved: null }
+
+/**
+ * Hold the store in the images-off state until the returned disposer runs.
+ * Returns a disposer that is safe to call more than once.
+ */
+export function beginSectionPipImageryScope(): () => void {
+  if (sectionPipImageryScope.depth === 0) {
+    const current = useAtlasStore.getState().sectionUnderlay
+    sectionPipImageryScope.saved = current
+    if (current.kind !== 'none') {
+      // LIVE value only — no persistence (see the block comment above).
+      useAtlasStore.setState({ sectionUnderlay: { ...current, kind: 'none' } })
+    }
+  }
+  sectionPipImageryScope.depth += 1
+
+  let released = false
+  return () => {
+    if (released) return
+    released = true
+    sectionPipImageryScope.depth = Math.max(0, sectionPipImageryScope.depth - 1)
+    const saved = sectionPipImageryScope.saved
+    if (sectionPipImageryScope.depth > 0 || saved === null) return
+    sectionPipImageryScope.saved = null
+    const live = useAtlasStore.getState().sectionUnderlay
+    if (live.kind !== saved.kind) {
+      // Only the field this scope wrote is restored.
+      useAtlasStore.setState({ sectionUnderlay: { ...live, kind: saved.kind } })
+    }
+  }
+}
 
 /**
  * The id set that should stay lit while everything else dims: an open syndrome

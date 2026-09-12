@@ -22,6 +22,12 @@ import type {
 } from '../types'
 import taxonomyJson from './taxonomy.json'
 import levelsJson from './levels.json'
+// v9: the somatotopic map's tree order. A pure data module (no three.js), so the
+// data layer can import it: the 16 M1/S1 segment records are children of ctx-m1 /
+// ctx-s1, and `somatotopyTreeOrder` is what puts each strip's children in
+// toe → leg → trunk → arm → hand → face → tongue → larynx order instead of
+// alphabetical order (which would be anatomically meaningless here).
+import { somatotopyTreeOrder } from '../geometry/somatotopy'
 
 export interface LevelAnchor { id: string; name: string; y: number }
 
@@ -343,7 +349,20 @@ function buildTree(): TreeRegion[] {
     const subdivisions: TreeSubdivision[] = [...subdivisionMap.entries()]
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([name, entries]) => {
-        const sorted = entries.slice().sort((a, b) => a.name.localeCompare(b.name))
+        // v9: somatotopy segments sort by their own rank first (finite ranks
+        // before non-somatotopy entries, which return +∞), then everything else
+        // keeps the alphabetical order it has always had. Both strips rank
+        // 0..7 independently, and children are grouped per parent below, so the
+        // two strips never interleave.
+        const sorted = entries.slice().sort((a, b) => {
+          const rankA = somatotopyTreeOrder(a.id)
+          const rankB = somatotopyTreeOrder(b.id)
+          const finiteA = Number.isFinite(rankA)
+          const finiteB = Number.isFinite(rankB)
+          if (finiteA && finiteB && rankA !== rankB) return rankA - rankB
+          if (finiteA !== finiteB) return finiteA ? -1 : 1
+          return a.name.localeCompare(b.name)
+        })
         const leafById = new Map(
           sorted.map((entry) => [entry.id, {
             entry,

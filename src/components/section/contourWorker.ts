@@ -19,6 +19,28 @@
  *
  * The worker imports only the pure math module (contours.ts) — no three.js,
  * no DOM — so its bundle stays tiny.
+ *
+ * v9 `cortical-lobes` — WHERE THE CORTICAL PARTITION LIVES (read this before
+ * adding a field to the protocol). The rough cortical-division layer of the
+ * live section (frontal / parietal / temporal / occipital / insula / limbic) is
+ * computed ON THE MAIN THREAD by `corticalLobes.classifyCorticalPoint`, applied
+ * to the contour vertices this worker already returns. It is deliberately NOT
+ * here:
+ *
+ *   - the protocol below (`SectionContourPart = { slug, loops }`) is the
+ *     contract `scripts/verify/section-pipeline.mjs` reproduces in Node, so a
+ *     new field is regression risk for a gate that must stay exit 0;
+ *   - the classification is O(1) per vertex with no geometry access, so moving
+ *     it into the worker would buy nothing and would duplicate the boundary
+ *     constants (the worker cannot import a module that imports nothing else
+ *     without growing its bundle);
+ *   - the canvas needs the per-division RUNS, not per-vertex tags, and it needs
+ *     them in the plane frame it draws in — it builds them from `loops` with the
+ *     shared `planeGeometry.AXIS_PAIR`.
+ *
+ * Consequence: `loops` and every other message in this file are UNCHANGED by
+ * the v9 cortical-lobes task, and switching the layer on or off cannot change
+ * what the worker computes.
  */
 import { boundsMayCut, extractContours, partBounds } from './contours'
 import type { PlaneAxis, PlaneSpec } from './contours'

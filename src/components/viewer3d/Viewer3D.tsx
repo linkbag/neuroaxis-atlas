@@ -16,14 +16,21 @@
  * Mounts SceneLayers (all data-driven meshes), PlaneHelpers (cut indicators),
  * the ClipControls / ExplodeSlider overlays, the PostFX composer
  * (realism plan §1 Layer 3 post-fx task) when quality is 'high', and the
- * SectionPiP GPU live-section picture-in-picture (v3 plan §2.1) — the
- * in-canvas renderer inside the Canvas, the dockable bottom-right panel
- * beside it (visible by default; hidden via the panel's hide button and
- * persisted in localStorage under neuroaxis.sectionPip), plus the v5 restore
+ * simulated-section panel (v9 items 4+5, `SectionPiP.tsx`) — the dockable
+ * bottom-right panel beside the canvas (visible by default; hidden via the
+ * panel's hide button and persisted in localStorage under
+ * neuroaxis.sectionPip), plus the v5 restore
  * control (`SectionPiPRestoreButton`, UX_FIXES_PLAN Feature 1) that takes the
  * panel's place in that same bottom-right corner whenever the flag is false —
  * so the hidden state is reversible instead of stranding the feature behind a
  * cleared localStorage.
+ *
+ * v9 REMOVAL NOTE: this file used to mount `SectionPiP` (default export) INSIDE
+ * the `<Canvas>`: a second orthographic camera rendering the clipped 3D scene
+ * into a private render target, blitted into the panel's viewport rect. That
+ * renderer is gone (see `SectionPiP.tsx`'s header for the full retirement
+ * record), so the `<Canvas>` subtree now contains no PiP work at all and the
+ * panel is pure DOM + a 2D canvas.
  *
  * Exports: default Viewer3D plus the named pieces so integration (and tests)
  * can compose or mount them independently.
@@ -36,8 +43,7 @@
  * message and no way back — the only recovery was a page reload the user had
  * no reason to know about.
  *
- * The contract implemented here (and mirrored by the PiP, see
- * `SectionPiP.tsx` — this file's recipe is what that panel applies):
+ * The contract implemented here:
  *
  *  1. `webglcontextlost` on the R3F canvas element (`gl.domElement`):
  *     `event.preventDefault()` FIRST — without it the browser never fires the
@@ -49,10 +55,11 @@
  *     the PMREM environment (remounted through `envGeneration`), three's
  *     internal GL state (`gl.resetState()`), the renderer settings
  *     (`localClippingEnabled`, ACES tone mapping + exposure, sRGB output) — then
- *     force exactly one frame and resume the loop. Clipping planes and stencil
- *     state are re-applied by their owners on that frame (ClipSync re-runs the
- *     store's planes; the PiP re-assigns its own stencil/clipping materials from
- *     `useFrame`), which is why a forced frame is part of the restore recipe.
+ *     force exactly one frame and resume the loop. GL state owned by the scene is
+ *     re-applied by its owner on that frame (ClipSync re-runs the store's clip
+ *     planes), which is why a forced frame is part of the restore recipe.
+ *     v9: the PiP no longer has a share of this recipe — the panel it names today
+ *     is DOM + a 2D canvas and owns no GL resource at all (SectionPiP.tsx).
  *  3. The overlay is `role="alert"`, says "Graphics context lost — restoring…",
  *     and carries a click-to-restore button that requests restoration through
  *     `WEBGL_lose_context.restoreContext()`. It is unmounted unless a loss is
@@ -71,37 +78,41 @@
  *     component — overlay included. Two independent fixes: PostFX is not mounted
  *     while `contextPhase !== null`, and every R3F child is wrapped in
  *     `CanvasSceneBoundary` (fallback `null`, DOM notice below), so a throw in
- *     the scene, the post stack or the PiP is contained in-canvas and this
+ *     the scene or the post stack is contained in-canvas and this
  *     component keeps rendering.
  *
- * ── v4 PiP real-imagery state (IMAGING_V4_PLAN §2 gap 4 + §4, task
- *    `integration-v4`) ─────────────────────────────────────────────────────
- * `pip-backdrop` DID land the GPU backdrop path (the evidence-based decision is
- * documented in SectionPiP's header and in the FALLBACK section below), so the
- * plan §4 fallback — "PiP unchanged + a note in the panel that the real-imagery
- * view lives in the Plates tab" — is not the shipping path and there is no
- * permanent "see the Plates tab" banner on a healthy build.
- *
- * What this file DOES surface is the honest state of that backdrop, because the
- * panel is otherwise silent about it: `SectionPipHint` below reads the live
- * diagnostics (`sectionPipDiagnostics.backdropReason`, written by the renderer
- * every frame) and shows, only while the PiP is visible and only while the
- * active modality genuinely cannot paint at the current plane, one line under
- * the panel saying what the panel is showing instead — the pure GPU cut.
- *   • 'unavailable' — an explicit modality with no data in this build (e.g. a
- *     CT grid that was never baked): the hint names the Plates tab, where the
- *     modality buttons are disabled with the same reason and the live-section
- *     canvas renders the full-resolution real slice for every modality that IS
- *     embedded.
+ * ── v9 items 4+5: the panel's honest state line (task `section-ux`) ───────
+ * The bottom-right panel is now a SIMULATED-SECTION panel: it shows the same
+ * worker-clipped 2D section the Plates tab computes, never the 3D cut, never a
+ * plane helper and never real imagery (see `SectionPiP.tsx` and
+ * `PipSection.tsx`). What this file still surfaces, because the panel itself is
+ * deliberately quiet about imagery, is the imagery REQUEST's state:
+ * `SectionPipHint` below reads the panel's lean published diagnostics
+ * (`sectionPipDiagnostics`: planeValue / backdropAxis / backdropRequested /
+ * backdropModality / backdropReason, written by the panel on store changes and
+ * on a self-stopping 1 s tick while the grids load) and shows, only while the
+ * PiP is visible, one line under the panel saying BOTH halves of the truth:
+ * what the panel is showing (the simulated section) and what the active
+ * modality request has at this plane on the Plates canvas.
+ *   • requested 'none' — the v9 images-off state: the line states that real
+ *     imagery is switched off (never a coverage excuse for a state the user
+ *     chose).
+ *   • 'unavailable' — the modality has no data in this build at all: the hint
+ *     names the Plates tab, where the modality buttons are disabled with the
+ *     same reason.
  *   • 'loading'     — the volume/plate is still arriving; the hint says so and
- *     disappears on its own when the sampler's next redraw paints it.
+ *     disappears on its own when the data lands.
  *   • 'no-anchor'   — a requested photograph has no plate anchored at this
- *     plane; the hint states it rather than leaving an unexplained black panel.
+ *     plane; the hint states it rather than leaving the line unexplained.
+ *   • 'beyond-source' — a CT plane above the Visible Human series' measured
+ *     apex: the line carries the SAME `ctCoverageStatement` the Plates toolbar
+ *     and the live canvas show, verbatim (one number, one sentence, three
+ *     surfaces).
  * The element is fed through requestAnimationFrame with a textContent compare
  * and a `hidden` flip, so it costs no React render and never touches the GL
- * frame; it is empty (and unpainted) in the steady state, where the real slice
- * IS in the render target and the panel's own credit line is the visible
- * attribution (SectionPiPPanel's PipAttribution).
+ * frame. It is empty (and unpainted) whenever the imagery request resolves at
+ * this plane — the panel's own in-window line ("simulated section only · real
+ * imagery kept in the Plates tab (CT)") covers the steady state.
  */
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import type { ReactElement } from 'react'
@@ -109,7 +120,7 @@ import * as THREE from 'three'
 import { Canvas, useThree, type RootState } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
-import { useAtlasStore } from '../../state/store'
+import { IMAGERY_OFF_STATEMENT, useAtlasStore } from '../../state/store'
 import {
   retryTimedOutAnatomyAssets,
   subscribeAnatomyTimeouts,
@@ -122,7 +133,6 @@ import PlaneHelpers from './PlaneHelpers'
 import PostFX from './PostFX'
 import CanvasSceneBoundary from './CanvasSceneBoundary'
 import {
-  SectionPiP,
   SectionPiPPanel,
   SectionPiPRestoreButton,
   sectionPipDiagnostics,
@@ -260,15 +270,16 @@ interface CanvasContextRecoveryProps {
  * frame when it comes back.
  *
  * Why the loop must be frozen: with no context every draw call is a no-op and
- * three's renderer would keep walking the whole scene graph (84 meshes, the
- * PiP's extra passes) on every animation frame, for nothing. `setFrameloop
+ * three's renderer would keep walking the whole scene graph (84 meshes) on every
+ * animation frame, for nothing. `setFrameloop
  * ('never')` is R3F's own supported way to stop scheduling frames, and
  * `advance(timestamp, true)` is its supported way to force one by hand.
  *
  * The first-mount branch exists because this effect is also responsible for
  * putting the loop back where the Canvas started it: `frameloop` is 'always'
  * unless a mounted `useFrame` consumer with priority > 0 takes rendering over
- * (PostFX at priority 1, the PiP at priority 2), and neither of those changes
+ * (PostFX at priority 1, and the retired PiP renderer at priority 2 — v9 removed
+ * that second consumer, see SectionPiP.tsx), and that does not change
  * `state.frameloop`, so restoring 'always' is always correct.
  */
 function CanvasContextRecovery({
@@ -293,9 +304,8 @@ function CanvasContextRecovery({
       return
     }
     // Exactly one synchronous-ish frame, so the restore is visible even before
-    // the next animation frame: it re-runs every registered `useFrame` (the PiP
-    // re-assigns its own clipping/stencil materials there) and redraws the
-    // main view.
+    // the next animation frame: it re-runs every registered `useFrame` (PostFX's
+    // present) and redraws the main view.
     state.advance(performance.now(), true)
     state.invalidate(2)
   }, [contextLost, stateRef, envGeneration])
@@ -473,7 +483,7 @@ export function CanvasSceneFailureNotice({
   )
 }
 
-/* ------------------------------- v4 PiP real-imagery state hint */
+/* ------------------------------- v9 panel: imagery-request state hint */
 
 /** Modality names for the hint sentence (indexed by the sampler's union). */
 const MODALITY_WORDS: Record<string, string> = {
@@ -484,65 +494,83 @@ const MODALITY_WORDS: Record<string, string> = {
   none: '',
 }
 
-/** Live input for the hint: exactly the fields the renderer publishes. */
+/**
+ * What the panel itself is showing, on every branch below. Stated in one place
+ * because the panel's content no longer depends on the modality at all: since
+ * v9 it is always the simulated 2D section (items 4+5).
+ */
+const PANEL_SUBJECT = 'this panel shows the simulated section'
+
+/** Live input for the hint: exactly the fields the panel publishes. */
 export interface PipBackdropState {
-  /** Modality the store asked for ('none' = "simulated only"). */
+  /** Modality the store asked for ('none' = the images-off state, item 4). */
   requested: string
-  /** Modality that actually painted ('none' when nothing did). */
+  /** Modality that WOULD paint on the Plates canvas at this plane. */
   modality: string
-  /** '' = painted (or 'none'); 'unavailable' | 'no-anchor' | 'loading' otherwise. */
+  /** '' = it would paint; 'unavailable' | 'no-anchor' | 'loading' | 'beyond-source' otherwise. */
   reason: string
 }
 
 /**
- * The honest one-line state of the PiP backdrop, or null when the panel is
- * showing real imagery (or is explicitly in "simulated only" mode). Pure and
- * exported so QA can check every branch without a GL context — this is the
- * PiP-side counterpart of SectionCanvas' `imageryHint`.
+ * The honest one-line state of the imagery REQUEST under the panel, or null when
+ * there is nothing to explain (the request resolves at this plane, or the panel
+ * is hidden). Pure and exported so QA can check every branch without a GL
+ * context — this is the PiP-side counterpart of SectionCanvas' `imageryHint`.
  *
- * It is deliberately NOT a permanent "see the Plates tab" banner: the panel
- * carries the real slice whenever a modality covers the plane, and a banner in
- * that state would be the opposite of honest. See the file header for the
- * fallback decision.
+ * Rewritten for v9 items 4+5. Before this, the line described the real-slice
+ * BACKDROP the panel painted behind the 3D cut; that backdrop is gone, so every
+ * branch now states what this panel shows (the simulated section) as well as the
+ * state of the request — and the images-off state, which used to return null
+ * ("nothing to explain"), is now stated in words, because "the user switched
+ * imagery off" is exactly the state item 4 requires to be legible.
+ *
+ * It is deliberately NOT a permanent "see the Plates tab" banner: with the
+ * request resolving at this plane the line is empty and the panel's own window
+ * line carries the steady state. See the file header.
  */
 export function pipBackdropHint(
   state: PipBackdropState,
   coverageStatement: string | null = null,
 ): string | null {
+  if (state.requested === 'none') {
+    // Item 4: the images-off state. Never a coverage excuse — the imagery is
+    // switched off, which is a choice, not a missing dataset.
+    return `${IMAGERY_OFF_STATEMENT} — ${PANEL_SUBJECT}; the Plates tab keeps every modality`
+  }
   if (!(state.reason.length > 0)) return null
-  if (state.requested === 'none') return null
-  // `modality` is what the sampler RESOLVED even when it could not paint, so
+  // `modality` is what the resolution RESOLVED even when it could not paint, so
   // 'auto' can still name the modality it was waiting on.
   const resolved = state.modality !== 'none' ? state.modality : state.requested
   const word = MODALITY_WORDS[resolved] ?? resolved
   if (state.reason === 'loading') {
     return resolved === 'auto'
-      ? 'real imagery for this plane is still loading'
-      : `the real ${word} imagery for this plane is still loading`
+      ? `real imagery for this plane is still loading — ${PANEL_SUBJECT}`
+      : `the real ${word} imagery for this plane is still loading — ${PANEL_SUBJECT}`
   }
   if (state.reason === 'no-anchor') {
-    return 'no photograph is anchored at this plane — see the Plates tab for the anchored series and the other modalities'
+    return `no photograph is anchored at this plane — ${PANEL_SUBJECT}; the Plates tab lists the anchored series and the other modalities`
   }
   if (state.reason === 'unavailable') {
-    // The grid/plate data is not in this build at all: the panel is showing the
-    // pure GPU cut, the Plates tab is where the embedded modalities are listed
-    // (disabled buttons carry the same reason) and the live section renders.
+    // The grid/plate data is not in this build at all: the Plates tab is where
+    // the embedded modalities are listed (disabled buttons carry the same
+    // reason) and where the live section renders.
     return resolved === 'auto'
-      ? 'no embeddable real imagery in this build — see the Plates tab for the modality list and the live section'
-      : `no embeddable ${word} imagery in this build — see the Plates tab for the modalities that are embedded`
+      ? `no embeddable real imagery in this build — ${PANEL_SUBJECT}; the Plates tab lists the modality list and the live section`
+      : `no embeddable ${word} imagery in this build — ${PANEL_SUBJECT}; the Plates tab lists the modalities that are embedded`
   }
   if (state.reason === 'beyond-source') {
     // v7 closure (gap 3): a CT plane above the Visible Human series' measured
     // apex. The grid is loaded and healthy — the SOURCE has no data there for any
-    // canonical box — so the panel states the measured limit (the same sentence
-    // the Plates toolbar and the live section show) rather than the previous
-    // fallback, which printed the internal token "beyond-source".
-    return (
+    // canonical box — so the line states the measured limit (the same sentence
+    // the Plates toolbar and the live section show) rather than the internal
+    // token, and that sentence is included VERBATIM so the three surfaces cannot
+    // state different numbers.
+    const coverage =
       coverageStatement ??
       `no real ${word} imagery at this plane — see the Plates tab for the coverage limit and the other modalities`
-    )
+    return `${coverage} — ${PANEL_SUBJECT}`
   }
-  return `real imagery unavailable at this plane (${state.reason}${resolved === 'auto' ? '' : `; ${word}`})`
+  return `real imagery unavailable at this plane (${state.reason}${resolved === 'auto' ? '' : `; ${word}`}) — ${PANEL_SUBJECT}`
 }
 
 /**
@@ -866,10 +894,9 @@ export default function Viewer3D() {
               throw in the scene or in the post stack can no longer be re-thrown
               by R3F's own boundary into the DOM tree — which is what unmounted
               Viewer3D (and the context-loss overlay with it) during the audit's
-              context-loss gate. The key is the Retry reset only: the scene and
-              the PiP deliberately keep the pre-existing restore semantics (three
-              re-uploads its own resources; the PiP rebuilds its rig from
-              `pipContextState.restores`), so a context restore does NOT remount
+              context-loss gate. The key is the Retry reset only: the scene
+              deliberately keeps the pre-existing restore semantics (three
+              re-uploads its own resources), so a context restore does NOT remount
               the whole model. PostFX, which owns render targets, IS rebuilt on
               restore — see its key below. */}
           <CanvasSceneBoundary
@@ -893,18 +920,14 @@ export default function Viewer3D() {
           >
             <PostFX enabled={quality === 'high'} quality={quality} contextLost={contextPhase !== null} />
           </CanvasSceneBoundary>
-          {/* GPU live-section PiP (v3 plan §2.1): renders the scene from the
-              section-aligned orthographic camera after PostFX presents, and
-              only while the panel below is visible. */}
-          {sectionPipVisible ? (
-            <CanvasSceneBoundary
-              key={`pip-${sceneGeneration}`}
-              name="Live-section PiP"
-              onError={onSceneError}
-            >
-              <SectionPiP visible={sectionPipVisible} windowRef={sectionPipWindowRef} />
-            </CanvasSceneBoundary>
-          ) : null}
+          {/* v9 (items 4+5): the panel is pure DOM + a 2D canvas and is mounted
+              OUTSIDE this <Canvas> (see the panel markup below), so the canvas
+              subtree now contains no PiP work at all. The retired in-canvas
+              renderer (`SectionPiP`, a second orthographic camera + private
+              render target + stencil/MSAA rig + real-slice backdrop) is deleted
+              rather than hidden behind a toggle — its retirement record is in
+              SectionPiP.tsx, and the panel's DOM sibling below is what the user
+              sees. */}
           <OrbitControls
             makeDefault
             enableDamping
@@ -924,6 +947,9 @@ export default function Viewer3D() {
         <ClipControls />
       </div>
       <ExplodeSlider />
+      {/* v9 items 4+5: the simulated-section panel. `windowRef` is the panel's
+          viewport element, which the resize handle measures for its drag
+          baseline (nothing is blitted into it any more). */}
       <SectionPiPPanel
         visible={sectionPipVisible}
         onVisibleChange={setSectionPipVisible}
@@ -944,9 +970,10 @@ export default function Viewer3D() {
       {sectionPipVisible ? null : (
         <SectionPiPRestoreButton onShow={() => setSectionPipVisible(true)} />
       )}
-      {/* v4: the panel's own honest state line — only painted while the active
-          modality genuinely has nothing to paint at this plane (see the file
-          header). Nothing renders in the steady state. */}
+      {/* v9: the imagery-request state line under the panel — empty whenever the
+          request resolves at this plane, and stating the images-off state in
+          words when imagery is switched off (item 4). Nothing renders in the
+          steady state; see the file header. */}
       <SectionPipHint visible={sectionPipVisible} />
       {/* P0: visible, retryable state for timed-out anatomy loads. Renders
           nothing at all while every slug resolved (the healthy case). */}

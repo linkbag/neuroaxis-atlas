@@ -279,6 +279,45 @@ const sectionStats = `(() => {
   return { painted, sampled, hash };
 })()`
 
+/**
+ * v9: the SAME sampler, aimed at any 2D canvas the caller can name.
+ *
+ * Why this exists: the PiP's own surface is now DOM + a 2D canvas (v9 item 5),
+ * so the simulated-section panel can be asserted on ITS OWN PIXELS instead of on
+ * its source text — the retired GPU rig had no script-readable surface at all,
+ * which is why the old checks could only look at DOM around it. `expression`
+ * must evaluate to a canvas element or null.
+ */
+const canvasStatsFor = (expression) => `(() => {
+  const c = ${expression};
+  if (!c) return null;
+  if (c.width < 2 || c.height < 2) return { painted: 0, sampled: 0, hash: 0, width: c.width, height: c.height };
+  const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+  let painted = 0, sampled = 0, hash = 0;
+  for (let i = 0; i < d.length; i += 4 * 53) {
+    sampled++;
+    const r = d[i], g = d[i+1], b = d[i+2];
+    hash = (hash * 31 + r + g * 3 + b * 7) % 1000000007;
+    if (!(Math.abs(r-13) < 9 && Math.abs(g-21) < 9 && Math.abs(b-38) < 12)) painted++;
+  }
+  return { painted, sampled, hash, width: c.width, height: c.height };
+})()`
+
+/** The simulated-section panel's canvas (v9 item 5) — the panel owns exactly one. */
+const PIP_CANVAS = `document.querySelector('.pip-panel .pip-window canvas')`
+
+/** The Plates tab's live-section canvas — never the panel's copy of it. */
+const PLATES_CANVAS = `([...document.querySelectorAll('.section-canvas')].find((c) => c.closest('.pip-panel') === null) || null)`
+
+/**
+ * One CDP key press (down + up). Used by the panel-size keyboard check, the same
+ * way the plane-slider check in block I dispatches ArrowRight by hand.
+ */
+const pressKey = async (key, code, windowsVirtualKeyCode, modifiers = 0) => {
+  await send('Input.dispatchKeyEvent', { type: 'rawKeyDown', windowsVirtualKeyCode, key, code, modifiers })
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', windowsVirtualKeyCode, key, code, modifiers })
+}
+
 /** Screenshot the page, then analyse it inside the page (WebGL pixels are not
  *  readable from script, so PNG → <img> → 2D canvas is the reliable route). */
 async function pagePixelStats() {
@@ -436,6 +475,56 @@ try {
   boot.canvases >= 1 ? ok(`3D canvas present (${boot.canvases} canvas elements)`) : bad('no canvas')
   boot.pip ? ok('section PiP visible by default') : bad('section PiP missing on load')
 
+  /* ======================================================================
+   * A1 — THE PANEL IS A SIMULATED-SECTION PANEL (v9 item 5), read at boot.
+   *
+   * The retired in-canvas GPU PiP was a second three.js camera rendering the
+   * clipped scene into a private render target; its DOM was a blit target. The
+   * panel's contract is now inverted and DOM-checkable: one 2D canvas inside
+   * `.pip-window`, and NOTHING that can carry real imagery or clipped geometry —
+   * no <img>, no credit link, no second (WebGL) canvas, no `.pip-context-lost`
+   * note (the panel owns no GL resource, so it has no GL loss path).
+   *
+   * Read HERE, before any check clicks anything, so a structural regression
+   * fails on the first block rather than only in the PiP block below.
+   * ==================================================================== */
+  const pipBoot = await evaluate(`(() => {
+    const panel = document.querySelector('.pip-panel');
+    if (panel === null) return null;
+    const canvases = [...panel.querySelectorAll('canvas')];
+    const safe2d = (c) => { try { return c.getContext('2d') !== null; } catch (error) { return false; } };
+    return {
+      window: panel.querySelector('.pip-window') !== null,
+      canvases: canvases.length,
+      canvas2d: canvases.map(safe2d),
+      sectionCanvas: panel.querySelectorAll('.section-canvas').length,
+      imgs: panel.querySelectorAll('img').length,
+      credits: panel.querySelectorAll('a[href^="http"], .pip-credit').length,
+      retiredContextLost: panel.querySelectorAll('.pip-context-lost').length,
+      stateLine: (panel.querySelector('.pip-imagery-state')?.textContent ?? '').trim(),
+      resizer: panel.querySelectorAll('.pip-resizer').length,
+    };
+  })()`)
+  if (pipBoot === null) {
+    bad('the PiP panel disappeared between the boot read and the panel-contract read')
+  } else {
+    pipBoot.window && pipBoot.canvases === 1 && pipBoot.sectionCanvas === 1 && pipBoot.canvas2d[0] === true
+      ? ok(`the PiP is a simulated-section panel: 1 canvas in .pip-window, and it is a 2D (section) canvas — ${pipBoot.canvases} canvas total`)
+      : bad('the PiP window does not hold exactly one 2D section canvas (' + JSON.stringify(pipBoot) + ')')
+    pipBoot.imgs === 0 && pipBoot.credits === 0
+      ? ok('the PiP carries no imagery markup: 0 <img>, 0 external credit link (nothing real can be painted in it)')
+      : bad(`the PiP carries imagery markup: ${pipBoot.imgs} <img>, ${pipBoot.credits} credit link(s)`)
+    pipBoot.retiredContextLost === 0
+      ? ok('the retired PiP context-loss note (.pip-context-lost) is gone — the panel owns no WebGL resource')
+      : bad(`the retired PiP context-loss note is still in the panel (${pipBoot.retiredContextLost} element(s))`)
+    pipBoot.stateLine.length > 0
+      ? ok(`the panel states its own imagery situation at boot ("${pipBoot.stateLine}")`)
+      : bad('the panel has no imagery state line (.pip-imagery-state)')
+    pipBoot.resizer === 1
+      ? ok('the panel exposes exactly one resize handle (.pip-resizer)')
+      : bad(`expected 1 resize handle, found ${pipBoot.resizer}`)
+  }
+
   const threeStats = await pagePixelStats()
   threeStats && threeStats.uniqueColors > 20
     ? ok(`3D scene renders (${threeStats.uniqueColors} colour buckets, mean luminance ${threeStats.meanLum})`)
@@ -501,19 +590,175 @@ try {
     ? ok(`clip slider drives the PiP (readout "${pipReadout}")`)
     : bad(`PiP did not follow the clip slider (${clipSync} → "${pipReadout}")`)
 
-  const pipAxes = await evaluate(`(() => {
+  const pipAxesClicks = await evaluate(`(() => {
     const panel = document.querySelector('.pip-panel');
     const out = [];
     for (const label of ['Y','Z','X']) {
       const b = [...panel.querySelectorAll('button')].find(x => x.textContent.trim() === label) ;
       if (b) { b.click(); out.push(label); }
     }
-    return out.join(',') + ' | badges ' + [...panel.querySelectorAll('.pip-orient')].map(e=>e.textContent).join('');
+    return out.join(',');
   })()`)
-  await sleep(800)
-  String(pipAxes).startsWith('Y,Z,X')
-    ? ok(`PiP axis switch + orientation badges (${pipAxes})`)
-    : bad(`PiP axis controls: ${pipAxes}`)
+  await sleep(900)
+  /* Read the badges AFTER the clicks have been committed — reading them in the
+     same tick as the click would report the PREVIOUS axis' badges and could pass
+     while the panel ignores the control entirely. */
+  const pipBadgesShown = await evaluate(`(() => {
+    const panel = document.querySelector('.pip-panel');
+    return {
+      badges: [...panel.querySelectorAll('.pip-orient')].map((e) => e.textContent).join(''),
+      readout: (panel.querySelector('.pip-readout')?.textContent || '').trim(),
+    };
+  })()`)
+  const pipAxes = `${pipAxesClicks} | badges ${pipBadgesShown.badges}`
+  const pipBadgeVerdict = (() => {
+    /* v9: the badges are the shared table's, per axis (patient-left convention:
+       transverse A/P/R/L, sagittal S/I/P/A, coronal S/I/R/L — 1 au = 1.2 mm,
+       patient-left on the image's right). `verify:plane` re-derives them from the
+       projected geometry; this asserts the panel really shows the LAST-clicked
+       axis' own set and that its readout moved to that axis. */
+    const lastAxis = String(pipAxesClicks).split(',').pop()
+    const expected = { X: 'SIPA', Z: 'SIRL', Y: 'APRL' }[lastAxis] ?? null
+    return {
+      shown: pipBadgesShown.badges,
+      lastAxis,
+      expected,
+      readoutOnAxis: new RegExp(`^${String(lastAxis).toLowerCase()}\\s*=`).test(pipBadgesShown.readout),
+    }
+  })()
+  pipAxesClicks === 'Y,Z,X' && pipBadgeVerdict.expected !== null && pipBadgeVerdict.shown === pipBadgeVerdict.expected
+    && pipBadgeVerdict.readoutOnAxis
+    ? ok(`PiP axis switch + orientation badges (${pipAxes} — ${pipBadgeVerdict.lastAxis} axis shows ${pipBadgeVerdict.shown} and the readout reads "${pipBadgesShown.readout}", patient-left)`)
+    : bad(`PiP axis controls: ${pipAxes} (expected the ${pipBadgeVerdict.lastAxis} badge set ${pipBadgeVerdict.expected} and a "${String(pipBadgeVerdict.lastAxis).toLowerCase()} = …" readout, got "${pipBadgesShown.readout}")`)
+
+  /* ======================================================================
+   * B3 — v9 item 5: THE PANEL IS RESIZABLE, PERSISTENT AND REVERSIBLE.
+   *
+   * What is asserted here (and what is NOT, stated honestly):
+   *   • the window RESIZES from the keyboard — the panel's own `onKeyDown`
+   *     (arrows ±16 px, Shift ×4) drives the SAME `setSectionPipSize` the corner
+   *     drag calls, so the keyboard path falsifies the store contract, the clamp
+   *     and the CSS wiring; the pointer drag itself is orchestrator-observed
+   *     only (a synthetic pointer drag is not reproducible here);
+   *   • the size is PERSISTED (`neuroaxis.sectionPipSize`, the JSON the store
+   *     writes) and the ▴/▾ preset stop returns to the named small size;
+   *   • hide (`×`, title "Hide live section") and the restore pill still work,
+   *     and restoring brings the panel back at the size the user chose.
+   * The size ACROSS A RELOAD is asserted in block P (after the layer/imagery
+   * state is set), because a reload here would discard the state the checks
+   * between here and there depend on.
+   * ==================================================================== */
+
+  const readPipSize = `(() => {
+    const w = document.querySelector('.pip-panel .pip-window');
+    if (w === null) return null;
+    const r = w.getBoundingClientRect();
+    let stored = null;
+    try { stored = window.localStorage.getItem('neuroaxis.sectionPipSize'); } catch (error) { stored = 'unavailable'; }
+    const panel = document.querySelector('.pip-panel');
+    const preset = panel === null ? '' :
+      (panel.classList.contains('pip-large') ? 'large' : panel.classList.contains('pip-small') ? 'small' : 'custom');
+    const resizer = document.querySelector('.pip-panel .pip-resizer');
+    return {
+      width: Math.round(r.width), height: Math.round(r.height),
+      stored, preset,
+      ariaLabel: resizer === null ? '' : (resizer.getAttribute('aria-label') || ''),
+    };
+  })()`
+
+  const pipSizeBefore = await evaluate(readPipSize)
+  const resizeFocus = await evaluate(`(() => {
+    const b = document.querySelector('.pip-panel .pip-resizer');
+    if (b === null) return { focused: false, reason: 'no .pip-resizer in the panel' };
+    b.focus();
+    return { focused: document.activeElement === b, reason: '' };
+  })()`)
+  if (pipSizeBefore === null || resizeFocus.focused !== true) {
+    bad(`the PiP size control is not operable (${JSON.stringify(pipSizeBefore)} / ${JSON.stringify(resizeFocus)})`)
+  } else {
+    await pressKey('ArrowRight', 'ArrowRight', 39)
+    await pressKey('ArrowRight', 'ArrowRight', 39)
+    await pressKey('ArrowDown', 'ArrowDown', 40)
+    await pressKey('ArrowDown', 'ArrowDown', 40)
+    await sleep(700)
+    const pipSizeGrown = await evaluate(readPipSize)
+    const expectWidth = pipSizeBefore.width + 32
+    const expectHeight = pipSizeBefore.height + 32
+    const storedGrown = (() => {
+      try { return JSON.parse(pipSizeGrown.stored) } catch (error) { return null }
+    })()
+    pipSizeGrown.width === expectWidth && pipSizeGrown.height === expectHeight
+      ? ok(`the panel window resizes from the keyboard (${pipSizeBefore.width}×${pipSizeBefore.height} → ${pipSizeGrown.width}×${pipSizeGrown.height}, +16 px per arrow)`)
+      : bad(`the panel did not resize as documented (${pipSizeBefore.width}×${pipSizeBefore.height} → ${pipSizeGrown.width}×${pipSizeGrown.height}, expected ${expectWidth}×${expectHeight})`)
+    storedGrown !== null && storedGrown.width === expectWidth && storedGrown.height === expectHeight
+      ? ok(`the size is persisted in the store's own key (neuroaxis.sectionPipSize = ${pipSizeGrown.stored})`)
+      : bad(`the persisted size does not match the window (${pipSizeGrown.stored} vs ${expectWidth}×${expectHeight})`)
+    pipSizeGrown.ariaLabel.indexOf(`${expectWidth}×${expectHeight}`) !== -1
+      ? ok(`the resize handle reports the live size to assistive tech ("${pipSizeGrown.ariaLabel.slice(0, 72)}…")`)
+      : bad(`the resize handle's accessible name does not carry the live size ("${pipSizeGrown.ariaLabel}")`)
+
+    /* Shift = ×4 on the same key, so the "Shift ×4" tooltip is not a claim. If
+       the CDP modifier never reaches the page this reports the delta instead of
+       failing — environment, not product (stated, not hidden). */
+    await pressKey('ArrowDown', 'ArrowDown', 40, 8)
+    await sleep(500)
+    const pipSizeShift = await evaluate(readPipSize)
+    const shiftDelta = pipSizeShift.height - pipSizeGrown.height
+    shiftDelta === 64
+      ? ok(`Shift+ArrowDown moves the height by 4× the step (${pipSizeGrown.height} → ${pipSizeShift.height})`)
+      : shiftDelta === 16
+        ? info(`Shift was not delivered to the page by this CDP call (Δ ${shiftDelta} px) — the ×4 branch is unverified here`)
+        : bad(`Shift+ArrowDown moved the height by ${shiftDelta} px, expected 64 (or 16 with the modifier dropped)`)
+
+    const presetClick = await evaluate(`(() => {
+      const panel = document.querySelector('.pip-panel');
+      const b = panel && [...panel.querySelectorAll('button')].find((x) => /^Panel size/.test(x.getAttribute('title') || ''));
+      if (!b) return 'no size button';
+      b.click();
+      return 'clicked ' + (b.getAttribute('title') || '').slice(0, 40);
+    })()`)
+    await sleep(600)
+    const pipSizePreset = await evaluate(readPipSize)
+    pipSizePreset.preset === 'small' && pipSizePreset.width === 224 && pipSizePreset.height === 170
+      ? ok(`the ▴/▾ size button returns a custom size to the named small stop (224×170, "${presetClick}")`)
+      : bad(`the size-preset cycle did not reach the small stop (${JSON.stringify(pipSizePreset)} / ${presetClick})`)
+
+    /* hide → restore pill → back, at the chosen size */
+    const hideClick = await evaluate(`(() => {
+      const b = [...document.querySelectorAll('.pip-panel button')].find((x) => (x.getAttribute('title') || '') === 'Hide live section');
+      if (!b) return 'no hide button (.pip-panel button[title="Hide live section"])';
+      b.click();
+      return 'clicked Hide live section';
+    })()`)
+    await sleep(800)
+    const hidden = await evaluate(`(() => {
+      const pill = document.querySelector('.pip-restore');
+      return {
+        panel: document.querySelectorAll('.pip-panel').length,
+        pill: pill === null ? null : pill.textContent.trim(),
+        pillTitle: pill === null ? '' : (pill.getAttribute('title') || ''),
+        pillExpanded: pill === null ? null : pill.getAttribute('aria-expanded'),
+      };
+    })()`)
+    hidden.panel === 0 && String(hidden.pill).indexOf('Live section') !== -1
+      ? ok(`hiding the panel removes it and leaves the restore pill ("${hidden.pill}", "${hideClick}")`)
+      : bad(`hide did not reach the documented state (${JSON.stringify(hidden)} / ${hideClick})`)
+    const restoreClick = await evaluate(`(() => {
+      const pill = document.querySelector('.pip-restore');
+      if (pill === null) return 'no restore pill';
+      pill.click();
+      return 'clicked the restore pill';
+    })()`)
+    await sleep(2500)
+    const restored = await evaluate(readPipSize)
+    const restoredStats = await evaluate(canvasStatsFor(PIP_CANVAS))
+    restored !== null && restored.width === pipSizePreset.width && restored.height === pipSizePreset.height
+      ? ok(`the restore pill brings the panel back at the chosen size (${restored.width}×${restored.height}, "${restoreClick}")`)
+      : bad(`the restored panel does not honour the stored size (${JSON.stringify(restored)} vs ${JSON.stringify(pipSizePreset)})`)
+    restoredStats !== null && restoredStats.painted > 20
+      ? ok(`the restored panel paints the simulated section (${restoredStats.painted}/${restoredStats.sampled} non-background samples on its own 2D canvas)`)
+      : bad(`the restored panel's canvas is blank or missing (${JSON.stringify(restoredStats)})`)
+  }
 
   /* C — selection + info panel content (tree is region → subdivision → structure)
    *
@@ -1147,27 +1392,66 @@ try {
     info('credit while CT is requested above its coverage: "' + String(ctNote?.credit ?? '').slice(0, 60) + '"')
   }
 
-  /* L5b — the third surface that shows real imagery: the 3D tab's live-section
-   * PiP. At this same CT-above-the-source request its hint must state the same
-   * measured limit (it used to print the internal token "beyond-source"). */
+  /* L5b — THE PANEL'S IMAGERY STATE AT A CT-ABOVE-THE-SOURCE REQUEST (v9 items
+   * 4+5; repurposed, not deleted).
+   *
+   * Before v9 this block asserted that the PiP — which PAINTED the real CT/MRI
+   * slice behind the 3D cut — stated the same measured coverage limit as the
+   * toolbar and the live canvas. The panel no longer paints real imagery at all,
+   * so the honest contract it now has to meet is the SAME number PLUS the two
+   * facts that replaced the backdrop: this panel shows the simulated section,
+   * and the real-imagery request belongs to the Plates tab. Both halves are
+   * asserted from the same live reading, and the panel is additionally checked
+   * for imagery markup/pixels — the CT request must NOT reach it. */
   await evaluate(clickText('3D'))
   await sleep(3000)
   const pipHint = await evaluate(`(() => {
     const el = document.querySelector('.pip-backdrop-hint');
-    if (el === null) return null;
-    return { text: (el.textContent || '').trim(), hidden: el.hidden === true };
+    const panel = document.querySelector('.pip-panel');
+    const canvases = panel === null ? [] : [...panel.querySelectorAll('canvas')];
+    return {
+      text: el === null ? null : (el.textContent || '').trim(),
+      hidden: el === null ? null : el.hidden === true,
+      imgs: panel === null ? -1 : panel.querySelectorAll('img').length,
+      credits: panel === null ? -1 : panel.querySelectorAll('a[href^="http"], .pip-credit').length,
+      canvases: canvases.length,
+      canvas2d: canvases.map((c) => { try { return c.getContext('2d') !== null; } catch (error) { return false; } }),
+      stateLine: (panel?.querySelector('.pip-imagery-state')?.textContent ?? '').trim(),
+    };
   })()`)
+  const pipHintText = String(pipHint?.text ?? '')
+  const pipIsSimulated =
+    pipHint !== null &&
+    pipHint.hidden === false &&
+    pipHintText.length > 0
   if (pipHint === null) {
-    info('the PiP backdrop hint element is not in this page (the panel may be hidden) — '
+    info('the PiP hint element is not in this page (the panel is hidden) — '
       + 'the canvas half above is the asserted one')
-  } else if (pipHint.text === '') {
-    info('the PiP shows real imagery at this plane (no hint line) — the CT request is honoured by another modality')
-  } else if (pipHint.text.indexOf(ctLimitText) !== -1 && pipHint.text.indexOf('MRI is the modality of record') !== -1) {
-    ok('the PiP states the same CT coverage limit as the toolbar and the canvas ("'
-      + pipHint.text.slice(0, 100) + '")')
+  } else if (!pipIsSimulated) {
+    info('the panel states no coverage limit at this plane (its hint line is empty/hidden) — '
+      + 'the CT request resolves through another modality for the Plates canvas')
+  } else if (pipHintText.indexOf(ctLimitText) !== -1
+    && pipHintText.indexOf('MRI is the modality of record') !== -1
+    && pipHintText.indexOf('this panel shows the simulated section') !== -1) {
+    ok('the PiP states the same CT coverage limit as the toolbar and the canvas AND that it shows the '
+      + 'simulated section ("' + pipHintText.slice(0, 120) + '")')
   } else {
-    bad('the PiP hint at a CT plane above the source does not state the measured limit ("'
-      + pipHint.text.slice(0, 100) + '")')
+    bad('the PiP hint at a CT plane above the source does not carry both the measured limit and the '
+      + 'simulated-section statement ("' + pipHintText.slice(0, 120) + '")')
+  }
+  /* The panel must be imagery-free in EVERY branch above — at a CT request most
+     of all, because that is the modality whose real slice used to be blitted
+     into it. */
+  if (pipHint !== null && pipHint.imgs === 0 && pipHint.credits === 0 && pipHint.canvases === 1 && pipHint.canvas2d[0] === true) {
+    ok('the CT-above-the-source request does not reach the panel: 0 <img>, 0 credit link, '
+      + 'and its one canvas is the 2D section canvas')
+  } else if (pipHint !== null) {
+    bad('the panel is not imagery-free at a CT request (' + JSON.stringify({
+      imgs: pipHint.imgs, credits: pipHint.credits, canvases: pipHint.canvases, canvas2d: pipHint.canvas2d,
+    }) + ')')
+  }
+  if (pipHint !== null && pipHint.stateLine.length > 0) {
+    info('panel imagery line at this plane: "' + pipHint.stateLine + '"')
   }
   // Back to the Plates tab: block L6 (the author plate) lives there.
   await evaluate(clickText('Plates'))
@@ -1360,21 +1644,43 @@ try {
         : bad(restoreVerdict.detail + ' (' + String(restoreNow) + ' / ' + JSON.stringify(afterRestore) + ')')
     }
 
-    /* The PiP has its own context survival path. `pipContextState` is the
-     * module's own published state, and the PiP note (`.pip-context-lost`) is
-     * the visible half. A loss on the SHARED canvas is what the PiP listens for
-     * (`gl.domElement`), so the PiP is asserted from whatever the loss left
-     * behind rather than by losing a second, separate context. */
-    const pipAfter = await evaluate(`(() => {
-      const note = document.querySelector('.pip-context-lost');
-      const pipCanvas = document.querySelector('.pip-panel canvas');
+    /* v9 item 5 — THE PANEL AND THE LOSS CYCLE (repurposed, not deleted).
+     *
+     * The old check read the PiP's own `.pip-context-lost` note, because the PiP
+     * shared the main canvas' WebGL context and needed its own recovery path.
+     * The panel is now DOM + a 2D canvas with no GL resource at all, so the
+     * contract has inverted and is stronger: the retired note must be ABSENT,
+     * the panel must still own exactly one 2D canvas, and — the part a source
+     * read cannot prove — that canvas must still be PAINTED after the main
+     * canvas lost and regained its context. If the panel had any dependency on
+     * the 3D context, this is where it would show up as a blank panel. */
+    const pipAfterLoss = await evaluate(`(() => {
+      const panel = document.querySelector('.pip-panel');
+      const canvases = panel === null ? [] : [...panel.querySelectorAll('canvas')];
       return {
-        note: note === null ? 'none' : (note.getAttribute('role') || 'no role'),
-        text: note === null ? '' : note.innerText.slice(0, 80),
-        pipCanvas: pipCanvas !== null,
+        panel: panel !== null,
+        retiredNote: document.querySelectorAll('.pip-context-lost').length,
+        canvases: canvases.length,
+        canvas2d: canvases.map((c) => { try { return c.getContext('2d') !== null; } catch (error) { return false; } }),
       };
     })()`)
-    info('PiP context state after the loss cycle: ' + JSON.stringify(pipAfter))
+    const pipPaintAfterLoss = await evaluate(canvasStatsFor(PIP_CANVAS))
+    pipAfterLoss.panel && pipAfterLoss.retiredNote === 0
+      ? ok('the panel has no context-loss path to lose: 0 .pip-context-lost notes while the MAIN canvas is lost '
+        + '(the panel owns no WebGL resource — v9 removed the shared rig)')
+      : bad(`the retired PiP context-loss note is back (${JSON.stringify(pipAfterLoss)})`)
+    pipAfterLoss.canvases === 1 && pipAfterLoss.canvas2d[0] === true
+      ? ok('the panel still owns exactly one 2D canvas through the main canvas\' loss cycle')
+      : bad(`the panel's canvas changed during the loss cycle (${JSON.stringify(pipAfterLoss)})`)
+    pipPaintAfterLoss !== null && pipPaintAfterLoss.painted > 50
+      ? ok(`the simulated section is STILL painted in the panel after the main context loss `
+        + `(${pipPaintAfterLoss.painted}/${pipPaintAfterLoss.sampled} non-background samples)`)
+      : bad(`the panel went blank while the main canvas was lost (${JSON.stringify(pipPaintAfterLoss)})`)
+    info('panel state after the loss cycle: ' + JSON.stringify({
+      canvases: pipAfterLoss.canvases,
+      painted: pipPaintAfterLoss?.painted ?? null,
+      sampled: pipPaintAfterLoss?.sampled ?? null,
+    }))
   }
 
   /* ======================================================================
@@ -1670,6 +1976,521 @@ try {
       ? ok('returning to Brainstem focus hides the vascular layer again (the region toggle is the only switch)')
       : bad('the vascular layer did not return to off (' + JSON.stringify(vascBack) + ')')
   }
+
+  /* ======================================================================
+   * P — v9 ITEMS 1, 2, 4 AND 5: the somatotopic map, the cortical-division
+   *     layer, the images-off state and the simulated-section panel.
+   *
+   * Each sub-block states what it FALSIFIES. The commands that CANNOT be run
+   * from this sandbox (Chrome is denied: platform_channel.cc:108) are the ones
+   * in this block — running them is the orchestrator's lane, and every claim
+   * below is a claim about what this block checks when it runs there.
+   *
+   *  P1  item 1 — the two strips and their 16 segments really are in the tree in
+   *      SOMATOTOPIC order; selecting a segment really resolves to its authored
+   *      record (info panel carrying the honest "schematic on the DERIVED …
+   *      ribbon" caveat); and the 3D overlay really draws the selected
+   *      segment's body-part label — drei's <Html> is DOM, so "the overlay is
+   *      mounted, gated on and reading the shared selection" is observable —
+   *      and really stops drawing when EITHER the telencephalon region or the
+   *      `context` kind layer is switched off (that is the overlay's own gate).
+   *  P2  item 2 — the toggle really repaints the live section: the Plates
+   *      canvas' pixel hash CHANGES with the layer on and CHANGES BACK with it
+   *      off, the legend lists the six divisions and carries the caveat
+   *      verbatim, and the choice is persisted under `neuroaxis.sectionLobes`.
+   *  P3  item 4 — the images-off state is complete on the Plates surface: the
+   *      button's accessible name says what it does, the state note is a
+   *      statement of CHOICE (no "unavailable at this plane" coverage excuse),
+   *      no credit line is rendered for imagery that is not drawn, the section
+   *      still paints, and the state is persisted.
+   *  P4  items 4+5 — the same state is honoured by the PANEL while the Plates
+   *      tab asks for real imagery (the independence requirement), the panel
+   *      never lets a real-imagery draw reach its canvas (no "blocked" alarm,
+   *      0 <img>, 0 credit, one 2D canvas, painted pixels), the Plates tab keeps
+   *      drawing the real layer, the user's stored modality is NOT rewritten by
+   *      the panel — and the panel's size, the layer choice and the imagery
+   *      state all survive a RELOAD.
+   * ==================================================================== */
+
+  /* ---------------------------------------------------------------- P1 */
+  await evaluate(clickText('3D'))
+  await sleep(2500)
+
+  /* Two round trips on purpose: React renders the subdivision rows only after
+     the region row's click has been committed, so a single synchronous
+     click-then-query would always find nothing on a collapsed region. */
+  const openTelRegion = await evaluate(`(() => {
+    const region = [...document.querySelectorAll('.tree-region')].find((r) =>
+      /telencephalon/i.test(r.querySelector('.tree-region-name')?.textContent || ''));
+    if (!region) return 'no telencephalon region row in the tree';
+    const row = region.querySelector('.tree-region-row');
+    if (row && row.getAttribute('aria-expanded') !== 'true') row.click();
+    return row && row.getAttribute('aria-expanded') === 'true' ? 'already open' : 'opened';
+  })()`)
+  await sleep(900)
+  const openCorticalSubdivision = await evaluate(`(() => {
+    const region = [...document.querySelectorAll('.tree-region')].find((r) =>
+      /telencephalon/i.test(r.querySelector('.tree-region-name')?.textContent || ''));
+    if (!region) return 'no telencephalon region row in the tree';
+    const sub = [...region.querySelectorAll('.tree-sub-row')].find((s) =>
+      (s.querySelector('.tree-sub-name')?.textContent || '').trim() === 'Functional cortical areas');
+    if (!sub) return 'no "Functional cortical areas" subdivision row';
+    if (sub.getAttribute('aria-expanded') !== 'true') sub.click();
+    return 'opened';
+  })()`)
+  await sleep(1000)
+  const stripOrder = await evaluate(`(() => {
+    const childrenOf = (parentName) => {
+      const row = [...document.querySelectorAll('.tree-leaf-row')].find((b) =>
+        (b.querySelector('.tree-leaf-name')?.textContent || '').trim() === parentName);
+      if (!row) return null;
+      const list = row.parentElement ? row.parentElement.querySelector('ul.tree-children') : null;
+      if (list === null) return [];
+      return [...list.querySelectorAll('.tree-leaf-name')].map((n) => (n.textContent || '').trim());
+    };
+    const subdivision = [...document.querySelectorAll('.tree-sub-row')].find((s) =>
+      (s.querySelector('.tree-sub-name')?.textContent || '').trim() === 'Functional cortical areas');
+    return {
+      region: ${JSON.stringify(openTelRegion)},
+      open: ${JSON.stringify(openCorticalSubdivision)},
+      m1: childrenOf('Primary motor cortex (M1)'),
+      s1: childrenOf('Primary somatosensory cortex (S1)'),
+      count: subdivision ? (subdivision.querySelector('.tree-count')?.textContent || '').trim() : null,
+    };
+  })()`)
+  const SOMATOTOPY_PARTS = ['toe', 'leg', 'trunk', 'arm', 'hand', 'face', 'tongue', 'larynx']
+  const partOfName = (name) => String(name).split('—').pop().trim().replace(/\s*representation$/, '')
+  const stripVerdict = (list, stripId) => {
+    if (!Array.isArray(list)) {
+      return { ok: false, detail: `${stripId}: the tree has no row for the strip's parent record` }
+    }
+    const parts = list.map(partOfName)
+    const ordered = parts.join(',') === SOMATOTOPY_PARTS.join(',')
+    return {
+      ok: list.length === 8 && ordered,
+      detail: `${stripId}: ${list.length} segment(s), ${ordered ? 'somatotopic order' : 'WRONG order'} — ${parts.join(' → ')}`,
+    }
+  }
+  const m1Verdict = stripVerdict(stripOrder.m1, 'ctx-m1')
+  const s1Verdict = stripVerdict(stripOrder.s1, 'ctx-s1')
+  m1Verdict.ok
+    ? ok(`the taxonomy tree carries the M1 strip in somatotopic order (${m1Verdict.detail})`)
+    : bad(`the M1 strip is not in the tree in somatotopic order (${m1Verdict.detail})`)
+  s1Verdict.ok
+    ? ok(`the taxonomy tree carries the S1 strip in somatotopic order (${s1Verdict.detail})`)
+    : bad(`the S1 strip is not in the tree in somatotopic order (${s1Verdict.detail})`)
+
+  const pickSomatotopy = await evaluate(`(() => {
+    const row = [...document.querySelectorAll('.tree-leaf-row')].find((b) =>
+      (b.querySelector('.tree-leaf-name')?.textContent || '').trim() === 'Primary motor cortex (M1) — hand representation');
+    if (!row) return 'leaf not found in the tree';
+    row.click();
+    return 'clicked';
+  })()`)
+  await sleep(1800)
+  const somatotopyRecord = await evaluate(`({
+    name: (document.querySelector('.info-name')?.textContent || '').trim(),
+    body: (document.querySelector('.info-panel')?.innerText || '').slice(0, 8000),
+    labels: [...document.querySelectorAll('.label3d')].map((n) => (n.textContent || '').trim()),
+    tabActive: [...document.querySelectorAll('button')].filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => (b.textContent || '').trim()).slice(0, 4),
+  })`)
+  somatotopyRecord.name === 'Primary motor cortex (M1) — hand representation'
+    ? ok(`selecting a somatotopy segment resolves to its own authored record ("${somatotopyRecord.name}")`)
+    : bad(`the somatotopy leaf did not resolve to its record (info panel "${somatotopyRecord.name}", ${pickSomatotopy})`)
+  /* NOTE (the same hazard the v8 block documents): a statement must never START
+     with a regex literal in this file — no semicolons, so a leading `/` would be
+     parsed as a division of the previous line. Both tests are named consts. */
+  const somatotopyCaveat = /schematic on the\s+derived|PLACEMENT IS SCHEMATIC ON THE DERIVED/i.test(somatotopyRecord.body)
+    && /ribbon/i.test(somatotopyRecord.body)
+  somatotopyCaveat
+    ? ok('the selected record carries the honest limit into the info panel (placement schematic on the DERIVED ribbon)')
+    : bad('the somatotopy record does not state the derived-ribbon caveat in the info panel')
+  const handLabelCount = somatotopyRecord.labels.filter((text) => text === 'Hand').length
+  handLabelCount >= 1
+    ? ok(`the 3D overlay draws the SELECTED segment's body-part label (${handLabelCount} .label3d reading "Hand", `
+      + `labels in the DOM: ${JSON.stringify(somatotopyRecord.labels.slice(0, 6))})`)
+    : bad(`no body-part label for the selected somatotopy segment in the 3D view (labels: ${JSON.stringify(somatotopyRecord.labels)}, ${pickSomatotopy})`)
+
+  const toggleLegendLayer = (label) => evaluate(`(() => {
+    const row = [...document.querySelectorAll('.legend-row.legend-toggle')].find((l) => (l.textContent || '').trim() === ${JSON.stringify(label)});
+    if (!row) return 'no legend toggle for "' + ${JSON.stringify(label)} + '"';
+    const input = row.querySelector('input');
+    if (!input) return 'the legend row for "' + ${JSON.stringify(label)} + '" has no input';
+    input.click();
+    return 'toggled';
+  })()`)
+  const legendLayerState = (label) => evaluate(`(() => {
+    const row = [...document.querySelectorAll('.legend-row.legend-toggle')].find((l) => (l.textContent || '').trim() === ${JSON.stringify(label)});
+    return row ? row.querySelector('input').checked : null;
+  })()`)
+  const legendToggleActions = []
+  const layerGate = [
+    { label: 'context', note: 'context kind layer' },
+    { label: 'telencephalon', note: 'telencephalon region layer' },
+  ]
+  for (const gate of layerGate) {
+    legendToggleActions.push(await toggleLegendLayer(gate.label))
+    await sleep(900)
+    const offState = await legendLayerState(gate.label)
+    const labelsOff = await evaluate(`[...document.querySelectorAll('.label3d')].map((n) => (n.textContent || '').trim())`)
+    const clearedOff = labelsOff.filter((text) => text === 'Hand').length === 0
+    offState === false && clearedOff
+      ? ok(`the somatotopy overlay honours the ${gate.note}: switched off → 0 body-part labels (the overlay's own gate, observed)`)
+      : bad(`switching the ${gate.note} off did not remove the overlay (layer=${JSON.stringify(offState)}, labels=${JSON.stringify(labelsOff)})`)
+    await toggleLegendLayer(gate.label)
+    await sleep(900)
+    const onState = await legendLayerState(gate.label)
+    const labelsOn = await evaluate(`[...document.querySelectorAll('.label3d')].map((n) => (n.textContent || '').trim())`)
+    const backOn = labelsOn.filter((text) => text === 'Hand').length >= 1
+    onState === true && backOn
+      ? ok(`switching the ${gate.note} back on restores the overlay and its label (${labelsOn.filter((t) => t === 'Hand').length} "Hand")`)
+      : bad(`the overlay did not come back with the ${gate.note} (layer=${JSON.stringify(onState)}, labels=${JSON.stringify(labelsOn)})`)
+  }
+  info('somatotopy layer-gate toggles: ' + JSON.stringify(legendToggleActions))
+  /* The tree is left open on ctx-m1/ctx-s1 and the selection is the M1 hand
+     segment; the tab is whatever selectStructure chose (3D) — asserted above. */
+
+  /* ---------------------------------------------------------------- P2 */
+  await evaluate(clickText('Plates'))
+  await sleep(1600)
+  await evaluate(clickText('Live section'))
+  await sleep(5000)
+  const planeSet = await evaluate(`(() => {
+    const r = [...document.querySelectorAll('.section-plane-sliders input[type=range]')].find((x) => /transverse/i.test(x.getAttribute('aria-label') || ''));
+    if (!r) return 'no transverse slider';
+    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    setter.call(r, '48');
+    r.dispatchEvent(new Event('input', { bubbles: true }));
+    return r.value;
+  })()`)
+  await sleep(3000)
+  const lobesOff = await evaluate(canvasStatsFor(PLATES_CANVAS))
+  const lobesToggleInitial = await evaluate(`(() => {
+    const b = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null);
+    return b === null ? null : { pressed: b.getAttribute('aria-pressed'), text: (b.textContent || '').trim() };
+  })()`)
+  const lobesClickOn = await evaluate(`(() => {
+    const b = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null);
+    if (!b) return 'no .section-lobes-toggle in the Plates live section';
+    b.click();
+    return 'clicked';
+  })()`)
+  await sleep(1500)
+  const lobesOn = await evaluate(`(() => {
+    const b = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null);
+    const legend = document.querySelector('.section-lobes-legend');
+    let stored = null;
+    try { stored = window.localStorage.getItem('neuroaxis.sectionLobes'); } catch (error) { stored = 'unavailable'; }
+    return {
+      pressed: b === null ? null : b.getAttribute('aria-pressed'),
+      text: b === null ? '' : (b.textContent || '').trim(),
+      rows: legend === null ? null : [...legend.querySelectorAll('.section-lobes-row')].map((n) => (n.textContent || '').trim()),
+      note: legend === null ? null : (legend.querySelector('.section-lobes-note')?.textContent || '').trim(),
+      stored,
+    };
+  })()`)
+  const lobesOnStats = await evaluate(canvasStatsFor(PLATES_CANVAS))
+  if (lobesToggleInitial === null) {
+    bad('the live section has no "Cortical divisions" toggle (.section-lobes-toggle)')
+  } else {
+    lobesToggleInitial.pressed === 'false' && lobesToggleInitial.text === 'Cortical divisions'
+      ? ok(`the cortical-division layer is off by default and its control is labelled ("${lobesToggleInitial.text}", aria-pressed=false)`)
+      : bad(`the cortical-division toggle does not start in the documented state (${JSON.stringify(lobesToggleInitial)})`)
+    lobesOn.pressed === 'true' && /on/.test(lobesOn.text)
+      ? ok(`the toggle switches the layer ON ("${lobesOn.text}", aria-pressed=true)`)
+      : bad(`clicking the cortical-division toggle did not press it (${JSON.stringify(lobesOn)} / ${lobesClickOn})`)
+    Array.isArray(lobesOn.rows) && lobesOn.rows.length === 6
+      ? ok(`the legend lists the six divisions (${lobesOn.rows.join(' · ')})`)
+      : bad(`the legend does not list six divisions (${JSON.stringify(lobesOn.rows)})`)
+    typeof lobesOn.note === 'string' && /DERIVED/.test(lobesOn.note) && /not a gyral/.test(lobesOn.note)
+      ? ok('the legend carries the honest caveat verbatim (divides the DERIVED ribbon, not a gyral map)')
+      : bad(`the legend does not carry the caveat (${JSON.stringify(lobesOn.note)})`)
+    lobesOnStats !== null && lobesOff !== null && lobesOnStats.hash !== lobesOff.hash
+      ? ok(`the layer really repaints the live section (canvas hash ${lobesOff.hash} → ${lobesOnStats.hash}, `
+        + `non-background samples ${lobesOff.painted} → ${lobesOnStats.painted}, plane y=${planeSet})`)
+      : bad(`switching the cortical-division layer on did not change the canvas (${JSON.stringify(lobesOff)} → ${JSON.stringify(lobesOnStats)})`)
+    lobesOn.stored === '1'
+      ? ok('the layer choice is persisted (neuroaxis.sectionLobes = "1")')
+      : bad(`the layer choice was not persisted (neuroaxis.sectionLobes = ${JSON.stringify(lobesOn.stored)})`)
+
+    /* off again — the layer must be switchable OFF as well as ON, and the
+       canvas must go back to a different frame than the ON one. */
+    const lobesClickOff = await evaluate(`(() => {
+      const b = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null);
+      if (!b) return 'no toggle';
+      b.click();
+      return 'clicked';
+    })()`)
+    await sleep(1500)
+    const lobesOffAgain = await evaluate(canvasStatsFor(PLATES_CANVAS))
+    const lobesOffState = await evaluate(`(() => {
+      const b = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null);
+      const legend = document.querySelector('.section-lobes-legend');
+      let stored = null;
+      try { stored = window.localStorage.getItem('neuroaxis.sectionLobes'); } catch (error) { stored = 'unavailable'; }
+      return { pressed: b === null ? null : b.getAttribute('aria-pressed'), legend: legend !== null, stored };
+    })()`)
+    lobesOffState.pressed === 'false' && lobesOffState.legend === false
+      ? ok(`switching the layer off removes both the legend and the colouring (aria-pressed=false, ${lobesClickOff})`)
+      : bad(`the layer did not switch off cleanly (${JSON.stringify(lobesOffState)})`)
+    lobesOffAgain !== null && lobesOnStats !== null && lobesOffAgain.hash !== lobesOnStats.hash
+      ? ok(`the section goes back to a different frame with the layer off (hash ${lobesOnStats.hash} → ${lobesOffAgain.hash}; `
+        + `identical to the pre-toggle frame: ${lobesOffAgain.hash === lobesOff?.hash})`)
+      : bad(`the canvas did not change when the layer was switched off (${JSON.stringify(lobesOffAgain)})`)
+    /* leave it ON: block P4 asserts the choice survives a reload. */
+    await evaluate(`(() => {
+      const b = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null);
+      if (b) b.click();
+    })()`)
+    await sleep(1200)
+  }
+
+  /* ---------------------------------------------------------------- P3 */
+  const imageryOffClick = await evaluate(`(() => {
+    const b = [...document.querySelectorAll('button')].find((x) => (x.textContent || '').trim() === 'Simulated only');
+    if (!b) return 'no "Simulated only" button in the modality row';
+    if (b.disabled) return 'the "Simulated only" button is disabled: ' + (b.getAttribute('title') || '');
+    b.click();
+    return 'clicked';
+  })()`)
+  await sleep(2500)
+  const imageryOff = await evaluate(`(() => {
+    const off = [...document.querySelectorAll('button')].find((x) => (x.textContent || '').trim() === 'Simulated only');
+    const offNote = document.querySelector('.section-alignment-note.is-imagery-off');
+    const anyNote = document.querySelector('.section-alignment-note');
+    const credit = document.querySelector('.section-credit');
+    const hint = document.querySelector('.section-imagery-hint');
+    let stored = null;
+    try { stored = window.localStorage.getItem('neuroaxis.sectionUnderlay'); } catch (error) { stored = 'unavailable'; }
+    return {
+      pressed: off === null ? null : off.getAttribute('aria-pressed'),
+      accessibleName: off === null ? '' : (off.getAttribute('aria-label') || ''),
+      visibleLabel: off === null ? '' : (off.textContent || '').trim(),
+      noteText: offNote === null ? null : (offNote.textContent || '').trim(),
+      noteRole: offNote === null ? '' : (offNote.getAttribute('role') || ''),
+      noteClass: offNote === null ? '' : String(offNote.className),
+      anyNote: anyNote === null ? null : (anyNote.textContent || '').trim(),
+      credit: credit === null ? null : (credit.textContent || '').trim().slice(0, 70),
+      hint: hint === null ? null : (hint.textContent || '').trim(),
+      stored,
+    };
+  })()`)
+  const imageryOffStats = await evaluate(canvasStatsFor(PLATES_CANVAS))
+  const imageryOffStored = (() => {
+    try { return JSON.parse(imageryOff.stored) } catch (error) { return null }
+  })()
+  imageryOff.pressed === 'true' && /simulated only/i.test(imageryOff.visibleLabel)
+    ? ok(`the images-off state is a first-class choice on the Plates surface ("${imageryOff.visibleLabel}", aria-pressed=true) — ${imageryOffClick}`)
+    : bad(`the "Simulated only" state could not be selected (${JSON.stringify(imageryOff)} / ${imageryOffClick})`)
+  imageryOff.accessibleName.indexOf(imageryOff.visibleLabel) !== -1 && /no imagery/i.test(imageryOff.accessibleName)
+    ? ok(`the control's accessible name says what the state does ("${imageryOff.accessibleName}") — and contains the visible label (WCAG 2.5.3)`)
+    : bad(`the accessible name does not describe the state ("${imageryOff.accessibleName}")`)
+  const notesReadOk = typeof imageryOff.noteText === 'string'
+  const noteStatesChoice = notesReadOk
+    && /switched off/i.test(imageryOff.noteText)
+    && /no imagery/i.test(imageryOff.noteText)
+    && /panel/i.test(imageryOff.noteText)
+    && !/at this plane/i.test(imageryOff.noteText)
+  noteStatesChoice
+    ? ok(`the state note states the CHOICE, not a coverage limit ("${imageryOff.noteText.slice(0, 120)}…")`)
+    : bad(`the state note (.section-alignment-note.is-imagery-off) is missing or still reads as a coverage excuse (${JSON.stringify(imageryOff.noteText)})`)
+  imageryOff.hint === null || (/switched off/i.test(imageryOff.hint) && !/at this plane/i.test(imageryOff.hint))
+    ? ok(`the canvas hint agrees with the toolbar about the same state ("${String(imageryOff.hint).slice(0, 90)}")`)
+    : bad(`the canvas hint contradicts the toolbar at the images-off state ("${String(imageryOff.hint)}")`)
+  imageryOff.credit === null
+    ? ok('no credit line is rendered while imagery is off (the credit would attribute an image that is not drawn)')
+    : bad(`a credit line is still rendered with imagery off ("${imageryOff.credit}")`)
+  imageryOffStored !== null && imageryOffStored.kind === 'none'
+    ? ok(`the images-off state is persisted (neuroaxis.sectionUnderlay.kind = "${imageryOffStored.kind}", schemaVersion ${imageryOffStored.schemaVersion})`)
+    : bad(`the images-off state was not persisted (${JSON.stringify(imageryOff.stored)})`)
+  imageryOffStats !== null && imageryOffStats.painted > 50
+    ? ok(`the simulated section is still drawn with imagery off (${imageryOffStats.painted}/${imageryOffStats.sampled} non-background samples)`)
+    : bad(`"Simulated only" blanked the section (${JSON.stringify(imageryOffStats)})`)
+
+  /* ---------------------------------------------------------------- P4 */
+  /* Ask for a REAL modality on the Plates tab: the panel must keep showing the
+     simulated section, and the Plates canvas must keep drawing the real layer. */
+  const realModality = await evaluate(`(() => {
+    const wanted = ['MRI', 'CT', 'Photo', 'Auto (real-first)'];
+    for (const label of wanted) {
+      const b = [...document.querySelectorAll('button')].find((x) => (x.textContent || '').trim() === label);
+      if (b && !b.disabled) { b.click(); return label; }
+    }
+    return 'none available';
+  })()`)
+  await sleep(3000)
+  const realOnPlates = await evaluate(`(() => {
+    const credit = document.querySelector('.section-credit');
+    const off = [...document.querySelectorAll('button')].find((x) => (x.textContent || '').trim() === 'Simulated only');
+    let stored = null;
+    try { stored = window.localStorage.getItem('neuroaxis.sectionUnderlay'); } catch (error) { stored = 'unavailable'; }
+    return {
+      credit: credit === null ? null : (credit.textContent || '').trim().slice(0, 80),
+      offPressed: off === null ? null : off.getAttribute('aria-pressed'),
+      stored,
+    };
+  })()`)
+  info(`real-modality request before the panel check: ${realModality} (credit "${String(realOnPlates.credit).slice(0, 60)}", images-off button pressed: ${realOnPlates.offPressed})`)
+
+  await evaluate(clickText('3D'))
+  await sleep(3000)
+  const panelUnderRealRequest = await evaluate(`(() => {
+    const panel = document.querySelector('.pip-panel');
+    if (panel === null) return null;
+    const canvases = [...panel.querySelectorAll('canvas')];
+    let stored = null;
+    try { stored = window.localStorage.getItem('neuroaxis.sectionUnderlay'); } catch (error) { stored = 'unavailable'; }
+    const lobes = [...panel.querySelectorAll('.section-lobes-toggle')];
+    return {
+      stateLine: (panel.querySelector('.pip-imagery-state')?.textContent ?? '').trim(),
+      stateTitle: (panel.querySelector('.pip-imagery-state')?.getAttribute('title') ?? '').trim(),
+      imgs: panel.querySelectorAll('img').length,
+      credits: panel.querySelectorAll('a[href^="http"], .pip-credit').length,
+      canvases: canvases.length,
+      canvas2d: canvases.map((c) => { try { return c.getContext('2d') !== null; } catch (error) { return false; } }),
+      statedSize: (panel.querySelector('.pip-resizer')?.getAttribute('aria-label') ?? '').trim(),
+      stored,
+      lobesToggles: lobes.length,
+      lobesPressed: lobes.map((b) => b.getAttribute('aria-pressed')),
+      lobesLegend: panel.querySelectorAll('.section-lobes-legend').length,
+    };
+  })()`)
+  const panelPaint = await evaluate(canvasStatsFor(PIP_CANVAS))
+  const panelStored = (() => {
+    try { return JSON.parse(panelUnderRealRequest.stored) } catch (error) { return null }
+  })()
+  if (panelUnderRealRequest === null) {
+    bad('the simulated-section panel is not in the 3D tab')
+  } else {
+    panelUnderRealRequest.imgs === 0 && panelUnderRealRequest.credits === 0
+      && panelUnderRealRequest.canvases === 1 && panelUnderRealRequest.canvas2d[0] === true
+      ? ok('the panel requests and receives no real imagery: 0 <img>, 0 credit link, its one canvas is 2D')
+      : bad(`the panel is not imagery-free under a real-modality request (${JSON.stringify(panelUnderRealRequest)})`)
+    const panelStatesSimulatedOnly = /simulated section only/.test(panelUnderRealRequest.stateLine)
+      && !/blocked/i.test(panelUnderRealRequest.stateLine)
+    panelStatesSimulatedOnly
+      ? ok(`the panel states what it shows while the Plates tab asks for real imagery ("${panelUnderRealRequest.stateLine}") — no dropped-imagery alarm`)
+      : bad(`the panel's imagery line is wrong or reports a blocked imagery draw ("${panelUnderRealRequest.stateLine}")`)
+    info('panel imagery line at the real-modality request: "' + panelUnderRealRequest.stateLine
+      + '" / title "' + panelUnderRealRequest.stateTitle.slice(0, 110) + '"')
+    panelPaint !== null && panelPaint.painted > 50
+      ? ok(`the panel paints the simulated section under a real-modality request (${panelPaint.painted}/${panelPaint.sampled} non-background samples)`)
+      : bad(`the panel is blank under a real-modality request (${JSON.stringify(panelPaint)})`)
+    realOnPlates.credit !== null
+      ? ok(`the Plates tab kept drawing the REAL layer for the same plane (credit "${String(realOnPlates.credit).slice(0, 46)}") — the modality choice still works as before`)
+      : info(`the Plates tab drew no real layer for ${realModality} at this plane (no credit line) — the panel-independence half is still asserted above`)
+    const panelKeptUserChoice = panelStored !== null && panelStored.kind !== 'none'
+      && String(realOnPlates.stored) === String(panelUnderRealRequest.stored)
+    if (realModality === 'none available') {
+      info('no real modality could be selected at this plane, so the panel-independence half of P4 '
+        + 'is limited to the imagery-free assertions above (the imagery-off state was still asked for)')
+    } else if (panelKeptUserChoice) {
+      ok(`the panel did NOT rewrite the user's persisted modality (neuroaxis.sectionUnderlay.kind = "${panelStored.kind}" before and during the panel's lifetime)`)
+    } else {
+      bad(`the panel rewrote the persisted imagery choice (requested ${realModality}; Plates read ${JSON.stringify(realOnPlates.stored)}, panel read ${JSON.stringify(panelUnderRealRequest.stored)})`)
+    }
+    panelUnderRealRequest.lobesToggles === 1 && panelUnderRealRequest.lobesPressed[0] === 'true'
+      ? ok('the panel carries the same cortical-division state as the Plates canvas (one toggle, aria-pressed=true — one shared layer state)')
+      : bad(`the panel's cortical-division toggle disagrees with the Plates surface (${JSON.stringify({
+          toggles: panelUnderRealRequest.lobesToggles, pressed: panelUnderRealRequest.lobesPressed,
+        })})`)
+  }
+
+  /* ---- the reload: size + layer choice + imagery state must all survive ---- */
+  const beforeReload = await evaluate(`(() => {
+    const w = document.querySelector('.pip-panel .pip-window');
+    const r = w === null ? null : w.getBoundingClientRect();
+    let size = null, underlay = null;
+    try {
+      size = window.localStorage.getItem('neuroaxis.sectionPipSize');
+      underlay = window.localStorage.getItem('neuroaxis.sectionUnderlay');
+    } catch (error) { size = 'unavailable'; }
+    return {
+      width: r === null ? null : Math.round(r.width),
+      height: r === null ? null : Math.round(r.height),
+      size, underlay,
+    };
+  })()`)
+  const resizeForReload = await evaluate(`(() => {
+    const b = document.querySelector('.pip-panel .pip-resizer');
+    if (b === null) return 'no resizer';
+    b.focus();
+    return document.activeElement === b ? 'focused' : 'not focused';
+  })()`)
+  await pressKey('ArrowRight', 'ArrowRight', 39)
+  await pressKey('ArrowDown', 'ArrowDown', 40)
+  await sleep(800)
+  const sizedForReload = await evaluate(`(() => {
+    const w = document.querySelector('.pip-panel .pip-window');
+    const r = w === null ? null : w.getBoundingClientRect();
+    let size = null;
+    try { size = window.localStorage.getItem('neuroaxis.sectionPipSize'); } catch (error) { size = 'unavailable'; }
+    return { width: r === null ? null : Math.round(r.width), height: r === null ? null : Math.round(r.height), size };
+  })()`)
+  const sizeChanged = sizedForReload.width !== beforeReload.width || sizedForReload.height !== beforeReload.height
+  sizeChanged
+    ? ok(`the panel was resized to a distinctive size before the reload (${sizedForReload.width}×${sizedForReload.height}, ${resizeForReload})`)
+    : bad(`could not resize the panel before the reload check (${JSON.stringify(beforeReload)} → ${JSON.stringify(sizedForReload)})`)
+
+  await send('Page.navigate', { url: BASE })
+  await sleep(8000)
+  await evaluate(clickText('3D'))
+  await sleep(3000)
+  const afterReload = await evaluate(`(() => {
+    const panel = document.querySelector('.pip-panel');
+    const w = panel === null ? null : panel.querySelector('.pip-window');
+    const r = w === null ? null : w.getBoundingClientRect();
+    let size = null, underlay = null;
+    try {
+      size = window.localStorage.getItem('neuroaxis.sectionPipSize');
+      underlay = window.localStorage.getItem('neuroaxis.sectionUnderlay');
+    } catch (error) { size = 'unavailable'; }
+    const lobes = document.querySelector('.section-lobes-toggle');
+    return {
+      width: r === null ? null : Math.round(r.width),
+      height: r === null ? null : Math.round(r.height),
+      size, underlay,
+      lobesPressed: lobes === null ? null : lobes.getAttribute('aria-pressed'),
+      lobesLegend: document.querySelectorAll('.section-lobes-legend').length,
+      panel: panel !== null,
+    };
+  })()`)
+  const panelPaintAfterReload = await evaluate(canvasStatsFor(PIP_CANVAS))
+  afterReload.panel && afterReload.width === sizedForReload.width && afterReload.height === sizedForReload.height
+    ? ok(`the panel's size survives a RELOAD (${afterReload.width}×${afterReload.height}, persisted as ${afterReload.size})`)
+    : bad(`the panel's size did not survive the reload (before ${sizedForReload.width}×${sizedForReload.height}, after ${afterReload.width}×${afterReload.height}, stored ${afterReload.size})`)
+  afterReload.lobesPressed === 'true' && afterReload.lobesLegend === 1
+    ? ok('the cortical-division layer is still ON after the reload, with its legend (the choice persisted, the layer repainted)')
+    : bad(`the cortical-division layer did not survive the reload (pressed=${String(afterReload.lobesPressed)}, legends=${afterReload.lobesLegend})`)
+  const afterReloadStored = (() => {
+    try { return JSON.parse(afterReload.underlay) } catch (error) { return null }
+  })()
+  const imageryChoiceSurvived = afterReloadStored !== null && panelStored !== null
+    && afterReloadStored.kind === panelStored.kind
+  imageryChoiceSurvived
+    ? ok(`the imagery choice is unchanged by the panel across a reload (neuroaxis.sectionUnderlay.kind = "${panelStored.kind}")`)
+    : bad(`the persisted imagery choice changed across the reload (before ${JSON.stringify(panelStored)}, after ${JSON.stringify(afterReload.underlay)})`)
+  panelPaintAfterReload !== null && panelPaintAfterReload.painted > 50
+    ? ok(`the panel paints after the reload (${panelPaintAfterReload.painted}/${panelPaintAfterReload.sampled} non-background samples at its restored size)`)
+    : bad(`the panel is blank after the reload (${JSON.stringify(panelPaintAfterReload)})`)
+
+  /* leave the panel at the named small stop rather than at the custom size */
+  const sizeReset = await evaluate(`(() => {
+    const panel = document.querySelector('.pip-panel');
+    const b = panel && [...panel.querySelectorAll('button')].find((x) => /^Panel size/.test(x.getAttribute('title') || ''));
+    if (!b) return 'no size button';
+    b.click();
+    return 'clicked';
+  })()`)
+  await sleep(700)
+  const sizeAfterReset = await evaluate(`(() => {
+    const w = document.querySelector('.pip-panel .pip-window');
+    const r = w === null ? null : w.getBoundingClientRect();
+    return { width: r === null ? null : Math.round(r.width), height: r === null ? null : Math.round(r.height) };
+  })()`)
+  sizeAfterReset.width === 224 && sizeAfterReset.height === 170
+    ? ok(`the panel is left at its named small stop (224×170, ${sizeReset})`)
+    : info(`the panel is left at ${JSON.stringify(sizeAfterReset)} (${sizeReset})`)
 
 } catch (error) {
   bad(`audit aborted: ${error instanceof Error ? error.message : String(error)}`)

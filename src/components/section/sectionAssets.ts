@@ -154,6 +154,31 @@ function metaFor(part: AnatomyPart): SectionPartMeta {
 /** Every committed GLB as a section part, in manifest order (stable). */
 export const SECTION_PARTS: readonly SectionPartMeta[] = getManifest().parts.map(metaFor)
 
+/* ------------------------------------------------- v9 cortical-lobe layer */
+
+/**
+ * The two cortical-ribbon GLBs the rough lobe partition re-colours
+ * (corticalLobes.ts, docs/SWARM_V9_PLAN.md §2). These are the DERIVED
+ * hemisphere shells — the same slugs `TEL_HEMISPHERE_SHELLS` names — and they
+ * are the only section parts whose contours carry a cortical ribbon: every
+ * other part is a nucleus, a tract, a ventricle or a deep surface, which has no
+ * lobe to belong to. The layer is drawn OVER their existing context fill, so
+ * the partition never replaces the taxonomy colouring.
+ */
+export const SECTION_CORTICAL_RIBBON_SLUGS: ReadonlySet<string> = new Set([
+  'ctx-hemisphere-l',
+  'ctx-hemisphere-r',
+])
+
+/**
+ * Whether a section part's contour is a piece of the cortical ribbon the
+ * cortical-division layer may re-colour. Pure slug test (no geometry, no
+ * taxonomy read) so the canvas can call it per part per frame.
+ */
+export function isCorticalRibbonSlug(slug: string): boolean {
+  return SECTION_CORTICAL_RIBBON_SLUGS.has(slug)
+}
+
 /** Copy positions + indices out of a parsed geometry as worker-owned
  *  transferables (detach-safe for the 3D scene's shared geometry).
  *

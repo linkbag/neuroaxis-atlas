@@ -1061,4 +1061,245 @@ parsed into the previous ternary's never-evaluated alternate branch and reported
 after the fix; see `docs/NEUROATLAS_V8_PLAN.md` §9.4). Their absence was caught because the count did not
 match the number of checks written, which is why the audit prints a count rather than only a verdict.
 
+---
+
+## 12. v9 — the somatotopic map, the cortical-division layer, and the imaging registration measurement
+
+**Appended by the v9 `integrate-docs` task** (`docs/SWARM_V9_PLAN.md` §8, task 6 in that plan's §6 table;
+the executable contract the run was verified against is `PLAN.md`, which is **gitignored** — a plan of record
+in the working tree only). §1–§11 above are the dated v6/v7/v8 reconciliations and **none of them was edited,
+renumbered or restated**. Every number here was recomputed from `src/data` / `src/assets` at close-out with
+`npm run validate` and the gates named per row — not copied from a task report. Where a v9 task's own report
+disagrees with the recomputation, the recomputation is what is written here.
+
+### 12.1 Measured delta
+
+| quantity | §11.13 (v8 closure) | v9 close-out | how |
+| --- | --- | --- | --- |
+| registry entries (`taxonomy.json`) | 220 | **236** | `npm run validate` |
+| registry entries awaiting an authored record | 0 | **0** | `npm run validate` |
+| by kind | — | nucleus · tract · surface · context · ventricle · **vessel** (unchanged counts per kind except `context` **+16**) | registry read |
+| `structures/*.json` | 16 files / 197 records | **17 files / 213 records** | `npm run validate` |
+| `tracts.json` | 23 | **23** (unchanged) | `npm run validate` |
+| `levels.json` anchors | 17 | **17** (unchanged, values unchanged) | `npm run validate` |
+| syndromes | 26 in 3 files | **26 in 3 files** (unchanged) | `npm run validate` |
+| plates / plate SVGs | 15 / 15 | **15 / 15** (unchanged) | `npm run validate` |
+| `npm run validate` | 0 errors, 0 warnings | **0 errors, 0 warnings** | gate |
+
+**16 ids registered, 16 records authored** — the whole v9 content delta is one new file and one append-only
+registry edit. No pre-existing record was edited, renamed or moved by v9.
+
+### 12.2 The somatotopic map — 16 new records (`src/data/structures/telencephalon-somatotopy.json`)
+
+All 16: `region: "telencephalon"` · `subdivision: "Functional cortical areas"` (existing — no new
+subdivision) · `kind: "context"` · `laterality: "paired"` · `meshes: false` · `parent` = `ctx-m1` / `ctx-s1`
+(both pre-existing) · 8 level anchors each · 2–3 `refs` · `synonyms` · `connections.afferent/efferent` ·
+`function` · `clinical[]` · `contextNote`. Registry rows were appended **before** the records referenced them
+(registry-first), and `npm run validate` reports 0 waiting and 0 drift.
+
+| # | slug | body part | strip | order | `origin3d` (record) | measured outward normal | probe residual |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `ctx-m1-toe` | toe | M1 | 0 | [7.46, 109.89, −11.91] | (−0.76, 0.63, 0.15) | 0.04 au (0.05 mm) |
+| 2 | `ctx-m1-leg` | leg | M1 | 1 | [15.03, 108.00, −12.70] | (0.86, 0.19, −0.48) | 0.03 au (0.04 mm) |
+| 3 | `ctx-m1-trunk` | trunk | M1 | 2 | [24.89, 102.10, −12.76] | (−0.72, 0.40, 0.57) | 0.16 au (0.19 mm) |
+| 4 | `ctx-m1-arm` | arm | M1 | 3 | [30.70, 99.40, −8.45] | (−0.42, 0.69, 0.59) | 0.05 au (0.06 mm) |
+| 5 | `ctx-m1-hand` | hand | M1 | 4 | [38.46, 93.20, −10.91] | (0.62, 0.25, −0.74) | 0.04 au (0.05 mm) |
+| 6 | `ctx-m1-face` | face | M1 | 5 | [42.97, 80.14, −6.95] | (0.88, −0.28, −0.39) | 0.07 au (0.08 mm) |
+| 7 | `ctx-m1-tongue` | tongue | M1 | 6 | [46.49, 68.50, −4.39] | (0.32, 0.66, 0.68) | 0.01 au (0.01 mm) |
+| 8 | `ctx-m1-larynx` | larynx | M1 | 7 | [48.42, 58.23, −3.51] | (0.95, −0.24, 0.19) | 0.04 au (0.05 mm) |
+| 9 | `ctx-s1-toe` | toe | S1 | 0 | [7.33, 108.57, −20.76] | (−0.32, 0.40, 0.86) | 1.00 au (1.20 mm) |
+| 10 | `ctx-s1-leg` | leg | S1 | 1 | [15.69, 105.80, −17.75] | (−0.21, 0.26, 0.94) | **2.29 au (2.75 mm)** |
+| 11 | `ctx-s1-trunk` | trunk | S1 | 2 | [23.50, 102.15, −16.99] | (−0.68, 0.67, 0.32) | 0.53 au (0.64 mm) |
+| 12 | `ctx-s1-arm` | arm | S1 | 3 | [32.26, 94.48, −17.63] | (0.84, −0.41, −0.35) | 0.29 au (0.35 mm) |
+| 13 | `ctx-s1-hand` | hand | S1 | 4 | [37.07, 91.24, −15.26] | (−0.26, 0.73, 0.63) | 0.78 au (0.94 mm) |
+| 14 | `ctx-s1-face` | face | S1 | 5 | [40.36, 78.22, −16.43] | (0.84, −0.52, 0.17) | 0.53 au (0.64 mm) |
+| 15 | `ctx-s1-tongue` | tongue | S1 | 6 | [46.37, 68.13, −14.62] | (0.58, 0.82, −0.04) | 0.41 au (0.49 mm) |
+| 16 | `ctx-s1-larynx` | larynx | S1 | 7 | [50.86, 60.88, −9.24] | (0.87, 0.25, 0.42) | **2.20 au (2.64 mm)** |
+
+**The placement method, measured (not guessed).** The probe
+(`node .dsh-scratch/somatotopy-probe7b.mjs`, gitignored scratch, reported in the task report) reads the
+committed `src/assets/anatomy/ctx-hemisphere-l.glb` — 1 mesh, **40,388 verts / 81,128 tris**, bbox
+x [1.00, 55.47] y [−6.80, 113.70] z [−72.82, 70.59], **signed volume +301,371.7 au³** (so the winding is
+CCW-outward and the vertex normals point away from tissue), mean edge 1.306 au. For each segment it takes an
+authored anatomical landmark, projects it by exhaustive nearest-vertex search onto the ribbon, records the
+residual between the landmark and the vertex it found, and takes the local surface normal. The committed table
+lives in `src/geometry/somatotopy.ts` **with the rule that produced it**, so a re-run reproduces the 16 rows.
+
+**Ordering evidence.** `npm run verify:somatotopy` (**45 assertions, exit 0**): `order` is 0…7 in somatotopic
+sequence on both strips; **arc length strictly increasing** (M1 min gap 7.72 au = 9.26 mm, S1 min gap
+6.27 au = 7.52 mm); **canonical x also strictly increasing** (M1 min gap 1.93 au, S1 3.29 au) — medial→lateral
+in +x; **8/8 M1↔S1 pairing** by body part with the posterior offset printed per part (4.45–10.53 au); every
+`origin3d`, every `origin3d ± size3d`, every normal-offset patch centre and every **mirrored (−x)** extent
+inside `CLIP_BOUNDS` x[−58,58] y[−55,116] z[−76,72]; surface contact re-measured against the GLB — all 16
+patch centres within 1 au of a ribbon vertex (worst 0.36 au) and the worst sampled rim point 3.05 au
+(3.67 mm) at `ctx-s1-trunk` against a 3.5 au tolerance; patch footprint [3.80, 3.00, 3.00] au half-sizes, so
+the strip reads as a band and the closest pair of centres (1.93 au apart, on M1) overlaps.
+
+**Colour ramp.** One ramp, reproduced in the registry so the two cannot drift: anchors M1 `#446ff2 → #e14a55`
+and S1 `#5b8fd9 → #d95b6e`, running face (0) → hand (0.2) → arm (0.4) → trunk (0.6) → leg (0.8) → toe (1).
+
+**Honest limit, in the records themselves.** Every `contextNote` states that the placement is **schematic on
+the derived `ctx-hemisphere-l` ribbon**, names the probe command and carries that segment's own measured
+residual — the three least certain (`ctx-s1-leg` 2.29 au, `ctx-s1-larynx` 2.20 au, `ctx-s1-toe` 1.00 au) say
+so explicitly. The 3D body-part labels render for the hovered/selected segment (two `label3d` nodes per
+segment, one per hemisphere), so at rest the map reads by colour ramp only.
+
+### 12.3 The cortical-division layer — method, fitted constants and residuals
+
+Not a content addition (no id, no record): `src/components/section/corticalLobes.ts` is a **geometric
+partition of the derived ribbon**, drawn by the 2D live section over the existing "Cerebral cortex" fill.
+The file header carries the caveat **"THIS DIVIDES THE DERIVED RIBBON, NOT A GYRAL MAP"** and every boundary's
+measurement and residual:
+
+| boundary | fitted to | residual |
+| --- | --- | --- |
+| central sulcus (frontal \| parietal) | the measured dorsal-ridge notch (ridge 106 → 90 at x 20–26); `z_cs(y) = −57 − 11.5y` below the knee, `y ≥ 77` above it | **0.0 au at both measured endpoints**, 5.4 au at the hand-knob reach |
+| lateral fissure (temporal \| frontal/parietal) | the measured MCA M1 junction (nearest ribbon vertex 3.13 au at [26.4, 15.2, 20.7]) and the M2 exit (5.93 au at [33.2, 36.6, 29.4]); `y_fis(z) = max(15, 30.7 − 0.46(z − 5))`, gated z ≤ 45 and x ≥ 18 + 0.055(z + 40) | **3.9 au at the M2 exit** |
+| parieto-occipital / calcarine (occipital) | `z ≤ −50 − 0.15y` above y = −5, pinned to an **11.05 %** ribbon share at z ≤ −52 (PCA P2 z [−16.6, 12.4] reported) | pinned, not fitted |
+| circular sulcus / insular limen (insula) | an ellipsoid at centre [29, 22, 17], radii (13, 16, 22) au = **15.6 × 19.2 × 26.4 mm**, holding **3.34 %** of ribbon vertices and **2.10 %** of reference-plane area | morphometric series 1.8–2.5 % |
+| callosal/cingulate + collateral (limbic) | callosal band radii (20, 22) au about the measured callosum (y [19.4, 63.9], z [−34.8, 41.1]), cut at the splenium by `y + 0.45z ≥ 42`, x ≤ 24 — **3.4 au = 4.1 mm** of cingulate beyond the callosal surface — plus the medial temporal band (x ≤ 22, y ≤ 20, z [−20, 17]) | **4.1 mm** of cingulate beyond the callosum |
+
+**Measured shares** (`npm run verify:cortical-lobes`, **200/200 assertions**, exit 0; the check prints the
+per-plane table and each plane's absent divisions). Whole ribbon by vertex: frontal 44.30 %, parietal 21.63 %,
+temporal 17.60 %, occipital 9.27 %, limbic 3.86 %, insula 3.34 %.
+
+| division | share over the 13 reference planes | planes where it is present / absent |
+| --- | --- | --- |
+| frontal | **47.60 %** | present 9 · absent y = 0 |
+| parietal | **27.30 %** | present 7 · absent y = 14, y = 78, z = 0 |
+| temporal | **12.90 %** | present 6 · absent y = 68, y = 78, x = 6, z = 40 |
+| occipital | **6.60 %** | present 7 · absent y = 78, z = 0, z = 40 |
+| limbic | **3.50 %** | present 6 · absent y = 30, y = 68, y = 78, z = 40 |
+| insula | **2.11 %** | present 3 · absent y = 0, 48, 58, 68, 78, x = 6, z = 40 |
+
+**Honest limits, with their numbers.** (1) **Three of the 13 reference planes — y = −46, −24, −8 — miss the
+ribbon entirely** (its inferior limit is y = −6.803) and carry no division. (2) The per-division absence list
+above is the honest form of "each division is non-empty on the reference planes". (3) At the 0.5 au raster two
+**sub-cell slivers** lose their last cell (parietal at z = 0 and limbic at z = 40 have run vertices but no
+raster cell). (4) The derived ribbon has **no insular surface**: at y = 30 the Sylvian corridor is a gap
+between z 21.5 and 24.9, so the insula ellipsoid paints the deepest available limen tissue, not real insular
+cortex. (5) `limbic : rest = 1 : 26.8` against **1 : 8 – 1 : 20** in the literature — the band is the 1–2
+gyrus strip the probe could measure, not the whole limbic lobe; the medial temporal band under-counts the
+parahippocampal gyrus deliberately (lateral edge 22 vs hippocampal lateral edge 31.0).
+
+### 12.4 The imaging registration measurement (`src/assets/imaging/registration-fit.json`, `plate-fit.json`)
+
+Produced by the re-runnable fitter `node scripts/fit-imaging-affine.mjs --report` (deterministic coarse-to-fine
+grid search, 3 stages, no RNG/clock/network; objective = minimise `1 − IoU(atlasBrainMask, imageMask ∘ T)` on a
+512² uniform canonical grid in the plane frame). The **atlas mask** is 34 committed GLB parts read through the
+section pipeline's own clipping; the **image mask** is each modality's own committed voxels/JPEG/PNG.
+
+**Grid modalities — 8 reference planes each (y = −46, −24, −8, 0, 14, 30, x = 6, z = 0).** Search bounds
+scale ×[0.75, 1.25] uniform, translation ±48 au; the ROI is the atlas mask's own in-plane bbox padded 30 %
+per side (the image is a head, the atlas is a brain, so a global IoU is dominated by pixels no atlas brain can
+cover — that is why the ROI figure is the one quoted).
+
+| modality | image mask | mean ROI IoU before → **per-plane winners** | mean centroid residual | the ONE similarity that could ship | verdict |
+| --- | --- | --- | --- | --- | --- |
+| **CT** | `ct.bin` uint8 ≥ 8, `backgroundValue 0` excluded → **302,860 / 979,371 voxels kept (30.9 %)**; 350,001 no-data + 326,510 below floor rejected | 0.0569 → **0.1428** (8 improved · 0 worsened · 0 unchanged) | 18.09 → **10.64 au** (max 51.54 → 38.64) | su = sv = **0.75**, du **+8**, dv **+40 au** → mean ROI IoU 0.2575 but mean residual **20.39 au** (median 10.82 → **34.04**), worst single plane **+15.24 au**, improving **2/8** planes | **NOT APPLIED** (`applied: false`) |
+| **MRI** | `mri-t1.bin` uint8 ≥ 40 → **832,843 / 979,371 voxels kept (85.0 %)** | 0.0675 → **0.1555** (8 improved · 0 worsened · 0 unchanged) | 9.40 → **6.93 au** (max 30.97 → 17.96) | su = sv **0.75**, du **+8**, dv **+40 au** → mean residual **17.75 au** (median 4.38 → **27.34**), worst single plane **+14.79 au**, improving **3/8** planes | **NOT APPLIED** (`applied: false`) |
+
+**Why the "improvement" was rejected.** The atlas mask is a **brain** and the image mask is the **head's
+soft-tissue envelope** — there is no brain segmenter in this repo and no dependency may be added — so only
+**6.6 % (CT) / 8.0 % (MRI)** of the atlas lands on image mask (median extent ratio 1.04 × 1.26). A
+translation/scale search is not comparing two views of one object, and the single similarity that maximises
+the mean IoU **makes the centroid residual worse on the planes that matter**. The committed placement is kept
+and the residual is reported rather than tuned away; both manifests carry the reason string with those
+numbers, and `imageLayers.ts` prints it as the UI's alignment note.
+
+**Photograph / stain plates — 24 measurable PNG plates.** Image mask = in-script PNG decode
+(`node:zlib inflateSync` + PNG filters 0–4); tissue = luminance < (median of the 8-px border bands − 12).
+
+| plate | ref plane | tissue % | ROI IoU before → after | Δ IoU | centroid residual before → after (au) | extent ratio to atlas before → after | verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `ubc-c07.png` | z = 0 | 50.1 | 0.0276 → 0.3485 | +0.3208 | 3.91 → 1.32 | 0.16×0.09 → 1.27×0.64 | applied |
+| `ubc-c09.png` | z = 0 | 51.6 | 0.0292 → 0.3456 | +0.3164 | 3.76 → 8.51 | 0.17×0.09 → 1.15×0.57 | applied (extent repair) |
+| `ubc-c11.png` | z = 0 | 58.4 | 0.0326 → 0.3616 | +0.3290 | 3.68 → 6.24 | 0.17×0.09 → 1.17×0.59 | applied (extent repair) |
+| `ubc-c12.png` | z = 0 | — | — | — | — | — | applied |
+| `ubc-c13.png` | z = 0 | 59.5 | 0.0319 → 0.3733 | +0.3413 | 3.69 → 8.55 | 0.17×0.09 → 1.10×0.55 | applied (extent repair) |
+| `ubc-c14.png` | z = 0 | 57.4 | 0.0309 → 0.3669 | +0.3360 | 3.66 → 8.19 | 0.17×0.09 → 1.10×0.54 | applied (extent repair) |
+| `ubc-c15.png` | z = 0 | 50.1 | 0.0259 → 0.3704 | +0.3445 | 4.45 → 8.70 | 0.17×0.09 → 1.13×0.60 | applied (extent repair) |
+| `ubc-c16.png` | z = 0 | 51.5 | 0.0267 → 0.3724 | +0.3456 | 4.35 → 10.30 | 0.18×0.09 → 1.14×0.60 | applied (extent repair) |
+| `ubc-c17.png` | z = 0 | 45.2 | 0.0221 → 0.3686 | +0.3465 | 4.50 → 11.55 | 0.14×0.09 → 1.39×0.78 | applied (extent repair) |
+| `ubc-c18.png` | z = 0 | 45.9 | 0.0234 → 0.3703 | +0.3469 | 5.33 → 10.00 | 0.14×0.09 → 1.39×0.78 | applied (extent repair) |
+| `ubc-c19.png` | z = 0 | 43.1 | 0.0222 → 0.3546 | +0.3324 | 4.32 → 11.11 | 0.13×0.09 → 1.36×0.78 | applied (extent repair) |
+| `ubc-c20.png` | z = 0 | 43.2 | 0.0220 → 0.3680 | +0.3460 | 4.23 → 12.02 | 0.16×0.09 → 1.35×0.78 | applied (extent repair) |
+| `ubc-c21.png` | z = 0 | 39.9 | 0.0196 → 0.3636 | +0.3440 | 4.35 → 8.85 | 0.16×0.09 → 1.39×0.81 | applied (extent repair) |
+| `ubc-c22.png` | z = 0 | 42.0 | 0.0210 → 0.3593 | +0.3383 | 4.14 → 7.02 | 0.13×0.09 → 1.35×0.78 | applied (extent repair) |
+| `ubc-c23.png` | z = 0 | 47.0 | 0.0238 → 0.3609 | +0.3372 | 3.91 → 8.26 | 0.17×0.09 → 1.32×0.74 | applied (extent repair) |
+| `ubc-c24.png` | z = 0 | 47.1 | 0.0239 → 0.3658 | +0.3419 | 3.83 → 5.53 | 0.14×0.09 → 1.32×0.74 | applied (extent repair) |
+| `ubc-h12.png` | y = 14 | 46.0 | 0.0901 → 0.3486 | +0.2585 | 16.26 → 11.47 | 0.23×0.24 → 0.94×0.95 | applied |
+| `ubc-h13.png` | y = 0 | 46.1 | 0.0991 → 0.4140 | +0.3149 | 15.99 → 14.09 | 0.29×0.27 → 0.97×0.88 | applied |
+| `ubc-h14.png` | y = 0 | 46.0 | 0.0948 → 0.4121 | +0.3173 | 16.27 → 14.44 | 0.25×0.27 → 0.96×0.88 | applied |
+| `ubc-h15.png` | y = −8 | 53.0 | 0.1095 → 0.6242 | +0.5146 | 21.01 → 2.00 | 0.34×0.35 → 0.95×1.00 | applied |
+| `ubc-h16.png` | y = −8 | 41.8 | 0.0910 → 0.6121 | +0.5212 | 21.48 → 3.84 | 0.32×0.33 → 1.02×1.07 | applied |
+| `ubc-h17.png` | y = −24 | 44.5 | 0.0993 → 0.6994 | +0.6001 | 20.28 → 1.48 | 0.34×0.38 → 1.14×1.26 | applied |
+| `ubc-h18.png` | y = −24 | 43.2 | 0.0948 → 0.7063 | +0.6116 | 19.96 → 2.77 | 0.35×0.38 → 1.02×1.09 | applied |
+| `ubc-h19.png` | y = −46 | 42.9 | 0.3732 → 0.7262 | +0.3530 | 1.89 → 0.92 | 2.03×1.55 → 1.26×0.91 | applied (extent repair) |
+| `ubc-h20.png` | y = −46 | 42.9 | 0.3432 → 0.7305 | +0.3873 | 2.28 → 0.80 | 2.15×1.76 → 1.24×0.91 | applied (extent repair) |
+
+**Totals: 24 plates measured · 24 applied · 0 kept · 0 worsened · mean ROI IoU 0.0741 → 0.4468.** The
+"extent repair" override is part of the shipped record and says so in each plate's own `applyReason`: where
+the committed placement made the plate 0.13–0.18 × 0.09 the atlas cross-section (outside the 3× sanity
+limit), the plate's tissue centroid is not a registration reference, so the centroid gate is overridden by
+the extent repair — which is exactly the defect the user reported for the photographs.
+
+**Not measured, with counts: 49 JPEG plates** (`vhp-*` 22, `ubc-m*` 17, `bmm-*` 10) are recorded
+`unmeasurable: no-decoder` — no JPEG decoder exists in this repo and no dependency may be added — and keep
+their committed placement. **3 plates** (`wikict-axial-*`) carry no committed `fit` and are `not-fittable`.
+**Nothing about those 52 plates is claimed as measured.**
+
+**Where the numbers live and what reads them.** `src/assets/imaging/registration-fit.json` (every plane,
+bound, residual, candidate and gate) and `plate-fit.json` (per-plate rows) are the records;
+`src/assets/imaging/ct-manifest.json` / `mri-manifest.json` carry the additive
+`registration.display` block (`applied`, `reason`, parameters, gate, residuals, note); the corrected plate
+affines travel as `fittedFit` in `src/data/sectionImages.ts` (4 map literals + the wiring that reads them),
+and `src/components/section/imageLayers.ts` **prefers `fittedFit`** over the legacy `fit` — it is the single
+place the layers are sampled.
+
+**The frozen invariant held.** `ct.bin`, `mri-t1.bin` and both manifests' `dims`/`originAu`/`spacingAu` are
+byte-identical to `HEAD` (the only manifest change is the additive `registration.display` block), so
+`verify:anatomy`'s MRI/CT legacy-level invariant (`max |Δ| 0 of 255`) is untouched: the correction is
+display-time only, never a re-bake.
+
+**RED GATE, recorded rather than hidden.** `npm run verify:imaging-fit` **fails on the committed tree**, and
+the failure was made measurable rather than merely reported: the committed gate re-runs the fitter as a
+**piped child process**, which this sandbox denies, so the command itself stops at
+`FAIL the fitter could not be re-run: spawnSync C:\nvm4w\nodejs\node.exe EPERM` (exit 1, **no assertion runs**).
+The fitter's `--json` output was therefore captured by redirection and fed to a byte-identical copy of the gate
+with only that transport swapped (`.dsh-scratch/v9-imagingfit/imaging-fit.local.mjs`, gitignored scratch;
+5 insertions / 9 deletions against the committed file), which completes: **289 assertions, 20 failures**.
+**18 are real defects in the committed state** — 16 × *"the manifest stores this plane"* (the gate compares
+every recomputed plane against `registration.display.planes`, and the committed manifests carry **no `planes`
+array**: their `registration.display.residuals` holds only the aggregate keys
+`planesFitted, improved, worsened, unchanged, roi, roiIouBefore, roiIouAfterPerPlaneWinners,
+roiIouWithChosenCorrection, min/maxRoiIouBefore, mean/maxCentroidResidual{Before,AfterPerPlaneWinners,
+WithChosenCorrection}Au, meanAtlasCoverage{Before,After}, toleranceIou, toleranceAu, note`) and 2 ×
+*"`sectionImages.ts` carries the accepted correction"* (`ubc-c13`/`ubc-c14` ship the literal `3.108820` while
+the gate builds `Math.round(scale × 1e6) / 1e6` = `3.10882` — equal numbers, different string). The other 2
+failures are artifacts of the copy: inside `.dsh-scratch`, the gate's own
+`git show HEAD:src/assets/imaging/*.bin` byte comparison cannot resolve, so `ct.bin`/`mri-t1.bin` report
+*"cannot read HEAD"*; on the committed gate, from the repo root, those two bytes checks are the ones that pass.
+Both real defects are in files owned by the `imaging-registration` task, so this document **records** them; the
+fix is either to write `display.planes` from the fitter's own per-plane table (or drop the per-plane comparison
+and keep the means) and to format/compare the `fittedFit` scale numerically.
+
+### 12.5 Verification performed in this task (all non-browser)
+
+| gate | result |
+| --- | --- |
+| `npm run validate` | **exit 0 — 0 errors, 0 warnings** · 236 registry entries (0 awaiting a record) · 17 files / 213 records · 23 tracts · 26 syndromes · 15 plates · 17 levels |
+| `npm run check` | **exit 0** |
+| `npm run build` | **exit 0** (9.15 s) |
+| `npm run verify:pipeline` | **exit 0 — 138/138 parts · 599,204 triangles · 386 loops across 13 planes · 0 problems** |
+| `npm run verify:plane` | **exit 0 — 10,827 assertions** |
+| `npm run verify:somatotopy` | **exit 0 — 45 passed / 0 failed** |
+| `npm run verify:cortical-lobes` | **exit 0 — 200/200 assertions** |
+| `npm run verify:pip-contract` | **exit 0 — 83 passed / 0 failed**, and **5/5 mutations caught** in an isolated copy (guard removed, resizer removed, clamp window widened, retired GPU token restored, imagery scope not started) with the restored copy re-running green |
+| `npm run verify:imaging-fit` | **exit 1 — NOT RUN AS ASSERTED in this sandbox** (the gate re-runs the fitter as a piped child: `spawnSync node EPERM`, no assertion runs); driven through a byte-identical copy with the captured fitter JSON it completes with **289 assertions / 20 failures = 18 real defects + 2 `HEAD` artifacts of the copy** (§12.4) |
+| `npm run verify:audit-checks` | **exit 1 — 90 passed / 1 failed / 7 informational** — *"rows dimmed at default framing"* lists the 14 `vasc-*` rows, a pre-existing v8 condition (the brainstem-focus default hides the vasculature by design while the check only exempts the telencephalon); reproduced by three tasks against stashed `HEAD` files |
+| `npm run verify:anatomy` | **not runnable in the agent sandbox** — `anatomy-qa.mjs:294` spawns PowerShell with piped stdio and the sandbox denies it (`spawnSync powershell EPERM`, errno −4048), so it aborts **before printing its verdict**. No agent may claim 27/27 from here; the orchestrator records it |
+| browser lanes (`verify:audit` / `verify:acceptance` / `verify:browser`) | **not run and not claimed** — Chrome cannot start in the sandbox (exit 4, "no check was run"). Every behaviour claim that needs a page (the somatotopy patches and labels render, the cortical-division layer and legend paint, the corrected photographs look aligned, images-off paints only the simulated section, the panel paints the section and resizes/persists, no plane helper appears in it) is marked **orchestrator-verified only** |
+
+
 

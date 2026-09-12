@@ -433,15 +433,42 @@ const levels = readJson('src/data/levels.json')
     : bad(`store.defaultLayers() reports "${preset}", not brainstem-focus`)
 
   const dimmed = taxonomy.filter((entry) => {
-    if (entry.region === 'telencephalon') return false
+    // v8 amendment — this check is the second copy of the store's own boot rule
+    // (state/store.ts), and it must track it. The vascular overlay is exempt for
+    // the reason stated there: the rule is about the NEURAXIS PARENCHYMA ("the
+    // brainstem stays whole at default framing"), and an artery is not a brainstem
+    // nucleus. The exemption is not a loophole — the block right below asserts
+    // exactly what it means, so a future edit that dimmed vessels by STRUCTURE
+    // HIDE (which would keep them hidden after the user switches the vascular
+    // region on) still fails here.
+    if (entry.region === 'telencephalon' || entry.region === 'vasculature') return false
     return !defaultLayers.regions.has(entry.region) || !defaultLayers.kinds.has(entry.kind)
   })
   dimmed.length === 0
     ? ok(
-        `no non-telencephalon row is layer-off under the default preset ` +
-          `(${taxonomy.filter((e) => e.region !== 'telencephalon').length} rows checked)`,
+        `no non-telencephalon/non-vascular row is layer-off under the default preset ` +
+          `(${taxonomy.filter((e) => e.region !== 'telencephalon' && e.region !== 'vasculature').length} rows checked)`,
       )
     : bad(`rows dimmed at default framing: ${dimmed.map((e) => `${e.id} (${e.region}/${e.kind})`).join(', ')}`)
+
+  // v8: the vascular exemption, asserted rather than assumed (the store asserts the
+  // other half — that All / Whole brain / Vasculature all carry the region AND the
+  // `vessel` kind with no vessel hidden — at module load).
+  {
+    const vascular = taxonomy.filter((e) => e.region === 'vasculature')
+    const regionOff = !defaultLayers.regions.has('vasculature')
+    const kindOn = defaultLayers.kinds.has('vessel')
+    const structureHidden = vascular.filter((e) => defaultLayers.hidden.has(e.id))
+    vascular.length > 0 && regionOff && kindOn && structureHidden.length === 0
+      ? ok(
+          `the ${vascular.length} vascular rows are off at default framing through the REGION layer only ` +
+            `(none structure-hidden, the vessel kind layer stays on, so switching the region reveals them)`,
+        )
+      : bad(
+          `the vascular exemption is not what it claims: ${vascular.length} row(s), region-off ${regionOff}, ` +
+            `vessel-kind-on ${kindOn}, structure-hidden ${structureHidden.map((e) => e.id).join(',') || 'none'}`,
+        )
+  }
 
   // The predicate itself, fed the browser lane's reading shape.
   assertVerdict(

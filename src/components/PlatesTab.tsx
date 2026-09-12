@@ -62,6 +62,8 @@ import {
 import {
   CT_WINDOW_PRESETS,
   CT_WINDOW_PRESET_LABELS,
+  IMAGERY_OFF_STATEMENT,
+  SECTION_UNDERLAY_KIND_DESCRIPTIONS,
   SECTION_UNDERLAY_KIND_LABELS,
   SECTION_UNDERLAY_KINDS,
   useAtlasStore,
@@ -596,6 +598,15 @@ export default function PlatesTab() {
                     type="button"
                     className={`btn${sectionUnderlay.kind === kind ? ' is-active' : ''}`}
                     aria-pressed={sectionUnderlay.kind === kind}
+                    // v9 item 4: the accessible name carries the "what it does"
+                    // sentence from the store (`SECTION_UNDERLAY_KIND_DESCRIPTIONS`),
+                    // so the state is legible to a screen reader as well as on
+                    // screen — and it always CONTAINS the visible label, which is
+                    // what WCAG 2.5.3 (label in name) requires. The visible text
+                    // stays the bare label on purpose: audit.mjs:656/716,
+                    // checks.mjs:523 and browser-probe.mjs:274 match these
+                    // buttons by their EXACT text (see the store's label note).
+                    aria-label={SECTION_UNDERLAY_KIND_DESCRIPTIONS[kind]}
                     disabled={reason !== null}
                     title={
                       reason !== null
@@ -743,8 +754,19 @@ export default function PlatesTab() {
                 credit line; every embedded source stays listed above
               </span>
             ) : (
-              <span className="section-alignment-note" role="note">
-                simulated only — real imagery is switched off; nothing external is drawn
+              // v9 item 4 — the images-off state, stated as a CHOICE rather than
+              // as missing data: no coverage excuse, no "unavailable at this
+              // plane" wording (this plane is irrelevant — nothing external is
+              // ever drawn in this mode), plus the two facts that make the state
+              // complete for the user: where the simulated section keeps
+              // rendering, and that the 3D tab's panel is simulated-only too.
+              // The sentence comes from the store so this toolbar, the panel's
+              // own line and the canvas hint cannot describe it differently.
+              <span className="section-alignment-note is-imagery-off" role="note">
+                {`${SECTION_UNDERLAY_KIND_LABELS.none} (no imagery) — ${IMAGERY_OFF_STATEMENT}. `}
+                This canvas and the 3D tab&rsquo;s simulated-section panel both follow it at every
+                plane; the choice is remembered across reloads, and every embedded source stays
+                listed above.
               </span>
             )}
 

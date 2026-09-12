@@ -34,10 +34,32 @@
  *   3. the simulated structure contours — translucent overlay over a real base
  *      (CONTOUR_OVERLAY_ALPHA, crisp outlines, selection unaffected), or the
  *      normal v3 rendering when the simulated section IS the base;
- *   4. labels (selected-structure name + hover), then crosshair, orientation
+ *   4. v9 cortical divisions (§2, `Cortical divisions` toggle): the fitted
+ *      lobe/division partition of the DERIVED cortical ribbon, stroked and
+ *      filled OVER the context fill from pass 3 — never replacing it — with one
+ *      label per division present, plus a legend that carries the honest caveat
+ *      verbatim (`CORTICAL_LOBE_METHOD_NOTE`). `corticalLobes.ts` holds the
+ *      fitted boundaries with their measurement and residuals;
+ *      `drawCorticalLobes` below is the pass;
+ *   5. labels (selected-structure name + hover), then crosshair, orientation
  *      badges and the plane readout.
  * When no real layer drew, an honest hint replaces the credit line in the same
  * bottom-left slot (imageryHint) — the panel is never silently blank.
+ *
+ * v9 cortical divisions — what is deliberately NOT here:
+ *  - the worker does not know about divisions. The partition is applied to the
+ *    loop vertices `contourWorker` already returns, on the main thread, so the
+ *    worker protocol and `verify:pipeline` are untouched (the worker's header
+ *    states the same);
+ *  - the toggle is not a `Kind` (that also gates the 3D scene) and not `hidden`
+ *    (a set of record ids): it is the store boolean `sectionLobes`, owned by the
+ *    v9 `section-ux` task. `readLobeLayerFlag` prefers that field and falls back
+ *    to the persisted `neuroaxis.sectionLobes` key, so the layer works before
+ *    and after that field lands;
+ *  - the division geometry is cached per render-order build (`buildLobeLayer`),
+ *    so a frame that changed no plane/axis/selection re-splits nothing and the
+ *    memoization contract below is preserved: switching the layer repaints, it
+ *    does not invalidate the contour paths.
  *
  * Performance: plane updates are quantized to 0.25 au and posted at
  * ≤ 15 Hz while dragging (trailing ack keeps the newest plane); draws are
@@ -91,7 +113,7 @@
  * Interaction (pointer, click, wheel, keyboard), the registry and the worker
  * plumbing stay in the component below; none of them is part of a paint pass.
  */
-import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from 'react'
 import { getLevel, getTaxonomyEntry, levels, platesForLevel, shortLevelName } from '../../data/load'
 import {
   highlightIdSet,
@@ -109,6 +131,22 @@ import {
   type PlaneTransform,
 } from './planeGeometry'
 import { pointInLoops, type PlaneAxis, type PlaneSpec } from './contours'
+// v9 task `cortical-lobes` (docs/SWARM_V9_PLAN.md §2): the toggleable rough
+// cortical-division layer. The partition is computed HERE, on the main thread,
+// from the worker's unmodified contour loops (see contourWorker.ts's header for
+// why the protocol is untouched) — so the layer cannot change what the worker
+// returns and `verify:pipeline` cannot regress.
+import {
+  CORTICAL_DIVISION_COLORS,
+  CORTICAL_DIVISION_LABELS,
+  CORTICAL_DIVISION_SHORT_LABELS,
+  CORTICAL_DIVISIONS,
+  CORTICAL_LOBES_FILL_ALPHA,
+  CORTICAL_LOBES_STROKE_ALPHA,
+  CORTICAL_LOBE_METHOD_NOTE,
+  splitLoopByDivisionPlane,
+  type CorticalDivision,
+} from './corticalLobes'
 // v7 closure (gap 3): the CT source-coverage statement — the SAME function the
 // Plates toolbar renders its `.is-ct-coverage` note from, so the canvas hint and
 // the toolbar can never state two different limits.
@@ -118,6 +156,7 @@ import {
   SECTION_KIND_ALPHA,
   SECTION_KIND_ORDER,
   SECTION_PARTS,
+  isCorticalRibbonSlug,
   registryPartFromGeometry,
   useSectionGeometryStatus,
   type SectionPartMeta,
@@ -160,6 +199,69 @@ const CONTOUR_OVERLAY_STROKE_ALPHA = 0.9
 
 /** Nearest-plate chip window (§2.2: ±3 au, plate-backed levels only). */
 const PLATE_CHIP_WINDOW = 3
+
+/* ------------------------------------------------- v9 cortical-lobe layer */
+
+/**
+ * localStorage key + state ownership of the cortical-division layer.
+ *
+ * Plan §6 assigns the field `sectionLobes` and its key `neuroaxis.sectionLobes`
+ * to the v9 task `section-ux` (`src/state/store.ts`), which this task does not
+ * own. The canvas therefore reads the store field DEFENSIVELY
+ * (`readLobeLayerFlag`) and keeps a module-scoped fallback for the moment before
+ * the field lands, so the layer is one toggle either way and the persisted
+ * preference survives a mid-session hot update. When `store.sectionLobes`
+ * exists it wins and `setSectionLobes` writes both it and this key.
+ */
+const LOBES_STORAGE_KEY = 'neuroaxis.sectionLobes'
+
+/** Module-scoped mirror of the store field (see the note above). */
+let lobeLayerFallback = false
+/** The layer's listeners (one canvas per section surface: Plates + PiP). */
+const lobeLayerListeners = new Set<() => void>()
+
+function readLobeLayerFlag(): boolean {
+  const state = useAtlasStore.getState() as unknown as Record<string, unknown>
+  const fromStore = state.sectionLobes
+  if (typeof fromStore === 'boolean') return fromStore
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const raw = window.localStorage.getItem(LOBES_STORAGE_KEY)
+      if (raw === '1') return true
+      if (raw === '0') return false
+    } catch {
+      // Private mode / quota: the layer still works, it just does not stick.
+    }
+  }
+  return lobeLayerFallback
+}
+
+/** Toggle the layer: store action first (when task 4 has landed it), then the
+ *  module fallback + the persisted key, then every listening canvas repaints. */
+function writeLobeLayerFlag(on: boolean): void {
+  lobeLayerFallback = on
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(LOBES_STORAGE_KEY, on ? '1' : '0')
+    }
+  } catch {
+    // Persistence is best-effort (same contract as the underlay settings).
+  }
+  const state = useAtlasStore.getState() as unknown as Record<string, unknown>
+  const setter = state.setSectionLobes
+  if (typeof setter === 'function') {
+    ;(setter as (value: boolean) => void)(on)
+  }
+  for (const listener of [...lobeLayerListeners]) listener()
+}
+
+/** Subscribe to the toggle (React 18 `useSyncExternalStore` contract). */
+function subscribeLobeLayer(listener: () => void): () => void {
+  lobeLayerListeners.add(listener)
+  return () => {
+    lobeLayerListeners.delete(listener)
+  }
+}
 
 /**
  * Orientation badges per §2.2 conventions (in-canvas corner labels).
@@ -699,6 +801,143 @@ function createRenderOrderCache(): RenderOrderCache {
   }
 }
 
+/* ------------------------------------------- cortical-division draw cache */
+
+/** One cortical division's drawn geometry for the current frame. */
+interface LobeLayerEntry {
+  /** One stroked path per same-division run (the division's boundaries). */
+  paths: Path2D[]
+  /** Label anchor in the plane frame: the vertex of the division's longest run
+   *  closest to that run's centroid, so the label is ON the ribbon. */
+  labelU: number
+  labelV: number
+  /** Vertices of this division across the whole slice (diagnostics). */
+  vertices: number
+  /** Vertex count of the longest run seen (label-anchor competition). */
+  longestRun: number
+}
+
+/**
+ * Per-plane cortical-division render geometry (v9 §2). Prepared lazily on the
+ * first frame that needs it and keyed on the render-order build, so switching
+ * the layer ON is the only thing that ever pays the split cost, and a cached
+ * frame (hover, selection, layer registry edit) never re-splits the contours.
+ */
+interface LobeLayerCache {
+  /** Build number of the render order this geometry was derived from. */
+  build: number
+  entries: Partial<Record<CorticalDivision, LobeLayerEntry>>
+  /** Slugs whose contour carried ribbon geometry at this build. */
+  ribbons: string[]
+  /** Vertices classified in total (diagnostics). */
+  vertices: number
+}
+
+function createLobeLayerCache(): LobeLayerCache {
+  return { build: -1, entries: {}, ribbons: [], vertices: 0 }
+}
+
+/**
+ * Build the division geometry for one frame: split every cortical-ribbon loop
+ * into consecutive same-division runs (corticalLobes.splitLoopByDivisionPlane —
+ * the plane value is the canonical coordinate on the plane's own axis, which the
+ * in-plane loop cannot carry), stroke each run into a Path2D through the SAME
+ * `transform` every other pass uses, and keep the longest run's inner vertex as
+ * the label anchor.
+ */
+function buildLobeLayer(
+  cache: LobeLayerCache,
+  items: readonly RenderItem[],
+  axis: PlaneAxis,
+  planeValue: number,
+  transform: Transform,
+  build: number,
+): void {
+  if (cache.build === build) return
+  cache.build = build
+  const entries: Partial<Record<CorticalDivision, LobeLayerEntry>> = {}
+  const ribbons: string[] = []
+  let total = 0
+  for (const item of items) {
+    if (!isCorticalRibbonSlug(item.meta.slug)) continue
+    if (item.part.loops.length === 0) continue
+    ribbons.push(item.meta.slug)
+    for (const loop of item.part.loops) {
+      const runs = splitLoopByDivisionPlane(loop, axis, planeValue)
+      for (const run of runs) {
+        const points = run.points
+        const count = points.length / 2
+        if (count < 2) continue
+        total += count
+        const entry = (entries[run.division] ??= {
+          paths: [],
+          labelU: Number.NaN,
+          labelV: Number.NaN,
+          vertices: 0,
+          longestRun: 0,
+        })
+        entry.vertices += count
+        const path = new Path2D()
+        path.moveTo(
+          (points[0] - transform.u0) * transform.scale,
+          (transform.v0 - points[1]) * transform.scale,
+        )
+        for (let i = 1; i < count; i++) {
+          path.lineTo(
+            (points[i * 2] - transform.u0) * transform.scale,
+            (transform.v0 - points[i * 2 + 1]) * transform.scale,
+          )
+        }
+        if (count >= 3) path.closePath()
+        entry.paths.push(path)
+        // Label anchor: the INNER vertex of the division's LONGEST run, so the
+        // label always sits on the widest piece of that division in the slice
+        // (a 2-vertex sliver at a boundary can never win the anchor).
+        if (count >= 3 && count > entry.longestRun) {
+          entry.longestRun = count
+          let cu = 0
+          let cv = 0
+          for (let i = 0; i < count; i++) {
+            cu += points[i * 2]
+            cv += points[i * 2 + 1]
+          }
+          cu /= count
+          cv /= count
+          let bestU = points[0]
+          let bestV = points[1]
+          let bestD = Infinity
+          for (let i = 0; i < count; i++) {
+            const du = points[i * 2] - cu
+            const dv = points[i * 2 + 1] - cv
+            const d = du * du + dv * dv
+            if (d < bestD) {
+              bestD = d
+              bestU = points[i * 2]
+              bestV = points[i * 2 + 1]
+            }
+          }
+          entry.labelU = bestU
+          entry.labelV = bestV
+        }
+      }
+    }
+  }
+  cache.entries = entries
+  cache.ribbons = ribbons
+  cache.vertices = total
+}
+
+/** Canvas pixel position of a plane-frame point (same transform as every pass). */
+function lobeLabelPosition(
+  entry: LobeLayerEntry,
+  transform: Transform,
+): { sx: number; sy: number } {
+  return {
+    sx: (entry.labelU - transform.u0) * transform.scale,
+    sy: (transform.v0 - entry.labelV) * transform.scale,
+  }
+}
+
 /** Cheap fingerprint of the layer registry contents (ids in registration order). */
 function registryKeyOf(layers: readonly SectionImageLayer[]): string {
   let key = ''
@@ -931,6 +1170,15 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   )
   const [debugTick, setDebugTick] = useState(0)
 
+  /**
+   * v9 §2 — the cortical-division layer's user-visible state. Read through the
+   * module's store subscription (see `readLobeLayerFlag`: the store field
+   * `sectionLobes` wins when task 4 has landed it, the persisted
+   * `neuroaxis.sectionLobes` key otherwise), so the toggle re-renders the
+   * legend and the rAF draw reads the same value through `lobesOnRef`.
+   */
+  const lobesOn = useSyncExternalStore(subscribeLobeLayer, readLobeLayerFlag, () => false)
+
   // Imperative render state.
   const transformRef = useRef<Transform | null>(null)
   const contoursRef = useRef<Map<string, SectionContourPart>>(new Map())
@@ -964,6 +1212,17 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   /** Contour generation: +1 on every worker result, so the cache key cannot
    *  survive a new slice (same plane re-requested after an axis round trip). */
   const contourSerialRef = useRef(0)
+  /** v9 cortical-division layer: per-render-order geometry (see buildLobeLayer). */
+  const lobeLayerRef = useRef<LobeLayerCache>(createLobeLayerCache())
+  /** Mirror of the toggle for the rAF draw (stale-closure safe). */
+  const lobesOnRef = useRef(false)
+  /** Set when the toggle changes between two frames of the same render order,
+   *  so the next frame rebuilds the division geometry (the render key does not
+   *  carry the toggle: switching the layer must not invalidate the memoized
+   *  contour paths, it only changes what is painted over them). */
+  const lobeDirtyRef = useRef(false)
+  // The rAF draw loop outlives renders, so the toggle reaches it through a ref.
+  lobesOnRef.current = lobesOn
 
   /* ------------------------------------------------------------- worker */
 
@@ -1311,11 +1570,90 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       }, item.path)
     }
 
+    // v9 §2: the toggleable rough cortical-division layer, painted OVER the
+    // context fill above (never replacing it) and UNDER the selected label.
+    drawCorticalLobes(frame)
+
     /* ---- labels last: over the base plate AND the contour fills ---- */
     for (const item of visibleParts) {
       if (item.meta.group !== state.selectedId) continue
       if (item.part.loops.length > 0) drawSelectedLabel(ctx, item.meta, item.part, transform)
     }
+  }
+
+  /* --------------------------------------------- v9 cortical-division layer */
+
+  /**
+   * Cortical-division pass (v9 §2). Draws the fitted lobe partition of the
+   * DERIVED cortical ribbon over the existing context fill:
+   *
+   *  - one stroked outline per same-division run, in
+   *    `CORTICAL_DIVISION_COLORS`, `CORTICAL_LOBES_STROKE_ALPHA`, with a thin
+   *    dark casing under it so a boundary between two divisions reads as a
+   *    boundary even where two colours meet;
+   *  - a translucent fill of the same colour at `CORTICAL_LOBES_FILL_ALPHA`
+   *    (mirroring `SECTION_KIND_ALPHA.context`'s translucent contract, so the
+   *    imagery underneath stays visible);
+   *  - one `<name>` label per division present in this slice, anchored on the
+   *    longest run's inner vertex and mapped through the canvas' OWN transform
+   *    (`transform.uToSx`/`vToSy` — never a second mapping), with the section's
+   *    orientation convention inherited from the parent canvas, not re-derived.
+   *
+   * Everything is derived from the cached render order (buildLobeLayer), so a
+   * frame that changed no plane/axis/selection re-splits nothing.
+   */
+  function drawCorticalLobes(frame: SectionFrame): void {
+    if (!lobesOnRef.current) return
+    const { ctx, axis, planeValue, transform, order } = frame
+    const cache = lobeLayerRef.current
+    if (lobeDirtyRef.current) {
+      cache.build = -1
+      lobeDirtyRef.current = false
+    }
+    buildLobeLayer(cache, order.visibleParts, axis, planeValue, transform, order.rebuilds)
+    const divisions = CORTICAL_DIVISIONS.filter((division) => cache.entries[division] !== undefined)
+    if (divisions.length === 0) return
+    ctx.save()
+    for (const division of divisions) {
+      const entry = cache.entries[division] as LobeLayerEntry
+      const color = CORTICAL_DIVISION_COLORS[division]
+      ctx.globalAlpha = CORTICAL_LOBES_FILL_ALPHA
+      ctx.fillStyle = color
+      for (const path of entry.paths) ctx.fill(path, 'evenodd')
+      // Two strokes per run: a dark casing first, then the division colour —
+      // so a boundary between two divisions reads as a boundary, not as a seam
+      // between two translucent fills.
+      ctx.globalAlpha = CORTICAL_LOBES_STROKE_ALPHA
+      ctx.lineWidth = 3
+      ctx.strokeStyle = 'rgba(9, 14, 26, 0.85)'
+      for (const path of entry.paths) ctx.stroke(path)
+      ctx.lineWidth = 1.6
+      ctx.strokeStyle = color
+      for (const path of entry.paths) ctx.stroke(path)
+    }
+    ctx.globalAlpha = 1
+    // Labels: one per division, on the ribbon, with a dark plate behind them.
+    ctx.font = '600 11px system-ui, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    for (const division of divisions) {
+      const entry = cache.entries[division] as LobeLayerEntry
+      if (!Number.isFinite(entry.labelU)) continue
+      const { sx, sy } = lobeLabelPosition(entry, transform)
+      if (sx < 24 || sy < 12 || sx > transform.width - 24 || sy > transform.height - 12) continue
+      const text = CORTICAL_DIVISION_SHORT_LABELS[division]
+      const width = ctx.measureText(text).width + 10
+      ctx.globalAlpha = 0.86
+      ctx.fillStyle = 'rgba(9, 14, 26, 0.86)'
+      ctx.fillRect(sx - width / 2, sy - 8, width, 16)
+      ctx.globalAlpha = 1
+      ctx.strokeStyle = CORTICAL_DIVISION_COLORS[division]
+      ctx.lineWidth = 1
+      ctx.strokeRect(sx - width / 2, sy - 8, width, 16)
+      ctx.fillStyle = CORTICAL_DIVISION_COLORS[division]
+      ctx.fillText(text, sx, sy + 0.5)
+    }
+    ctx.restore()
   }
 
   /**
@@ -1788,6 +2126,14 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   // Any store change → redraw (crosshair/selection/underlay react live).
   useEffect(() => useAtlasStore.subscribe(() => scheduleDraw()), [])
 
+  // v9 §2: the cortical-division layer toggled → repaint once, and mark the
+  // division geometry dirty (the contour paths themselves stay memoized).
+  useEffect(() => {
+    lobeDirtyRef.current = true
+    scheduleDraw()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lobesOn])
+
   // Returning to the tab: repaint once (draws were skipped while hidden).
   useEffect(() => {
     const onVisibilityChange = () => {
@@ -1827,6 +2173,18 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const hoveredEntry = hoveredId !== null ? getTaxonomyEntry(hoveredId) : null
   const selectedEntry = selectedId !== null ? getTaxonomyEntry(selectedId) : null
   const showHoveredEntry = hoveredEntry != null && hoveredEntry.id !== selectedId
+  /**
+   * v9 §2 — which divisions the canvas actually put on screen this frame. Read
+   * from the drawn cache, so the legend lists what was painted (never a
+   * division the rule produced but this plane does not contain).
+   */
+  const drawnDivisions = useMemo(() => {
+    if (!lobesOn) return []
+    return CORTICAL_DIVISIONS.filter(
+      (division) => lobeLayerRef.current.entries[division] !== undefined,
+    )
+    // debugTick changes on every painted frame, so the legend follows the draw.
+  }, [lobesOn, debugTick])
 
   return (
     <div
@@ -1872,6 +2230,12 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
               `kind ${useAtlasStore.getState().sectionUnderlay.kind}`,
               frame ? `frame ${frame.modality}/${frame.status} drew=${frame.drewReal}` : 'frame n/a',
               `layers ${[...kinds.values()].join(' ')}`,
+              // v9 §2: the cortical-division layer's own state — on/off, the
+              // divisions painted at this plane and the vertices classified.
+              lobesOn
+                ? `lobes on · ${drawnDivisions.length} div · ${lobeLayerRef.current.vertices} v` +
+                  ` · ribbons ${lobeLayerRef.current.ribbons.join(',') || 'none'}`
+                : 'lobes off',
               `draw #${debugTick}`,
               // Memoization evidence: draws since the last rebuild of the
               // per-plane render order and the Path2D bytes it retains.
@@ -1928,6 +2292,105 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
           {hint}
         </div>
       )}
+      {/* v9 §2 — the cortical-division layer's user-visible control AND legend.
+          The toggle is a real <button> carrying `aria-pressed`, so it is
+          keyboard operable and its state is announced; the legend lists the
+          divisions the canvas ACTUALLY painted this frame plus the honest
+          caveat, verbatim from `CORTICAL_LOBE_METHOD_NOTE`, so the file header,
+          the legend and the docs cannot state different limits. Styling is
+          inline (like the imagery hint above) so this layer needs no CSS file
+          edit — only task 4 owns `src/styles/**` in this run. */}
+      <div
+        className="section-lobes"
+        style={{
+          position: 'absolute',
+          left: 8,
+          top: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: 4,
+          maxWidth: 'min(320px, 46%)',
+          pointerEvents: 'auto',
+        }}
+      >
+        <button
+          type="button"
+          className="section-lobes-toggle"
+          aria-pressed={lobesOn}
+          title={`${CORTICAL_LOBE_METHOD_NOTE} Fit and residual per boundary: src/components/section/corticalLobes.ts`}
+          onClick={() => writeLobeLayerFlag(!lobesOn)}
+          style={{
+            padding: '3px 9px',
+            border: `1px solid ${lobesOn ? '#38bdf8' : 'rgba(148, 163, 184, 0.45)'}`,
+            borderRadius: 6,
+            background: 'rgba(13, 21, 38, 0.86)',
+            color: lobesOn ? '#e2e8f0' : '#94a3b8',
+            fontSize: '0.7rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          Cortical divisions{lobesOn ? ' · on' : ''}
+        </button>
+        {lobesOn && (
+          <div
+            className="section-lobes-legend"
+            role="note"
+            style={{
+              padding: '5px 8px',
+              background: 'rgba(13, 21, 38, 0.86)',
+              border: '1px solid rgba(148, 163, 184, 0.35)',
+              borderRadius: 6,
+              color: '#cbd5e1',
+              fontSize: '0.68rem',
+              lineHeight: 1.45,
+            }}
+          >
+            {(drawnDivisions.length > 0 ? drawnDivisions : CORTICAL_DIVISIONS).map((division) => (
+              <span
+                key={division}
+                className="section-lobes-row"
+                style={{ display: 'block', whiteSpace: 'nowrap' }}
+              >
+                <span
+                  className="section-lobes-swatch"
+                  style={{
+                    display: 'inline-block',
+                    width: 9,
+                    height: 9,
+                    marginRight: 6,
+                    borderRadius: 2,
+                    background: CORTICAL_DIVISION_COLORS[division],
+                    opacity: drawnDivisions.length > 0 ? 1 : 0.35,
+                  }}
+                  aria-hidden="true"
+                />
+                {CORTICAL_DIVISION_LABELS[division]}
+              </span>
+            ))}
+            <span
+              className="section-lobes-note"
+              style={{
+                display: 'block',
+                marginTop: 4,
+                paddingTop: 4,
+                borderTop: '1px solid rgba(148, 163, 184, 0.25)',
+                color: '#94a3b8',
+              }}
+            >
+              {/* BOTH facts, always: the method caveat is what the layer means
+               *  wherever it IS drawn, and the no-ribbon sentence is what a plane
+               *  without a ribbon adds. Rendering them as either/or (the v9 first
+               *  cut) meant a ribbon-less plane showed only the second, so the
+               *  legend stopped stating that the division is a derived geometric
+               *  approximation exactly where a reader most needs reminding. */}
+              {drawnDivisions.length === 0 ? 'no cortical ribbon at this plane. ' : ''}
+              {CORTICAL_LOBE_METHOD_NOTE}
+            </span>
+          </div>
+        )}
+      </div>
       {plateChip !== null && (
         <button
           type="button"

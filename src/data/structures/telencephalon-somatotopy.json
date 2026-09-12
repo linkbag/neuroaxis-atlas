@@ -1,0 +1,1172 @@
+[
+  {
+    "id": "ctx-m1-toe",
+    "name": "Primary motor cortex (M1) — toe representation",
+    "synonyms": [
+      "foot motor area",
+      "M1 toe area",
+      "paracentral toe representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#e14a55",
+    "meshes": false,
+    "rampT": 1,
+    "function": "The most medial part of the motor strip, tucked into the paracentral lobule on the medial surface of the hemisphere: it drives the intrinsic foot and toe muscles through the most medial (and longest-running) corticospinal fibres. Its medial position is why a foot-predominant weakness points at an anterior cerebral artery territory lesion rather than at the convexity, and why the foot and bladder representations are described together on the medial surface.",
+    "anchors": {
+      "gyrus": "paracentral lobule and the medial end of the precentral gyrus, behind the superior end of the cingulate sulcus",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "M1 (precentral)",
+      "somatotopicOrder": "order 0 of 7, arc s = 0.00 au from the toe",
+      "surfaceNormal": [
+        -0.759,
+        0.633,
+        0.15
+      ]
+    },
+    "contextNote": "Authored v9 record for the toe segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the precentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.04 au = 0.05 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (-0.759, 0.633, 0.15) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 0.00 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary motor cortex (M1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-s1-toe. 3D view: precentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral lateral (VL) and ventral anterior (VA) nuclei (nuc-vl, nuc-va) — the cerebellothalamocortical and pallidothalamocortical motor loops, in the same somatotopic order as the strip",
+        "Local corticocortical input from the adjacent S1 segment of the same body part (ctx-s1-toe) and from the premotor cortex / SMA (ctx-premotor, ctx-sma)",
+        "Callosal fibres from the mirror segment in the contralateral hemisphere for proximal and axial musculature"
+      ],
+      "efferent": [
+        "Corticospinal fibres for the toe through the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid (tract-corticospinal-lateral), keeping the same somatotopic order in the pyramid",
+        "Corticostriate and corticopontine collaterals, plus corticothalamic feedback to the same thalamic territory"
+      ]
+    },
+    "bloodSupply": "Anterior cerebral artery (pericallosal and callosomarginal branches) — the medial surface above the cingulate sulcus.",
+    "clinical": [
+      {
+        "syndrome": "Focal motor deficit of the toe — cortical (M1) localisation",
+        "findings": "Contralateral foot/leg weakness with a relatively spared hand and face; the medial position of this segment makes an anterior cerebral artery territorial infarct the leading explanation, and the deficit may be accompanied by abulia and urinary incontinence when the adjacent SMA and anterior cingulate are involved.",
+        "vascular": "Anterior cerebral artery"
+      },
+      {
+        "syndrome": "Jacksonian march starting in this segment",
+        "findings": "An irritative lesion of the toe representation produces a focal motor seizure that marches to the neighbouring segment in somatotopic order (the next more lateral body part), followed by a transient Todd paresis of the same distribution.",
+        "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      7.46,
+      109.89,
+      -11.91
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Penfield & Rasmussen, The Cerebral Cortex of Man (1950) — the electrical-stimulation homunculus"
+    ]
+  },
+  {
+    "id": "ctx-m1-leg",
+    "name": "Primary motor cortex (M1) — leg representation",
+    "synonyms": [
+      "leg motor area",
+      "M1 leg area",
+      "paracentral leg representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#c25174",
+    "meshes": false,
+    "rampT": 0.8,
+    "function": "The second, slightly more lateral band of the motor strip: hip, knee and ankle musculature. It still occupies the medial surface and the superior rim of the hemisphere, which is why a leg-predominant hemiparesis with relative sparing of the hand and face indicates an anterior cerebral artery territorial infarct rather than a middle cerebral artery one.",
+    "anchors": {
+      "gyrus": "superior rim of the hemisphere adjacent to the paracentral lobule (leg band of the precentral gyrus)",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "M1 (precentral)",
+      "somatotopicOrder": "order 1 of 7, arc s = 7.84 au from the toe",
+      "surfaceNormal": [
+        0.857,
+        0.186,
+        -0.481
+      ]
+    },
+    "contextNote": "Authored v9 record for the leg segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the precentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.03 au = 0.04 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.857, 0.186, -0.481) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 7.84 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary motor cortex (M1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-s1-leg. 3D view: precentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral lateral (VL) and ventral anterior (VA) nuclei (nuc-vl, nuc-va) — the cerebellothalamocortical and pallidothalamocortical motor loops, in the same somatotopic order as the strip",
+        "Local corticocortical input from the adjacent S1 segment of the same body part (ctx-s1-leg) and from the premotor cortex / SMA (ctx-premotor, ctx-sma)",
+        "Callosal fibres from the mirror segment in the contralateral hemisphere for proximal and axial musculature"
+      ],
+      "efferent": [
+        "Corticospinal fibres for the leg through the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid (tract-corticospinal-lateral), keeping the same somatotopic order in the pyramid",
+        "Corticostriate and corticopontine collaterals, plus corticothalamic feedback to the same thalamic territory"
+      ]
+    },
+    "bloodSupply": "Anterior cerebral artery with a middle-cerebral-artery watershed along the superior rim; the ACA/MCA border crosses this band.",
+    "clinical": [
+      {
+        "syndrome": "Focal motor deficit of the leg — cortical (M1) localisation",
+        "findings": "Contralateral foot/leg weakness with a relatively spared hand and face; the medial position of this segment makes an anterior cerebral artery territorial infarct the leading explanation, and the deficit may be accompanied by abulia and urinary incontinence when the adjacent SMA and anterior cingulate are involved.",
+        "vascular": "Anterior cerebral artery"
+      },
+      {
+        "syndrome": "Jacksonian march starting in this segment",
+        "findings": "An irritative lesion of the leg representation produces a focal motor seizure that marches to the neighbouring segment in somatotopic order (the next more lateral body part), followed by a transient Todd paresis of the same distribution.",
+        "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      15.03,
+      108,
+      -12.7
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Penfield & Rasmussen, The Cerebral Cortex of Man (1950) — the electrical-stimulation homunculus"
+    ]
+  },
+  {
+    "id": "ctx-m1-trunk",
+    "name": "Primary motor cortex (M1) — trunk representation",
+    "synonyms": [
+      "trunk motor area",
+      "M1 trunk area",
+      "axial motor representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#a25994",
+    "meshes": false,
+    "rampT": 0.6,
+    "function": "The axial and proximal band: thorax, abdomen and pelvis musculature, the smallest of the limb representations in the classical map. It occupies the superior convexity where the motor strip first rolls off the medial surface, so axial weakness with a preserved limb — or the reverse — is a topographic statement about this segment and its neighbours.",
+    "anchors": {
+      "gyrus": "superior convexity of the precentral gyrus, first segment to leave the medial surface",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "M1 (precentral)",
+      "somatotopicOrder": "order 2 of 7, arc s = 19.33 au from the toe",
+      "surfaceNormal": [
+        -0.716,
+        0.4,
+        0.572
+      ]
+    },
+    "contextNote": "Authored v9 record for the trunk segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the precentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.16 au = 0.19 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (-0.716, 0.4, 0.572) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 19.33 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary motor cortex (M1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-s1-trunk. 3D view: precentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral lateral (VL) and ventral anterior (VA) nuclei (nuc-vl, nuc-va) — the cerebellothalamocortical and pallidothalamocortical motor loops, in the same somatotopic order as the strip",
+        "Local corticocortical input from the adjacent S1 segment of the same body part (ctx-s1-trunk) and from the premotor cortex / SMA (ctx-premotor, ctx-sma)",
+        "Callosal fibres from the mirror segment in the contralateral hemisphere for proximal and axial musculature"
+      ],
+      "efferent": [
+        "Corticospinal fibres for the trunk through the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid (tract-corticospinal-lateral), keeping the same somatotopic order in the pyramid",
+        "Corticostriate and corticopontine collaterals, plus corticothalamic feedback to the same thalamic territory"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior division, with the anterior cerebral artery territory immediately medial to it at the vertex.",
+    "clinical": [
+      {
+        "syndrome": "Focal motor deficit of the trunk — cortical (M1) localisation",
+        "findings": "Contralateral axial weakness, uncommon in isolation; when it occurs with a spared limb it localises to the superior convexity at the ACA/MCA watershed, the segment most exposed to haemodynamic failure.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Jacksonian march starting in this segment",
+        "findings": "An irritative lesion of the trunk representation produces a focal motor seizure that marches to the neighbouring segment in somatotopic order (the next more lateral body part), followed by a transient Todd paresis of the same distribution.",
+        "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      24.89,
+      102.1,
+      -12.76
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Penfield & Rasmussen, The Cerebral Cortex of Man (1950) — the electrical-stimulation homunculus"
+    ]
+  },
+  {
+    "id": "ctx-m1-arm",
+    "name": "Primary motor cortex (M1) — arm representation",
+    "synonyms": [
+      "arm motor area",
+      "M1 arm area",
+      "proximal upper limb representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#8360b3",
+    "meshes": false,
+    "rampT": 0.4,
+    "function": "Shoulder, elbow and forearm musculature on the upper lateral convexity, at the beginning of the disproportionate expansion the distal upper limb receives. Its lateral position puts it squarely in the middle cerebral artery superior division, so a shoulder-predominant weakness belongs to the convexity territory while the leg is spared.",
+    "anchors": {
+      "gyrus": "upper lateral convexity of the precentral gyrus (arm band)",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "M1 (precentral)",
+      "somatotopicOrder": "order 3 of 7, arc s = 27.05 au from the toe",
+      "surfaceNormal": [
+        -0.416,
+        0.692,
+        0.591
+      ]
+    },
+    "contextNote": "Authored v9 record for the arm segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the precentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.05 au = 0.06 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (-0.416, 0.692, 0.591) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 27.05 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary motor cortex (M1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-s1-arm. 3D view: precentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral lateral (VL) and ventral anterior (VA) nuclei (nuc-vl, nuc-va) — the cerebellothalamocortical and pallidothalamocortical motor loops, in the same somatotopic order as the strip",
+        "Local corticocortical input from the adjacent S1 segment of the same body part (ctx-s1-arm) and from the premotor cortex / SMA (ctx-premotor, ctx-sma)",
+        "Callosal fibres from the mirror segment in the contralateral hemisphere for proximal and axial musculature"
+      ],
+      "efferent": [
+        "Corticospinal fibres for the arm through the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid (tract-corticospinal-lateral), keeping the same somatotopic order in the pyramid",
+        "Corticostriate and corticopontine collaterals, plus corticothalamic feedback to the same thalamic territory"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior division (the convexity branches).",
+    "clinical": [
+      {
+        "syndrome": "Focal motor deficit of the arm — cortical (M1) localisation",
+        "findings": "Contralateral arm and hand weakness, hand-predominant; a small convexity infarct or tumour here produces a disproportionately disabling hand deficit while the leg is spared, because the leg representation is medial and in the anterior cerebral artery territory.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Jacksonian march starting in this segment",
+        "findings": "An irritative lesion of the arm representation produces a focal motor seizure that marches to the neighbouring segment in somatotopic order (the next more lateral body part), followed by a transient Todd paresis of the same distribution.",
+        "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      30.7,
+      99.4,
+      -8.45
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Penfield & Rasmussen, The Cerebral Cortex of Man (1950) — the electrical-stimulation homunculus"
+    ]
+  },
+  {
+    "id": "ctx-m1-hand",
+    "name": "Primary motor cortex (M1) — hand representation",
+    "synonyms": [
+      "hand motor area",
+      "M1 hand area",
+      "hand knob",
+      "omega knob"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#6368d3",
+    "meshes": false,
+    "rampT": 0.2,
+    "function": "The hand: the largest single representation in the motor strip, and the one that makes the strip identifiable on imaging — the precentral \"hand knob\" (omega) is the landmark radiologists use to tell precentral from postcentral gyrus. Fine fractionated finger movement, the corticomotoneuronal component of the corticospinal tract, and the substrate of the classic clinical dissociation in which a small convexity lesion produces a disproportionately disabling hand deficit.",
+    "anchors": {
+      "gyrus": "lateral convexity of the precentral gyrus at the hand-knob (the \"omega\" of the central sulcus)",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "M1 (precentral)",
+      "somatotopicOrder": "order 4 of 7, arc s = 37.29 au from the toe",
+      "surfaceNormal": [
+        0.624,
+        0.251,
+        -0.741
+      ]
+    },
+    "contextNote": "Authored v9 record for the hand segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the precentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.04 au = 0.05 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.624, 0.251, -0.741) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 37.29 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary motor cortex (M1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-s1-hand. 3D view: precentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral lateral (VL) and ventral anterior (VA) nuclei (nuc-vl, nuc-va) — the cerebellothalamocortical and pallidothalamocortical motor loops, in the same somatotopic order as the strip",
+        "Local corticocortical input from the adjacent S1 segment of the same body part (ctx-s1-hand) and from the premotor cortex / SMA (ctx-premotor, ctx-sma)",
+        "Callosal fibres from the mirror segment in the contralateral hemisphere for proximal and axial musculature"
+      ],
+      "efferent": [
+        "Corticospinal fibres for the hand through the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid (tract-corticospinal-lateral), keeping the same somatotopic order in the pyramid",
+        "Corticostriate and corticopontine collaterals, plus corticothalamic feedback to the same thalamic territory"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior division — the convexity branches supply the hand knob directly.",
+    "clinical": [
+      {
+        "syndrome": "Focal motor deficit of the hand — cortical (M1) localisation",
+        "findings": "Contralateral arm and hand weakness, hand-predominant; a small convexity infarct or tumour here produces a disproportionately disabling hand deficit while the leg is spared, because the leg representation is medial and in the anterior cerebral artery territory.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Jacksonian march starting in this segment",
+        "findings": "An irritative lesion of the hand representation produces a focal motor seizure that marches to the neighbouring segment in somatotopic order (the next more lateral body part), followed by a transient Todd paresis of the same distribution.",
+        "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      38.46,
+      93.2,
+      -10.91
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Penfield & Rasmussen, The Cerebral Cortex of Man (1950) — the electrical-stimulation homunculus"
+    ]
+  },
+  {
+    "id": "ctx-m1-face",
+    "name": "Primary motor cortex (M1) — face representation",
+    "synonyms": [
+      "face motor area",
+      "M1 face area",
+      "facial motor representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#446ff2",
+    "meshes": false,
+    "rampT": 0,
+    "function": "The face: lower face, lips and jaw, the second-largest representation of the strip. It sits on the lower lateral convexity, medial to the tongue and larynx segments, and it is the segment that gives the corticobulbar tract its crossed-dominance rule — the lower face receives predominantly contralateral corticobulbar input and therefore weakens after a convexity lesion, while the upper face (bilateral input) does not, which is what separates a central from a peripheral facial palsy.",
+    "anchors": {
+      "gyrus": "lower lateral convexity of the precentral gyrus (face band), above the lateral fissure",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "M1 (precentral)",
+      "somatotopicOrder": "order 5 of 7, arc s = 51.66 au from the toe",
+      "surfaceNormal": [
+        0.88,
+        -0.276,
+        -0.386
+      ]
+    },
+    "contextNote": "Authored v9 record for the face segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the precentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.07 au = 0.08 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.88, -0.276, -0.386) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 51.66 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary motor cortex (M1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-s1-face. 3D view: precentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posteromedial (VPM) and parvicellular motor thalamus — the cerebellothalamocortical and pallidothalamocortical motor loops, in the same somatotopic order as the strip",
+        "Local corticocortical input from the adjacent S1 segment of the same body part (ctx-s1-face) and from the premotor cortex / SMA (ctx-premotor, ctx-sma)",
+        "Callosal fibres from the mirror segment in the contralateral hemisphere for proximal and axial musculature"
+      ],
+      "efferent": [
+        "Corticospinal fibres for the face through the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid (tract-corticospinal-lateral), keeping the same somatotopic order in the pyramid",
+        "Corticobulbar fibres to the trigeminal, facial, hypoglossal and nucleus-ambiguus motor nuclei, with crossed dominance for the lower face and genioglossus"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior and inferior divisions meet on the lower convexity; the face band sits near their border.",
+    "clinical": [
+      {
+        "syndrome": "Focal motor deficit of the face — cortical (M1) localisation",
+        "findings": "Contralateral lower-face, tongue or pharyngeal weakness. The crossed corticobulbar dominance for the lower face and genioglossus is why the upper face is spared (bilateral input) and the tongue deviates away from the lesion — the bedside distinction between a central and a peripheral facial palsy.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Jacksonian march starting in this segment",
+        "findings": "An irritative lesion of the face representation produces a focal motor seizure that marches to the neighbouring segment in somatotopic order (the next more lateral body part), followed by a transient Todd paresis of the same distribution.",
+        "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      42.97,
+      80.14,
+      -6.95
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Penfield & Rasmussen, The Cerebral Cortex of Man (1950) — the electrical-stimulation homunculus"
+    ]
+  },
+  {
+    "id": "ctx-m1-tongue",
+    "name": "Primary motor cortex (M1) — tongue representation",
+    "synonyms": [
+      "tongue motor area",
+      "M1 tongue area",
+      "genioglossus representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#7364c3",
+    "meshes": false,
+    "rampT": 0.3,
+    "function": "The tongue: the most lateral of the large representations, on the opercular surface just above the lateral fissure. Its corticobulbar output to the genioglossus is crossed-dominant, so a convexity lesion deviates the protruded tongue away from the weak side — the classic bedside sign that ties the tongue segment to the rest of the homunculus.",
+    "anchors": {
+      "gyrus": "opercular surface of the precentral gyrus, immediately above the lateral fissure",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "M1 (precentral)",
+      "somatotopicOrder": "order 6 of 7, arc s = 64.09 au from the toe",
+      "surfaceNormal": [
+        0.322,
+        0.655,
+        0.684
+      ]
+    },
+    "contextNote": "Authored v9 record for the tongue segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the precentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.01 au = 0.01 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.322, 0.655, 0.684) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 64.09 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary motor cortex (M1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-s1-tongue. 3D view: precentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posteromedial (VPM) and parvicellular motor thalamus — the cerebellothalamocortical and pallidothalamocortical motor loops, in the same somatotopic order as the strip",
+        "Local corticocortical input from the adjacent S1 segment of the same body part (ctx-s1-tongue) and from the premotor cortex / SMA (ctx-premotor, ctx-sma)",
+        "Callosal fibres from the mirror segment in the contralateral hemisphere for proximal and axial musculature"
+      ],
+      "efferent": [
+        "Corticospinal fibres for the tongue through the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid (tract-corticospinal-lateral), keeping the same somatotopic order in the pyramid",
+        "Corticobulbar fibres to the trigeminal, facial, hypoglossal and nucleus-ambiguus motor nuclei, with crossed dominance for the lower face and genioglossus"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, inferior division (opercular branches).",
+    "clinical": [
+      {
+        "syndrome": "Focal motor deficit of the tongue — cortical (M1) localisation",
+        "findings": "Contralateral lower-face, tongue or pharyngeal weakness. The crossed corticobulbar dominance for the lower face and genioglossus is why the upper face is spared (bilateral input) and the tongue deviates away from the lesion — the bedside distinction between a central and a peripheral facial palsy.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Jacksonian march starting in this segment",
+        "findings": "An irritative lesion of the tongue representation produces a focal motor seizure that marches to the neighbouring segment in somatotopic order (the next more lateral body part), followed by a transient Todd paresis of the same distribution.",
+        "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      46.49,
+      68.5,
+      -4.39
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Penfield & Rasmussen, The Cerebral Cortex of Man (1950) — the electrical-stimulation homunculus"
+    ]
+  },
+  {
+    "id": "ctx-m1-larynx",
+    "name": "Primary motor cortex (M1) — larynx representation",
+    "synonyms": [
+      "larynx motor area",
+      "M1 larynx area",
+      "vocalisation area",
+      "laryngeal motor cortex"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#6b66cb",
+    "meshes": false,
+    "rampT": 0.25,
+    "function": "The larynx and pharynx — the most lateral and most inferior representation, on the opercular surface at the bottom of the strip. In the human it is the segment that anchors the cortical control of vocalisation, and it lies immediately anterior to the face and tongue segments, which is why an opercular lesion can leave a patient with a preserved hand but a hoarse, poorly articulated voice.",
+    "anchors": {
+      "gyrus": "opercular surface of the precentral gyrus, at the inferior end of the strip",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "M1 (precentral)",
+      "somatotopicOrder": "order 7 of 7, arc s = 74.57 au from the toe",
+      "surfaceNormal": [
+        0.95,
+        -0.245,
+        0.193
+      ]
+    },
+    "contextNote": "Authored v9 record for the larynx segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the precentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.04 au = 0.05 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.95, -0.245, 0.193) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 74.57 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary motor cortex (M1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-s1-larynx. 3D view: precentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posteromedial (VPM) and parvicellular motor thalamus — the cerebellothalamocortical and pallidothalamocortical motor loops, in the same somatotopic order as the strip",
+        "Local corticocortical input from the adjacent S1 segment of the same body part (ctx-s1-larynx) and from the premotor cortex / SMA (ctx-premotor, ctx-sma)",
+        "Callosal fibres from the mirror segment in the contralateral hemisphere for proximal and axial musculature"
+      ],
+      "efferent": [
+        "Corticospinal fibres for the larynx through the corona radiata, posterior limb of the internal capsule, crus cerebri, basis pontis and pyramid (tract-corticospinal-lateral), keeping the same somatotopic order in the pyramid",
+        "Corticobulbar fibres to the trigeminal, facial, hypoglossal and nucleus-ambiguus motor nuclei, with crossed dominance for the lower face and genioglossus"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, inferior division; the surrounding opercular cortex is the MCA/insular border zone.",
+    "clinical": [
+      {
+        "syndrome": "Focal motor deficit of the larynx — cortical (M1) localisation",
+        "findings": "Contralateral lower-face, tongue or pharyngeal weakness. The crossed corticobulbar dominance for the lower face and genioglossus is why the upper face is spared (bilateral input) and the tongue deviates away from the lesion — the bedside distinction between a central and a peripheral facial palsy.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Jacksonian march starting in this segment",
+        "findings": "An irritative lesion of the larynx representation produces a focal motor seizure that marches to the neighbouring segment in somatotopic order (the next more medial body part), followed by a transient Todd paresis of the same distribution.",
+        "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      48.42,
+      58.23,
+      -3.51
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
+      "Penfield & Rasmussen, The Cerebral Cortex of Man (1950) — the electrical-stimulation homunculus"
+    ]
+  },
+  {
+    "id": "ctx-s1-toe",
+    "name": "Primary somatosensory cortex (S1) — toe representation",
+    "synonyms": [
+      "foot sensory area",
+      "S1 toe area",
+      "paracentral toe representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#d95b6e",
+    "meshes": false,
+    "rampT": 1,
+    "function": "The most medial part of the sensory strip, on the posterior bank of the paracentral lobule, where the foot and toes are represented behind the central sulcus. Together with the leg segment it is the part of the sensory homunculus that faces the interhemispheric fissure, receiving its thalamocortical input from the most medial VPL territory; it is also the site of the bladder afferent representation, which is why medial-surface lesions can disturb micturition control.",
+    "anchors": {
+      "gyrus": "paracentral lobule and the medial end of the precentral gyrus, behind the superior end of the cingulate sulcus",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "S1 (postcentral)",
+      "somatotopicOrder": "order 0 of 7, arc s = 0.00 au from the toe",
+      "surfaceNormal": [
+        -0.318,
+        0.401,
+        0.859
+      ]
+    },
+    "contextNote": "Authored v9 record for the toe segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the postcentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 1.00 au = 1.20 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (-0.318, 0.401, 0.859) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 0.00 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary somatosensory cortex (S1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-m1-toe. 3D view: postcentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posterolateral nucleus (VPL), from the contralateral dorsal column“medial lemniscus and spinothalamic systems — the same body-part band of the thalamic map",
+        "Corticocortical input from the M1 counterpart (ctx-m1-toe), from S2 and from the posterior parietal cortex",
+        "Callosal fibres from the mirror segment, densest for the axial and proximal representations"
+      ],
+      "efferent": [
+        "Descending corticocortical projections back onto S1 and onto area 3a/area 2 subdivisions, and onto the posterior parietal association cortex for the dorsal \"where\" stream",
+        "Corticostriate, corticopontine and corticothalamic feedback, and (for the face and intraoral segments) corticobulbar collaterals to the trigeminal sensory nuclei"
+      ]
+    },
+    "bloodSupply": "Anterior cerebral artery (pericallosal and callosomarginal branches) — the medial surface above the cingulate sulcus.",
+    "clinical": [
+      {
+        "syndrome": "Cortical (S1) sensory loss of the toe",
+        "findings": "Impaired discriminative sensation of the toe — joint position, vibration and fine texture — with preserved crude touch thresholds; the deficit respects the body-part band rather than a dermatome, which is what separates it from a spinal or peripheral lesion.",
+        "vascular": "Anterior cerebral artery"
+      },
+      {
+        "syndrome": "Thalamic pain syndrome after a lesion of the ascending relay",
+        "findings": "Lesions of the VPL/VPM relay that feeds this segment (or of the thalamus itself) can be followed by Déjérine-Roussy syndrome — contralateral spontaneous pain and hyperalgesia in the same body-part band that lost discriminative sensation.",
+        "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      7.33,
+      108.57,
+      -20.76
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Sensory Pathways and the Somatosensory System'",
+      "Kaas, 'The functional organization of somatosensory cortex in primates', Ann Anat 175:509–518 (1993)"
+    ]
+  },
+  {
+    "id": "ctx-s1-leg",
+    "name": "Primary somatosensory cortex (S1) — leg representation",
+    "synonyms": [
+      "leg sensory area",
+      "S1 leg area",
+      "paracentral leg representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#c06583",
+    "meshes": false,
+    "rampT": 0.8,
+    "function": "The leg band of the sensory strip, on the superior rim of the hemisphere just behind the central sulcus, carrying thigh, knee and calf input. Its vessels arrive over the vertex, so it sits in the watershed between the anterior and middle cerebral artery territories — the anatomical reason a proximal leg sensory deficit can follow a haemodynamic rather than a thromboembolic event.",
+    "anchors": {
+      "gyrus": "superior rim of the hemisphere adjacent to the paracentral lobule (leg band of the precentral gyrus)",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "S1 (postcentral)",
+      "somatotopicOrder": "order 1 of 7, arc s = 7.84 au from the toe",
+      "surfaceNormal": [
+        -0.206,
+        0.255,
+        0.945
+      ]
+    },
+    "contextNote": "Authored v9 record for the leg segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the postcentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 2.29 au = 2.75 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (-0.206, 0.255, 0.945) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 7.84 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary somatosensory cortex (S1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-m1-leg. 3D view: postcentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posterolateral nucleus (VPL), from the contralateral dorsal column“medial lemniscus and spinothalamic systems — the same body-part band of the thalamic map",
+        "Corticocortical input from the M1 counterpart (ctx-m1-leg), from S2 and from the posterior parietal cortex",
+        "Callosal fibres from the mirror segment, densest for the axial and proximal representations"
+      ],
+      "efferent": [
+        "Descending corticocortical projections back onto S1 and onto area 3a/area 2 subdivisions, and onto the posterior parietal association cortex for the dorsal \"where\" stream",
+        "Corticostriate, corticopontine and corticothalamic feedback, and (for the face and intraoral segments) corticobulbar collaterals to the trigeminal sensory nuclei"
+      ]
+    },
+    "bloodSupply": "Anterior cerebral artery with a middle-cerebral-artery watershed along the superior rim; the ACA/MCA border crosses this band.",
+    "clinical": [
+      {
+        "syndrome": "Cortical (S1) sensory loss of the leg",
+        "findings": "Impaired discriminative sensation of the leg — joint position, vibration and fine texture — with preserved crude touch thresholds; the deficit respects the body-part band rather than a dermatome, which is what separates it from a spinal or peripheral lesion.",
+        "vascular": "Anterior cerebral artery"
+      },
+      {
+        "syndrome": "Thalamic pain syndrome after a lesion of the ascending relay",
+        "findings": "Lesions of the VPL/VPM relay that feeds this segment (or of the thalamus itself) can be followed by Déjérine-Roussy syndrome — contralateral spontaneous pain and hyperalgesia in the same body-part band that lost discriminative sensation.",
+        "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      15.69,
+      105.8,
+      -17.75
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Sensory Pathways and the Somatosensory System'",
+      "Kaas, 'The functional organization of somatosensory cortex in primates', Ann Anat 175:509–518 (1993)"
+    ]
+  },
+  {
+    "id": "ctx-s1-trunk",
+    "name": "Primary somatosensory cortex (S1) — trunk representation",
+    "synonyms": [
+      "trunk sensory area",
+      "S1 trunk area",
+      "axial sensory representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#a77099",
+    "meshes": false,
+    "rampT": 0.6,
+    "function": "The trunk band of the sensory strip on the superior convexity, carrying thorax and abdominal wall input. It lies between the leg and arm representations, which is why a thoracic sensory level on cortical grounds is very unusual: the cortical trunk band is small, runs along the vertex, and is supplied by the ACA/MCA watershed.",
+    "anchors": {
+      "gyrus": "superior convexity of the precentral gyrus, first segment to leave the medial surface",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "S1 (postcentral)",
+      "somatotopicOrder": "order 2 of 7, arc s = 19.33 au from the toe",
+      "surfaceNormal": [
+        -0.676,
+        0.666,
+        0.315
+      ]
+    },
+    "contextNote": "Authored v9 record for the trunk segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the postcentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.53 au = 0.64 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (-0.676, 0.666, 0.315) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 19.33 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary somatosensory cortex (S1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-m1-trunk. 3D view: postcentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posterolateral nucleus (VPL), from the contralateral dorsal column“medial lemniscus and spinothalamic systems — the same body-part band of the thalamic map",
+        "Corticocortical input from the M1 counterpart (ctx-m1-trunk), from S2 and from the posterior parietal cortex",
+        "Callosal fibres from the mirror segment, densest for the axial and proximal representations"
+      ],
+      "efferent": [
+        "Descending corticocortical projections back onto S1 and onto area 3a/area 2 subdivisions, and onto the posterior parietal association cortex for the dorsal \"where\" stream",
+        "Corticostriate, corticopontine and corticothalamic feedback, and (for the face and intraoral segments) corticobulbar collaterals to the trigeminal sensory nuclei"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior division, with the anterior cerebral artery territory immediately medial to it at the vertex.",
+    "clinical": [
+      {
+        "syndrome": "Cortical (S1) sensory loss of the trunk",
+        "findings": "Impaired discriminative sensation of the trunk — joint position, vibration and fine texture — with preserved crude touch thresholds; the deficit respects the body-part band rather than a dermatome, which is what separates it from a spinal or peripheral lesion.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Thalamic pain syndrome after a lesion of the ascending relay",
+        "findings": "Lesions of the VPL/VPM relay that feeds this segment (or of the thalamus itself) can be followed by Déjérine-Roussy syndrome — contralateral spontaneous pain and hyperalgesia in the same body-part band that lost discriminative sensation.",
+        "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      23.5,
+      102.15,
+      -16.99
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Sensory Pathways and the Somatosensory System'",
+      "Kaas, 'The functional organization of somatosensory cortex in primates', Ann Anat 175:509–518 (1993)"
+    ]
+  },
+  {
+    "id": "ctx-s1-arm",
+    "name": "Primary somatosensory cortex (S1) — arm representation",
+    "synonyms": [
+      "arm sensory area",
+      "S1 arm area",
+      "proximal upper limb representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#8d7aae",
+    "meshes": false,
+    "rampT": 0.4,
+    "function": "The upper-limb band of the sensory strip on the lateral convexity: shoulder, arm and forearm, with the territory expanding sharply towards the hand next to it. It is one of the segments that makes the sensory homunculus legible — the arm/hand boundary is the largest step in representation size along the strip.",
+    "anchors": {
+      "gyrus": "upper lateral convexity of the precentral gyrus (arm band)",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "S1 (postcentral)",
+      "somatotopicOrder": "order 3 of 7, arc s = 27.05 au from the toe",
+      "surfaceNormal": [
+        0.842,
+        -0.412,
+        -0.347
+      ]
+    },
+    "contextNote": "Authored v9 record for the arm segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the postcentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.29 au = 0.35 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.842, -0.412, -0.347) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 27.05 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary somatosensory cortex (S1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-m1-arm. 3D view: postcentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posterolateral nucleus (VPL), from the contralateral dorsal column“medial lemniscus and spinothalamic systems — the same body-part band of the thalamic map",
+        "Corticocortical input from the M1 counterpart (ctx-m1-arm), from S2 and from the posterior parietal cortex",
+        "Callosal fibres from the mirror segment, densest for the axial and proximal representations"
+      ],
+      "efferent": [
+        "Descending corticocortical projections back onto S1 and onto area 3a/area 2 subdivisions, and onto the posterior parietal association cortex for the dorsal \"where\" stream",
+        "Corticostriate, corticopontine and corticothalamic feedback, and (for the face and intraoral segments) corticobulbar collaterals to the trigeminal sensory nuclei"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior division (the convexity branches).",
+    "clinical": [
+      {
+        "syndrome": "Cortical (S1) sensory loss of the arm",
+        "findings": "Impaired discriminative sensation of the arm — joint position, vibration and fine texture — with preserved crude touch thresholds; the deficit respects the body-part band rather than a dermatome, which is what separates it from a spinal or peripheral lesion.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Thalamic pain syndrome after a lesion of the ascending relay",
+        "findings": "Lesions of the VPL/VPM relay that feeds this segment (or of the thalamus itself) can be followed by Déjérine-Roussy syndrome — contralateral spontaneous pain and hyperalgesia in the same body-part band that lost discriminative sensation.",
+        "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      32.26,
+      94.48,
+      -17.63
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Sensory Pathways and the Somatosensory System'",
+      "Kaas, 'The functional organization of somatosensory cortex in primates', Ann Anat 175:509–518 (1993)"
+    ]
+  },
+  {
+    "id": "ctx-s1-hand",
+    "name": "Primary somatosensory cortex (S1) — hand representation",
+    "synonyms": [
+      "hand sensory area",
+      "S1 hand area",
+      "hand knob region"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#7485c4",
+    "meshes": false,
+    "rampT": 0.2,
+    "function": "The hand: the largest representation in the sensory strip and the seat of the cortical components of tactile discrimination — two-point discrimination, stereognosis, graphaesthesia and texture. Its size relative to the trunk band is the clearest expression of the sensory homunculus, and its lateral position in the middle-cerebral-artery territory is why a pure cortical sensory loss with a preserved primary modality points here rather than at the thalamus.",
+    "anchors": {
+      "gyrus": "lateral convexity of the precentral gyrus at the hand-knob (the \"omega\" of the central sulcus)",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "S1 (postcentral)",
+      "somatotopicOrder": "order 4 of 7, arc s = 37.29 au from the toe",
+      "surfaceNormal": [
+        -0.263,
+        0.734,
+        0.626
+      ]
+    },
+    "contextNote": "Authored v9 record for the hand segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the postcentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.78 au = 0.94 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (-0.263, 0.734, 0.626) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 37.29 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary somatosensory cortex (S1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-m1-hand. 3D view: postcentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posterolateral nucleus (VPL), from the contralateral dorsal column“medial lemniscus and spinothalamic systems — the same body-part band of the thalamic map",
+        "Corticocortical input from the M1 counterpart (ctx-m1-hand), from S2 and from the posterior parietal cortex",
+        "Callosal fibres from the mirror segment, densest for the axial and proximal representations"
+      ],
+      "efferent": [
+        "Descending corticocortical projections back onto S1 and onto area 3a/area 2 subdivisions, and onto the posterior parietal association cortex for the dorsal \"where\" stream",
+        "Corticostriate, corticopontine and corticothalamic feedback, and (for the face and intraoral segments) corticobulbar collaterals to the trigeminal sensory nuclei"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior division — the convexity branches supply the hand knob directly.",
+    "clinical": [
+      {
+        "syndrome": "Cortical (S1) sensory loss of the hand",
+        "findings": "Impaired two-point discrimination, stereognosis, graphaesthesia and texture discrimination of the hand with relatively preserved crude touch and pinprick (the spinothalamic and lemniscal primary modalities have subcortical relays): a cortical rather than peripheral pattern, and the reason a parietal convexity lesion can be mistaken for a neuropathy.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Thalamic pain syndrome after a lesion of the ascending relay",
+        "findings": "Lesions of the VPL/VPM relay that feeds this segment (or of the thalamus itself) can be followed by Déjérine-Roussy syndrome — contralateral spontaneous pain and hyperalgesia in the same body-part band that lost discriminative sensation.",
+        "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      37.07,
+      91.24,
+      -15.26
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Sensory Pathways and the Somatosensory System'",
+      "Kaas, 'The functional organization of somatosensory cortex in primates', Ann Anat 175:509–518 (1993)"
+    ]
+  },
+  {
+    "id": "ctx-s1-face",
+    "name": "Primary somatosensory cortex (S1) — face representation",
+    "synonyms": [
+      "face sensory area",
+      "S1 face area",
+      "facial sensory representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#5b8fd9",
+    "meshes": false,
+    "rampT": 0,
+    "function": "The face: lips, cheek and jaw on the lower lateral convexity, with the lips again taking a disproportionate share. It receives the most lateral VPM territory and is the segment whose position — behind the lower end of the central sulcus, anterior to the supramarginal gyrus — makes the lower third of the postcentral gyrus the landing zone for face and intraoral sensation.",
+    "anchors": {
+      "gyrus": "lower lateral convexity of the precentral gyrus (face band), above the lateral fissure",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "S1 (postcentral)",
+      "somatotopicOrder": "order 5 of 7, arc s = 51.66 au from the toe",
+      "surfaceNormal": [
+        0.836,
+        -0.522,
+        0.166
+      ]
+    },
+    "contextNote": "Authored v9 record for the face segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the postcentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.53 au = 0.64 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.836, -0.522, 0.166) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 51.66 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary somatosensory cortex (S1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-m1-face. 3D view: postcentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posteromedial nucleus (VPM), with the trigeminal component for the intraoral segments — the same body-part band of the thalamic map",
+        "Corticocortical input from the M1 counterpart (ctx-m1-face), from S2 and from the posterior parietal cortex",
+        "Callosal fibres from the mirror segment, densest for the axial and proximal representations"
+      ],
+      "efferent": [
+        "Descending corticocortical projections back onto S1 and onto area 3a/area 2 subdivisions, and onto the posterior parietal association cortex for the dorsal \"where\" stream",
+        "Corticostriate, corticopontine and corticothalamic feedback, and (for the face and intraoral segments) corticobulbar collaterals to the trigeminal sensory nuclei"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, superior and inferior divisions meet on the lower convexity; the face band sits near their border.",
+    "clinical": [
+      {
+        "syndrome": "Cortical (S1) sensory loss of the face",
+        "findings": "Impaired two-point discrimination, stereognosis, graphaesthesia and texture discrimination of the face with relatively preserved crude touch and pinprick (the spinothalamic and lemniscal primary modalities have subcortical relays): a cortical rather than peripheral pattern, and the reason a parietal convexity lesion can be mistaken for a neuropathy.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Thalamic pain syndrome after a lesion of the ascending relay",
+        "findings": "Lesions of the VPL/VPM relay that feeds this segment (or of the thalamus itself) can be followed by Déjérine-Roussy syndrome — contralateral spontaneous pain and hyperalgesia in the same body-part band that lost discriminative sensation.",
+        "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      40.36,
+      78.22,
+      -16.43
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Sensory Pathways and the Somatosensory System'",
+      "Kaas, 'The functional organization of somatosensory cortex in primates', Ann Anat 175:509–518 (1993)"
+    ]
+  },
+  {
+    "id": "ctx-s1-tongue",
+    "name": "Primary somatosensory cortex (S1) — tongue representation",
+    "synonyms": [
+      "tongue sensory area",
+      "S1 tongue area",
+      "intraoral representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#817fb9",
+    "meshes": false,
+    "rampT": 0.3,
+    "function": "The tongue and intraoral mucosa, on the opercular surface of the postcentral gyrus above the lateral fissure. It receives the most lateral VPM (and trigeminal) territory; with the face segment beside it, it explains why tongue and lip sensation can be lost together after a low convexity lesion while the hand, a few centimetres away on the same gyrus, is spared.",
+    "anchors": {
+      "gyrus": "opercular surface of the precentral gyrus, immediately above the lateral fissure",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "S1 (postcentral)",
+      "somatotopicOrder": "order 6 of 7, arc s = 64.09 au from the toe",
+      "surfaceNormal": [
+        0.577,
+        0.816,
+        -0.037
+      ]
+    },
+    "contextNote": "Authored v9 record for the tongue segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the postcentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 0.41 au = 0.49 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.577, 0.816, -0.037) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 64.09 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary somatosensory cortex (S1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-m1-tongue. 3D view: postcentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posteromedial nucleus (VPM), with the trigeminal component for the intraoral segments — the same body-part band of the thalamic map",
+        "Corticocortical input from the M1 counterpart (ctx-m1-tongue), from S2 and from the posterior parietal cortex",
+        "Callosal fibres from the mirror segment, densest for the axial and proximal representations"
+      ],
+      "efferent": [
+        "Descending corticocortical projections back onto S1 and onto area 3a/area 2 subdivisions, and onto the posterior parietal association cortex for the dorsal \"where\" stream",
+        "Corticostriate, corticopontine and corticothalamic feedback, and (for the face and intraoral segments) corticobulbar collaterals to the trigeminal sensory nuclei"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, inferior division (opercular branches).",
+    "clinical": [
+      {
+        "syndrome": "Cortical (S1) sensory loss of the tongue",
+        "findings": "Impaired two-point discrimination, stereognosis, graphaesthesia and texture discrimination of the tongue with relatively preserved crude touch and pinprick (the spinothalamic and lemniscal primary modalities have subcortical relays): a cortical rather than peripheral pattern, and the reason a parietal convexity lesion can be mistaken for a neuropathy.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Thalamic pain syndrome after a lesion of the ascending relay",
+        "findings": "Lesions of the VPL/VPM relay that feeds this segment (or of the thalamus itself) can be followed by Déjérine-Roussy syndrome — contralateral spontaneous pain and hyperalgesia in the same body-part band that lost discriminative sensation.",
+        "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      46.37,
+      68.13,
+      -14.62
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Sensory Pathways and the Somatosensory System'",
+      "Kaas, 'The functional organization of somatosensory cortex in primates', Ann Anat 175:509–518 (1993)"
+    ]
+  },
+  {
+    "id": "ctx-s1-larynx",
+    "name": "Primary somatosensory cortex (S1) — larynx representation",
+    "synonyms": [
+      "larynx sensory area",
+      "S1 larynx area",
+      "laryngeal representation"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Functional cortical areas",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#7b82be",
+    "meshes": false,
+    "rampT": 0.25,
+    "function": "The larynx and pharynx on the lowest opercular band of the postcentral gyrus. It is the smallest and least certain representation of the strip — the classical homunculus labels it as part of the face segment, and its separation here follows the standard eight-part M1 decomposition rather than a distinct anatomical boundary.",
+    "anchors": {
+      "gyrus": "opercular surface of the precentral gyrus, at the inferior end of the strip",
+      "mesh": "ctx-hemisphere-l",
+      "strip": "S1 (postcentral)",
+      "somatotopicOrder": "order 7 of 7, arc s = 74.57 au from the toe",
+      "surfaceNormal": [
+        0.871,
+        0.247,
+        0.425
+      ]
+    },
+    "contextNote": "Authored v9 record for the larynx segment of the somatotopic map. PLACEMENT IS SCHEMATIC ON THE DERIVED ctx-hemisphere-l RIBBON, not a gyral or cytoarchitectonic boundary: the centre is the ribbon vertex nearest to an authored landmark on the postcentral bank, measured with nearest-vertex projection by .dsh-scratch/somatotopy-probe7b.mjs (residual 2.20 au = 2.64 mm to the nearest surface vertex; mean triangle edge 1.31 au = 1.57 mm; 1 au = 1.2 mm). The patch reads its outward normal (0.871, 0.247, 0.425) from that vertex and its half-sizes [3.8, 3.0, 3.0] au from the measured spacing between neighbouring segments; the ordering coordinate is the arc length along the fitted strip (s = 74.57 au at this segment), strictly increasing from toe to larynx on both strips. Why the number matters: nearest-vertex residuals came down from a first-pass min 0.56 / median 2.60 / max 3.93 au (probe4) to min 0.01 / median 0.04 / max 0.16 au on M1 and min 0.29 / median 0.78 / max 2.29 au on S1, so the two S1 segments that snap to a different fold (foot/toe 1.00 au, leg 2.29 au, larynx 2.20 au) are the least certain placements in the table. The two strips are NOT a cytoarchitectonic segmentation (no Brodmann 4/3a/3b/1/2 map exists in this atlas) and the atlas' derived ribbon does not carry central-sulcus geometry, so the Primary somatosensory cortex (S1) attribution is a position along the fitted medial-paracentral -> lateral-opercular strip, not a sulcus traced on the mesh. Its somatotopic counterpart is ctx-m1-larynx. 3D view: postcentral patch drawn by SomatotopyOverlay when the telencephalon + context layers are on; the record owns no GLB (meshes: false), so it adds no geometry to the load budget.",
+    "connections": {
+      "afferent": [
+        "Thalamocortical input from the ventral posteromedial nucleus (VPM), with the trigeminal component for the intraoral segments — the same body-part band of the thalamic map",
+        "Corticocortical input from the M1 counterpart (ctx-m1-larynx), from S2 and from the posterior parietal cortex",
+        "Callosal fibres from the mirror segment, densest for the axial and proximal representations"
+      ],
+      "efferent": [
+        "Descending corticocortical projections back onto S1 and onto area 3a/area 2 subdivisions, and onto the posterior parietal association cortex for the dorsal \"where\" stream",
+        "Corticostriate, corticopontine and corticothalamic feedback, and (for the face and intraoral segments) corticobulbar collaterals to the trigeminal sensory nuclei"
+      ]
+    },
+    "bloodSupply": "Middle cerebral artery, inferior division; the surrounding opercular cortex is the MCA/insular border zone.",
+    "clinical": [
+      {
+        "syndrome": "Cortical (S1) sensory loss of the larynx",
+        "findings": "Impaired discriminative sensation of the larynx — joint position, vibration and fine texture — with preserved crude touch thresholds; the deficit respects the body-part band rather than a dermatome, which is what separates it from a spinal or peripheral lesion.",
+        "vascular": "Middle cerebral artery"
+      },
+      {
+        "syndrome": "Thalamic pain syndrome after a lesion of the ascending relay",
+        "findings": "Lesions of the VPL/VPM relay that feeds this segment (or of the thalamus itself) can be followed by Déjérine-Roussy syndrome — contralateral spontaneous pain and hyperalgesia in the same body-part band that lost discriminative sensation.",
+        "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
+      }
+    ],
+    "levels": [
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale",
+      "lvl-tel-convexity"
+    ],
+    "origin3d": [
+      50.86,
+      60.88,
+      -9.24
+    ],
+    "size3d": [
+      3.8,
+      3,
+      3
+    ],
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Sensory Pathways and the Somatosensory System'",
+      "Kaas, 'The functional organization of somatosensory cortex in primates', Ann Anat 175:509–518 (1993)"
+    ]
+  }
+]

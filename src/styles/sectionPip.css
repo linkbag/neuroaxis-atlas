@@ -1,13 +1,44 @@
 /*
- * sectionPip.css — GPU live-section picture-in-picture (SECTION_SYNC_PLAN
- * §2.1, section-pip-v3b task). Docked bottom-right over the 3D canvas:
- * header bar (plane readout, axis override, size + hide) and the viewport
- * window that stays fully transparent — the section pixels are blitted by
- * SectionPiP into the canvas BENEATH this rect, so the window must not tint
- * or blur them (no backdrop-filter here, unlike the other docks).
+ * sectionPip.css — the 3D tab's simulated-section panel (v9 items 4+5,
+ * SECTION_SYNC_PLAN §2.1 for the original dock, PIP_FIX_PLAN for the chrome).
+ * Docked bottom-right over the 3D canvas: header bar (plane readout, axis
+ * override, size + hide), the resizable viewport window and the restore pill.
+ *
+ * ── WHAT CHANGED IN v9, AND WHY THE RULES BELOW LOOK DIFFERENT ──────────────
+ * The window used to be a transparent glass rect over a canvas the GPU PiP
+ * blitted INTO (so it was `pointer-events: none`, carried no background and its
+ * only children were overlay chrome). Since v9 the window contains the real
+ * thing: a `SectionCanvas` instance (`.section-canvas-wrap` > `canvas.section-
+ * canvas`, styled in plates.css) that paints the simulated 2D section. That
+ * changes four rules and adds three:
+ *
+ *   • `pointer-events: auto` — the section is interactive (hover, click to move
+ *     the plane, the cortical-division toggle) instead of a dead rect;
+ *   • `display: flex` — `.section-canvas-wrap` is `flex: 1` (plates.css), so the
+ *     window must lay it out rather than stack it;
+ *   • the size comes from `--pip-window-width` / `--pip-window-height`, written
+ *     as INLINE custom properties by `SectionPiPPanel` (store field
+ *     `sectionPipSize`). Custom properties, not an inline `width`, precisely so
+ *     the ≤900 px media query below can still override the box — an inline
+ *     `width` would beat every stylesheet rule and break the narrow layout.
+ *     `.pip-small` / `.pip-large` stay as the CSS-only fallback for the two
+ *     named stops, and `.pip-custom` (a dragged size) relies on the variables;
+ *   • `.pip-orient` badges, `.pip-offnote` and the new lines are positioned
+ *     INSIDE the window, so they are laid out over the section, not beside it.
+ *
  * Depends only on tokens.css variables.
  */
 
+/*
+ * The panel card. It is shrink-to-fit and centres its children, so its width is
+ * `max(header, window)`: with the window now carrying a real background (it used
+ * to be transparent glass over a blitted canvas), a card wider than the window
+ * would read as a lopsided hole rather than as chrome. Centre + a card
+ * background make any such difference read as deliberate padding, and the
+ * `pip-compact` rules below keep it at zero for every window at or above the
+ * smallest preset. `align-items: center` is also what makes the header's own
+ * width its content width instead of stretching to a wide dragged window.
+ */
 .pip-panel {
   position: absolute;
   right: var(--space-3);
@@ -15,9 +46,10 @@
   z-index: 6;
   display: flex;
   flex-direction: column;
+  align-items: center;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  background: transparent;
+  background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
   overflow: hidden;
 }
@@ -31,6 +63,23 @@
   border-bottom: 1px solid var(--border-subtle);
 }
 
+/*
+ * COMPACT header (`SectionPiPPanel` adds `pip-compact` below
+ * `PIP_COMPACT_WIDTH = 320 px`): the axis caption is dropped and the gaps
+ * tighten so the header fits inside the window at its smallest storable width.
+ * The caption is the one thing here that is purely decorative — the plane
+ * readout beside it (`x = 12.0 au`), the L/R/A/P/S/I badges and the panel's own
+ * `aria-label` all carry the orientation.
+ */
+.pip-compact .pip-header {
+  gap: 3px;
+  padding: 5px 6px;
+}
+
+.pip-compact .pip-title {
+  display: none;
+}
+
 .pip-title {
   font-size: 0.64rem;
   font-weight: 600;
@@ -41,6 +90,7 @@
 }
 
 .pip-readout {
+  flex: 0 0 auto;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--text-primary);
@@ -53,6 +103,7 @@
 
 .pip-axis-group {
   display: flex;
+  flex: 0 0 auto;
   gap: 2px;
 }
 
@@ -86,7 +137,8 @@
 }
 
 .pip-btn:focus-visible,
-.pip-restore:focus-visible {
+.pip-restore:focus-visible,
+.pip-resizer:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -96,11 +148,26 @@
   color: var(--accent);
 }
 
-/* The viewport window: transparent glass over the blitted canvas pixels. */
+/*
+ * The viewport window: it HOLDS the simulated section (a 2D canvas), so it
+ * carries the frame, the clipping and the pointer events the section needs. The
+ * box is driven by the store through the two custom properties; the class-based
+ * rules below are the fallback when only CSS is in play.
+ */
 .pip-window {
   position: relative;
-  background: transparent;
-  pointer-events: none;
+  display: flex;
+  width: var(--pip-window-width, 224px);
+  /* The stored height is authoritative, with ONE guard: a window taller than the
+     viewport would push the panel's own header (and the × / size buttons) off
+     the top of the viewer, stranding the controls. The guard is CSS-only and
+     does not touch the stored value — the panel keeps reporting the size the
+     user chose, and on every viewport that can hold it, that is the size shown. */
+  height: min(var(--pip-window-height, 170px), calc(100vh - 150px));
+  overflow: hidden;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: #0d1526;
+  pointer-events: auto;
 }
 
 .pip-small .pip-window {
@@ -113,9 +180,27 @@
   height: 262px;
 }
 
+/* The panel's content: one transparent container so the boundary inside it can
+   stay layout-transparent (see PipSection). */
+.pip-section {
+  display: contents;
+}
+
+/* The section canvas fills the window (plates.css gives it `flex: 1` for the
+   Plates stage); the window already draws the frame, so the wrap's own border
+   and radius come off here, and no border-box rounding can clip the fills. */
+.pip-window .section-canvas-wrap {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+}
+
 /* Orientation badges (§2.2: L/R/A/P/S/I per axis, patient-left convention). */
 .pip-orient {
   position: absolute;
+  z-index: 2;
   font-family: var(--font-mono);
   font-size: 0.62rem;
   line-height: 1.5;
@@ -124,6 +209,7 @@
   color: var(--text-secondary);
   background: color-mix(in srgb, var(--bg-panel) 80%, transparent);
   user-select: none;
+  pointer-events: none;
 }
 
 .pip-orient-n {
@@ -152,15 +238,17 @@
 
 /*
  * Shown when clipping is disabled (PIP_FIX_PLAN §2, always-render): purely
- * informational — the section still renders from the slider planes. Parked
- * in the bottom-left corner so it never covers the live slice (the canvas
- * beneath this transparent window carries the content).
+ * informational — the section still renders from the slider planes. Stacked
+ * above the imagery-state line in the window's bottom-left corner, ellipsised
+ * with the full sentence in the title, so it never covers the middle of the
+ * section (where the anatomy is) and never collides with the resizer.
  */
 .pip-offnote {
   position: absolute;
-  bottom: 4px;
+  z-index: 2;
+  bottom: 20px;
   left: 4px;
-  max-width: calc(100% - 8px);
+  max-width: calc(100% - 28px);
   font-size: 0.62rem;
   padding: 2px 8px;
   border-radius: 999px;
@@ -171,31 +259,66 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: none;
 }
 
 /*
- * ?pipdebug readout (PIP_FIX_PLAN §4): diagnostics overlay inside the panel
- * window — top-left, mono font, semi-transparent, pointer-events none (the
- * window is transparent glass; the overlay must not tint the section). The
- * component renders null and costs nothing when the flag is absent.
+ * v9 item 4 on this surface: the panel's imagery state, in the slot the retired
+ * real-slice credit line used to occupy ("real imagery is switched off" when the
+ * user chose Simulated only, "kept in the Plates tab (<modality>)" otherwise —
+ * the panel never paints imagery at all). `pointer-events: none` so it cannot
+ * swallow a click meant for the section underneath it.
  */
-.pip-debug {
+.pip-imagery-state {
   position: absolute;
-  top: 4px;
+  z-index: 2;
+  bottom: 4px;
   left: 4px;
-  z-index: 1;
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  line-height: 1.5;
-  text-align: left;
+  max-width: calc(100% - 28px);
+  font-size: 0.62rem;
+  line-height: 1.35;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--bg-panel) 82%, transparent);
   color: var(--text-secondary);
-  background: color-mix(in srgb, var(--bg-panel) 55%, transparent);
-  padding: 3px 6px;
-  border-radius: 4px;
-  white-space: pre;
-  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   user-select: none;
+  pointer-events: none;
+}
+
+/*
+ * v9 item 5 requirement 4 — the resize handle. Bottom-right corner, ≥24 px so it
+ * is a real hit target (the same floor `.pip-btn` and `.pip-restore` meet), with
+ * the diagonal-resize cursor and `touch-action: none` so a pointer drag on a
+ * touchscreen resizes instead of scrolling the page. It is a real <button>, so
+ * the keyboard path (arrows, Shift ×4) and the accessible name come for free.
+ */
+.pip-resizer {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 0;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 24px;
+  height: 24px;
+  padding: 0 2px 1px 0;
+  border: none;
+  border-radius: var(--radius-sm) 0 var(--radius-md) 0;
+  background: color-mix(in srgb, var(--bg-panel) 70%, transparent);
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: nwse-resize;
+  touch-action: none;
+}
+
+.pip-resizer:hover {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--bg-panel) 92%, transparent);
 }
 
 /*
@@ -248,6 +371,10 @@
  * normal desktop width the header above already carries the title, the plane
  * readout and the controls, so the tab is not rendered at all — it appears only
  * inside the ≤900 px media query below, which is where its layout lives.
+ *
+ * v9: this checkbox is the narrow-viewport DISCLOSURE only. The window SIZE is
+ * the store field `sectionPipSize` (the ▴/▾ button and the corner handle), so at
+ * ≤900 px the checkbox cannot fight the size the user saved on a desktop.
  */
 .pip-toggle {
   display: none;
@@ -259,9 +386,9 @@
 
 /*
  * ── RESPONSIVE PiP: collapse to a labelled tab below ~900 px ─────────────
- * QUALITY_PLAN §4 item 15 / AUDIT §2.20: the panel was fixed-size (224×170 /
- * 348×262) with no narrow-width behaviour, so on a phone it covered the 3D
- * model it is supposed to annotate. Below 900 px the two states become
+ * QUALITY_PLAN §4 item 15 / AUDIT §2.20: the panel was fixed-size with no
+ * narrow-width behaviour, so on a phone it covered the 3D model it is supposed
+ * to annotate. Below 900 px the two states become
  *
  *   (a) COLLAPSED — only the panel's own header bar, which is a real
  *       <label class="pip-toggle"> wrapping the native checkbox in the PiP
@@ -379,11 +506,16 @@
   }
 
   /* Expanded narrow panel: the slice fills the free width and is capped by the
-     62vh panel budget; the tab keeps its 44 px row underneath it. The window
-     carries its own top corners because the panel's `overflow: visible` (needed
-     for the collapsed tab) no longer clips them. */
+      62vh panel budget; the tab keeps its 44 px row underneath it. `display:
+      flex` (not `block`) is what makes the section wrap stretch to that height
+      — `.section-canvas-wrap` is a `flex: 1` child, so in a block box it would
+      collapse to zero height. The window carries its own top corners because
+      the panel's `overflow: visible` (needed for the collapsed tab) no longer
+      clips them. This rule deliberately wins over the stored size: on a narrow
+      viewport the CSS box is the layout, and the store value comes back when
+      the viewport is wide again. */
   .pip-panel:has(.pip-toggle input:checked) .pip-window {
-    display: block;
+    display: flex;
     width: 100%;
     height: auto;
     aspect-ratio: 4 / 3;

@@ -180,6 +180,9 @@ import vhp0721 from '../assets/imaging/stains/vhp-0721.jpg'
 export type ImageSource = 'ubc' | 'brainmuseum' | 'commons-ct' | 'vhp-nlm'
 export type SectionAxis = 'transverse' | 'coronal' | 'sagittal'
 
+/** The plane-axis letters a fitted correction may name (canonical axes). */
+export type SectionPlaneAxisLetter = 'x' | 'y' | 'z'
+
 /** First-pass image→canonical affine (see the header: documented defaults). */
 export interface SectionImageFit {
   /** Pixels per canonical atlas unit (isotropic). */
@@ -190,6 +193,20 @@ export interface SectionImageFit {
   dy: number
   /** True when the plate is stored mirrored relative to the canvas. */
   mirrorX?: boolean
+  /**
+   * ── v9 MEASURED correction (task `imaging-registration`) ────────────────
+   * Present only on plates whose fit `scripts/fit-imaging-affine.mjs` measured
+   * AND whose gate accepted (overlap with the atlas brain mask gained AND the
+   * centroid residual to it did not get worse). `imageLayers.drawStainToView`
+   * prefers it over the entry's committed `fit`, and
+   * `imageLayers.imagingAlignmentNote`/`plateAlignmentNote` quote the numbers.
+   * The four placement fields carry the same meaning as on `SectionImageFit`.
+   */
+  residualAu?: number
+  iouBefore?: number
+  iouAfter?: number
+  referencePlane?: { axis: SectionPlaneAxisLetter; value: number }
+  method?: string
 }
 
 /* ------------------------------------------------------- v6 measurement record */
@@ -878,6 +895,15 @@ export interface SectionImage {
   license: string
   /** First-pass image→canonical affine; see the header for the defaults. */
   fit?: SectionImageFit
+  /**
+   * v9 MEASURED correction (task `imaging-registration`): present only when
+   * `scripts/fit-imaging-affine.mjs` measured this plate's own tissue mask
+   * against the atlas brain mask AND its gate accepted the result (overlap
+   * gained and the centroid residual to the atlas did not get worse).
+   * `imageLayers.drawStainToView` prefers it over `fit`; every other plate
+   * keeps its committed `fit` and carries its measured reason instead.
+   */
+  fittedFit?: SectionImageFit
   /** What is KNOWN about `fit` — measured, or a stated documented default. */
   registration?: SectionImageRegistration
   /** Level evidence: site's own title / viewer overlay labels or MSU level id. */
@@ -1294,6 +1320,69 @@ const ubcHDx: Record<number, number> = {
   20: 0.83,
 }
 
+/**
+ * MEASURED AND APPLIED (v9, task `imaging-registration`): the corrections
+ * `scripts/fit-imaging-affine.mjs --report` fitted for these plates and the
+ * fitter's gate accepted. Each plate's own tissue mask (decoded from the
+ * committed PNG) was registered against the atlas brain mask — the committed
+ * GLB contours through the section pipeline's clipping, rasterised by
+ * `planeGeometry.planeTransform` — by a deterministic coarse-to-fine search over
+ * (scale, Δu, Δv). A correction is kept only when the ROI IoU GAINS and the
+ * centroid residual to the atlas does NOT get worse; every other plate keeps its
+ * committed `fit`. Display-time only: no image file is re-encoded, and the
+ * committed `fit` above stays the pre-fit record.
+ *
+ * Per plate: index → { scale (px per au), dx (au), dy (au), residualAu (the
+ * measured centroid residual AFTER the correction), iouBefore, iouAfter }.
+ */
+const ubcHFittedFit: Record<number, { scale: number; dx: number; dy: number; residualAu: number; iouBefore: number; iouAfter: number }> = {
+  12: { scale: 3.365737, dx: -7.55, dy: 24, residualAu: 11.466799, iouBefore: 0.090103, iouAfter: 0.348553 },
+  13: { scale: 4.141176, dx: -7.82, dy: 4, residualAu: 14.085794, iouBefore: 0.099138, iouAfter: 0.413989 },
+  14: { scale: 4.141176, dx: 11.03, dy: 4, residualAu: 14.437427, iouBefore: 0.094811, iouAfter: 0.412107 },
+  15: { scale: 4.680332, dx: 0.61, dy: 24, residualAu: 2.001723, iouBefore: 0.109521, iouAfter: 0.624152 },
+  16: { scale: 4.141176, dx: -13.08, dy: 24, residualAu: 3.840511, iouBefore: 0.090952, iouAfter: 0.612104 },
+  17: { scale: 4.141176, dx: 0.15, dy: 24, residualAu: 1.484103, iouBefore: 0.099345, iouAfter: 0.699444 },
+  18: { scale: 4.680332, dx: 1.06, dy: 24, residualAu: 2.765429, iouBefore: 0.09477, iouAfter: 0.706323 },
+  19: { scale: 21.387342, dx: -0.76, dy: -2, residualAu: 0.923566, iouBefore: 0.373208, iouAfter: 0.726168 },
+  20: { scale: 21.387342, dx: 0.83, dy: -2, residualAu: 0.801836, iouBefore: 0.3432, iouAfter: 0.730516 },
+}
+
+/**
+ * The measured correction for the UBC CORONAL series — the exact counterpart of
+ * `ubcHFittedFit` above, added by the v9 orchestrator.
+ *
+ * Why it had to exist: the coronal plates had no fitted-fit carrier at all, so
+ * they were drawn at the v3 first-pass `UBC_C_FIT_SCALE = 17.9` px/au. The fitter
+ * measures ≈ 4.5 px/au on the same plates (factor ≈ 4), consistent with the
+ * 4.0816 px/au independently measured for this series' framing in
+ * `assets-src/imaging3/VHP_ANCHORS.md` — i.e. the coronal photographs were being
+ * drawn about four times too small, which is exactly what "the photo view is
+ * clearly off" looks like on screen.
+ *
+ * Filled by `scripts/apply-plate-fits.mjs` from the fitter's own record
+ * (`src/assets/imaging/plate-fit.json`); same fields and same contract as the
+ * horizontal table: `fit` above stays the baseline, this is the correction.
+ */
+const ubcCFittedFit: Record<number, { scale: number; dx: number; dy: number; residualAu: number; iouBefore: number; iouAfter: number }> = {
+  7: { scale: 2.609567, dx: -0.28, dy: -4, residualAu: 1.323516, iouBefore: 0.027645, iouAfter: 0.348461 },
+  9: { scale: 2.922449, dx: -0.34, dy: 6, residualAu: 8.508001, iouBefore: 0.029153, iouAfter: 0.345601 },
+  11: { scale: 2.922449, dx: -0.28, dy: 4, residualAu: 6.237715, iouBefore: 0.032562, iouAfter: 0.361571 },
+  13: { scale: 3.10882, dx: 0.22, dy: 6, residualAu: 8.549664, iouBefore: 0.031945, iouAfter: 0.373279 },
+  14: { scale: 3.10882, dx: -0.06, dy: 6, residualAu: 8.194943, iouBefore: 0.030869, iouAfter: 0.366918 },
+  15: { scale: 2.922449, dx: 0, dy: 2, residualAu: 8.703332, iouBefore: 0.025896, iouAfter: 0.370436 },
+  16: { scale: 2.922449, dx: -0.17, dy: 4, residualAu: 10.295378, iouBefore: 0.026742, iouAfter: 0.37236 },
+  17: { scale: 2.248479, dx: -6.06, dy: -18, residualAu: 11.546408, iouBefore: 0.02211, iouAfter: 0.368602 },
+  18: { scale: 2.248479, dx: -2.68, dy: -18, residualAu: 9.995893, iouBefore: 0.023356, iouAfter: 0.370298 },
+  19: { scale: 2.248479, dx: 0.22, dy: -18, residualAu: 11.11312, iouBefore: 0.02217, iouAfter: 0.354601 },
+  20: { scale: 2.248479, dx: -0.39, dy: -18, residualAu: 12.017486, iouBefore: 0.021992, iouAfter: 0.368031 },
+  21: { scale: 2.149343, dx: 0.28, dy: -16, residualAu: 8.854245, iouBefore: 0.019577, iouAfter: 0.363552 },
+  22: { scale: 2.248479, dx: -0.56, dy: -12, residualAu: 7.019858, iouBefore: 0.021043, iouAfter: 0.359303 },
+  23: { scale: 2.357202, dx: 0.11, dy: -12, residualAu: 8.255491, iouBefore: 0.02375, iouAfter: 0.360937 },
+  24: { scale: 2.357202, dx: -0.61, dy: -8, residualAu: 5.528995, iouBefore: 0.023857, iouAfter: 0.365785 },
+}
+
+/** The UBC horizontal plates' committed asset per index (restored after a v9
+ *  applier edit; the assets themselves are imported at the top of this file). */
 const ubcHFiles: Record<number, string> = {
   12: ubcH12,
   13: ubcH13,
@@ -1461,7 +1550,36 @@ export const sectionImages: SectionImage[] = [
       creditUrl: UBC_LICENSE_URL,
       sourceUrl: `${UBC_H_BASE}/h${n}/h${n}brain.png`,
       license: UBC_LICENSE,
+      /* THE BASELINE PLACEMENT — never overwritten by a fitted correction.
+       *
+       * v9 orchestrator fix: this used to resolve to the fitted values whenever
+       * `ubcHFittedFit[n]` existed, which broke the very contract stated in the
+       * `ubcHFittedFit` docstring above ("the committed `fit` above stays the
+       * pre-fit record") and made the measurement NON-IDEMPOTENT: the fitter fits
+       * the image against this `fit`, so feeding it its own output moved the
+       * optimum a little on every re-run (committed 3.560801 vs recomputed
+       * 3.32688 for h12), and `scripts/verify/imaging-fit.mjs` — which requires the
+       * committed numbers to equal a fresh recomputation — could never pass. The
+       * correction now travels ONLY in `fittedFit` (which `imageLayers` prefers),
+       * so the fitter always measures from the same baseline and a re-run
+       * reproduces the committed numbers exactly. */
       fit: { scale: UBC_H_FIT_SCALE, dx: ubcHDx[n], dy: 0, mirrorX: false },
+      /* The measured correction, when this plate has one — read by
+       * imageLayers.drawStainToView (which prefers fittedFit over `fit`) and by
+       * imageLayers.imagingAlignmentNote for the on-screen number. */
+      fittedFit: ubcHFittedFit[n] === undefined
+        ? undefined
+        : {
+            scale: ubcHFittedFit[n].scale,
+            dx: ubcHFittedFit[n].dx,
+            dy: ubcHFittedFit[n].dy,
+            mirrorX: false,
+            residualAu: ubcHFittedFit[n].residualAu,
+            iouBefore: ubcHFittedFit[n].iouBefore,
+            iouAfter: ubcHFittedFit[n].iouAfter,
+            referencePlane: { axis: 'y' as const, value: ubcHPlane[n] },
+            method: 'scripts/fit-imaging-affine.mjs --report',
+          },
       registration: {
         status: REGISTRATION_STATUS.unmeasuredDefault,
         dyAu: 0,
@@ -1496,6 +1614,23 @@ export const sectionImages: SectionImage[] = [
       sourceUrl: `${UBC_C_BASE}/c${n}/c${n}brain.png`,
       license: UBC_LICENSE,
       fit: { scale: UBC_C_FIT_SCALE, dx: ubcCDx[n], dy: 0, mirrorX: false },
+      /* The measured correction, when this plate has one — the same contract as
+       * the horizontal series: `fit` stays the baseline placement and `imageLayers`
+       * prefers this. Absent ⇒ the committed placement is what is drawn (and the
+       * fitter's own record says why, per plate). */
+      fittedFit: ubcCFittedFit[n] === undefined
+        ? undefined
+        : {
+            scale: ubcCFittedFit[n].scale,
+            dx: ubcCFittedFit[n].dx,
+            dy: ubcCFittedFit[n].dy,
+            mirrorX: false,
+            residualAu: ubcCFittedFit[n].residualAu,
+            iouBefore: ubcCFittedFit[n].iouBefore,
+            iouAfter: ubcCFittedFit[n].iouAfter,
+            referencePlane: { axis: 'z' as const, value: ubcCPlane[n] },
+            method: 'scripts/fit-imaging-affine.mjs --report',
+          },
       registration: {
         status: REGISTRATION_STATUS.unmeasuredDefault,
         dyAu: 0,

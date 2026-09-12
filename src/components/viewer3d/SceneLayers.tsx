@@ -49,7 +49,9 @@ import {
   TEL_HEMISPHERE_SHELLS,
 } from '../../geometry/anatomyAssets'
 import NucleusMesh from './NucleusMesh'
+import SomatotopyOverlay from './SomatotopyOverlay'
 import TractTube from './TractTube'
+import { SOMATOTOPY_RECORD_IDS } from '../../geometry/somatotopy'
 
 /** Envelope gray (plan §6 context palette) — fed to the factory material. */
 const CONTEXT_COLOR = '#94a3b8'
@@ -463,8 +465,18 @@ export default function SceneLayers() {
       <ContextEnvelopes highlight={highlight} />
       {/* §5 cortex ghost: the two hemisphere shells at their own material. */}
       <TelGhostShells highlight={highlight} cortexHidden={hidden.has(TEL_HEMISPHERE_RECORD_IDS[0])} />
+      {/* v9 somatotopy: one oriented patch per M1/S1 segment, on the same ribbon.
+          `SomatotopyOverlay` carries its own region+kind gate (and the same
+          highlight/dimming contract), so it needs no props — only the records are
+          filtered out of the structure pass above, so nothing is drawn twice. */}
+      <SomatotopyOverlay />
       {visibleStructures.map((record) => {
         if (ENVELOPE_RECORD_IDS.has(record.id)) return null // envelope pass above
+        // v9 (PLAN.md §5.1): the 16 somatotopic segment records have no GLB and no
+        // placeholder ellipsoid of their own — their 3D body is the oriented patch
+        // drawn by <SomatotopyOverlay> below, so the ordinary pass must skip them
+        // rather than draw a second, wrong sphere on the same spot.
+        if (SOMATOTOPY_RECORD_IDS.has(record.id)) return null
         // Ventricle records keep their parametric v1 shape as the fallback;
         // NucleusMesh upgrades to the committed GLB when the manifest has one.
         const override = record.kind === 'ventricle' ? cachedVentricleGeometry(record.id) : undefined
