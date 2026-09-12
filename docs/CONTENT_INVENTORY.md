@@ -1434,5 +1434,86 @@ nothing about that class).
 | `npm run verify:imaging-fit` | **exit 1 — environment, not product**: `FAIL the fitter could not be re-run: spawnSync node EPERM` (**0 assertions run**); red at base and unchanged by this run |
 | browser lanes (`verify:audit` / `verify:acceptance` / `verify:browser`) | **not run and not claimed** — `verify:audit` prints its non-browser half here (`v10 source facts: CLIP_BOUNDS x[-58, 58] y[-55, 116] z[-76, 72] · declaration sites 1 · grid cell 4 au · division floors 10 au / 25 au2 (label 25 au2) · PiP clamp 224x170…880x640 px · suppressed canvas label ids [ctx-cerebral-cortex]`) and then exits **4** ("no check was run", Chrome dies in `mojo::PlatformChannel`). Every rendered-pixel claim of items 1–5 is therefore **orchestrator-verified only** |
 
+## 14. v11 — the Areas + Systems toggle rows (a display grouping; **no content change**)
+
+Spec: [`SWARM_V11_PLAN.md`](SWARM_V11_PLAN.md) (§7 is the run's closure). The run replaces the header's
+view-preset row as the primary control with **two rows of on/off toggles** — big anatomical **Areas** and the
+orthogonal **Systems** axis — that slice the existing content for the 3D view, the 2D live section and the PiP.
+
+### 14.1 Measured delta — **no content record changed**
+
+`npm run validate` (v11 integrator sweep, exit 0): **236 registry entries** (0 awaiting an authored record) ·
+**17 files / 213 records** · **23 tracts** · **26 syndromes** · **15 plate records / 15 SVG** · **17 level
+anchors** — *identical to the v10 close-out counts*, 0 errors / 0 warnings. No record, mesh, level, plate,
+syndrome or citation was added, renamed, moved or re-scoped: v11 is **data slicing over what already exists**
+(plan §4), which is exactly why the two rows could be built without touching `src/data/**` at all.
+
+### 14.2 Content-shaped fact 1 — the Areas partition (every taxonomy entry lands in exactly one button)
+
+`npm run verify:area-toggles` prints this table and asserts totality + disjointness over `ALL_REGIONS`
+(7 regions, 236 entries). The rows are the **taxonomy** rows of each region, so this is the same content
+accounting `npm run validate` performs, regrouped:
+
+| header button (`data-area`) | taxonomy region(s) | registry entries | v10 division | a fresh boot |
+| --- | --- | --- | --- | --- |
+| Telencephalon | `telencephalon` | **85** | prosencephalon | on |
+| Diencephalon | `diencephalon` | **39** | prosencephalon | on |
+| Mesencephalon (midbrain) | `midbrain` | **25** | mesencephalon | on |
+| Metencephalon (pons + cerebellum) | `pons` + `cerebellum` | **40** (registry rows: pons **35** + cerebellum **5** — §3.3's "(34)" is that table's own record count, not the number of registry rows) | rhombencephalon | on |
+| Myelencephalon (medulla) | `medulla` | **33** | rhombencephalon | on |
+| Cerebral vasculature | `vasculature` | **14** (the v8 arteries, still hidden by default) | vasculature | **off** |
+| **Σ** | **7 regions, each owned exactly once** | **236** | — | 5 of 6 pressed |
+
+The two hindbrain buttons together are the `rhombencephalon` division exactly, with the **medulla alone** in the
+myelencephalon — asserted at module load in the shipped store (a mutation of the table makes the store exit 1
+naming the defect), so a future region cannot be added to the taxonomy without landing in a button.
+
+### 14.3 Content-shaped fact 2 — the Systems partition is the `kind` axis (`ALL_KINDS`)
+
+| header button (`data-kind`) | registry entries | notes |
+| --- | --- | --- |
+| Nuclei | **88** | nucleus records |
+| Tracts | **53** | includes the 23 `tracts.json` records |
+| Ventricles | **11** | |
+| Surface | **25** | **only 17 have a committed GLB and 0 have a section part** — the `surf-*` peripheral-nerve and lobe-surface records are content-only for the section, so switching Surface off changes the 3D view and nothing in the 2D canvas (measured, printed by `verify:view-filter-consistency`) |
+| Vessels | **14** | the v8 arterial records |
+| Context | **45** | context envelopes |
+| **Σ** | **236** | total over `ALL_KINDS` by construction |
+
+### 14.4 Content-shaped limits recorded by the run (all measurable, none hidden)
+
+- **Four section parts have no 3D body of their own** — `ctx-caudate-l`, `ctx-caudate-r`,
+  `ctx-choroid-plexus-l`, `ctx-choroid-plexus-r` (each sub-region's mesh is drawn by another record). The
+  cross-surface join is therefore **137 of 138 parts**, and the row toggles still hide them on the section
+  surface (measured).
+- **One section part has no taxonomy entry at all** — `ctx-pineal`; it takes its region from the shipped
+  override table in `sectionAssets.ts`, and its visibility decision is the same `isPartVisible` gate.
+- **26 section parts carry `taxonomyKind: "vessel"` while their draw bucket is `nucleus`** — the Systems row
+  reads `taxonomyKind`, so the bucket cannot leak an artery past the Vessels toggle (measured and printed).
+- **The 3D surface also honours the structure-level `hidden` set** of the v7 presets (28 ids under
+  *Brainstem focus*) which the 2D section does not. That is a *different* axis from areas/systems, measured and
+  printed by the gate (lane C2), deliberately **not** unified with it in this run.
+- **No content was regrouped at the taxonomy level**: the seven `Region` values, the six `Kind` values, the
+  subdivisions and the v10 `DIVISIONS` are exactly as v10 shipped — the Areas row is derived from `DIVISIONS`,
+  never a re-typing of it.
+
+### 14.5 Verification performed in this task (all non-browser)
+
+| gate | result |
+| --- | --- |
+| `npm run validate` | **exit 0 — 0 errors, 0 warnings** · 236 registry entries · 17 files / 213 records · 23 tracts · 26 syndromes · 15 plates · 17 levels (inventory unchanged from v10) |
+| `npm run check` | **exit 0** |
+| `npm run build` | **exit 0** (`✓ built in 9.40s`) |
+| `npm run verify:pipeline` | **exit 0 — 138/138 parts · 599,204 triangles · 386 loops · 0 problems** |
+| `npm run verify:area-toggles` | **exit 0 — 331 passed / 0 failed** (new npm script, wired by this task; prints §14.2/§14.3's tables) |
+| `npm run verify:view-filter-consistency` | **exit 0 — 100/100** (new npm script; 138 parts · 213 records · 23 tracts · 10 slots · 2 ghost shells × 7 areas × 6 systems, 548 + 552 cross-surface comparisons, 0 disagreements) |
+| `npm run verify:cortical-lobes` | **exit 0 — 564/564** (prints the two-ribbon `rule(l)` ∥ `rule(l+r)` table and reconciles the browser lane's 6 rows) |
+| `npm run verify:plane-helper-extent` | **exit 0 — 206/0** (lane A2 settles the sagittal `u/v` convention: `AXIS_PAIR.x = [z, y]` → 148 × 171) |
+| `npm run verify:division-toggles` / `verify:somatotopy` / `verify:pip-contract` | **exit 0 — 250/0 · 45/0 · 187/0** |
+| `npm run verify:audit-checks` / `verify:closure-bite` | **exit 0 — 92/0 · 7/7 mutations caught** (the DEFAULT-framing mirror is byte-unchanged) |
+| `npm run verify:boundary-contract` / `verify:a11y-contract` / `verify:budget-report` | **exit 0 — 22/0 · 38/0 · 599,204 tris / 13.82 MiB / 9.02 MiB** |
+| `npm run verify:anatomy` / `verify:imaging-fit` | **exit 1 — environment, not product** (`spawnSync powershell EPERM` / `spawnSync node EPERM` before any verdict; 0 assertions run; unchanged from v10) |
+| browser lanes (`verify:audit` / `verify:acceptance` / `verify:browser`) | **not run and not claimed** — `verify:audit` prints `v11 source facts: AREAS telencephalon→[telencephalon] · … · ALL_KINDS nucleus, tract, ventricle, surface, vessel, context · AXIS_PAIR {"y":["x","z"],"x":["z","y"],"z":["x","y"]} · AXIS_INDEX {"x":0,"y":1,"z":2}` and then exits **4**. Every claim about what a user **sees** (the rows rendering, a toggle repainting the scene or the section, keyboard/pointer use, and whether the v10 audit's 14 failures are gone) is **orchestrator-verified only** |
+
 
 

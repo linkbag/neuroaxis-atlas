@@ -77,6 +77,22 @@
  *    accessibility tree. Every other context label — the thalamus envelope, the
  *    level chips, the division labels — is untouched.
  *
+ * v11 §2 (PLAN.md §2) — ONE visibility decision, named at every use site:
+ *  - `isPartVisible` is THE 2D decision, exported so
+ *    `scripts/verify/view-filter-consistency.mjs` can execute it against the 3D
+ *    predicate and prove the two surfaces agree part by part. It is the only
+ *    place this file reads `layers.regions` / `layers.kinds` (the gate asserts
+ *    that too), and the draw pass, the hit test (both through
+ *    `ensureRenderOrder`) and the PiP (which mounts this component with no
+ *    visibility prop) all consume it;
+ *  - `buildLobeLayer` now re-applies it with the layer sets the visible list was
+ *    filtered from (`RenderOrderCache.visibleLayers`). It used to be correct
+ *    only because its input happened to be pre-filtered; a caller passing the
+ *    raw catalogue would have painted the whole telencephalon with the area off;
+ *  - the division rule itself is the shared `corticalRunsForLoop`
+ *    (section/corticalLobes.ts), so the canvas, the legend and both committed
+ *    gates are one computation.
+ *
  * Performance: plane updates are quantized to 0.25 au and posted at
  * ≤ 15 Hz while dragging (trailing ack keeps the newest plane); draws are
  * rAF-coalesced; contour extraction happens ONLY in the worker — the main
@@ -162,7 +178,7 @@ import {
   CORTICAL_LOBE_METHOD_NOTE,
   MIN_DIVISION_LABEL_AREA_AU2,
   corticalRunMetrics,
-  splitLoopByDivisionPlane,
+  corticalRunsForLoop,
   type CorticalDivision,
 } from './corticalLobes'
 // v7 closure (gap 3): the CT source-coverage statement — the SAME function the
@@ -749,10 +765,25 @@ function chipNameOf(entry: TaxonomyEntry | null | undefined): string | null {
 
 /* ------------------------------------------------------------ component */
 
-/** Per-slug visibility gating shared by drawing and hit-testing. */
-function isPartVisible(
+/**
+ * Per-slug visibility gating shared by drawing and hit-testing.
+ *
+ * THE one visibility decision of the 2D surface (canvas AND PiP: `PipSection`
+ * mounts this component and hands it no visibility prop). The 3D surface's
+ * decision is `viewer3d/SceneLayers.layersAdmit` — the same two set tests, over
+ * that surface's own record domain — and
+ * `scripts/verify/view-filter-consistency.mjs` executes both and asserts they
+ * agree part by part, so "exactly one place decides visibility" is measured
+ * rather than asserted in prose. Exported for that gate (the repo's convention
+ * for the module's other harness read points, e.g. `sectionRenderKey`).
+ *
+ * `kindByTaxonomy` folds a draw BUCKET into the taxonomy kind the layer set is
+ * keyed on; a vessel's bucket is `nucleus` while its `taxonomyKind` is `vessel`,
+ * which is why the taxonomy kind wins when it exists.
+ */
+export function isPartVisible(
   meta: SectionPartMeta,
-  layers: { regions: Set<string>; kinds: Set<string> },
+  layers: { regions: ReadonlySet<string>; kinds: ReadonlySet<string> },
 ): boolean {
   if (meta.region !== null && !layers.regions.has(meta.region)) return false
   const taxonomyKind = meta.taxonomyKind ?? (kindByTaxonomy[meta.kind] ?? meta.kind)
@@ -831,6 +862,14 @@ interface RenderOrderCache {
   visibleParts: RenderItem[]
   /** The same parts front-to-back — what a hover probe must test first. */
   visibleFaces: RenderItem[]
+  /**
+   * v11 §2 — the EXACT region/kind sets `visibleParts` was filtered with, so a
+   * later pass can re-apply the one gate instead of trusting that its input was
+   * pre-filtered (`buildLobeLayer`). Captured at the same moment as the filter,
+   * so the two cannot describe different layer states. Empty until the first
+   * rebuild — `visibleParts` is empty then too, so such a call is a no-op.
+   */
+  visibleLayers: { regions: ReadonlySet<string>; kinds: ReadonlySet<string> }
   /** Reused Path2D per slug (only while it is in the byte budget). */
   paths: Map<string, Path2D>
   pathBytes: number
@@ -840,13 +879,14 @@ interface RenderOrderCache {
   rebuilds: number
 }
 
-function createRenderOrderCache(): RenderOrderCache {
+export function createRenderOrderCache(): RenderOrderCache {
   return {
     key: '',
     registryKey: '',
     orderedLayers: [],
     visibleParts: [],
     visibleFaces: [],
+    visibleLayers: { regions: new Set<string>(), kinds: new Set<string>() },
     paths: new Map<string, Path2D>(),
     pathBytes: 0,
     levelId: null,
@@ -891,27 +931,48 @@ interface LobeLayerCache {
   vertices: number
 }
 
-function createLobeLayerCache(): LobeLayerCache {
+/**
+ * Empty lobe-layer cache. Module-scope and exported so a Node gate can drive
+ * `buildLobeLayer` (the canvas' own function) against real ribbon contours —
+ * `scripts/verify/view-filter-consistency.mjs` does exactly that, and its §2
+ * bite re-runs the same call against a mutated copy of this file.
+ */
+export function createLobeLayerCache(): LobeLayerCache {
   return { build: -1, entries: {}, ribbons: [], vertices: 0 }
 }
 
 /**
  * Build the division geometry for one frame: split every cortical-ribbon loop
- * into consecutive same-division runs (corticalLobes.splitLoopByDivisionPlane —
- * the plane value is the canonical coordinate on the plane's own axis, which the
- * in-plane loop cannot carry). Since v10 that splitter also drops runs below the
- * documented arc/area floors (absorbed into their neighbour), so what is stroked
- * here is never a sliver. Each run is stroked into a Path2D through the SAME
- * `transform` every other pass uses, and the LARGEST-AREA run's inner vertex
- * becomes the label anchor (v10 §4: by drawn area, see `LobeLayerEntry`).
+ * into consecutive same-division runs (`corticalLobes.corticalRunsForLoop` —
+ * THE v11 rule, so the canvas, the legend and both committed gates are one
+ * computation; the plane value is the canonical coordinate on the plane's own
+ * axis, which the in-plane loop cannot carry). Since v10 that rule also drops
+ * runs below the documented arc/area floors (absorbed into their neighbour), so
+ * what is stroked here is never a sliver. Each run is stroked into a Path2D
+ * through the SAME `transform` every other pass uses, and the LARGEST-AREA run's
+ * inner vertex becomes the label anchor (v10 §4: by drawn area, see
+ * `LobeLayerEntry`).
+ *
+ * v11 §2 — THIS PASS NAMES ITS OWN GATE. Until v11 it was correct only because
+ * `items` is `order.visibleParts`, i.e. already filtered by `isPartVisible`; a
+ * future caller passing the raw `SECTION_PARTS` (or a cached list from a
+ * different layer state) would have painted the whole telencephalon with the
+ * area switched off, silently. The gate is therefore applied HERE, with the
+ * layer sets the visible list was built from (`layers`), and it is the same
+ * function `ensureRenderOrder` applies — one rule, two call sites, and
+ * `scripts/verify/view-filter-consistency.mjs` executes both (including a
+ * mutation that removes this line and must be caught).
+ *
+ * Exported for that gate, which imports this function rather than a copy.
  */
-function buildLobeLayer(
+export function buildLobeLayer(
   cache: LobeLayerCache,
   items: readonly RenderItem[],
   axis: PlaneAxis,
   planeValue: number,
   transform: Transform,
   build: number,
+  layers: { regions: ReadonlySet<string>; kinds: ReadonlySet<string> },
 ): void {
   if (cache.build === build) return
   cache.build = build
@@ -920,10 +981,13 @@ function buildLobeLayer(
   let total = 0
   for (const item of items) {
     if (!isCorticalRibbonSlug(item.meta.slug)) continue
+    // The one visibility decision (see the header above): the SAME predicate
+    // ensureRenderOrder filtered `items` with, applied to the item's own meta.
+    if (!isPartVisible(item.meta, layers)) continue
     if (item.part.loops.length === 0) continue
     ribbons.push(item.meta.slug)
     for (const loop of item.part.loops) {
-      const runs = splitLoopByDivisionPlane(loop, axis, planeValue)
+      const runs = corticalRunsForLoop(loop, axis, planeValue)
       for (const run of runs) {
         const points = run.points
         const count = points.length / 2
@@ -1167,6 +1231,9 @@ function ensureRenderOrder(
   }
   cache.visibleParts = items
   cache.visibleFaces = [...items].reverse()
+  // v11 §2: the layer state this list was filtered with, kept with it (see
+  // RenderOrderCache.visibleLayers) so `buildLobeLayer` can name the gate.
+  cache.visibleLayers = { regions: args.state.layers.regions, kinds: args.state.layers.kinds }
   cache.levelId = levelIdForPlane(args.axis, args.planeValue)
   return cache
 }
@@ -1672,7 +1739,15 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       cache.build = -1
       lobeDirtyRef.current = false
     }
-    buildLobeLayer(cache, order.visibleParts, axis, planeValue, transform, order.rebuilds)
+    buildLobeLayer(
+      cache,
+      order.visibleParts,
+      axis,
+      planeValue,
+      transform,
+      order.rebuilds,
+      order.visibleLayers,
+    )
     const divisions = CORTICAL_DIVISIONS.filter((division) => cache.entries[division] !== undefined)
     if (divisions.length === 0) return
     ctx.save()

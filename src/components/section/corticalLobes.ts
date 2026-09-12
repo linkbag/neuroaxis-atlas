@@ -144,6 +144,29 @@
  * iterates to a FIXPOINT: absorption changes the drawn polygon of the span that
  * grew, and a single pass can therefore leave a new sub-threshold span behind.
  *
+ * v11 ONE RULE (PLAN.md §3b, `docs/SWARM_V11_PLAN.md` §3)
+ * ------------------------------------------------------
+ * `corticalRunsForLoop` is the ONE entry point that turns a contour loop into
+ * the runs the section draws: the v10 splitter (classification + absorption to
+ * the floors) followed by the drawn-path minimum (`MIN_RUN_PATH_POINTS`, a run
+ * needs a closed polygon to fill and stroke). `SectionCanvas.buildLobeLayer`
+ * calls exactly this function per ribbon loop, and
+ * `scripts/verify/cortical-lobes.mjs` + `scripts/verify/view-filter-consistency
+ * .mjs` call it too, so "what the rule says should be painted" and "what the
+ * canvas paints" are the same computation rather than two that happen to agree.
+ * `paintedDivisionsOfLoops` is that answer as a division set, for the gates.
+ *
+ * v11 CORONAL PLANE-FRAME FIX (`planePointToCanonical`)
+ * ---------------------------------------------------
+ * The mapping used to send the coronal axis down the transverse branch
+ * (`[u, planeValue, v]`), which put the plane's own coordinate on **y** and the
+ * loop's `v` (the true y) on **z**, contradicting `contours.PLANE_FRAME.z =
+ * [0, 1]` and `planeGeometry.AXIS_PAIR.z = ['x','y']`. Every CORONAL section was
+ * therefore classified at the wrong canonical point; the measured effect and the
+ * after-fix sets are in that function's doc comment. The three axes now read one
+ * ordered table, which `scripts/verify/plane-helper-extent.mjs` (lane A2) and
+ * `scripts/verify/cortical-lobes.mjs` (lane B2) both assert.
+ *
  * WHY 10 au of arc. Measured (`.dsh-scratch/v10-arch/runs-probe.mjs`): run arc
  * medians are 25.98 (temporal) / 30.30 (frontal) / 45.17 (occipital) au and the
  * artefact population sits at 0.00–9.99 au, so 10 au (12 mm) is narrower than
@@ -466,7 +489,26 @@ export function classifyCorticalPoint(x: number, y: number, z: number): Cortical
   return 'parietal'
 }
 
-/** Canonical coordinate of a plane-frame point: `[u, v]` on `AXIS_PAIR[axis]`. */
+/** Canonical coordinate of a plane-frame point: `[u, v]` on `AXIS_PAIR[axis]`.
+ *
+ * v11 §3a-ish FIX (measured, coronal): this function used to return
+ * `[u, planeValue, v]` for the CORONAL axis as well as the transverse one,
+ * which puts the plane's coordinate on **y** and the loop's `v` on **z** —
+ * while `contours.PLANE_FRAME.z = [0, 1]` (u = x, v = y) and
+ * `planeGeometry.AXIS_PAIR.z = ['x', 'y']`. Every coronal section was therefore
+ * classified at the wrong canonical point. Measured on `ctx-hemisphere-l` with
+ * the shipped rule (probe `.dsh-scratch/v11-section-correctness/probe4.mjs`,
+ * before the fix → after the fix):
+ *   z = 0   → [parietal, temporal, limbic]              → [frontal, temporal, insula, limbic]
+ *   z = 30  → [insula, parietal]                        → [temporal, insula, frontal, parietal]
+ *   z = 40  → [parietal, limbic]                        → [frontal, parietal]
+ *   z = −30 → [parietal, temporal, limbic]              → [frontal, temporal]
+ * A coronal section at z = 0 is anterior to the central sulcus, so `frontal` is
+ * the right answer there and `parietal` was the symptom. The three plane axes
+ * now agree with the ONE ordered `AXIS_PAIR` table, which is what
+ * `scripts/verify/cortical-lobes.mjs` asserts (u → pair[0], v → pair[1]) and
+ * what the 3D helper quad is sized from (u extent × v extent).
+ */
 export function planePointToCanonical(
   axis: PlaneAxis,
   planeValue: number,
@@ -475,7 +517,7 @@ export function planePointToCanonical(
 ): readonly [number, number, number] {
   if (axis === 'y') return [u, planeValue, v] // transverse: u = x, v = z
   if (axis === 'x') return [planeValue, v, u] // sagittal:   u = z, v = y
-  return [u, planeValue, v] // coronal: u = x, v = y
+  return [u, v, planeValue] // coronal: u = x, v = y — the PLANE owns z
 }
 
 /** One consecutive same-division run of a contour loop (plane frame). */
@@ -653,6 +695,55 @@ export function splitLoopByDivisionPlane(
   planeValue: number,
 ): CorticalRun[] {
   return splitRuns(loop, axis, planeValue)
+}
+
+/* ------------------------------------------------------ v11 — the ONE rule */
+
+/**
+ * Minimum number of PATH POINTS (`[u, v, …]` pairs) a run needs to be drawn.
+ * A run path is its shared junction vertex plus its own vertices, so 3 points is
+ * the smallest closed polygon `Path2D.fill`/`stroke` can draw — a 2-point "run"
+ * is a degenerate line. The splitter already absorbs one-own-vertex spans
+ * (`corticalRunMetrics.vertices < 2`), so this is the second, independent guard
+ * that keeps the canvas from building a path it cannot paint.
+ */
+export const MIN_RUN_PATH_POINTS = 3
+
+/**
+ * corticalRunsForLoop — THE rule of the cortical-division layer, in one call:
+ * the v10 splitter (classify → cut maximal spans → absorb below the floors to a
+ * fixpoint) followed by the drawn-path minimum. This is what the section canvas
+ * draws, what the legend lists and what both committed gates exercise, so a
+ * change here changes all three at once and none of them can drift.
+ *
+ * Pure: no geometry access, no state, no allocation beyond the runs themselves.
+ */
+export function corticalRunsForLoop(
+  loop: number[],
+  axis: PlaneAxis,
+  planeValue: number,
+): CorticalRun[] {
+  return splitRuns(loop, axis, planeValue).filter(
+    (run) => run.points.length / 2 >= MIN_RUN_PATH_POINTS,
+  )
+}
+
+/**
+ * paintedDivisionsOfLoops — the DIVISION SET the rule paints for a set of loops
+ * of ONE plane, in the canonical legend order (`CORTICAL_DIVISIONS`). Used by
+ * the gates to print and compare "the rule's set" against the set the canvas
+ * reports; never a second classification.
+ */
+export function paintedDivisionsOfLoops(
+  loops: readonly (readonly number[])[],
+  axis: PlaneAxis,
+  planeValue: number,
+): CorticalDivision[] {
+  const seen = new Set<CorticalDivision>()
+  for (const loop of loops) {
+    for (const run of corticalRunsForLoop(loop as number[], axis, planeValue)) seen.add(run.division)
+  }
+  return CORTICAL_DIVISIONS.filter((division) => seen.has(division))
 }
 
 /**

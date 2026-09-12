@@ -92,6 +92,88 @@ function isSolidKind(kind: StructureRecord['kind']): boolean {
   return kind !== 'context' && kind !== 'ventricle' && kind !== 'vessel'
 }
 
+/* ------------------------------------------------- v11 §2 — ONE decision */
+
+/**
+ * The layer state every 3D pass reads: the two layer SETS the area/system
+ * toggles write (`store.layers.regions` / `.kinds`) plus the preset's
+ * structure-level `hidden` set.
+ */
+export interface SceneLayerSets {
+  regions: ReadonlySet<string>
+  kinds: ReadonlySet<string>
+  hidden: ReadonlySet<string>
+}
+
+/**
+ * layersAdmit — THE region/kind decision of the 3D surface.
+ *
+ * Every pass below (context envelopes, the hemisphere ghost shells, the
+ * structure bodies and the tract tubes) asks this ONE function, so "the area is
+ * off" cannot mean different things in two passes: a new pass that forgets it is
+ * visibly different in the source, and
+ * `scripts/verify/view-filter-consistency.mjs` asserts that no other read of
+ * `regions`/`kinds` remains in this file. The 2D surface's decision is
+ * `SectionCanvas.isPartVisible` — the same two tests over the section's own
+ * domain (draw bucket → taxonomy kind); the gate executes both and asserts they
+ * agree part by part, which is what makes "one decision, two surfaces" a
+ * measurement rather than a convention (PLAN.md §9 item 9).
+ *
+ * Pure and total: no store access, no geometry, no allocation.
+ */
+export function layersAdmit(
+  layers: { regions: ReadonlySet<string>; kinds: ReadonlySet<string> },
+  region: string,
+  kind: string,
+): boolean {
+  return layers.regions.has(region) && layers.kinds.has(kind)
+}
+
+/**
+ * Whether the STRUCTURE pass draws a record: its region and kind are on and the
+ * active preset does not hide it. Records whose body another pass owns (the
+ * context envelopes, the somatotopy patches) or that have no baked body at all
+ * are excluded — that exclusion is about WHICH pass draws a body, never about
+ * the area/system decision, which stays `layersAdmit`.
+ */
+export function isStructureVisible(record: StructureRecord, layers: SceneLayerSets): boolean {
+  if (!layersAdmit(layers, record.region, record.kind)) return false
+  // v7 preset `hidden` (plan C11): structure-level visibility that the
+  // region/kind sets cannot express — §5's "cortex hidden" and
+  // "deep structures only" presets are structure-level states.
+  if (layers.hidden.has(record.id)) return false
+  return !isGhostOrContentOnly(record.id)
+}
+
+/**
+ * Whether the TRACT pass draws a tract. `TractRecord` carries no region, so the
+ * taxonomy registry is authoritative (a tract with no entry is a medullary one,
+ * the pre-v7 default) — and the tract whose telencephalic body belongs to a
+ * hidden record is hidden too, or the preset would leak the very fibres it says
+ * it hides.
+ */
+export function isTractVisible(tractId: string, layers: SceneLayerSets): boolean {
+  const entry = getTaxonomyEntry(tractId)
+  if (!layersAdmit(layers, entry ? entry.region : 'medulla', 'tract')) return false
+  return !layers.hidden.has(tractId)
+}
+
+/** Whether a context envelope slot is drawn (region on + the context kind on). */
+export function isEnvelopeSlotVisible(
+  slot: { region: string },
+  layers: { regions: ReadonlySet<string>; kinds: ReadonlySet<string> },
+): boolean {
+  return layersAdmit(layers, slot.region, 'context')
+}
+
+/** Whether the hemisphere ghost shells are drawn — telencephalon + context. */
+export function isGhostShellVisible(layers: {
+  regions: ReadonlySet<string>
+  kinds: ReadonlySet<string>
+}): boolean {
+  return layersAdmit(layers, 'telencephalon', 'context')
+}
+
 /**
  * The ordinary hemisphere opacity (§5's window is 0.12–0.18; the material
  * factory carries 0.14 as its own default, restated here because this pass
@@ -169,8 +251,12 @@ function createPinealFallback(): THREE.BufferGeometry {
  * thalamus slots, ctx-hypothalamus-envelope, ctx-cerebellum on all three
  * cerebellar slots). Keep this table and `ENVELOPE_RECORD_IDS` in step with
  * the registry — the verifier asserts it.
+ *
+ * Exported (v11 §2) so `scripts/verify/view-filter-consistency.mjs` can execute
+ * the envelope pass's OWN decision (`isEnvelopeSlotVisible`) over the real slot
+ * list instead of a copy of it.
  */
-const ENVELOPE_SLOTS: EnvelopeSlot[] = [
+export const ENVELOPE_SLOTS: EnvelopeSlot[] = [
   { id: 'ctx-medulla-surface', region: 'medulla', slug: 'ctx-medulla-surface', geometry: createMedullaEnvelope() },
   { id: 'ctx-pons-surface', region: 'pons', slug: 'ctx-pons-surface', geometry: createPonsEnvelope() },
   { id: 'ctx-midbrain-surface', region: 'midbrain', slug: 'ctx-midbrain-surface', geometry: createMidbrainEnvelope() },
@@ -193,8 +279,11 @@ const ENVELOPE_MATERIALS: THREE.MeshPhysicalMaterial[] = ENVELOPE_SLOTS.map(() =
   createContextMaterial(CONTEXT_COLOR),
 )
 
-/** Records whose 3D body is the envelope pass instead of a per-record mesh. */
-const ENVELOPE_RECORD_IDS = new Set([
+/**
+ * Records whose 3D body is the envelope pass instead of a per-record mesh.
+ * Exported for the v11 §2 gate (see `ENVELOPE_SLOTS`).
+ */
+export const ENVELOPE_RECORD_IDS: ReadonlySet<string> = new Set([
   'ctx-thalamus-envelope',
   'ctx-hypothalamus-envelope',
   'ctx-cerebellum',
@@ -242,7 +331,7 @@ function EnvelopeSlotMesh({
   const geometry =
     asset.status === 'ready' && asset.geometry !== null ? asset.geometry : slot.geometry
 
-  const visible = regions.has(slot.region) && kinds.has('context')
+  const visible = isEnvelopeSlotVisible(slot, { regions, kinds })
   const lit =
     (highlight !== null && highlight.has(slot.id)) ||
     hoveredId === slot.id ||
@@ -354,7 +443,7 @@ function TelGhostShell({
   if (asset.status !== 'ready' || asset.geometry === null) return null
 
   const recordId = TEL_HEMISPHERE_RECORD_IDS[0]
-  const visible = regions.has('telencephalon') && kinds.has('context')
+  const visible = isGhostShellVisible({ regions, kinds })
   if (!visible) return null
 
   const lit =
@@ -430,35 +519,25 @@ export default function SceneLayers() {
 
   const highlight = useMemo(() => highlightIdSet({ selectedId, syndromeId }), [selectedId, syndromeId])
 
-  const visibleStructures = useMemo(
-    () =>
-      structures.filter(
-        (record) =>
-          regions.has(record.region) &&
-          kinds.has(record.kind) &&
-          // v7 preset `hidden` (plan C11): structure-level visibility that the
-          // region/kind sets cannot express — §5's "cortex hidden" and
-          // "deep structures only" presets are structure-level states.
-          !hidden.has(record.id) &&
-          !isGhostOrContentOnly(record.id),
-      ),
+  /**
+   * v11 §2 — the layer state, assembled ONCE so every pass below hands the SAME
+   * object to the same decision (see `layersAdmit`). Memoized on the three store
+   * sets, so a pass never closes over a stale layer state.
+   */
+  const layerSets = useMemo<SceneLayerSets>(
+    () => ({ regions, kinds, hidden }),
     [regions, kinds, hidden],
   )
 
-  const visibleTracts = useMemo(() => {
-    if (!kinds.has('tract')) return []
-    return tracts.filter((tract) => {
-      // TractRecord carries no region; the taxonomy registry is authoritative.
-      const entry = getTaxonomyEntry(tract.id)
-      if (!regions.has(entry ? entry.region : 'medulla')) return false
-      // A tract whose own record is hidden OR whose telencephalic body belongs
-      // to a hidden record (the corpus-callosum / internal-capsule subdivisions)
-      // is hidden too — otherwise the preset would leak the very fibres it says
-      // it is hiding.
-      if (hidden.has(tract.id)) return false
-      return true
-    })
-  }, [regions, kinds, hidden])
+  const visibleStructures = useMemo(
+    () => structures.filter((record) => isStructureVisible(record, layerSets)),
+    [layerSets],
+  )
+
+  const visibleTracts = useMemo(
+    () => tracts.filter((tract) => isTractVisible(tract.id, layerSets)),
+    [layerSets],
+  )
 
   return (
     <group name="scene-layers">

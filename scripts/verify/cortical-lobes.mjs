@@ -23,6 +23,21 @@
  *     (Three of the 13 reference planes — y = −46, −24, −8 — MISS this ribbon
  *     entirely: its inferior limit is y = −6.803. That is reported, not hidden,
  *     and it is why the requirement is "at least one plane", not "every plane".)
+ *  B2. TWO-RIBBON COVERAGE + THE BROWSER LANE'S TABLE (v11 §3b). The canvas
+ *     paints TWO ribbons; the per-plane tables above slice the LEFT one. This
+ *     lane prints, per reference plane, the rule's division set over the left
+ *     ribbon AND over both, then reconciles the browser lane's `ARTEFACT_PLANES`
+ *     expectation (read out of `scripts/verify/audit.mjs`, never retyped) with
+ *     the measured two-ribbon set. It also reads the run floors and the
+ *     `AXIS_PAIR` table OUT OF THE SHIPPED SOURCES and asserts the section plane
+ *     frame follows that ordered pair (u → AXIS_PAIR[axis][0]), which is the
+ *     convention the 3D helper quad is sized from. It retires the v10 audit
+ *     reading "the canvas paints NONE at y = 6 / y = 14" with numbers: those
+ *     columns were a one-ribbon measurement (y = 14: left alone 4 divisions,
+ *     both ribbons all six). The EXECUTED parity of the canvas' own
+ *     `buildLobeLayer` against this rule is lane F of
+ *     `scripts/verify/view-filter-consistency.mjs`, which imports that function
+ *     and runs it over the same committed ribbons.
  *  C. THE RUN RULE (v10). Per reference plane, per loop:
  *       c1. every PAINTED run clears both runoff floors — `arcAu >=
  *           MIN_DIVISION_RUN_AU` (10 au) and `areaAu2 >= MIN_DIVISION_AREA_AU2`
@@ -116,6 +131,8 @@ const {
   MIN_DIVISION_LABEL_AREA_AU2,
   classifyCorticalPoint,
   corticalRunMetrics,
+  corticalRunsForLoop,
+  paintedDivisionsOfLoops,
   planePointToCanonical,
   splitLoopByDivision,
   splitLoopByDivisionPlane,
@@ -135,6 +152,9 @@ function assert(condition, label, detail = '') {
 }
 
 const fmt = (n, d = 2) => Number(n).toFixed(d)
+
+/** Left-aligned cell for the fixed-width evidence tables below. */
+const pad = (value, width) => String(value).padEnd(width)
 
 /** min / median / max / sum of a numeric list (null for an empty list). */
 function statsOf(list) {
@@ -576,6 +596,302 @@ for (const division of CORTICAL_DIVISIONS) {
 }
 assert(containmentFailures === 0, 'no classified cell fell outside the six divisions', `${containmentFailures} did`)
 assert(totalCells > 0, 'the raster found ribbon tissue at some reference plane')
+
+/* ==================== B2. TWO-RIBBON COVERAGE + THE AUDIT'S TABLE (v11 §3) ==
+ *
+ * v11 §3b. The v10 audit read "at planes where corticalLobes' rule expects 4–6
+ * painted divisions the canvas paints NONE" (y = 6: `[]` vs five; y = 14: `[]`
+ * vs all six). This lane measures what is actually true, per plane, with the
+ * SHIPPED rule, and reconciles the two sets the audit compared:
+ *
+ *   • `rule (ribbons: l)`   — what the left ribbon alone yields. This is the
+ *     column `verify:cortical-lobes` printed until v11, and it is why the two
+ *     numbers were never the same measurement: the canvas paints TWO ribbons
+ *     (`SECTION_CORTICAL_RIBBON_SLUGS` = ctx-hemisphere-l AND -r, both matched
+ *     by `buildLobeLayer`), so a division whose only body at that plane is on the
+ *     right ribbon is invisible to the left-ribbon table.
+ *   • `rule (ribbons: l+r)` — what the canvas' input yields, over BOTH ribbons.
+ *     `SectionCanvas.buildLobeLayer` calls the SAME function these columns call
+ *     (`corticalRunsForLoop`, v11 §2 — asserted below from the canvas source), so
+ *     this column IS the canvas' division set; the executed proof that the
+ *     canvas' own function paints it is lane F of
+ *     `scripts/verify/view-filter-consistency.mjs`, which imports
+ *     `buildLobeLayer` and runs it over the same committed ribbons.
+ *   • `audit table` — the browser lane's expectation for the planes it names
+ *     (`audit.mjs` `ARTEFACT_PLANES`), read out of that file rather than
+ *     retyped, so the Node gate and the (orchestrator-only) browser lane are
+ *     reconciled here in one printed table. If that table is ever derived at
+ *     runtime instead of written down, this column reports 0 rows and says so;
+ *     every other number in the lane is unconditional.
+ *
+ * The floors this rule applies are read from the shipped source, never retyped
+ * here (PLAN.md §3b item 4: the v10 plan's "10 au²" is stale — the shipped
+ * `MIN_DIVISION_AREA_AU2` is 25).
+ */
+
+console.log('\n--- B2. two-ribbon coverage, and the audit’s plane table reconciled -----')
+
+const LOBES_SOURCE_TEXT = readFileSync(resolve('src/components/section/corticalLobes.ts'), 'utf8')
+const CANVAS_SOURCE_TEXT = readFileSync(resolve('src/components/section/SectionCanvas.tsx'), 'utf8')
+const PLANE_GEOMETRY_TEXT = readFileSync(resolve('src/components/section/planeGeometry.ts'), 'utf8')
+const SECTION_ASSETS_TEXT = readFileSync(resolve('src/components/section/sectionAssets.ts'), 'utf8')
+
+/* ---- (i) the convention this gate measures in (v11 §3a, PLAN.md §3a) ------ *
+ * The in-plane axes are read from the SHIPPED `AXIS_PAIR` table, not retyped:
+ * the table is the ORDERED pair `[u, v]`, and the section's own plane frame has
+ * to agree with it (u is the first entry). That is the same convention the 3D
+ * helper quad measures its width from — `quadWidth = extent(uAxis)` — so the
+ * sagittal sheet's 148 (z) × 171 (y) follows from the table, while the audit's
+ * historical `['x','y','z'].filter(c => c !== axis)` (ascending axis NAME) gives
+ * 171 × 148 for the sagittal plane and is the wrong one.
+ */
+const AXIS_PAIR_BLOCK = /AXIS_PAIR[^=]*=\s*\{([\s\S]*?)\n\}/.exec(PLANE_GEOMETRY_TEXT)?.[1] ?? ''
+const AXIS_PAIR_SOURCE = {}
+for (const match of AXIS_PAIR_BLOCK.matchAll(/([xyz]):\s*\[\s*'([xyz])'\s*,\s*'([xyz])'\s*\]/g)) {
+  AXIS_PAIR_SOURCE[match[1]] = [match[2], match[3]]
+}
+assert(
+  Object.keys(AXIS_PAIR_SOURCE).length === 3,
+  'the shipped AXIS_PAIR table is readable from planeGeometry.ts (this gate retypes no axis pair)',
+  JSON.stringify(AXIS_PAIR_SOURCE),
+)
+const AXIS_INDEX_OF = { x: 0, y: 1, z: 2 }
+console.log('  the one in-plane convention (u = AXIS_PAIR[axis][0], v = AXIS_PAIR[axis][1]):')
+for (const axis of ['x', 'y', 'z']) {
+  const [uAxis, vAxis] = AXIS_PAIR_SOURCE[axis] ?? AXIS_PAIR[axis]
+  const probeValue = 7
+  const asU = planePointToCanonical(axis, probeValue, 1, 0)
+  const asV = planePointToCanonical(axis, probeValue, 0, 1)
+  assert(
+    asU[AXIS_INDEX_OF[uAxis]] === 1 &&
+      asU[AXIS_INDEX_OF[vAxis]] === 0 &&
+      asU[AXIS_INDEX_OF[axis]] === probeValue &&
+      asV[AXIS_INDEX_OF[vAxis]] === 1 &&
+      asV[AXIS_INDEX_OF[uAxis]] === 0,
+    `the section plane frame maps u onto ${uAxis} and v onto ${vAxis} (AXIS_PAIR.${axis} order)`,
+    `u → ${JSON.stringify(asU)} · v → ${JSON.stringify(asV)}`,
+  )
+  console.log(
+    `    ${pad(axis, 2)} plane: u = ${uAxis} (extent ${BOUNDS[uAxis][1] - BOUNDS[uAxis][0]} au), ` +
+      `v = ${vAxis} (extent ${BOUNDS[vAxis][1] - BOUNDS[vAxis][0]} au) — the sheet is ` +
+      `${BOUNDS[uAxis][1] - BOUNDS[uAxis][0]} × ${BOUNDS[vAxis][1] - BOUNDS[vAxis][0]} au, ` +
+      'which is what PlaneHelpers derives its quad from',
+  )
+}
+
+/* ---- (ii) the floors, read from the shipped source ------------------------ */
+const floorFromSource = (name) => {
+  const match = new RegExp(`${name}\\s*=\\s*(-?[\\d.]+)`).exec(LOBES_SOURCE_TEXT)
+  return match === null ? null : Number(match[1])
+}
+const FLOORS_FROM_SOURCE = {
+  MIN_DIVISION_RUN_AU: floorFromSource('MIN_DIVISION_RUN_AU'),
+  MIN_DIVISION_AREA_AU2: floorFromSource('MIN_DIVISION_AREA_AU2'),
+  MIN_DIVISION_LABEL_AREA_AU2: floorFromSource('MIN_DIVISION_LABEL_AREA_AU2'),
+}
+for (const [name, value] of Object.entries(FLOORS_FROM_SOURCE)) {
+  assert(value !== null, `${name} is declared in corticalLobes.ts (read from the source)`)
+  assert(
+    value === ({ MIN_DIVISION_RUN_AU, MIN_DIVISION_AREA_AU2, MIN_DIVISION_LABEL_AREA_AU2 })[name],
+    `the imported ${name} is the value written in the shipped source (no retyped floor)`,
+    `source ${value} vs import ${({ MIN_DIVISION_RUN_AU, MIN_DIVISION_AREA_AU2, MIN_DIVISION_LABEL_AREA_AU2 })[name]}`,
+  )
+}
+console.log(
+  `  floors read from corticalLobes.ts: run ≥ ${FLOORS_FROM_SOURCE.MIN_DIVISION_RUN_AU} au · ` +
+    `drawn area ≥ ${FLOORS_FROM_SOURCE.MIN_DIVISION_AREA_AU2} au² · label ≥ ` +
+    `${FLOORS_FROM_SOURCE.MIN_DIVISION_LABEL_AREA_AU2} au² (the v10 plan's "10 au²" is stale)`,
+)
+
+/* ---- (iii) the two-ribbon rule set, per plane ---------------------------- */
+const RIBBON_SLUGS = [
+  ...(SECTION_ASSETS_TEXT
+    .slice(
+      SECTION_ASSETS_TEXT.indexOf('SECTION_CORTICAL_RIBBON_SLUGS'),
+      SECTION_ASSETS_TEXT.indexOf('export function isCorticalRibbonSlug'),
+    )
+    .matchAll(/'([a-z0-9-]+)'/g) ?? []),
+].map((match) => match[1])
+assert(
+  RIBBON_SLUGS.length === 2 && RIBBON_SLUGS.includes('ctx-hemisphere-l') && RIBBON_SLUGS.includes('ctx-hemisphere-r'),
+  'the canvas’ ribbon set is two slugs (read from sectionAssets.ts)',
+  JSON.stringify(RIBBON_SLUGS),
+)
+console.log(`  the canvas paints both ribbons: SECTION_CORTICAL_RIBBON_SLUGS = ${RIBBON_SLUGS.join(', ')}`)
+
+/** Load a second ribbon's geometry the same way the gate loads the first. */
+async function loadRibbonGeometry(slug) {
+  const part = MANIFEST.parts.find((candidate) => candidate.slug === slug)
+  if (part === undefined) return null
+  const ribbonLoader = new GLTFLoader()
+  const buffer = readFileSync(resolve('src/assets/anatomy', part.file ?? `${slug}.glb`))
+  const arrayBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)
+  const gltf = await new Promise((res, rej) => ribbonLoader.parse(arrayBuffer, '', res, rej))
+  let ribbonMesh = null
+  gltf.scene.traverse((child) => {
+    if (ribbonMesh === null && child.isMesh) ribbonMesh = child
+  })
+  const ribbonPosition = ribbonMesh.geometry.getAttribute('position')
+  const ribbonIndex = ribbonMesh.geometry.getIndex()
+  const ribbonPositions = new Float32Array(ribbonPosition.count * 3)
+  for (let i = 0; i < ribbonPosition.count; i++) {
+    ribbonPositions[i * 3] = ribbonPosition.getX(i)
+    ribbonPositions[i * 3 + 1] = ribbonPosition.getY(i)
+    ribbonPositions[i * 3 + 2] = ribbonPosition.getZ(i)
+  }
+  const ribbonIndices = new Uint32Array(ribbonIndex.count)
+  for (let i = 0; i < ribbonIndex.count; i++) ribbonIndices[i] = ribbonIndex.getX(i)
+  return { slug, positions: ribbonPositions, indices: ribbonIndices }
+}
+
+const ribbonGeometries = new Map()
+for (const slug of RIBBON_SLUGS) {
+  ribbonGeometries.set(
+    slug,
+    slug === RIBBON_SLUG ? { slug, positions, indices } : await loadRibbonGeometry(slug),
+  )
+}
+for (const slug of RIBBON_SLUGS) {
+  const geometry = ribbonGeometries.get(slug)
+  assert(geometry !== null && geometry !== undefined, `ribbon ${slug} loads from the manifest`)
+  if (geometry !== null && geometry !== undefined) {
+    console.log(
+      `    ${pad(slug, 20)} ${String(geometry.positions.length / 3).padStart(6)} vertices · ` +
+        `${geometry.indices.length / 3} triangles`,
+    )
+  }
+}
+
+/** The loops of ONE ribbon at a plane (the worker's own extraction path). */
+const loopsAt = (slug, plane) => {
+  const geometry = ribbonGeometries.get(slug)
+  if (geometry === null || geometry === undefined) return []
+  if (!contours.boundsMayCut(contours.partBounds(geometry.positions), plane)) return []
+  return contours.extractContours(geometry.positions, geometry.indices, plane).loops
+}
+
+/** Per plane: the rule's division set over the left ribbon and over both. */
+const coverageRows = []
+for (const plane of REFERENCE_PLANES) {
+  const label = `${plane.axis}=${plane.value}`
+  const leftLoops = loopsAt(RIBBON_SLUGS[0], plane)
+  const rightLoops = loopsAt(RIBBON_SLUGS[1], plane)
+  const ruleLeft = paintedDivisionsOfLoops(leftLoops, plane.axis, plane.value)
+  const ruleBoth = paintedDivisionsOfLoops([...leftLoops, ...rightLoops], plane.axis, plane.value)
+  const missingFromLeft = ruleBoth.filter((division) => !ruleLeft.includes(division))
+  coverageRows.push({ label, leftLoops: leftLoops.length, rightLoops: rightLoops.length, ruleLeft, ruleBoth, missingFromLeft })
+  assert(
+    ruleLeft.every((division) => ruleBoth.includes(division)),
+    `${label}: the left-ribbon set is a subset of the two-ribbon set (coverage can only grow)`,
+    `left [${ruleLeft.join(', ')}] vs both [${ruleBoth.join(', ')}]`,
+  )
+}
+console.log('\n  plane    loops l/r   rule (ribbons: l)                              rule (ribbons: l+r)                            only-with-r')
+for (const row of coverageRows) {
+  console.log(
+    `  ${pad(row.label, 8)} ${pad(`${row.leftLoops}/${row.rightLoops}`, 11)} ` +
+      `${pad(`[${row.ruleLeft.join(' ')}]`, 44)} ${pad(`[${row.ruleBoth.join(' ')}]`, 47)} ` +
+      `${row.missingFromLeft.length === 0 ? '(same)' : row.missingFromLeft.join(' ')}`,
+  )
+}
+const coverageDiffer = coverageRows.filter((row) => row.missingFromLeft.length > 0)
+console.log(
+  `  coverage: ${coverageDiffer.length} of ${coverageRows.length} reference planes carry a division the LEFT ribbon ` +
+    `alone does not paint — ${coverageDiffer.map((row) => row.label).join(', ') || '(none)'}`,
+)
+const coveredPlanes = coverageRows.filter((row) => row.ruleBoth.length > 0).length
+console.log(
+  `  the rule is not vacuous: it paints at least one division at ${coveredPlanes} of ${coverageRows.length} ` +
+    'reference planes (the other three — y = −46, −24, −8 — miss the ribbon entirely)',
+)
+assert(coveredPlanes > 0, 'the two-ribbon rule paints something at some reference plane')
+assert(
+  coverageDiffer.length >= 1,
+  'at least one reference plane shows the coverage asymmetry (so the reconciliation below is not vacuous)',
+  `${coverageDiffer.length} plane(s)`,
+)
+const y14Row = coverageRows.find((row) => row.label === 'y=14')
+assert(
+  y14Row !== undefined && y14Row.ruleBoth.length === CORTICAL_DIVISIONS.length,
+  'y = 14: the canvas’ two-ribbon input paints ALL SIX divisions (the plane the audit called empty)',
+  `both [${y14Row?.ruleBoth.join(', ') ?? ''}] left [${y14Row?.ruleLeft.join(', ') ?? ''}]`,
+)
+assert(
+  y14Row !== undefined && y14Row.ruleLeft.length < y14Row.ruleBoth.length,
+  'y = 14: the LEFT ribbon alone gives fewer divisions than the canvas’ input — the measured cause of the old reading',
+  `left ${y14Row?.ruleLeft.length} vs both ${y14Row?.ruleBoth.length}`,
+)
+console.log(
+  `  y = 14 reconciled: rule(l) = [${y14Row?.ruleLeft.join(' ')}] · rule(l+r) = [${y14Row?.ruleBoth.join(' ')}] — ` +
+    'the canvas paints the l+r set, so the old "canvas paints []" column was a ONE-RIBBON measurement, not a rule ' +
+    'disagreement (the executed proof of the canvas’ own function is lane F of verify:view-filter-consistency)',
+)
+console.log(
+  '  the ONE rule both consume: the canvas’ buildLobeLayer calls ' +
+    `corticalRunsForLoop per ribbon loop (canvas source: ${/corticalRunsForLoop\(loop, axis, planeValue\)/.test(CANVAS_SOURCE_TEXT)}), ` +
+    'and this gate calls the same function through paintedDivisionsOfLoops',
+)
+assert(
+  /corticalRunsForLoop\(loop, axis, planeValue\)/.test(CANVAS_SOURCE_TEXT),
+  'buildLobeLayer splits with the SHIPPED shared rule (corticalRunsForLoop), not a private one',
+)
+assert(
+  typeof corticalRunsForLoop === 'function' && typeof paintedDivisionsOfLoops === 'function',
+  'corticalLobes exports the shared rule and its division-set projection',
+)
+assert(
+  !/splitLoopByDivisionPlane/.test(CANVAS_SOURCE_TEXT),
+  'the canvas no longer calls the lower-level splitter directly (there is one entry point)',
+)
+
+/* ---- (iv) the audit's plane table, reconciled with the measurement -------- */
+const AUDIT_SOURCE_TEXT = readFileSync(resolve('scripts/verify/audit.mjs'), 'utf8')
+assert(AUDIT_SOURCE_TEXT.length > 1000, 'the browser lane’s source is readable from this gate')
+const AUDIT_PLANES_BLOCK =
+  /ARTEFACT_PLANES\s*=\s*\[([\s\S]*?)\n\]/.exec(AUDIT_SOURCE_TEXT)?.[1] ?? null
+const auditRows = []
+if (AUDIT_PLANES_BLOCK !== null) {
+  for (const match of AUDIT_PLANES_BLOCK.matchAll(
+    /value:\s*(-?[\d.]+)\s*,\s*drawn:\s*\[([^\]]*)\]/g,
+  )) {
+    auditRows.push({
+      value: Number(match[1]),
+      drawn: [...match[2].matchAll(/'([a-z]+)'/g)].map((token) => token[1]),
+    })
+  }
+}
+console.log(
+  `\n  the browser lane’s expectation (audit.mjs ARTEFACT_PLANES): ${auditRows.length} row(s) ` +
+    `${AUDIT_PLANES_BLOCK === null ? '— the table is not written down any more (derived at runtime there); nothing to cross-check, and the measurements above stand alone' : 'read out of the file, never retyped here'}`,
+)
+if (auditRows.length > 0) {
+  console.log('    plane    audit table                                  measured rule (ribbons: l+r)                  match')
+}
+let auditMatched = 0
+for (const row of auditRows) {
+  const plane = { axis: 'y', value: row.value }
+  const measured = paintedDivisionsOfLoops(
+    [...loopsAt(RIBBON_SLUGS[0], plane), ...loopsAt(RIBBON_SLUGS[1], plane)],
+    plane.axis,
+    plane.value,
+  )
+  const same = [...row.drawn].sort().join(',') === [...measured].sort().join(',')
+  if (same) auditMatched += 1
+  console.log(
+    `    ${pad(`y=${row.value}`, 8)} ${pad(`[${row.drawn.join(' ')}]`, 44)} ${pad(`[${measured.join(' ')}]`, 45)} ` +
+      `${same ? 'yes' : 'NO'}`,
+  )
+  assert(
+    same,
+    `y = ${row.value}: the browser lane’s hardcoded expectation equals the measured two-ribbon rule set`,
+    `audit [${row.drawn.join(', ')}] vs measured [${measured.join(', ')}]`,
+  )
+}
+assert(
+  auditRows.length === 0 || auditMatched === auditRows.length,
+  'every plane the browser lane names is reconciled with the rule the canvas runs',
+  `${auditMatched}/${auditRows.length}`,
+)
 
 /* ================================================ C. the v10 run rule ===== */
 

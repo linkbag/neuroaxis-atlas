@@ -23,6 +23,8 @@
     "verify:pip-contract": "node scripts/verify/pip-contract.mjs",
     "verify:audit-checks": "node scripts/verify/audit-checks.test.mjs",
     "verify:division-toggles": "node scripts/verify/division-toggles.mjs",
+    "verify:area-toggles": "node scripts/verify/area-toggles.mjs",
+    "verify:view-filter-consistency": "node scripts/verify/view-filter-consistency.mjs",
     "verify:boundary-contract": "node scripts/verify/boundary-contract.mjs",
     "verify:a11y-contract": "node scripts/verify/a11y-contract.mjs",
     "verify:budget-report": "node scripts/verify/budget-report.mjs",

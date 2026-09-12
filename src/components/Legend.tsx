@@ -19,6 +19,13 @@
 import type { Kind, Region } from '../types'
 import { ALL_KINDS, ALL_REGIONS, dataStatus } from '../data/load'
 import { DIVISIONS, useAtlasStore } from '../state/store'
+// v11 §1 — the header's "Areas" row, read here only to NAME the finer rows this
+// division resolves to. This second import statement is deliberate: the line above
+// is matched by an exact-string mutation anchor in `verify:division-toggles`
+// (its behaviour probe rewrites exactly that text in an isolated copy), so it must
+// stay byte-identical. No state, no new field: the areas are a labelling of the
+// same seven regions, and every control below still writes `layers.regions` alone.
+import { AREAS as HEADER_AREAS, type AreaDefinition } from '../state/store'
 
 const KIND_SWATCHES: { label: string; token: string }[] = [
   { label: 'Nuclei', token: 'var(--kind-nucleus)' },
@@ -39,6 +46,21 @@ const KIND_SWATCHES: { label: string; token: string }[] = [
 /** "telencephalon + diencephalon" — the regions a division actually switches. */
 function regionList(regions: readonly Region[]): string {
   return regions.join(' + ')
+}
+
+/**
+ * v11 §1 — the divisions' RELATIONSHIP to the header's Areas row, printed per
+ * row so the two controls are legible as one partition at two granularities
+ * (prosencephalon {telencephalon, diencephalon}; rhombencephalon {pons,
+ * cerebellum, medulla} → metencephalon {pons, cerebellum} + myelencephalon
+ * {medulla}). Pure text: no state, no second source of truth — every control in
+ * this panel still reads and writes `layers.regions` alone.
+ */
+function areasOfDivision(regions: readonly Region[], areas: readonly AreaDefinition[]): string {
+  return areas
+    .filter((area) => area.regions.every((region) => regions.includes(region)))
+    .map((area) => area.label)
+    .join(' + ')
 }
 
 export default function Legend() {
@@ -74,6 +96,16 @@ export default function Legend() {
       <div className="legend-group">
         <p className="panel-title">Layer toggles</p>
 
+        {/*
+         * v11 §1 — the same region sets, named twice on purpose. The header's
+         * "Areas" row is this partition at the finer vesicle granularity
+         * (prosencephalon → telencephalon + diencephalon; rhombencephalon →
+         * metencephalon + myelencephalon), and this row is the v10 grouping the
+         * audit and `verify:division-toggles` are written against. Both write
+         * `layers.regions` and nothing else, so the two controls and the
+         * per-region checkboxes below cannot disagree — a division here is
+         * exactly the union of its areas in the header.
+         */}
         <div className="legend-divisions" role="group" aria-label="Divisions">
           {DIVISIONS.map((division) => {
             const on = divisionOn(division.regions)
@@ -81,7 +113,7 @@ export default function Legend() {
               <div key={division.id} className="legend-division" data-division={division.id}>
                 <label
                   className={`legend-row legend-toggle${on ? ' is-on' : ''}`}
-                  title={`${division.label} — ${regionList(division.regions)}`}
+                  title={`${division.label} — ${regionList(division.regions)} · header areas: ${areasOfDivision(division.regions, HEADER_AREAS)}`}
                 >
                   {/*
                    * The checkbox is a genuine region-set control, so it carries

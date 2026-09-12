@@ -6,7 +6,8 @@
 
 - **Realistic v2 rendering** — real-scan-derived brainstem/diencephalon/cerebellum envelopes, organically sculpted nuclei, CSF spaces, PBR lighting with SSAO/bloom/SMAA, and a High/Balanced quality toggle (details below).
 - **3D viewer** — orbit / zoom / pan; click-select any nucleus, tract, ventricle, or surface landmark; hover labels; global selection shared with every other panel.
-- **Region & system layers** — toggle diencephalon / midbrain / pons / medulla / cerebellum **/ telencephalon / vasculature** and nuclei / tracts / ventricles / surface / context / **vessel**; presets *Brainstem focus* (default), *Deep structures*, *Whole brain*, ***Vasculature***, *Cortex only*, *All*, *Nuclei*, *Tracts*, *Clinical motor*.
+- **Two toggle rows — Areas and Systems (v11)** — the header's primary control is **two labelled rows of on/off toggle buttons**: **Areas** (Telencephalon · Diencephalon · Mesencephalon (midbrain) · Metencephalon (pons + cerebellum) · Myelencephalon (medulla) · Cerebral vasculature) and **Systems** (Nuclei · Tracts · Ventricles · Surface · Vessels · Context). Switching one **off excludes that slice of the atlas from the 3D view, the 2D live section *and* the PiP**; switching it on includes it — one visibility decision, three surfaces. **Reset** restores the documented default framing and **All** shows everything. The view-preset row is kept as the **shortcut row beneath them**; the per-region / per-kind checkboxes stay in the Legend and read the same two sets.
+- **Region & system layers** — the Legend still toggles diencephalon / midbrain / pons / medulla / cerebellum **/ telencephalon / vasculature** and nuclei / tracts / ventricles / surface / context / **vessel** individually, plus the v10 division group with **Solo**; presets *Brainstem focus* (default), *Deep structures*, *Whole brain*, ***Vasculature***, *Cortex only*, *All*, *Nuclei*, *Tracts*, *Clinical motor* are unchanged.
 - **Exploded view** — slider fans nuclei radially off the brainstem axis while tracts and envelopes stay put.
 - **Clipping planes** — sagittal / coronal / transverse cuts over the full canonical range with a plane-helper toggle; the transverse slider snaps to plate levels.
 - **Live section sync (v3/v4/v9)** — every clip slider drives a 2D live-section canvas in the *Plates* tab **and** a simulated-section panel docked bottom-right of the 3D view, both computed by the same Web Worker (clip the committed GLB triangles by the plane, chain closed contours, fill even-odd with taxonomy colours) and both showing **real imagery as the base layer** in the *Plates* tab — real section photographs on their anchored planes, a continuous real head CT volume, and a continuous T1 MRI at any plane, with a modality toolbar (Auto real-first / MRI / CT / Photo / Simulated only), CT brain–bone windows, and the active modality's credit always visible. **The 3D tab's panel is the simulated section only and never counts as an imagery surface** — v9 replaced its GPU stencil-cut renderer with that shared 2D renderer, and retired the v4 real-slice backdrop with it (details in [v9](#v9--somatotopy-cortical-divisions-measured-imaging-registration-and-a-simulated-section-panel)).
@@ -17,6 +18,7 @@
 - **Measured imaging registration (v9)** — a re-runnable fitter (`node scripts/fit-imaging-affine.mjs --report`) that measures the atlas brain mask against each modality's own image mask and commits the residuals; **24 photograph plates corrected and applied (mean ROI IoU 0.074 → 0.447, 0 worsened)**, while the **CT and MRI corrections were measured and rejected** with their numbers stated in the manifests and in the UI — details in [v9](#v9--somatotopy-cortical-divisions-measured-imaging-registration-and-a-simulated-section-panel).
 - **Simulated-section panel + images-off (v9)** — the 3D tab's bottom-right panel is now a **2D simulated-section panel** (no clipped 3D geometry, no plane helper, **no real imagery ever**, resizable with the size remembered across reloads), and the *Plates* toolbar's **Simulated only** state is a first-class, persisted, clearly-worded "no imagery" mode — details in [v9](#v9--somatotopy-cortical-divisions-measured-imaging-registration-and-a-simulated-section-panel).
 - **Display round 2 (v10)** — the three 3D plane helpers now span the **whole `CLIP_BOUNDS` rectangle** of their two in-plane axes, so a cut through the hemispheres shows the cut plane where the cortex actually is instead of stopping at the brainstem; a **division-level visibility control** (Prosencephalon · Mesencephalon · Rhombencephalon · Cerebral vasculature) in the Legend with an on/off checkbox **and** a one-click **Solo** per division, so "everything on" stops being overwhelming; the simulated-section panel resizes from **all four corners**; the cortical-division layer stops painting slivers and floating wedges; and the *"Cerebral cortex (context envelope)"* **text label is dropped while its contour stays** — details in [v10](#v10--plane-helper-extent-division-visibility-four-corner-pip-resize-cortical-division-quality-and-the-cortex-label).
+- **Areas + Systems toggle rows (v11)** — the header's view-preset row is demoted to a shortcut row beneath **two rows of on/off toggles**: the big anatomical **Areas** (Telencephalon · Diencephalon · Mesencephalon · Metencephalon (pons + cerebellum) · Myelencephalon (medulla) · Cerebral vasculature — which together partition all 7 taxonomy regions and all 236 entries exactly once) and the orthogonal **Systems** axis (Nuclei · Tracts · Ventricles · Surface · Vessels · Context = `ALL_KINDS`). An area or system **off** is excluded from the 3D scene, the live section **and** the PiP by **one** visibility decision, with **Reset / All** restoring the documented default; the run also settled the two v10 carry-over defects (the cortical-division rule vs what the canvas paints; the sagittal plane-helper `u/v` convention) — details in [v11](#v11--the-areas--systems-toggle-rows-replace-the-view-preset-row).
 - **12 interactive 2D plates** — 9 transverse levels (pyramidal decussation → mid-thalamus), 1 midline sagittal profile, 2 coronal slices; every labeled region highlights on hover and selects everywhere on click; leader-line labels toggle on/off. **(v7 adds 3 more — 15 total:** axial +58, sagittal hemisphere, coronal fornix.)
 - **2D ↔ 3D sync** — selecting a plate (or level-ruler entry) moves the 3D transverse clipping plane to that level and reveals the plane helper; dragging the plane keeps the level ruler and plate sync indicator in step.
 - **Structure browser** — region → subdivision → structure taxonomy tree plus case-insensitive search over names and synonyms (try "STN", "MLF", "pulvinar").
@@ -421,7 +423,7 @@ the shipped sources**:
 
 | Tier | Gate | Runs without a browser |
 | --- | --- | --- |
-| **1 — binding** | `npm run validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, **`verify:plane-helper-extent`** (v10), `verify:somatotopy`, `verify:cortical-lobes`, `verify:pip-contract`, **`verify:division-toggles`** (v10), `node scripts/verify/boundary-contract.mjs`, `node scripts/verify/a11y-contract.mjs`, `node scripts/verify/budget-report.mjs`, `node scripts/build-anatomy-geometry.mjs --manifest`, `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | yes — these must exit 0 |
+| **1 — binding** | `npm run validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, **`verify:plane-helper-extent`** (v10), `verify:somatotopy`, `verify:cortical-lobes`, `verify:pip-contract`, **`verify:division-toggles`** (v10), **`verify:area-toggles`** (v11), **`verify:view-filter-consistency`** (v11), `node scripts/verify/boundary-contract.mjs`, `node scripts/verify/a11y-contract.mjs`, `node scripts/verify/budget-report.mjs`, `node scripts/build-anatomy-geometry.mjs --manifest`, `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | yes — these must exit 0 |
 | **1b — binding; the v9 close-out note that these were RED does not reproduce** | `npm run verify:audit-checks` (92 passed · 0 failed) and `node scripts/verify/closure-bite.mjs` (7/7 mutations caught) | yes — both re-measured green by the v10 integrator sweep against the **unmodified** file at `f5d3ed2` ([v10 verification](#verification-v10-close-out-non-browser)); the dimmed-row check carries the documented vasculature exemption **plus the assertion that pins it** (*"the 14 vascular rows are off at default framing through the REGION layer only…"*), so the v9 statement is superseded rather than papered over |
 | **2 — recorded, not asserted** | `npm run verify:anatomy`, `npm run verify:imaging-fit` (both **environment-blocked in the agent sandbox**: `spawnSync … EPERM` before any verdict), `npm run verify:audit`, `verify:browser`, `verify:acceptance` | **no** — reported as command + exit code + reason |
 
@@ -929,6 +931,169 @@ every task's write scope in this run.
 No content record was added, renamed or moved by v10: `npm run validate` reports the same 236 / 213 / 23 / 26 /
 15 / 17 inventory as v9 — the run is display, controls and rules only.
 
+## v11 — the Areas + Systems toggle rows replace the view-preset row
+
+Spec: [`docs/SWARM_V11_PLAN.md`](docs/SWARM_V11_PLAN.md) — **§7 is this run's closure**, and every number in this
+section is re-measured there by the integrator's own sweep (`npm run …`, exit code per gate). The ask was
+"*instead of divisions such as 'brainstem focus', use big categories like telencephalon, mesencephalon … and make
+them toggle buttons so users can toggle brain areas on and off (exclude from 3D/2D section view when off)*", plus
+"*another orthogonal axis is vascular, nuclei, tract (also toggle on and off), which you already pretty much
+have*". It is data slicing, controls and rules — **no content record, mesh, level, plate or syndrome moved**
+(`npm run validate`: the same 236 registry entries · 213 records · 23 tracts · 26 syndromes · 15 plates · 17
+levels, 0 errors / 0 warnings).
+
+### 1. Two rows of toggles, and where the preset row went
+
+The header's first control row is now **Areas**, followed by **Systems**; every button is a real
+`<button type="button">` with `aria-pressed`, an accessible name whose visible text is a prefix (WCAG 2.5.3) and
+a stable machine hook for the browser lane (`data-area` / `data-kind`) — and because they are real buttons they
+are focusable and keyboard-operable by construction, which the browser lane confirms with a real Space keypress
+(the check is written to fail, not to skip).
+
+| Row **Areas** (`data-area`) | regions it owns | taxonomy rows | v10 division (`data-division`) | a fresh boot |
+| --- | --- | --- | --- | --- |
+| Telencephalon | telencephalon | 85 | prosencephalon | on |
+| Diencephalon | diencephalon | 39 | prosencephalon | on |
+| Mesencephalon (midbrain) | midbrain | 25 | mesencephalon | on |
+| Metencephalon (pons + cerebellum) | pons + cerebellum | 40 | rhombencephalon | on |
+| Myelencephalon (medulla) | medulla | 33 | rhombencephalon | on |
+| Cerebral vasculature | vasculature | 14 | vasculature | **off** (v8: the arterial overlay is off by default) |
+| **Σ** | **7 regions, each owned exactly once** | **236 = every taxonomy entry** | — | pressed row `[true,true,true,true,true,false]` |
+
+| Row **Systems** (`data-kind`) | taxonomy rows | a fresh boot |
+| --- | --- | --- |
+| Nuclei · Tracts · Ventricles · Surface · Vessels · Context | 88 · 53 · 11 · 25 · 14 · 45 = **236** | all six **on** |
+
+The partition is **derived and asserted, not typed**: the Areas table is computed from the v10 `DIVISIONS`
+(`metencephalon` = rhombencephalon minus medulla, `myelencephalon` = medulla) and the store throws **at module
+load** if any region is claimed twice, claimed by nobody, or claimed by an area whose declared division
+disagrees — in Node *and* in the browser. The Systems row is `ALL_KINDS` mapped in order, so it is total over the
+kinds by construction. `npm run verify:area-toggles` (**331 assertions, 0 failed**) imports the shipped store and
+the shipped `Header`, drives the real `onClick` handlers, renders the header through `react-dom`, prints the two
+tables above, and bites: a mutated area table (region moved, region shared, area dropped, helpers clobbered)
+fails a named check, and two load-time mutations make the store itself exit 1 naming the defect.
+
+**What changed for users, exactly.** The **preset row is not deleted — it moved**: it is still in the header,
+now the **shortcut row beneath Areas and Systems** (presentation order 0/1/2; the DOM order is deliberately
+presets-first so the existing default-framing assertion still addresses the same buttons). **Reset** and **All**
+sit at the end of that row: Reset calls the store's existing default (`applyViewPreset('brainstem-focus')`) and
+All resolves through the preset table, so there is exactly **one** definition of "the default framing" — the
+v7 *Brainstem focus* default, its 32 hidden cortex-preset ids, the vasculature region off and all six kinds on
+are unchanged, and `viewPresetOf(DEFAULT_LAYERS)` is still `brainstem-focus` (asserted in the unchanged
+`verify:audit-checks` mirror, 92/0, and in the new gate's own §5–§6). The Legend keeps every per-region,
+per-kind and per-division control, and its division rows now name the header areas they resolve to; the
+taxonomy tree dims through the same layer sets, so the tree and the rows can never disagree.
+
+### 2. One visibility decision — the 3D scene, the live section and the PiP agree
+
+The point of the rows is that **off means off everywhere**. Before v11 one path bypassed the layer sets:
+`buildLobeLayer` (the cortical-division pass) was correct only because its input happened to be pre-filtered.
+It now re-applies the same gate, and the check sweeps both surfaces case by case
+(`npm run verify:view-filter-consistency`, **100/100**):
+
+| what was swept | result |
+| --- | --- |
+| **2D canvas + PiP** — 138 section parts × 4 states (on+on / kind-off / area-off / both-off) | on+on **138/138 painted**; kind-off **138 hidden**; area-off **138 hidden**; both-off **138 hidden**; parts with no region (**the silent-bypass class**) **0 of 138** |
+| **3D** — the same 4 states through `layersAdmit` | **552 comparisons · 0 disagreements** with the 2D decision |
+| **every 3D pass** — 213 structure records, 23 tracts, 10 envelope slots, 2 ghost shells | area off ⇒ **all hidden**; kind off ⇒ **all hidden**; both off ⇒ **all hidden**; **violations 0** |
+| **cross-surface join** on the taxonomy id — 137 of 138 parts | **548 comparisons · 0 disagreements** |
+| **the cortical-division pass executed** over both committed ribbon GLBs, 5 planes × 2 ribbons | parity **5/5**; area off ⇒ **0 ribbons / 0 painted divisions** even with the unfiltered catalogue |
+
+Per area, what each surface hides (2D parts hidden/owned · 3D drawn records hidden/owned): diencephalon 33/33 ·
+38/38 — telencephalon 28/28 · 57/57 — midbrain 14/14 · 21/21 — pons 17/17 · 27/27 — medulla 14/14 · 27/27 —
+cerebellum 6/6 · 5/5 — vasculature 26/26 · 14/14. Per system: nucleus 81/81 · 84/84 — context 17/17 · 44/44 —
+tract 7/7 · 24/24 (+23 tract tubes) — ventricle 7/7 · 6/6 — surface 0/0 · 17/17 — vessel 26/26 · 14/14.
+
+The check is not decorative: the pass really built **75 `Path2D`s (75 `moveTo` · 2233 `lineTo` · 75
+`closePath`)**, and with the canvas' gate removed in a scratch copy the mutant paints **5 divisions with the
+telencephalon off** where the shipped code paints **0**. `SectionCanvas.tsx`'s SHA-256 is printed identical
+before and after.
+
+### 3. The two v10 carry-over defects — settled
+
+**(a) The cortical-division rule vs what the canvas paints (§3 item 4).** The v10 audit read "at the planes the
+rule expects 4–6 painted divisions the canvas paints **NONE**" (y=6 legend `[]` vs the rule's five; y=14 `[]`
+vs all six). The measured cause is **ribbon coverage, not a rule disagreement**: the canvas paints **both**
+cortical ribbons while the gate's per-plane tables sliced the **left** one only. Per reference plane
+(`npm run verify:cortical-lobes`, **564/564**, prints both columns and the audit's own table is reconciled
+**6/6** rows):
+
+| plane | rule, LEFT ribbon alone | rule, both ribbons = what the canvas paints | only the right ribbon adds |
+| --- | --- | --- | --- |
+| y=0 | temporal · occipital · limbic | **parietal** · temporal · occipital · limbic | parietal |
+| **y=14** | frontal · temporal · occipital · insula | frontal · **parietal** · temporal · occipital · insula · **limbic** | parietal · limbic |
+| y=30 | frontal · parietal · temporal · occipital | *identical* | — |
+| y=48 | frontal · parietal · temporal · occipital · limbic | *identical* | — |
+| y=58 | frontal · parietal · occipital | frontal · parietal · occipital · **limbic** | limbic |
+| y=68 | frontal · parietal | *identical* | — |
+| y=78 | frontal | *identical* | — |
+| x=6 | frontal · parietal · occipital | *identical* | — |
+| z=0 | frontal · temporal · limbic | *identical* | — |
+| z=40 | frontal · parietal | *identical* | — |
+| y=−46 / −24 / −8 | `[]` | `[]` (these planes miss the ribbon entirely) | — |
+
+**3 of 13 reference planes** carry a division only the right ribbon paints, and the canvas now consumes the
+**same** splitter + floors the Node gate exercises (`corticalRunsForLoop`; run ≥ 10 au, drawn area ≥ 25 au²,
+label ≥ 25 au², all read from `corticalLobes.ts`). The browser lane no longer hardcodes the expected set: it
+re-derives it at audit runtime over both ribbons and keeps the old table as a printed cross-check.
+
+**(b) The sagittal plane-helper `u/v` convention (§3 item 1).** The v10 audit measured the sagittal helper quad
+at **148 × 171 au** and its own in-plane `CLIP_BOUNDS` rectangle at **171 × 148**. The arithmetic settles it:
+`AXIS_PAIR.x = [z, y]`, so `u = z` → 72 − (−76) = **148** and `v = y` → 116 − (−55) = **171** — **the shipped
+quad is right** and the audit's `['x','y','z'].filter(c => c !== axis)` was **ascending axis *name***
+(`['y','z']` → 171 × 148), which no single permutation can match for all three planes. The **audit** was fixed:
+it reads the ORDERED pair out of the shipped `planeGeometry.ts` and prints it in its own run
+(`AXIS_PAIR {"y":["x","z"],"x":["z","y"],"z":["x","y"]}`), and the hand-typed `AXIS_INDEX` table is gone;
+`npm run verify:plane-helper-extent` (**206/0**) now reports *"ascending-name in-plane derivation absent ·
+reads AXIS_PAIR yes"*. `PlaneHelpers.tsx` itself is unchanged (a comment documents the convention).
+
+**(c) Found by this run, not in the brief: the coronal plane frame.** `planePointToCanonical` sent the coronal
+axis down the transverse branch, so every coronal section was classified at wrong canonical coordinates.
+Measured on the left ribbon, before → after: **z=0** `[parietal temporal limbic]` → `[frontal temporal insula
+limbic]`; **z=30** `[insula parietal]` → `[temporal insula frontal parietal]`; **z=40** `[parietal limbic]` →
+`[frontal parietal]`; **z=−30** `[parietal temporal limbic]` → `[frontal temporal]`. The frame is now
+`[u, v, planeValue]` for all three axes and both gates assert it per axis.
+
+### v11 honest limits, in one place
+
+| Item | Limit (with its number) |
+| --- | --- |
+| 1 · the Areas row | The six areas are a **display grouping over the taxonomy regions**, not new anatomy and not a new taxonomy: each button is exactly the union of the region layers named in the table above (`Metencephalon` = pons + cerebellum; `Myelencephalon` = medulla), i.e. the reference figure's embryological vesicles plus the arterial system, at one click. A region added to the taxonomy later **cannot** be orphaned — the store's load-time assertion throws instead — and a button reads "on" only when *every* region it owns is on (a partly-on area reads unpressed; there is no third state) |
+| 2 · the Systems row | The orthogonal axis is exactly the **`kind` axis the app already had** (`ALL_KINDS`: nucleus · tract · ventricle · surface · vessel · context) — not a new grouping, and not the same thing as the v10 divisions. Measured consequence: **25 `surface` records exist but only 17 have a 3D body and 0 have a section part**, so switching Surface off changes the 3D view and nothing in the section; and the 26 vessel *parts* are gated by `taxonomyKind`, not by their draw bucket |
+| 3 · the preset row | The row is **demoted, not deleted** (it is the shortcut row below the two new rows) — the documented default framing stays reachable and asserted. `Cortex only` keeps its v7 meaning and is not a header toggle. **Two header buttons read exactly "Nuclei"** (the preset and the system toggle) and two read "All" (the preset and the action); both are machine-hooked, and a new contract check fails if an *unhooked* duplicate ever appears |
+| 4 · one decision, one axis | The 3D surface also honours the **structure-level `hidden` set** of the v7 presets (28 records under *Brainstem focus*), which the 2D section does not. That is a *different* axis, measured and printed (gate lane C2), deliberately **not** merged with the area/kind decision. Four section parts have no 3D body of their own (`ctx-caudate-l/-r`, `ctx-choroid-plexus-l/-r`) and one part (`ctx-pineal`) has no taxonomy entry, so the cross-surface join is **137 of 138 parts**, not 138 |
+| 5 · cortical divisions | **Fitted to the DERIVED ribbon, not a gyral map** — no sulcal fundus, Brodmann area or flat-map boundary is traced; the caveat is in the file header, in the legend and in the [v10 limits](#v10--plane-helper-extent-division-visibility-four-corner-pip-resize-cortical-division-quality-and-the-cortex-label). v11 changed **no fitted constant**: it unified the *rule*, fixed the coronal plane frame, and replaced the one-ribbon reading with the two-ribbon measurement above |
+| 6 · claim tier | Every rendered-pixel claim — **the two rows appearing on screen, a toggle repainting the 3D scene / the Plates canvas / the PiP, real pointer and keyboard activation, and whether the v10 audit's 14 failures are now gone** — is **orchestrator-verified only**: Chrome cannot start in the agent sandbox and every browser lane exits **4** ("no check was run"). This section's numbers are the store, the rendered DOM contract, the wired handlers and the executed draw paths |
+
+### Verification (v11 close-out, non-browser)
+
+| Gate | Result |
+| --- | --- |
+| `npm run validate` | **exit 0** — 0 errors / 0 warnings · 236 registry entries (0 awaiting a record) · 17 files / 213 records · 23 tracts · 26 syndromes · 15 plates · 17 levels |
+| `npm run check` | **exit 0** |
+| `npm run build` | **exit 0** (`✓ built in 9.40s`) |
+| `npm run verify:pipeline` | **exit 0** — 138/138 parts · 599,204 triangles · 386 loops across 13 planes · 0 problems |
+| `npm run verify:plane` | **exit 0** — 10,827 assertions |
+| `npm run verify:area-toggles` | **exit 0 (new gate)** — 331 passed · 0 failed, printing the two partition tables |
+| `npm run verify:view-filter-consistency` | **exit 0 (new gate)** — 100/100 assertions, 548 + 552 cross-surface comparisons with 0 disagreements |
+| `npm run verify:cortical-lobes` | **exit 0** — **564/564** assertions (prints the two-ribbon table and the audit reconciliation) |
+| `npm run verify:plane-helper-extent` | **exit 0** — 206 passed · 0 failed (lane A2 settles the `u/v` convention) |
+| `npm run verify:division-toggles` | **exit 0** — 250 passed · 0 failed |
+| `npm run verify:somatotopy` / `verify:pip-contract` | **exit 0** — 45/0 · 187/0 |
+| `npm run verify:audit-checks` | **exit 0** — 92 passed · 0 failed · 7 informational · 9 groups (the DEFAULT-framing mirror is byte-unchanged by v11) |
+| `npm run verify:closure-bite` | **exit 0** — 7/7 mutations caught, shared tree byte-identical, restored copy re-runs 92/0 |
+| `npm run verify:boundary-contract` / `verify:a11y-contract` | **exit 0** — 22/0 · 38/0 (the a11y gate re-run after `build`, so its shipped-bundle spot check ran) |
+| `npm run verify:budget-report` | **exit 0** — 599,204 tris · GLB 13.82 MiB · imaging 9.02 MiB, all inside their caps |
+| `npm run verify:anatomy` | **exit 1 — environment, not product**: `spawnSync powershell EPERM` before any verdict prints. Red at base, in no v11 task's scope |
+| `npm run verify:imaging-fit` | **exit 1 — environment, not product**: `FAIL the fitter could not be re-run: spawnSync node EPERM` (0 assertions run) |
+| `npm run verify:audit` | **exit 4 — orchestrator lane only** — it prints its non-browser half here (`v11 source facts: AREAS telencephalon→[telencephalon] · … · ALL_KINDS nucleus, tract, ventricle, surface, vessel, context · AXIS_PAIR {"y":["x","z"],"x":["z","y"],"z":["x","y"]} · AXIS_INDEX {"x":0,"y":1,"z":2}`) and then Chrome dies in `mojo::PlatformChannel` (`OpenProcess: Access is denied (0x5)`) |
+| `verify:acceptance` / `verify:browser` | **not run and not claimed** |
+
+The **14 `verify:audit` failures** the v10 run recorded (`202 passed / 14 failed`) are accounted for class by
+class in [the plan's §7.4](docs/SWARM_V11_PLAN.md): the item-1 convention is fixed on the audit side; the item-4
+divergence is retired with the two-ribbon numbers above; the audit-side end-of-run shape reading is unchanged by
+v11 and remains orchestrator-verified. Nothing was deleted or weakened to make a failure disappear.
+
 ## Scripts
 
 | Script | What it does |
@@ -950,6 +1115,8 @@ No content record was added, renamed or moved by v10: `npm run validate` reports
 | `npm run verify:cortical-lobes` | **v9 cortical-division gate, no browser** (`scripts/verify/cortical-lobes.mjs`): **v10 rewrote it to 519 assertions** — the six divisions and their 12 labels (full + short), per-plane shares with the per-plane absence list printed, containment (no classified cell outside the ribbon, no invented run point, runs form a closed chain), determinism under a repeat and a reversed sweep, 17 pinned anatomical spot checks, the legend's real JSX rendered through `react-dom/server` carrying the caveat, and `section-pipeline.mjs` re-run as a child. **v10 groups C–F** add the run-quality rule: the three floors read from the shipped constants, the printed **per-plane per-division arc/area table**, the sliver census (`arc < 2 / < 5 / < 10`, `area < 1 / < 10`, 1-vertex — all **0** over the 47 painted reference-plane runs), the dropped-loop census, the independent **raw** re-cut that shows 23 of 72 spans sub-threshold under the unchanged classification, the 49-plane user-grid sweep, and a real `react-dom` render proving `ctx-cerebral-cortex`'s chip is suppressed while the thalamus envelope's still renders. Shown to bite on six in-place mutations (paint floor, floors not gating absorption, un-gated hover label, un-gated chip, vertex-count label competition, filtered contour), each exiting 1, files restored byte-identical |
 | `npm run verify:pip-contract` | **v9/v10 simulated-section panel gate, no browser** (`scripts/verify/pip-contract.mjs`): **187 assertions in 6 groups** (v10 added group F) — the panel mounts the shared 2D renderer (one canvas, no WebGL context, no `PlaneHelpers`), 12 retired GPU-renderer tokens absent from its code, the imagery scope started in an effect + the pixel guard shadowing the two blit calls, the surviving chrome (axis override, readout shape, badges from `planeGeometry.PLANE_BADGES`, hide/restore, the ≤900 px tab literals), and the size control's arithmetic — clamp window pinned to 224–880 × 170–640 px, totality over 0/negatives/`NaN`/±∞, idempotence, small⇄large cycle, persistence key. **Group F (v10 item 3)** adds the four corner handles with four distinct corner-naming accessible names, the corner table and render order, the plan's exact numbers, an independent re-derivation, the **local-frame geometry proof** (dragged corner on the pointer, opposite corner bit-identical, one-axis drags leave the other axis alone, still fixed at the clamp bound), the keyboard/wiring non-regression and the stylesheet anchors. Its header states the zustand-4 static-render limit that decides how the markup half is asserted; its own bite check catches **6/6** mutations in an isolated copy |
 | `npm run verify:division-toggles` | **v10 division-visibility gate, no browser** (`scripts/verify/division-toggles.mjs`, new): 250 assertions in 10 groups, importing the **shipped store** through an in-process TS/TSX loader (the `audit-checks.test.mjs` technique) — the exported contract the Legend calls; the four divisions equal the documented ones and **partition** `ALL_REGIONS` (no region in two divisions, none unreachable); a fresh boot still reports `brainstem-focus` with the vasculature region off and the vessel kind on; `solo` leaves exactly one division's regions on for all four (action + pure function, idempotent, printed per division); the checkbox path is a union that is idempotent, empties a complete division and restores the previous set exactly; the arteries are never swept into a division (7×4 matrix printed); kinds/hidden/emphasis set-equal after every call; a **real `react-dom` render** yields 4 checkboxes + 4 solo buttons with distinct accessible names above the region rows; and group 10 drives the **shipped handlers** in an isolated copy capturing 7 states (boot `[true,true,true,false]` → solo(mesencephalon) → checkbox off/on → vascular checkbox ± → solo(prosencephalon)). Bite: four injected defects each caught by a named check, plus a mutated `DIVISIONS` table (arteries folded into the hindbrain) tripping the store's own load-time assertion |
+| `npm run verify:area-toggles` | **v11 Areas/Systems toggle-row gate, no browser** (`scripts/verify/area-toggles.mjs`, new): **331 assertions in 10 groups**, importing the **shipped store and the shipped `Header.tsx`** through the in-process TS/TSX loader the other Node gates use — the exported area contract the header calls (`AREAS`, `areaRegions`, `areasOf`, `areaLayersOn`, `ALL_ON_LAYERS`); the **Area partition printed as a table** (button · regions · taxonomy rows · boot state: 85/39/25/40/33/14 = 236 over 7 regions owned exactly once, no region in two areas and none unreached); the rhombencephalon split proven at the vesicle boundary (metencephalon + myelencephalon = the division, medulla alone); the Systems row = `ALL_KINDS` in order with its own row counts (88/53/11/25/14/45 = 236); the shipped `AREAS` equal to the table **reconstructed from `DIVISIONS`** and to the region sets parsed out of the store's own source text (a hardcoded list that drifts fails); every area toggle adding/removing **exactly** its regions through the real store action *and* the real `onClick` (a child probe fires all twelve buttons), leaving kinds/hidden/emphasis set-equal; the unchanged default (`viewPresetOf(DEFAULT_LAYERS) === 'brainstem-focus'`, boot row `[true,true,true,true,true,false]`); Reset reproducing the default exactly from a dirty state and after All; a real `react-dom` render of the header (6 + 6 + 9 buttons, labelled groups, distinct accessible names, visible text a prefix of each name, no `div` impersonating a button); and a bite half — four injected defects caught by named checks plus two load-time mutations that make the store exit 1 naming the partition defect |
+| `npm run verify:view-filter-consistency` | **v11 one-visibility-decision gate, no browser** (`scripts/verify/view-filter-consistency.mjs`, new): **100/100 assertions** — sweeps **138 section parts · 213 structure records · 23 tracts · 10 envelope slots · 2 ghost shells** through **7 areas × 6 systems** in 4 states each, comparing the 2D/PiP decision (`isPartVisible`) with the 3D primitive (`layersAdmit`) and joining both surfaces on the taxonomy id: **548 cross-surface comparisons and 0 disagreements**, area-off/kind-off/both-off concealing **every** owned body on every pass, and **0 of 138** parts with an undecidable region (the silent-bypass class). It prints the per-area and per-system hide tables, asserts `isPartVisible` is the **only** layer read in `SectionCanvas.tsx` and that `SceneLayers.tsx`'s component body holds **zero** direct region/kind reads, executes the shipped `buildLobeLayer` over **both** committed ribbon GLBs (division parity **5/5** planes; area off ⇒ 0 ribbons / 0 divisions even with the unfiltered catalogue, 75 `Path2D`s / 2233 `lineTo` proving the pass stroked), and bites: removing the canvas' layer gate in a scratch copy paints 5 divisions with the telencephalon off where the shipped pass paints 0, and a canvas-private rule filter diverges from the shared rule (`SectionCanvas.tsx` SHA-256 identical before/after) |
 | `npm run verify:imaging-fit` | **v9 imaging-registration gate** (`scripts/verify/imaging-fit.mjs`): re-runs the fitter and requires every committed number to equal the recomputation — grid bytes frozen against `HEAD`, per-plane and mean residuals, `applied` vs the record's own gate, every accepted plate present in `src/data/sectionImages.ts` as a `fittedFit` and every rejected one absent, the 49 JPEG plates recorded as `unmeasurable: no-decoder`, and `imageLayers.ts` preferring `fittedFit`. **RED in the agent sandbox** — the gate re-runs the fitter as a piped child and the sandbox denies it (`spawnSync node EPERM`, **0 assertions run**); when driven through a byte-identical copy with the captured fitter JSON it completes with 289 assertions / 20 failures (18 real, 2 copy artifacts) — the exact failures are in the [v9 section](#verification-v9-close-out-non-browser) |
 | `npm run verify:audit-checks` | **Audit check mirror, no browser** (`scripts/verify/audit-checks.test.mjs`, exposed as an npm script at v9 close-out; it was previously run as a bare `node` command): runs the *same* pure predicates the runtime audit uses (`scripts/verify/checks.mjs`) against the **shipped manifests and the shipped sources** — CT coverage honesty driven by the real `ct-manifest.json` and `ctCoverageStatement()`, the brainstem-focus default and the preset region guard (imported from the real store), the `?panelfail` containment demonstration (drives the real `PanelErrorBoundary` through the real throw: `probes === 1`, correct surface, Retry recovers), the context-loss DOM contract including the "overlay is outside `<Canvas>`" and "PostFX returns null while lost" root causes, and the modality sweep in both directions. It also re-derives the three budget numbers and checks the telencephalon data/plate inventory. **This is a mirror, not a browser test**: it proves the decision logic and the shipped code contract, never that pixels appeared. **v10: measured 92 passed · 0 failed · 7 informational · 9 groups (exit 0)** — the dimmed-row predicate carries the documented vasculature exemption *and* the assertion that pins it (*"the 14 vascular rows are off at default framing through the REGION layer only…"*), which supersedes the v9 close-out note that this gate was red |
 | `npm run verify:audit` | **Self-sufficient runtime audit** (`scripts/verify/audit.mjs`): starts Vite itself when nothing answers at the target URL, drives headless Chrome over the DevTools Protocol through the whole feature surface, and stops the server again on every exit path. Includes the two P0 gates — simulated WebGL context loss via `WEBGL_lose_context` (overlay appears, canvas recovers) and a **forced render throw** through the dev-only `?panelfail=<surface>` hook (the failure is contained, the app keeps working, Retry restores the panel). Pass an existing URL to reuse a running server. **v7 closure:** every load-bearing verdict is now decided by `scripts/verify/checks.mjs`, the run uses a **fresh Chrome profile per run** plus a `localStorage`/`sessionStorage` clear before the boot read (so a persisted `neuroaxis.viewPreset` can never masquerade as a wrong default), and the CT/modality checks are coverage-aware. **v9:** the PiP checks were re-pointed at the simulated-section panel (structure at boot, per-axis badges + readout, resizable/persisted/preset/hide+restore, the panel's independence from the Plates modality) and the retired `.pip-backdrop-hint` / `.pip-context-lost` checks now assert the **absence** of the retired elements. **v10 (re-pointed by the run's `review-qa` task):** a Node-side **"v10 source facts"** block reads `CLIP_BOUNDS`, `GRID_CELL_AU`, the `MIN_DIVISION_*` floors, `SECTION_PIP_SIZE_MIN/MAX`, `NO_CANVAS_LABEL_RECORD_IDS`, `DIVISIONS` and `REGION_LABELS` out of the shipped sources so no browser assertion retypes a number; a **three.js scene bridge** installed through `THREE.__THREE_DEVTOOLS__` makes the *rendered* helper geometry and mesh set readable; and blocks **Q0–Q6** (~120 assertions) cover the helper sheets' rendered spans vs the DOM sliders, division solos driving legend + tree + scene, real per-corner pointer drags with the dock-pinned edges, the artefact planes in Plates **and** PiP, and the suppressed cortex label with a hover/click sweep. The only in-place edits were the `node:fs` import and the sanctioned re-point `pipBoot.resizer === 1 → === 4`; no existing check was deleted or weakened |
@@ -959,7 +1126,8 @@ No content record was added, renamed or moved by v10: `npm run validate` reports
 | `node scripts/verify/a11y-contract.mjs` | **a11y gate, no browser**: reads the shared source files and the shipped bundle for the keyboard/AX contract (plate regions focusable with an accessible name, `inert` hidden panels, modal trap/restore, `aria-activedescendant`, focus rings, ≥24 px hit targets, favicon) |
 
 All of `validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `verify:plane-helper-extent`,
-`verify:somatotopy`, `verify:cortical-lobes`, `verify:pip-contract`, `verify:division-toggles`, `a11y-contract`,
+`verify:somatotopy`, `verify:cortical-lobes`, `verify:pip-contract`, `verify:division-toggles`,
+`verify:area-toggles`, `verify:view-filter-consistency`, `a11y-contract`,
 `boundary-contract`, `budget-report.mjs` and `build-anatomy-geometry.mjs --manifest` must exit 0;
 `npm run validate` is the pre-commit data authority (plan §9). The Node gates are wired as plain `node` entry
 points on purpose — they have no external precondition, so they can be quoted as evidence from any checkout.
@@ -968,7 +1136,10 @@ points on purpose — they have no external precondition, so they can be quoted 
 red at base, neither is in a v10 task's write scope, and **neither is claimed green here**. The three gates that
 were red at v9 close-out (`verify:imaging-fit` aside, `verify:audit-checks` and `closure-bite.mjs`) were
 re-measured by the v10 sweep: `verify:audit-checks` is **92 passed · 0 failed** and `closure-bite.mjs` catches
-**7/7** mutations against a green baseline.
+**7/7** mutations against a green baseline. **v11 re-measured both reds** (identical `spawnSync … EPERM`, 0
+assertions run — environmental, unchanged, in no v11 task's write scope), and re-measured the whole binding list:
+the v11 integrator sweep is in [v11 verification](#verification-v11-close-out-non-browser), including the two new
+gates `verify:area-toggles` (**331/0**) and `verify:view-filter-consistency` (**100/100**).
 
 **Exit codes of the browser lane** (`verify:audit`, `verify:acceptance`, `verify:browser`) — an environment failure must never look like a product failure:
 
@@ -1001,6 +1172,11 @@ All numbers produced by `npm run validate` at integration time:
 > edited, renamed or moved, and nothing below y = +45 moved. Earlier milestones: v7 added the telencephalon
 > (42 structure records, 4 tracts, 46 registry entries, 4 levels, 3 plates, levels now running to y = +78);
 > v8 added 43 records including the 14 arteries.
+>
+> **v10 and v11 added no content at all.** The v11 sweep's `npm run validate` reports the identical inventory
+> (236 / 213 / 23 / 26 / 15 / 17, 0 errors / 0 warnings), and the Areas/Systems rows of v11 are a **display
+> grouping over the existing taxonomy regions and kinds** — every one of the 236 entries belongs to exactly one
+> area button and exactly one system button, measured by `npm run verify:area-toggles`.
 
 Vascular territories are carried as string fields (`bloodSupply` per structure, `vascularTerritory` per syndrome) — no 3D vessel models. Every structure spans at least one of the 17 canonical levels; a subset of those levels has a matching transverse plate, and the plates' `data-structure` slugs resolve against the same registry as the 3D scene (enforced by the validator).
 

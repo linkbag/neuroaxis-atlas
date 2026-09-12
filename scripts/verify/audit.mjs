@@ -53,7 +53,9 @@
  * falsifiable without a browser and cannot drift from the assertions run here.
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { register } from 'node:module'
 import { resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
 import {
   EXIT,
   createLifecycle,
@@ -64,6 +66,7 @@ import {
   contextLossReading,
   contextRestoreReading,
   ctCoverageReading,
+  headerToggleRowsReading,
   modalityReading,
   panelContainmentReading,
   panelRecoveryReading,
@@ -274,6 +277,14 @@ const HELPER_GRID_CELL_AU = numericConstantOf(PLANE_HELPERS_SOURCE, 'GRID_CELL_A
  * The load-bearing cases are the planes where the classifier still cuts a
  * division that the floors then remove: y = 26 (limbic), y = 30/32/34 (insula and
  * limbic) — that is the user's sliver class, and it must stay gone.
+ *
+ * v11 §3b — `drawn` IS NOW A PRINTED CROSS-CHECK, NOT THE PASS CONDITION. The
+ * browser lane derives the expected set AT RUNTIME from the shipped classifier +
+ * splitter + floors over BOTH ribbons (`loadCorticalRule` below) and compares that
+ * to what the canvas reports; this table is printed beside it, and
+ * `verify:cortical-lobes` asserts the two still agree. A hardcoded expectation is
+ * a second copy of the rule: change a floor and this column drifts, and the check
+ * would then fail for the wrong reason (or, worse, someone would relax it).
  */
 const ARTEFACT_PLANES = [
   {
@@ -321,6 +332,105 @@ const TAXONOMY_ENTRIES = (() => {
 })()
 const CORTEX_RECORD_NAME = TAXONOMY_ENTRIES.find((e) => e.id === 'ctx-cerebral-cortex')?.name ?? null
 
+/* ========================================================================
+ * v11 §3b — THE RULE'S OWN DIVISION SET, DERIVED AT AUDIT RUNTIME.
+ *
+ * The v10 audit compared the canvas' painted divisions against `ARTEFACT_PLANES[
+ * ].drawn` — a hand-written table. That is a second copy of the rule: change a
+ * floor or a boundary in `corticalLobes.ts` and the table drifts, so the check
+ * then fails for the wrong reason (or, worse, someone relaxes it). PLAN.md §3b
+ * requires the expected set to be RE-DERIVED here, from the shipped classifier +
+ * shipped splitter + shipped floors, over BOTH cortical ribbons (the canvas
+ * paints `ctx-hemisphere-l` AND `-r`; the committed gate's per-plane tables slice
+ * the LEFT one, which is the whole measured cause of v10's "the canvas paints
+ * none" reading).
+ *
+ * HOW. `scripts/verify/plane-transform.loader.mjs` is the repo's own
+ * extensionless-specifier hook (used by `verify:plane`), registered here so Node
+ * 24's type stripping can import the shipped `.ts` modules the app ships — the
+ * SAME `corticalLobes.corticalRunsForLoop`/`paintedDivisionsOfLoops` the canvas
+ * calls and the same `contours.extractContours` the section worker calls. No
+ * retyped maths. The ribbon slugs come from `sectionAssets.ts`, the GLB names
+ * from the anatomy manifest. A derivation failure is reported as a FAILURE by
+ * the caller (never skipped): a check that passes by not running is this
+ * project's known failure mode.
+ * ====================================================================== */
+let corticalRulePromise = null
+function loadCorticalRule() {
+  if (corticalRulePromise !== null) return corticalRulePromise
+  corticalRulePromise = (async () => {
+    register(pathToFileURL(resolve('scripts/verify/plane-transform.loader.mjs')).href, import.meta.url)
+    const lobes = await import('../../src/components/section/corticalLobes.ts')
+    const contours = await import('../../src/components/section/contours.ts')
+    const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js')
+    const assetsText = readSourceFile('src/components/section/sectionAssets.ts') ?? ''
+    const ribbonBlock = assetsText.slice(
+      assetsText.indexOf('SECTION_CORTICAL_RIBBON_SLUGS'),
+      assetsText.indexOf('export function isCorticalRibbonSlug'),
+    )
+    const slugs = [...ribbonBlock.matchAll(/'([a-z0-9-]+)'/g)].map((match) => match[1])
+    if (slugs.length === 0) throw new Error('SECTION_CORTICAL_RIBBON_SLUGS could not be read from sectionAssets.ts')
+    const manifestText = readSourceFile('src/assets/anatomy/anatomy-manifest.json')
+    if (manifestText === null) throw new Error('src/assets/anatomy/anatomy-manifest.json is missing')
+    const manifest = JSON.parse(manifestText)
+    const geometries = []
+    for (const slug of slugs) {
+      const part = (manifest.parts ?? []).find((candidate) => candidate.slug === slug) ?? null
+      if (part === null) throw new Error(`ribbon ${slug} is not in the anatomy manifest`)
+      const buffer = readFileSync(resolve('src/assets/anatomy', part.file ?? `${slug}.glb`))
+      const arrayBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)
+      const loader = new GLTFLoader()
+      const gltf = await new Promise((res, rej) => loader.parse(arrayBuffer, '', res, rej))
+      let mesh = null
+      gltf.scene.traverse((child) => {
+        if (mesh === null && child.isMesh === true) mesh = child
+      })
+      if (mesh === null) throw new Error(`ribbon ${slug} has no mesh`)
+      const position = mesh.geometry.getAttribute('position')
+      const index = mesh.geometry.getIndex()
+      if (position === null || position === undefined || index === null) {
+        throw new Error(`ribbon ${slug} has no indexed position attribute`)
+      }
+      const positions = new Float32Array(position.count * 3)
+      for (let i = 0; i < position.count; i++) {
+        positions[i * 3] = position.getX(i)
+        positions[i * 3 + 1] = position.getY(i)
+        positions[i * 3 + 2] = position.getZ(i)
+      }
+      const indices = new Uint32Array(index.count)
+      for (let i = 0; i < index.count; i++) indices[i] = index.getX(i)
+      geometries.push({ slug, positions, indices, triangles: index.count / 3 })
+    }
+    const loopsOf = (geometry, axis, planeValue) => {
+      const plane = { axis, value: planeValue }
+      if (!contours.boundsMayCut(contours.partBounds(geometry.positions), plane)) return []
+      return contours.extractContours(geometry.positions, geometry.indices, plane).loops
+    }
+    return {
+      ribbons: geometries.map((geometry) => `${geometry.slug} (${geometry.triangles} tris)`),
+      floors: {
+        runAu: lobes.MIN_DIVISION_RUN_AU,
+        areaAu2: lobes.MIN_DIVISION_AREA_AU2,
+        labelAreaAu2: lobes.MIN_DIVISION_LABEL_AREA_AU2,
+        rule: 'corticalRunsForLoop (spawned by the section canvas per ribbon loop)',
+      },
+      divisions: [...lobes.CORTICAL_DIVISIONS],
+      /** The rule's division set at one plane over BOTH ribbons — the canvas' input. */
+      setAt(planeValue, axis = 'y') {
+        const loops = geometries.flatMap((geometry) => loopsOf(geometry, axis, planeValue))
+        return lobes.paintedDivisionsOfLoops(loops, axis, planeValue)
+      },
+      /** Per ribbon, so the coverage asymmetry stays printed (l vs l+r). */
+      setPerRibbon(planeValue, axis = 'y') {
+        return Object.fromEntries(
+          geometries.map((geometry) => [geometry.slug, lobes.paintedDivisionsOfLoops(loopsOf(geometry, axis, planeValue), axis, planeValue)]),
+        )
+      },
+    }
+  })().catch((error) => ({ error: error instanceof Error ? error.message : String(error) }))
+  return corticalRulePromise
+}
+
 /**
  * v10 §5 — the ONE record whose canvas text is suppressed. Read from the shipped
  * SectionCanvas source rather than retyped, so the browser check follows the
@@ -331,6 +441,103 @@ const SUPPRESSED_CANVAS_LABEL_IDS = (() => {
   const block = /NO_CANVAS_LABEL_RECORD_IDS[^=]*=\s*new Set\(\[([^\]]*)\]\)/.exec(text ?? '')
   if (block === null) return []
   return [...block[1].matchAll(/'([^']+)'/g)].map((m) => m[1])
+})()
+
+/* ========================================================================
+ * v11 — THE TWO TOGGLE ROWS (docs/SWARM_V11_PLAN.md §1 · PLAN.md §1)
+ *
+ * The header's preset ROW is no longer the primary control: two labelled rows of
+ * toggle buttons ("Areas" = the big anatomical categories, "Systems" = the
+ * orthogonal kinds) now decide what the 3D scene, the 2D live section and the PiP
+ * show, and a Reset action restores the documented default framing.
+ *
+ * Every assertion about them below is derived from the SHIPPED DECLARATIONS —
+ * the `AREAS` table and the `DIVISIONS` table in `state/store.ts`, `ALL_KINDS` in
+ * `data/load.ts` — never from a retyped list, so a region or kind that stops
+ * being covered by a button is a FAILURE here rather than a silent hole. The
+ * `AREAS` entries' `regions:` expressions are the store's own derivation
+ * (`divisionRegions('…')` plus the two named hindbrain constants), so this
+ * parser EVALUATES that expression instead of restating its result; an
+ * unrecognised shape fails loudly (`AREA_TABLE_SOURCE === null`).
+ * ====================================================================== */
+
+const AREA_TABLE_SOURCE = (() => {
+  const text = STORE_SOURCE ?? ''
+  const block = /export const AREAS[\s\S]*?=\s*\[([\s\S]*?)\n\]/.exec(text)?.[1] ?? null
+  if (block === null) return null
+  /** `const NAME = <expression>` — the named constants the split is built from. */
+  const constants = new Map()
+  for (const match of text.matchAll(/\nconst ([A-Z_][A-Z0-9_]*)(?::[^=\n]*)?=\s*([^\n]+)/g)) {
+    constants.set(match[1], match[2].trim())
+  }
+  const valueOf = (expression, depth = 0) => {
+    if (depth > 4) return null
+    const expr = String(expression).trim().replace(/,$/, '')
+    const literal = /^\[([^\]]*)\]$/.exec(expr)
+    if (literal !== null) return [...literal[1].matchAll(/'([a-z]+)'/g)].map((m) => m[1])
+    const quoted = /^'([a-z]+)'$/.exec(expr)
+    if (quoted !== null) return [quoted[1]]
+    const call = /^divisionRegions\(\s*'([a-z]+)'\s*\)$/.exec(expr)
+    if (call !== null) return DIVISIONS_SOURCE.find((d) => d.id === call[1])?.regions ?? null
+    const filter = /^([\s\S]+?)\.filter\(\(\s*region\s*\)\s*=>\s*region\s*(===|!==)\s*([A-Za-z_'"]+)\s*\)$/.exec(expr)
+    if (filter !== null) {
+      const base = valueOf(filter[1], depth + 1)
+      const target = valueOf(filter[3], depth + 1)
+      if (base === null || target === null || target.length !== 1) return null
+      return filter[2] === '===' ? base.filter((region) => region === target[0]) : base.filter((region) => region !== target[0])
+    }
+    if (constants.has(expr)) return valueOf(constants.get(expr), depth + 1)
+    return null
+  }
+  const out = []
+  for (const match of block.matchAll(
+    /\{\s*id:\s*'([a-z]+)'[\s\S]*?label:\s*'([^']*)'[\s\S]*?division:\s*'([a-z]+)'[\s\S]*?regions:\s*([\s\S]*?)\s*\},/g,
+  )) {
+    out.push({ id: match[1], label: match[2], division: match[3], regions: valueOf(match[4]) })
+  }
+  return out.length === 0 || out.some((area) => !Array.isArray(area.regions)) ? null : out
+})()
+const AREA_IDS = AREA_TABLE_SOURCE === null ? [] : AREA_TABLE_SOURCE.map((area) => area.id)
+const AREA_REGIONS_MAP = Object.fromEntries(
+  (AREA_TABLE_SOURCE ?? []).map((area) => [area.id, area.regions]),
+)
+
+/** `export const ALL_KINDS = [...]` — the systems row's own declaration. */
+const ALL_KINDS_SOURCE = (() => {
+  const text = readSourceFile('src/data/load.ts') ?? ''
+  const block = /export const ALL_KINDS[^=]*=\s*\[([^\]]*)\]/.exec(text)?.[1] ?? null
+  if (block === null) return null
+  const out = [...block.matchAll(/'([a-z]+)'/g)].map((match) => match[1])
+  return out.length === 0 ? null : out
+})()
+
+/**
+ * v11 §3a — the ORDERED in-plane axis pair, and the world-axis index, read from
+ * `planeGeometry.ts` (the ONE declaration the 2D canvas, the PiP camera, the
+ * backdrop sampler, the section plane frame and the 3D helper quad all use).
+ * The v10 audit derived the pair by ascending axis NAME — dropping the swept
+ * plane's own axis from the canonical three in x, y, z order with an inequality
+ * test — which is the SAME answer for the transverse and coronal sheets and the
+ * WRONG one for sagittal: it reports 171 × 148 au where the shipped quad (and the
+ * in-plane CLIP_BOUNDS rectangle) is 148 × 171. The comparison below is therefore
+ * on the ordered pair, so a swap fails.
+ */
+const PLANE_GEOMETRY_SOURCE = readSourceFile('src/components/section/planeGeometry.ts')
+const AXIS_PAIR_SOURCE = (() => {
+  const block = /export const AXIS_PAIR[^=]*=\s*\{([\s\S]*?)\n\}/.exec(PLANE_GEOMETRY_SOURCE ?? '')?.[1] ?? null
+  if (block === null) return null
+  const out = {}
+  for (const match of block.matchAll(/([xyz]):\s*\[\s*'([xyz])'\s*,\s*'([xyz])'\s*\]/g)) {
+    out[match[1]] = [match[2], match[3]]
+  }
+  return ['x', 'y', 'z'].every((axis) => Array.isArray(out[axis])) ? out : null
+})()
+const AXIS_INDEX_SOURCE = (() => {
+  const block = /export const AXIS_INDEX[^=]*=\s*\{([^}]*)\}/.exec(PLANE_GEOMETRY_SOURCE ?? '')?.[1] ?? null
+  if (block === null) return null
+  const out = {}
+  for (const match of block.matchAll(/([xyz]):\s*([0-9])/g)) out[match[1]] = Number(match[2])
+  return ['x', 'y', 'z'].every((axis) => typeof out[axis] === 'number') ? out : null
 })()
 
 console.log(
@@ -344,6 +551,16 @@ console.log(
     `${PIP_SIZE_SOURCE.min.width ?? '?'}x${PIP_SIZE_SOURCE.min.height ?? '?'}…` +
     `${PIP_SIZE_SOURCE.max.width ?? '?'}x${PIP_SIZE_SOURCE.max.height ?? '?'} px · ` +
     `suppressed canvas label ids [${SUPPRESSED_CANVAS_LABEL_IDS.join(', ') || 'none'}]`,
+)
+
+console.log(
+  '  ·  v11 source facts: AREAS ' +
+    (AREA_TABLE_SOURCE === null
+      ? 'NOT READABLE from state/store.ts (the toggle rows cannot be asserted against the table)'
+      : AREA_TABLE_SOURCE.map((area) => `${area.id}→[${area.regions.join('+')}]`).join(' · ')) +
+    ` · ALL_KINDS ${ALL_KINDS_SOURCE === null ? 'not readable' : ALL_KINDS_SOURCE.join(', ')}` +
+    ` · AXIS_PAIR ${AXIS_PAIR_SOURCE === null ? 'not readable' : JSON.stringify(AXIS_PAIR_SOURCE)}` +
+    ` · AXIS_INDEX ${AXIS_INDEX_SOURCE === null ? 'not readable' : JSON.stringify(AXIS_INDEX_SOURCE)}`,
 )
 
 const results = []
@@ -493,6 +710,38 @@ const clickText = (text, exact = true, scope = 'document') => `(() => {
   return 'clicked: ' + b.textContent.trim().slice(0, 40);
 })()`
 
+/**
+ * Click ONE control by its MACHINE HOOK — the v11 way to address the header
+ * (`[data-area="…"]`, `[data-kind="…"]`, `[data-preset="…"]`,
+ * `[data-header-action="…"]`). `clickText` finds the FIRST button whose exact
+ * `textContent` matches, which is now ambiguous in the header: the v11 Systems
+ * row adds a button reading exactly `Nuclei` next to the preset of that name, and
+ * a preset row that is reordered (or a label that is re-worded) would silently
+ * re-point a text-based click at a different control — the failure mode this
+ * helper exists to remove. A missing hook is REPORTED (the string is printed by
+ * the caller), never patched over with a text fallback.
+ */
+const clickHook = (selector) => `(() => {
+  const b = document.querySelector(${JSON.stringify(selector)});
+  if (b === null) return 'not found: ${selector}';
+  if (b.tagName !== 'BUTTON') return 'not a <button>: ' + b.tagName + ' for ${selector}';
+  b.click();
+  return 'clicked ${selector} ("' + (b.textContent || '').trim().slice(0, 40) + '")';
+})()`
+
+/** The same hook addressing, read-only: pressed state + visible text. */
+const hookState = (selector) => `(() => {
+  const b = document.querySelector(${JSON.stringify(selector)});
+  if (b === null) return null;
+  const raw = b.getAttribute('aria-pressed');
+  return {
+    selector: ${JSON.stringify(selector)},
+    text: (b.textContent || '').trim(),
+    pressed: raw === 'true' ? true : raw === 'false' ? false : null,
+    name: b.getAttribute('aria-label') || '',
+  };
+})()`
+
 const sectionStats = `(() => {
   const c = document.querySelector('.section-canvas');
   if (!c) return null;
@@ -537,6 +786,157 @@ const PIP_CANVAS = `document.querySelector('.pip-panel .pip-window canvas')`
 /** The Plates tab's live-section canvas — never the panel's copy of it. */
 const PLATES_CANVAS = `([...document.querySelectorAll('.section-canvas')].find((c) => c.closest('.pip-panel') === null) || null)`
 
+/* ======================================================================
+ * v11 — THE HEADER'S TWO TOGGLE ROWS, read as plain DOM values.
+ *
+ * One probe, three uses: the clean-boot contract (block A0), the toggle
+ * behaviour sweep (block R) and the restore check after Reset. It reads the
+ * button's REAL attributes — tag, type, `aria-pressed`, accessible name
+ * (`aria-label`), machine hook — plus the LEGEND's own layer checkboxes at the
+ * same instant, because "the button says on" and "the layer set says on" must be
+ * one fact rather than two readings that happen to agree.
+ *
+ * `pressed` is deliberately null when `aria-pressed` is missing or is not the
+ * literal "true"/"false": a missing state must FAIL the predicate, never read as
+ * "false" and pass the half of the contract that expects it off.
+ * ====================================================================== */
+const HEADER_ROWS_PROBE = `(() => {
+  const boolAttr = (element, name) => {
+    if (element === null) return null;
+    const raw = element.getAttribute(name);
+    return raw === 'true' ? true : raw === 'false' ? false : null;
+  };
+  const rowOf = (selector) => {
+    const row = document.querySelector(selector);
+    return {
+      present: row !== null,
+      role: row === null ? '' : (row.getAttribute('role') || ''),
+      name: row === null ? '' : (row.getAttribute('aria-label') || ''),
+      dataRow: row === null ? null : row.getAttribute('data-row'),
+      buttons: row === null ? -1 : row.querySelectorAll('button').length,
+      labelText: row === null ? '' : ((row.querySelector('.header-row-label') || {}).textContent || '').trim(),
+    };
+  };
+  const toggles = [];
+  for (const hook of ['data-area', 'data-kind']) {
+    for (const button of document.querySelectorAll('[' + hook + ']')) {
+      toggles.push({
+        hook: hook,
+        key: button.getAttribute(hook) || '',
+        text: (button.textContent || '').trim(),
+        pressed: boolAttr(button, 'aria-pressed'),
+        name: button.getAttribute('aria-label') || '',
+        title: button.getAttribute('title') || '',
+        tag: button.tagName,
+        type: button.getAttribute('type') || '',
+        division: button.getAttribute('data-division'),
+        rowClass: button.closest('.header-rows') === null ? null : (button.parentElement || {}).className || '',
+      });
+    }
+  }
+  const actions = [...document.querySelectorAll('[data-header-action]')].map((button) => ({
+    key: button.getAttribute('data-header-action') || '',
+    text: (button.textContent || '').trim(),
+    pressed: boolAttr(button, 'aria-pressed'),
+    name: button.getAttribute('aria-label') || '',
+  }));
+  const presets = [...document.querySelectorAll('.header-presets button[data-preset]')].map((button) => ({
+    id: button.getAttribute('data-preset') || '',
+    label: (button.textContent || '').trim(),
+    pressed: boolAttr(button, 'aria-pressed'),
+  }));
+  const headerButtons = [...document.querySelectorAll('.app-header button')].map((button) => ({
+    text: (button.textContent || '').trim(),
+    hook: ['data-preset', 'data-area', 'data-kind', 'data-header-action']
+      .filter((name) => button.getAttribute(name) !== null)
+      .join('+') || '',
+  }));
+  const legend = {};
+  for (const row of document.querySelectorAll('.legend-row.legend-toggle')) {
+    if (row.closest('.legend-divisions') !== null) continue;
+    const input = row.querySelector('input[type=checkbox]');
+    if (input === null) continue;
+    legend[(row.textContent || '').trim()] = input.checked;
+  }
+  const tab = [...document.querySelectorAll('[role=tab]')]
+    .filter((t) => t.getAttribute('aria-selected') === 'true')
+    .map((t) => (t.textContent || '').trim());
+  return {
+    rows: { areas: rowOf('.header-areas'), systems: rowOf('.header-systems') },
+    toggles: toggles,
+    actions: actions,
+    presets: presets,
+    headerButtons: headerButtons,
+    legend: legend,
+    activeTab: tab,
+  };
+})()`
+
+/**
+ * Turn one `HEADER_ROWS_PROBE` reading into the pure predicate's input: the
+ * expected sets come from the shipped declarations parsed above, and the layer
+ * sets are sliced out of the legend readback by the app's own region/kind lists.
+ */
+function headerReadingFrom(probe) {
+  const legend = probe?.legend ?? {}
+  const pick = (keys) =>
+    Object.fromEntries(keys.filter((key) => typeof legend[key] === 'boolean').map((key) => [key, legend[key]]))
+  return {
+    rows: probe?.rows ?? {},
+    toggles: probe?.toggles ?? [],
+    actions: probe?.actions ?? [],
+    presets: probe?.presets ?? [],
+    headerButtons: probe?.headerButtons ?? [],
+    expectedAreas: AREA_IDS,
+    expectedKinds: ALL_KINDS_SOURCE ?? [],
+    allRegions: ALL_REGIONS_FROM_DIVISIONS,
+    areaRegions: AREA_REGIONS_MAP,
+    layers: {
+      regions: pick(ALL_REGIONS_FROM_DIVISIONS),
+      kinds: pick(ALL_KINDS_SOURCE ?? []),
+    },
+  }
+}
+
+/** The legend's own layer checkboxes, as a plain id → boolean map (see above). */
+const LEGEND_LAYERS_PROBE = `(() => {
+  const out = {};
+  for (const row of document.querySelectorAll('.legend-row.legend-toggle')) {
+    if (row.closest('.legend-divisions') !== null) continue;
+    const input = row.querySelector('input[type=checkbox]');
+    if (input === null) continue;
+    out[(row.textContent || '').trim()] = input.checked;
+  }
+  return out;
+})()`
+
+/**
+ * The taxonomy tree's dim state per region: how many of its rendered leaves carry
+ * the tree's `is-off` class. Used to show that a toggle reaches the tree too (the
+ * tree and the two rows read the same two sets, `docs/SWARM_V11_PLAN.md` §1).
+ */
+const TREE_REGION_DIM_PROBE = `(() => {
+  const out = [];
+  for (const region of document.querySelectorAll('.tree-region')) {
+    const name = ((region.querySelector('.tree-region-name') || {}).textContent || '').trim();
+    let on = 0, off = 0;
+    for (const row of region.querySelectorAll('.tree-leaf-row')) {
+      if (row.classList.contains('is-off')) off += 1; else on += 1;
+    }
+    out.push({ label: name, on: on, off: off });
+  }
+  return out;
+})()`
+
+/** The cortical-division legend rows of one surface (Plates or the PiP panel). */
+const LOBE_ROWS_FOR = (where) => `(() => {
+  const legend = ${where === 'pip'
+    ? "document.querySelector('.pip-panel .section-lobes-legend')"
+    : "[...document.querySelectorAll('.section-lobes-legend')].find((legend) => legend.closest('.pip-panel') === null) ?? null"};
+  if (legend === null) return null;
+  return [...legend.querySelectorAll('.section-lobes-row')].map((row) => (row.textContent || '').trim());
+})()`
+
 /**
  * One CDP key press (down + up). Used by the panel-size keyboard check, the same
  * way the plane-slider check in block I dispatches ArrowRight by hand.
@@ -572,6 +972,53 @@ async function pagePixelStats() {
     img.src = ${encoded};
   })`)
   return stats
+}
+
+/* ======================================================================
+ * v11 — the SAME pixel sampler, aimed at one ELEMENT's rectangle.
+ *
+ * Why a region sampler and not the whole-page one: the v11 toggle buttons live
+ * in the header, so flipping one repaints the header (the `is-active` class) and
+ * a whole-page hash would change even if the 3D view had not. A claim about the
+ * 3D surface must therefore sample the 3D CANVAS' own rectangle — cropped out of
+ * a real screenshot, because WebGL pixels are not script-readable.
+ * ====================================================================== */
+async function regionPixelStats(selector) {
+  const rect = await evaluate(`(() => {
+    const element = document.querySelector(${JSON.stringify(selector)});
+    if (element === null) return null;
+    const r = element.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) return null;
+    return { left: r.left, top: r.top, width: r.width, height: r.height };
+  })()`)
+  if (rect === null || typeof rect !== 'object') return null
+  const shot = await send('Page.captureScreenshot', { format: 'png' })
+  if (!shot?.data) return null
+  const encoded = JSON.stringify(`data:image/png;base64,${shot.data}`)
+  return evaluate(`new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const rect = ${JSON.stringify(rect)};
+      const c = document.createElement('canvas');
+      const scale = img.naturalWidth / window.innerWidth;
+      c.width = Math.max(2, Math.round(rect.width));
+      c.height = Math.max(2, Math.round(rect.height));
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, Math.round(rect.left * scale), Math.round(rect.top * scale),
+        Math.round(rect.width * scale), Math.round(rect.height * scale), 0, 0, c.width, c.height);
+      const d = ctx.getImageData(0, 0, c.width, c.height).data;
+      const buckets = new Set();
+      let hash = 0, sampled = 0;
+      for (let i = 0; i < d.length; i += 4 * 7) {
+        sampled++;
+        buckets.add((d[i] >> 4) + ',' + (d[i+1] >> 4) + ',' + (d[i+2] >> 4));
+        hash = (hash * 31 + d[i] + d[i+1] * 3 + d[i+2] * 7) % 1000000007;
+      }
+      resolve({ uniqueColors: buckets.size, hash: hash, sampled: sampled, width: c.width, height: c.height });
+    };
+    img.onerror = () => resolve(null);
+    img.src = ${encoded};
+  })`)
 }
 
 /* ======================================================================
@@ -881,9 +1328,22 @@ try {
   await sleep(1200)
 
   const bootPreset = await evaluate(`(() => {
+    /* v11 re-point: the preset shortcut row is addressed by its MACHINE HOOK
+       (the data-preset attribute) and the two new actions (Reset / All) sit in
+       the same '.header-presets' group, so a bare '.header-presets button' sweep
+       would mix a framing ACTION into the "which preset is active" reading. The
+       group, its role, its aria-label and the preset labels themselves are
+       unchanged from v10 — that is the default-framing assertion the brief
+       forbids removing — and the total count is reported alongside so a
+       collapsed row (a <select>, a hidden menu) cannot pass this check by
+       simply holding no buttons. */
     const presets = [...document.querySelectorAll('.header-presets button')];
-    const active = presets.filter((b) => b.getAttribute('aria-pressed') === 'true')
+    const presetButtons = presets.filter((b) => b.getAttribute('data-preset') !== null);
+    const pressed = (b) => { const raw = b.getAttribute('aria-pressed'); return raw === 'true' ? true : raw === 'false' ? false : null; };
+    const active = presetButtons.filter((b) => b.getAttribute('aria-pressed') === 'true')
       .map((b) => b.textContent.trim());
+    const activeIds = presetButtons.filter((b) => b.getAttribute('aria-pressed') === 'true')
+      .map((b) => b.getAttribute('data-preset'));
     const offRows = [];
     let rowsSeen = 0;
     for (const region of document.querySelectorAll('.tree-region')) {
@@ -899,7 +1359,15 @@ try {
     try { stored = window.localStorage.getItem('neuroaxis.viewPreset'); } catch (error) { stored = null; }
     return {
       bootActiveLabels: active,
-      labels: presets.map((b) => b.textContent.trim()),
+      bootActivePresets: activeIds,
+      presetButtonsWithHook: presetButtons.length,
+      headerPresetButtons: presets.length,
+      actionLabels: presets.filter((b) => b.getAttribute('data-preset') === null).map((b) => b.textContent.trim()),
+      actionPressed: presets.filter((b) => b.getAttribute('data-preset') === null).map((b) => ({
+        text: b.textContent.trim(),
+        pressed: pressed(b),
+      })),
+      labels: presetButtons.map((b) => b.textContent.trim()),
       offRows: offRows.slice(0, 8),
       offCount: offRows.length,
       rowsSeen,
@@ -909,6 +1377,9 @@ try {
   info('boot preset reading (' + String(expandRegions) + ', ' + String(expandSubdivisions) + '): '
     + JSON.stringify({
       active: bootPreset.bootActiveLabels,
+      activePresets: bootPreset.bootActivePresets,
+      presetButtons: bootPreset.presetButtonsWithHook + '/' + bootPreset.headerPresetButtons
+        + ' in .header-presets (' + (bootPreset.actionLabels ?? []).join(', ') + ' = the v11 actions)',
       stored: bootPreset.storedPreset,
       rowsSeen: bootPreset.rowsSeen,
       offCount: bootPreset.offCount,
@@ -917,6 +1388,61 @@ try {
   focusVerdict.ok ? ok(focusVerdict.detail) : bad(focusVerdict.detail)
   const dimmingVerdict = presetDimmingReading(bootPreset)
   dimmingVerdict.ok ? ok(dimmingVerdict.detail) : bad(dimmingVerdict.detail)
+
+  /* ======================================================================
+   * A0b — v11: THE TWO TOGGLE ROWS AT A CLEAN BOOT.
+   *
+   * docs/SWARM_V11_PLAN.md §1 + PLAN.md §1. Read at the SAME clean-boot moment
+   * as the preset reading above (before any check clicks anything), because the
+   * boot contract is: both rows present and labelled, every area/kind covered by
+   * exactly one aria-pressed toggle whose accessible name starts with its
+   * visible text, each button's pressed state the SAME fact as the layer set the
+   * legend reads, the default framing reachable (Reset pressed exactly when the
+   * documented default preset is), and the preset shortcut row still real.
+   *
+   * The predicate is `checks.headerToggleRowsReading` (pure, so the Node mirror
+   * can exercise it without Chrome and so a failure names which claim broke);
+   * `verify:area-toggles` is the Node lane's full version of the same contract.
+   * ==================================================================== */
+  const bootHeaderRaw = await evaluate(HEADER_ROWS_PROBE)
+  /* The clean-boot pressed set, kept OUTSIDE the branch below because block R
+     asserts that Reset reproduces exactly it ("Reset restores the documented
+     default", not "Reset lands somewhere plausible"). */
+  const bootPressed = (bootHeaderRaw?.toggles ?? [])
+    .map((toggle) => toggle.hook + ':' + toggle.key + '=' + toggle.pressed)
+    .sort()
+    .join(' | ')
+  if (bootHeaderRaw === null || typeof bootHeaderRaw !== 'object') {
+    bad('v11 A0b: the header toggle-row probe returned nothing — the header contract did NOT run')
+  } else {
+    const bootHeader = headerReadingFrom(bootHeaderRaw)
+    info(
+      'v11 header rows at boot: ' +
+        Object.entries(bootHeaderRaw.rows ?? {})
+          .map(([row, value]) => `${row} present=${value.present} role=${value.role} buttons=${value.buttons}`)
+          .join(' · ') +
+        ' · toggles ' +
+        bootHeader.toggles.map((t) => `${t.hook}:${t.key}=${t.pressed}`).join(' ') +
+        ' · actions ' + bootHeader.actions.map((a) => `${a.key}=${a.pressed}`).join(' ') +
+        ' · preset buttons ' + bootHeader.presets.map((p) => `${p.id}=${p.pressed}`).join(' '),
+    )
+    for (const verdictRow of headerToggleRowsReading(bootHeader)) {
+      verdictRow.ok ? ok(verdictRow.detail) : bad(verdictRow.detail)
+    }
+    /* The header must not have lost the group the boot-preset assertion reads,
+       and the two v11 actions must live in it (PLAN.md §4). */
+    bootPreset.headerPresetButtons >= bootPreset.presetButtonsWithHook && bootPreset.presetButtonsWithHook > 0
+      ? ok(
+        'v11 A0b: the preset shortcut row is still a real button group inside .header-presets (' +
+          bootPreset.presetButtonsWithHook + ' preset button(s) with a data-preset hook + ' +
+          (bootPreset.headerPresetButtons - bootPreset.presetButtonsWithHook) + ' v11 action(s): ' +
+          (bootPreset.actionLabels ?? []).join(', ') + ')',
+      )
+      : bad(
+        'v11 A0b: .header-presets holds ' + bootPreset.presetButtonsWithHook + ' preset button(s) and ' +
+          bootPreset.headerPresetButtons + ' button(s) total — the documented-default assertion has no target',
+      )
+  }
 
   /* A — shell & boot */
   const boot = await evaluate(`({
@@ -991,18 +1517,64 @@ try {
     : bad(`3D scene looks blank (${JSON.stringify(threeStats)})`)
 
   /* B — 3D interactions */
-  const layerToggle = await evaluate(`(() => {
-    const chip = [...document.querySelectorAll('button')].find(b => b.textContent.trim() === 'Nuclei');
-    if (!chip) return 'no Nuclei chip';
-    const before = chip.getAttribute('aria-pressed');
+  /* v11 RE-POINT (was: `[...document.querySelectorAll('button')].find(b =>
+   * b.textContent.trim() === 'Nuclei')`). That selector used to be unambiguous
+   * because the only button reading exactly "Nuclei" was the PRESET of that name
+   * (`VIEW_PRESETS.nuclei.label`); the v11 "Systems" row adds a SECOND button with
+   * the same text, so the old form would have silently kept clicking the preset
+   * (DOM order put the preset first) while claiming to test "the layer toggle".
+   * The check now addresses the `data-kind="nucleus"` TOGGLE by its machine hook —
+   * the control the v11 plan says owns visibility — asserts which hook was
+   * clicked, and requires the LEGEND's own kind checkbox to follow the toggle, so
+   * "aria-pressed changed" and "the kind layer changed" are one reading. */
+  const layerToggleProbe = `(() => {
+    const chip = document.querySelector('[data-kind="nucleus"]');
+    const legendRow = [...document.querySelectorAll('.legend-row.legend-toggle')].find(
+      (l) => l.closest('.legend-divisions') === null && l.textContent.trim() === 'nucleus');
+    const input = legendRow === null ? null : legendRow.querySelector('input[type=checkbox]');
+    const colliding = [...document.querySelectorAll('button')].filter((b) => b.textContent.trim() === 'Nuclei');
+    return {
+      present: chip !== null,
+      hook: chip === null ? null : chip.getAttribute('data-kind'),
+      pressed: chip === null ? null : chip.getAttribute('aria-pressed'),
+      legendNucleus: input === null ? null : input.checked,
+      sameTextButtons: colliding.length,
+      sameTextHooks: colliding.map((b) => ['data-preset', 'data-kind'].filter((n) => b.getAttribute(n) !== null).join('+')),
+    };
+  })()`
+  const layerBefore = await evaluate(layerToggleProbe)
+  const layerClick = await evaluate(`(() => {
+    const chip = document.querySelector('[data-kind="nucleus"]');
+    if (chip === null) return 'no [data-kind="nucleus"] toggle in the header';
     chip.click();
-    const after = chip.getAttribute('aria-pressed');
-    chip.click();
-    return 'aria-pressed ' + before + ' -> ' + after + ' -> ' + chip.getAttribute('aria-pressed');
+    return 'clicked [data-kind="nucleus"]';
   })()`)
-  String(layerToggle).includes('->') && !String(layerToggle).includes('-> treu')
-    ? ok(`layer toggle works (${layerToggle})`)
-    : bad(`layer toggle suspicious: ${layerToggle}`)
+  await sleep(500)
+  const layerAfter = await evaluate(layerToggleProbe)
+  await evaluate(`(() => {
+    const chip = document.querySelector('[data-kind="nucleus"]');
+    if (chip !== null) chip.click();
+    return 'clicked back';
+  })()`)
+  await sleep(500)
+  const layerBack = await evaluate(layerToggleProbe)
+  const layerToggleOk =
+    layerBefore?.present === true && layerBefore.hook === 'nucleus' &&
+    layerBefore.pressed === 'true' && layerAfter?.pressed === 'false' && layerBack?.pressed === 'true' &&
+    layerBefore.legendNucleus === true && layerAfter?.legendNucleus === false && layerBack?.legendNucleus === true
+  layerToggleOk
+    ? ok(
+      'layer toggle works via the v11 Systems row: ' + String(layerClick) + ' — aria-pressed ' +
+        layerBefore.pressed + ' -> ' + layerAfter.pressed + ' -> ' + layerBack.pressed +
+        ', and the legend\'s own "nucleus" checkbox followed it ' + String(layerBefore.legendNucleus) + ' -> ' +
+        String(layerAfter.legendNucleus) + ' -> ' + String(layerBack.legendNucleus) +
+        ' (' + layerBefore.sameTextButtons + ' header button(s) read exactly "Nuclei": ' +
+        (layerBefore.sameTextHooks ?? []).join(', ') + ')',
+    )
+    : bad(
+      'layer toggle suspicious: ' + String(layerClick) + ' ' +
+        JSON.stringify({ before: layerBefore, after: layerAfter, back: layerBack }),
+    )
 
   for (const q of ['Balanced', 'High']) {
     await evaluate(clickText(q))
@@ -2325,9 +2897,29 @@ try {
     }
   })()`
 
-  await evaluate(clickText('Brainstem focus'))
+  /* v11 RE-POINT (was: `clickText('Brainstem focus')`). The default framing is now
+   * reached through the header's Reset action, which the v11 header binds to the
+   * store's EXISTING `applyViewPreset('brainstem-focus')` — so this step asserts
+   * BOTH that Reset lands on the documented default (the preset button reads
+   * pressed at the same moment) and that the default framing is what v8 claims. */
+  const resetClick = await evaluate(clickHook('[data-header-action="reset"]'))
   await sleep(500)
+  const resetState = await evaluate(`(() => {
+    const reset = document.querySelector('[data-header-action="reset"]');
+    const preset = document.querySelector('[data-preset="brainstem-focus"]');
+    const read = (b) => (b === null ? null : b.getAttribute('aria-pressed'));
+    return { reset: read(reset), defaultPreset: read(preset), presetLabel: preset === null ? null : (preset.textContent || '').trim() };
+  })()`)
   const vascDefault = await evaluate(vascularState)
+  resetState.reset === 'true' && resetState.defaultPreset === 'true'
+    ? ok(
+      'v11: ' + String(resetClick) + ' restores the documented default framing (Reset aria-pressed=true and ' +
+        'data-preset="brainstem-focus" (' + String(resetState.presetLabel) + ') aria-pressed=true at the same moment)',
+    )
+    : bad(
+      'v11: the Reset action did not land on the documented default framing (' + JSON.stringify(resetState) + ', ' +
+        String(resetClick) + ')',
+    )
   if (!vascDefault.regionRowFound) {
     bad('the taxonomy tree has no "Cerebral vasculature" region row — the v8 region did not reach the tree')
   } else {
@@ -2350,15 +2942,84 @@ try {
   if (!vascDefault.presetButton) {
     bad('the header has no "Vasculature" preset button')
   } else {
-    await evaluate(clickText('Vasculature'))
+    /* ------------------------------------------------------------------ (1)
+     * v11 RE-POINT: THE NEW PRIMARY CONTROL. The Areas row's `Cerebral
+     * vasculature` toggle is what the user asked for (an area switch, not a
+     * preset), so the vascular REGION is now driven through it — addressed by
+     * `data-area`, never by its label. Both directions are asserted (the same
+     * button must also switch it back off), and the tree AND the legend must
+     * follow, because the region layer is the one fact all three read. */
+    const areaOnClick = await evaluate(clickHook('[data-area="vasculature"]'))
+    await sleep(700)
+    const vascAreaOn = await evaluate(vascularState)
+    const areaOnState = await evaluate(hookState('[data-area="vasculature"]'))
+    vascAreaOn.regionOff === false && vascAreaOn.legendVasculature === true && areaOnState?.pressed === true
+      ? ok(
+        'v11: ' + String(areaOnClick) + ' switches the vascular REGION on in the tree, in the legend and in its own ' +
+          'aria-pressed (' + String(areaOnState.name) + ')',
+      )
+      : bad(
+        'v11: the Areas toggle did not turn the vascular region on (' +
+          JSON.stringify({ tree: vascAreaOn.regionOff, legend: vascAreaOn.legendVasculature, button: areaOnState }) + ')',
+      )
+    vascAreaOn.legendNucleus === true
+      ? ok('v11: the area toggle is a REGION switch only — the nucleus kind layer is untouched (' + vascAreaOn.legendNucleus + ')')
+      : bad('v11: the area toggle also changed the nucleus KIND layer (' + JSON.stringify(vascAreaOn) + ')')
+    const areaOffClick = await evaluate(clickHook('[data-area="vasculature"]'))
+    await sleep(700)
+    const vascAreaOff = await evaluate(vascularState)
+    vascAreaOff.regionOff === true && vascAreaOff.legendVasculature === false
+      ? ok('v11: ' + String(areaOffClick) + ' switches it back off (the toggle is symmetric: tree + legend both off again)')
+      : bad('v11: the area toggle did not switch the vascular region back off (' + JSON.stringify(vascAreaOff) + ')')
+
+    /* ------------------------------------------------------------------ (2)
+     * The v8 preset claim itself, now addressed by its MACHINE HOOK
+     * (`[data-preset="vasculature"]`) instead of by the exact label text — the
+     * label stays in the assertion message as evidence, not as the target. */
+    const presetClick = await evaluate(clickHook('[data-preset="vasculature"]'))
     await sleep(700)
     const vascOn = await evaluate(vascularState)
     vascOn.regionOff === false && vascOn.legendVasculature === true
-      ? ok('the Vasculature preset switches the vascular region layer ON in both the tree and the legend')
+      ? ok('the Vasculature preset (' + String(presetClick) + ') switches the vascular region layer ON in both the tree and the legend')
       : bad('the Vasculature preset did not turn the vascular region on (' + JSON.stringify(vascOn) + ')')
     vascOn.legendNucleus === false
       ? ok('the Vasculature preset is the arterial cast: nuclei are layer-off by kind, vessels are on')
       : bad('the Vasculature preset leaves the nucleus kind layer on — it is not the cast view the plan describes')
+
+    /* ------------------------------------------------------------------ (3)
+     * v11's OWN CLAIM, and the reason the two rows exist: the orthogonal axes
+     * COMPOSE the cast the single preset used to describe. From the default,
+     * Areas{Cerebral vasculature}=on plus Systems{Nuclei,Tracts,Ventricles}=off
+     * must produce the same three readings the preset produces — if either row
+     * were wired to a different set, the two paths would disagree. */
+    const composeSteps = []
+    composeSteps.push(String(await evaluate(clickHook('[data-header-action="reset"]'))))
+    await sleep(700)
+    composeSteps.push(String(await evaluate(clickHook('[data-area="vasculature"]'))))
+    await sleep(600)
+    for (const kind of ['nucleus', 'tract', 'ventricle']) {
+      composeSteps.push(String(await evaluate(clickHook(`[data-kind="${kind}"]`))))
+      await sleep(600)
+    }
+    const vascComposed = await evaluate(vascularState)
+    const composedAgrees =
+      vascComposed.regionOff === vascOn.regionOff &&
+      vascComposed.legendVasculature === vascOn.legendVasculature &&
+      vascComposed.legendVessel === vascOn.legendVessel &&
+      vascComposed.legendNucleus === vascOn.legendNucleus
+    composedAgrees
+      ? ok(
+        'v11: the two rows COMPOSE the arterial cast without the preset — Areas{Cerebral vasculature}=on + ' +
+          'Systems{Nuclei,Tracts,Ventricles}=off gives the same reading as the preset ' +
+          JSON.stringify({ regionOff: vascComposed.regionOff, vasculature: vascComposed.legendVasculature, vessel: vascComposed.legendVessel, nucleus: vascComposed.legendNucleus }),
+      )
+      : bad(
+        'v11: the Areas/Systems rows do not compose what the Vasculature preset describes (rows ' +
+          JSON.stringify(vascComposed) + ' vs preset ' + JSON.stringify(vascOn) + '), steps: ' + composeSteps.join(' | '),
+      )
+    /* back to the cast for the artery-selection half below (the preset path). */
+    await evaluate(clickHook('[data-preset="vasculature"]'))
+    await sleep(700)
 
     // Open the vascular region in the tree, then select an artery through it.
     await evaluate(`(() => {
@@ -2428,13 +3089,21 @@ try {
         : bad('the artery record has no clinical section')
     }
 
-    // Round trip: back to the default, the overlay must be off again.
-    await evaluate(clickText('Brainstem focus'))
+    // Round trip: back to the default via the v11 Reset action (was
+    // `clickText('Brainstem focus')`), the overlay must be off again.
+    const backClick = await evaluate(clickHook('[data-header-action="reset"]'))
     await sleep(500)
     const vascBack = await evaluate(vascularState)
-    vascBack.regionOff === true && vascBack.legendVasculature === false
-      ? ok('returning to Brainstem focus hides the vascular layer again (the region toggle is the only switch)')
-      : bad('the vascular layer did not return to off (' + JSON.stringify(vascBack) + ')')
+    const backPreset = await evaluate(hookState('[data-preset="brainstem-focus"]'))
+    vascBack.regionOff === true && vascBack.legendVasculature === false && backPreset?.pressed === true
+      ? ok(
+        'v11: ' + String(backClick) + ' hides the vascular layer again and reports the documented default ' +
+          '(region toggle is the only switch; data-preset="brainstem-focus" pressed=true)',
+      )
+      : bad(
+        'the vascular layer did not return to off (' + JSON.stringify(vascBack) + ', ' +
+          JSON.stringify(backPreset) + ', ' + String(backClick) + ')',
+      )
   }
 
   /* ======================================================================
@@ -3027,7 +3696,17 @@ try {
     const bound = CLIP_BOUNDS_SOURCE[axis]
     return bound === undefined ? null : (bound.min + bound.max) / 2
   }
-  const AXIS_INDEX = { x: 0, y: 1, z: 2 }
+  /* v11 §3a — the in-plane pair is the SHIPPED `AXIS_PAIR` table, read out of
+   * `section/planeGeometry.ts`, in its ORDERED form `[u, v]`. The v10 audit
+   * derived it by ascending axis NAME (dropping the swept axis from x, y, z),
+   * which is the same answer for transverse and coronal and SWAPPED for sagittal
+   * (171 × 148 vs the shipped 148 × 171) — so the sagittal helper quad was
+   * reported as wrong while the quad was right. `AXIS_INDEX` is parsed from the
+   * same file for the same reason: one table, one consumer. When the table cannot
+   * be read there is NO fallback to a retyped convention: the comparison below
+   * fails loudly instead (a check that passes by guessing is the failure mode
+   * this project keeps re-learning). */
+  const AXIS_INDEX = AXIS_INDEX_SOURCE ?? { x: 0, y: 1, z: 2 }
   const boundsReady =
     CLIP_BOUNDS_DECLARATIONS === 1 && ['x', 'y', 'z'].every((axis) => CLIP_BOUNDS_SOURCE[axis] !== undefined)
   boundsReady
@@ -3041,6 +3720,20 @@ try {
       'the canonical box declaration could not be read from clipPlanes.ts (' + CLIP_BOUNDS_DECLARATIONS +
         ' declaration site(s); bounds ' + JSON.stringify(CLIP_BOUNDS_SOURCE) + ')',
     )
+  if (AXIS_PAIR_SOURCE === null || AXIS_INDEX_SOURCE === null) {
+    bad(
+      'v11 item 1 source contract: the ORDERED in-plane pair / axis index could not be read out of ' +
+        'section/planeGeometry.ts (AXIS_PAIR ' + JSON.stringify(AXIS_PAIR_SOURCE) + ', AXIS_INDEX ' +
+        JSON.stringify(AXIS_INDEX_SOURCE) + ') — the helper-quad comparison below would compare against a ' +
+        'retyped convention, which is exactly the v10 defect',
+    )
+  } else {
+    ok(
+      'v11 item 1 source contract: the in-plane convention is read from the shipped planeGeometry.ts — AXIS_PAIR ' +
+        Object.keys(AXIS_PAIR_SOURCE).map((axis) => axis + ' → [' + AXIS_PAIR_SOURCE[axis].join(', ') + ']').join(' · ') +
+        ' · AXIS_INDEX ' + JSON.stringify(AXIS_INDEX_SOURCE) + ' (u = pair[0], v = pair[1], never axis-name order)',
+    )
+  }
   const dockRanges = await evaluate(DOCK_SLIDERS)
   const dockAxes = (Array.isArray(dockRanges) ? dockRanges : []).map((slider) => {
     const axis = ['x', 'y', 'z'].find(
@@ -3124,7 +3817,19 @@ try {
         bad('item 1: helper sheet ' + JSON.stringify(sheet.name) + ' is not a clip-helper-<axis> group with a quad and a grid: ' + JSON.stringify(sheet))
         continue
       }
-      const inPlane = ['x', 'y', 'z'].filter((candidate) => candidate !== axis)
+      /* v11 §3a: the ORDERED shipped pair — u is `AXIS_PAIR[axis][0]`, v is
+       * `[1]`. A swap now fails instead of being silently accepted (the v10
+       * derivation gave the sagittal sheet ['y','z'] = 171 × 148 au and reported
+       * the correct 148 × 171 quad as the wrong side). */
+      const inPlane = AXIS_PAIR_SOURCE === null ? null : AXIS_PAIR_SOURCE[axis]
+      if (inPlane === null || inPlane.length !== 2) {
+        bad(
+          'item 1: the ORDERED in-plane pair for the ' + axis + '-plane helper could not be read from ' +
+            'section/planeGeometry.ts (AXIS_PAIR ' + JSON.stringify(AXIS_PAIR_SOURCE) + ') — the quad comparison ' +
+            'DID NOT RUN, and it is reported as a failure rather than compared against a guessed convention',
+        )
+        continue
+      }
       const expected = {
         u: { span: sourceSpan(inPlane[0]), mid: sourceMid(inPlane[0]) },
         v: { span: sourceSpan(inPlane[1]), mid: sourceMid(inPlane[1]) },
@@ -3135,12 +3840,14 @@ try {
         ? ok(
           'item 1: the ' + axis + '-plane helper quad spans its CLIP_BOUNDS rectangle — ' +
             sheet.quad.width.toFixed(3) + ' au (' + inPlane[0] + ') x ' + sheet.quad.height.toFixed(3) +
-            ' au (' + inPlane[1] + '), read from the rendered planeGeometry',
+            ' au (' + inPlane[1] + '), read from the rendered planeGeometry — the pair is the ORDERED shipped ' +
+            'AXIS_PAIR.' + axis + ' = [' + inPlane.join(', ') + ']',
         )
         : bad(
           'item 1: the ' + axis + '-plane helper quad is ' + sheet.quad.width.toFixed(3) + ' x ' +
             sheet.quad.height.toFixed(3) + ' au while its in-plane CLIP_BOUNDS rectangle is ' +
-            expected.u.span.toFixed(3) + ' x ' + expected.v.span.toFixed(3) + ' au (a second hardcoded box?)',
+            expected.u.span.toFixed(3) + ' x ' + expected.v.span.toFixed(3) + ' au (a second hardcoded box? ' +
+            'AXIS_PAIR.' + axis + ' = [' + inPlane.join(', ') + '])',
         )
       const gridCoversQuad =
         Math.abs(sheet.grid.uMin + sheet.quad.width / 2) < 1e-3 &&
@@ -3838,6 +4545,28 @@ try {
   await sleep(1100)
   const lobeLabelToDivision = {}
   for (const [division, label] of Object.entries(DIVISION_LEGEND_LABELS)) lobeLabelToDivision[label] = division
+  /* v11 §3b: derive the rule's own set for these planes AT RUNTIME (see
+     `loadCorticalRule`) and compare it to what the canvas reports. The v10
+     `ARTEFACT_PLANES[].drawn` table is kept below as a PRINTED CROSS-CHECK only —
+     never the pass condition — because a hardcoded expectation is a second copy
+     of the rule. */
+  const corticalRule = await loadCorticalRule()
+  const ruleReady = corticalRule !== null && corticalRule !== undefined && corticalRule.error === undefined
+  if (ruleReady) {
+    info(
+      'v11 §3b: the rule was re-derived in THIS run from the shipped classifier + splitter + floors over both ' +
+        'cortical ribbons — ' + corticalRule.ribbons.join(' + ') + ' · floors run ≥ ' + corticalRule.floors.runAu +
+        ' au / drawn ≥ ' + corticalRule.floors.areaAu2 + ' au² / label ≥ ' + corticalRule.floors.labelAreaAu2 +
+        ' au² · divisions ' + corticalRule.divisions.join(', '),
+    )
+  } else {
+    bad(
+      'v11 §3b: the rule\'s own division set could NOT be derived at runtime (' +
+        String(corticalRule?.error ?? 'the loader returned nothing') + ') — the canvas-vs-rule parity assertion ' +
+        'CANNOT run and is therefore reported as a failure, not skipped (the v10 hardcoded table is a cross-check, ' +
+        'never the pass condition)',
+    )
+  }
   const artefactSweep = []
   for (const plane of ARTEFACT_PLANES) {
     await evaluate(`(() => {
@@ -3856,8 +4585,10 @@ try {
     })()`)
     const rows = reading?.plates ?? null
     const drawn = Array.isArray(rows) ? rows.map((label) => lobeLabelToDivision[label] ?? label) : null
+    const ruleSet = ruleReady ? corticalRule.setAt(plane.value, 'y') : null
+    const perRibbon = ruleReady ? corticalRule.setPerRibbon(plane.value, 'y') : null
     const landed = planeNow !== null && Math.abs(planeNow - plane.value) < 0.01
-    artefactSweep.push({ plane: plane.value, landed, drawn })
+    artefactSweep.push({ plane: plane.value, landed, drawn, ruleSet })
     if (!landed) {
       bad(
         'item 4: the transverse slider could not be parked on y = ' + plane.value + ' au (it reads ' + String(planeNow) +
@@ -3869,20 +4600,41 @@ try {
       bad('item 4: the Plates cortical-division legend is missing at y = ' + plane.value + ' (' + String(lobesOnPlates) + ')')
       continue
     }
-    const missing = plane.drawn.filter((division) => !drawn.includes(division))
-    const extra = drawn.filter((division) => !plane.drawn.includes(division))
-    missing.length === 0 && extra.length === 0
+    if (ruleSet === null) {
+      bad(
+        'item 4: at y = ' + plane.value + ' au the canvas reports [' + drawn.join(', ') + '] but the rule set ' +
+          'could not be derived, so the parity assertion DID NOT RUN (' + String(corticalRule?.error ?? '') + ')',
+      )
+      continue
+    }
+    /* THE PARITY ASSERTION (v11 §3b): the set the canvas reports (from
+       `.section-lobes-row`, which is rendered from the same `lobeLayerRef`
+       entries the painted Path2Ds come from) against the set the shipped rule
+       computes over BOTH ribbons. */
+    const ruleOnly = ruleSet.filter((division) => !drawn.includes(division))
+    const canvasOnly = drawn.filter((division) => !ruleSet.includes(division))
+    ruleOnly.length === 0 && canvasOnly.length === 0
       ? ok(
-        'item 4: at y = ' + plane.value + ' au the layer paints exactly the divisions the floor rule leaves there (' +
-          drawn.join(', ') + ') — ' + plane.note,
+        'item 4 PARITY at y = ' + plane.value + ' au — rule (ribbons: l+r) [' + ruleSet.join(', ') +
+          '] ∥ canvas [' + drawn.join(', ') + '] — identical; per ribbon ' +
+          Object.entries(perRibbon ?? {}).map(([slug, set]) => slug + ' [' + set.join(' ') + ']').join(' · '),
       )
       : bad(
-        'item 4: at y = ' + plane.value + ' au the painted divisions are ' + JSON.stringify(drawn) +
-          ' where the shipped rule leaves ' + JSON.stringify(plane.drawn) +
-          (extra.length > 0 ? ' — {' + extra.join(', ') + '} is a sub-threshold patch painted again' : '') +
-          (missing.length > 0 ? ' — {' + missing.join(', ') + '} has a floor-clearing body but is not painted' : '') +
+        'item 4 PARITY at y = ' + plane.value + ' au — rule (ribbons: l+r) [' + ruleSet.join(', ') + '] ∥ canvas [' +
+          drawn.join(', ') + '] disagree' +
+          (canvasOnly.length > 0 ? ' — {' + canvasOnly.join(', ') + '} is painted but the rule does not leave it there' : '') +
+          (ruleOnly.length > 0 ? ' — {' + ruleOnly.join(', ') + '} has a floor-clearing body the canvas does not paint' : '') +
+          '; per ribbon ' + Object.entries(perRibbon ?? {}).map(([slug, set]) => slug + ' [' + set.join(' ') + ']').join(' · ') +
           ' (' + plane.note + ')',
       )
+    /* Printed cross-check ONLY (never the pass condition): the hardcoded table
+       `verify:cortical-lobes` reconciles against the same measurement. */
+    const tableAgrees = [...plane.drawn].sort().join(',') === [...ruleSet].sort().join(',')
+    info(
+      'item 4 cross-check at y = ' + plane.value + ' au (NOT the pass condition): ARTEFACT_PLANES[].drawn [' +
+        plane.drawn.join(', ') + '] vs the rule derived in this run [' + ruleSet.join(', ') + '] — ' +
+        (tableAgrees ? 'their table still matches the rule' : 'they differ; verify:cortical-lobes owns that reconciliation'),
+    )
     const pipPlaneMatches = new RegExp('y\\s*=\\s*' + plane.value + '(\\D|$)').test(String(reading?.pipReadout))
     const surfacesAgree =
       pipPlaneMatches && Array.isArray(reading?.pip) && rows.length === reading.pip.length &&
@@ -3899,8 +4651,8 @@ try {
   }
   info(
     'item 4 sweep (' + String(snapOff) + ', ' + String(pipOnTransverse) + ', ' + String(lobesOnPlates) + '): ' +
-      artefactSweep.map((entry) => 'y=' + entry.plane + (entry.landed ? '' : '(NOT REACHED)') + ' [' +
-        (entry.drawn ?? []).join('+') + ']').join(' · '),
+      artefactSweep.map((entry) => 'y=' + entry.plane + (entry.landed ? '' : '(NOT REACHED)') + ' canvas [' +
+        (entry.drawn ?? []).join('+') + '] vs rule [' + (entry.ruleSet ?? []).join('+') + ']').join(' · '),
   )
 
   /* ---------------------------------------------------------------- Q5 */
@@ -4156,6 +4908,478 @@ try {
       ' · item 4 planes ' + (artefactSweep.length === 0 ? 'none' : artefactSweep.map((entry) => entry.plane + (entry.landed ? '' : '!')).join(',')) +
       ' · item 5 suppressed ids [' + SUPPRESSED_CANVAS_LABEL_IDS.join(', ') + ']',
   )
+
+  /* ======================================================================
+   * R — v11: THE TWO TOGGLE ROWS DECIDE BOTH SURFACES (docs/SWARM_V11_PLAN.md
+   *     §1–§2 · PLAN.md §1).
+   *
+   * The user's ask is a VISIBILITY decision: switching an AREA or a SYSTEM off
+   * must remove that slice from the 3D view AND from the 2D live section AND from
+   * the PiP; switching it on must bring it back; Reset must restore the documented
+   * default framing. Every claim below is driven through a real control and
+   * measured on the surface itself — never on the button's class:
+   *
+   *   R1  Reset → the default framing; the two rows' pressed states are the same
+   *       fact as the layer sets the legend reads (asserted again here, live).
+   *   R2  one big AREA (telencephalon, 85 taxonomy rows and the only cortical
+   *       ribbon) off: the rendered 3D mesh multiset changes and stays changed,
+   *       the 3D canvas' OWN rectangle repaints, the Plates live-section canvas
+   *       reports a different pixel hash, the cortical-division legend empties
+   *       (the ribbon pass is area-gated, PLAN §2) on BOTH surfaces, the tree dims
+   *       the region — and the SAME state reached through the legend's per-region
+   *       checkboxes renders byte-identical mesh names and an identical Plates
+   *       hash (two independent UI paths, one render: no path bypasses the sets).
+   *   R3  one SYSTEM (nucleus, context) off: same measurement, plus the PiP's own
+   *       2D canvas hash, plus the same two-path equality.
+   *   R4  Reset restores the default: the pressed set equals the CLEAN-BOOT
+   *       reading captured in A0, and the render returns to the baseline mesh
+   *       multiset / Plates hash.
+   *   R5  keyboard: a real CDP Space press on a focused toggle flips it, calibrated
+   *       against a plain checkbox so a CDP delivery problem is reported as
+   *       UNVERIFIED rather than as a product failure.
+   *
+   * Chrome is the orchestrator's lane; this block is written so that a regression
+   * in any of those behaviours FAILS here rather than passing by not running.
+   * ==================================================================== */
+  const v11ErrorsBefore = exceptions.length + consoleErrors.length
+  const THREE_CANVAS = `.viewer3d-canvas canvas, .viewer3d-root canvas`
+  const treeDimOf = (entries, region) => {
+    const rows = (Array.isArray(entries) ? entries : []).filter(
+      (entry) => (REGION_LABEL_TO_REGION[String(entry.label).trim().toLowerCase()] ?? '') === region,
+    )
+    return {
+      rows: rows.length,
+      on: rows.reduce((sum, entry) => sum + entry.on, 0),
+      off: rows.reduce((sum, entry) => sum + entry.off, 0),
+    }
+  }
+  const legendRegionRow = (region) => `(() => {
+    const row = [...document.querySelectorAll('.legend-row.legend-toggle')].find(
+      (l) => l.closest('.legend-divisions') === null && l.textContent.trim() === ${JSON.stringify(region)});
+    const input = row === null ? null : row.querySelector('input[type=checkbox]');
+    if (input === null) return 'missing ${region} legend row';
+    input.click();
+    return 'clicked legend "' + ${JSON.stringify(region)} + '"';
+  })()`
+  const legendKindRow = (kind) => `(() => {
+    const row = [...document.querySelectorAll('.legend-row.legend-toggle')].find(
+      (l) => l.closest('.legend-divisions') === null && l.textContent.trim() === ${JSON.stringify(kind)});
+    const input = row === null ? null : row.querySelector('input[type=checkbox]');
+    if (input === null) return 'missing ${kind} legend row';
+    input.click();
+    return 'clicked legend "' + ${JSON.stringify(kind)} + '"';
+  })()`
+
+  /* ---------------------------------------------------------------- R1 */
+  const r1ResetClick = await evaluate(clickHook('[data-header-action="reset"]'))
+  await sleep(1200)
+  const r1Header = await evaluate(HEADER_ROWS_PROBE)
+  const r1Legend = await evaluate(LEGEND_LAYERS_PROBE)
+  if (r1Header === null || typeof r1Header !== 'object') {
+    bad('v11 R1: the header toggle-row probe returned nothing on the 3D tab — the whole v11 block cannot run')
+  } else {
+    const r1Reading = headerReadingFrom({ ...r1Header, legend: r1Legend ?? r1Header.legend })
+    const r1Verdicts = headerToggleRowsReading(r1Reading)
+    const r1Failed = r1Verdicts.filter((entry) => !entry.ok)
+    info(
+      'v11 R1 (' + String(r1ResetClick) + '): areas ' +
+        r1Reading.toggles.filter((t) => t.hook === 'data-area').map((t) => t.key + '=' + t.pressed).join(' ') +
+        ' · systems ' + r1Reading.toggles.filter((t) => t.hook === 'data-kind').map((t) => t.key + '=' + t.pressed).join(' ') +
+        ' · legend regions ' + JSON.stringify(r1Reading.layers.regions) +
+        ' · legend kinds ' + JSON.stringify(r1Reading.layers.kinds),
+    )
+    if (r1Failed.length === 0) {
+      ok('v11 R1: after Reset the live header still satisfies all ' + r1Verdicts.length + ' toggle-row claims (' + r1Verdicts.map((v) => v.label).join(', ') + ')')
+    } else {
+      for (const entry of r1Failed) bad('v11 R1: ' + entry.detail)
+    }
+    /* The boot reading (A0b) and the Reset reading (R1) must be the SAME pressed
+       set — that is "Reset restores the documented default" stated as one fact. */
+    const resetPressed = r1Reading.toggles.map((t) => t.hook + ':' + t.key + '=' + t.pressed).sort().join(' | ')
+    if (bootPressed.length > 0 && bootPressed === resetPressed) {
+      ok('v11 R1: Reset reproduces the CLEAN-BOOT pressed set exactly — ' + resetPressed)
+    } else {
+      bad('v11 R1: Reset does not reproduce the clean-boot pressed set (boot: ' + bootPressed + ' vs reset: ' + resetPressed + ')')
+    }
+  }
+
+  /* ---- the shared measuring rig for R2/R3 --------------------------------
+   * TAB-AWARE ON PURPOSE: the 3D scene bridge and the PiP's canvas are read on
+   * the 3D tab (where the viewer is mounted), the Plates live-section canvas and
+   * the cortical-division legends on the Plates tab. Reading the scene while the
+   * Plates tab is up would measure a detached scene, so each read states which
+   * surface it is taken on and the caller parks the tab first. */
+  const goto3D = async () => {
+    await evaluate(clickText('3D'))
+    await sleep(2600)
+  }
+  const gotoPlates = async () => {
+    await ensurePlatesLiveSection()
+    await sleep(1400)
+  }
+  /* The 3D tab UNMOUNTS the viewer (`App.tsx`: `{activeTab === '3d' && <Viewer3D/>}`),
+     so every return to the tab constructs a NEW scene while `window.__auditScene`
+     still points at the detached one. Re-binding here — to the newest scene that
+     still holds the app's own graph — is what makes a mesh reading taken after a
+     tab round trip a measurement of the view on screen rather than of a corpse.
+     `bound === false` is a FAILURE in the caller, never a silent empty list. */
+  const SCENE_REBIND_NEWEST = `(() => {
+    const observed = Array.isArray(window.__auditThreeObserved) ? window.__auditThreeObserved : [];
+    const alive = (s) => {
+      try { return s.getObjectByName('scene-layers') !== null || s.getObjectByName('clip-plane-helpers') !== null; }
+      catch (error) { return false; }
+    };
+    const scenes = observed.filter((o) => o != null && o.isScene === true);
+    const live = scenes.filter(alive);
+    const scene = live.length > 0 ? live[live.length - 1] : null;
+    window.__auditScene = scene;
+    return { observed: observed.length, scenes: scenes.length, alive: live.length, bound: scene !== null };
+  })()`
+  const threeCanvasRead = async (label) => {
+    const rebind = await evaluate(SCENE_REBIND_NEWEST)
+    const meshes = rebind?.bound === true ? await stableRead(VISIBLE_MESH_NAMES, 4) : null
+    const three = await regionPixelStats(THREE_CANVAS)
+    const pip = await evaluate(canvasStatsFor(PIP_CANVAS))
+    const treeDim = await evaluate(TREE_REGION_DIM_PROBE)
+    const header = await evaluate(HEADER_ROWS_PROBE)
+    return { label, rebind, meshes, three, pip, treeDim, header }
+  }
+  const platesCanvasRead = async (label) => {
+    const plates = await evaluate(canvasStatsFor(PLATES_CANVAS))
+    const platesRows = await evaluate(LOBE_ROWS_FOR('plates'))
+    const pipRows = await evaluate(LOBE_ROWS_FOR('pip'))
+    return { label, plates, platesRows, pipRows }
+  }
+  const sameStats = (a, b, key) => a !== null && b !== null && typeof a?.[key] === 'number' && a[key] === b[key]
+  const statsLine = (stats) =>
+    stats === null
+      ? 'unavailable'
+      : `hash ${stats.hash} · ${stats.painted !== undefined ? `painted ${stats.painted}/${stats.sampled}` : `colours ${stats.uniqueColors} · ${stats.sampled} samples`}`
+  const v11ToggleRow = async (hook, key) => {
+    const selector = `[${hook}="${key}"]`
+    const click = String(await evaluate(clickHook(selector)))
+    await sleep(1600)
+    return { selector, click }
+  }
+
+  /* ---------------------------------------------------------------- R2 */
+  await goto3D()
+  await evaluate(clickHook('[data-header-action="reset"]'))
+  await sleep(1400)
+  const r2Base3D = await threeCanvasRead('default (3D tab)')
+  await gotoPlates()
+  /* The division legend is only meaningful with its own layer switched ON; the
+     v10 block turned it on and may have left it on, but the v11 block must not
+     depend on that — a check whose premise is "the toggle happens to be on" is a
+     check that can pass by not running. */
+  const lobesFixed = await evaluate(`(() => {
+    const button = [...document.querySelectorAll('.section-lobes-toggle')].find((x) => x.closest('.pip-panel') === null);
+    if (button === null) return 'no cortical-division toggle in the Plates live section';
+    if (button.getAttribute('aria-pressed') !== 'true') button.click();
+    return 'aria-pressed ' + button.getAttribute('aria-pressed');
+  })()`)
+  await sleep(1400)
+  const r2BasePlates = await platesCanvasRead('default (Plates tab)')
+  info('v11 R2 division layer (' + String(lobesFixed) + '): baseline rows ' + JSON.stringify(r2BasePlates.platesRows) +
+    ' on Plates and ' + JSON.stringify(r2BasePlates.pipRows) + ' in the PiP')
+
+  const r2Off = await v11ToggleRow('data-area', 'telencephalon')
+  await gotoPlates()
+  const r2AfterPlates = await platesCanvasRead('telencephalon off (Plates tab)')
+  await goto3D()
+  const r2After3D = await threeCanvasRead('telencephalon off (3D tab)')
+  const telRegions = AREA_REGIONS_MAP.telencephalon ?? ['telencephalon']
+  const r2TreeBefore = treeDimOf(r2Base3D.treeDim, 'telencephalon')
+  const r2TreeAfter = treeDimOf(r2After3D.treeDim, 'telencephalon')
+  info(
+    'v11 R2 (' + r2Off.click + '): 3D meshes ' + (r2Base3D.meshes ?? []).length + ' → ' + (r2After3D.meshes ?? []).length +
+      ' · 3D canvas pixels ' + statsLine(r2Base3D.three) + ' → ' + statsLine(r2After3D.three) +
+      ' · PiP ' + statsLine(r2Base3D.pip) + ' → ' + statsLine(r2After3D.pip) +
+      ' · Plates ' + statsLine(r2BasePlates.plates) + ' → ' + statsLine(r2AfterPlates.plates) +
+      ' · lobe rows Plates ' + JSON.stringify(r2BasePlates.platesRows) + ' → ' + JSON.stringify(r2AfterPlates.platesRows) +
+      ' · tree ' + JSON.stringify(r2TreeBefore) + ' → ' + JSON.stringify(r2TreeAfter),
+  )
+  if (!sceneReady || r2Base3D.rebind?.bound !== true || r2After3D.rebind?.bound !== true) {
+    bad(
+      'v11 R2: the scene bridge could not be re-bound to the mounted 3D view (' +
+        JSON.stringify({ q0SceneReady: sceneReady, before: r2Base3D.rebind, after: r2After3D.rebind }) +
+        ') — "the 3D view dropped the area" could not be measured: FAILURE, not a skip',
+    )
+  } else {
+    ok('v11 R2: the scene bridge re-bound to the mounted view after the tab round trip (' +
+      JSON.stringify(r2After3D.rebind) + ') — the mesh readings below are of the scene on screen')
+    const lost = (r2Base3D.meshes ?? []).filter((name) => !(r2After3D.meshes ?? []).includes(name))
+    const gained = (r2After3D.meshes ?? []).filter((name) => !(r2Base3D.meshes ?? []).includes(name))
+    if (lost.length > 0 && gained.length === 0) {
+      ok('v11 R2: switching the telencephalon area OFF removed ' + lost.length + ' structure mesh(es) from the 3D scene and added none (' +
+        lost.slice(0, 3).join(', ') + (lost.length > 3 ? ', …' : '') + ')')
+    } else {
+      bad('v11 R2: the 3D scene did not follow the area toggle (removed ' + lost.length + ', added ' + gained.length +
+        ': ' + JSON.stringify(gained.slice(0, 5)) + ')')
+    }
+  }
+  if (r2Base3D.three?.hash !== undefined && r2After3D.three?.hash !== undefined && r2Base3D.three.hash !== r2After3D.three.hash) {
+    ok('v11 R2: the 3D canvas\' own rectangle repainted (' + statsLine(r2Base3D.three) + ' → ' + statsLine(r2After3D.three) + ')')
+  } else {
+    bad('v11 R2: the 3D canvas rectangle did not change when 85 taxonomy rows were switched off (' +
+      statsLine(r2Base3D.three) + ' → ' + statsLine(r2After3D.three) + ')')
+  }
+  if (r2Base3D.pip?.hash !== undefined && r2After3D.pip?.hash !== undefined && r2Base3D.pip.hash !== r2After3D.pip.hash) {
+    ok('v11 R2: the PiP\'s own 2D canvas repainted (' + statsLine(r2Base3D.pip) + ' → ' + statsLine(r2After3D.pip) + ')')
+  } else {
+    bad('v11 R2: the PiP canvas did not change with the telencephalon off (' + statsLine(r2Base3D.pip) + ' → ' + statsLine(r2After3D.pip) + ')')
+  }
+  if (r2BasePlates.plates?.hash !== undefined && r2AfterPlates.plates?.hash !== undefined && r2BasePlates.plates.hash !== r2AfterPlates.plates.hash) {
+    ok('v11 R2: the Plates live-section canvas repainted (' + statsLine(r2BasePlates.plates) + ' → ' + statsLine(r2AfterPlates.plates) + ')')
+  } else {
+    bad('v11 R2: the Plates live section did not repaint with the telencephalon off (' + statsLine(r2BasePlates.plates) + ' → ' + statsLine(r2AfterPlates.plates) + ')')
+  }
+  const r2RowsWereThere = Array.isArray(r2BasePlates.platesRows) && r2BasePlates.platesRows.length > 0
+  const r2RowsEmptied = Array.isArray(r2AfterPlates.platesRows) && Array.isArray(r2AfterPlates.pipRows) &&
+    r2AfterPlates.platesRows.length === 0 && r2AfterPlates.pipRows.length === 0
+  if (r2RowsEmptied && r2RowsWereThere) {
+    ok('v11 R2: the cortical-division legend is EMPTY on both surfaces with the area off (Plates ' +
+      r2BasePlates.platesRows.length + ' row(s) → 0, PiP ' + r2BasePlates.pipRows.length + ' → 0) — the ribbon pass is area-gated (PLAN §2)')
+  } else {
+    bad('v11 R2: the division legend did not empty with the telencephalon off (Plates ' +
+      JSON.stringify(r2BasePlates.platesRows) + ' → ' + JSON.stringify(r2AfterPlates.platesRows) + ', PiP ' +
+      JSON.stringify(r2BasePlates.pipRows) + ' → ' + JSON.stringify(r2AfterPlates.pipRows) + ')')
+  }
+  if (r2TreeAfter.rows > 0 && r2TreeAfter.on === 0 && r2TreeAfter.off > 0) {
+    ok('v11 R2: the taxonomy tree dims every rendered ' + telRegions.join('/') + ' row (' + r2TreeAfter.off + '/' +
+      (r2TreeAfter.on + r2TreeAfter.off) + ' is-off across ' + r2TreeAfter.rows + ' region row(s); was ' + r2TreeBefore.off + ')')
+  } else {
+    bad('v11 R2: the tree did not follow the area toggle (' + JSON.stringify(r2TreeAfter) + ')')
+  }
+  const r2Recenter = await evaluate(hookState('[data-area="telencephalon"]'))
+  if (r2Recenter?.pressed === false) {
+    ok('v11 R2: the Areas button reports the state it produced (aria-pressed=false, "' + String(r2Recenter.name) + '")')
+  } else {
+    bad('v11 R2: the Areas button does not report its own state (' + JSON.stringify(r2Recenter) + ')')
+  }
+
+  /* ---- the two-path equality: button vs the legend's per-region checkbox -- */
+  await v11ToggleRow('data-area', 'telencephalon')
+  await goto3D()
+  const r2Restored3D = await threeCanvasRead('restored (3D tab)')
+  const r2RestoreOk = sameStringList(r2Base3D.meshes, r2Restored3D.meshes)
+  if (r2RestoreOk) {
+    ok('v11 R2: switching the area back ON restores the exact 3D scene it started from (' +
+      (r2Base3D.meshes ?? []).length + ' mesh names identical)')
+  } else {
+    bad('v11 R2: the area toggle is not a round trip (meshes ' + (r2Base3D.meshes ?? []).length + ' → ' +
+      (r2Restored3D.meshes ?? []).length + ')')
+  }
+  const r2LegendClick = await evaluate(legendRegionRow('telencephalon'))
+  await sleep(1600)
+  const r2Legend3D = await threeCanvasRead('telencephalon off (legend row, 3D tab)')
+  await gotoPlates()
+  const r2LegendPlates = await platesCanvasRead('telencephalon off (legend row, Plates tab)')
+  const r2PathsAgree = sameStringList(r2After3D.meshes, r2Legend3D.meshes) &&
+    sameStats(r2AfterPlates.plates, r2LegendPlates.plates, 'hash') &&
+    sameStringList(r2AfterPlates.platesRows, r2LegendPlates.platesRows)
+  if (r2PathsAgree) {
+    ok('v11 R2: the two independent paths agree exactly — ' + r2Off.click + ' and ' + String(r2LegendClick) +
+      ' render the same ' + (r2After3D.meshes ?? []).length + ' 3D mesh names, the same Plates hash (' +
+      r2AfterPlates.plates?.hash + ') and the same ' + (r2AfterPlates.platesRows ?? []).length + ' division row(s)')
+  } else {
+    bad('v11 R2: the Areas toggle and the per-region legend row do NOT reach the same state (meshes ' +
+      (r2After3D.meshes ?? []).length + ' vs ' + (r2Legend3D.meshes ?? []).length + ', Plates ' +
+      r2AfterPlates.plates?.hash + ' vs ' + r2LegendPlates.plates?.hash + ', lobe rows ' +
+      JSON.stringify(r2AfterPlates.platesRows) + ' vs ' + JSON.stringify(r2LegendPlates.platesRows) + ')')
+  }
+  await evaluate(legendRegionRow('telencephalon'))
+  await sleep(1400)
+
+  /* ---------------------------------------------------------------- R3 */
+  const kindSweep = []
+  await goto3D()
+  for (const kind of ['nucleus', 'context']) {
+    await evaluate(clickHook('[data-header-action="reset"]'))
+    await sleep(1400)
+    const baseline = await threeCanvasRead('default before ' + kind + ' (3D tab)')
+    const off = await v11ToggleRow('data-kind', kind)
+    await gotoPlates()
+    const afterPlates = await platesCanvasRead(kind + ' off (Plates tab)')
+    await goto3D()
+    const after = await threeCanvasRead(kind + ' off (3D tab)')
+    const lost = (baseline.meshes ?? []).filter((name) => !(after.meshes ?? []).includes(name))
+    const on = await v11ToggleRow('data-kind', kind)
+    await sleep(1000)
+    const restored = await threeCanvasRead('restored ' + kind + ' (3D tab)')
+    const legendClick = await evaluate(legendKindRow(kind))
+    await sleep(1600)
+    const legend3D = await threeCanvasRead(kind + ' off (legend kind row, 3D tab)')
+    await gotoPlates()
+    const legendPlates = await platesCanvasRead(kind + ' off (legend kind row, Plates tab)')
+    const entry = {
+      kind,
+      lost: lost.length,
+      three: [baseline.three?.hash, after.three?.hash],
+      pip: [baseline.pip?.hash, after.pip?.hash],
+      plates: [afterPlates.plates?.hash, legendPlates.plates?.hash],
+      restore: sameStringList(baseline.meshes, restored.meshes),
+      equalPath: sameStringList(after.meshes, legend3D.meshes) && sameStats(afterPlates.plates, legendPlates.plates, 'hash'),
+    }
+    kindSweep.push(entry)
+    if (lost.length > 0) {
+      ok('v11 R3[' + kind + ']: ' + off.click + ' removed ' + lost.length + ' structure mesh(es) from the 3D scene (' +
+        lost.slice(0, 3).join(', ') + (lost.length > 3 ? ', …' : '') + ')')
+    } else {
+      bad('v11 R3[' + kind + ']: switching the ' + kind + ' system off removed nothing from the 3D scene (' +
+        (baseline.meshes ?? []).length + ' meshes before and ' + (after.meshes ?? []).length + ' after)')
+    }
+    if (baseline.three?.hash !== after.three?.hash && baseline.pip?.hash !== after.pip?.hash) {
+      ok('v11 R3[' + kind + ']: the 3D canvas and the PiP repainted — 3D canvas ' + baseline.three?.hash + ' → ' +
+        after.three?.hash + ', PiP ' + baseline.pip?.hash + ' → ' + after.pip?.hash)
+    } else {
+      bad('v11 R3[' + kind + ']: a 3D-surface reading did not change (3D ' + baseline.three?.hash + '→' + after.three?.hash +
+        ', PiP ' + baseline.pip?.hash + '→' + after.pip?.hash + ')')
+    }
+    if (afterPlates.plates?.hash !== undefined && legendPlates.plates?.hash !== undefined &&
+      afterPlates.plates.hash === legendPlates.plates.hash) {
+      ok('v11 R3[' + kind + ']: the Plates live section renders the same pixels through both paths — Systems toggle ' +
+        afterPlates.plates.hash + ' = legend "' + kind + '" checkbox ' + legendPlates.plates.hash)
+    } else {
+      bad('v11 R3[' + kind + ']: the two paths disagree on the Plates surface (' + afterPlates.plates?.hash + ' vs ' + legendPlates.plates?.hash + ')')
+    }
+    if (entry.restore) {
+      ok('v11 R3[' + kind + ']: ' + on.click + ' restores the baseline 3D scene exactly (' + (baseline.meshes ?? []).length + ' meshes)')
+    } else {
+      bad('v11 R3[' + kind + ']: the system toggle is not a round trip (meshes ' + (restored.meshes ?? []).length + ' vs baseline ' + (baseline.meshes ?? []).length + ')')
+    }
+    if (entry.equalPath) {
+      ok('v11 R3[' + kind + ']: the Systems toggle and the legend\'s "' + kind + '" checkbox render the same 3D scene (' +
+        String(legendClick) + ')')
+    } else {
+      bad('v11 R3[' + kind + ']: the Systems toggle and the legend kind row disagree (meshes ' + (after.meshes ?? []).length +
+        ' vs ' + (legend3D.meshes ?? []).length + ')')
+    }
+    /* the baseline capture for the NEXT kind is taken on the 3D tab: come back
+       to it before the next iteration, and restore the legend row first. */
+    await evaluate(legendKindRow(kind))
+    await sleep(1400)
+    await goto3D()
+  }
+  info(
+    'v11 R3 sweep: ' + kindSweep.map((entry) => entry.kind + ' removed ' + entry.lost + ' mesh(es) · 3D ' +
+      entry.three.join('→') + ' · PiP ' + entry.pip.join('→') + ' · Plates ' + entry.plates.join('→') +
+      ' · round trip ' + (entry.restore ? 'yes' : 'NO') + ' · legend path equal ' + (entry.equalPath ? 'yes' : 'NO')).join(' | '),
+  )
+
+  /* ---------------------------------------------------------------- R4 */
+  await evaluate(clickHook('[data-header-action="reset"]'))
+  await sleep(1600)
+  const r4 = await threeCanvasRead('after Reset (3D tab)')
+  const r4Header = await evaluate(HEADER_ROWS_PROBE)
+  const r4Pressed = (r4Header?.toggles ?? []).map((t) => t.hook + ':' + t.key + '=' + t.pressed).sort().join(' | ')
+  if (bootPressed.length > 0 && r4Pressed === bootPressed) {
+    ok('v11 R4: after the whole v11 sweep, Reset reproduces the clean-boot pressed set exactly — ' + r4Pressed)
+  } else {
+    bad('v11 R4: Reset no longer reproduces the clean-boot pressed set (boot ' + bootPressed + ' vs now ' + r4Pressed + ')')
+  }
+  const r4RenderOk = sameStringList(r2Base3D.meshes, r4.meshes)
+  if (r4RenderOk) {
+    ok('v11 R4: Reset also restores the documented default RENDER — ' + (r2Base3D.meshes ?? []).length +
+      ' mesh names identical to the default captured at the start of block R')
+  } else {
+    bad('v11 R4: Reset does not restore the default render (meshes ' + (r2Base3D.meshes ?? []).length + ' → ' +
+      (r4.meshes ?? []).length + ')')
+  }
+  await gotoPlates()
+  const r4Plates = await platesCanvasRead('after Reset (Plates tab)')
+  if (sameStats(r2BasePlates.plates, r4Plates.plates, 'hash') && sameStringList(r2BasePlates.platesRows, r4Plates.platesRows)) {
+    ok('v11 R4: the Plates live section returns to the default pixels too (hash ' + r2BasePlates.plates?.hash +
+      ', division rows ' + (r4Plates.platesRows ?? []).length + ')')
+  } else {
+    bad('v11 R4: the Plates surface did not return to the default (Plates ' + r2BasePlates.plates?.hash + ' → ' +
+      r4Plates.plates?.hash + ', rows ' + JSON.stringify(r2BasePlates.platesRows) + ' → ' + JSON.stringify(r4Plates.platesRows) + ')')
+  }
+  const r4Actions = (r4Header?.actions ?? []).map((action) => action.key + '=' + action.pressed).join(' ')
+  const defaultPresetPressed = (r4Header?.presets ?? []).filter((preset) => preset.id === 'brainstem-focus')[0]?.pressed ?? null
+  if (defaultPresetPressed === true && /reset=true/.test(r4Actions)) {
+    ok('v11 R4: Reset and data-preset="brainstem-focus" both report pressed at the default framing (' + r4Actions + ')')
+  } else {
+    bad('v11 R4: the default framing is not reported by both controls (actions ' + r4Actions + ', default preset ' + String(defaultPresetPressed) + ')')
+  }
+
+  /* ---------------------------------------------------------------- R5 */
+  /* The calibration checkbox lives in the clipping dock, which belongs to the 3D
+     tab, so park the tab first — otherwise the calibration would report "CDP key
+     delivery unknown" for a reason that has nothing to do with CDP. */
+  await goto3D()
+  /* The SAME Space-delivery mechanism the v10 division block uses (`keyDown`
+     with `text`, which Blink needs in order to run the default activation of a
+     real <button>), calibrated on a plain checkbox first: if CDP's key path is
+     dead in this environment the finding is UNVERIFIED, not a product failure. */
+  const pressSpaceKey = async () => {
+    await send('Input.dispatchKeyEvent', {
+      type: 'keyDown', key: ' ', code: 'Space', windowsVirtualKeyCode: 32, text: ' ', unmodifiedText: ' ',
+    })
+    await send('Input.dispatchKeyEvent', { type: 'keyUp', key: ' ', code: 'Space', windowsVirtualKeyCode: 32 })
+  }
+  const keyboardCalibrationProbe = `(() => {
+    const label = [...document.querySelectorAll('label')].find((l) => /Show plane helper/i.test(l.textContent || ''));
+    const input = label === null ? null : label.querySelector('input[type=checkbox]');
+    if (input === null) return null;
+    input.focus();
+    return { checked: input.checked, focused: document.activeElement === input };
+  })()`
+  const calibration0 = await evaluate(keyboardCalibrationProbe)
+  await pressSpaceKey()
+  await sleep(400)
+  const calibration1 = await evaluate(keyboardCalibrationProbe)
+  const spaceDelivered = calibration0 !== null && calibration1 !== null && calibration0.checked !== calibration1.checked
+  if (spaceDelivered) await pressSpaceKey()
+  const focusToggle = await evaluate(`(() => {
+    const button = document.querySelector('[data-area="diencephalon"]');
+    if (button === null) return 'no [data-area="diencephalon"] button';
+    button.focus();
+    return document.activeElement === button ? 'focused' : 'not focused';
+  })()`)
+  const beforeSpace = await evaluate(hookState('[data-area="diencephalon"]'))
+  await pressSpaceKey()
+  await sleep(1000)
+  const afterSpace = await evaluate(hookState('[data-area="diencephalon"]'))
+  const keyboardOk =
+    beforeSpace !== null && afterSpace !== null && beforeSpace.pressed !== afterSpace.pressed &&
+    afterSpace.pressed === false
+  if (!spaceDelivered) {
+    info(
+      'v11 R5: the CDP Space key did not toggle a plain checkbox either (' + JSON.stringify(calibration0) + ' → ' +
+        JSON.stringify(calibration1) + ') — the toggle rows\' keyboard path is UNVERIFIED here, not failed',
+    )
+  } else if (String(focusToggle) === 'focused' && keyboardOk) {
+    ok('v11 R5: the Areas toggle is keyboard operable — a real Space keypress on the focused [data-area="diencephalon"] ' +
+      'button flipped aria-pressed ' + beforeSpace.pressed + ' → ' + afterSpace.pressed + ' (the same keypress toggled the calibration checkbox)')
+  } else {
+    bad('v11 R5: the Areas toggle did not respond to Space (' + String(focusToggle) + ', ' + JSON.stringify(beforeSpace) +
+      ' → ' + JSON.stringify(afterSpace) + ')')
+  }
+  if (afterSpace?.pressed === false) {
+    await evaluate(clickHook('[data-area="diencephalon"]'))
+    await sleep(900)
+  }
+
+  /* ---------------------------------------------------------------- R6 */
+  const v11NewErrors = [...exceptions.slice(v11ErrorsBefore), ...consoleErrors.slice(v11ErrorsBefore)]
+  if (v11NewErrors.length === 0) {
+    ok('v11 hygiene: the toggle-row sweep produced no console error and no page exception')
+  } else {
+    bad('v11 hygiene: ' + v11NewErrors.length + ' runtime error(s) during the v11 sweep: ' + v11NewErrors.slice(0, 3).join(' || '))
+  }
+  const appAfterV11 = await evaluate(`({
+    root: document.getElementById('root')?.childElementCount ?? -1,
+    tabs: [...document.querySelectorAll('button')].map((b) => b.textContent.trim()).filter((t) => /^(3D|Plates|Syndromes)$/.test(t)),
+    areas: document.querySelectorAll('.header-areas button').length,
+    systems: document.querySelectorAll('.header-systems button').length,
+    pip: document.querySelector('.pip-panel') !== null,
+  })`)
+  if (appAfterV11.root > 0 && appAfterV11.tabs.length === 3 && appAfterV11.areas > 0 && appAfterV11.systems > 0) {
+    ok('v11 hygiene: the app is fully alive after the v11 sweep (' + JSON.stringify(appAfterV11) + ')')
+  } else {
+    bad('v11 hygiene: the app is not in its documented shape after the v11 sweep (' + JSON.stringify(appAfterV11) + ')')
+  }
 
 } catch (error) {
   bad(`audit aborted: ${error instanceof Error ? error.message : String(error)}`)

@@ -45,6 +45,27 @@
  * derivation the 2D canvas and the PiP draw with — so the 3D helper rectangle
  * and the 2D visible rect are proven to be the SAME rectangle.
  *
+ * ── v11 (`docs/SWARM_V11_PLAN.md` §3/PLAN.md §3a): ONE axis-pair convention ──
+ * The v10 audit reported the sagittal quad as 148 × 171 au against an "in-plane
+ * CLIP_BOUNDS rectangle" of 171 × 148, i.e. the two sides disagreed about the
+ * u/v ORDER. Lane A2 settles it with arithmetic and ONE source of truth:
+ *
+ *   AXIS_PAIR (planeGeometry.ts) = y → [x, z] · x → [z, y] · z → [x, y]
+ *   quad width  = extent(AXIS_PAIR[axis][0])   quad height = extent(AXIS_PAIR[axis][1])
+ *   sagittal (x): extent(z) = 72 − (−76) = 148 · extent(y) = 116 − (−55) = 171
+ *                 → the shipped 148 × 171 is RIGHT (u = z, v = y)
+ *   the audit's historical in-plane pair is
+ *   `['x','y','z'].filter(c => c !== axis)` = ASCENDING AXIS NAME = [y, z]
+ *                 → 171 × 148 for sagittal, i.e. the WRONG side.
+ * The table is now READ FROM THE SHIPPED SOURCE in this gate (never retyped),
+ * and the same ORDERED pair is asserted against the other three consumers a
+ * Node lane can reach: `axisExtents` (the 2D canvas, the PiP camera and the
+ * backdrop sampler), `planePointToCanonical` (the section's own plane frame,
+ * corticalLobes.ts) and the component's render path (lane B). The audit's own
+ * derivation is reported from its source so the orchestrator can see whether
+ * `review-qa`'s re-point has landed; it is not a pass condition here, because
+ * `scripts/verify/audit.mjs` is that task's file.
+ *
  * WHAT IT CANNOT OBSERVE. Chrome is not available in this sandbox, so "the
  * helper now covers the cortex on screen" is an orchestrator claim: the pixels
  * are checked by `verify:acceptance` / `verify:audit`, not here. Lane B runs no
@@ -340,6 +361,118 @@ for (const axis of PLANE_AXES) {
     )
   }
 }
+
+/* ==================================================================== *
+ *  A2. ONE AXIS-PAIR CONVENTION (v11 §3a) — read from the shipped source
+ * ==================================================================== */
+
+console.log('\n--- A2. the u/v convention: AXIS_PAIR read from the shipped source -------')
+
+/** The `AXIS_PAIR` literal in `planeGeometry.ts`, as text, parsed here. */
+const GEOMETRY_SOURCE = readFileSync(resolve(ROOT, GEOMETRY_FILE), 'utf8')
+const AXIS_PAIR_BLOCK = /AXIS_PAIR[^=]*=\s*\{([\s\S]*?)\n\}/.exec(GEOMETRY_SOURCE)?.[1] ?? ''
+const AXIS_PAIR_FROM_SOURCE = {}
+for (const match of AXIS_PAIR_BLOCK.matchAll(/([xyz]):\s*\[\s*'([xyz])'\s*,\s*'([xyz])'\s*\]/g)) {
+  AXIS_PAIR_FROM_SOURCE[match[1]] = [match[2], match[3]]
+}
+assert(
+  Object.keys(AXIS_PAIR_FROM_SOURCE).length === 3,
+  'A2 AXIS_PAIR is readable from planeGeometry.ts (the gate retypes no axis pair)',
+  JSON.stringify(AXIS_PAIR_FROM_SOURCE),
+)
+for (const axis of AXES) {
+  assert(
+    AXIS_PAIR_FROM_SOURCE[axis]?.[0] === AXIS_PAIR[axis][0] &&
+      AXIS_PAIR_FROM_SOURCE[axis]?.[1] === AXIS_PAIR[axis][1],
+    `A2 the imported AXIS_PAIR.${axis} is the ORDERED pair written in the shipped source`,
+    `source ${JSON.stringify(AXIS_PAIR_FROM_SOURCE[axis])} vs import ${JSON.stringify(AXIS_PAIR[axis])}`,
+  )
+}
+
+/** The section's own plane frame — imported, so this is the shipped mapping. */
+const lobesModule = await import(pathToFileURL(resolve(ROOT, 'src/components/section/corticalLobes.ts')).href)
+const { planePointToCanonical } = lobesModule
+const axisIndexOf = { x: 0, y: 1, z: 2 }
+for (const axis of AXES) {
+  const [uAxis, vAxis] = AXIS_PAIR[axis]
+  // The 2D canvas / PiP camera / backdrop sampler derivation, in ORDER.
+  const extents = axisExtents(axis)
+  assert(
+    extents.uAxis === uAxis && extents.vAxis === vAxis,
+    `A2 axisExtents(${axis}) uses the ORDERED pair [${uAxis}, ${vAxis}] (2D canvas, PiP camera, backdrop sampler)`,
+    `got [${extents.uAxis}, ${extents.vAxis}]`,
+  )
+  const asU = planePointToCanonical(axis, 7, 1, 0)
+  const asV = planePointToCanonical(axis, 7, 0, 1)
+  assert(
+    asU[axisIndexOf[uAxis]] === 1 &&
+      asU[axisIndexOf[vAxis]] === 0 &&
+      asU[axisIndexOf[axis]] === 7 &&
+      asV[axisIndexOf[vAxis]] === 1 &&
+      asV[axisIndexOf[uAxis]] === 0 &&
+      asV[axisIndexOf[axis]] === 7,
+    `A2 the section plane frame maps u onto ${uAxis} and v onto ${vAxis} (AXIS_PAIR.${axis} order)`,
+    `u → ${JSON.stringify(asU)} · v → ${JSON.stringify(asV)}`,
+  )
+}
+
+/**
+ * The audit's own in-plane derivation, reported (not asserted): its file belongs
+ * to another task, so this prints which convention it currently uses and what
+ * that implies for the sagittal plane. The pass condition stays the SHIPPED side.
+ */
+const AUDIT_PATH = 'scripts/verify/audit.mjs'
+const AUDIT_SOURCE = readFileSync(resolve(ROOT, AUDIT_PATH), 'utf8')
+const auditUsesAscendingNames = /\['x',\s*'y',\s*'z'\]\.filter\(\s*\(?\s*\w+\s*\)?\s*=>\s*\w+\s*!==\s*axis\s*\)/.test(
+  AUDIT_SOURCE,
+)
+const auditReadsAxisPair = /AXIS_PAIR/.test(AUDIT_SOURCE)
+const sagittal = AXIS_PAIR.x
+const sagittalShipped = [
+  CLIP_BOUNDS[sagittal[0]].max - CLIP_BOUNDS[sagittal[0]].min,
+  CLIP_BOUNDS[sagittal[1]].max - CLIP_BOUNDS[sagittal[1]].min,
+]
+const ascending = ['x', 'y', 'z'].filter((candidate) => candidate !== 'x')
+const ascendingSpans = [
+  CLIP_BOUNDS[ascending[0]].max - CLIP_BOUNDS[ascending[0]].min,
+  CLIP_BOUNDS[ascending[1]].max - CLIP_BOUNDS[ascending[1]].min,
+]
+console.log('  A2 the arithmetic, per plane (u extent × v extent, from CLIP_BOUNDS):')
+for (const axis of AXES) {
+  const [uAxis, vAxis] = AXIS_PAIR[axis]
+  const uSpan = CLIP_BOUNDS[uAxis].max - CLIP_BOUNDS[uAxis].min
+  const vSpan = CLIP_BOUNDS[vAxis].max - CLIP_BOUNDS[vAxis].min
+  console.log(
+    `     ${pad(axis, 2)} plane: AXIS_PAIR.${axis} = [${uAxis}, ${vAxis}] → ` +
+      `${uSpan} × ${vSpan} au  (u = ${uAxis} extent ${CLIP_BOUNDS[uAxis].max} − ${CLIP_BOUNDS[uAxis].min}, ` +
+      `v = ${vAxis} extent ${CLIP_BOUNDS[vAxis].max} − ${CLIP_BOUNDS[vAxis].min})`,
+  )
+}
+console.log(
+  `     the shipped quad (lane A/B) says sagittal = ${sagittalShipped[0]} × ${sagittalShipped[1]} au; ` +
+    `ascending-axis-name order ['${ascending.join("', '")}'] would say ${ascendingSpans[0]} × ${ascendingSpans[1]} au ` +
+    '— the two numbers the v10 audit compared, and the order is the only difference',
+)
+console.log(
+  `  A2 audit.mjs (${AUDIT_PATH}, another task's file): ` +
+    `ascending-name in-plane derivation ${auditUsesAscendingNames ? 'PRESENT' : 'absent'} · ` +
+    `reads AXIS_PAIR ${auditReadsAxisPair ? 'yes' : 'no'}`,
+)
+if (auditUsesAscendingNames) {
+  console.log(
+    "     → that derivation is the WRONG side of the disagreement: for the sagittal sheet it yields " +
+      `['${ascending.join("', '")}'] = ${ascendingSpans[0]} × ${ascendingSpans[1]} au where the shipped quad (and the 2D ` +
+      `visible rectangle) is ${sagittalShipped[0]} × ${sagittalShipped[1]} au. Fix belongs to scripts/verify/audit.mjs ` +
+      '(task review-qa): read AXIS_PAIR from planeGeometry.ts and compare the ORDERED pair. Not asserted here — this ' +
+      'gate owns the shipped side only.',
+  )
+} else {
+  console.log('     → the audit derives its in-plane pair from the shipped table; one table, all consumers')
+}
+console.log(
+  `  A2 [convention] AXIS_PAIR = ${JSON.stringify(AXIS_PAIR)} (u, v — the ORDER the quad, the 2D canvas, the PiP ` +
+    'camera, the backdrop sampler and the section plane frame all use)',
+)
 
 /* ---- and the SAME rectangle the 2D canvas draws (axisExtents) ---------- */
 for (const axis of PLANE_AXES) {

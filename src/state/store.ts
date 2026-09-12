@@ -1127,6 +1127,115 @@ export function toggleDivisionLayers(layers: AtlasLayers, id: DivisionId): Atlas
   return divisionLayersOn(layers, id) ? clearDivisionLayers(layers, id) : applyDivisionLayers(layers, id)
 }
 
+/* ============ v11 §1 — the AREA partition (the header's "Areas" toggle row) ===
+ *
+ * The user's ask: "instead of divisions such as 'brainstem focus', simply use big
+ * categories like telencephalon, mesencephalon etc. … and make them toggle buttons
+ * so users can toggle on and off these brain areas (exclude from 3D/2D section
+ * view when off, include when on)".
+ *
+ * WHAT AN AREA IS. Exactly what a division is (see the block above): a LABELLING
+ * of the seven existing regions, not a fifth layer field. Every area toggle
+ * resolves to the same region-set write the per-region checkboxes and the v10
+ * division control already perform (`toggleRegionLayer`), so the 3D scene, the 2D
+ * live section and the simulated-section panel follow it through the one rule
+ * they already implement, and nothing needs persisting.
+ *
+ * WHAT CHANGES FROM v10 IS ONLY THE GRANULARITY. The v10 divisions group the
+ * regions along the three-vesicle scheme — prosencephalon, mesencephalon,
+ * rhombencephalon — which leaves the hindbrain as one four-region lump. v11 splits
+ * exactly that lump along the vesicle boundary the store's own header already
+ * documents (`store.ts` v10 block: "rhombencephalon (hindbrain) = pons +
+ * cerebellum (metencephalon) + medulla (myelencephalon)"), so the row reads
+ * Telencephalon · Diencephalon · Mesencephalon · Metencephalon · Myelencephalon ·
+ * Cerebral vasculature — more precise where the user asked for more precision,
+ * and identical everywhere else.
+ *
+ * DERIVED, NEVER RETYPED. `metencephalon` is `DIVISIONS.rhombencephalon` MINUS
+ * `medulla` and `myelencephalon` IS `medulla`, both computed from
+ * `divisionRegions()` at module load; the other four areas are their division's
+ * regions verbatim. `DIVISIONS` itself is untouched (v11 §4: the v10 partition is
+ * reused, not re-labelled), which is why the v10 block above still holds exactly
+ * as written.
+ */
+
+/** The six areas of the header's "Areas" row (the v11 partition). */
+export type AreaId =
+  | 'telencephalon'
+  | 'diencephalon'
+  | 'mesencephalon'
+  | 'metencephalon'
+  | 'myelencephalon'
+  | 'vasculature'
+
+/**
+ * The regions `DIVISIONS.rhombencephalon` names, as the store labels them. Read
+ * from the division, not retyped; `HINDBRAIN_SPLIT_MEDULLA` is the ONE region the
+ * metencephalon/myelencephalon boundary is drawn at, and the loop right below
+ * fails the module load if the division stops containing it — so the derivation
+ * can never quietly become the whole rhombencephalon.
+ */
+const HINDBRAIN_REGIONS: readonly Region[] = divisionRegions('rhombencephalon')
+const HINDBRAIN_SPLIT_MEDULLA: Region = 'medulla'
+
+/** One area: the label the button shows, its v10 division, and its own regions. */
+export interface AreaDefinition {
+  id: AreaId
+  label: string
+  /**
+   * The v10 division this area belongs to (the `data-division` hook and the
+   * browser lane's link between the two controls). `metencephalon` and
+   * `myelencephalon` share `rhombencephalon`: they are one division seen at the
+   * finer granularity the user asked for.
+   */
+  division: DivisionId
+  regions: readonly Region[]
+}
+
+/**
+ * The AREAS table: six buttons, seven regions, each region owned exactly once.
+ * The load-time block after `areaLayersOn` proves that totality and disjointness,
+ * and `scripts/verify/area-toggles.mjs` re-derives the same partition from
+ * `DIVISIONS` and asserts this table equals it.
+ */
+export const AREAS: readonly AreaDefinition[] = [
+  { id: 'telencephalon', label: 'Telencephalon', division: 'prosencephalon', regions: divisionRegions('prosencephalon').filter((region) => region === 'telencephalon') },
+  { id: 'diencephalon', label: 'Diencephalon', division: 'prosencephalon', regions: divisionRegions('prosencephalon').filter((region) => region === 'diencephalon') },
+  { id: 'mesencephalon', label: 'Mesencephalon (midbrain)', division: 'mesencephalon', regions: divisionRegions('mesencephalon') },
+  { id: 'metencephalon', label: 'Metencephalon (pons + cerebellum)', division: 'rhombencephalon', regions: HINDBRAIN_REGIONS.filter((region) => region !== HINDBRAIN_SPLIT_MEDULLA) },
+  { id: 'myelencephalon', label: 'Myelencephalon (medulla)', division: 'rhombencephalon', regions: HINDBRAIN_REGIONS.filter((region) => region === HINDBRAIN_SPLIT_MEDULLA) },
+  { id: 'vasculature', label: 'Cerebral vasculature', division: 'vasculature', regions: divisionRegions('vasculature') },
+]
+
+/** The regions of one area, as a fresh array the caller may keep. */
+export function areaRegions(id: AreaId): readonly Region[] {
+  return AREAS.find((area) => area.id === id)?.regions ?? []
+}
+
+/** The one area a region belongs to (empty for a region no area claims). */
+export function areasOf(region: Region): readonly AreaId[] {
+  return AREAS.filter((area) => area.regions.includes(region)).map((area) => area.id)
+}
+
+/**
+ * Is every region of the area layer-on? This is the button's `aria-pressed`
+ * reading and the decision input of the "Areas" row's toggle, so "the button
+ * reads on" and "the area is on" are one fact rather than two guesses — the same
+ * contract `divisionLayersOn` gives the Legend's division checkbox.
+ */
+export function areaLayersOn(layers: AtlasLayers, id: AreaId): boolean {
+  const regions = areaRegions(id)
+  return regions.length > 0 && regions.every((region) => layers.regions.has(region))
+}
+
+/**
+ * The "everything on" layer state, bound to `VIEW_PRESETS.all` rather than
+ * hand-written, so the header's All action cannot invent a second definition of
+ * "everything" (docs/SWARM_V11_PLAN.md §1c). Exported for the same reason
+ * DEFAULT_LAYERS is: it is the definition a check can assert against.
+ */
+export const ALL_ON_LAYERS: AtlasLayers = layersFromPreset('all')
+
 /**
  * Boot-time invariant of the division table (same contract as the blocks below:
  * asserted at module load, in Node and in the browser alike).
@@ -1165,6 +1274,93 @@ export function toggleDivisionLayers(layers: AtlasLayers, id: DivisionId): Atlas
       `store: the vasculature region is grouped into ${vascularOwners.join(', ') || 'no division'} — the ` +
         'arterial system is its own division and is never swept into a brain division ' +
         '(docs/SWARM_V10_PLAN.md §2, docs/NEUROATLAS_V8_PLAN.md §2)',
+    )
+  }
+}
+
+/**
+ * Boot-time invariant of the AREA table — total and disjoint over `ALL_REGIONS`,
+ * asserted at module load in Node and in the browser alike (the same contract as
+ * the division block above, and the reason both blocks exist twice).
+ *
+ * ── WHY THIS BLOCK RUNS AFTER THE DIVISION BLOCK, AND NOT BEFORE ────────────
+ * The area table is DERIVED from `DIVISIONS`, so when the division table itself is
+ * broken there are two true throwers and their order decides which one a caller
+ * sees. `verify:division-toggles`' load-time bite mutates a division (`rhombencephalon`
+ * → `vasculature` instead of `cerebellum`) and asserts the failure names the
+ * DIVISION defect ("belongs to 0 divisions" / "is grouped into"). Running the
+ * division block first keeps that documented diagnosis intact and still leaves the
+ * area rule fully checked in every other case — including the v11 case it exists
+ * for, a mutated area table (see `scripts/verify/area-toggles.mjs` §10, where the
+ * same mutation is applied to the AREAS entry and this block is the one that fires).
+ *
+ * The failure modes this makes impossible are the silent ones: an area that
+ * claims no region (a button that switches nothing), a region no area claims (a
+ * slice of the atlas the row cannot exclude), a region claimed twice (one button
+ * silently switching another area's data), and a table that drifts from the v10
+ * divisions it is derived from (two labels for one region). A region added to the
+ * taxonomy later can therefore not be orphaned from the header control.
+ */
+{
+  const claimed = new Map<Region, AreaId[]>()
+  for (const area of AREAS) {
+    if (area.regions.length === 0) {
+      throw new Error(
+        `store: area "${area.id}" (${area.label}) claims no region — the button would switch ` +
+          'nothing (docs/SWARM_V11_PLAN.md §1)',
+      )
+    }
+    if (divisionsOf(area.regions[0])[0] !== area.division) {
+      throw new Error(
+        `store: area "${area.id}" declares the division "${area.division}", but its first region ` +
+          `"${area.regions[0]}" belongs to "${divisionsOf(area.regions[0]).join(', ') || 'no division'}" ` +
+          '— the header row and the Legend would disagree about the same region ' +
+          '(docs/SWARM_V11_PLAN.md §1)',
+      )
+    }
+    for (const region of area.regions) {
+      if (!ALL_REGIONS.includes(region)) {
+        throw new Error(
+          `store: area "${area.id}" claims "${region}", which is not in ALL_REGIONS — the button would ` +
+            'toggle a region no layer set can hold (docs/SWARM_V11_PLAN.md §1)',
+        )
+      }
+      if (divisionsOf(region)[0] !== area.division) {
+        throw new Error(
+          `store: area "${area.id}" claims "${region}", which the v10 division table puts in ` +
+            `"${divisionsOf(region).join(', ') || 'no division'}" — areas are the divisions at a finer ` +
+            'granularity, never a re-grouping of them (docs/SWARM_V11_PLAN.md §1)',
+        )
+      }
+      const owners = claimed.get(region) ?? []
+      owners.push(area.id)
+      claimed.set(region, owners)
+    }
+  }
+  for (const region of ALL_REGIONS) {
+    const owners = claimed.get(region) ?? []
+    if (owners.length !== 1) {
+      throw new Error(
+        `store: region "${region}" is claimed by ${owners.length} areas (${owners.join(', ') || 'none'}) ` +
+          '— the six areas must partition ALL_REGIONS exactly, or a slice of the atlas is either ' +
+          'unreachable or switched by two buttons (docs/SWARM_V11_PLAN.md §1)',
+      )
+    }
+  }
+  // The hindbrain split, asserted rather than assumed: the two areas that share
+  // the rhombencephalon must together be that division and must each hold the
+  // vesicle the label names. Without this, editing the division would silently
+  // hand one area the other's region while the partition rule above still passed.
+  const hindbrain = divisionRegions('rhombencephalon')
+  const met = [...areaRegions('metencephalon')]
+  const myel = [...areaRegions('myelencephalon')]
+  const merged = [...met, ...myel]
+  const mergedCovers = merged.length === hindbrain.length && hindbrain.every((region) => merged.includes(region))
+  if (!mergedCovers || myel.length !== 1 || myel[0] !== HINDBRAIN_SPLIT_MEDULLA || !met.includes('pons')) {
+    throw new Error(
+      `store: the rhombencephalon split is wrong — metencephalon [${met.join(', ')}] + ` +
+        `myelencephalon [${myel.join(', ')}] must be exactly [${hindbrain.join(', ')}] with the medulla ` +
+        'alone in the myelencephalon (docs/SWARM_V11_PLAN.md §1)',
     )
   }
 }

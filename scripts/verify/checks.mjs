@@ -21,6 +21,13 @@
  *   • Labels are stable identifiers (they are what a Node test asserts on),
  *     `detail` is the human sentence the audit prints.
  *
+ * v11 adds `headerToggleRowsReading` — the contract of the header's two toggle
+ * rows (Areas / Systems), the Reset action and the surviving preset shortcut row.
+ * It returns an ARRAY of verdicts (one per falsifiable claim), so a failure names
+ * the part that broke; `audit.mjs` drives it from the real DOM at a clean boot
+ * (block A0b) and again after Reset (block R1), and `verify:area-toggles` is the
+ * Node lane's full version of the same contract.
+ *
  * Node-only entry point (no browser, no server, no precondition):
  *   node -e "import('./scripts/verify/checks.mjs').then(m=>console.log(m.readCtSourceCoverage()))"
  */
@@ -178,9 +185,21 @@ export function ctCoverageReading(reading, coverage = readCtSourceCoverage()) {
  * The boot-preset check (TELENCEPHALON_PLAN §5/§9: "Brainstem focus" is the
  * first-time default).
  *
- * Reading: `{ bootActiveLabels, storedPreset }` — the header preset buttons
- * reporting `aria-pressed="true"` at a CLEAN boot, plus the stored
+ * Reading: `{ bootActiveLabels, bootActivePresets, storedPreset }` — the header
+ * preset buttons reporting `aria-pressed="true"` at a CLEAN boot, plus the stored
  * `neuroaxis.viewPreset` value read at the same moment.
+ *
+ * v11 re-point (the preset row became the SHORTCUT row beneath the Areas/Systems
+ * rows, and two new actions — Reset / All — joined the same `.header-presets`
+ * group): `bootActivePresets` carries the `data-preset` ids of the pressed preset
+ * buttons. When it is present the verdict is decided by the MACHINE HOOK
+ * (`brainstem-focus`), not by text — so a third button whose label merely
+ * contains "Brainstem focus" (Reset's own tooltip does) can neither fake the
+ * default nor muddy the printed reading. `bootActiveLabels` remains the fallback
+ * and stays the printed evidence, so the predicate keeps working with the
+ * narrower reading shape the Node mirror feeds it
+ * (`audit-checks.test.mjs`'s fixtures pass only the labels); it is also now built
+ * from the preset buttons ALONE.
  *
  * `storedPreset` is reported so the two causes can never be confused: a
  * non-default active preset that matches a stored key is a returning visitor's
@@ -190,8 +209,11 @@ export function ctCoverageReading(reading, coverage = readCtSourceCoverage()) {
  */
 export function presetFocusReading(reading) {
   const active = Array.isArray(reading?.bootActiveLabels) ? reading.bootActiveLabels : []
+  const activePresets = Array.isArray(reading?.bootActivePresets) ? reading.bootActivePresets : null
   const stored = reading?.storedPreset ?? null
-  const focused = active.some((label) => /brainstem focus/i.test(String(label)))
+  const labelled = active.some((label) => /brainstem focus/i.test(String(label)))
+  const hooked = activePresets === null ? labelled : activePresets.includes('brainstem-focus')
+  const focused = hooked && labelled
   const cause =
     stored !== null && stored !== ''
       ? `active preset came from the STORED preference "${stored}" (the check must run from a clean profile)`
@@ -201,13 +223,15 @@ export function presetFocusReading(reading) {
     return verdict(
       false,
       'not-brainstem-focus',
-      `the boot preset is not Brainstem focus (active: ${active.join(', ') || 'none'}; ${cause})`,
+      `the boot preset is not Brainstem focus (active: ${active.join(', ') || 'none'}; ` +
+        `pressed data-preset: ${activePresets === null ? 'not read' : (activePresets.join(', ') || 'none')}; ${cause})`,
     )
   }
   return verdict(
     true,
     'default-brainstem-focus',
-    `default preset is Brainstem focus (header reports "${active.join(', ')}"; ${cause})`,
+    `default preset is Brainstem focus (header reports "${active.join(', ')}"` +
+      `${activePresets === null ? '' : `, pressed data-preset [${activePresets.join(', ')}]`}; ${cause})`,
   )
 }
 
@@ -251,6 +275,224 @@ export function presetDimmingReading(reading) {
     `no brainstem/diencephalon/cerebellum tree row is layer-off at default framing ` +
       `(${rowsSeen} row(s) inspected; ${cause})`,
   )
+}
+
+/* ------------------------- (4b) v11 — the two header toggle rows */
+
+/**
+ * The v11 contract of the header's TWO toggle rows (`docs/SWARM_V11_PLAN.md` §1,
+ * `PLAN.md` §1) — the control that replaced the preset row as the primary one.
+ *
+ * Reading (every field is a plain value read from the DOM / the shipped source,
+ * built by `audit.mjs`'s `HEADER_ROWS_PROBE`):
+ *
+ *   rows       `{ areas: { present, role, name, buttons }, systems: {…} }` — the
+ *              two `role="group"` containers and their accessible group names.
+ *   toggles    one entry per toggle button: `{ hook, key, text, pressed, name,
+ *              tag, type }`. `hook` is `data-area` / `data-kind`; `pressed` is a
+ *              REAL boolean or `null` when `aria-pressed` is missing/unreadable;
+ *              `name` is the accessible name (`aria-label`).
+ *   expected   the shipped declarations: `expectedAreas`, `expectedKinds`,
+ *              `allRegions` and `areaRegions` (area id → its regions), all parsed
+ *              out of `src/state/store.ts` / `src/data/load.ts` — never retyped.
+ *   layers     the layer state read from the LEGEND checkboxes at the same
+ *              moment: `{ regions: {…}, kinds: {…} }` (bare ids, booleans).
+ *   actions    `[{ key, pressed, name }]` for `data-header-action` (reset / all).
+ *   presets    `[{ id, label, pressed }]` for the preset shortcut row's REAL
+ *              buttons — the documented-default assertion that must survive the
+ *              new rows (the brief forbids removing it).
+ *
+ * Returns an ARRAY of verdicts (one per claim) rather than a single verdict: the
+ * v11 contract has several independent falsifiable parts, and collapsing them
+ * would make a failure unreadable. Every part prints its own numbers. Nothing is
+ * skipped on a missing field: an absent row/button/hook FAILS.
+ */
+export function headerToggleRowsReading(reading) {
+  const out = []
+  const add = (okFlag, label, detail) => out.push(verdict(okFlag, label, detail))
+
+  const rows = reading?.rows ?? {}
+  const toggles = Array.isArray(reading?.toggles) ? reading.toggles : []
+  const expectedAreas = Array.isArray(reading?.expectedAreas) ? reading.expectedAreas : []
+  const expectedKinds = Array.isArray(reading?.expectedKinds) ? reading.expectedKinds : []
+  const allRegions = Array.isArray(reading?.allRegions) ? reading.allRegions : []
+  const areaRegions = reading?.areaRegions ?? null
+  const layerRegions = reading?.layers?.regions ?? null
+  const layerKinds = reading?.layers?.kinds ?? null
+  const actions = Array.isArray(reading?.actions) ? reading.actions : []
+  const presets = Array.isArray(reading?.presets) ? reading.presets : []
+  const areaToggles = toggles.filter((t) => t?.hook === 'data-area')
+  const kindToggles = toggles.filter((t) => t?.hook === 'data-kind')
+
+  /* ---- 1. both rows exist, as labelled groups -------------------------- */
+  const describeRow = (key) => {
+    const row = rows[key] ?? {}
+    return `${key}: ${row.present === true ? 'present' : 'MISSING'} role=${JSON.stringify(String(row.role ?? ''))} ` +
+      `aria-label=${JSON.stringify(String(row.name ?? ''))} buttons=${Number(row.buttons ?? -1)}`
+  }
+  const rowsOk =
+    rows.areas?.present === true && rows.systems?.present === true &&
+    rows.areas?.role === 'group' && rows.systems?.role === 'group' &&
+    String(rows.areas?.name ?? '').length > 0 && String(rows.systems?.name ?? '').length > 0 &&
+    String(rows.areas?.name ?? '') !== String(rows.systems?.name ?? '')
+  add(
+    rowsOk,
+    rowsOk ? 'two-toggle-rows' : 'rows-missing-or-unlabelled',
+    `the header exposes the two v11 toggle rows as distinct labelled groups (${describeRow('areas')} · ${describeRow('systems')})`,
+  )
+
+  /* ---- 2. the machine hooks, total over the shipped sets ---------------- */
+  const areaKeys = areaToggles.map((t) => String(t.key))
+  const kindKeys = kindToggles.map((t) => String(t.key))
+  const keysOk =
+    expectedAreas.length > 0 && expectedKinds.length > 0 &&
+    areaKeys.length === expectedAreas.length &&
+    expectedAreas.every((id) => areaKeys.filter((key) => key === id).length === 1) &&
+    kindKeys.length === expectedKinds.length &&
+    expectedKinds.every((kind) => kindKeys.filter((key) => key === kind).length === 1)
+  add(
+    keysOk,
+    keysOk ? 'hooks-total' : 'hooks-incomplete',
+    `every area and kind the app declares has exactly one toggle with its machine hook ` +
+      `(areas ${areaKeys.join(', ') || 'none'} vs ${expectedAreas.join(', ') || 'none'}; ` +
+      `systems ${kindKeys.join(', ') || 'none'} vs ${expectedKinds.join(', ') || 'none'})`,
+  )
+
+  /* ---- 3. real buttons, aria-pressed, accessible names (2.5.3) ---------- */
+  const malformed = toggles.filter(
+    (t) => t?.tag !== 'BUTTON' || t?.type !== 'button' || typeof t?.pressed !== 'boolean' ||
+      String(t?.name ?? '').length === 0 || !String(t?.name ?? '').startsWith(String(t?.text ?? '\u0000')),
+  )
+  add(
+    malformed.length === 0 && toggles.length > 0,
+    malformed.length === 0 ? 'toggle-accessible-contract' : 'toggle-contract-broken',
+    `${toggles.length} toggle button(s): every one is a <button type="button"> with a real boolean ` +
+      `aria-pressed and an accessible name that STARTS WITH its visible text (WCAG 2.5.3)` +
+      (malformed.length === 0
+        ? ` — e.g. "${String(toggles[0]?.name ?? '')}"`
+        : ` — broken: ${JSON.stringify(malformed.slice(0, 3))}`),
+  )
+  const names = toggles.map((t) => String(t?.name ?? ''))
+  const namesOk = names.length > 0 && new Set(names).size === names.length
+  add(
+    namesOk,
+    namesOk ? 'names-distinct' : 'names-collide',
+    `the ${names.length} accessible names are distinct (a screen reader cannot confuse two slices): ` +
+      `${new Set(names).size} unique`,
+  )
+
+  /* ---- 4. the partitions ---------------------------------------------- */
+  const claims = new Map()
+  for (const area of expectedAreas) {
+    const regions = Array.isArray(areaRegions?.[area]) ? areaRegions[area] : null
+    if (regions === null) continue
+    for (const region of regions) claims.set(region, [...(claims.get(region) ?? []), area])
+  }
+  const unclaimed = allRegions.filter((region) => !claims.has(region))
+  const doubleClaimed = [...claims.entries()].filter(([, owners]) => owners.length !== 1)
+  const partitionOk =
+    allRegions.length > 0 && areaRegions !== null && unclaimed.length === 0 && doubleClaimed.length === 0
+  add(
+    partitionOk,
+    partitionOk ? 'areas-partition-total-disjoint' : 'areas-partition-broken',
+    `the ${expectedAreas.length} area buttons partition ALL_REGIONS exactly: ` +
+      `${allRegions.length} region(s) ` +
+      `${expectedAreas.map((id) => `${id}→[${(areaRegions?.[id] ?? []).join('+') || '?'}]`).join(' · ')}` +
+      (partitionOk ? '' : ` — unclaimed ${JSON.stringify(unclaimed)}, multiply claimed ${JSON.stringify(doubleClaimed)}`),
+  )
+  const kindsTotal =
+    expectedKinds.length > 0 && kindKeys.length === expectedKinds.length &&
+    expectedKinds.every((kind) => kindKeys.includes(kind))
+  add(
+    kindsTotal,
+    kindsTotal ? 'systems-partition-total' : 'systems-partition-broken',
+    `the ${kindKeys.length} systems buttons are exactly ALL_KINDS (${expectedKinds.join(', ')})`,
+  )
+
+  /* ---- 5. pressed ⇔ the layer sets the legend reads --------------------- */
+  const areaMismatch = areaToggles.filter((t) => {
+    const regions = Array.isArray(areaRegions?.[String(t.key)]) ? areaRegions[String(t.key)] : null
+    if (regions === null || layerRegions === null) return true
+    return t.pressed !== regions.every((region) => layerRegions[region] === true)
+  })
+  const kindMismatch = kindToggles.filter((t) => {
+    if (layerKinds === null) return true
+    return t.pressed !== (layerKinds[String(t.key)] === true)
+  })
+  const pressedOk =
+    layerRegions !== null && layerKinds !== null && areaToggles.length > 0 &&
+    kindToggles.length > 0 && areaMismatch.length === 0 && kindMismatch.length === 0
+  add(
+    pressedOk,
+    pressedOk ? 'pressed-matches-layers' : 'pressed-disagrees-with-layers',
+    `every button's aria-pressed is the SAME fact as the layer set the legend reads ` +
+      `(areas ${areaToggles.map((t) => `${t.key}=${t.pressed}`).join(', ')}; ` +
+      `systems ${kindToggles.map((t) => `${t.key}=${t.pressed}`).join(', ')}; ` +
+      `legend regions ${JSON.stringify(layerRegions ?? null)}, kinds ${JSON.stringify(layerKinds ?? null)})` +
+      (pressedOk ? '' : ` — disagreeing: ${JSON.stringify([...areaMismatch, ...kindMismatch].map((t) => t.key))}`),
+  )
+
+  /* ---- 6. Reset restores the documented default ------------------------- */
+  const reset = actions.find((action) => String(action?.key) === 'reset') ?? null
+  const defaultPreset = presets.find((preset) => String(preset?.id) === 'brainstem-focus') ?? null
+  const resetOk =
+    reset !== null && typeof reset.pressed === 'boolean' && String(reset.name ?? '').length > 0 &&
+    defaultPreset !== null && typeof defaultPreset.pressed === 'boolean' &&
+    reset.pressed === defaultPreset.pressed
+  add(
+    resetOk,
+    resetOk ? 'reset-bound-to-default' : 'reset-not-bound-to-default',
+    `the Reset action is pressed exactly when the preset row reports the documented default ` +
+      `(reset=${JSON.stringify(reset?.pressed ?? null)} "${String(reset?.name ?? '')}" vs ` +
+      `data-preset="brainstem-focus"=${JSON.stringify(defaultPreset?.pressed ?? null)} ` +
+      `"${String(defaultPreset?.label ?? '')}")`,
+  )
+
+  /* ---- 7. the default-framing assertion survives the new rows ------------ */
+  const presetButtonsOk = presets.length > 0 && presets.every(
+    (preset) => String(preset?.id ?? '').length > 0 && String(preset?.label ?? '').length > 0 &&
+      typeof preset?.pressed === 'boolean',
+  )
+  add(
+    presetButtonsOk,
+    presetButtonsOk ? 'preset-shortcuts-still-real' : 'preset-shortcuts-gone',
+    `the preset shortcut row is still rendered as real aria-pressed buttons (${presets.length}: ` +
+      `${presets.map((preset) => `${preset.id}=${preset.pressed}`).join(', ') || 'none'}) — the documented ` +
+      'default framing stays reachable and asserted (a menu/select would delete that assertion)',
+  )
+
+  /* ---- 8. no ambiguous label for a hook-free click ---------------------- */
+  /* The v11 change added a SECOND header button reading exactly `Nuclei` (the
+   * preset of that name and the `nucleus` system toggle), which is precisely the
+   * class of collision that makes a text-based click silently address a different
+   * control. The rule asserted here: any exact visible text carried by more than
+   * one header button must be carried ONLY by hooked controls, and the documented
+   * v8 preset label `Vasculature` may appear at most once (it is the label three
+   * v8 checks used to click by exact text before v11 re-pointed them). */
+  const headerButtons = Array.isArray(reading?.headerButtons) ? reading.headerButtons : []
+  const byText = new Map()
+  for (const button of headerButtons) {
+    const text = String(button?.text ?? '')
+    if (text.length === 0) continue
+    byText.set(text, [...(byText.get(text) ?? []), String(button?.hook ?? '')])
+  }
+  const ambiguous = [...byText.entries()].filter(
+    ([, hooks]) => hooks.length > 1 && hooks.some((hook) => hook.length === 0),
+  )
+  const vasculature = [...byText.entries()].filter(([text]) => text === 'Vasculature')
+  const vasculatureOk =
+    vasculature.length <= 1 && (vasculature.length === 0 || vasculature[0][1][0].length > 0)
+  const labelOk = headerButtons.length > 0 && ambiguous.length === 0 && vasculatureOk
+  add(
+    labelOk,
+    labelOk ? 'labels-unambiguous' : 'ambiguous-control-labels',
+    `of the ${headerButtons.length} header button(s), no exact label is shared by a hooked and an unhooked control ` +
+      `(shared labels: ${[...byText.entries()].filter(([, hooks]) => hooks.length > 1).map(([text, hooks]) => `"${text}"=${hooks.map((hook) => hook || 'NO HOOK').join('/')}`).join(', ') || 'none'}), ` +
+      `and the exact text "Vasculature" (the v8 preset label) is carried by ` +
+      `${vasculature.length} control(s)${vasculature.length === 0 ? '' : ` (${vasculature[0][1].map((hook) => hook || 'NO HOOK').join('/')})`}`,
+  )
+
+  return out
 }
 
 /* ------------------------------------- (5) error-boundary containment */

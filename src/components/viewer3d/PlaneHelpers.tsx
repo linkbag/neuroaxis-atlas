@@ -28,6 +28,18 @@
  * path, and mutates `clipPlanes.ts` in a scratch copy to require these helpers
  * to follow it.
  *
+ * ── v11 §3a: the u/v ORDER is the ordered AXIS_PAIR, not axis-name order ────
+ * The quad is `extent(u) × extent(v)` with `[u, v] = AXIS_PAIR[axis]` — the
+ * ORDERED pair, so the sagittal (x) sheet is `extent(z) × extent(y)` =
+ * 148 × 171 au (z[−76, +72] = 148, y[−55, +116] = 171). Deriving the in-plane
+ * pair any other way gets the sagittal sheet wrong: ascending axis NAME gives
+ * `['y', 'z']` → 171 × 148, which is the v10 audit's reading of this quad and
+ * the one thing that had to move (the audit, not this file — see PLAN.md §3a).
+ * `scripts/verify/plane-helper-extent.mjs` lane A2 reads `AXIS_PAIR` out of
+ * `planeGeometry.ts` and asserts this file, `axisExtents` (the 2D canvas, the
+ * PiP camera, the backdrop sampler) and the section's plane frame all use that
+ * one ordered table.
+ *
  * ── grid spacing is constant in AU, not in line count ──────────────────────
  * `GRID_CELL_AU` pins one cell to ~4 canonical au on BOTH in-plane axes, so
  * `divisions = round(extent / GRID_CELL_AU)` grows with the box instead of the
