@@ -212,104 +212,94 @@ export default function Header() {
         style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 4, minWidth: 0, flex: 1 }}
       >
         {/*
-         * v12d — TWO modules, one per axis, stacked in a right-hand column so they
-         * sit to the right of the Areas row's last button and stay vertically
-         * aligned with each other:
-         *   • Areas   — All on / All off for the regions the AREAS row owns;
-         *   • Systems — All on / All off for ALL_KINDS plus the Systems row's own
-         *               region-backed buttons (today the arterial system).
-         * Each is a thin wrapper over `setSlice`, so neither can produce a layer
-         * state the rows could not have produced themselves. Each carries its axis
-         * in its visible label, its accessible name and its data hook, because two
-         * buttons both reading "All on" would be ambiguous for a screen reader, the
-         * accessibility tree and the browser lane alike.
+         * v12e — TWO All modules, one per axis, each on ITS OWN group's line:
+         * the Areas module shares the Areas row's line (order 1, right-aligned by
+         * `marginLeft: 'auto'`) and the Systems module shares the Systems row's
+         * line (order 3, same right alignment). The Systems row itself carries
+         * `flexBasis: 100%` (order 2), which is what forces it onto a fresh line so
+         * the two groups cannot interleave. No "Areas"/"Systems" text inside the
+         * boxes: a box sitting on the row it acts on is what says which axis it is.
+         * The axis still lives in the accessible name and the data hook
+         * (areas-all-on/off, systems-all-on/off), because two buttons both reading
+         * "All on" would be ambiguous for a screen reader and the browser lane.
          */}
         <div
-          className="header-all-modules"
+          className="header-all-module"
+          role="group"
+          aria-label="Show or hide all areas"
+          data-row="all-areas"
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
+            gap: 6,
+            alignItems: 'center',
             marginLeft: 'auto',
             order: 1,
+            padding: '3px 6px',
+            border: '1px solid var(--border, rgba(148, 163, 184, 0.35))',
+            borderRadius: 8,
           }}
         >
-          <div
-            className="header-all-module"
-            role="group"
-            aria-label="Show or hide all areas"
-            data-row="all-areas"
-            style={{
-              display: 'flex',
-              gap: 6,
-              alignItems: 'center',
-              padding: '3px 6px',
-              border: '1px solid var(--border, rgba(148, 163, 184, 0.35))',
-              borderRadius: 8,
-            }}
+          <button
+            type="button"
+            data-header-action="areas-all-on"
+            className={`btn${allAreasOn ? ' is-active' : ''}`}
+            aria-pressed={allAreasOn}
+            aria-label="All areas on — show every area"
+            title="All areas on — display every area of the neuraxis"
+            onClick={() => setSlice(areaRegions, [], true)}
           >
-            <span style={rowLabelStyle}>Areas</span>
-            <button
-              type="button"
-              data-header-action="areas-all-on"
-              className={`btn${allAreasOn ? ' is-active' : ''}`}
-              aria-pressed={allAreasOn}
-              aria-label="All areas on — show every area"
-              title="All areas on — display every area of the neuraxis"
-              onClick={() => setSlice(areaRegions, [], true)}
-            >
-              All on
-            </button>
-            <button
-              type="button"
-              data-header-action="areas-all-off"
-              className="btn"
-              aria-pressed={allAreasOff}
-              aria-label="All areas off — hide every area"
-              title="All areas off — remove every area from the 3D and section views"
-              onClick={() => setSlice(areaRegions, [], false)}
-            >
-              All off
-            </button>
-          </div>
-          <div
-            className="header-all-module"
-            role="group"
-            aria-label="Show or hide all systems"
-            data-row="all-systems"
-            style={{
-              display: 'flex',
-              gap: 6,
-              alignItems: 'center',
-              padding: '3px 6px',
-              border: '1px solid var(--border, rgba(148, 163, 184, 0.35))',
-              borderRadius: 8,
-            }}
+            All on
+          </button>
+          <button
+            type="button"
+            data-header-action="areas-all-off"
+            className="btn"
+            aria-pressed={allAreasOff}
+            aria-label="All areas off — hide every area"
+            title="All areas off — remove every area from the 3D and section views"
+            onClick={() => setSlice(areaRegions, [], false)}
           >
-            <span style={rowLabelStyle}>Systems</span>
-            <button
-              type="button"
-              data-header-action="systems-all-on"
-              className={`btn${allSystemsOn ? ' is-active' : ''}`}
-              aria-pressed={allSystemsOn}
-              aria-label="All systems on — show every system"
-              title="All systems on — display every structure system"
-              onClick={() => setSlice(systemRegions, ALL_KINDS, true)}
-            >
-              All on
-            </button>
-            <button
-              type="button"
-              data-header-action="systems-all-off"
-              className="btn"
-              aria-pressed={allSystemsOff}
-              aria-label="All systems off — hide every system"
-              title="All systems off — remove every structure system"
-              onClick={() => setSlice(systemRegions, ALL_KINDS, false)}
-            >
-              All off
-            </button>
-          </div>
+            All off
+          </button>
+        </div>
+        <div
+          className="header-all-module"
+          role="group"
+          aria-label="Show or hide all systems"
+          data-row="all-systems"
+          style={{
+            display: 'flex',
+            gap: 6,
+            alignItems: 'center',
+            marginLeft: 'auto',
+            order: 3,
+            padding: '3px 6px',
+            border: '1px solid var(--border, rgba(148, 163, 184, 0.35))',
+            borderRadius: 8,
+          }}
+        >
+          <button
+            type="button"
+            data-header-action="systems-all-on"
+            className={`btn${allSystemsOn ? ' is-active' : ''}`}
+            aria-pressed={allSystemsOn}
+            aria-label="All systems on — show every system"
+            title="All systems on — display every structure system"
+            onClick={() => setSlice(systemRegions, ALL_KINDS, true)}
+          >
+            All on
+          </button>
+          <button
+            type="button"
+            data-header-action="systems-all-off"
+            className="btn"
+            aria-pressed={allSystemsOff}
+            aria-label="All systems off — hide every system"
+            title="All systems off — remove every structure system"
+            onClick={() => setSlice(systemRegions, ALL_KINDS, false)}
+          >
+            All off
+          </button>
         </div>
         {/*
          * Row "Areas" — the big anatomical categories, multi-select, presented
