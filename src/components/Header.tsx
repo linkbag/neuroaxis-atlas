@@ -183,7 +183,18 @@ export default function Header() {
         <span className="app-subtitle">3D Brainstem Atlas — diencephalon · midbrain · rhombencephalon · telencephalon</span>
       </div>
 
-      <div className="header-rows" style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
+      {/*
+       * v12b — the rows flow in ONE wrapping flex line instead of a column: the
+       * Areas row is given `flexBasis: 100%` so it still owns the first line, and
+       * the Systems row plus the All on/All off module share the second line, with
+       * the module pushed to the right (`marginLeft: 'auto'`). The module keeps
+       * its own DOM position and its `data-header-action` hooks, so the browser
+       * lane's selectors and the accessibility tree are unchanged.
+       */}
+      <div
+        className="header-rows"
+        style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 4, minWidth: 0, flex: 1 }}
+      >
         {/*
          * v12 — the separate All on / All off module, to the right of the two
          * rows (`alignSelf: 'flex-end'` in the column container, `order: 2` so it
@@ -205,9 +216,13 @@ export default function Header() {
             display: 'flex',
             gap: 6,
             alignItems: 'center',
-            alignSelf: 'flex-end',
-            order: 2,
-            marginTop: 2,
+            marginLeft: 'auto',
+            order: 3,
+            // The box the user asked for: the module is visually separate from the
+            // Systems buttons without becoming a third row.
+            padding: '3px 6px',
+            border: '1px solid var(--border, rgba(148, 163, 184, 0.35))',
+            borderRadius: 8,
           }}
         >
           <button
@@ -246,7 +261,7 @@ export default function Header() {
           role="group"
           aria-label="Anatomical areas"
           data-row="areas"
-          style={{ ...rowStyle, order: 0 }}
+          style={{ ...rowStyle, order: 0, flexBasis: '100%' }}
         >
           <span className="header-row-label" style={rowLabelStyle}>Areas</span>
           {AREAS.map((area) => {
