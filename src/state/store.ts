@@ -17,6 +17,7 @@ import {
   getPlate,
   getSyndrome,
   platesForLevel,
+  REGION_LABELS,
   taxonomy,
   territoryOf,
 } from '../data/load'
@@ -1198,14 +1199,33 @@ export interface AreaDefinition {
  * and `scripts/verify/area-toggles.mjs` re-derives the same partition from
  * `DIVISIONS` and asserts this table equals it.
  */
+/**
+ * The AREAS table: five buttons, six regions, each region owned exactly once.
+ *
+ * v12: `vasculature` is NOT here. The user asked for the arterial system to sit
+ * with the other SYSTEMS (it is a system of vessels, not a division of the
+ * neuraxis), so its button moved to the header's Systems row, labelled
+ * "Vasculature". The Areas row therefore partitions `ALL_REGIONS` minus
+ * `vasculature`, and `SYSTEM_REGION_BUTTONS` below is that complement by
+ * construction — `scripts/verify/area-toggles.mjs` asserts the two halves still
+ * cover every region exactly once, so a future region cannot fall between them.
+ */
 export const AREAS: readonly AreaDefinition[] = [
   { id: 'telencephalon', label: 'Telencephalon', division: 'prosencephalon', regions: divisionRegions('prosencephalon').filter((region) => region === 'telencephalon') },
   { id: 'diencephalon', label: 'Diencephalon', division: 'prosencephalon', regions: divisionRegions('prosencephalon').filter((region) => region === 'diencephalon') },
   { id: 'mesencephalon', label: 'Mesencephalon (midbrain)', division: 'mesencephalon', regions: divisionRegions('mesencephalon') },
   { id: 'metencephalon', label: 'Metencephalon (pons + cerebellum)', division: 'rhombencephalon', regions: HINDBRAIN_REGIONS.filter((region) => region !== HINDBRAIN_SPLIT_MEDULLA) },
   { id: 'myelencephalon', label: 'Myelencephalon (medulla)', division: 'rhombencephalon', regions: HINDBRAIN_REGIONS.filter((region) => region === HINDBRAIN_SPLIT_MEDULLA) },
-  { id: 'vasculature', label: 'Cerebral vasculature', division: 'vasculature', regions: divisionRegions('vasculature') },
 ]
+
+/**
+ * v12 — the regions the Systems row owns as region-backed buttons (today just the
+ * arterial system). Derived as the complement of `AREAS`, never a literal, so the
+ * two rows cannot both claim a region or leave one unreachable.
+ */
+export const SYSTEM_REGION_BUTTONS: readonly { id: Region; label: string }[] = ALL_REGIONS
+  .filter((region) => !AREAS.some((area) => area.regions.includes(region)))
+  .map((region) => ({ id: region, label: region === 'vasculature' ? 'Vasculature' : REGION_LABELS[region] }))
 
 /** The regions of one area, as a fresh array the caller may keep. */
 export function areaRegions(id: AreaId): readonly Region[] {
@@ -1338,12 +1358,21 @@ export const ALL_ON_LAYERS: AtlasLayers = layersFromPreset('all')
     }
   }
   for (const region of ALL_REGIONS) {
-    const owners = claimed.get(region) ?? []
+    // v12: the two rows TOGETHER must still cover every region exactly once. The
+    // Areas row owns the divisions of the neuraxis; the Systems row owns the
+    // region-backed systems (today just `vasculature`), which the user asked to
+    // sit with the other systems rather than with the areas. What matters is
+    // unchanged: no region may be claimed twice (two buttons switching one slice)
+    // and none may be claimed by nobody (a slice the UI cannot reach).
+    const areaOwners = claimed.get(region) ?? []
+    const systemOwners = SYSTEM_REGION_BUTTONS.filter((entry) => entry.id === region).map((entry) => `systems:${entry.id}`)
+    const owners = [...areaOwners, ...systemOwners]
     if (owners.length !== 1) {
       throw new Error(
-        `store: region "${region}" is claimed by ${owners.length} areas (${owners.join(', ') || 'none'}) ` +
-          '— the six areas must partition ALL_REGIONS exactly, or a slice of the atlas is either ' +
-          'unreachable or switched by two buttons (docs/SWARM_V11_PLAN.md §1)',
+        `store: region "${region}" is claimed by ${owners.length} controls (${owners.join(', ') || 'none'}) ` +
+          '— the Areas row plus the Systems row\'s region-backed buttons must partition ALL_REGIONS ' +
+          'exactly, or a slice of the atlas is either unreachable or switched by two buttons ' +
+          '(docs/SWARM_V11_PLAN.md §1, v12 amendment)',
       )
     }
   }

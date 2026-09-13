@@ -65,32 +65,24 @@ import {
   ALL_ON_LAYERS,
   AREAS,
   areaLayersOn,
+  SYSTEM_REGION_BUTTONS,
   useAtlasStore,
   viewPresetOf,
   VIEW_PRESETS,
   type RenderQuality,
-  type ViewPreset,
 } from '../state/store'
 
-/**
- * Preset button order. v1–v6 presets first (their behaviour is unchanged), then
- * the four v7 telencephalon-aware presets of docs/TELENCEPHALON_PLAN.md §5 —
- * whose FIRST entry, Brainstem focus, is also the default layer state a fresh
- * visitor boots into (state/store.ts DEFAULT_LAYERS) — then v8's Vasculature,
- * which sits next to Whole brain because those are the two framings that carry
- * the arterial layer (docs/NEUROATLAS_V8_PLAN.md §2).
+/*
+ * v12 — the preset shortcut row is GONE (the user's ask: it overlapped the Areas
+ * and Systems rows). Two things it carried are kept, because they are not
+ * duplicated anywhere else:
+ *   • `clinical-motor` survives as a category button in the Systems row — it is
+ *     the one framing that is not expressible as a single area or kind, so it
+ *     stays reachable and still comes from `VIEW_PRESETS` (no second definition);
+ *   • the default framing is still reachable at boot, and the All on / All off
+ *     module replaced the old Reset / All pair.
+ * `VIEW_PRESETS` and `viewPresetOf` therefore stay imported and authoritative.
  */
-const PRESET_ORDER: ViewPreset[] = [
-  'brainstem-focus',
-  'deep-structures',
-  'whole-brain',
-  'vasculature',
-  'cortex-only',
-  'all',
-  'nuclei',
-  'tracts',
-  'clinical-motor',
-]
 
 const QUALITY_ORDER: RenderQuality[] = ['high', 'balanced']
 
@@ -171,6 +163,19 @@ export default function Header() {
     }
   }
 
+  /** True when nothing at all is layer-on — the All off button's pressed state. */
+  const nothingOn = layers.regions.size === 0 && layers.kinds.size === 0
+
+  /**
+   * All off — turn off exactly what is currently on, through the same per-region
+   * and per-kind toggles the two rows use, so this control cannot produce a layer
+   * state the rows could not have produced themselves.
+   */
+  const turnEverythingOff = (): void => {
+    for (const region of [...layers.regions]) toggleRegionLayer(region)
+    for (const kind of [...layers.kinds]) toggleKindLayer(kind)
+  }
+
   return (
     <header className="app-header">
       <div className="brand">
@@ -180,57 +185,52 @@ export default function Header() {
 
       <div className="header-rows" style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
         {/*
-         * The preset SHORTCUT row — third of the three rows visually (`order: 2`),
-         * first in the DOM for the reason in the file header. `data-preset` is the
-         * v11 machine hook; the class, the group role, the label text and the
-         * `aria-pressed` state are all exactly what v10 shipped.
+         * v12 — the separate All on / All off module, to the right of the two
+         * rows (`alignSelf: 'flex-end'` in the column container, `order: 2` so it
+         * reads last). It replaces the old Reset / All pair:
+         *   • All on  — every area and every system ON. It applies the `all`
+         *               preset through `ALL_ON_LAYERS`, exactly as the old button
+         *               did, so "everything" has one definition in the codebase.
+         *   • All off — every area and every system OFF (an empty view). It turns
+         *               off precisely what is currently ON through the same
+         *               per-region/per-kind toggles the rows use, so this control
+         *               cannot invent a layer state the rows cannot express.
          */}
-        <div className="header-presets" role="group" aria-label="View presets" style={{ ...rowStyle, order: 2 }}>
-          {PRESET_ORDER.map((preset) => {
-            const def = VIEW_PRESETS[preset]
-            const active = activePreset === preset
-            return (
-              <button
-                key={preset}
-                type="button"
-                data-preset={preset}
-                className={`btn${active ? ' is-active' : ''}`}
-                title={def.hint}
-                aria-pressed={active}
-                onClick={() => applyViewPreset(preset)}
-              >
-                {def.label}
-              </button>
-            )
-          })}
-          {/*
-           * The two v11 actions, inside the same `.header-presets` group because
-           * they set the same thing the preset buttons do — a framing. Reset is
-           * the documented default, and it IS the preset action (not a copy of
-           * the default layer object), so the store's default assertion, the
-           * audit's boot reading and this button can never drift apart.
-           */}
+        <div
+          className="header-all-module"
+          role="group"
+          aria-label="Show or hide everything"
+          data-row="all"
+          style={{
+            display: 'flex',
+            gap: 6,
+            alignItems: 'center',
+            alignSelf: 'flex-end',
+            order: 2,
+            marginTop: 2,
+          }}
+        >
           <button
             type="button"
-            data-header-action="reset"
-            className="btn"
-            aria-pressed={activePreset === 'brainstem-focus'}
-            aria-label="Reset the view to the default framing"
-            title="Reset — the default framing (Brainstem focus): brainstem-first, hemispheres faint, arterial overlay off"
-            onClick={() => applyViewPreset('brainstem-focus')}
+            data-header-action="all-on"
+            className={`btn${activePreset === 'all' ? ' is-active' : ''}`}
+            aria-pressed={activePreset === 'all'}
+            aria-label="All on — show every area and every system"
+            title="All on — display everything (every area, every system)"
+            onClick={() => applyViewPreset(viewPresetOf(ALL_ON_LAYERS) ?? 'all')}
           >
-            Reset
+            All on
           </button>
           <button
             type="button"
-            data-header-action="all"
+            data-header-action="all-off"
             className="btn"
-            aria-pressed={activePreset === 'all'}
-            aria-label="All — show every area and system"
-            title={VIEW_PRESETS.all.hint}
-            onClick={() => applyViewPreset(viewPresetOf(ALL_ON_LAYERS) ?? 'all')}
+            aria-pressed={nothingOn}
+            aria-label="All off — hide every area and every system"
+            title="All off — remove everything from the 3D and section views"
+            onClick={turnEverythingOff}
           >
-            All
+            All off
           </button>
         </div>
 
@@ -299,6 +299,49 @@ export default function Header() {
               </button>
             )
           })}
+          {/*
+           * v12 — the region-backed system buttons. Today that is just the arterial
+           * system, moved here from the Areas row at the user's request and labelled
+           * "Vasculature": it is a system of vessels rather than a division of the
+           * neuraxis, and the store derives this list as the complement of AREAS so
+           * the two rows cannot both claim a region or leave one unreachable.
+           */}
+          {SYSTEM_REGION_BUTTONS.map((entry) => {
+            const on = layers.regions.has(entry.id)
+            return (
+              <button
+                key={entry.id}
+                type="button"
+                data-region={entry.id}
+                data-system-region={entry.id}
+                className={`btn${on ? ' is-active' : ''}`}
+                title={`${entry.label} — show/hide the ${entry.id} system (a system, not a division of the neuraxis)`}
+                aria-pressed={on}
+                aria-label={`${entry.label} — show/hide the ${entry.id} system`}
+                onClick={() => toggleArea([entry.id], !on)}
+              >
+                {entry.label}
+              </button>
+            )
+          })}
+          {/*
+           * v12 — Clinical motor, the one framing that is not a single area or
+           * kind, kept as a category in this row (the user asked for exactly this
+           * one to survive the preset row's removal). It is still the store's own
+           * `clinical-motor` preset — no second definition — and switching it off
+           * returns to the all-on framing rather than to an undefined state.
+           */}
+          <button
+            type="button"
+            data-header-action="clinical-motor"
+            className={`btn${activePreset === 'clinical-motor' ? ' is-active' : ''}`}
+            aria-pressed={activePreset === 'clinical-motor'}
+            aria-label="Clinical motor — brainstem motor nuclei and the descending motor pathways"
+            title={VIEW_PRESETS['clinical-motor'].hint}
+            onClick={() => applyViewPreset(activePreset === 'clinical-motor' ? 'all' : 'clinical-motor')}
+          >
+            Clinical motor
+          </button>
         </div>
       </div>
 
