@@ -27,7 +27,13 @@
   height: 100dvh;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  grid-template-columns: 320px minmax(0, 1fr) 400px;
+  /* v12f — the sidebar width is a NAMED value because the header aligns to it:
+   * the header spans all three columns (`header header header`), and the toggle
+   * rows inside it are padded by exactly this much so they start on the 3D view's
+   * left border instead of floating in the middle of the header. One declaration,
+   * so the two cannot drift. */
+  --sidebar-w: 320px;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr) 400px;
   grid-template-areas:
     'header header header'
     'sidebar center info';
@@ -45,10 +51,31 @@
   background: var(--bg-panel);
 }
 
+/*
+ * v12f — the brand block is capped at the sidebar width so the toggle rows can
+ * begin exactly where the 3D view begins (see `.header-rows` below), and the
+ * subtitle is allowed to wrap inside that cap instead of being forced onto one
+ * long line that pushed the rows to the right.
+ */
 .brand {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  max-width: var(--sidebar-w, 320px);
+  flex: 0 0 auto;
+}
+
+.app-header .app-subtitle {
+  white-space: normal;
+  line-height: 1.25;
+}
+
+/*
+ * v12f — start on the 3D view's LEFT BORDER. The header spans the full width, so
+ * without this the rows sit wherever the brand happens to end.
+ */
+.header-rows {
+  padding-left: var(--sidebar-w, 320px);
 }
 
 .header-presets {

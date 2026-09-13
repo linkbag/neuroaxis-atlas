@@ -346,7 +346,7 @@ export default function Header() {
           role="group"
           aria-label="Structure systems"
           data-row="systems"
-          style={{ ...rowStyle, order: 2, flexBasis: '100%' }}
+          style={{ ...rowStyle, order: 2 }}
         >
           <span className="header-row-label" style={rowLabelStyle}>Systems</span>
           {ALL_KINDS.map((kind) => {
