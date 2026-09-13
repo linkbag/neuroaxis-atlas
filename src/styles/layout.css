@@ -52,17 +52,33 @@
 }
 
 /*
- * v12f — the brand block is capped at the sidebar width so the toggle rows can
- * begin exactly where the 3D view begins (see `.header-rows` below), and the
- * subtitle is allowed to wrap inside that cap instead of being forced onto one
- * long line that pushed the rows to the right.
+ * v12g — the header is a GRID whose first column is the sidebar's width, so the
+ * toggle rows start exactly on the sidebar's right border (the 3D view's left
+ * border) no matter how wide the brand's text is. v12f tried to do this with
+ * `padding-left` on `.header-rows`, which was wrong: that element is a flex item
+ * AFTER the brand, so the padding measured from the brand's end, not from the
+ * shell's left edge, and pushed the rows far too far right.
+ *
+ * The left padding moved onto `.brand` so the first grid column starts at x = 0
+ * (the shell's own left edge) — otherwise the header's 16 px padding would offset
+ * the column and the rows would land 16 px short of the border they align to.
  */
+.app-header {
+  grid-area: header;
+  display: grid;
+  grid-template-columns: var(--sidebar-w, 320px) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 8px 16px 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+}
+
 .brand {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  max-width: var(--sidebar-w, 320px);
-  flex: 0 0 auto;
+  padding-left: 16px;
 }
 
 .app-header .app-subtitle {
@@ -70,12 +86,11 @@
   line-height: 1.25;
 }
 
-/*
- * v12f — start on the 3D view's LEFT BORDER. The header spans the full width, so
- * without this the rows sit wherever the brand happens to end.
- */
+/* The grid column above places this row on the sidebar's right border; no
+ * padding of its own, or it would drift past it again. */
 .header-rows {
-  padding-left: var(--sidebar-w, 320px);
+  padding-left: 0;
+  min-width: 0;
 }
 
 .header-presets {
