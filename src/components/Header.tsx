@@ -62,7 +62,6 @@ import type { CSSProperties } from 'react'
 import type { Kind, Region } from '../types'
 import { ALL_KINDS } from '../data/load'
 import {
-  ALL_ON_LAYERS,
   AREAS,
   areaLayersOn,
   SYSTEM_REGION_BUTTONS,
@@ -163,18 +162,35 @@ export default function Header() {
     }
   }
 
-  /** True when nothing at all is layer-on — the All off button's pressed state. */
-  const nothingOn = layers.regions.size === 0 && layers.kinds.size === 0
-
   /**
-   * All off — turn off exactly what is currently on, through the same per-region
-   * and per-kind toggles the two rows use, so this control cannot produce a layer
-   * state the rows could not have produced themselves.
+   * v12d — ONE helper for the two All modules: set exactly the given layer slice
+   * to `on`, through the same per-region/per-kind toggles the two rows use. Both
+   * modules are thin wrappers over it, so neither can invent a layer state the
+   * rows could not have produced themselves (and the empty slice is `[]`, i.e.
+   * "this module does not touch that axis").
    */
-  const turnEverythingOff = (): void => {
-    for (const region of [...layers.regions]) toggleRegionLayer(region)
-    for (const kind of [...layers.kinds]) toggleKindLayer(kind)
+  const setSlice = (regions: readonly Region[], kinds: readonly Kind[], on: boolean): void => {
+    for (const region of regions) {
+      if (layers.regions.has(region) !== on) toggleRegionLayer(region)
+    }
+    for (const kind of kinds) {
+      if (layers.kinds.has(kind) !== on) toggleKindLayer(kind)
+    }
   }
+
+  /** Every region the Areas row owns (the areas' own regions, nothing else). */
+  const areaRegions = AREAS.flatMap((area) => [...area.regions])
+  /** Every layer the Systems row owns: its region-backed buttons plus ALL_KINDS. */
+  const systemRegions = SYSTEM_REGION_BUTTONS.map((entry) => entry.id)
+
+  /** All areas on / all areas off — the Areas module's two pressed readings. */
+  const allAreasOn = areaRegions.length > 0 && areaRegions.every((region) => layers.regions.has(region))
+  const allAreasOff = areaRegions.every((region) => !layers.regions.has(region))
+  /** All systems on / all systems off — the Systems module's two readings. */
+  const allSystemsOn =
+    systemRegions.every((region) => layers.regions.has(region)) && ALL_KINDS.every((kind) => layers.kinds.has(kind))
+  const allSystemsOff =
+    systemRegions.every((region) => !layers.regions.has(region)) && ALL_KINDS.every((kind) => !layers.kinds.has(kind))
 
   return (
     <header className="app-header">
@@ -196,59 +212,105 @@ export default function Header() {
         style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 4, minWidth: 0, flex: 1 }}
       >
         {/*
-         * v12 — the separate All on / All off module, to the right of the two
-         * rows (`alignSelf: 'flex-end'` in the column container, `order: 2` so it
-         * reads last). It replaces the old Reset / All pair:
-         *   • All on  — every area and every system ON. It applies the `all`
-         *               preset through `ALL_ON_LAYERS`, exactly as the old button
-         *               did, so "everything" has one definition in the codebase.
-         *   • All off — every area and every system OFF (an empty view). It turns
-         *               off precisely what is currently ON through the same
-         *               per-region/per-kind toggles the rows use, so this control
-         *               cannot invent a layer state the rows cannot express.
+         * v12d — TWO modules, one per axis, stacked in a right-hand column so they
+         * sit to the right of the Areas row's last button and stay vertically
+         * aligned with each other:
+         *   • Areas   — All on / All off for the regions the AREAS row owns;
+         *   • Systems — All on / All off for ALL_KINDS plus the Systems row's own
+         *               region-backed buttons (today the arterial system).
+         * Each is a thin wrapper over `setSlice`, so neither can produce a layer
+         * state the rows could not have produced themselves. Each carries its axis
+         * in its visible label, its accessible name and its data hook, because two
+         * buttons both reading "All on" would be ambiguous for a screen reader, the
+         * accessibility tree and the browser lane alike.
          */}
         <div
-          className="header-all-module"
-          role="group"
-          aria-label="Show or hide everything"
-          data-row="all"
+          className="header-all-modules"
           style={{
             display: 'flex',
-            gap: 6,
-            alignItems: 'center',
+            flexDirection: 'column',
+            gap: 4,
             marginLeft: 'auto',
             order: 1,
-            // The box the user asked for: the module is visually separate from the
-            // Systems buttons without becoming a third row.
-            padding: '3px 6px',
-            border: '1px solid var(--border, rgba(148, 163, 184, 0.35))',
-            borderRadius: 8,
           }}
         >
-          <button
-            type="button"
-            data-header-action="all-on"
-            className={`btn${activePreset === 'all' ? ' is-active' : ''}`}
-            aria-pressed={activePreset === 'all'}
-            aria-label="All on — show every area and every system"
-            title="All on — display everything (every area, every system)"
-            onClick={() => applyViewPreset(viewPresetOf(ALL_ON_LAYERS) ?? 'all')}
+          <div
+            className="header-all-module"
+            role="group"
+            aria-label="Show or hide all areas"
+            data-row="all-areas"
+            style={{
+              display: 'flex',
+              gap: 6,
+              alignItems: 'center',
+              padding: '3px 6px',
+              border: '1px solid var(--border, rgba(148, 163, 184, 0.35))',
+              borderRadius: 8,
+            }}
           >
-            All on
-          </button>
-          <button
-            type="button"
-            data-header-action="all-off"
-            className="btn"
-            aria-pressed={nothingOn}
-            aria-label="All off — hide every area and every system"
-            title="All off — remove everything from the 3D and section views"
-            onClick={turnEverythingOff}
+            <span style={rowLabelStyle}>Areas</span>
+            <button
+              type="button"
+              data-header-action="areas-all-on"
+              className={`btn${allAreasOn ? ' is-active' : ''}`}
+              aria-pressed={allAreasOn}
+              aria-label="All areas on — show every area"
+              title="All areas on — display every area of the neuraxis"
+              onClick={() => setSlice(areaRegions, [], true)}
+            >
+              All on
+            </button>
+            <button
+              type="button"
+              data-header-action="areas-all-off"
+              className="btn"
+              aria-pressed={allAreasOff}
+              aria-label="All areas off — hide every area"
+              title="All areas off — remove every area from the 3D and section views"
+              onClick={() => setSlice(areaRegions, [], false)}
+            >
+              All off
+            </button>
+          </div>
+          <div
+            className="header-all-module"
+            role="group"
+            aria-label="Show or hide all systems"
+            data-row="all-systems"
+            style={{
+              display: 'flex',
+              gap: 6,
+              alignItems: 'center',
+              padding: '3px 6px',
+              border: '1px solid var(--border, rgba(148, 163, 184, 0.35))',
+              borderRadius: 8,
+            }}
           >
-            All off
-          </button>
+            <span style={rowLabelStyle}>Systems</span>
+            <button
+              type="button"
+              data-header-action="systems-all-on"
+              className={`btn${allSystemsOn ? ' is-active' : ''}`}
+              aria-pressed={allSystemsOn}
+              aria-label="All systems on — show every system"
+              title="All systems on — display every structure system"
+              onClick={() => setSlice(systemRegions, ALL_KINDS, true)}
+            >
+              All on
+            </button>
+            <button
+              type="button"
+              data-header-action="systems-all-off"
+              className="btn"
+              aria-pressed={allSystemsOff}
+              aria-label="All systems off — hide every system"
+              title="All systems off — remove every structure system"
+              onClick={() => setSlice(systemRegions, ALL_KINDS, false)}
+            >
+              All off
+            </button>
+          </div>
         </div>
-
         {/*
          * Row "Areas" — the big anatomical categories, multi-select, presented
          * FIRST (`order: 0`). Each button is pressed exactly when every region it
