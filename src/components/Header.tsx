@@ -217,7 +217,7 @@ export default function Header() {
             gap: 6,
             alignItems: 'center',
             marginLeft: 'auto',
-            order: 3,
+            order: 1,
             // The box the user asked for: the module is visually separate from the
             // Systems buttons without becoming a third row.
             padding: '3px 6px',
@@ -261,7 +261,7 @@ export default function Header() {
           role="group"
           aria-label="Anatomical areas"
           data-row="areas"
-          style={{ ...rowStyle, order: 0, flexBasis: '100%' }}
+          style={{ ...rowStyle, order: 0 }}
         >
           <span className="header-row-label" style={rowLabelStyle}>Areas</span>
           {AREAS.map((area) => {
@@ -294,7 +294,7 @@ export default function Header() {
           role="group"
           aria-label="Structure systems"
           data-row="systems"
-          style={{ ...rowStyle, order: 1 }}
+          style={{ ...rowStyle, order: 2, flexBasis: '100%' }}
         >
           <span className="header-row-label" style={rowLabelStyle}>Systems</span>
           {ALL_KINDS.map((kind) => {
