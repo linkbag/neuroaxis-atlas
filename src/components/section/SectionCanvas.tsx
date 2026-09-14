@@ -2279,6 +2279,17 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
           : { x: clampToBounds('x', point.u), y: clampToBounds('y', point.v) }
     state.setClip(partial)
     state.setSectionAxis(axis)
+    // v16d — ONE click does both jobs. It places the crosshair (above, the
+    // documented single-click contract) AND selects the structure under the
+    // pointer, so the border highlight follows the click instead of needing a
+    // second gesture.
+    //
+    // `{ tab: null }` is the load-bearing part: `selectStructure` defaults to
+    // `activeTab: '3d'`, so without it every click in this canvas threw the reader
+    // out of the Plates tab into the 3D view. Passing null explicitly means "keep
+    // the tab the user is on" — selecting from a section must not navigate.
+    const hit = hitTest(point.u, point.v)
+    if (hit !== null) state.selectStructure(hit.group, { tab: null })
   }
 
   /* --------------------------------------------------------- resize + store */
