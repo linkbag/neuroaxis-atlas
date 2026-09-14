@@ -1892,14 +1892,11 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     const fillAlpha = style.dim
       ? DIM_ALPHA
       : style.selected
-        ? // v16 — the SELECTED structure is filled SOLID, not kind-alpha + 0.2.
-          // A context envelope (SECTION_KIND_ALPHA.context) came out at 0.4, so
-          // clicking a structure moved its label but left the shape translucent.
-          // Selection is the one state where the fill must be unambiguous, and the
-          // stroke below is already full-strength and in its own colour, so shape
-          // and border now read together. Every other state keeps its kind
-          // hierarchy (dim / overlay / plain).
-          1
+        ? // v16b — the selected structure keeps its NORMAL fill; selection is
+          // shown by the border alone (SELECTION_STROKE, width below). Filling it
+          // solid (v16) buried the underlying anatomy and the reader lost the
+          // relationship between the highlighted shape and what it sits in.
+        SECTION_KIND_ALPHA[meta.kind]
         : style.overlay
           ? SECTION_KIND_ALPHA[meta.kind] * CONTOUR_OVERLAY_ALPHA
           : SECTION_KIND_ALPHA[meta.kind]
@@ -1926,7 +1923,7 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       }
       ctx.globalAlpha = strokeAlpha
       ctx.strokeStyle = style.selected ? SELECTION_STROKE : style.hovered ? HOVER_STROKE : meta.color
-      ctx.lineWidth = style.selected ? 2.2 : style.hovered ? 1.8 : 0.9
+      ctx.lineWidth = style.selected ? 3 : style.hovered ? 1.8 : 0.9
       ctx.stroke()
       ctx.restore()
       return
@@ -1938,7 +1935,7 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     }
     ctx.globalAlpha = strokeAlpha
     ctx.strokeStyle = style.selected ? SELECTION_STROKE : style.hovered ? HOVER_STROKE : meta.color
-    ctx.lineWidth = style.selected ? 2.2 : style.hovered ? 1.8 : 0.9
+    ctx.lineWidth = style.selected ? 3 : style.hovered ? 1.8 : 0.9
     ctx.stroke(path)
     ctx.restore()
     // Labels are drawn in a second pass over every part (see draw()), so a
