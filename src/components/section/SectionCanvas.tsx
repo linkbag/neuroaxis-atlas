@@ -192,6 +192,8 @@ import {
   SECTION_KIND_ORDER,
   SECTION_PARTS,
   isCorticalRibbonSlug,
+  partsForCanvas,
+  registryNerveParts,
   registryPartFromGeometry,
   useSectionGeometryStatus,
   type SectionPartMeta,
@@ -1206,7 +1208,15 @@ function ensureRenderOrder(
 
   // Visible parts, in draw order — the filter+sort that used to run per frame
   // (and again per pointermove) now runs only when this key changes.
-  const visible = SECTION_PARTS.filter(
+  //
+  // v14: `partsForCanvas()` is `SECTION_PARTS` (the 138 committed GLBs) plus the
+  // twelve PROCEDURAL cranial-nerve parts (sectionAssets.SECTION_NERVE_PARTS).
+  // The filter itself is unchanged, so a nerve contour is drawn exactly when the
+  // worker returned it AND `isPartVisible` admits it — and `isPartVisible`
+  // prefers `taxonomyKind`, which is 'nerve' for a course, so the Systems row's
+  // "Cranial nerves" button is what shows and hides these twelve. `SECTION_PARTS`
+  // stays 138 for every gate that counts it.
+  const visible = partsForCanvas().filter(
     (meta) => args.contours.has(meta.slug) && isPartVisible(meta, args.state.layers),
   ).sort((a, b) => kindRankOf(a.kind) - kindRankOf(b.kind))
 
@@ -1882,7 +1892,14 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     const fillAlpha = style.dim
       ? DIM_ALPHA
       : style.selected
-        ? Math.min(1, SECTION_KIND_ALPHA[meta.kind] + 0.2)
+        ? // v16 — the SELECTED structure is filled SOLID, not kind-alpha + 0.2.
+          // A context envelope (SECTION_KIND_ALPHA.context) came out at 0.4, so
+          // clicking a structure moved its label but left the shape translucent.
+          // Selection is the one state where the fill must be unambiguous, and the
+          // stroke below is already full-strength and in its own colour, so shape
+          // and border now read together. Every other state keeps its kind
+          // hierarchy (dim / overlay / plain).
+          1
         : style.overlay
           ? SECTION_KIND_ALPHA[meta.kind] * CONTOUR_OVERLAY_ALPHA
           : SECTION_KIND_ALPHA[meta.kind]
@@ -2104,6 +2121,12 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
       const part = registryPartFromGeometry(meta, geometry)
       if (part !== null) registryParts.push(part)
     }
+    // v14 — the twelve cranial-nerve courses: PROCEDURAL geometry, swept by the
+    // same builder the 3D pass uses, appended to the SAME registry message. No
+    // committed GLB, no manifest entry, 0 bytes of payload (PLAN.md §4). They
+    // are not covered by `geometryStatus` (there is nothing to load), so they
+    // are appended here rather than waited for.
+    registryParts.push(...registryNerveParts())
     if (registryParts.length === 0) {
       // Nothing loaded and nothing pending: a real failure. Record it but let a
       // later geometry arrival clear it (the worker/store subscription keeps

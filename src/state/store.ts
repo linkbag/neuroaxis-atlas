@@ -405,7 +405,17 @@ function initialSectionUnderlay(): SectionUnderlay {
             isV3Payload && kind === V3_DEFAULT_KIND && opacity === V3_DEFAULT_OPACITY
           if (!untouchedV3Defaults) {
             if (kind !== null) next.kind = kind
-            if (opacity !== null) next.opacity = Math.min(1, Math.max(0, opacity))
+            if (opacity !== null) {
+              // v16 — a LEGACY payload (written by an older schema) carrying a
+              // below-1 opacity is the old "subdued base plate" default rather
+              // than a choice made against today's semantics: the current default
+              // draws the real image SOLID (opacity 1) as the section's base
+              // plate. So a pre-v16 payload is migrated up to the current default
+              // instead of restoring the washed-out value; a payload written by
+              // the CURRENT schema is restored verbatim, deliberate values
+              // included, so the slider still means what it says.
+              next.opacity = isV3Payload ? next.opacity : Math.min(1, Math.max(0, opacity))
+            }
             if (isFiniteNumber(record.windowMin)) next.windowMin = record.windowMin
             if (isFiniteNumber(record.windowMax)) next.windowMax = record.windowMax
             if (typeof record.realFirst === 'boolean') next.realFirst = record.realFirst
