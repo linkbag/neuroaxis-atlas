@@ -12,7 +12,7 @@
     "connections": {
       "afferent": [
         "Mammillary bodies via the mammillothalamic tract (tract of Vicq d'Azyr)",
-        "Hippocampal formation via the circuit of Papez (fornix, subiculum)",
+        "Indirect hippocampal input through the mammillary bodies (mammillothalamic tract); a minor direct subicular projection to the anterior nuclei is described experimentally but is not the defining route",
         "Prefrontal and retrosplenial cortical feedback"
       ],
       "efferent": [
@@ -304,7 +304,7 @@
         "Superior parietal lobule, prefrontal and cingulate cortex"
       ]
     },
-    "bloodSupply": "PCA — thalamogeniculate artery and lateral posterior choroidal artery; angular (MCA) branches supply the lateral pole.",
+    "bloodSupply": "PCA — thalamogeniculate artery and lateral posterior choroidal artery; the whole pulvinar is PCA territory (the middle cerebral artery never supplies the thalamus; the anterior choroidal artery is the only non-PCA contributor to the thalamus).",
     "clinical": [
       {
         "syndrome": "Déjérine-Roussy thalamic pain syndrome",
@@ -375,13 +375,13 @@
   {
     "id": "nuc-intralaminar",
     "name": "Centromedian-parafascicular nuclei",
-    "synonyms": ["CM-PF", "intralaminar nuclei", "centromedian nucleus", "parafascicular nucleus"],
+    "synonyms": ["CM-PF", "centromedian nucleus", "parafascicular nucleus", "caudal intralaminar group (CM and PF)"],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Intralaminar system embedded in the internal medullary lamina: centromedian closes striatal-motor loops (pallidal input, striatal and motor-cortical output), while parafascicular — with the midline nuclei — forms the thalamic arm of the ascending reticular activating system and relays the medial (arousal-affective) pain system.",
+    "function": "Intralaminar system embedded in the internal medullary lamina: centromedian closes striatal-motor loops (pallidal input, striatal and motor-cortical output), while parafascicular — with the midline nuclei — forms the thalamic arm of the ascending reticular activating system; the rostral intralaminar group (central lateral, paracentral, central medial) is not covered by this record and relays the medial (arousal-affective) pain system.",
     "connections": {
       "afferent": [
         "Globus pallidus and substantia nigra (centromedian)",
@@ -482,7 +482,7 @@
     "clinical": [
       {
         "syndrome": "Fatal familial insomnia",
-        "findings": "Prion degeneration targeting anterior and reticular thalamic nuclei abolishes sleep spindles and normal sleep architecture, producing progressive insomnia with dysautonomia.",
+        "findings": "Prion degeneration targeting the anteroventral and mediodorsal thalamic nuclei (with the inferior olive) abolishes sleep spindles and normal sleep architecture, producing progressive insomnia with dysautonomia.",
         "note": "neurodegenerative (PRNP) — the canonical human TRN/anterior-thalamus syndrome"
       },
       {
@@ -568,7 +568,7 @@
       }
     ],
     "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [8, 22.5, -4.5],
+    "origin3d": [8, 21, -4.5],
     "size3d": [1.4, 1.4, 1.4],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
@@ -581,7 +581,7 @@
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "context",
-    "laterality": "midline",
+    "laterality": "paired",
     "color": "#94a3b8",
     "function": "Y-shaped sheet of myelinated fibers that partitions the thalamus into anterior, medial and lateral nuclear masses; the centromedian and parafascicular nuclei are embedded within its laminae, and its perforating vessels are a favored site of hypertensive thalamic hemorrhage.",
     "contextNote": "Context record: white-matter lamina tagged on plate-thalamus-mid and plate-coronal-thalamus; not a functional nucleus — see the individual thalamic nucleus records.",
@@ -608,8 +608,8 @@
       }
     ],
     "levels": ["lvl-thalamus-mid"],
-    "origin3d": [0, 28.5, 0.5],
-    "size3d": [4.5, 5.5, 5.5],
+    "origin3d": [6.5, 28.5, 0.5],
+    "size3d": [1.2, 4, 4.5],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
     ]
@@ -624,7 +624,7 @@
     "laterality": "paired",
     "color": "#94a3b8",
     "function": "Silhouette envelope of the paired thalamic ovoids — each an egg-shaped mass about 3 cm long flanking the third ventricle, joined to its partner by the interthalamic adhesion in roughly 70% of brains — used for the 3D scene and the sagittal/coronal plate blocks; the individual nuclei are separate records.",
-    "contextNote": "Envelope/block tag for the thalamus silhouette on sagittal and coronal plates and in the 3D scene; not a nucleus record (see the 15 individual thalamic nucleus records).",
+    "contextNote": "Envelope/block tag for the thalamus silhouette on sagittal and coronal plates and in the 3D scene; not a nucleus record (see the 14 individual thalamic nucleus records).",
     "connections": {
       "afferent": [
         "All thalamocortical, corticothalamic, cerebellar, pallidal, retinal, auditory and somatosensory afferents listed in the individual nucleus records"

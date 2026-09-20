@@ -2,19 +2,19 @@
   {
     "id": "vent-lateral-ventricle",
     "name": "Lateral ventricle",
-    "synonyms": ["lateral ventricle (body)", "ventriculus lateralis", "paracoele"],
+    "synonyms": ["ventriculus lateralis", "paracoele"],
     "region": "telencephalon",
     "subdivision": "Lateral ventricles",
     "kind": "ventricle",
     "laterality": "paired",
     "color": "#06b6d4",
-    "function": "The paired C-shaped CSF space of the cerebral hemisphere: its body lies under the corpus callosum with the caudate above the thalamus, and its frontal, temporal and occipital horns extend into the three lobes around the thalamus. It receives CSF from the third ventricle through the interventricular foramen, hosts the choroid plexus that produces most of it, and drains through the atrium into the temporal horn and thence to the fourth ventricle — so its shape is a direct readout of the deep hemispheric anatomy.",
+    "function": "The paired C-shaped CSF space of the cerebral hemisphere: its body lies under the corpus callosum with the caudate above the thalamus, and its frontal, temporal and occipital horns extend into the three lobes around the thalamus. It hosts the choroid plexus that produces most of the CSF it contains and drains through the interventricular foramen of Monro into the third ventricle, and thence through the cerebral aqueduct into the fourth ventricle — the atrium and the temporal and occipital horns are terminal recesses of the same compartment, so its shape is a direct readout of the deep hemispheric anatomy.",
     "connections": {
       "afferent": [
-        "Interventricular foramen (of Monro) from the third ventricle — CSF inflow and the route by which intraventricular pressure is transmitted"
+        "Choroid plexus of the lateral ventricle (vent-choroid-plexus-lateral), which produces most of the CSF this space contains"
       ],
       "efferent": [
-        "Atrium → temporal horn → collateral trigone to the fourth ventricle via the cerebral aqueduct; the subarachnoid space is reached through the fourth-ventricle foramina",
+        "Interventricular foramen of Monro → third ventricle → cerebral aqueduct → fourth ventricle; the subarachnoid space is reached through the fourth-ventricle foramina",
         "Venous drainage of its walls through subependymal veins (thalamostriate, septal, caudate) into the internal cerebral vein and the great cerebral vein"
       ]
     },
@@ -65,12 +65,9 @@
     "function": "The anterior extension of the lateral ventricle into the frontal lobe, bounded laterally by the head of the caudate, medially by the septum pellucidum (with the contralateral horn across the midline) and above by the corpus callosum; the interventricular foramen opens at its posterior-medial floor. Its width is the standard index of ventricular enlargement, and the caudothalamic groove at its junction with the body is the site of germinal-matrix haemorrhage.",
     "contextNote": "Authored at a documented plane: the frontal horn is the segment of the lateral-ventricle cast anterior to the splitter plane z = +25 (measured from the baked cast), reproducing the segment's extent y 31.8…55.2, z 25.2…37.5, centroid (7.2, 42.6, 31) probed from tel-lateral-ventricle-l by the v8 content-authoring run. The bake splits the cast at z = +25 (frontal horn/body), z = −6 (body/atrium) and y = +22 (temporal horn), per docs/NEUROATLAS_V8_PLAN.md §1c/§4.5.",
     "connections": {
-      "afferent": [
-        "Interventricular foramen (of Monro) at its posterior floor, from the third ventricle",
-        "CSF secreted by the choroid plexus of the body, which begins behind the foramen"
-      ],
+      "afferent": ["None — the frontal horn is a blind anterior recess with no choroid plexus of its own"],
       "efferent": [
-        "Continuous posteriorly with the body and atrium; no choroid plexus lies within the frontal horn itself"
+        "Continuous posteriorly with the body; CSF leaves through the interventricular foramen of Monro in the posterior floor of the horn, into the third ventricle"
       ]
     },
     "bloodSupply": "Recurrent artery of Heubner and medial lenticulostriate branches of the ACA supply the caudate head forming its lateral wall; the anterior choroidal artery and the septal veins drain and supply the medio-inferior adjacent tissue. The ependyma is sustained by CSF.",
@@ -114,11 +111,11 @@
     "contextNote": "Authored at a documented plane: the temporal horn is the segment of the lateral-ventricle cast below the splitter plane y = +22 (measured from the baked cast), reproducing the segment's extent y 5.6…22, z −53.2…15.9, centroid (24.8, 15.4, −9.1) probed from tel-lateral-ventricle-l by the v8 content-authoring run. The hook of the horn around the pulvinar and its tip in the uncus are the landmarks the split preserves.",
     "connections": {
       "afferent": [
-        "Atrium (drains the body and occipital horn) — the temporal horn is the CSF exit route toward the fourth ventricle",
+        "Atrium (vent-lateral-ventricle-atrium) posteriorly",
         "Choroid plexus entering along the choroidal fissure from the atrium"
       ],
       "efferent": [
-        "CSF flows posteriorly from the temporal horn through the atrium to the cerebral aqueduct"
+        "Back to the atrium: the temporal horn is the terminal recess of the lateral ventricle and has no independent outlet"
       ]
     },
     "bloodSupply": "Anterior choroidal artery (internal carotid) supplies the choroid plexus of the temporal horn and the adjacent hippocampus/amygdala; the posterior cerebral artery (hippocampal and posterior choroidal branches) supplies the posterior part. The basal vein of Rosenthal drains the region.",
@@ -162,11 +159,9 @@
     "function": "The posterior extension of the lateral ventricle into the occipital lobe: its roof is formed by the tapetum (splenial fibres of the corpus callosum), its medial wall carries the calcar avis (the bulge of the calcarine fissure) and the bulb of the posterior horn, and its lateral wall carries the collateral trigone. It contains no choroid plexus, and it is the part of the ventricular system whose size varies most between individuals.",
     "contextNote": "Authored at a documented plane: the occipital horn is the segment of the lateral-ventricle cast posterior to the splitter plane z = −24 (atrium boundary, measured from the baked cast), reproducing the segment's extent y 18.1…37.5, z −53.2…−24.1, centroid (18.7, 25.3, −34.2) probed from tel-lateral-ventricle-l by the v8 content-authoring run.",
     "connections": {
-      "afferent": [
-        "Atrium (trigone) — CSF arriving from the body and from the temporal horn"
-      ],
+      "afferent": ["Atrium (trigone)"],
       "efferent": [
-        "CSF returns to the atrium and then to the cerebral aqueduct and fourth ventricle; the horn is a blind posterior recess"
+        "None — blind posterior recess: CSF returns to the atrium and leaves the ventricle only through the interventricular foramen of Monro"
       ]
     },
     "bloodSupply": "Lateral posterior choroidal artery branches (from the PCA) supply the adjoining plexus and walls of the trigone; the calcarine (PCA) branches and the splenial vessels supply the medial wall, with venous drainage through the internal cerebral vein and the basal vein.",
@@ -207,13 +202,13 @@
     "laterality": "paired",
     "color": "#06b6d4",
     "function": "The triangular confluence of the ventricular body, occipital horn and temporal horn, roofed by the tapetum and floored by the collateral trigone: it is the widest part of the lateral ventricle and the site of the glomus (the largest tuft) of the choroid plexus. Its medial wall carries the forceps major and the bulb of the corpus callosum.",
-    "contextNote": "Authored at a documented plane: the atrium is the segment of the lateral-ventricle cast between the splitter planes z = −6 (body boundary) and z = −24 (occipital-horn boundary) and above y = +22 (temporal-horn boundary), reproducing the segment's extent y 11.2…54.6, z −23.9…−6, centroid (17.2, 32.5, −14.8) probed from tel-lateral-ventricle-l by the v8 content-authoring run.",
+    "contextNote": "Authored at a documented plane: the atrium is the segment of the lateral-ventricle cast between the splitter planes z = −6 (body boundary) and z = −24 (occipital-horn boundary) with the temporal horn taken as the part of the cast that curves anteriorly and laterally below and in front of the atrium — the atrium keeps the tapered tail that crosses the y = +22 plane, reproducing the segment's extent y 11.2…54.6, z −23.9…−6, centroid (17.2, 32.5, −14.8) probed from tel-lateral-ventricle-l by the v8 content-authoring run.",
     "connections": {
       "afferent": [
         "Body of the lateral ventricle and the occipital horn converge here; the choroid plexus fills the trigone from the choroidal fissure"
       ],
       "efferent": [
-        "CSF leaves through the temporal horn toward the fourth ventricle; the plexus at the glomus absorbs and produces CSF and is the landmark for atrial surgery"
+        "CSF leaves through the body and the interventricular foramen of Monro; the temporal and occipital horns are terminal recesses. The plexus at the glomus absorbs and produces CSF and is the landmark for atrial surgery"
       ]
     },
     "bloodSupply": "Lateral posterior choroidal artery (posterior cerebral artery) supplies the glomus and the atrial plexus, with contributions from the anterior choroidal artery anteriorly and the medial posterior choroidal artery medially; venous drainage via the internal cerebral and basal veins.",
@@ -261,7 +256,7 @@
         "Choroidal fissure attachments through the tela choroidea, along which it enters each ventricle"
       ],
       "efferent": [
-        "CSF secreted into the lateral ventricles flows through the interventricular foramen to the third ventricle (and, from the atrium and temporal horn, posteriorly toward the aqueduct)",
+        "CSF secreted into the lateral ventricles flows through the interventricular foramen to the third ventricle — the atrium and temporal horn are the plexus-bearing terminal segments of that same lateral-ventricle compartment",
         "Venous drainage through choroidal veins into the internal cerebral, basal and great cerebral veins"
       ]
     },

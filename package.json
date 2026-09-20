@@ -28,7 +28,11 @@
     "verify:boundary-contract": "node scripts/verify/boundary-contract.mjs",
     "verify:a11y-contract": "node scripts/verify/a11y-contract.mjs",
     "verify:budget-report": "node scripts/verify/budget-report.mjs",
-    "verify:closure-bite": "node scripts/verify/closure-bite.mjs"
+    "verify:closure-bite": "node scripts/verify/closure-bite.mjs",
+    "verify:cranial-nerves": "node scripts/verify/cranial-nerves.mjs",
+    "verify:nerve-kind": "node scripts/verify/nerve-kind.mjs",
+    "verify:cranial-nerve-courses": "node scripts/verify/cranial-nerve-courses.mjs",
+    "verify:cranial-nerve-render": "node scripts/verify/cranial-nerve-render.mjs"
   },
   "dependencies": {
     "@react-three/drei": "9.114.3",

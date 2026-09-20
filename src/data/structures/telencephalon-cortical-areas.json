@@ -102,7 +102,7 @@
       }
     ],
     "levels": ["lvl-post-comm", "lvl-thalamus-mid", "lvl-tel-convexity"],
-    "origin3d": [16.4, 33, -50],
+    "origin3d": [14, 37.6, -47.9],
     "size3d": [6, 6, 6],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'"
@@ -164,7 +164,13 @@
   {
     "id": "ctx-a2",
     "name": "Secondary auditory cortex (A2, planum temporale)",
-    "synonyms": ["A2", "Brodmann area 42", "auditory association cortex", "planum temporale", "belt and parabelt auditory cortex"],
+    "synonyms": [
+      "A2",
+      "Brodmann area 42 (Heschl's gyrus belt)",
+      "auditory association cortex",
+      "planum temporale",
+      "belt and parabelt auditory cortex"
+    ],
     "region": "telencephalon",
     "subdivision": "Functional cortical areas",
     "kind": "context",
@@ -172,7 +178,7 @@
     "color": "#0ea5e9",
     "function": "Auditory association cortex on the planum temporale behind Heschl's gyrus: the belt and parabelt fields that compute what the primary area has already encoded — spectrotemporal patterns, pitch sequences, voice identity and the phonemic categories of speech. It sits at the posterior end of the superior temporal plane and, on the left, is the anatomical core of Wernicke's area; the leftward planum temporale asymmetry is one of the best-documented structural asymmetries of the human brain and the classic correlate of language lateralization.",
     "anchors": {
-      "gyrus": "planum temporale — the posterior superior temporal plane behind Heschl's gyrus (registered separately as surf-planum-temporale)",
+      "gyrus": "posterior superior temporal plane (planum temporale) behind Heschl's gyrus — a region-level view of the A2 belt, with the landmark registered separately as surf-planum-temporale",
       "mesh": "ctx-hemisphere-l"
     },
     "contextNote": "Authored record — schematic placement: BodyParts3D has no dedicated functional-area mesh (docs/NEUROATLAS_V8_PLAN.md §1e), so the area is not a dissection but a **view over its host gyrus**: the `anchors` object names the gyrus the area occupies and the baked mesh that currently stands in for it (`ctx-hemisphere-l`, whose two shells answer clicks as `ctx-cerebral-cortex` — SceneLayers.tsx `TEL_HEMISPHERE_RECORD_IDS`). The `origin3d` anchor was probed from that ribbon by the v8 content-authoring run. Highlighting the host gyrus (or a future per-gyrus mesh with a `surf-` id) is what makes the record visible in 3D.",
@@ -270,7 +276,12 @@
   {
     "id": "ctx-broca",
     "name": "Broca's area",
-    "synonyms": ["Broca area", "Brodmann areas 44 and 45", "motor speech area", "inferior frontal gyrus, opercular and triangular parts"],
+    "synonyms": [
+      "Broca area",
+      "Brodmann area 44 (pars opercularis), with area 45 (pars triangularis) as its anterior extension — the 44/45 border is debated",
+      "motor speech area",
+      "inferior frontal gyrus, opercular and triangular parts"
+    ],
     "region": "telencephalon",
     "subdivision": "Functional cortical areas",
     "kind": "context",
@@ -366,7 +377,7 @@
       }
     ],
     "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
-    "origin3d": [43.2, 66.5, 19],
+    "origin3d": [45.1, 69.2, -5],
     "size3d": [4, 5, 7],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
@@ -419,7 +430,7 @@
       }
     ],
     "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
-    "origin3d": [42.4, 68.2, -1.7],
+    "origin3d": [47.2, 67.3, -13.3],
     "size3d": [4, 5, 7],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Somatosensory Pathways'",
@@ -524,7 +535,7 @@
       }
     ],
     "levels": ["lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
-    "origin3d": [6, 82.8, 22.6],
+    "origin3d": [5.1, 106.6, 3.5],
     "size3d": [4, 5, 6],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",

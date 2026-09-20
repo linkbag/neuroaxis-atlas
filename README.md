@@ -6,7 +6,7 @@
 
 - **Realistic v2 rendering** — real-scan-derived brainstem/diencephalon/cerebellum envelopes, organically sculpted nuclei, CSF spaces, PBR lighting with SSAO/bloom/SMAA, and a High/Balanced quality toggle (details below).
 - **3D viewer** — orbit / zoom / pan; click-select any nucleus, tract, ventricle, or surface landmark; hover labels; global selection shared with every other panel.
-- **Two toggle rows — Areas and Systems (v11)** — the header's primary control is **two labelled rows of on/off toggle buttons**: **Areas** (Telencephalon · Diencephalon · Mesencephalon (midbrain) · Metencephalon (pons + cerebellum) · Myelencephalon (medulla) · Cerebral vasculature) and **Systems** (Nuclei · Tracts · Ventricles · Surface · Vessels · Context). Switching one **off excludes that slice of the atlas from the 3D view, the 2D live section *and* the PiP**; switching it on includes it — one visibility decision, three surfaces. **Reset** restores the documented default framing and **All** shows everything. The view-preset row is kept as the **shortcut row beneath them**; the per-region / per-kind checkboxes stay in the Legend and read the same two sets.
+- **Two toggle rows — Areas and Systems (v11)** — the header's primary control is **two labelled rows of on/off toggle buttons**: **Areas** (Telencephalon · Diencephalon · Mesencephalon (midbrain) · Metencephalon (pons + cerebellum) · Myelencephalon (medulla) · Cerebral vasculature) and **Systems** (Nuclei · Tracts · Ventricles · Surface · Vessels · Context · **Cranial nerves** — the seventh kind, added by v13). Switching one **off excludes that slice of the atlas from the 3D view, the 2D live section *and* the PiP**; switching it on includes it — one visibility decision, three surfaces. **Reset** restores the documented default framing and **All** shows everything. The view-preset row is kept as the **shortcut row beneath them**; the per-region / per-kind checkboxes stay in the Legend and read the same two sets.
 - **Region & system layers** — the Legend still toggles diencephalon / midbrain / pons / medulla / cerebellum **/ telencephalon / vasculature** and nuclei / tracts / ventricles / surface / context / **vessel** individually, plus the v10 division group with **Solo**; presets *Brainstem focus* (default), *Deep structures*, *Whole brain*, ***Vasculature***, *Cortex only*, *All*, *Nuclei*, *Tracts*, *Clinical motor* are unchanged.
 - **Exploded view** — slider fans nuclei radially off the brainstem axis while tracts and envelopes stay put.
 - **Clipping planes** — sagittal / coronal / transverse cuts over the full canonical range with a plane-helper toggle; the transverse slider snaps to plate levels.
@@ -18,7 +18,8 @@
 - **Measured imaging registration (v9)** — a re-runnable fitter (`node scripts/fit-imaging-affine.mjs --report`) that measures the atlas brain mask against each modality's own image mask and commits the residuals; **24 photograph plates corrected and applied (mean ROI IoU 0.074 → 0.447, 0 worsened)**, while the **CT and MRI corrections were measured and rejected** with their numbers stated in the manifests and in the UI — details in [v9](#v9--somatotopy-cortical-divisions-measured-imaging-registration-and-a-simulated-section-panel).
 - **Simulated-section panel + images-off (v9)** — the 3D tab's bottom-right panel is now a **2D simulated-section panel** (no clipped 3D geometry, no plane helper, **no real imagery ever**, resizable with the size remembered across reloads), and the *Plates* toolbar's **Simulated only** state is a first-class, persisted, clearly-worded "no imagery" mode — details in [v9](#v9--somatotopy-cortical-divisions-measured-imaging-registration-and-a-simulated-section-panel).
 - **Display round 2 (v10)** — the three 3D plane helpers now span the **whole `CLIP_BOUNDS` rectangle** of their two in-plane axes, so a cut through the hemispheres shows the cut plane where the cortex actually is instead of stopping at the brainstem; a **division-level visibility control** (Prosencephalon · Mesencephalon · Rhombencephalon · Cerebral vasculature) in the Legend with an on/off checkbox **and** a one-click **Solo** per division, so "everything on" stops being overwhelming; the simulated-section panel resizes from **all four corners**; the cortical-division layer stops painting slivers and floating wedges; and the *"Cerebral cortex (context envelope)"* **text label is dropped while its contour stays** — details in [v10](#v10--plane-helper-extent-division-visibility-four-corner-pip-resize-cortical-division-quality-and-the-cortex-label).
-- **Areas + Systems toggle rows (v11)** — the header's view-preset row is demoted to a shortcut row beneath **two rows of on/off toggles**: the big anatomical **Areas** (Telencephalon · Diencephalon · Mesencephalon · Metencephalon (pons + cerebellum) · Myelencephalon (medulla) · Cerebral vasculature — which together partition all 7 taxonomy regions and all 236 entries exactly once) and the orthogonal **Systems** axis (Nuclei · Tracts · Ventricles · Surface · Vessels · Context = `ALL_KINDS`). An area or system **off** is excluded from the 3D scene, the live section **and** the PiP by **one** visibility decision, with **Reset / All** restoring the documented default; the run also settled the two v10 carry-over defects (the cortical-division rule vs what the canvas paints; the sagittal plane-helper `u/v` convention) — details in [v11](#v11--the-areas--systems-toggle-rows-replace-the-view-preset-row).
+- **Areas + Systems toggle rows (v11)** — the header's view-preset row is demoted to a shortcut row beneath **two rows of on/off toggles**: the big anatomical **Areas** (Telencephalon · Diencephalon · Mesencephalon · Metencephalon (pons + cerebellum) · Myelencephalon (medulla) · Cerebral vasculature — which together partition all 7 taxonomy regions and all 236 entries exactly once) and the orthogonal **Systems** axis (Nuclei · Tracts · Ventricles · Surface · Vessels · Context = `ALL_KINDS`; **v13 adds a seventh, Cranial nerves**). An area or system **off** is excluded from the 3D scene, the live section **and** the PiP by **one** visibility decision, with **Reset / All** restoring the documented default; the run also settled the two v10 carry-over defects (the cortical-division rule vs what the canvas paints; the sagittal plane-helper `u/v` convention) — details in [v11](#v11--the-areas--systems-toggle-rows-replace-the-view-preset-row).
+- **Cranial nerves (v13)** — the twelve cranial nerves (**CN I Olfactory → CN XII Hypoglossal**) as first-class records under a new seventh **Systems** toggle, **Cranial nerves** (kind `nerve`, id prefix `nrv-`): each record carries its modality, its course *with the skull-base foramen it uses*, its function, links to the cranial-nerve **nuclei** the atlas already had, its blood supply or the vessel it is clinically related to, and clinical items that give the palsy picture **and its localisation**. They are placed in their **true** regions (telencephalon 2 · midbrain 2 · pons 4 · medulla 4) under one subdivision, `Cranial nerves`, so they group in the tree. **v13 shipped them as records with schematic placement markers; v14 replaced the markers with authored course geometry** — read the [v14 section](#v14--the-cranial-nerves-as-traveling-tracts) and its [honest limits](#v14-honest-limits-in-one-place) before quoting one in 3D — details in [v13](#v13--the-cranial-nerves-the-seventh-system).
 - **12 interactive 2D plates** — 9 transverse levels (pyramidal decussation → mid-thalamus), 1 midline sagittal profile, 2 coronal slices; every labeled region highlights on hover and selects everywhere on click; leader-line labels toggle on/off. **(v7 adds 3 more — 15 total:** axial +58, sagittal hemisphere, coronal fornix.)
 - **2D ↔ 3D sync** — selecting a plate (or level-ruler entry) moves the 3D transverse clipping plane to that level and reveals the plane helper; dragging the plane keeps the level ruler and plate sync indicator in step.
 - **Structure browser** — region → subdivision → structure taxonomy tree plus case-insensitive search over names and synonyms (try "STN", "MLF", "pulvinar").
@@ -1094,6 +1095,200 @@ class in [the plan's §7.4](docs/SWARM_V11_PLAN.md): the item-1 convention is fi
 divergence is retired with the two-ribbon numbers above; the audit-side end-of-run shape reading is unchanged by
 v11 and remains orchestrator-verified. Nothing was deleted or weakened to make a failure disappear.
 
+## v13 — the cranial nerves, the seventh system
+
+Plan and closure: [`docs/SWARM_V13_PLAN.md`](docs/SWARM_V13_PLAN.md) (the run's executable contract is
+[`PLAN.md`](PLAN.md)). Every number below was printed by the integrator's own non-browser sweep, gate by gate;
+the full table with exit codes is in that file's §9.
+
+The ask was to add a **Cranial nerves** slice to the Systems row — which meant **creating the data slice first,
+because it did not exist**: the taxonomy already carried the cranial-nerve *nuclei* (17 rows under
+`Cranial nerve nuclei`) and the *exit landmarks* (`surf-cn3-exit` … `surf-cn12-exit`), but never the twelve
+nerves as records, and there was no kind to slice them by. Two things shipped: a seventh **kind**, `nerve`, and
+**twelve records**.
+
+### 1. The twelve records, and where each one lives
+
+One record per nerve, in its **true region** (the taxonomy is the authority) under a single subdivision name,
+**`Cranial nerves`**, so all twelve group together inside each region in the tree. `course` is the one string
+carrying the cisternal course **and the skull-base foramen**; `connections` **link the ids that already exist**
+rather than paraphrasing them.
+
+| # | record | region | course → foramen | nuclei / ids it links | geometry |
+| --- | --- | --- | --- | --- | --- |
+| I | `nrv-cn1-olfactory` — CN I Olfactory nerve | telencephalon | olfactory fila → **cribriform plate** | `nuc-amygdala`, `nuc-hippocampus`, `nuc-md` | schematic marker, `meshes:false` |
+| II | `nrv-cn2-optic` — CN II Optic nerve | telencephalon | optic canal | `tract-optic-nerve`, `ctx-optic-chiasm`, `tract-optic-tract`, `nuc-lgn`, `nuc-pretectal`, `nuc-suprachiasmatic` | schematic marker, `meshes:false` (the v8 optic-pathway **meshes** belong to those three records, not to this one) |
+| III | `nrv-cn3-oculomotor` — CN III Oculomotor nerve | midbrain | interpeduncular cistern → **superior orbital fissure** | `nuc-oculomotor`, `nuc-edinger-westphal`, `nuc-pprf`, `nuc-pretectal` | schematic marker, `meshes:false` |
+| IV | `nrv-cn4-trochlear` — CN IV Trochlear nerve | midbrain | dorsal exit below the inferior colliculus → **superior orbital fissure** | `nuc-trochlear`, `nuc-pprf`, `nuc-mesencephalic-v` | schematic marker, `meshes:false` |
+| V | `nrv-cn5-trigeminal` — CN V Trigeminal nerve | pons | prepontine cistern → **foramen ovale** (V3; V1/V2 superior orbital fissure / foramen rotundum) | `nuc-trigeminal-motor`, `nuc-principal-sensory-v`, `nuc-mesencephalic-v`, `tract-mesencephalic-v`, `nuc-spinal-trigeminal`, `nuc-vpm` | schematic marker, `meshes:false` |
+| VI | `nrv-cn6-abducens` — CN VI Abducens nerve | pons | prepontine cistern, **Dorello canal** → **superior orbital fissure** | `nuc-abducens`, `nuc-oculomotor`, `nuc-pprf`, `nuc-vestibular-medial` | schematic marker, `meshes:false` |
+| VII | `nrv-cn7-facial` — CN VII Facial nerve | pons | cerebellopontine angle → **internal acoustic meatus**, then stylomastoid foramen | `nuc-facial`, `nuc-superior-salivatory`, `nuc-solitarius-rostral`, `nuc-spinal-trigeminal`, `nuc-vpm` | schematic marker, `meshes:false` |
+| VIII | `nrv-cn8-vestibulocochlear` — CN VIII Vestibulocochlear nerve | pons | cerebellopontine angle → **internal acoustic meatus** | `nuc-vestibular-superior/-medial/-lateral/-inferior`, `nuc-cochlear-ventral/-dorsal`, `nuc-superior-olivary`, `nuc-inferior-colliculus`, `nuc-mgn` | schematic marker, `meshes:false` |
+| IX | `nrv-cn9-glossopharyngeal` — CN IX Glossopharyngeal nerve | medulla | postolivary sulcus → **jugular foramen** | `nuc-ambiguus`, `nuc-solitarius-caudal`, `nuc-solitarius-rostral`, `nuc-dmv`, `nuc-spinal-trigeminal` | schematic marker, `meshes:false` |
+| X | `nrv-cn10-vagus` — CN X Vagus nerve | medulla | postolivary sulcus → **jugular foramen** | `nuc-dmv`, `nuc-ambiguus`, `nuc-solitarius-caudal`, `nuc-solitarius-rostral` | schematic marker, `meshes:false` |
+| XI | `nrv-cn11-accessory` — CN XI Accessory nerve | medulla | cranial root from the postolivary sulcus → **jugular foramen**, plus a stated spinal-cord origin | `nuc-ambiguus` | schematic marker, `meshes:false` |
+| XII | `nrv-cn12-hypoglossal` — CN XII Hypoglossal nerve | medulla | preolivary sulcus → **hypoglossal canal** | `nuc-hypoglossal`, `nuc-medullary-reticular`, `nuc-inferior-olive-principal`, `nuc-solitarius-caudal` | schematic marker, `meshes:false` |
+
+Measured by `npm run verify:cranial-nerves` (**451 assertions · 0 failed**): 12 registry rows and 12 authored
+records of kind `nerve`, the numbers I…XII each exactly once, regions medulla 4 · pons 4 · midbrain 2 ·
+telencephalon 2, **24** level-anchor references all resolving, **131** id tokens inside the records with **0**
+unresolved (**56** of them nucleus/tract records), **50** clinical items (each nerve ≥ 2, most 4–5), **13,465**
+content words, and **12/12** records with a curated web reference. CN II sits in `telencephalon` on purpose: the
+three committed v8 optic-pathway rows do, so the registry keeps **one** answer for optic-nerve region.
+
+### 2. The seventh kind — the `nerve` contract
+
+| where | what it is now |
+| --- | --- |
+| `src/types.ts` `Kind` · `src/data/load.ts` `ALL_KINDS` · `scripts/validate-data.mjs` `KINDS` | **`nerve`**, appended last — 7 kinds. The Systems row renders `ALL_KINDS.map(…)`, so the button exists **because** the kind exists; the store boots it **on** (it throws at module load if a non-telencephalon row's kind is off) |
+| `scripts/validate-data.mjs` `SLUG_RE` · `PREFIX_KIND` | `/^(nuc\|tract\|vent\|surf\|vasc\|ctx\|nrv)-[a-z0-9-]+$/` and `nrv → nerve`. The prefix follows the kind in all 248 rows (0 contradictions); the three near-misses `cn3-oculomotor`, `nrv-CN3`, `nerve-cn3` are still rejected |
+| `Header.tsx` `KIND_LABELS` | label **Cranial nerves**; accessible name `Cranial nerves — show/hide the nerve system (nerve)` (visible text is a prefix of it, WCAG 2.5.3) |
+| `KindGlyph.tsx` · `NucleusMesh.tsx` | glyph `✦`; `KIND_OPACITY.nerve = 1` (opaque, so a marker is pickable) and `hintForKind('nerve') = 'nucleus'` (the gray-matter preset of a schematic placement) |
+| `Legend.tsx` · `styles/tokens.css` | palette swatch **Cranial nerves** on `var(--kind-nerve)` = `#14b8a6` — the same teal as `--kind-cn-nucleus`, so "the nuclei of the twelve" and "the twelve" read as one family |
+
+**What the toggle actually reaches** (all measured, `verify:nerve-kind` §3–§6 and `verify:area-toggles` §9):
+with `nerve` **on**, all 12 records are admitted to the 3D scene (24 drawn bodies — every nerve is paired) and
+0 of 12 tree rows are dimmed; with `nerve` **off**, **0** nerve records are admitted, the other kinds are
+untouched, all **12 of 12** tree rows dim, the `Cranial nerves` button flips to `aria-pressed="false"` (the
+other six buttons' markup byte-identical), and clicking it again restores the boot rendering byte for byte.
+
+### v13 honest limits, in one place
+
+| Item | Limit (with its number) |
+| --- | --- |
+| 1 · the twelve nerves are **records with schematic placement markers, not meshes** | No cranial-nerve mesh is committed and none was added. Each record is `meshes: false` with a **sized schematic ellipsoid** at its authored `origin3d`/`size3d` inside the clip box — the same mechanism the hippocampal subfields (`nuc-subiculum`) and the lenticulostriate artery already use — and each record's own `contextNote` says exactly what geometry stands behind it and which committed landmark/envelope it anchors against |
+| 2 · **why there is no mesh** | There is nothing to bake: `assets-src/` (`bp3d/canonical/`, 86 OBJs) holds **no cranial-nerve element** beyond the already-baked CN II trio (`tract-optic-nerve-*`, `ctx-optic-chiasm-*`, `tract-optic-tract-*`), and `bp3d/raw*` holds only `FJ*.obj` sources. The GLB budget is **13.82 MiB of a 14 MiB cap — 0.18 MiB of headroom** — and `verify:anatomy` **freezes the existing bounding boxes**, so a new GLB would be both unaffordable and a deliberate re-freeze |
+| 3 · the **2D live section and the PiP do not react to this toggle** — **SUPERSEDED BY v14** | *This was true at v13 and is stated here as the record of it.* `SECTION_PARTS` is one entry per committed GLB (138) and **0 of them are of kind `nerve`**, so at v13 `isPartVisible` returned the same 138 parts with the kind on and off. **v14 changed this**: the canvas now draws 138 committed parts + **12 procedurally generated** nerve parts, the *Cranial nerves* toggle flips exactly those 12 (measured: on 12/12, off 0/12), and the worker computes their contours — see [v14](#v14--the-cranial-nerves-as-traveling-tracts) |
+| 4 · CN II's meshes belong to other records | `tract-optic-nerve`, `ctx-optic-chiasm` and `tract-optic-tract` keep their v8 geometry; the new `nrv-cn2-optic` is the **nerve as a record** and is mesh-less like the other eleven — the 3D view shows the pathway, not a second copy of it |
+| 5 · what is **not** verified here | `verify:anatomy` (27/27) and `verify:imaging-fit` cannot run in the agent sandbox — both die on `spawnSync … EPERM` **before any assertion** (0 assertions run), red at base and in no v13 task's write scope; `verify:audit` / `verify:acceptance` / `verify:browser` need Chrome, which exits **4** here. So "the button is on screen and the markers are drawn" is **orchestrator-browser-verified only**; what this run proves is the shipped data, the shipped decision chain, the rendered DOM contract and the wired handlers |
+| 6 · a pre-existing header a11y defect is pinned, not hidden | The four All-module buttons show `All on` / `All off` while their accessible names are `All areas on — …` / `All areas off — …`, so the visible text is not contained in the name (WCAG 2.5.3). `Header.tsx` is outside this run's write scope, so `verify:area-toggles` asserts **exactly those four violations with their exact strings** — a pinned exemption that **fails the moment someone fixes the labels**, which routes the fix instead of burying it |
+
+### Verification (v13 close-out, non-browser)
+
+| Gate | Result |
+| --- | --- |
+| `npm run validate` | **exit 0** — 0 errors / 0 warnings · **248 registry entries** (0 awaiting a record) · **7 kinds**: nucleus 88 · tract 53 · ventricle 11 · surface 25 · vessel 14 · context 45 · **nerve 12** · 19 files / 225 records · 23 tracts · 26 syndromes · 15 plates · 17 levels |
+| `npm run check` | **exit 0** (`tsc --noEmit` — the five exhaustive `Record<Kind, …>` maps are the coverage proof) |
+| `npm run build` | **exit 0** (`✓ built in 9.57s`) |
+| `npm run verify:pipeline` | **exit 0** — 138/138 parts · 599,204 triangles · 386 loops across 13 planes · 0 problems |
+| `npm run verify:plane` / `verify:plane-helper-extent` | **exit 0** — 10,827 assertions · 206/0 |
+| `npm run verify:somatotopy` / `verify:cortical-lobes` | **exit 0** — 45/0 · 564/564 |
+| `npm run verify:pip-contract` / `verify:division-toggles` | **exit 0** — 187/0 · 251/0 |
+| `npm run verify:view-filter-consistency` | **exit 0** — 102/102 assertions, 7 regions × 7 kinds (the nerve kind included), 548 cross-surface comparisons |
+| `npm run verify:area-toggles` | **exit 0** — **437 assertions · 0 failed** in 14 groups. **Red at base (225 passed / 25 failed)** on the pre-v12 header contract; re-pointed by the review task, and the product was **not** bent back (no preset row, no `data-preset`, no `data-header-action`) |
+| `npm run verify:audit-checks` | **exit 0** — 92 passed · 0 failed · 7 informational · 9 groups |
+| `npm run verify:closure-bite` | **exit 0** — 7/7 mutations caught, shared tree byte-identical, restored copy re-runs 92/0 |
+| `npm run verify:boundary-contract` / `verify:a11y-contract` | **exit 0** — 22/0 · 38/0 (the a11y gate re-run after `build`, so its shipped-bundle spot check ran) |
+| `npm run verify:budget-report` | **exit 0** — 599,204 tris · GLB 13.82 MiB (cap 14, headroom 0.18) · imaging 9.02 MiB (cap 10) |
+| `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | **exit 0** — v4 imaging QA PASSED · `verify-imaging-v4b: OK` (22/22 cryosections re-decoded) |
+| **`npm run verify:cranial-nerves`** *(new gate)* | **exit 0** — **451 assertions · 0 failed**, 16 printed measurements: 12/12 records, `meshes:false` 12/12, placements inside `CLIP_BOUNDS` 12/12, manifest parts of kind `nerve` **0**, manifest still 138 |
+| **`npm run verify:nerve-kind`** *(new gate)* | **exit 0** — **79 passed · 0 failed** in 9 groups; the bite catches **8/8** defective kind tables by name (a check that cannot fail is not evidence) |
+| `npm run verify:anatomy` | **exit 1 — environment, not product** — `spawnSync powershell … EPERM` before any verdict; the 27 items are **not** claimed here |
+| `npm run verify:imaging-fit` | **exit 1 — environment, not product** — `FAIL the fitter could not be re-run: spawnSync node.exe EPERM` (0 assertions run) |
+| `npm run verify:audit` / `verify:acceptance` / `verify:browser` | **not run and not claimed** — Chrome cannot start in the sandbox (exit **4**, "no check was run"); orchestrator lane |
+
+The v11 carry-over defect (the canvas painting divisions the rule excludes at y = 6/26/30/32) was re-measured
+with the canvas' **own** `buildLobeLayer` over both committed ribbons: **parity 6/6** — y=6 paints 5 divisions,
+**not** NONE — so its measured cause was the v11 reading's left-ribbon-only slice, and nothing in the product
+was changed to satisfy it.
+
+## v14 — the cranial nerves as traveling tracts
+
+Plan and closure: [`docs/SWARM_V14_PLAN.md`](docs/SWARM_V14_PLAN.md) (the run's executable contract is
+[`PLAN.md`](PLAN.md)). Every number below was printed by the integrator's own non-browser sweep, gate by gate;
+the full table with exit codes is in that file's §8.
+
+v13 added the twelve cranial nerves **as records**, each with a schematic ellipsoid placement marker — which is
+what you saw as **blobs**. v14 gives them **real course geometry**: a cranial nerve is a bundle that leaves the
+brainstem at a **root**, crosses the **cistern**, traverses a named **skull-base foramen** and reaches its
+**target**, so it is drawn as a Catmull-Rom path with a radius through the project's existing `TractTube`
+machinery — in the 3D view **and** in the 2D live section. **The blobs are gone, not stacked on.**
+
+### 1. The twelve courses, root to target (measured)
+
+`len au` / `len mm` are the published **chord** length (straight segments between waypoints); `drawn` is the
+Catmull-Rom arc the tube actually integrates. The **root** column is the course's first waypoint: the committed
+nucleus `origin3d` for the ten nerves that have a brainstem root, the epithelium for CN I, the orbital end of
+the committed optic-nerve chain for CN II.
+
+| nerve | root au | foramen | target | wp | len au / mm | drawn au / mm | r au | calibre mm → r |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| I Olfactory | [11, 9, 66] | cribriform plate | olfactory bulb → tract → primary olfactory cortex | 5 | 18.51 / 22.2 | 18.52 / 22.2 | 0.71 | 1.7 |
+| II Optic | [26, 16, 57] | optic canal | optic chiasm → tract → LGN | 5 | 42.42 / 50.9 | 42.69 / 51.2 | 1.67 | 4.0 |
+| III Oculomotor | [0, 14, −4] | superior orbital fissure | recti, inferior oblique, levator palpebrae; ciliary ganglion | 6 | 44.23 / 53.1 | 44.63 / 53.6 | 1.25 | 3.0 |
+| IV Trochlear | [0, 8, −5] | superior orbital fissure | contralateral superior oblique | 7 | 41.21 / 49.5 | 42.10 / 50.5 | 0.42 | 1.0 |
+| V Trigeminal | [4, −8, 4] | foramen ovale | face and anterior scalp; muscles of mastication, tensor tympani, mylohyoid | 7 | 30.64 / 36.8 | 30.85 / 37.0 | 1.88 | 4.5 |
+| VI Abducens | [1.5, −18, −4] | superior orbital fissure | lateral rectus | 8 | 51.85 / 62.2 | 52.44 / 62.9 | 0.79 | 1.9 |
+| VII Facial | [4, −19, −2] | internal acoustic meatus | muscles of facial expression, stapedius, stylohyoid, taste | 8 | 52.94 / 63.5 | 54.88 / 65.9 | 0.79 | 1.9 |
+| VIII Vestibulocochlear | [3.5, −14, −5.5] | internal acoustic meatus | cochlear and the four vestibular nuclei | 8 | 48.64 / 58.4 | 49.56 / 59.5 | 1.17 | 2.8 |
+| IX Glossopharyngeal | [3.5, −31, −4] | jugular foramen | stylopharyngeus, parotid, carotid body and sinus, taste | 7 | 40.82 / 49.0 | 41.56 / 49.9 | 0.83 | 2.0 |
+| X Vagus | [2, −32, −7] | jugular foramen | pharyngeal and laryngeal muscles, thoracic and abdominal viscera | 8 | 44.31 / 53.2 | 44.95 / 53.9 | 1.00 | 2.4 |
+| XI Accessory | [3.5, −31, −4] | jugular foramen | sternocleidomastoid and trapezius | 8 | 48.93 / 58.7 | 49.57 / 59.5 | 0.63 | 1.5 |
+| XII Hypoglossal | [0, −31, −4] | hypoglossal canal | intrinsic tongue muscles, genioglossus, hyoglossus, styloglossus | 7 | 36.11 / 43.3 | 36.44 / 43.7 | 0.75 | 1.8 |
+| **total** | 84 waypoints | 12 named foramina | — | **84** | **500.62 / 600.7** | **508.20 / 609.8** | 0.42–1.88 | **r = d ÷ 2.4** at 1 au = 1.2 mm |
+
+**Anchored, not free-hand.** Ten of the twelve carry their own committed exit landmark (the `surf-cn3-exit` …
+`surf-cn12-exit` surface records) as a **literal waypoint at 0.000 au**, and all ten start on the committed
+nucleus `origin3d` they name (CN XI starts on `nuc-ambiguus`), also at **0.000 au**. The radii are converted
+from **cisternal-segment calibres** (dissection / high-resolution-MRI ranges, with the mm figure and the range
+both in `docs/SWARM_V14_PLAN.md` §2) and are genuinely non-uniform — **0.42 au (CN IV) to 1.88 au (CN V)**.
+Every waypoint is inside `CLIP_BOUNDS`, minimum clearance **6.00 au** (CN I).
+
+### 2. One body per nerve — the blob is retired, not covered
+
+The structure pass returns `null` for any record that has a course, so a nerve with a course stops drawing its
+schematic marker: the shipped XOR table prints `tube = yes` **and** `marker would-draw = no` **and**
+`section part = yes` for all twelve. `hasNerveCourse(id)` is true for exactly the 12 course ids and false for a
+real tract. The honesty statement that a course is an **authored path, not a segmented scan, ships in each
+course's `anchorNote` (432–692 characters) and the gate asserts it in both halves.
+
+### 3. Both surfaces — 3D tubes and 2D procedural contours
+
+| surface | what it shows | the evidence |
+| --- | --- | --- |
+| **3D scene** | one tapered tube per nerve (12), mounted by the `SceneLayers` nerve-course pass | the kind truth table, executed through the **shipped** `isTractVisible`: all on → 23 tracts + **12/12** nerves; **tract kind off → 0/23 tracts but 12/12 nerves**; **nerve kind off → 23/23 tracts but 0/12 nerves**; both off → 0 + 0; midbrain area off → 19 tracts + 10 nerves. **The wrong-toggle trap the run was warned about is fixed at the line that held it** — `isTractVisible` now reads the record's **own registry kind** instead of the literal `'tract'` |
+| **2D live section + PiP** | **route (a): procedurally generated parts.** `registryNerveParts()` feeds the 12 tubes through the **existing** `registryPartFromGeometry(meta, geometry)` adapter, so the 3D tube and the 2D contour are the **same geometry by construction** | 12 registry parts (803 verts / 1,440 tris each); the **shipped worker machinery** (`partBounds` / `boundsMayCut` / `extractContours`) run over them: **38 planes → 121 closed loops, 0 non-finite**; the courses gate sweeps three orthogonal plane sets per nerve: **576 crossing planes → 689 contour loops**. `partsForCanvas()` = 138 committed + 12 procedural = **150**, and the *Cranial nerves* toggle flips exactly those 12 (`verify:area-toggles` §11: on **12/12**, off **0/12**, committed admissions byte-identical) |
+
+**Why not bake the tubes into GLBs.** Measured: one tube at `TractTube`'s 72 × 10 sweep is 803 verts /
+1,440 tris = **33.5 KiB** raw / **14.7 KiB** quantized; the twelve are **0.3929 MiB raw / 0.1724 MiB
+quantized** (`0.3448 MiB` for 24, both sides). The binding budget is the `src/assets/anatomy/` directory —
+**13.8914 MiB of the 14 MiB cap, 140 files, headroom 0.1086 MiB** — so the bake misses by **1.6× at best**
+and by **3.6×** at the honest reading, before the JSON chunk or any left/right duplication. Route (a) costs
+**0 bytes**: the manifest is still **138 parts / 599,204 tris**, `Σ stat(parts[].file)` is still
+**14,486,228 B**, and no committed GLB, manifest row or bounding box moved.
+
+### v14 honest limits, in one place
+
+| Item | Limit (with its number) |
+| --- | --- |
+| 1 · **the courses are AUTHORED PATHS** | Every one of the twelve is a path authored through documented landmarks — root (a committed nucleus `origin3d`), cisternal segment, named skull-base foramen, target — with a radius converted from a stated calibre. **They are not segmented scans, not tractography, and not a dissection.** No skull-base, dural-sinus or orbit mesh is committed, so **every foramen position is authored from anatomy**, not measured from geometry; each course's `anchorNote` says so in the record itself |
+| 2 · **CN II is stated separately — and it is the one place the rule is not met** | `nrv-cn2-optic` is the one nerve with committed geometry behind it (the v8 `tract-optic-nerve` / `ctx-optic-chiasm` / `tract-optic-tract` meshes). Its authored tube **overlaps the baked `tract-optic-nerve-l` GLB** (x 26.2 au, y 1.9 au, z 36.8 au of overlap), and the mesh belongs to a **different** record, so both bodies render. That is a second optic nerve, and the fix is a data decision carried forward in `docs/SWARM_V14_PLAN.md` §6.1 — it was **not** quietly papered over. Its chain is anchored on the committed optic-nerve waypoints (0.000 au at both ends, worst interior 6.595 au), **not** on the `surf-optic-chiasm` landmark its own `anchorId` still names (which disagrees with the mesh by ~7 au) |
+| 3 · **CN I is stated separately** | CN I has **no brainstem root and no exit landmark** (`surf-cn1-exit` does not exist and no olfactory nucleus record exists). Its chain runs the other way — epithelium **[11, 9, 66]** → bulb/tract → and **ends** on its own committed `origin3d` **[8, 12, 48]** (0.000 au). Nothing behind the anterior end is committed geometry, which the gate prints rather than hides |
+| 4 · **the twelve records' own `contextNote` still describes the retired ellipsoid** | The ellipsoid no longer renders, but the note still reads "the ellipsoid at `origin3d` … is a SCHEMATIC placement". `src/data/structures/*-cranial-nerves.json` was outside this run's write scope, so it is reported, not silently edited: the **data model** the note describes (`meshes:false`, sized placement, no manifest part) is still accurate, and the authored-path statement ships in the course's `anchorNote` |
+| 5 · **the published length understates the drawn tube by 1.5 %** | The gate prints the chord sum **500.62 au = 600.74 mm**; the drawn Catmull-Rom tube is **508.20 au = 609.84 mm**. Both are published above — the earlier plan estimate (475.79 au) is superseded |
+| 6 · **what is not verified here** | `verify:anatomy` (27/27) and `verify:imaging-fit` die on the sandbox's piped-child-stdio denial **before any verdict** (red at base, 0 assertions); the blocked anatomy measurement re-run directly returns **14,566,178 B**, i.e. unchanged. **Chrome cannot start here**, so *"the tubes are painted on screen"*, *"the button toggles them on screen"*, *"the section and the PiP paint the contours"* and *"click-select works"* are **orchestrator-browser-verified only** — the browser proof of 2D parity is `verify:audit` **R3b**, re-pointed by this run's review to assert the Plates hash **changes** and round-trips |
+
+### Verification (v14 close-out, non-browser)
+
+| Gate | Result |
+| --- | --- |
+| `npm run validate` | **exit 0** — 0 errors / 0 warnings · 248 registry entries · 7 kinds (nerve 12) · 19 files / 225 records · 23 tracts |
+| `npm run check` · `npm run build` | **exit 0** · **exit 0** (`✓ built in 9.08s`) |
+| `npm run verify:pipeline` | **exit 0** — 138/138 parts · 599,204 triangles · 386 loops across 13 planes · 0 problems |
+| `npm run verify:plane` / `verify:plane-helper-extent` | **exit 0** — 10,827 assertions · 206/0 |
+| `npm run verify:somatotopy` / `verify:cortical-lobes` | **exit 0** — 45/0 · 564/564 |
+| `npm run verify:pip-contract` / `verify:division-toggles` | **exit 0** — panel contract PASSED · 251/0 |
+| `npm run verify:view-filter-consistency` | **exit 0** — 102/102 · 138 parts · 225 structures · 23 tracts · **7 regions × 7 kinds** · 548 cross-surface comparisons |
+| `npm run verify:area-toggles` | **exit 0** — **455 assertions · 0 failed · 14 groups**, including §11's 2D nerve parity (on 12/12, off 0/12) and the dead-click guard (4/4 mutated variants caught) |
+| `npm run verify:audit-checks` / `verify:closure-bite` | **exit 0** — 92/0 · 7/7 mutations caught, shared tree byte-identical |
+| `npm run verify:boundary-contract` / `verify:a11y-contract` | **exit 0** — 22/0 · 38/0 |
+| `npm run verify:budget-report` | **exit 0** — 599,204 tris · parts **13.82 MiB** · tree **13.89 MiB / 140 files** (cap 14) · imaging 9.02 MiB |
+| `npm run verify:cranial-nerves` / `verify:nerve-kind` | **exit 0** — 451/0 · 79/0 |
+| **`npm run verify:cranial-nerve-courses`** *(new)* | **exit 0** — **220 assertions · 0 failed**, the twelve-row probe table, 84 waypoints, 10/10 exit landmarks at 0.000 au, 12/12 foramina named, min clearance 6.00 au, **689 worker contour loops** |
+| **`npm run verify:cranial-nerve-render`** *(new)* | **exit 0** — **47/47 assertions**, 3D tubes 12/12 with the four-state toggle table, 2D parts 12, **121 contour loops over 38 planes**, XOR-with-the-marker 12/12, payload unchanged |
+| `npm run verify:anatomy` / `verify:imaging-fit` | **exit 1 — environment, not product** (`spawnSync powershell` / `node.exe` EPERM, 0 verdicts; the anatomy measurement re-run directly = 14,566,178 B) |
+| `npm run verify:audit` / `verify:acceptance` / `verify:browser` | **not run and not claimed** — Chrome cannot start in the sandbox; orchestrator lane |
+
 ## Scripts
 
 | Script | What it does |
@@ -1117,6 +1312,10 @@ v11 and remains orchestrator-verified. Nothing was deleted or weakened to make a
 | `npm run verify:division-toggles` | **v10 division-visibility gate, no browser** (`scripts/verify/division-toggles.mjs`, new): 250 assertions in 10 groups, importing the **shipped store** through an in-process TS/TSX loader (the `audit-checks.test.mjs` technique) — the exported contract the Legend calls; the four divisions equal the documented ones and **partition** `ALL_REGIONS` (no region in two divisions, none unreachable); a fresh boot still reports `brainstem-focus` with the vasculature region off and the vessel kind on; `solo` leaves exactly one division's regions on for all four (action + pure function, idempotent, printed per division); the checkbox path is a union that is idempotent, empties a complete division and restores the previous set exactly; the arteries are never swept into a division (7×4 matrix printed); kinds/hidden/emphasis set-equal after every call; a **real `react-dom` render** yields 4 checkboxes + 4 solo buttons with distinct accessible names above the region rows; and group 10 drives the **shipped handlers** in an isolated copy capturing 7 states (boot `[true,true,true,false]` → solo(mesencephalon) → checkbox off/on → vascular checkbox ± → solo(prosencephalon)). Bite: four injected defects each caught by a named check, plus a mutated `DIVISIONS` table (arteries folded into the hindbrain) tripping the store's own load-time assertion |
 | `npm run verify:area-toggles` | **v11 Areas/Systems toggle-row gate, no browser** (`scripts/verify/area-toggles.mjs`, new): **331 assertions in 10 groups**, importing the **shipped store and the shipped `Header.tsx`** through the in-process TS/TSX loader the other Node gates use — the exported area contract the header calls (`AREAS`, `areaRegions`, `areasOf`, `areaLayersOn`, `ALL_ON_LAYERS`); the **Area partition printed as a table** (button · regions · taxonomy rows · boot state: 85/39/25/40/33/14 = 236 over 7 regions owned exactly once, no region in two areas and none unreached); the rhombencephalon split proven at the vesicle boundary (metencephalon + myelencephalon = the division, medulla alone); the Systems row = `ALL_KINDS` in order with its own row counts (88/53/11/25/14/45 = 236); the shipped `AREAS` equal to the table **reconstructed from `DIVISIONS`** and to the region sets parsed out of the store's own source text (a hardcoded list that drifts fails); every area toggle adding/removing **exactly** its regions through the real store action *and* the real `onClick` (a child probe fires all twelve buttons), leaving kinds/hidden/emphasis set-equal; the unchanged default (`viewPresetOf(DEFAULT_LAYERS) === 'brainstem-focus'`, boot row `[true,true,true,true,true,false]`); Reset reproducing the default exactly from a dirty state and after All; a real `react-dom` render of the header (6 + 6 + 9 buttons, labelled groups, distinct accessible names, visible text a prefix of each name, no `div` impersonating a button); and a bite half — four injected defects caught by named checks plus two load-time mutations that make the store exit 1 naming the partition defect |
 | `npm run verify:view-filter-consistency` | **v11 one-visibility-decision gate, no browser** (`scripts/verify/view-filter-consistency.mjs`, new): **100/100 assertions** — sweeps **138 section parts · 213 structure records · 23 tracts · 10 envelope slots · 2 ghost shells** through **7 areas × 6 systems** in 4 states each, comparing the 2D/PiP decision (`isPartVisible`) with the 3D primitive (`layersAdmit`) and joining both surfaces on the taxonomy id: **548 cross-surface comparisons and 0 disagreements**, area-off/kind-off/both-off concealing **every** owned body on every pass, and **0 of 138** parts with an undecidable region (the silent-bypass class). It prints the per-area and per-system hide tables, asserts `isPartVisible` is the **only** layer read in `SectionCanvas.tsx` and that `SceneLayers.tsx`'s component body holds **zero** direct region/kind reads, executes the shipped `buildLobeLayer` over **both** committed ribbon GLBs (division parity **5/5** planes; area off ⇒ 0 ribbons / 0 divisions even with the unfiltered catalogue, 75 `Path2D`s / 2233 `lineTo` proving the pass stroked), and bites: removing the canvas' layer gate in a scratch copy paints 5 divisions with the telencephalon off where the shipped pass paints 0, and a canvas-private rule filter diverges from the shared rule (`SectionCanvas.tsx` SHA-256 identical before/after) |
+| `npm run verify:cranial-nerves` | **v13 cranial-nerve records gate, no browser** (`scripts/verify/cranial-nerves.mjs`, new): **451 assertions · 0 failed · 16 printed measurements**, reading the twelve records through the **shipped data layer** (`src/data/load.ts` — the real selector, not a re-typed copy), `CLIP_BOUNDS` from the shipped runtime declaration, the manifest from `src/assets/anatomy/anatomy-manifest.json`, and the id contract **parsed out of `scripts/validate-data.mjs` and executed**, so the gate cannot drift from the regex that accepts the ids. It counts what no other gate counts: 12 taxonomy rows and 12 authored records of kind `nerve` (no registry-only stub), each nerve number I…XII exactly once, all 12 ids accepted by that `SLUG_RE`, the true regions 2/2/4/4 with the one subdivision `Cranial nerves` (and `Cranial nerve nuclei` still at its 17 rows), laterality/colour/name agreeing with the registry, **24** level anchors resolving, **131** id tokens inside the records with **0** unresolved, the named links per nerve, the foramen name in each `course`, ≥2 clinical items with an explicit localisation, ≥2 refs and a curated web reference, and the geometry: **12/12 `meshes:false`**, **12/12** sized placements inside `CLIP_BOUNDS`, **0** manifest parts of kind `nerve`, **0** `nrv-*` GLBs, manifest still **138** parts |
+| `npm run verify:nerve-kind` | **v13 kind gate, no browser** (`scripts/verify/nerve-kind.mjs`, new): **79 assertions · 0 failed** in **9 groups**. It imports the **shipped** `load.ts`, `Header.tsx`, `Legend.tsx`, `KindGlyph.tsx`, `NucleusMesh.tsx`, `SceneLayers.tsx` and `store.ts` through the in-process TS/TSX loader the other Node gates use, renders the real components with `react-dom` **and** through a live hook dispatcher (zustand 4 hands React's *server* renderer the boot snapshot, so a post-toggle re-render is only readable on the client path), and reads the two declaration sites that cannot be imported (`validate-data.mjs` runs on import; `types.ts` is types-only) as parsed data. It proves the kind is declared in **every** site and the sites **agree** (ALL_KINDS ≡ validator `KINDS` ≡ the `Kind` union ≡ the `KIND_GLYPH`/`KIND_OPACITY` key sets, seven kinds, `nerve` last); the slug contract accepts all 12 `nrv-*` ids, still rejects the four near-misses, and finds **0** prefix/kind contradictions over all **248** rows; the rendered `<Header />` carries **one Systems button per `ALL_KINDS` entry, in order**, the seventh reading exactly **Cranial nerves** with `data-kind`, `aria-pressed`, `type="button"` and a WCAG-2.5.3-correct accessible name; the Legend has a palette swatch **and** a toggle row per kind, the `Cranial nerves` swatch on a token `tokens.css` really defines; **the shipped `onClick` handler is called** and the toggle removes exactly `nerve` from `layers.kinds` while `regions`/`hidden`/`emphasis` stay set-equal, with the round trip rendering byte-identically to boot; a synthetic `nrv-*` record is admitted by the shipped `isStructureVisible` iff the kind is on, at opacity 1 with the gray-matter hint; and its **bite** runs the *same* contract checker against **8 defective kind tables**, each caught by name |
+| `npm run verify:cranial-nerve-courses` | **v14 course-geometry gate, no browser** (`scripts/verify/cranial-nerve-courses.mjs`, new): **220 assertions · 0 failed**. It reads the twelve authored courses through the repo's own TS loader — so it verifies the table the two surfaces actually render — and asserts, per nerve and with every number printed: ≥ 3 finite waypoints; `tubeRadius` finite, > 0, equal to `calibreMm ÷ 2.4` at 1 au = 1.2 mm and equal to the plan's table (1.7/4.0/3.0/1.0/4.5/1.9/1.9/2.8/2.0/2.4/1.5/1.8 mm → 0.71/1.67/1.25/0.42/1.88/0.79/0.79/1.17/0.83/1.00/0.63/0.75 au); the nerve's **own exit landmark carried as a literal waypoint** (measured deviation **0.000 au** for all ten that have one, tolerance 2 au) and the chain **starting on the committed nucleus `origin3d`** it names (0.000 au); the documented foramen **named in the record and present in its own course sentence**; every waypoint inside `CLIP_BOUNDS` with the printed minimum clearance (**6.00 au**, CN I); length in **au and mm**; and the direction/modality/origin/target/decussation/function/clinical/levels/refs content. It then **executes** the rendering claims: the 23 tracts + 12 courses through the shipped `isTractVisible` (kind gating, `hasNerveCourse`, the structure pass dropping a record that has a course) and each course's tube through the **section worker's own** `boundsMayCut`/`extractContours` (**576 crossing planes → 689 loops**, per-plane counts printed). Its probe table is the twelve-row root · foramen · target · length table |
+| `npm run verify:cranial-nerve-render` | **v14 render-parity gate, no browser** (`scripts/verify/cranial-nerve-render.mjs`, new): **47 assertions · 0 failed**. It mounts nothing and paints nothing (Chrome cannot start here) — it **executes the shipped modules** through the same in-process loader and proves: **12 tubes in the scene's tract list**, with the four-state toggle truth table printed (all on 23+12 · **tract off → 0 tracts but 12/12 nerves** · **nerve off → 23/23 tracts but 0/12 nerves** · both off 0+0 · midbrain off 19+10 · a preset-hidden id 11) — i.e. the mis-gating trap is closed in both directions; **12 section registry parts** (803 verts / 1,440 tris each, `maxIndex 802 < 803`) whose contours the **shipped** `partBounds`/`boundsMayCut`/`extractContours` compute over 38 planes (**121 closed loops, ≥ 1 crossing plane with ≥ 1 loop per nerve, 0 non-finite**); the **XOR** — a nerve renders a tube **or** a marker, never both, for all twelve; the shared-builder claim read as source; and the payload re-measured (**138 manifest parts, 0 `nrv-*` GLBs, 599,204 tris, 13.8151 MiB of parts / 13.8914 MiB of tree**). A bite flips the literal `'tract'` back into `isTractVisible` and the nerve-off row goes from 0 to 12 shown |
 | `npm run verify:imaging-fit` | **v9 imaging-registration gate** (`scripts/verify/imaging-fit.mjs`): re-runs the fitter and requires every committed number to equal the recomputation — grid bytes frozen against `HEAD`, per-plane and mean residuals, `applied` vs the record's own gate, every accepted plate present in `src/data/sectionImages.ts` as a `fittedFit` and every rejected one absent, the 49 JPEG plates recorded as `unmeasurable: no-decoder`, and `imageLayers.ts` preferring `fittedFit`. **RED in the agent sandbox** — the gate re-runs the fitter as a piped child and the sandbox denies it (`spawnSync node EPERM`, **0 assertions run**); when driven through a byte-identical copy with the captured fitter JSON it completes with 289 assertions / 20 failures (18 real, 2 copy artifacts) — the exact failures are in the [v9 section](#verification-v9-close-out-non-browser) |
 | `npm run verify:audit-checks` | **Audit check mirror, no browser** (`scripts/verify/audit-checks.test.mjs`, exposed as an npm script at v9 close-out; it was previously run as a bare `node` command): runs the *same* pure predicates the runtime audit uses (`scripts/verify/checks.mjs`) against the **shipped manifests and the shipped sources** — CT coverage honesty driven by the real `ct-manifest.json` and `ctCoverageStatement()`, the brainstem-focus default and the preset region guard (imported from the real store), the `?panelfail` containment demonstration (drives the real `PanelErrorBoundary` through the real throw: `probes === 1`, correct surface, Retry recovers), the context-loss DOM contract including the "overlay is outside `<Canvas>`" and "PostFX returns null while lost" root causes, and the modality sweep in both directions. It also re-derives the three budget numbers and checks the telencephalon data/plate inventory. **This is a mirror, not a browser test**: it proves the decision logic and the shipped code contract, never that pixels appeared. **v10: measured 92 passed · 0 failed · 7 informational · 9 groups (exit 0)** — the dimmed-row predicate carries the documented vasculature exemption *and* the assertion that pins it (*"the 14 vascular rows are off at default framing through the REGION layer only…"*), which supersedes the v9 close-out note that this gate was red |
 | `npm run verify:audit` | **Self-sufficient runtime audit** (`scripts/verify/audit.mjs`): starts Vite itself when nothing answers at the target URL, drives headless Chrome over the DevTools Protocol through the whole feature surface, and stops the server again on every exit path. Includes the two P0 gates — simulated WebGL context loss via `WEBGL_lose_context` (overlay appears, canvas recovers) and a **forced render throw** through the dev-only `?panelfail=<surface>` hook (the failure is contained, the app keeps working, Retry restores the panel). Pass an existing URL to reuse a running server. **v7 closure:** every load-bearing verdict is now decided by `scripts/verify/checks.mjs`, the run uses a **fresh Chrome profile per run** plus a `localStorage`/`sessionStorage` clear before the boot read (so a persisted `neuroaxis.viewPreset` can never masquerade as a wrong default), and the CT/modality checks are coverage-aware. **v9:** the PiP checks were re-pointed at the simulated-section panel (structure at boot, per-axis badges + readout, resizable/persisted/preset/hide+restore, the panel's independence from the Plates modality) and the retired `.pip-backdrop-hint` / `.pip-context-lost` checks now assert the **absence** of the retired elements. **v10 (re-pointed by the run's `review-qa` task):** a Node-side **"v10 source facts"** block reads `CLIP_BOUNDS`, `GRID_CELL_AU`, the `MIN_DIVISION_*` floors, `SECTION_PIP_SIZE_MIN/MAX`, `NO_CANVAS_LABEL_RECORD_IDS`, `DIVISIONS` and `REGION_LABELS` out of the shipped sources so no browser assertion retypes a number; a **three.js scene bridge** installed through `THREE.__THREE_DEVTOOLS__` makes the *rendered* helper geometry and mesh set readable; and blocks **Q0–Q6** (~120 assertions) cover the helper sheets' rendered spans vs the DOM sliders, division solos driving legend + tree + scene, real per-corner pointer drags with the dock-pinned edges, the artefact planes in Plates **and** PiP, and the suppressed cortex label with a hover/click sweep. The only in-place edits were the `node:fs` import and the sanctioned re-point `pipBoot.resizer === 1 → === 4`; no existing check was deleted or weakened |
@@ -1127,7 +1326,8 @@ v11 and remains orchestrator-verified. Nothing was deleted or weakened to make a
 
 All of `validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `verify:plane-helper-extent`,
 `verify:somatotopy`, `verify:cortical-lobes`, `verify:pip-contract`, `verify:division-toggles`,
-`verify:area-toggles`, `verify:view-filter-consistency`, `a11y-contract`,
+`verify:area-toggles`, `verify:view-filter-consistency`, **`verify:cranial-nerves`**, **`verify:nerve-kind`**,
+**`verify:cranial-nerve-courses`**, **`verify:cranial-nerve-render`**, `a11y-contract`,
 `boundary-contract`, `budget-report.mjs` and `build-anatomy-geometry.mjs --manifest` must exit 0;
 `npm run validate` is the pre-commit data authority (plan §9). The Node gates are wired as plain `node` entry
 points on purpose — they have no external precondition, so they can be quoted as evidence from any checkout.
@@ -1140,6 +1340,15 @@ re-measured by the v10 sweep: `verify:audit-checks` is **92 passed · 0 failed**
 assertions run — environmental, unchanged, in no v11 task's write scope), and re-measured the whole binding list:
 the v11 integrator sweep is in [v11 verification](#verification-v11-close-out-non-browser), including the two new
 gates `verify:area-toggles` (**331/0**) and `verify:view-filter-consistency` (**100/100**).
+**v14 re-measured the whole list** (the sweep with every exit code and printed tail is in
+[`docs/SWARM_V14_PLAN.md`](docs/SWARM_V14_PLAN.md) §8): **21 green · 2 environment-red · 0 product-red**, with the
+two new gates `verify:cranial-nerve-courses` (**220/0**) and `verify:cranial-nerve-render` (**47/47**) wired as
+npm scripts and executed **through npm**, so the wiring itself is tested. `verify:anatomy` and
+`verify:imaging-fit` fail identically (`spawnSync … EPERM`, **0 verdicts**); the single measurement
+`verify:anatomy` was blocked on — the `src/assets/anatomy` directory size — re-run directly returns
+**14,566,178 B**, unchanged. The brief's "known-red" note for **`verify:area-toggles` was stale**: it exits **0**
+with **455 assertions · 0 failed**, and the v11 item-4 divergence (the canvas painting divisions the rule
+excludes at y = 6/26/30/32) is **closed with parity 6/6** — the product was never bent back to either gate.
 
 **Exit codes of the browser lane** (`verify:audit`, `verify:acceptance`, `verify:browser`) — an environment failure must never look like a product failure:
 
@@ -1159,9 +1368,10 @@ All numbers produced by `npm run validate` at integration time:
 
 | Content | Count |
 | --- | --- |
-| Structures (nuclei, ventricles, surfaces, context) | **190 records** (213 records in `structures/*.json` minus the 23 tracts) |
+| Structures (nuclei, ventricles, surfaces, context, **cranial nerves**) | **202 records** (225 records in `structures/*.json` minus the 23 tracts) |
 | Fiber tracts & pathways (with waypoints, decussation, somatotopy) | **23 records** |
-| Registry entries (taxonomy tree + search; every authored id registered) | **236 entries** |
+| Cranial nerves (kind `nerve`, id prefix `nrv-`, `meshes:false` placement markers — v13) | **12 records** (CN I Olfactory … CN XII Hypoglossal) |
+| Registry entries (taxonomy tree + search; every authored id registered) | **248 entries** |
 | Canonical levels (rostro-caudal anchors, y = −50…+78 au) | **17 levels** |
 | 2D cross-section plates | **15** (11 transverse + 2 sagittal + 2 coronal) |
 | Clinical syndromes | **26 cards** |
@@ -1177,6 +1387,13 @@ All numbers produced by `npm run validate` at integration time:
 > (236 / 213 / 23 / 26 / 15 / 17, 0 errors / 0 warnings), and the Areas/Systems rows of v11 are a **display
 > grouping over the existing taxonomy regions and kinds** — every one of the 236 entries belongs to exactly one
 > area button and exactly one system button, measured by `npm run verify:area-toggles`.
+>
+> **v13 adds content** — the twelve cranial nerves: **12 structure records** in 2 new files
+> (`telencephalon-cranial-nerves.json`, `brainstem-cranial-nerves.json`), 12 registry rows under the new seventh
+> kind `nerve`, and 12 curated web references. Measured at close-out by `npm run validate`: **248 registry
+> entries · 225 records in 19 files · 23 tracts · 26 syndromes · 15 plates · 17 levels, 0 errors / 0 warnings**.
+> Nothing pre-existing was edited, renamed or moved — the appending of the 12 rows is the only `taxonomy.json`
+> change (one earlier line gained a trailing comma) — and **no mesh, GLB, manifest part or bbox moved**.
 
 Vascular territories are carried as string fields (`bloodSupply` per structure, `vascularTerritory` per syndrome) — no 3D vessel models. Every structure spans at least one of the 17 canonical levels; a subset of those levels has a matching transverse plate, and the plates' `data-structure` slugs resolve against the same registry as the 3D scene (enforced by the validator).
 

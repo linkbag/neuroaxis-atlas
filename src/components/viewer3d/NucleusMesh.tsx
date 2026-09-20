@@ -36,24 +36,45 @@ import { makeAnatomyMaterial, type MaterialHint } from '../../geometry/materials
 /** One shared unit sphere for every ellipsoid record (plan §5). */
 export const SHARED_NUCLEUS_GEOMETRY = new THREE.SphereGeometry(1, 24, 16)
 
-/** Translucency per kind; solid kinds stay opaque unless dimmed. */
-const KIND_OPACITY: Record<StructureRecord['kind'], number> = {
+/**
+ * Translucency per kind; solid kinds stay opaque unless dimmed.
+ *
+ * Exported (v13) so `scripts/verify/nerve-kind.mjs` asserts the values from the
+ * SHIPPED table rather than re-typing them: a `nerve` record is a schematic
+ * placement like `nuc-subiculum` or `vasc-lenticulostriate-arteries`, so it must
+ * be OPAQUE (1) — a translucent nerve would read as an envelope, and
+ * `KIND_OPACITY[kind] >= 1` is also what turns depth writing on below.
+ */
+export const KIND_OPACITY: Record<StructureRecord['kind'], number> = {
   nucleus: 1,
   tract: 1,
   surface: 1,
   vessel: 0.5,
   ventricle: 0.42,
   context: 0.22,
+  nerve: 1,
 }
 
-/** Kind → factory preset when no manifest hint is supplied. */
-function hintForKind(kind: StructureRecord['kind']): MaterialHint {
+/**
+ * Kind → factory preset when no manifest hint is supplied.
+ *
+ * Exported (v13) for the same reason as `KIND_OPACITY`. The `nerve` branch is
+ * explicit even though the trailing default already returns `'nucleus'`: the
+ * decision that a mesh-less nerve gets the gray-matter nucleus preset (not the
+ * arterial `vasculature` cast the v8 vessel branch exists for) is worth being
+ * visible, and `scripts/verify/nerve-kind.mjs` asserts it.
+ */
+export function hintForKind(kind: StructureRecord['kind']): MaterialHint {
   if (kind === 'ventricle') return 'csf'
   if (kind === 'context') return 'context'
   // v8: a vessel record with no manifest hint still gets the arterial cast
   // material rather than the gray-matter nucleus preset (the baked vessel parts
   // all declare `materialHint: 'vasculature'`; this covers the mesh-less ones).
   if (kind === 'vessel') return 'vasculature'
+  // v13: a cranial-nerve record owns no mesh in this repo (PLAN.md §5) and
+  // resolves no manifest part, so this branch is the one its schematic
+  // ellipsoid takes.
+  if (kind === 'nerve') return 'nucleus'
   return 'nucleus'
 }
 

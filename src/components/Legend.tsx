@@ -30,6 +30,16 @@ import { AREAS as HEADER_AREAS, type AreaDefinition } from '../state/store'
 const KIND_SWATCHES: { label: string; token: string }[] = [
   { label: 'Nuclei', token: 'var(--kind-nucleus)' },
   { label: 'Cranial-nerve nuclei', token: 'var(--kind-cn-nucleus)' },
+  // v13 (PLAN.md §2 item 8, §4.3): the twelve cranial nerves, beside the
+  // cranial-nerve NUCLEI row above so the pair reads as one family — "nuclei" is
+  // the 15 `nuc-*` rows in subdivision "Cranial nerve nuclei", "nerves" the 12
+  // new `nrv-*` rows in "Cranial nerves". NOTE for whoever adds the next kind:
+  // this list is a PLAIN ARRAY, so a missing entry is NOT a compile error (the
+  // exhaustive `Record<Kind, …>` maps do catch their own misses);
+  // `scripts/verify/nerve-kind.mjs` is what asserts one swatch per kind, and it
+  // also resolves each token against src/styles/tokens.css, so a swatch naming a
+  // token that does not exist cannot pass as "present".
+  { label: 'Cranial nerves', token: 'var(--kind-nerve)' },
   { label: 'Ascending tracts', token: 'var(--kind-ascending)' },
   { label: 'Descending tracts', token: 'var(--kind-descending)' },
   { label: 'Mixed tracts', token: 'var(--kind-mixed)' },

@@ -134,7 +134,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "First synapse of the dorsal column-medial lemniscus pathway for the lower body: primary afferents of the fasciculus gracilis terminate in tonotopically leg-arranged columns, and the second-order neurons emit the internal arcuate fibers that decussate to form the contralateral medial lemniscus. Its dorsal bulge is the gracile tubercle of the closed medulla.",
+    "function": "First synapse of the dorsal column-medial lemniscus pathway for the lower body: primary afferents of the fasciculus gracilis terminate in somatotopically organised (leg-arranged) columns, and the second-order neurons emit the internal arcuate fibers that decussate to form the contralateral medial lemniscus. Its dorsal bulge is the gracile tubercle of the closed medulla.",
     "connections": {
       "afferent": ["Fasciculus gracilis (tract-fasciculus-gracilis)"],
       "efferent": ["Internal arcuate fibers (tract-internal-arcuate) to the contralateral medial lemniscus"]
@@ -263,7 +263,7 @@
     "clinical": [
       {
         "syndrome": "Palatal tremor from hypertrophic olivary degeneration (Guillain-Mollaret triangle)",
-        "findings": "When the triangle is interrupted — by a lesion of the central tegmental tract, the dentate nucleus or the superior cerebellar peduncle — the medial accessory olive loses its climbing-fibre target and undergoes trans-synaptic hypertrophy, producing rhythmic 1-3 Hz palatal tremor that persists during sleep, often with synchronous ocular (pendular) and laryngeal movement. The tremor appears weeks to months after the causative stroke.",
+        "findings": "When the triangle is interrupted — by a lesion of the central tegmental tract, the dentate nucleus or the superior cerebellar peduncle — the medial accessory olive loses its rubro-olivary input and undergoes trans-synaptic hypertrophy, while its climbing-fibre output to the vermis fails, producing rhythmic 1-3 Hz palatal tremor that persists during sleep, often with synchronous ocular (pendular) and laryngeal movement. The tremor appears weeks to months after the causative stroke.",
         "vascular": "Vertebral artery branches; ASA borderzone",
         "note": "The olive is disinhibited and hypertrophied rather than destroyed, so MRI shows a swollen, T2-hyperintense inferior olive — the imaging signature of the triangle's interruption."
       }
@@ -303,7 +303,16 @@
         "note": "Because the lemniscus hugs the midline throughout the brainstem it is involved in most paramedian brainstem strokes — medullary (Déjerine), pontine and midbrain variants differ only in the accompanying cranial-nerve signs."
       }
     ],
-    "levels": ["lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary"],
+    "levels": [
+      "lvl-sensory-decuss",
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
     "origin3d": [2, -37, 3],
     "size3d": [1.2, 9, 1],
     "refs": [
@@ -471,7 +480,7 @@
     "clinical": [
       {
         "syndrome": "Hoarseness, dysphagia and depressed gag (efferent)",
-        "findings": "Unilateral ambiguityus failure droops the ipsilateral palate, paralyzes the ipsilateral vocal fold and destroys effective swallowing — the clinical core of the lateral medullary (Wallenberg) syndrome; aspiration pneumonia is the principal risk.",
+        "findings": "Unilateral ambiguus failure droops the ipsilateral palate, paralyzes the ipsilateral vocal fold and destroys effective swallowing — the clinical core of the lateral medullary (Wallenberg) syndrome; aspiration pneumonia is the principal risk.",
         "vascular": "PICA"
       },
       {
@@ -547,7 +556,7 @@
         "vascular": "PICA"
       }
     ],
-    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "levels": ["lvl-olivary"],
     "origin3d": [1.2, -33, -8],
     "size3d": [0.8, 2.5, 0.7],
     "refs": [
@@ -624,7 +633,9 @@
   {
     "id": "nuc-medullary-reticular",
     "name": "Medullary reticular formation",
-    "synonyms": ["gigantocellular reticular nucleus", "central/medial reticular nuclei of the medulla"],
+    "synonyms": [
+      "medullary reticular nuclei (gigantocellular, central, ventral and dorsal) — this record covers the formation as a whole"
+    ],
     "region": "medulla",
     "subdivision": "Reticular formation",
     "kind": "nucleus",
@@ -704,7 +715,7 @@
       }
     ],
     "levels": ["lvl-olivary", "lvl-pontomedullary"],
-    "origin3d": [5, -31, 4.5],
+    "origin3d": [6, -31, 0.5],
     "size3d": [1, 1.5, 1],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
@@ -728,7 +739,7 @@
       }
     ],
     "levels": ["lvl-olivary"],
-    "origin3d": [5, -34, 4.5],
+    "origin3d": [6, -34, 0.5],
     "size3d": [1, 1.5, 1],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
@@ -833,7 +844,14 @@
         "vascular": "PICA (inferior vermis)"
       }
     ],
-    "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
+    "levels": [
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic"
+    ],
     "origin3d": [0, -22, -13],
     "size3d": [10, 14, 7],
     "contextNote": "Context envelope for the 3D scene and sagittal/coronal plates (two hemispheres plus vermis bar); the deep nuclei and vermis are separate records, and the peduncles are owned elsewhere: tract-mcp (pons), tract-icp (medulla), tract-scp (midbrain).",
@@ -860,7 +878,7 @@
     "clinical": [
       {
         "syndrome": "Intention tremor and dysmetria",
-        "findings": "SCA infarcts or lesions of the dentate/SCP system produce ipsilateral intention tremor, dysmetria and decomposition of movement; bilateral dentate disease (Ceroid-lipofuscinosis, metronomic injury) disturbs movement timing.",
+        "findings": "SCA infarcts or lesions of the dentate/SCP system produce ipsilateral intention tremor, dysmetria and decomposition of movement; bilateral dentate disease (neuronal ceroid lipofuscinosis, metronidazole or radiation toxicity) disturbs movement timing.",
         "vascular": "SCA"
       },
       {

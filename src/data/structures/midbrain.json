@@ -8,7 +8,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Multimodal orienting center of the tectum: builds a retinotopic and spatiotopic map on which salient visual (and auditory/somatosensory) stimuli trigger saccades and combined eye-head turning; also relays visual reflexes such as the pupillary light reflex through its rostral pretectal neighbors. Its output gates orienting movement via tectospinal and tectobulbar projections.",
+    "function": "Multimodal orienting center of the tectum: builds a retinotopic and spatiotopic map on which salient visual (and auditory/somatosensory) stimuli trigger saccades and combined eye-head turning; its rostral pretectal neighbours relay the pupillary light reflex, while the colliculus itself drives orienting saccades and eye-head turning. Its output gates orienting movement via tectospinal and tectobulbar projections.",
     "connections": {
       "afferent": [
         "Retina (direct retinotectal fibers and via the optic tract)",
@@ -89,7 +89,7 @@
     "name": "Pretectal area",
     "synonyms": ["pretectal nuclei", "pretectum"],
     "region": "midbrain",
-    "subdivision": "Tectum",
+    "subdivision": "Tegmentum",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
@@ -118,7 +118,7 @@
         "note": "Contrast with Adie pupil, which is a lesion of the ciliary ganglion beyond the EW neurons."
       }
     ],
-    "levels": ["lvl-post-comm"],
+    "levels": ["lvl-post-comm", "lvl-midbrain-sc"],
     "origin3d": [2, 17.5, -7],
     "size3d": [2, 1.5, 2],
     "refs": [
@@ -330,7 +330,7 @@
         "note": "Isolated lesions of the nucleus are clinically silent; assessed as part of the CN V examination."
       }
     ],
-    "levels": ["lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc"],
+    "levels": ["lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc"],
     "origin3d": [4.5, 8, -5],
     "size3d": [1, 6, 1],
     "refs": [
@@ -365,7 +365,7 @@
         "vascular": "SCA branches"
       }
     ],
-    "levels": ["lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc"],
+    "levels": ["lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-pons-middle"],
     "origin3d": [4.5, 8, -4.2],
     "size3d": [0.6, 6, 0.6],
     "refs": [
@@ -458,7 +458,7 @@
       }
     ],
     "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc"],
-    "origin3d": [6.5, 10.5, 2.5],
+    "origin3d": [6.5, 10.5, 8.5],
     "size3d": [4.5, 1.2, 3.5],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Basal Ganglia\" (Parkinson's disease and related disorders)",
@@ -503,7 +503,7 @@
       }
     ],
     "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc"],
-    "origin3d": [6.5, 9.5, 3.5],
+    "origin3d": [6.5, 9.5, 9],
     "size3d": [4.5, 1.2, 3.5],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Basal Ganglia\"",
@@ -542,7 +542,7 @@
         "vascular": "PCA perforators"
       }
     ],
-    "levels": ["lvl-midbrain-sc"],
+    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic"],
     "origin3d": [7, 10, 9],
     "size3d": [2.5, 6, 2],
     "refs": [
@@ -601,7 +601,8 @@
     "connections": {
       "afferent": [
         "Dentate nucleus",
-        "Interposed nuclei (emboliform and globose)"
+        "Interposed nuclei (emboliform and globose)",
+        "Anterior (ventral) spinocerebellar tract (tract-anterior-spinocerebellar) — the cerebellar afferent that enters through this peduncle"
       ],
       "efferent": [
         "Contralateral red nucleus",
@@ -729,7 +730,7 @@
         "vascular": "Basilar apex / posterior communicating artery"
       }
     ],
-    "levels": ["lvl-midbrain-sc"],
+    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic"],
     "origin3d": [0, 9, 9],
     "size3d": [2.5, 3, 1.5],
     "refs": [

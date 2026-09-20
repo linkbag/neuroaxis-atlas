@@ -8,7 +8,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "The anterior, bulging third of the C-shaped striatum, filling the wall of the frontal horn and lying against the anterior limb of the internal capsule. It is the associative and limbic striatum: prefrontal, cingulate and orbitofrontal projections converge here before the striatopallidal loops select behaviour, and its dopaminergic input comes from the substantia nigra pars compacta.",
+    "function": "The anterior, bulging third of the C-shaped striatum, forming the lateral wall of the frontal horn and lying against the anterior limb of the internal capsule. It is the associative and limbic striatum: prefrontal, cingulate and orbitofrontal projections converge here before the striatopallidal loops select behaviour, and its dopaminergic input comes from the substantia nigra pars compacta.",
     "connections": {
       "afferent": [
         "Corticostriate fibres from the dorsolateral prefrontal, anterior cingulate and orbitofrontal cortex (associative and limbic loops)",
@@ -366,7 +366,7 @@
     "laterality": "paired",
     "color": "#d97706",
     "function": "The limbic counterpart of the dorsal pallidal segments, lying in the substantia innominata beneath the anterior commissure and continuous with the subcommissural part of the globus pallidus: it is the principal output nucleus of the ventral striatopallidal system, receiving GABAergic input from the accumbens shell and core and relaying it — through a thalamic route to the mediodorsal nucleus and cortex, and through a descending route to the lateral hypothalamus and brainstem — into motivated behaviour. Its neurons encode hedonic 'liking' reactions (the taste-reactivity substrate) and, with the mediodorsal thalamus, the reward-prediction signal that keeps behaviour directed at a goal.",
-    "contextNote": "Authored at a documented plane: the ventral-most part of the pallidal cast at the level of the anterior commissure (x ≈ 20.5, y ≈ 23, z ≈ 14, an anchor placed on the baked globus-pallidus cast by the v8 content-authoring run). The dorsal GPe/GPi records start above this level; the two are anatomically continuous.",
+    "contextNote": "Authored at a documented plane: the ventral-most part of the pallidal cast at the level of the anterior commissure (x ≈ 19, y ≈ 24, z ≈ 15, an anchor placed on the baked globus-pallidus cast by the v8 content-authoring run). The dorsal GPe/GPi records start above this level; the two are anatomically continuous.",
     "connections": {
       "afferent": [
         "Nucleus accumbens (nuc-accumbens) shell and core — the striatopallidal (GABA/enkephalin) projection of the limbic loop",
@@ -398,7 +398,7 @@
       }
     ],
     "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [20.5, 23, 14],
+    "origin3d": [19, 24, 15],
     "size3d": [2.5, 2, 4],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'",

@@ -26,6 +26,8 @@ import {
   type AnatomyAssetStatus,
 } from '../../geometry/anatomyAssets'
 import type { AnatomyPart } from '../../geometry/generated'
+import { NERVE_COURSES, type NerveCourseRecord } from '../../geometry/curves'
+import { tubeGeometryFor } from '../viewer3d/TractTube'
 import type { WorkerRegistryPart } from './contourWorker'
 
 /** Draw buckets — lower is painted first (section canvases stack under
@@ -153,6 +155,101 @@ function metaFor(part: AnatomyPart): SectionPartMeta {
 
 /** Every committed GLB as a section part, in manifest order (stable). */
 export const SECTION_PARTS: readonly SectionPartMeta[] = getManifest().parts.map(metaFor)
+
+/* ------------------------------------------- v14 cranial-nerve courses */
+
+/**
+ * THE PROBLEM THIS SOLVES (PLAN.md §4). The live section paints committed GLB
+ * parts: `SECTION_PARTS` is *exactly* `getManifest().parts.map(metaFor)`, the
+ * canvas builds its worker registry from that list alone, and the worker
+ * protocol carries raw positions/indices. Tube geometry is PROCEDURAL — it is
+ * swept in the browser by `TractTube` and exists nowhere on disk — so before
+ * v14 **no tract and no cranial nerve could appear in the 2D section by any
+ * code path**, and the user's twelve nerves were invisible in the live section
+ * and in the PiP that mounts the same canvas.
+ *
+ * ROUTE (a), procedural, CHOSEN — and (b), baked GLBs, rejected by measurement:
+ * one tube at `TractTube`'s parameters is 803 verts / 1440 tris, i.e. ~34.5 KiB
+ * raw and ~21.6 KiB quantized per tube; the twelve nerves are 24 tubes because
+ * every nerve record is `paired`, so baking costs **0.809 MiB raw / 0.506 MiB
+ * quantized** (0.404 / 0.253 one-sided). The anatomy DIRECTORY — the reading
+ * `verify:anatomy` and `verify:budget-report` take — has **0.1086 MiB** of
+ * headroom against the 14 MiB cap, so even the one-sided quantized case is 2.3×
+ * the budget. Route (a) costs **0 bytes on disk**: the tube is swept at runtime
+ * through the very same `tubeGeometryFor` the 3D pass uses, so the 2D contour is
+ * the intersection of the SAME geometry the user sees in 3D — one builder, one
+ * cache, by construction rather than by coincidence.
+ *
+ * `SECTION_PARTS` itself is UNCHANGED (138 entries, byte-identical), so every
+ * count-based gate that sweeps it — `view-filter-consistency`'s 102/102,
+ * `cranial-nerves.mjs`'s and `audit.mjs`'s `138` assertions — keeps its domain.
+ * Only the canvas's own two call sites move to `partsForCanvas()`.
+ */
+
+/** Where a nerve course sits in the draw order — the solid-body bucket. */
+const NERVE_SECTION_KIND: SectionKind = 'nucleus'
+
+/**
+ * The procedural section part for one course. `slug` and `group` are both the
+ * course id (the same `nrv-*` id the 3D scene selects by, and the same id
+ * `isPartVisible`'s taxonomy lookup resolves), `region` comes from the course,
+ * and `taxonomyKind: 'nerve'` is what makes the Systems row's "Cranial nerves"
+ * button gate the nerve contours — `isPartVisible` prefers `taxonomyKind` over
+ * the draw bucket, so no change to that predicate is needed.
+ */
+function nerveCourseMeta(course: NerveCourseRecord): SectionPartMeta {
+  const entry = getTaxonomyEntry(course.id)
+  return {
+    slug: course.id,
+    group: course.id,
+    region: course.region,
+    kind: NERVE_SECTION_KIND,
+    taxonomyKind: entry?.kind ?? course.kind,
+    color: entry?.color ?? course.color,
+  }
+}
+
+/**
+ * One section part per cranial-nerve course, in course order (stable — the
+ * registry key is the slug, and the canvas's Path2D cache is keyed the same
+ * way). Twelve entries; nothing here touches the manifest.
+ */
+export const SECTION_NERVE_PARTS: readonly SectionPartMeta[] = NERVE_COURSES.map(nerveCourseMeta)
+
+/**
+ * What the live section draws: the committed GLB parts followed by the
+ * procedural cranial-nerve parts. The canvas's visible-list filter and its
+ * worker registry both read THIS, so a nerve is drawn iff its contours came
+ * back from the worker — which cannot happen unless the worker was handed its
+ * geometry, which is why the registry below is the only other change.
+ */
+export function partsForCanvas(): readonly SectionPartMeta[] {
+  return [...SECTION_PARTS, ...SECTION_NERVE_PARTS]
+}
+
+/**
+ * The cranial-nerve part of the worker registry: the tube geometry the 3D pass
+ * renders, copied into worker-owned transferable arrays by the same adapter the
+ * committed parts use (`registryPartFromGeometry`), which already accepts an
+ * arbitrary `BufferGeometry`.
+ *
+ * Copied, not shared: `registryPartFromGeometry` builds FRESH `Float32Array` /
+ * `Uint32Array` views, so transferring these to the worker cannot detach an
+ * attribute the 3D scene is still drawing (the parsed GLB geometries have the
+ * same constraint and get the same treatment).
+ *
+ * A course whose sweep yields no positions returns null and is skipped — the
+ * canvas then simply has no contour entry for that slug, exactly as it does for
+ * a GLB that failed to load.
+ */
+export function registryNerveParts(): WorkerRegistryPart[] {
+  const parts: WorkerRegistryPart[] = []
+  for (const course of NERVE_COURSES) {
+    const part = registryPartFromGeometry(nerveCourseMeta(course), tubeGeometryFor(course))
+    if (part !== null) parts.push(part)
+  }
+  return parts
+}
 
 /* ------------------------------------------------- v9 cortical-lobe layer */
 

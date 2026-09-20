@@ -261,13 +261,13 @@
     "function": "Biconvex, lens-shaped excitatory hub of the indirect basal-ganglia pathway: glutamatergic STN neurons drive GPi/SNr output, raising the thalamocortical brake on movement; loss of this drive disinhibits the motor thalamus and releases violent involuntary movement. The hyperdirect cortex-STN loop also gates movement cancellation.",
     "connections": {
       "afferent": [
-        "Lateral segment of the globus pallidus externa (indirect pathway)",
+        "Lateral segment of the globus pallidus externus (GPe) (indirect pathway)",
         "Motor cortex via the hyperdirect (corticosubthalamic) pathway",
         "Substantia nigra pars compacta (dopaminergic modulation)"
       ],
       "efferent": [
         "Globus pallidus internus and substantia nigra pars reticulata (excitatory, glutamatergic)",
-        "Reciprocal projections back to the globus pallidus externa"
+        "Reciprocal projections back to the globus pallidus externus (GPe)"
       ]
     },
     "bloodSupply": "Small perforating branches of the posterior communicating artery and the anterior choroidal artery (rostral/lateral STN); P1/PCA perforators caudally.",
@@ -361,7 +361,8 @@
     "name": "Fields of Forel (H1/H2)",
     "synonyms": [
       "thalamic fasciculus (H1)",
-      "lenticular fasciculus (H2)"
+      "lenticular fasciculus (H2)",
+      "prerubral field (H3 — named here, not drawn in this atlas)"
     ],
     "region": "diencephalon",
     "subdivision": "Subthalamus",
@@ -369,7 +370,7 @@
     "laterality": "paired",
     "color": "#94a3b8",
     "function": "Fiber-field complex of the subthalamus: field H2 (lenticular fasciculus) carries pallidal output looping through the internal capsule, and field H1 (thalamic fasciculus) delivers it to the ventral anterior and ventral lateral nuclei — the final common route of basal-ganglia output to the motor thalamus, shared with cerebellothalamic fibers.",
-    "contextNote": "Context record for the H1 (thalamic fasciculus) and H2 (lenticular fasciculus) white-matter zones medial to the zona incerta; drawn on plate-thalamus-mid and plate-coronal-midbrain. See also nuc-subthalamic and nuc-zona-incerta.",
+    "contextNote": "Context record for the H1 (thalamic fasciculus) and H2 (lenticular fasciculus) white-matter zones medial to the zona incerta; the third field of Forel (H3, the prerubral field into which the ansa lenticularis turns before joining H1) is named but not drawn; drawn on plate-thalamus-mid and plate-coronal-midbrain. See also nuc-subthalamic and nuc-zona-incerta.",
     "connections": {
       "afferent": [
         "Globus pallidus internus via the ansa lenticularis and lenticular fasciculus (H2)",
@@ -699,7 +700,7 @@
         "Corticostriate fibers from prefrontal and associative cortex; nigrostriatal dopamine"
       ],
       "efferent": [
-        "Caudate projections to the globus pallidus externa and substantia nigra pars reticulata (indirect pathway entry)"
+        "Caudate projections to the globus pallidus externus (GPe) and substantia nigra pars reticulata (indirect pathway entry)"
       ]
     },
     "bloodSupply": "Medial lenticulostriate and anterior cerebral (recurrent artery of Heubner) perforators for the head; lateral lenticulostriate branches for the body.",

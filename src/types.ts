@@ -17,7 +17,21 @@ export type Region =
   | 'medulla'
   | 'cerebellum'
   | 'vasculature';
-export type Kind = 'nucleus' | 'tract' | 'ventricle' | 'surface' | 'vessel' | 'context';
+/**
+ * The structure kinds. v13 (PLAN.md §2) appends `'nerve'` — the twelve cranial
+ * nerves as first-class records. Appending (never reordering) keeps every
+ * existing table, preset and data hook stable; the one thing a new kind MUST
+ * carry is a `Record<Kind, …>` entry everywhere such a map exists, which is why
+ * `npm run check` is the coverage proof for this addition (six exhaustive maps
+ * fail until each one is updated): `load.ALL_KINDS` and `Header.KIND_LABELS`
+ * (the Systems row), `NucleusMesh.KIND_OPACITY`, `KindGlyph.KIND_GLYPH`,
+ * `Legend.KIND_SWATCHES` (a plain array — tsc cannot catch that one, so
+ * `scripts/verify/nerve-kind.mjs` does) and the validator's `KINDS`.
+ *
+ * The id prefix follows the kind (`nrv-` for `nerve`, docs/DATA_CONTRACT.md §3);
+ * that rule is enforced by `scripts/validate-data.mjs` for every registry row.
+ */
+export type Kind = 'nucleus' | 'tract' | 'ventricle' | 'surface' | 'vessel' | 'context' | 'nerve';
 export type Laterality = 'midline' | 'paired';
 export type Vec3 = [number, number, number];
 
@@ -53,6 +67,22 @@ export interface StructureRecord {
   territory?: string[];
   supply?: string[];
   meshes?: boolean;
+  /**
+   * v13 (PLAN.md §4.2) — the two cranial-nerve fields.
+   *
+   * The twelve `nerve` records state a **modality** (the fibre class the nerve
+   * carries: general somatic efferent, branchial motor, special sensory, …) and
+   * its **course** (cisternal/segmental course AND the skull-base foramen it
+   * uses) — the two facts a reader needs and neither `function` nor
+   * `connections` can carry without turning into prose. They are typed here, not
+   * left as JSON-only keys, for the same reason v8 typed `territory`/`supply`:
+   * a declared field is a checkable one. `modality` mirrors `TractRecord.modality`
+   * (`types.ts` §TractRecord) because a cranial nerve IS the tract-like record of
+   * this slice, and `scripts/validate-data.mjs` validates both as non-empty
+   * strings when present.
+   */
+  modality?: string;
+  course?: string;
 }
 
 export interface TractRecord {

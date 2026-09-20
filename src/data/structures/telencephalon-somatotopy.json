@@ -51,12 +51,7 @@
         "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       7.46,
       109.89,
@@ -124,12 +119,7 @@
         "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       15.03,
       108,
@@ -197,12 +187,7 @@
         "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       24.89,
       102.1,
@@ -270,12 +255,7 @@
         "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       30.7,
       99.4,
@@ -344,12 +324,7 @@
         "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       38.46,
       93.2,
@@ -417,12 +392,7 @@
         "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       42.97,
       80.14,
@@ -490,12 +460,7 @@
         "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       46.49,
       68.5,
@@ -564,12 +529,7 @@
         "note": "Structural/epileptic; the march follows the order in `anchors.somatotopicOrder`"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       48.42,
       58.23,
@@ -602,7 +562,7 @@
     "rampT": 1,
     "function": "The most medial part of the sensory strip, on the posterior bank of the paracentral lobule, where the foot and toes are represented behind the central sulcus. Together with the leg segment it is the part of the sensory homunculus that faces the interhemispheric fissure, receiving its thalamocortical input from the most medial VPL territory; it is also the site of the bladder afferent representation, which is why medial-surface lesions can disturb micturition control.",
     "anchors": {
-      "gyrus": "paracentral lobule and the medial end of the precentral gyrus, behind the superior end of the cingulate sulcus",
+      "gyrus": "paracentral lobule and the medial end of the postcentral gyrus, behind the superior end of the cingulate sulcus",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 0 of 7, arc s = 0.00 au from the toe",
@@ -637,12 +597,7 @@
         "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       7.33,
       108.57,
@@ -675,7 +630,7 @@
     "rampT": 0.8,
     "function": "The leg band of the sensory strip, on the superior rim of the hemisphere just behind the central sulcus, carrying thigh, knee and calf input. Its vessels arrive over the vertex, so it sits in the watershed between the anterior and middle cerebral artery territories — the anatomical reason a proximal leg sensory deficit can follow a haemodynamic rather than a thromboembolic event.",
     "anchors": {
-      "gyrus": "superior rim of the hemisphere adjacent to the paracentral lobule (leg band of the precentral gyrus)",
+      "gyrus": "superior rim of the hemisphere adjacent to the paracentral lobule (leg band of the postcentral gyrus)",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 1 of 7, arc s = 7.84 au from the toe",
@@ -710,12 +665,7 @@
         "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       15.69,
       105.8,
@@ -748,7 +698,7 @@
     "rampT": 0.6,
     "function": "The trunk band of the sensory strip on the superior convexity, carrying thorax and abdominal wall input. It lies between the leg and arm representations, which is why a thoracic sensory level on cortical grounds is very unusual: the cortical trunk band is small, runs along the vertex, and is supplied by the ACA/MCA watershed.",
     "anchors": {
-      "gyrus": "superior convexity of the precentral gyrus, first segment to leave the medial surface",
+      "gyrus": "superior convexity of the postcentral gyrus, first segment to leave the medial surface",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 2 of 7, arc s = 19.33 au from the toe",
@@ -783,12 +733,7 @@
         "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       23.5,
       102.15,
@@ -821,7 +766,7 @@
     "rampT": 0.4,
     "function": "The upper-limb band of the sensory strip on the lateral convexity: shoulder, arm and forearm, with the territory expanding sharply towards the hand next to it. It is one of the segments that makes the sensory homunculus legible — the arm/hand boundary is the largest step in representation size along the strip.",
     "anchors": {
-      "gyrus": "upper lateral convexity of the precentral gyrus (arm band)",
+      "gyrus": "upper lateral convexity of the postcentral gyrus (arm band)",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 3 of 7, arc s = 27.05 au from the toe",
@@ -856,12 +801,7 @@
         "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       32.26,
       94.48,
@@ -894,7 +834,7 @@
     "rampT": 0.2,
     "function": "The hand: the largest representation in the sensory strip and the seat of the cortical components of tactile discrimination — two-point discrimination, stereognosis, graphaesthesia and texture. Its size relative to the trunk band is the clearest expression of the sensory homunculus, and its lateral position in the middle-cerebral-artery territory is why a pure cortical sensory loss with a preserved primary modality points here rather than at the thalamus.",
     "anchors": {
-      "gyrus": "lateral convexity of the precentral gyrus at the hand-knob (the \"omega\" of the central sulcus)",
+      "gyrus": "lateral convexity of the postcentral gyrus at the hand-knob (the \"omega\" of the central sulcus)",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 4 of 7, arc s = 37.29 au from the toe",
@@ -929,12 +869,7 @@
         "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       37.07,
       91.24,
@@ -967,7 +902,7 @@
     "rampT": 0,
     "function": "The face: lips, cheek and jaw on the lower lateral convexity, with the lips again taking a disproportionate share. It receives the most lateral VPM territory and is the segment whose position — behind the lower end of the central sulcus, anterior to the supramarginal gyrus — makes the lower third of the postcentral gyrus the landing zone for face and intraoral sensation.",
     "anchors": {
-      "gyrus": "lower lateral convexity of the precentral gyrus (face band), above the lateral fissure",
+      "gyrus": "lower lateral convexity of the postcentral gyrus (face band), above the lateral fissure",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 5 of 7, arc s = 51.66 au from the toe",
@@ -1002,12 +937,7 @@
         "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       40.36,
       78.22,
@@ -1040,7 +970,7 @@
     "rampT": 0.3,
     "function": "The tongue and intraoral mucosa, on the opercular surface of the postcentral gyrus above the lateral fissure. It receives the most lateral VPM (and trigeminal) territory; with the face segment beside it, it explains why tongue and lip sensation can be lost together after a low convexity lesion while the hand, a few centimetres away on the same gyrus, is spared.",
     "anchors": {
-      "gyrus": "opercular surface of the precentral gyrus, immediately above the lateral fissure",
+      "gyrus": "opercular surface of the postcentral gyrus, immediately above the lateral fissure",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 6 of 7, arc s = 64.09 au from the toe",
@@ -1075,12 +1005,7 @@
         "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       46.37,
       68.13,
@@ -1113,7 +1038,7 @@
     "rampT": 0.25,
     "function": "The larynx and pharynx on the lowest opercular band of the postcentral gyrus. It is the smallest and least certain representation of the strip — the classical homunculus labels it as part of the face segment, and its separation here follows the standard eight-part M1 decomposition rather than a distinct anatomical boundary.",
     "anchors": {
-      "gyrus": "opercular surface of the precentral gyrus, at the inferior end of the strip",
+      "gyrus": "opercular surface of the postcentral gyrus, at the inferior end of the strip",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 7 of 7, arc s = 74.57 au from the toe",
@@ -1148,12 +1073,7 @@
         "note": "The cortical segment itself is not the lesion, but it is the end of the pathway whose loss is described"
       }
     ],
-    "levels": [
-      "lvl-tel-thalamostriate",
-      "lvl-tel-basal-ganglia",
-      "lvl-tel-centrum-semiovale",
-      "lvl-tel-convexity"
-    ],
+    "levels": ["lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale", "lvl-tel-convexity"],
     "origin3d": [
       50.86,
       60.88,

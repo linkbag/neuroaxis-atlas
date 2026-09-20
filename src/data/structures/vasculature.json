@@ -29,12 +29,7 @@
       "ctx-cerebral-cortex",
       "tract-optic-radiation"
     ],
-    "supply": [
-      "syn-weber",
-      "syn-hypothalamic",
-      "syn-tuberothalamic",
-      "syn-hemiballismus"
-    ],
+    "supply": ["syn-hypothalamic"],
     "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. Meshes: `FJ1682` (right) / `FJ1682M` (left), 1,272 faces each, FMA 3947/3949/4062 — the inventory lists the carotid as source-only because its table starts at the intracranial trunks, and notes that \"if the content task wants a `vasc-internal-carotid-artery` record, the verified mesh is already on disk\": this is that record. The carotid siphon the Willis ring needs is the rostral end of these same elements.",
     "connections": {
       "afferent": [
@@ -43,7 +38,7 @@
       ],
       "efferent": [
         "Ophthalmic artery (orbit and retina — the origin of amaurosis fugax), posterior communicating artery (vasc-posterior-communicating-artery), anterior choroidal artery (vasc-anterior-choroidal-artery)",
-        "Terminal bifurcation into the anterior cerebral artery (vasc-anterior-cerebral-artery) and the middle cerebral artery (vasc-middle-cerebral-artery); medial and lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) arise from the proximal segments"
+        "Terminal bifurcation into the anterior cerebral artery (vasc-anterior-cerebral-artery) and the middle cerebral artery (vasc-middle-cerebral-artery); the lateral lenticulostriate perforators arise from the proximal M1 middle cerebral artery and the medial group (including the recurrent artery of Heubner) from the proximal A1 anterior cerebral artery"
       ]
     },
     "bloodSupply": "Supplied by the vasa vasorum of its wall in the neck and by the caroticotympanic and capsular branches intracranially; the cavernous segment is surrounded by the cavernous sinus and its nerves, and the supraclinoid segment by the subarachnoid space, which is why aneurysms here bleed into the subarachnoid space or into the sinus.",
@@ -122,7 +117,7 @@
       "syn-hemimedullary",
       "syn-central-horner"
     ],
-    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The territory listed is the vertebral/PICA complex; the anterior spinal artery (ventral medulla) is reported in the PICA record's clinical notes. Meshes: `FJ1725` (right) / `FJ1725M` (left), 800 faces each, FMA 3956/3958/4066 — both tops meet the basilar bottom at z ≈ 1503 mm (inventory §3.2).",
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The territory listed is the vertebral/PICA complex; the anterior spinal artery (ventral medulla) is reported in this record's own efferent list and clinical entries. Meshes: `FJ1725` (right) / `FJ1725M` (left), 800 faces each, FMA 3956/3958/4066 — both tops meet the basilar bottom at z ≈ 1503 mm (inventory §3.2).",
     "connections": {
       "afferent": [
         "Subclavian artery (the first branch of the subclavian on each side) — the inflow of the posterior circulation",
@@ -215,7 +210,8 @@
       "syn-millard-gubler",
       "syn-foville",
       "syn-ino",
-      "syn-peduncular-hallucinosis"
+      "syn-peduncular-hallucinosis",
+      "syn-central-horner"
     ],
     "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The territories above are the paramedian and circumferential perforator beds, which are the ones that produce the named syndromes. Meshes: `FJ1672` (262 faces) primary, `FJ1844` (244 faces) the documented alternative — two decimations of the same unpaired concept, both straddling the midline by 1.5–1.9 mm (inventory §4).",
     "connections": {
@@ -257,13 +253,10 @@
       "lvl-pons-caudal",
       "lvl-pons-middle",
       "lvl-pons-rostral",
-      "lvl-midbrain-ic"
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
     ],
-    "origin3d": [
-      0,
-      -12,
-      6
-    ],
+    "origin3d": [0, -12, 14],
     "size3d": [
       2.5,
       14,
@@ -470,11 +463,8 @@
       "tract-corona-radiata",
       "tract-optic-radiation"
     ],
-    "supply": [
-      "syn-parkinson",
-      "syn-lateral-medullary"
-    ],
-    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The two `supply` entries are the syndrome cards whose arterial territory is named as MCA in the existing data (`syn-lateral-medullary` cites the MCA among its alternatives); the MCA's own named syndromes are documented in the clinical array and in the territory structures. Meshes: the sphenoid (M1) part `FJ1692`/`FJ1692M` (800 faces each), the insular (M2) parts (`FJ1660`/`FJ1660M`, `FJ1694`/`FJ1694M`), and the 34 terminal M2–M4 branch elements the inventory groups under this record (FMA 50080/50081/50365–50370); the generic MCA branch/zone elements (44 files) are listed as source-only support.",
+    "supply": [],
+    "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The record carries no `supply` entry: no syndrome card in this atlas attributes its lesion to the middle cerebral artery (the two entries an earlier revision carried — Parkinson's disease and lateral medullary syndrome — are a degenerative alpha-synucleinopathy and a PICA/vertebral territory respectively), so the MCA's named syndromes are documented in its own clinical array and in the territory structures it lists. Meshes: the sphenoid (M1) part `FJ1692`/`FJ1692M` (800 faces each), the insular (M2) parts (`FJ1660`/`FJ1660M`, `FJ1694`/`FJ1694M`), and the 34 terminal M2–M4 branch elements the inventory groups under this record (FMA 50080/50081/50365–50370); the generic MCA branch/zone elements (44 files) are listed as source-only support.",
     "connections": {
       "afferent": [
         "Internal carotid artery (vasc-internal-carotid-artery) at the carotid bifurcation",
@@ -527,7 +517,6 @@
       8
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
     ]
   },
@@ -556,12 +545,7 @@
       "tract-optic-tract",
       "nuc-pulvinar"
     ],
-    "supply": [
-      "syn-hemiballismus",
-      "syn-tuberothalamic",
-      "syn-hypothalamic",
-      "syn-weber"
-    ],
+    "supply": ["syn-hemiballismus", "syn-tuberothalamic", "syn-hypothalamic"],
     "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. Its perforators — not the vessel itself — are the ones that infarct the thalamus and subthalamic region, which is why the `supply` list is dominated by thalamic and subthalamic syndrome cards. Meshes: `FJ1713` (right) / `FJ1713M` (left), 204 faces each, FMA 50084/50085/50086.",
     "connections": {
       "afferent": [
@@ -602,11 +586,7 @@
       "lvl-post-comm",
       "lvl-thalamus-mid"
     ],
-    "origin3d": [
-      14,
-      22.5,
-      8
-    ],
+    "origin3d": [8, 22.5, 17],
     "size3d": [
       3.5,
       2,
@@ -623,8 +603,8 @@
     "synonyms": [
       "PCA",
       "arteria cerebri posterior",
-      "P1/P2/P3 segments of the posterior cerebral artery",
-      "calcarine artery (P3 branch)"
+      "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)",
+      "calcarine artery (a P4 cortical branch)"
     ],
     "region": "vasculature",
     "subdivision": "Posterior circulation",
@@ -660,7 +640,8 @@
       "syn-claude",
       "syn-nothnagel",
       "syn-parinaud",
-      "syn-peduncular-hallucinosis"
+      "syn-peduncular-hallucinosis",
+      "syn-hypothalamic"
     ],
     "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The long `supply` list is not an over-claim: the existing syndrome cards overwhelmingly cite PCA perforator territories (thalamic, midbrain and peduncular), which is exactly what this artery supplies. Meshes: the precommunicating P1 part `FJ1723`/`FJ1723M` (282 faces each; FMA 50590/50639/50640) and the postcommunicating P2–P3 part `FJ1714`/`FJ1714M` (544 faces each; FMA 50591/50641/50642) — P1 extent [8.6, 3.2, 5.5] mm versus P2 [11.2, 36.9, 10.1] mm, which is how the inventory verifies the segment split.",
     "connections": {
@@ -778,11 +759,7 @@
         "vascular": "Superior cerebellar artery and collicular branches of the posterior cerebral artery"
       }
     ],
-    "levels": [
-      "lvl-midbrain-ic",
-      "lvl-midbrain-sc",
-      "lvl-post-comm"
-    ],
+    "levels": ["lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
     "origin3d": [
       12,
       8,
@@ -868,11 +845,7 @@
       "lvl-pons-caudal",
       "lvl-pons-middle"
     ],
-    "origin3d": [
-      10,
-      -16,
-      -4
-    ],
+    "origin3d": [10, -16, 4],
     "size3d": [
       5,
       4,
@@ -923,7 +896,7 @@
         "Anastomotic flow from the anterior inferior cerebellar artery and the superior cerebellar artery along the cerebellar surface (the reason cerebellar infarcts can be smaller than the territory suggests)"
       ],
       "efferent": [
-        "Tonsillomedullary and telovelotonsillar segments with medullary branches to the dorsolateral medulla (vestibular nuclei, spinal trigeminal complex, nucleus ambiguus, solitary nucleus, inferior cerebellar peduncle, spinothalamic and hypothalamospinal tracts)",
+        "Anterior medullary, lateral medullary, tonsillomedullary and telovelotonsillar segments (the standard five-segment scheme) with medullary branches to the dorsolateral medulla (vestibular nuclei, spinal trigeminal complex, nucleus ambiguus, solitary nucleus, inferior cerebellar peduncle, spinothalamic and hypothalamospinal tracts)",
         "Cortical branches to the inferior vermis and the inferior cerebellar hemisphere"
       ]
     },
@@ -994,10 +967,7 @@
       "tract-internal-capsule-posterior-limb",
       "tract-corona-radiata"
     ],
-    "supply": [
-      "syn-hemiballismus",
-      "syn-weber"
-    ],
+    "supply": [],
     "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. This record is a two-vessel functional concept (lateral group from the MCA, medial group including Heubner's artery from the ACA) rather than a single named trunk, and it is classified `paired` because both groups are bilateral; the `origin3d` anchor sits at the anterior perforated substance. Meshes: no dedicated BP3D concept exists. The nearest elements are the anterolateral central branches of the middle cerebral artery (`FJ1662`/`FJ1662M`, `FJ1663`/`FJ1663M`, FMA 50376–50378), which the inventory files as MCA `half+support` rather than as their own record; the remaining lenticulostriate elements are inside its 44-element \"generic MCA branch/zone\" group. The record is therefore documented as a two-vessel functional concept whose geometry the render task takes from the MCA branch set.",
     "connections": {
       "afferent": [
@@ -1139,8 +1109,7 @@
     "synonyms": [
       "arteria choroidea posterior medialis",
       "medial posterior choroidal artery",
-      "posterior choroidal arteries (with its lateral companion)",
-      "lateral posterior choroidal artery"
+      "posterior choroidal arteries (medial and lateral — this record documents both branches)"
     ],
     "region": "vasculature",
     "subdivision": "Deep perforators",
@@ -1159,9 +1128,7 @@
       "tract-fornix",
       "nuc-thalamic-reticular"
     ],
-    "supply": [
-      "syn-dejerine-roussy"
-    ],
+    "supply": [],
     "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. This record is the paired medial/lateral posterior choroidal concept, which the existing ventricular and plexus records already cite by name in their `bloodSupply` fields. Mesh: `FJ1727`/`FJ1727M`, 880 faces each, FMA 50630/50672/50673 (\"posterior medial choroidal artery\" in the archive). Its lateral companion is not a separate element in the archive, so the record documents both branches and names this id after the one mesh that exists.",
     "connections": {
       "afferent": [
@@ -1190,11 +1157,7 @@
         "vascular": "Choroidal arteries (with the germinal matrix in neonates)"
       }
     ],
-    "levels": [
-      "lvl-midbrain-sc",
-      "lvl-post-comm",
-      "lvl-thalamus-mid"
-    ],
+    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate"],
     "origin3d": [
       14,
       18,

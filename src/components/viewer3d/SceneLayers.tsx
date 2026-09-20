@@ -16,7 +16,12 @@
  *    upgrades to the committed GLB when one exists and keeps the v1
  *    primitive (sphere or ventricle envelope override) otherwise;
  *  - one TractTube per tract record (region via the taxonomy registry) —
- *    tracts stay procedural (realism plan §7 tracts-upgrade).
+ *    tracts stay procedural (realism plan §7 tracts-upgrade);
+ *  - v14: one TractTube per CRANIAL-NERVE COURSE, through the SAME component,
+ *    the SAME sweep and the SAME `isTractVisible` gate — but keyed on the
+ *    record's OWN registry kind (`nerve`), so the Systems row's "Cranial
+ *    nerves" button controls exactly the twelve and the "Tracts" button
+ *    controls exactly the 23 (`src/geometry/curves.ts` holds the courses).
  *
  * Selection/hover dimming: the lit id set (open syndrome wins over a plain
  * selection — store.highlightIdSet) stays at full brightness/emissive while
@@ -52,6 +57,7 @@ import NucleusMesh from './NucleusMesh'
 import SomatotopyOverlay from './SomatotopyOverlay'
 import TractTube from './TractTube'
 import { SOMATOTOPY_RECORD_IDS } from '../../geometry/somatotopy'
+import { NERVE_COURSES, hasNerveCourse, type NerveCourseRecord } from '../../geometry/curves'
 
 /** Envelope gray (plan §6 context palette) — fed to the factory material. */
 const CONTEXT_COLOR = '#94a3b8'
@@ -87,7 +93,25 @@ export const GHOST_OUTLINE_OPACITY = 0.05
  * decides WHO gets it: opaque kinds, never the translucent envelopes.
  */
 
-/** A structure is "solid" when its kind renders opaque by default. */
+/**
+ * A structure is "solid" when its kind renders opaque by default.
+ *
+ * v13 note — `nerve` needs no entry here, and that is a DECISION, not an
+ * oversight: the predicate is "everything that is not one of the three
+ * translucent kinds", and a cranial-nerve record is a solid schematic placement
+ * the ordinary body pass draws. The whole nerve path is:
+ *   • `isStructureVisible` admits it (region on, `nerve` kind on, not hidden,
+ *     not in `TEL_CONTENT_ONLY_IDS`);
+ *   • `anatomySlugsForRecord` has no link for an `nrv-*` id, so the slug handed
+ *     to `NucleusMesh` is the record id itself — a manifest miss, which settles
+ *     to `status: 'fallback'` and draws the shared unit sphere scaled by
+ *     `size3d` at `origin3d` (exactly what `nuc-subiculum` and
+ *     `vasc-lenticulostriate-arteries` do);
+ *   • `isSolidKind('nerve')` is true, so `emphasis` may lift it — which is
+ *     correct for an opaque body and would be wrong for an envelope.
+ * The v13 slice adds no pass, no manifest part and no GLB (PLAN.md §5); if a
+ * nerve ever gets a baked body it becomes a `LINKS` entry, not a branch here.
+ */
 function isSolidKind(kind: StructureRecord['kind']): boolean {
   return kind !== 'context' && kind !== 'ventricle' && kind !== 'vessel'
 }
@@ -146,16 +170,48 @@ export function isStructureVisible(record: StructureRecord, layers: SceneLayerSe
 }
 
 /**
- * Whether the TRACT pass draws a tract. `TractRecord` carries no region, so the
+ * Whether the TRACT pass draws a tract — and, since v14, whether the
+ * CRANIAL-NERVE pass draws a course. `TractRecord` carries no region, so the
  * taxonomy registry is authoritative (a tract with no entry is a medullary one,
  * the pre-v7 default) — and the tract whose telencephalic body belongs to a
  * hidden record is hidden too, or the preset would leak the very fibres it says
  * it hides.
+ *
+ * v14 §5 — THE KIND IS THE RECORD'S OWN, NOT THE LITERAL 'tract'.
+ * This used to pass the hard-coded string `'tract'` to `layersAdmit`, which was
+ * invisible for the 23 tracts (all `kind: 'tract'` in the registry) and
+ * catastrophic for a `nerve`-kind course: the twelve cranial nerves would have
+ * been shown and hidden by the wrong Systems-row button — the tract toggle —
+ * while their own "Cranial nerves" toggle did nothing. Reading
+ * `entry.kind` fixes it at the line that held the defect and keeps the 23-tract
+ * behaviour byte-identical (`entry.kind === 'tract'` for each of them). The
+ * `view-filter-consistency` gate's source assertion on this call site and the
+ * call sites themselves are unchanged; only the kind argument moves.
  */
 export function isTractVisible(tractId: string, layers: SceneLayerSets): boolean {
   const entry = getTaxonomyEntry(tractId)
-  if (!layersAdmit(layers, entry ? entry.region : 'medulla', 'tract')) return false
+  const kind = entry?.kind ?? 'tract'
+  if (!layersAdmit(layers, entry ? entry.region : 'medulla', kind)) return false
   return !layers.hidden.has(tractId)
+}
+
+/**
+ * The CRANIAL-NERVE pass's admission list — the twelve courses that survive the
+ * one decision. Exported for the same reason `isTractVisible`,
+ * `isStructureVisible` and `layersAdmit` are: a gate cannot mount the R3F
+ * canvas, so the pass's decision is a pure function over (records, layer state)
+ * and `scripts/verify/cranial-nerve-render.mjs` runs it instead of reading a
+ * comment. The component calls this with `NERVE_COURSES`.
+ *
+ * The twelve are admitted by `isTractVisible`, i.e. on their OWN registry kind
+ * (`nerve`), which is what makes the Systems row's "Cranial nerves" button
+ * control exactly these and nothing else.
+ */
+export function nerveCoursesVisible(
+  courses: readonly NerveCourseRecord[],
+  layers: SceneLayerSets,
+): NerveCourseRecord[] {
+  return courses.filter((course) => isTractVisible(course.id, layers))
 }
 
 /** Whether a context envelope slot is drawn (region on + the context kind on). */
@@ -539,6 +595,29 @@ export default function SceneLayers() {
     [layerSets],
   )
 
+  /**
+   * v14 §5 — the twelve cranial nerves as TUBES.
+   *
+   * A cranial nerve is the same object as a tract — a bundle that leaves the
+   * brainstem at a root, crosses the cistern, traverses a named skull-base
+   * foramen and reaches a target, i.e. a Catmull-Rom path with a radius — so it
+   * renders through the SAME `<TractTube>` and the SAME gate as the 23 tracts,
+   * and its own registry kind (`nerve`) decides visibility. The domains stay
+   * separate: `src/data/tracts.json` is untouched by this run, so every
+   * count-based gate that sweeps `tracts` (23) keeps its domain while this pass
+   * covers the twelve.
+   *
+   * `visibleNerveCourses` is filtered by the one decision — `isTractVisible`,
+   * which reads the record's own registry kind — so with `kinds.has('nerve')`
+   * false all twelve disappear and the 23 tracts stay; with `kinds.has('tract')`
+   * false the reverse. `scripts/verify/cranial-nerve-render.mjs` executes that
+   * truth table rather than trusting this comment.
+   */
+  const visibleNerveCourses = useMemo(
+    () => nerveCoursesVisible(NERVE_COURSES, layerSets),
+    [layerSets],
+  )
+
   return (
     <group name="scene-layers">
       <ContextEnvelopes highlight={highlight} />
@@ -556,6 +635,26 @@ export default function SceneLayers() {
         // drawn by <SomatotopyOverlay> below, so the ordinary pass must skip them
         // rather than draw a second, wrong sphere on the same spot.
         if (SOMATOTOPY_RECORD_IDS.has(record.id)) return null
+        // v14 §5 — a nerve that now has a COURSE must not also keep its
+        // schematic placement ellipsoid: one record, one body.
+        //
+        // WHERE this suppression belongs is a decision, and this is the right
+        // place: `isStructureVisible` is THE layer decision (its four-state
+        // truth table is asserted by `view-filter-consistency`), so a
+        // course-bearing nerve is still ADMITTED by the area/system predicate —
+        // it simply is not drawn by this pass, exactly like the envelope and
+        // somatotopy records above. Putting the suppression inside
+        // `isStructureVisible` would have made "area off ⇒ hidden" stop being
+        // the whole story there, and the gate caught it.
+        //
+        // What is suppressed is the ellipsoid only. The v13 slice drew every
+        // `nrv-*` record as a unit sphere scaled by `size3d` at `origin3d` (the
+        // fallback branch of `NucleusMesh`, since `anatomySlugsForRecord` has no
+        // link for a nerve id) — that is the "blob" the user sees beside the
+        // course. The record itself stays complete: `origin3d`, `size3d`,
+        // `function`, `modality`, `course` and the clinical items are still read
+        // by the InfoPanel, the content gates and the course anchor chain.
+        if (hasNerveCourse(record.id)) return null
         // Ventricle records keep their parametric v1 shape as the fallback;
         // NucleusMesh upgrades to the committed GLB when the manifest has one.
         const override = record.kind === 'ventricle' ? cachedVentricleGeometry(record.id) : undefined
@@ -610,6 +709,14 @@ export default function SceneLayers() {
         // as REALISM_PLAN §7 decided ("tracts stay procedural"). So: no baked-body
         // branch here, and nothing below y = +45 changes.
         <TractTube key={tract.id} tract={tract} highlight={highlight} />
+      ))}
+      {/* v14 §5 — the twelve cranial-nerve courses, same tube, same gate, their
+          OWN registry kind. Each is a `NerveCourseRecord`: a superset of
+          `TractRecord` (waypoints + tubeRadius + direction + colour) carrying
+          the `region` and `foramen` a nerve needs, so `TractTube` needs no
+          branch and no new renderer exists. */}
+      {visibleNerveCourses.map((course) => (
+        <TractTube key={course.id} tract={course} highlight={highlight} />
       ))}
     </group>
   )

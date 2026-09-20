@@ -3,7 +3,7 @@
     "id": "syn-weber",
     "name": "Weber syndrome",
     "eponym": "Weber",
-    "structures": ["nuc-oculomotor", "tract-crus-cerebri", "tract-corticospinal-lateral", "tract-corticobulbar"],
+    "structures": ["nuc-oculomotor", "tract-crus-cerebri", "tract-corticobulbar"],
     "vascularTerritory": "Paramedian branches of the posterior cerebral artery (posterior thalamoperforating / midbrain perforators)",
     "presentation": "Ipsilateral pupil-involving CN III palsy — ptosis, mydriasis, and a 'down and out' eye — combined with contralateral hemiplegia of face, arm, and leg and contralateral upper motor neuron facial weakness (crossed findings).",
     "cause": "Infarction or hemorrhage of the ventral midbrain at the basis pedunculi, damaging the oculomotor fascicles as they traverse the substance of the midbrain and the corticospinal/corticobulbar fibers of the crus cerebri; classically from occlusion of paramedian PCA perforators, also reported with tumors, demyelination, and tuberculoma.",
@@ -56,7 +56,7 @@
   {
     "id": "syn-parinaud",
     "name": "Parinaud syndrome (dorsal midbrain)",
-    "eponym": "Parinaud (dorsal midbrain syndrome)",
+    "eponym": "Parinaud",
     "structures": ["nuc-pretectal", "nuc-superior-colliculus", "nuc-pineal-gland", "nuc-edinger-westphal"],
     "vascularTerritory": "Collicular/quadrigeminal branches of the posterior cerebral artery; pineal region masses cause the syndrome by mass effect rather than ischemia",
     "presentation": "Vertical gaze palsy (upgaze affected first, later downgaze), convergence-retraction nystagmus on attempted upgaze, eyelid retraction (Collier sign), light-near dissociation with large pupils that accommodate but do not react to light, and the setting-sun sign.",
@@ -70,7 +70,7 @@
   {
     "id": "syn-ino",
     "name": "Internuclear ophthalmoplegia (MLF)",
-    "structures": ["tract-mlf", "nuc-abducens", "nuc-oculomotor"],
+    "structures": ["tract-mlf"],
     "vascularTerritory": "Paramedian branches of the basilar artery",
     "presentation": "On attempted lateral gaze: impaired (slow or absent) adduction of the ipsilateral eye with abducting nystagmus of the contralateral eye; convergence is characteristically spared, distinguishing the lesion from a third-nerve palsy; diplopia occurs in lateral gaze.",
     "cause": "Lesion of the medial longitudinal fasciculus interrupting the abducens internuclear fibers that ascend to the contralateral oculomotor medial rectus subnucleus; in young adults usually demyelination (often bilateral), in the elderly a small paramedian basilar perforator infarct (usually unilateral).",

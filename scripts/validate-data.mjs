@@ -39,8 +39,37 @@ const taxonomyById = new Map();
 
 /* ----------------------------------------------------- contract constants */
 
-/** Structure/tract id slugs, plan §3: prefix by kind + lowercase kebab. */
-const SLUG_RE = /^(nuc|tract|vent|surf|vasc|ctx)-[a-z0-9-]+$/;
+/**
+ * Structure/tract id slugs, plan §3: prefix by kind + lowercase kebab.
+ *
+ * v13 (PLAN.md §3) extends the FROZEN contract with `nrv-` for the `nerve` kind.
+ * The alternative — reusing `ctx-` (the only prefix not already tied to a
+ * matching kind) — was rejected because prefix-follows-kind is stated as a rule
+ * in three places (here, docs/DATA_CONTRACT.md §3, docs/CONTENT_INVENTORY.md §3)
+ * and twelve `ctx-` rows whose kind is `nerve` would be the one class of row
+ * where the two disagree, an exception every future reader would have to carry.
+ * Measured against the pre-v13 regex: `nrv-cn3-oculomotor`, `cn3-oculomotor`,
+ * `nrv-CN3` and `nerve-cn3` were all rejected; with `nrv` added the first is
+ * accepted and the other three stay rejected (see PREFIX_KIND below, which is
+ * the same rule asserted rather than merely documented).
+ */
+const SLUG_RE = /^(nuc|tract|vent|surf|vasc|ctx|nrv)-[a-z0-9-]+$/;
+/**
+ * The prefix→kind rule the regex encodes, made executable: every registry row's
+ * id prefix must name its own kind. Measured before adding it: all 236 rows
+ * satisfied the rule with 0 violations, so this is an assertion the shipped data
+ * already passes, and it is what keeps a future `nrv-…` row from silently being
+ * classified as something else (or a nucleus from being mis-prefixed).
+ */
+const PREFIX_KIND = {
+  nuc: 'nucleus',
+  tract: 'tract',
+  vent: 'ventricle',
+  surf: 'surface',
+  vasc: 'vessel',
+  ctx: 'context',
+  nrv: 'nerve',
+};
 const LEVEL_ID_RE = /^lvl-[a-z0-9-]+$/;
 const PLATE_ID_RE = /^plate-[a-z0-9-]+$/;
 /** Syndrome ids: lowercase kebab, no reserved prefix (syn- recommended). */
@@ -48,7 +77,7 @@ const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const HEX_RE = /^#[0-9a-f]{6}$/;
 
 const REGIONS = ['telencephalon', 'diencephalon', 'midbrain', 'pons', 'medulla', 'cerebellum', 'vasculature'];
-const KINDS = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context'];
+const KINDS = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context', 'nerve'];
 const LATERALITIES = ['midline', 'paired'];
 const DIRECTIONS = ['ascending', 'descending', 'mixed'];
 const ORIENTATIONS = ['transverse', 'sagittal', 'coronal'];
@@ -89,7 +118,18 @@ const counts = {
   plates: 0,
   svgs: 0,
   registryOnly: 0,
+  /** v13: kind -> row count on each side, so the Summary can print the census. */
+  registryKinds: new Map(),
+  authoredKinds: new Map(),
 };
+
+/** "nucleus 88 · tract 53 · … · nerve 12  (7 kinds)  Σ 248" — one axis. */
+function census(histogram) {
+  const parts = KINDS.map((kind) => `${kind} ${histogram.get(kind) ?? 0}`);
+  const total = [...histogram.values()].reduce((sum, n) => sum + n, 0);
+  const empty = KINDS.filter((kind) => (histogram.get(kind) ?? 0) === 0);
+  return `${parts.join(' · ')}  (${KINDS.length} kinds${empty.length > 0 ? `, 0 rows: ${empty.join(', ')}` : ''})  Σ ${total}`;
+}
 
 /* ------------------------------------------------------- small checkers */
 
@@ -290,6 +330,15 @@ function validateTaxonomy(list, file) {
       if (!SLUG_RE.test(e.id)) {
         err(file, `${at}.id`, `slug ${JSON.stringify(e.id)} must match ${SLUG_RE}`);
       }
+      /* plan §3 "prefix by kind", asserted (v13): the prefix must NAME this row's
+       * kind, so the registry can never hold an id whose prefix lies about it. */
+      const prefix = e.id.split('-')[0];
+      const prefixKind = PREFIX_KIND[prefix];
+      if (prefixKind === undefined) {
+        err(file, `${at}.id`, `unknown id prefix "${prefix}-" — allowed prefixes: ${Object.keys(PREFIX_KIND).join(' | ')} (plan §3)`);
+      } else if (typeof e.kind === 'string' && prefixKind !== e.kind) {
+        err(file, `${at}.id`, `prefix "${prefix}-" means kind "${prefixKind}" but the row declares kind "${e.kind}" (plan §3: prefix by kind)`);
+      }
       if (ids.has(e.id)) err(file, `${at}.id`, `duplicate registry id "${e.id}"`);
       ids.add(e.id);
     }
@@ -363,6 +412,13 @@ function claimIdentity(file, at, rec, type) {
   if (!SLUG_RE.test(id)) {
     err(file, `${at}.id`, `slug ${JSON.stringify(id)} must match ${SLUG_RE} (plan §3/§9)`);
   }
+  /* The same prefix→kind rule as the registry side, applied to authored records
+   * that carry a `kind` (StructureRecords do; TractRecords join the registry for
+   * classification, so they are skipped — v13). */
+  const prefixKind = PREFIX_KIND[id.split('-')[0]];
+  if (prefixKind !== undefined && typeof rec.kind === 'string' && prefixKind !== rec.kind) {
+    err(file, `${at}.id`, `prefix "${id.split('-')[0]}-" means kind "${prefixKind}" but the record declares kind "${rec.kind}" (plan §3: prefix by kind)`);
+  }
   const seen = authored.get(id);
   if (seen) {
     err(file, `${at}.id`, `duplicate id "${id}" (first seen in ${seen.file} ${seen.at})`);
@@ -396,6 +452,15 @@ function crossCheckRegistry(registryIds) {
     if (t.color !== a.color) warn(a.file, `${a.at}.color`, `color "${a.color}" differs from registry "${t.color}" — SVG recoloring uses the taxonomy color`);
   }
   counts.registryOnly = [...registryIds].filter((id) => !authored.has(id)).length;
+  /* v13: the authored-side kind census (StructureRecords carry `kind`; a
+   * TractRecord joins the registry for classification, so its kind is read from
+   * the registry row it is registered under — the same authority the rest of the
+   * validator uses). */
+  for (const a of authored.values()) {
+    const kind = typeof a.kind === 'string' ? a.kind : taxonomyById.get(a.id)?.kind;
+    if (typeof kind !== 'string') continue;
+    counts.authoredKinds.set(kind, (counts.authoredKinds.get(kind) ?? 0) + 1);
+  }
 }
 
 function validateStructure(rec, file, at, levelIds) {
@@ -412,6 +477,13 @@ function validateStructure(rec, file, at, levelIds) {
   checkEnum(file, `${at}.laterality`, rec.laterality, LATERALITIES);
   checkHex(file, `${at}.color`, rec.color);
   checkString(file, `${at}.function`, rec.function, true);
+  /* v13 (PLAN.md §4.2): the two fields the cranial-nerve records carry and no
+   * other structure record does — the fibre modality and the course with its
+   * skull-base foramen. Optional here (the six pre-v13 kinds do not use them),
+   * but validated when present so a typo cannot hide in a JSON-only key that
+   * tsc never sees. */
+  if (rec.modality !== undefined) checkString(file, `${at}.modality`, rec.modality, false);
+  if (rec.course !== undefined) checkString(file, `${at}.course`, rec.course, false);
   if (rec.connections !== undefined) {
     const c = rec.connections;
     if (!isObj(c)) {
@@ -650,6 +722,12 @@ function printReport(skippedGroups) {
   console.log('\nSummary');
   line('levels', `${counts.levels} level anchor(s)`);
   line('taxonomy', `${counts.taxonomy} registry entr(ies) (${counts.registryOnly} awaiting authored records)`);
+  /* v13: the per-KIND census, printed for BOTH sides so a new kind (or a kind
+   * whose records landed on one side only) is visible in this command's own
+   * output instead of being inferable only from the error list. `nerve 0 · …`
+   * and a registry-only count are what a half-landed slice looks like. */
+  line('kinds', `registry: ${census(counts.registryKinds)}`);
+  line('kinds/auth', `authored: ${census(counts.authoredKinds)}`);
   line('structures', orSkipped('structures', `${counts.structureFiles} file(s), ${counts.structures} record(s)`));
   line('tracts', orSkipped('tracts', `${counts.tracts} record(s)`));
   line('syndromes', orSkipped('syndromes', `${counts.syndromeFiles} file(s), ${counts.syndromes} record(s)`));
@@ -704,6 +782,10 @@ function main() {
   taxonomyById.clear();
   if (Array.isArray(taxonomy)) {
     for (const e of taxonomy) if (isObj(e) && typeof e.id === 'string') taxonomyById.set(e.id, e);
+    for (const e of taxonomy) {
+      if (!isObj(e) || typeof e.kind !== 'string') continue;
+      counts.registryKinds.set(e.kind, (counts.registryKinds.get(e.kind) ?? 0) + 1);
+    }
   }
   if (taxonomy === undefined) err('src/data/taxonomy.json', '(file)', 'missing required file — the registry must exist (plan §10, created first)');
   if (levels === undefined) err('src/data/levels.json', '(file)', 'missing required file — the level table must exist (plan §2)');

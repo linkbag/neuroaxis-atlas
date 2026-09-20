@@ -105,6 +105,6 @@
     <g class="plate-label" data-for="nuc-vpm"><line x1="617" y1="565" x2="446" y2="484" stroke="#475569" stroke-width="1"/><circle cx="446" cy="484" r="2.5" fill="#475569"/><text x="625" y="569" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">VPM nucleus</tspan></text></g>
     <g class="plate-label" data-for="ctx-fields-of-forel"><line x1="617" y1="606" x2="462" y2="514" stroke="#475569" stroke-width="1"/><circle cx="462" cy="514" r="2.5" fill="#475569"/><text x="625" y="610" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Fields of Forel (H1/H2)</tspan></text></g>
     <g class="plate-label" data-for="tract-crus-cerebri"><line x1="617" y1="647" x2="504" y2="598" stroke="#475569" stroke-width="1"/><circle cx="504" cy="598" r="2.5" fill="#475569"/><text x="625" y="651" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Crus cerebri</tspan></text></g>
-    <g class="plate-label" data-for="nuc-mammillary-body"><line x1="617" y1="688" x2="430" y2="586" stroke="#475569" stroke-width="1"/><circle cx="430" cy="586" r="2.5" fill="#475569"/><text x="625" y="692" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Mammillary body</tspan></text></g>
+    <g class="plate-label" data-for="nuc-mammillary-body"><line x1="617" y1="688" x2="418" y2="578" stroke="#475569" stroke-width="1"/><circle cx="418" cy="578" r="2.5" fill="#475569"/><text x="625" y="692" text-anchor="start" font-size="12" fill="#1e293b"><tspan x="625" dy="0">Mammillary body</tspan></text></g>
   </g>
 </svg>

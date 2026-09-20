@@ -1,0 +1,346 @@
+{
+  "audit": "v15-syndromes",
+  "area": "syndromes",
+  "generatedBy": "audit-syndromes (swarm run NeuroAxis v15)",
+  "generatedFor": "docs/audit/v15 — integrator hand-off (auditors do not edit data)",
+  "scope": {
+    "cards": 26,
+    "files": [
+      "src/data/syndromes/diencephalon.json",
+      "src/data/syndromes/hindbrain.json",
+      "src/data/syndromes/midbrain.json"
+    ],
+    "crossCheckedAgainst": [
+      "src/data/structures/vasculature.json (14 vessel records, supply[] both directions)",
+      "src/data/taxonomy.json (248 registry ids; syndrome structures[] resolve against it)",
+      "src/data/tracts.json (23 tract records — tract-* ids a card names are NOT missing structures)",
+      "src/data/structures/*.json (225 records: the structures a card names, their own clinical[] entries, region/laterality/levels)"
+    ],
+    "verdictEnum": [
+      "ok",
+      "wrong",
+      "suspect",
+      "unverifiable-here"
+    ],
+    "severityEnum": [
+      "critical",
+      "major",
+      "minor"
+    ],
+    "basisKindEnum": [
+      "internal-contradiction",
+      "external-source",
+      "nomenclature",
+      "own-anatomical-knowledge"
+    ]
+  },
+  "summary": {
+    "findingsTotal": 16,
+    "byVerdict": {
+      "wrong": 14,
+      "suspect": 1,
+      "unverifiable-here": 1
+    },
+    "bySeverity": {
+      "critical": 3,
+      "major": 10,
+      "minor": 3
+    },
+    "cardsWithAtLeastOneFinding": 11,
+    "cardsClean": 15,
+    "headline": "Three critical defects: the MCA names two syndrome cards it cannot cause (Parkinson's disease, which the card itself declares non-vascular, and lateral medullary syndrome, a PICA/vertebral syndrome), and syn-foville states the direction of the gaze palsy backwards relative to its own brainstem records.",
+    "byBasisKind": {
+      "internal-contradiction": 15,
+      "external-source": 1
+    },
+    "findingsAgainstCards": 11,
+    "findingsAgainstArteryRecords": 4,
+    "cardsTotal": 26
+  },
+  "findings": [
+    {
+      "id": "SYN-001",
+      "area": "syndromes",
+      "recordId": "vasc-middle-cerebral-artery",
+      "field": "supply[] (artery side) / syn-parkinson.vascularTerritory (card side)",
+      "claimed": "vasc-middle-cerebral-artery.supply = [\"syn-parkinson\",\"syn-lateral-medullary\"] — i.e. the atlas states that the middle cerebral artery causes Parkinson's disease. Via src/data/load.ts syndromesBySupply -> arteriesForSyndrome(), opening syn-parkinson currently lights the MCA as its causal artery.",
+      "expected": "supply = [\"syn-lateral-medullary\"] only, or [] if SYN-002 is also applied. syn-parkinson.vascularTerritory stays exactly as written: \"None (degenerative alpha-synucleinopathy, not vascular)\".",
+      "verdict": "wrong",
+      "severity": "critical",
+      "basis": "Internal contradiction between two records: syn-parkinson.vascularTerritory and syn-parkinson.cause state the disease is a degenerative alpha-synucleinopathy of the substantia nigra pars compacta with no vascular territory, and nuc-snc's own clinical[] entry for Parkinson's disease records vascular \"None (degenerative alpha-synucleinopathy)\". The MCA record's territory[] lists no nigral or midbrain structure (it lists cortex, basal-ganglia and capsule ids), so the MCA cannot infarct the SNc. Mechanism: src/data/load.ts builds the reverse syndrome index from supply[] verbatim, so the wrong entry is rendered as a real causal link.",
+      "basisKind": "internal-contradiction",
+      "suggestedFix": "Remove \"syn-parkinson\" from vasc-middle-cerebral-artery.supply in src/data/structures/vasculature.json (leave \"syn-lateral-medullary\" alone here — it is SYN-002's subject). Do not touch syn-parkinson.json.",
+      "notes": "Severity critical because it is rendered: a reader selecting Parkinson's disease is shown the MCA as the artery of the disease, which inverts the card's own teaching point."
+    },
+    {
+      "id": "SYN-002",
+      "area": "syndromes",
+      "recordId": "syn-lateral-medullary",
+      "field": "vascularTerritory + structures[] (card) vs vasc-middle-cerebral-artery.supply (artery)",
+      "claimed": "The card names only the PICA/vertebral territory (\"Posterior inferior cerebellar artery (PICA), usually occluded at its vertebral origin; occasionally the vertebral artery directly\") and its cause names vertebral dissection/atherothrombosis/embolism — yet vasc-middle-cerebral-artery.supply contains \"syn-lateral-medullary\", and the MCA record's contextNote asserts the card \"cites the MCA among its alternatives\", which the card does not do anywhere in vascularTerritory, cause, presentation or refs. Reciprocal-link direction (a) also fails: the card's text names vasc-posterior-inferior-cerebellar-artery and vasc-vertebral-artery (both of which do list the card) but the MCA link is unreciprocated by the text.",
+      "expected": "vasc-middle-cerebral-artery.supply should not contain \"syn-lateral-medullary\" at all (after SYN-001 is applied it becomes [] unless a genuine MCA syndrome is added); the card side — vascularTerritory, structures[] and cause — is correct as written and must not change.",
+      "verdict": "wrong",
+      "severity": "critical",
+      "basis": "Internal contradiction: (1) syn-lateral-medullary.vascularTerritory/cause restrict the lesion to PICA/vertebral; (2) the MCA record is region=vasculature, subdivision=\"Anterior circulation\", and its territory[] contains no medullary structure (it lists surf-frontal-lobe … tract-optic-radiation), so it cannot infarct the dorsolateral medulla; (3) an MCA infarct cannot produce Wallenberg's crossed pattern by any accepted mechanism. External confirmation of the standard attribution: StatPearls \"Lateral Medullary Syndrome (Wallenberg Syndrome)\" — \"usually due to occlusion of the posterior inferior cerebellar artery (PICA), which is a branch of the vertebral artery\" (https://www.ncbi.nlm.nih.gov/books/NBK551670/).",
+      "basisKind": "internal-contradiction+external-source",
+      "suggestedFix": "Remove \"syn-lateral-medullary\" from vasc-middle-cerebral-artery.supply and delete/replace the claim in that record's contextNote (\"the existing data cites the MCA among its alternatives\"), which is factually untrue of the card as authored.",
+      "notes": "Read literally, the current entry asserts that a middle-cerebral-artery infarct causes Wallenberg syndrome — the wrong vascular territory of the wrong circulation, rendered as a causal link in the UI."
+    },
+    {
+      "id": "SYN-003",
+      "area": "syndromes",
+      "recordId": "syn-foville",
+      "field": "presentation",
+      "claimed": "\"IPSILATERAL horizontal gaze palsy (PPRF and/or abducens nuclear complex — the eyes deviate away, gaze toward the lesion is impossible)\"; and \"Contrasts with Millard-Gubler by the gaze-palsy emphasis (PPRF/nuclear VI)\".",
+      "expected": "\"IPSILATERAL horizontal gaze palsy (PPRF and/or abducens nuclear complex — gaze toward the lesion is impossible, so the eyes rest conjugately deviated AWAY from the lesion)\". The parenthetical must state that gaze toward the lesion is lost; the resting deviation is the secondary observation, not the definition.",
+      "verdict": "wrong",
+      "severity": "critical",
+      "basis": "Internal contradiction with two records in the same atlas that state the rule correctly: nuc-pprf.clinical[0] \"the eyes rest deviated away, and the intact contralateral PPRF drives gaze in the opposite direction\" and nuc-abducens.clinical[0] \"paralyses gaze toward the lesion\"; syn-one-and-a-half.presentation \"gaze TOWARD the lesion is impossible for either eye … The eyes rest conjugately deviated AWAY from the lesion\". External confirmation: StatPearls \"Foville Syndrome\" — \"With the involvement of the PPRF, this presents as a conjugate gaze palsy, meaning the inability to move the eyes towards the affected side\" (https://www.ncbi.nlm.nih.gov/books/NBK544268/); the same source's classic triad is \"ipsilateral 6th nerve palsy, facial palsy, and contralateral hemiparesis\" (https://europepmc.org/books/nbk544268).",
+      "basisKind": "internal-contradiction+external-source",
+      "suggestedFix": "Replace the parenthesis with: \"(PPRF and/or abducens nuclear complex — gaze toward the lesion is impossible, so the eyes rest conjugately deviated away from the lesion)\".",
+      "notes": "Critical because the wrong direction of a gaze palsy mislocalizes the lesion to the opposite side of the pons, which is exactly how Foville is examined at the bedside."
+    },
+    {
+      "id": "SYN-004",
+      "area": "syndromes",
+      "recordId": "syn-weber",
+      "field": "structures[] + vascularTerritory",
+      "claimed": "structures = [\"nuc-oculomotor\",\"tract-crus-cerebri\",\"tract-corticospinal-lateral\",\"tract-corticobulbar\"]; vascularTerritory = \"Paramedian branches of the posterior cerebral artery (posterior thalamoperforating / midbrain perforators)\".",
+      "expected": "structures = [\"nuc-oculomotor\",\"tract-crus-cerebri\"] (the presentation already names the corticobulbar fibres as damaged, and tract-crus-cerebri documents that it carries the corticospinal and corticobulbar fibres of the basis pedunculi). vascularTerritory should lead with the paramedian PCA/perforator origin of the syndrome and must not be paired with the lenticulostriate (MCA) supply entry — see SYN-011.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "(a) Internal contradiction with the record's own registry entry: tract-corticospinal-lateral is a medulla record (src/data/tracts.json: \"Corticospinal tract (lateral)\", levels lvl-spinal-medulla … lvl-thalamus-rostral) and tract-pyramid (medulla) documents that the corticospinal axons only become the *lateral* corticospinal tract at the pyramidal decussation, caudal to the medulla. At the level of the syndrome's lesion — the midbrain basis pedunculi — the descending fibres are uncrossed crus-cerebri fibres, which is why tract-crus-cerebri.function states it carries \"corticobulbar fibers, then corticospinal fibers\" with frontopontine most medial. (b) syn-medial-medullary and syn-locked-in use tract-pyramid for the same pre-decussation corticospinal fibres at their own levels, so the atlas's own convention is level-correct naming. (c) External: StatPearls \"Weber Syndrome\" and Radiopaedia \"Weber syndrome\" localize the syndrome to the ventral midbrain basis pedunculi with fascicular CN III involvement (https://www.ncbi.nlm.nih.gov/books/NBK559158/, https://radiopaedia.org/articles/weber-syndrome).",
+      "basisKind": "internal-contradiction+external-source",
+      "suggestedFix": "Drop \"tract-corticospinal-lateral\" and (optionally) \"tract-corticobulbar\" from syn-weber.structures, leaving [\"nuc-oculomotor\",\"tract-crus-cerebri\"]; the pre-decussation corticospinal/corticobulbar fibres are already enumerated by tract-crus-cerebri's own afferent/efferent fields. Do not invent a midbrain 'corticospinal' id — none exists in taxonomy.json.",
+      "notes": "Verdict is wrong on the id/level mismatch (the record is the caudal, crossed lateral corticospinal tract of the medulla), not on clinical content: the presentation text itself is correct. External basis cited above; the internal contradiction alone would sustain it."
+    },
+    {
+      "id": "SYN-005",
+      "area": "syndromes",
+      "recordId": "syn-millard-gubler",
+      "field": "structures[]",
+      "claimed": "structures = [\"nuc-facial\",\"nuc-abducens\",\"nuc-pprf\",\"tract-corticospinal-lateral\",\"tract-corticobulbar\"] — the abducens nucleus and the PPRF are listed as the damaged structures of the syndrome, while the card's own presentation hedges them (\"plus IPSILATERAL abducens failure … and if the nuclear complex or adjacent PPRF is involved, conjugate gaze palsy\").",
+      "expected": "structures = [\"nuc-facial\",\"nuc-abducens\",\"tract-corticospinal-lateral\",\"tract-corticobulbar\"] for the classic ventrocaudal-pons definition (CN VII + CN VI fascicles + corticospinal), with the PPRF removed: a nuclear CN VI or PPRF lesion abolishes *conjugate* gaze toward the side, which is the Foville variant, not the classical Millard-Gubler abduction failure. If the pons-level id must be level-correct, tract-corticospinal-lateral/tract-corticobulbar should follow the same treatment decided for SYN-004.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "External: StatPearls \"Millard-Gubler Syndrome\" — \"MGS is caused by a lesion in the ventral part of the pons (basis pontis) involving the infranuclear fascicular fibers of cranial nerve VII ipsilaterally and the corticospinal tract contralaterally\" (https://www.ncbi.nlm.nih.gov/books/NBK532907/), i.e. the defining structures are the CN VII fascicles and the corticospinal tract; the abducens is the eponymous but variable addition (\"facial abducens hemiplegia syndrome\", https://www.ophth.wisc.edu/blog/2025/01/01/millard-gubler-syndrome/). Internal: the card's own presentation makes the abducens *nucleus*/PPRF contribution conditional, and nuc-abducens.clinical[1] explicitly separates \"fascicular or peripheral CN VI injury (isolated failure of abduction)\" — the Millard-Gubler lesion — from \"a nuclear lesion (gaze palsy)\", which is what the structures[] field currently asserts.",
+      "basisKind": "external-source+internal-contradiction",
+      "suggestedFix": "Remove \"nuc-pprf\" from syn-millard-gubler.structures and keep the conjugate-gaze clause in the presentation as a conditional extension (it is correct there). Consider rewording the presentation's first clause to \"ipsilateral abducens (fascicular) failure\".",
+      "notes": "Not critical: the presentation hedges correctly and the syndrome is still recognizable; the defect is that structures[] asserts a nuclear/PPRF lesion the classic definition does not require."
+    },
+    {
+      "id": "SYN-006",
+      "area": "syndromes",
+      "recordId": "syn-ino",
+      "field": "structures[]",
+      "claimed": "structures = [\"tract-mlf\",\"nuc-abducens\",\"nuc-oculomotor\"] — the abducens nucleus and the oculomotor nucleus are listed as structures damaged by the lesion.",
+      "expected": "structures = [\"tract-mlf\"] for the lesion itself; if the deafferented target must be shown, say so in the presentation (already done: \"interrupting the abducens internuclear fibers that ascend to the contralateral oculomotor medial rectus subnucleus\") rather than listing the nucleus as damaged.",
+      "verdict": "wrong",
+      "severity": "minor",
+      "basis": "Internal: nuc-abducens.function/efferent identify the nucleus as the *origin* of the internuclear axons that ascend in the contralateral MLF (\"Internuclear axons crossing to ascend in the contralateral MLF toward nuc-oculomotor\"); tract-mlf's registry meaning is the interrupted pathway. The abducens and oculomotor nuclei lie respectively caudal and rostral to the MLF lesion and are deafferented/de-efferented, not destroyed — the card's own presentation says exactly this. External: the definition of INO is an MLF lesion (Blumenfeld, cited by the card, Ch. \"Brainstem II: Eye Movements and Pupillary Control\").",
+      "basisKind": "internal-contradiction+external-source",
+      "suggestedFix": "Reduce syn-ino.structures to [\"tract-mlf\"]; keep the presentation text unchanged.",
+      "notes": "Minor because the card's prose localizes correctly; the defect is that structures[] over-claims the damaged set in the machine-readable field that drives highlighting."
+    },
+    {
+      "id": "SYN-007",
+      "area": "syndromes",
+      "recordId": "syn-hypothalamic",
+      "field": "vascularTerritory (reciprocal link, direction a)",
+      "claimed": "The card names \"posterior communicating and P1/PCA paramedially\" but vasc-posterior-cerebral-artery.supply does not contain \"syn-hypothalamic\" (supply = syn-dejerine-roussy, syn-percheron, syn-tuberothalamic, syn-weber, syn-benedikt, syn-claude, syn-nothnagel, syn-parinaud, syn-peduncular-hallucinosis).",
+      "expected": "vasc-posterior-cerebral-artery.supply should contain \"syn-hypothalamic\", since the card names the P1/PCA paramedian hypothalamic perforators among the territories that injure the supraoptic/paraventricular magnocellular neurons.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "Internal contradiction between the card's own vascularTerritory text (\"P1/PCA paramedially\") and the artery record that omits it; opening the card currently lights the anterior communicating, posterior communicating and internal carotid arteries but not the PCA it names (src/data/load.ts arteriesForSyndrome reads supply[] only).",
+      "basisKind": "internal-contradiction",
+      "suggestedFix": "Add \"syn-hypothalamic\" to vasc-posterior-cerebral-artery.supply.",
+      "notes": "One-sided link — exactly the defect class the dispatch brief asks to flag."
+    },
+    {
+      "id": "SYN-008",
+      "area": "syndromes",
+      "recordId": "syn-cerebellar",
+      "field": "vascularTerritory (territory coverage + reciprocal link, direction a)",
+      "claimed": "The card names \"Superior cerebellar artery (SCA) for the dentate/SCP complex; AICA and PICA for the other deep-nucleus territories\", but the AICA record's territory[] = [tract-mcp, ctx-cerebellum, surf-vermis, cochlear/vestibular/facial/trigeminal nuclei, surf-cn7-exit, surf-cn8-exit, vent-fourth-ventricle] and the PICA record's territory[] = [ctx-cerebellum, surf-vermis, tract-icp, vestibular/spinal-trigeminal/ambiguus/solitary/DMV/spinothalamic/hypothalamospinal/reticular ids, vent-fourth-ventricle] — neither claims any deep cerebellar nucleus (nuc-dentate, nuc-interposed, nuc-fastigial); the SCA record alone does. Nor does either supply[] contain syn-cerebellar (AICA: syn-lateral-pontine, syn-millard-gubler, syn-foville; PICA: syn-lateral-medullary, syn-central-horner, syn-hemimedullary), while the card's structures[] are exactly nuc-dentate, nuc-interposed, nuc-fastigial and tract-scp — i.e. the SCA territory.",
+      "expected": "Consistent either way, but not both: (a) correct the card's vascularTerritory to the territory the artery records actually claim — the SCA supplies all three deep nuclei (the SCA territory[] names nuc-dentate, nuc-interposed and nuc-fastigial) and the AICA/PICA clause should be dropped or narrowed to \"AICA and PICA for cerebellar cortical/vermal involvement\"; or (b) if the atlas wants the AICA/PICA deep-nucleus link, add the deep-nucleus ids to those territories and \"syn-cerebellar\" to their supply[].",
+      "verdict": "suspect",
+      "severity": "major",
+      "basis": "Internal contradiction (basisKind internal-contradiction): the card asserts a deep-nucleus allocation that no AICA/PICA record supports, while the SCA record supports the SCA half verbatim (territory[] contains nuc-dentate, nuc-interposed, nuc-fastigial and tract-scp; supply[] already contains syn-cerebellar). The remaining question is genuinely contested in the literature — the dentate nucleus is classically SCA territory with a variable PICA/AICA contribution — so this audit does not declare the data wrong and does not invent a new territory; it records the inconsistency and the two consistent end states. Verdict suspect by the evidence-discipline rule.",
+      "basisKind": "internal-contradiction",
+      "suggestedFix": "Preferred (smallest, no anatomical re-authoring): edit syn-cerebellar.vascularTerritory to \"Superior cerebellar artery (SCA) for the dentate/interposed/fastigial complex and the superior cerebellar peduncle; vermal and cortical cerebellar infarcts follow the AICA and PICA territories\" — which is what the artery records already encode. Alternative: if the integrator wants the AICA/PICA deep-nucleus link, add the deep-nucleus ids to vasc-anterior-inferior-cerebellar-artery.territory / vasc-posterior-inferior-cerebellar-artery.territory and \"syn-cerebellar\" to both supply[] arrays.",
+      "notes": "Flagged separately from the pure link findings because the two sides of the atlas disagree about which artery feeds the deep nuclei — a reader who opens the SCA record and the cerebellar card together currently reads two different answers. The reciprocal-link half of the defect (AICA/PICA supply[] omitting syn-cerebellar) disappears under the preferred fix, because the card would then name only the SCA."
+    },
+    {
+      "id": "SYN-009",
+      "area": "syndromes",
+      "recordId": "syn-central-horner",
+      "field": "vascularTerritory (reciprocal link, direction a)",
+      "claimed": "The card names \"basilar paramedian perforators in the pons\" but vasc-basilar-artery.supply (syn-locked-in, syn-one-and-a-half, syn-millard-gubler, syn-foville, syn-ino, syn-peduncular-hallucinosis) does not contain \"syn-central-horner\".",
+      "expected": "Add \"syn-central-horner\" to vasc-basilar-artery.supply.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "Internal contradiction: the card explicitly lists the basilar paramedian perforators in the pons as one of the territories of a first-order Horner syndrome, and the structure record nuc-medullary-reticular (named by the card) carries the central Horner clinical entry with vascular \"PICA / vertebral\". The reciprocal entry is missing only on the basilar side.",
+      "basisKind": "internal-contradiction",
+      "suggestedFix": "Add \"syn-central-horner\" to vasc-basilar-artery.supply.",
+      "notes": "Note the card also names the anterior spinal artery in the cervical cord; the atlas has no vasc-anterior-spinal-artery record (see SYN-015), so no entry can be added for it."
+    },
+    {
+      "id": "SYN-010",
+      "area": "syndromes",
+      "recordId": "vasc-internal-carotid-artery + vasc-posterior-communicating-artery",
+      "field": "supply[] (artery side), both records",
+      "claimed": "vasc-internal-carotid-artery.supply = [\"syn-weber\",\"syn-hypothalamic\",\"syn-tuberothalamic\",\"syn-hemiballismus\"] and vasc-posterior-communicating-artery.supply = [\"syn-hemiballismus\",\"syn-tuberothalamic\",\"syn-hypothalamic\",\"syn-weber\"] — the internal carotid is listed as an artery of the tuberothalamic and hemiballismus cards (whose own vascularTerritory fields name the P1/PCoA junction and the PCoA/anterior-choroidal perforators), and the posterior communicating artery is listed as an artery of Weber syndrome (whose card names only PCA paramedian/midbrain perforators, and whose cause names no PCoA mechanism).",
+      "expected": "vasc-internal-carotid-artery.supply = [\"syn-hypothalamic\"] only (the card names the superior hypophyseal perforators, an ICA branch); vasc-posterior-communicating-artery.supply = [\"syn-hemiballismus\",\"syn-tuberothalamic\",\"syn-hypothalamic\"] with \"syn-weber\" removed. The \"syn-weber\" entry on the ICA is resolved by SYN-013.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "Internal contradiction in four places: (1) syn-tuberothalamic.vascularTerritory = \"PCA — tuberothalamic (anterior thalamoperforating) artery from the P1/posterior communicating junction\", and neither its structures nor its cause names the ICA; (2) syn-hemiballismus.vascularTerritory = \"Perforating branches of the posterior communicating artery and anterior choroidal artery to the subthalamic nucleus\", with the ICA and its branches absent; (3) syn-weber.vascularTerritory names only the PCA, and the PCoA record's own clinical[] array contains no Weber item (\"Posterior communicating aneurysm with third-nerve palsy\", the tuberothalamic infarct, hemiballismus, the fetal-type variant) — a PCoA aneurysm compresses CN III in the cistern and cannot infarct the basis pedunculi; (4) neither artery's territory[] contains nuc-thalamic-anterior, nuc-subthalamic or tract-crus-cerebri.",
+      "basisKind": "internal-contradiction",
+      "suggestedFix": "In src/data/structures/vasculature.json: set vasc-internal-carotid-artery.supply = [\"syn-hypothalamic\"], and remove \"syn-weber\" from vasc-posterior-communicating-artery.supply. Keep the PCoA entries for syn-hemiballismus, syn-tuberothalamic and syn-hypothalamic — those three are reciprocal with their cards.",
+      "notes": "Severity major rather than critical: every card involved also carries at least one correct artery link (the PCA or the PCoA), so these entries add a spurious artery instead of replacing the right one. If the integrator prefers to keep the Weber/PCoA link, the card's vascularTerritory must be rewritten to name the PCoA perforators explicitly — as authored the two records contradict each other."
+    },
+    {
+      "id": "SYN-011",
+      "area": "syndromes",
+      "recordId": "vasc-lenticulostriate-arteries",
+      "field": "supply[] (artery side)",
+      "claimed": "supply = [\"syn-hemiballismus\",\"syn-weber\"] — the lenticulostriate (MCA) perforators are listed as an artery of both hemiballismus and Weber syndrome.",
+      "expected": "Remove both entries. Hemiballismus is attributed by the card to \"Perforating branches of the posterior communicating artery and anterior choroidal artery to the subthalamic nucleus\", and Weber syndrome to \"Paramedian branches of the posterior cerebral artery … midbrain perforators\". The lenticulostriate record's own territory[] is putamen/caudate/pallidum/claustrum/internal capsule/corona radiata — no midbrain, no subthalamic nucleus.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "Internal contradiction: neither syndrome card mentions the lenticulostriate arteries or the MCA, and the lenticulostriate record's territory[] has no subthalamic or midbrain id (it lists nuc-putamen … tract-corona-radiata). Its clinical[] array names hypertensive putaminal haemorrhage, lacunar pure motor/sensory syndromes, capsular warning syndrome and caudate haemorrhage — none of which is hemiballismus or Weber syndrome.",
+      "basisKind": "internal-contradiction",
+      "suggestedFix": "Set vasc-lenticulostriate-arteries.supply = [] (or delete the key) — the record keeps its four clinical[] entries, which already document its real syndromes.",
+      "notes": "This is a large false-positive cluster: as authored, opening Weber syndrome lights the MCA's deep perforators, and opening hemiballismus lights both the PCoA (correct) and the lenticulostriate arteries (incorrect)."
+    },
+    {
+      "id": "SYN-012",
+      "area": "syndromes",
+      "recordId": "vasc-posterior-medial-choroidal-artery",
+      "field": "supply[] (artery side) + syn-dejerine-roussy.vascularTerritory",
+      "claimed": "vasc-posterior-medial-choroidal-artery.supply = [\"syn-dejerine-roussy\"] — the posterior *medial* choroidal artery is listed as the artery of the Déjérine-Roussy thalamic pain syndrome, whose card attributes it to the \"thalamogeniculate artery (inferolateral thalamic territory)\".",
+      "expected": "Remove \"syn-dejerine-roussy\" from the posterior medial choroidal supply; the inferolateral (thalamogeniculate) territory is the correct attribution. The card text is right and should not change.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "External: the thalamic vascular-syndrome literature assigns the inferolateral (thalamogeniculate) artery territory the \"thalamic hand\" of Foix and Hillemand and the post-lesion pain syndrome of Déjérine-Roussy (Vascular Syndromes of the Thalamus, Stroke, https://www.ahajournals.org/doi/10.1161/01.str.0000087786.38997.9e). Internal: the posterior medial choroidal record's own territory[] is choroid plexus, habenula, MGN, pulvinar and fornix, and its clinical[] items are \"Choroid plexus tumour supply\", \"Posterior choroidal territory infarction\" and \"Intraventricular haemorrhage\" — none is thalamic pain. At most a pulvinar/medial-choroidal contribution could be argued, but the card does not claim one and the entry displaces the correct thalamogeniculate attribution in the reverse index.",
+      "basisKind": "internal-contradiction+external-source",
+      "suggestedFix": "Remove \"syn-dejerine-roussy\" from vasc-posterior-medial-choroidal-artery.supply, leaving []. Consider a separate finding for the PCA record: vasc-posterior-cerebral-artery.supply does correctly contain \"syn-dejerine-roussy\", so the card keeps a correct artery link.",
+      "notes": "The atlas has no vasc-thalamogeniculate record, so no reciprocal entry can be created; the correct end state is simply that the medial choroidal artery does not claim this card."
+    },
+    {
+      "id": "SYN-013",
+      "area": "syndromes",
+      "recordId": "syn-weber",
+      "field": "reciprocal link set (card ↔ artery records)",
+      "claimed": "Opening syn-weber lights four arteries — vasc-internal-carotid-artery, vasc-posterior-communicating-artery, vasc-lenticulostriate-arteries and vasc-posterior-cerebral-artery — of which only the PCA names a mechanism the card supports (\"paramedian branches of the posterior cerebral artery (posterior thalamoperforating / midbrain perforators)\"). The other three are supported by neither the card nor their own clinical[] arrays.",
+      "expected": "syn-weber should light the posterior cerebral artery (and, if the atlas wants the classic alternative, only arteries whose clinical[] array actually documents Weber syndrome). syn-weber.vascularTerritory should be left as authored.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "Internal: the three non-PCA links are each contradicted on their own side — ICA (SYN-010), PCoA (undefined), lenticulostriate (SYN-011); no ICA/PCoA/lenticulostriate clinical[] item mentions Weber syndrome or a basis-pedunculi infarct. External: Radiopaedia \"Weber syndrome\" — \"usually caused by an ischemic stroke, typically involving branches of the posterior cerebral artery\" (https://radiopaedia.org/articles/weber-syndrome); StatPearls \"Weber Syndrome\" (https://www.ncbi.nlm.nih.gov/books/NBK559158/).",
+      "basisKind": "internal-contradiction+external-source",
+      "suggestedFix": "Remove \"syn-weber\" from vasc-internal-carotid-artery.supply, vasc-posterior-communicating-artery.supply and vasc-lenticulostriate-arteries.supply; keep vasc-posterior-cerebral-artery.supply as is. This finding is the syndrome-side roll-up of SYN-010 and closes when SYN-010 and SYN-011 are applied.",
+      "notes": "Kept as a separate row so the integrator can verify the final rendered link set (arteriesForSyndrome('syn-weber') === ['vasc-posterior-cerebral-artery']) after applying SYN-010."
+    },
+    {
+      "id": "SYN-014",
+      "area": "syndromes",
+      "recordId": "syn-parinaud",
+      "field": "eponym",
+      "claimed": "eponym = \"Parinaud (dorsal midbrain syndrome)\"; name = \"Parinaud syndrome (dorsal midbrain)\". syn-pineal-region carries the identical eponym string while being a different card (name \"Pineal region tumor with gaze palsy\").",
+      "expected": "eponym should be the eponym alone — \"Parinaud\" (or \"Henri Parinaud\") — with the descriptor left to `name`; two distinct cards should not share an eponym string that also duplicates another card's name.",
+      "verdict": "wrong",
+      "severity": "minor",
+      "basis": "Internal: the field is an eponym field and every other card in the three files uses it that way (\"Weber\", \"Benedikt\", \"Claude\", \"Nothnagel\", \"Wallenberg syndrome\", \"Reinhold syndrome\"); grepping the three files shows the string \"Parinaud (dorsal midbrain syndrome)\" occurring twice as an eponym. The dorsal-midbrain descriptor is redundant with name = \"Parinaud syndrome (dorsal midbrain)\".",
+      "basisKind": "internal-contradiction+nomenclature-convention",
+      "suggestedFix": "Set syn-parinaud.eponym = \"Parinaud\" and syn-pineal-region.eponym = \"Parinaud (mass effect)\" or, preferably, drop the eponym from syn-pineal-region entirely (it is a tumor card whose name does not claim an eponym), keeping the cross-reference in its cause text.",
+      "notes": "Minor/cosmetic in the UI, but it is the only duplicate eponym pair in the 26 cards and it makes the two cards indistinguishable in an eponym index."
+    },
+    {
+      "id": "SYN-015",
+      "area": "syndromes",
+      "recordId": "syn-medial-medullary",
+      "field": "vascularTerritory (reciprocal link) + registry coverage",
+      "claimed": "vascularTerritory = \"Anterior spinal artery (paramedian branches of the vertebral artery)\"; vasc-vertebral-artery.supply does contain \"syn-medial-medullary\", but the named primary artery — the anterior spinal artery — has no record in src/data/structures/vasculature.json (14 records: ICA, VA, BA, ACA, ACom, MCA, PCoA, PCA, SCA, AICA, PICA, lenticulostriate, anterior choroidal, posterior medial choroidal).",
+      "expected": "Either (a) accept the vertebral-artery fallback as the atlas's representation and note it, or (b) add a vasc-anterior-spinal-artery record and put \"syn-medial-medullary\" (and the anterior-spinal-artery clauses of syn-hemimedullary and syn-central-horner) in its supply[]. Option (a) is what the VA record's contextNote already claims (\"the anterior spinal artery (ventral medulla) is reported in the PICA record's clinical notes\"), which is itself inaccurate — the VA record's clinical[] documents it, not the PICA record's.",
+      "verdict": "unverifiable-here",
+      "severity": "minor",
+      "basis": "Internal: enumerating src/data/structures/vasculature.json shows no anterior spinal artery record; the VA record's contextNote asserts the ASA is \"reported in the PICA record's clinical notes\", but reading vasc-posterior-inferior-cerebellar-artery.clinical[] shows no ASA item (its three syndromes are the lateral medullary syndrome, a PICA cerebellar infarct and a PICA aneurysm). Whether the atlas intends a dedicated ASA record is a design decision this audit cannot settle — hence unverifiable-here rather than wrong.",
+      "basisKind": "internal-contradiction",
+      "suggestedFix": "Cheapest consistent fix: correct the VA record's contextNote to say the anterior spinal artery is reported in its own clinical notes; or add the vasc-anterior-spinal-artery record if the integrator wants the card's named artery to be clickable.",
+      "notes": "Reported as unverifiable-here per the evidence-discipline rule: the card is clinically right, the omission is a registry-coverage question, and I have no basis to declare the data wrong."
+    },
+    {
+      "id": "SYN-016",
+      "area": "syndromes",
+      "recordId": "syn-hemimedullary",
+      "field": "structures[]",
+      "claimed": "structures = [\"tract-pyramid\",\"tract-medial-lemniscus\",\"nuc-hypoglossal\",\"nuc-spinal-trigeminal\",\"nuc-ambiguus\",\"nuc-dmv\",\"tract-spinothalamic\"] — but the presentation asserts two further findings whose structures are absent from the list: \"ipsilateral Horner syndrome and ataxia\".",
+      "expected": "Add \"tract-hypothalamospinal\" (the structure that causes the Horner syndrome — the same id syn-lateral-medullary uses for its Horner finding, and the id that the PICA record lists in its own territory[]) and \"tract-icp\" (the ipsilateral limb ataxia, exactly as syn-lateral-medullary lists it) to the structures[] array.",
+      "verdict": "wrong",
+      "severity": "major",
+      "basis": "Internal contradiction with the sibling card: syn-lateral-medullary — whose deficits the hemimedullary card explicitly combines — lists tract-anterior-spinocerebellar and tract-icp for the ataxia and nuc-medullary-reticular for the Horner syndrome. Both ids exist in the registry (taxonomy: tract-hypothalamospinal \"Hypothalamospinal (sympathetic) tract\", tract-icp \"Inferior cerebellar peduncle\") and vasc-posterior-inferior-cerebellar-artery.territory contains both \"tract-icp\" and \"tract-hypothalamospinal\", so the artery record that feeds this card already names them.",
+      "basisKind": "internal-contradiction",
+      "suggestedFix": "Add \"tract-hypothalamospinal\" and \"tract-icp\" to syn-hemimedullary.structures (both are valid registry ids; validate:anatomy is unaffected because syndrome structures[] resolve against taxonomy.json, not against authored structure records).",
+      "notes": "This is the 'card missing the structure that causes the cardinal sign' defect class named in the brief: the card states Horner syndrome and ataxia but its structures[] cannot produce either."
+    }
+  ],
+  "cardsAuditedClean": [
+    "syn-dejerine-roussy",
+    "syn-percheron",
+    "syn-tuberothalamic",
+    "syn-korsakoff",
+    "syn-pineal-region",
+    "syn-hemiballismus",
+    "syn-locked-in",
+    "syn-cpm",
+    "syn-lateral-pontine",
+    "syn-one-and-a-half",
+    "syn-benedikt",
+    "syn-claude",
+    "syn-nothnagel",
+    "syn-parkinson",
+    "syn-peduncular-hallucinosis"
+  ],
+  "checksRun": [
+    {
+      "check": "Every structure id named by a card resolves in taxonomy.json",
+      "result": "PASS — all 58 distinct ids referenced by the 26 cards exist in taxonomy.json (248 ids).",
+      "note": "tract-anterior-spinocerebellar, tract-spinothalamic, tract-corticospinal-lateral, tract-corticobulbar, tract-mlf and tract-hypothalamospinal have no record under src/data/structures/*.json because they are authored in src/data/tracts.json (23 records) — they are NOT dangling references. The validator resolves syndrome structures[] against the taxonomy registry (scripts/validate-data.mjs line 821 comment and validateSyndrome)."
+    },
+    {
+      "check": "Card-id duplicates / near-duplicate cards",
+      "result": "PASS — 26 unique ids across the 3 files, no duplicate id.",
+      "note": "Two clinically overlapping pairs exist and were reviewed, not filed as defects: syn-parinaud vs syn-pineal-region (same dorsal-midbrain syndrome, one idiopathic/ischemic, one tumor — the distinction is real and stated in both cards' cause), and syn-weber vs syn-benedikt vs syn-claude (adjacent midbrain lesions distinguished by the red nucleus / dentatorubrothalamic involvement, as each card's cause states). syn-hemimedullary is by construction the union of syn-medial-medullary and syn-lateral-medullary and says so."
+    },
+    {
+      "check": "Artery ↔ syndrome link reciprocity, both directions",
+      "result": "3 one-sided card→artery links (SYN-007…009), 11 artery→card links contradicted by the card (SYN-001, SYN-002, SYN-010, SYN-011, SYN-012; roll-up SYN-013).",
+      "note": "Method: card side parsed from vascularTerritory with case-insensitive ASCII-boundary token matching; artery side read from supply[]; then src/data/load.ts syndromesBySupply/arteriesForSyndrome read to confirm the wrong links are actually rendered."
+    },
+    {
+      "check": "Eponyms vs modern names",
+      "result": "All eponyms verified as the names in current use; one duplicate eponym pair (SYN-014).",
+      "note": "Wallenberg (lateral medullary), Déjerine (medial medullary / anterior bulbar), Reinhold (hemimedullary), Millard-Gubler, Foville, Weber, Benedikt, Claude, Nothnagel, Parinaud, Lhermitte (peduncular hallucinosis), Déjérine-Roussy (thalamogeniculate) are all standard. Wernicke-Korsakoff, Parkinson's disease, central pontine myelinolysis/osmotic demyelination syndrome and lateral pontine (AICA) syndrome are the modern labels and are used correctly; the atlas's older alternatives (\"paralysis agitans\" for Parkinson's, \"AICA syndrome\" for lateral pontine) are flagged as descriptors, not errors."
+    },
+    {
+      "check": "Laterality / crossed-ness of every stated deficit",
+      "result": "All 26 cards state crossed and uncrossed findings on the correct side except syn-foville (SYN-003).",
+      "note": "Verified per card: lateral medullary (ipsilateral face / contralateral body — correct), medial medullary (ipsilateral tongue / contralateral body — correct, tongue deviates toward the lesion per nuc-hypoglossal's own entry), hemimedullary, Millard-Gubler, Foville, Weber, Benedikt (contralateral involuntary movements), Claude (contralateral ataxia), Nothnagel (ipsilateral CN III + ipsilateral ataxia — the classical description), one-and-a-half (gaze away from the lesion), INO, lateral pontine, cerebellar (ipsilateral because cerebellar output double-crosses), Déjérine-Roussy (contralateral), Percheron (bilateral), tuberothalamic (left/right-specific neuropsychology), hemiballismus (contralateral), Horner (ipsilateral), peduncular hallucinosis (no lateralizing claim), CPM and locked-in (bilateral)."
+    },
+    {
+      "check": "Presentation vs the card's own structures[] for cause-of-cardinal-sign coverage",
+      "result": "One defect (SYN-016, syn-hemimedullary Horner + ataxia with no sympathetic or peduncular structure listed).",
+      "note": "Two further coverage gaps reviewed and NOT filed: syn-lateral-medullary's vertigo is attributed in the presentation to the \"vestibular territory\" without listing a vestibular nucleus (the neighbouring nuc-vestibular-medial/-inferior records and the syndrome's ICP entry both document the mechanism, so the omission is not a false claim), and syn-percheron's vertical gaze palsy arises from the rostral midbrain, which its structures[] does not list (the card's own MRI sentence says \"paramedian thalamic and rostral midbrain\"). Both are defensible editorial choices; flagged here as observations for the integrator rather than as findings."
+    },
+    {
+      "check": "Non-vascular cards",
+      "result": "PASS for syn-korsakoff, syn-cpm, syn-pineal-region, syn-parkinson.",
+      "note": "All four correctly declare \"None …\" and are referenced by no artery supply[] entry. syn-parkinson's problem is the reverse direction (an artery claims it) and is filed as SYN-001."
+    }
+  ],
+  "basisKindEnum": [
+    "internal-contradiction",
+    "external-source",
+    "nomenclature",
+    "own-anatomical-knowledge"
+  ]
+}

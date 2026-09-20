@@ -216,7 +216,18 @@ export const ALL_REGIONS: readonly Region[] = [
   'cerebellum',
   'vasculature',
 ]
-export const ALL_KINDS: readonly Kind[] = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context']
+/**
+ * Every kind, in display order. v13 (PLAN.md §2/§6) appends `'nerve'`.
+ *
+ * THIS LIST IS THE SYSTEMS-ROW MECHANISM: `Header.tsx` maps `ALL_KINDS` into the
+ * `data-kind` buttons (with `KIND_LABELS[kind]` as the visible text) and
+ * `Legend.tsx` maps it into the per-kind checkboxes, so a kind added here appears
+ * in both rows with no other UI edit. The boot state follows automatically too —
+ * `VIEW_PRESETS['brainstem-focus'].kinds` IS this array, so the new layer is on
+ * at startup, which `store.ts` requires (its load-time assertion throws when any
+ * non-telencephalon record's kind is layer-off in the default framing).
+ */
+export const ALL_KINDS: readonly Kind[] = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context', 'nerve']
 
 export const REGION_LABELS: Record<Region, string> = {
   telencephalon: 'Telencephalon (cerebral hemispheres)',

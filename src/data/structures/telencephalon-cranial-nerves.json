@@ -1,0 +1,141 @@
+[
+  {
+    "id": "nrv-cn1-olfactory",
+    "name": "CN I Olfactory nerve",
+    "synonyms": [
+                  "olfactory nerve",
+                  "nervus olfactorius",
+                  "first cranial nerve",
+                  "CN I",
+                  "olfactory fila (fila olfactoria)",
+                  "olfactory nerve plus bulb and tract"
+                ],
+    "region": "telencephalon",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Special sensory — smell (olfaction); also a special visceral afferent carried from the nasal epithelium, and the afferent limb of the smell-taste flavour system",
+    "course": "From the olfactory epithelium of the superior nasal cavity (bipolar receptor neurons) the unmyelinated axons (fila olfactoria, about 20 bundles per side) pierce the cribriform plate of the ethmoid — the foramen this nerve uses — and enter the olfactory bulb of the anterior cranial fossa; from the bulb the olfactory tract runs posteriorly in the olfactory sulcus on the orbital surface of the frontal lobe, at the limen insulae dividing into the medial and lateral olfactory striae that reach the anterior perforated substance and the piriform cortex. There is no true cisternal segment: the intracranial part of CN I is the bulb and tract, which lie on the orbital surface rather than in the subarachnoid cisterns, and the nerve owns no subarachnoid course of the kind CN III delivers to the interpeduncular cistern. The bulb and tract are therefore included in this one record, because the fila, bulb and tract are the same first-order pathway and the clinical lesions (trauma, frontal tumour) damage them together.",
+    "function": "The only cranial nerve that reaches the brain without a thalamic relay: its first-order axons synapse directly on the mitral and tufted cells of the olfactory bulb, which are the output neurons of a three-layered cortical structure. The bulb performs the first stage of odour processing (glomerular convergence and lateral inhibition through periglomerular and granule cells) and sends the result along the tract to the primary olfactory cortex — the piriform cortex, the periamygdaloid cortex and the anterior cortical nucleus of the amygdala, with a smaller projection to the rostral entorhinal cortex (ctx-entorhinal). This is why smell has a uniquely direct route to the limbic system (odours are recognised, remembered and emotionally tagged before any conscious analysis), and why the tract's projections are the anatomical basis of odour-triggered memory and of the uncinate-fit phenomenon. The nerve also carries the afferent limb of retronasal olfaction, so it is the dominant contributor to what patients call taste.",
+    "connections": {
+                     "afferent": [
+                       "Olfactory receptor neurons of the olfactory epithelium (bipolar cells whose cilia carry the odorant receptors) — the true first-order neurons; their axons are the fila olfactoria and they regenerate throughout life, which is why post-viral anosmia can recover",
+                       "Central modulation of the bulb through the medial olfactory stria (from the anterior olfactory nucleus, the diagonal band and the contralateral bulb via the anterior commissure), which sharpens and gates the incoming odour signal",
+                       "Note on the registry: no `nuc-` record exists for the olfactory bulb or its mitral/tufted cells, so the first relay of this nerve is named here in prose rather than linked; the nucleus-level records this record can link are the cortical targets listed under efferent"
+                     ],
+                     "efferent": [
+                       "Primary olfactory (piriform) cortex of the uncus and anterior parahippocampal gyrus — the main cortical target, with no thalamic relay",
+                       "Amygdala (nuc-amygdala) and the periamygdaloid cortex — the substrate of odour-driven emotion and of the visceral responses to smell",
+                       "Entorhinal cortex (ctx-entorhinal) and thence the hippocampus (nuc-hippocampus) — the route by which an odour becomes a memory, severed early in Alzheimer disease",
+                       "Thalamus (nuc-md, mediodorsal nucleus) and the orbitofrontal cortex — the secondary pathway that makes odour a conscious, nameable percept; this is the relay that a frontal lesion interrupts",
+                       "The bulb and tract also project back into the epithelium through centrifugal fibres from the horizontal limb of the diagonal band, the anatomical reason attention modulates odour detection"
+                     ]
+                   },
+    "bloodSupply": "The olfactory bulb and tract are supplied by the olfactory branches of the anterior cerebral artery (vasc-anterior-cerebral-artery), with contributions from the anterior ethmoidal branches of the ophthalmic artery in the olfactory fossa; the convergence of these small vessels on the anterior perforated substance places the nerve next to the anterior communicating artery (vasc-anterior-communicating-artery), which is why the nerve is at risk during anterior-communicating-aneurysm surgery and why subarachnoid blood from that aneurysm can leave anosmia. The olfactory epithelium itself is supplied by the anterior ethmoidal artery, and venous drainage runs through the ethmoidal veins, whose proximity to the subarachnoid space is why a fracture here leaks CSF.",
+    "clinical": [
+      {
+        "syndrome": "Anosmia and hyposmia (conductive versus sensorineural)",
+        "findings": "Loss of smell must be split into a conductive type (the odorant never reaches the epithelium or the cribriform foramina are blocked — rhinosinusitis, nasal polyposis, allergic rhinitis, a deviated septum) and a sensorineural type (the fila, bulb or tract are damaged). The distinction localizes the lesion, and only the sensorineural type is a neurological sign: a persistently unilateral anosmia in a patient with no nasal disease is a structural lesion until proven otherwise.",
+        "note": "The clinically load-bearing test is unilateral testing of each nostril with a familiar odour; bilateral anosmia is often unnoticed by the patient and reported as loss of taste, because retronasal olfaction carries most of the flavour of food while the tongue's taste buds (CN VII, IX, X) remain normal."
+      },
+      {
+        "syndrome": "Post-traumatic anosmia (cribriform-plate shearing)",
+        "findings": "Head injury, particularly occipital impact with contre-coup against the anterior cranial fossa, avulses the fila olfactoria as they pass through the cribriform plate; the bulb and tract may also be contused against the orbital roof. The deficit is typically unilateral or asymmetric, is often unnoticed until the patient cannot smell smoke or gas, and is a recognized cause of permanent disability after apparently minor trauma.",
+        "note": "Because the fila are the torn element, recovery is possible (they regenerate and re-synapse) but is usually incomplete — the anatomical reason recovery after traumatic anosmia is partial at best, unlike the recovery after a conductive cause is treated."
+      },
+      {
+        "syndrome": "Foster Kennedy syndrome (olfactory-groove meningioma)",
+        "findings": "A meningioma of the olfactory groove compresses the nerve and bulb on one side, producing ipsilateral anosmia and ipsilateral optic atrophy from direct compression of the optic nerve, while raised intracranial pressure produces papilloedema in the other eye; anosmia may precede visual symptoms by years, and a frontal-lobe syndrome with abulia, anosmia and gait disturbance can be the presenting picture.",
+        "vascular": "Not vascular — the artery that matters is the anterior cerebral artery displaced by the tumour"
+      },
+      {
+        "syndrome": "Anosmia after subarachnoid haemorrhage and in neurodegenerative disease",
+        "findings": "Blood in the subarachnoid space (most often from an anterior communicating artery aneurysm, which lies immediately behind the olfactory tract) damages the nerve and produces anosmia distinct from the headache and meningism; a slowly progressive anosmia with no nasal disease is an early non-motor feature of Parkinson disease and of dementia with Lewy bodies, and it also precedes the memory loss of Alzheimer disease.",
+        "vascular": "Anterior communicating artery / anterior cerebral artery territory"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral", "lvl-tel-basal-ganglia"],
+    "origin3d": [8, 12, 48],
+    "size3d": [1.6, 1.8, 7.5],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'",
+              "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\"",
+              "Patten, Neurological Differential Diagnosis, 2nd ed., cranial nerve examination sections"
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` and owns no manifest part. The ellipsoid at origin3d [8, 12, 48] with radii size3d [1.6, 1.8, 7.5] spans z ≈ 40.5–55.5 au, i.e. the orbital surface of the frontal lobe in front of the frontal pole (the baked cortex reaches z ≈ +70.6 au at the pole), and is a SCHEMATIC placement, not anatomy: it stands for the bulb and tract on the orbital surface, and the cribriform plate of the ethmoid at the anterior end. BodyParts3D carries no olfactory-nerve element in this checkout's archive (`assets-src/bp3d/parts-report.json` has no nerve entry and the raw `*.obj` filenames name no nerve), and no nucleus record exists for the olfactory bulb, so nothing could be drawn from geometry even if the budget allowed. The record is useful without a mesh because the content is the tract: the cribriform-plate foramen, the unmyelinated fila, the thalamic-free cortical route and the localizing value of a unilateral anosmia. The nearest committed geometry to anchor the reader is `ctx-cerebral-cortex` (the hemisphere envelope) and, at the anterior perforated substance, the anterior cerebral artery (vasc-anterior-cerebral-artery)."
+  },
+  {
+    "id": "nrv-cn2-optic",
+    "name": "CN II Optic nerve",
+    "synonyms": [
+                  "optic nerve (as a cranial nerve)",
+                  "nervus opticus",
+                  "second cranial nerve",
+                  "CN II",
+                  "intracranial (cisternal) optic nerve",
+                  "prechiasmatic optic nerve"
+                ],
+    "region": "telencephalon",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Special sensory — vision (special somatic afferent); retinal ganglion-cell axons carrying the retinotopic map of the contralateral visual field half, plus the afferent limb of the pupillary light reflex",
+    "course": "From the optic disc (where about one million retinal ganglion-cell axons converge) the nerve runs through the orbit in the cone of extraocular muscles, pierces the optic canal with the ophthalmic artery — the foramen this nerve uses — and enters the middle cranial fossa. Its intracranial (cisternal) segment, about 10 mm long, runs posteromedially and superiorly through the suprasellar cistern, bathed in CSF and wrapped in meninges, to join the contralateral nerve at the optic chiasm. The nasal fibres cross at the chiasm and the temporal fibres stay ipsilateral, so the chiasm is the end of this nerve and the beginning of the optic tract (tract-optic-tract). Because the nerve is a CNS tract rather than a peripheral nerve it is myelinated by oligodendrocytes, is enclosed in all three meninges, and is the reason it is the only cranial nerve that swells in papilloedema.",
+    "function": "Carries the entire visual signal from the photoreceptors to the brain: the retina's three-neuron chain (photoreceptor to bipolar cell to ganglion cell) converges on the axons of this nerve, which are organized retinotopically. The macula — about 5 degrees of central vision — occupies roughly two-thirds of the axons and the far nasal periphery the remainder, so the fibre arrangement inside the nerve explains the field pattern of a partial lesion (central scotoma for a macular-fibre lesion, an arcuate defect for a nerve-fibre-bundle lesion, an altitudinal defect for an ischaemic anterior lesion). The nerve also carries the afferent limb of the pupillary light reflex: its fibres leave the tract before the lateral geniculate nucleus (nuc-lgn) to reach the pretectal area (nuc-pretectal), and a minority leave near the chiasm for the suprachiasmatic nucleus (nuc-suprachiasmatic) to entrain circadian rhythm. Its relationship to this record's sibling, `tract-optic-nerve`, is the split between the v8 optic-pathway record (the whole nerve as a tract of the visual pathway, with real baked meshes) and this cranial-nerve record (the nerve as CN II, classified with the other eleven and carrying the foramen, nerve-sheath and clinic of a cranial nerve). Both are registered on purpose: the registry holds one answer for the nerve's region and one for its kind, and the two records carry different content.",
+    "connections": {
+                     "afferent": [
+                       "Retinal ganglion cells of the ipsilateral retina — the first-order afferents, whose receptive-field organization is already computed in the retina before the axons reach this nerve",
+                       "The optic nerve is afferent-only in the classical sense; its efferent partner is the olivary pretectal projection to the Edinger-Westphal nucleus (nuc-edinger-westphal), which is what makes the pupillary light reflex a two-nerve loop rather than a one-nerve arc"
+                     ],
+                     "efferent": [
+                       "Optic chiasm (ctx-optic-chiasm) — the crossing point where the nasal fibres of each nerve pass to the contralateral tract",
+                       "Optic tract (tract-optic-tract) — the continuation carrying the contralateral visual half-field",
+                       "Lateral geniculate nucleus (nuc-lgn) — the thalamic relay for conscious vision",
+                       "Pretectal area (nuc-pretectal) — the pupillary light reflex, reached by fibres that leave the tract before the geniculate body",
+                       "Suprachiasmatic nucleus (nuc-suprachiasmatic) — the retinohypothalamic tract for circadian photoentrainment",
+                       "Superior colliculus (nuc-superior-colliculus) — the small collicular projection that supports orienting to a visual target"
+                     ]
+                   },
+    "bloodSupply": "The intraorbital and intracanalicular nerve is supplied by the ophthalmic artery (branches of the internal carotid artery, vasc-internal-carotid-artery): the central retinal artery runs inside the nerve's substance and the short posterior ciliary arteries supply its anterior portion, which is why occlusion of the short posterior ciliary arteries produces anterior ischaemic optic neuropathy. The intracranial segment is supplied by the superior hypophyseal arteries and small branches of the internal carotid — a rich anastomotic supply that lets the nerve tolerate gradual compression from a sellar mass, and the same vessels that surgeons must preserve when the chiasm is approached from below. Compression of this cisternal segment by the internal carotid or by a suprasellar tumour is the anatomical reason a junctional scotoma localizes the lesion to the nerve-chiasm junction.",
+    "clinical": [
+      {
+        "syndrome": "Optic neuritis (demyelinating)",
+        "findings": "Subacute painful monocular visual loss with reduced colour vision, a relative afferent pupillary defect and a central scotoma, typically in a young adult woman and often the first symptom of multiple sclerosis; the nerve enhances on MRI and vision usually recovers over weeks. Pain on eye movement localizes the inflammation to the intraorbital and intracanalicular nerve, where the meninges are mobile.",
+        "note": "Inflammatory/demyelinating (anti-AQP4 or MOG antibody disease in atypical or bilateral cases), not vascular"
+      },
+      {
+        "syndrome": "Papilloedema from raised intracranial pressure",
+        "findings": "Because the optic-nerve sheath is continuous with the subarachnoid space, raised intracranial pressure is transmitted along the cisternal segment and produces bilateral disc swelling, transient visual obscurations and enlarged blind spots; prolonged compression produces optic atrophy. The raised pressure also produces the false localizing abducens palsy (nrv-cn6-abducens) and, in a chronic picture, an empty sella.",
+        "vascular": "Not vascular — CSF pressure transmitted through the sheath; the sheath's continuity with the subarachnoid space is the anatomical fact"
+      },
+      {
+        "syndrome": "Compressive optic neuropathy (sellar, suprasellar and orbital)",
+        "findings": "A pituitary adenoma, craniopharyngioma, tuberculum-sellae or optic-sheath meningioma compressing the cisternal or canalicular nerve causes progressive monocular visual loss with a central scotoma, a junctional scotoma when the nerve-chiasm junction is involved, or optic atrophy; a mass in the orbital apex adds proptosis and ophthalmoplegia from the neighbouring CN III, IV, V1 and VI.",
+        "note": "Compressive rather than vascular; the pattern of the field defect — not the acuity — localizes the level"
+      },
+      {
+        "syndrome": "Anterior ischaemic optic neuropathy and central retinal artery occlusion",
+        "findings": "Infarction of the anterior nerve from occlusion of the short posterior ciliary arteries gives sudden painless monocular loss with an altitudinal field defect and a swollen disc (arteritic in giant-cell arteritis; non-arteritic otherwise), while central retinal artery occlusion gives sudden painless loss with a cherry-red spot and a markedly attenuated arterial tree. Both are diseases of the nerve's own blood supply rather than of the nerve as a conductor.",
+        "vascular": "Short posterior ciliary arteries and the central retinal artery (ophthalmic artery); the arteritic form accompanies giant-cell arteritis"
+      },
+      {
+        "syndrome": "Traumatic and iatrogenic optic-nerve injury",
+        "findings": "The nerve is fixed at the optic canal, so a deceleration injury tears it or shears its vessels at the canal while the globe is displaced; the deficit is immediate and irreversible. The same fixed point is why the nerve is at risk in endoscopic sinus surgery and during orbital decompression, and why the clinical priority in suspected injury is a documented pupillary examination before any imaging.",
+        "note": "Mechanical; the optic canal is the anatomical choke point, and the nerve's fixation there is the reason for the injury pattern"
+      }
+    ],
+    "levels": ["lvl-thalamus-rostral"],
+    "origin3d": [12, 19, 30],
+    "size3d": [2.4, 1.8, 5],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
+              "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
+            ],
+    "contextNote": "Authored structure — schematic placement: BP3D carries optic-nerve meshes and the v8 run already baked them as the left and right optic-nerve GLBs (registered in `anatomyAssets.ts` for the v8 optic-pathway record). This cranial-nerve record deliberately owns NO mesh of its own — adding one would need a new GLB, and the anatomy budget has under 0.2 MiB of headroom while verify:anatomy freezes the existing bounding boxes — so it is `meshes: false` and contributes no manifest part and no section part. The ellipsoid at origin3d [12, 19, 30] with radii size3d [2.4, 1.8, 5] spans z ≈ 25–35 au, i.e. the orbital apex and the optic canal on the way to the chiasm, and is a SCHEMATIC placement, not anatomy: it marks where CN II enters the skull and where its cisternal segment begins. For a reader who wants real geometry the sibling record `tract-optic-nerve` (v8, real meshes) and the context record `ctx-optic-chiasm` carry it; this record carries the cranial-nerve content — the optic canal, the CSF sheath, the pupillary afferents and the compressive and ischaemic clinic. Its intracranial course is the segment that the baked geometry represents as `tract-optic-nerve` between z ≈ 25 and the chiasm."
+  }
+]

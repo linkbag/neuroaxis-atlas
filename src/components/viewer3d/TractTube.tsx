@@ -112,8 +112,19 @@ const tubeCache = new Map<string, THREE.BufferGeometry>()
  * source TubeGeometry uses — sampled at uniform arc length (getPointAt), so
  * segment density is length-independent. UVs keep the TubeGeometry layout
  * (u along the tube, v around) so the striation normal map traces the fibers.
+ *
+ * v14 EXPORT (PLAN.md §4 route (a), section-nerve): this is THE swept-tube
+ * builder. `tubeGeometryFor` below is the cached entry point and is what the 2D
+ * live-section registry calls for a cranial-nerve course
+ * (`sectionAssets.registryNerveParts`), so the 3D tube and the 2D contour are
+ * the SAME geometry by construction — not two sweeps that happen to agree
+ * today. Baking the twelve tubes to GLB instead was measured and rejected:
+ * 0.809 MiB raw / 0.506 MiB quantized against a 0.1086 MiB directory headroom.
+ * PLAN.md §4 puts this builder in a new `src/geometry/tubeGeometry.ts`; that
+ * file was not in this task's write scope, so it stays here, exported, and
+ * `TractTube` remains its only 3D consumer.
  */
-function buildTractGeometry(tract: TractRecord): THREE.BufferGeometry {
+export function buildTractGeometry(tract: TractRecord): THREE.BufferGeometry {
   const curve = toCatmullRom(tract.waypoints)
   const frames = curve.computeFrenetFrames(TUBULAR_SEGMENTS, false)
 
@@ -212,7 +223,13 @@ function buildTractGeometry(tract: TractRecord): THREE.BufferGeometry {
   return geometry
 }
 
-function tubeGeometryFor(tract: TractRecord): THREE.BufferGeometry {
+/**
+ * Cached tube geometry for a waypoint-bearing record — the entry point shared
+ * by this component and by the 2D section registry (see `buildTractGeometry`).
+ * The cache is keyed on the record id, so twelve nerve courses add twelve
+ * entries and a layer toggle never re-sweeps anything.
+ */
+export function tubeGeometryFor(tract: TractRecord): THREE.BufferGeometry {
   const cached = tubeCache.get(tract.id)
   if (cached) return cached
   const geometry = buildTractGeometry(tract)

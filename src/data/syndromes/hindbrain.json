@@ -51,7 +51,9 @@
       "nuc-spinal-trigeminal",
       "nuc-ambiguus",
       "nuc-dmv",
-      "tract-spinothalamic"
+      "tract-spinothalamic",
+      "tract-hypothalamospinal",
+      "tract-icp"
     ],
     "vascularTerritory": "Occlusion of the vertebral artery at the medullary foramina (conjoint ASA + PICA supply of one hemicord-half of the medulla)",
     "presentation": "Combined medial + lateral medullary syndromes in one half of the medulla: ipsilateral tongue LMN palsy (XII), ipsilateral face pain-temperature loss (spinal V), ipsilateral palatal-pharyngeal-laryngeal paralysis with depressed gag (ambiguus, DMV vagal visceromotor failure), ipsilateral Horner syndrome and ataxia, against contralateral hemiplegia (pyramid) and contralateral loss of body vibration-proprioception (medial lemniscus) plus body pain-temperature loss (spinothalamic). The most devastating of the medullary stroke patterns — effectively a brainstem equivalent of a hemisection.",
@@ -64,13 +66,7 @@
   {
     "id": "syn-millard-gubler",
     "name": "Millard-Gubler syndrome",
-    "structures": [
-      "nuc-facial",
-      "nuc-abducens",
-      "nuc-pprf",
-      "tract-corticospinal-lateral",
-      "tract-corticobulbar"
-    ],
+    "structures": ["nuc-facial", "nuc-abducens", "tract-corticospinal-lateral", "tract-corticobulbar"],
     "vascularTerritory": "Basilar artery paramedian perforators, or the AICA territory at the caudal-ventral pons",
     "presentation": "Ventro-caudal pontine syndrome: IPSILATERAL complete LMN facial paralysis (entire hemiface including forehead) from the facial nucleus/fascicles, plus IPSILATERAL abducens failure — inability to abduct that eye with binocular horizontal diplopia, and if the nuclear complex or adjacent PPRF is involved, conjugate gaze palsy away from the intact side — combined with CONTRALATERAL hemiparesis of the body (corticospinal fibers before decussation) and frequently contralateral lower-facial and tongue UMN weakness (corticobulbar fibers). The crossed facial-plus-body pattern localizes to the caudal basis-pontis/tegmentum junction.",
     "cause": "Infarct, hemorrhage, tumor or demyelinating lesion of the ventrocaudal pons damaging CN VI and CN VII fascicles/nuclei together with the corticospinal-corticobulbar bundles",
@@ -90,7 +86,7 @@
       "tract-lateral-lemniscus"
     ],
     "vascularTerritory": "Paramedian perforating branches of the basilar artery (dorsal caudal pons), sometimes AICA",
-    "presentation": "Dorsal pontine tegmentum syndrome at the level of the facial colliculus: IPSILATERAL horizontal gaze palsy (PPRF and/or abducens nuclear complex — the eyes deviate away, gaze toward the lesion is impossible), IPSILATERAL complete LMN facial paralysis (facial nucleus and the internal genu looping over the abducens nucleus), often with loss of the ipsilateral blink, and contralateral loss of vibration-proprioception and light touch of the body (medial lemniscus); tinnitus or diminished hearing may appear with lateral spread into the lateral lemniscus. Contrasts with Millard-Gubler by the gaze-palsy emphasis (PPRF/nuclear VI) and dorsal location.",
+    "presentation": "Dorsal pontine tegmentum syndrome at the level of the facial colliculus: IPSILATERAL horizontal gaze palsy (PPRF and/or abducens nuclear complex — gaze toward the lesion is impossible, so the eyes rest conjugately deviated away from the lesion), IPSILATERAL complete LMN facial paralysis (facial nucleus and the internal genu looping over the abducens nucleus), often with loss of the ipsilateral blink, and contralateral loss of vibration-proprioception and light touch of the body (medial lemniscus); tinnitus or diminished hearing may appear with lateral spread into the lateral lemniscus. Contrasts with Millard-Gubler by the gaze-palsy emphasis (PPRF/nuclear VI) and dorsal location.",
     "cause": "Infarction or mass lesion of the dorsal caudal pontine tegmentum around the facial colliculus (paramedian basilar perforators)",
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
@@ -140,7 +136,7 @@
       "nuc-fastigial",
       "tract-scp"
     ],
-    "vascularTerritory": "Superior cerebellar artery (SCA) for the dentate/SCP complex; AICA and PICA for the other deep-nucleus territories",
+    "vascularTerritory": "Superior cerebellar artery (SCA) for the dentate, interposed and fastigial nuclei and the superior cerebellar peduncle; the vermal and cortical cerebellar infarcts follow the AICA and PICA territories",
     "presentation": "IPSILATERAL cerebellar deficits: intention (terminal) tremor, dysmetria (past-pointing), decomposition of movement and dysdiadochokinesia from dentate-SCP involvement; hypotonia with pendular reflexes from interposed/rubrospinal disruption; truncal ataxia, wide-based gait and nystagmus when the fastigial-vermal loop is caught. Speech becomes scanning/staccato (ataxic dysarthria); bilateral disease adds cerebellar cognitive-affective slowing. Signs are ipsilateral because cerebellar efferents cross twice (SCP decussation then cortical projections).",
     "cause": "SCA infarction, demyelination, or mass lesions of the deep cerebellar nuclei and superior cerebellar peduncle; chronic variants include dentate degeneration in spinocerebellar ataxias and myelinolysis of the SCP",
     "refs": [

@@ -21,12 +21,50 @@
  *   • Labels are stable identifiers (they are what a Node test asserts on),
  *     `detail` is the human sentence the audit prints.
  *
- * v11 adds `headerToggleRowsReading` — the contract of the header's two toggle
- * rows (Areas / Systems), the Reset action and the surviving preset shortcut row.
+ * v11 added `headerToggleRowsReading` — the contract of the header's two toggle
+ * rows (Areas / Systems) plus the Reset / All actions and the preset shortcut row.
  * It returns an ARRAY of verdicts (one per falsifiable claim), so a failure names
  * the part that broke; `audit.mjs` drives it from the real DOM at a clean boot
- * (block A0b) and again after Reset (block R1), and `verify:area-toggles` is the
- * Node lane's full version of the same contract.
+ * (block A0b) and again after the composed default restore (block R1), and
+ * `verify:area-toggles` is the Node lane's full version of the same contract.
+ *
+ * ── v12–v12g RE-POINT (this review task; the product was NOT bent back) ────
+ * v12 removed the preset shortcut row and the `data-header-action="reset"|"all"`
+ * pair, and v12b–v12g replaced them with TWO per-axis All modules inside the
+ * Areas / Systems rows (`areas-all-on` / `areas-all-off` / `systems-all-on` /
+ * `systems-all-off`) plus the region-backed `Vasculature` system button
+ * (`data-system-region`) and the `clinical-motor` category button. Every
+ * predicate below therefore reads the POST-v12 header:
+ *   • `presetFocusReading` decides the documented default framing from the ROW
+ *     state (`rowFraming`) when the audit supplies it, because no preset button
+ *     exists to read any more; the v11 `data-preset` path and the label fallback
+ *     are kept so the shape stays backwards-compatible for callers that still
+ *     have a preset row (and so `verify:audit-checks`, which feeds the label
+ *     fixture, keeps asserting the same text).
+ *   • `headerToggleRowsReading` claim 6 is now "the two All modules are wired to
+ *     their own axis" instead of "Reset is pressed exactly when the default
+ *     preset is", and claim 7 is now "the Systems row carries the region-backed
+ *     Vasculature button and the Clinical motor category" instead of "the preset
+ *     shortcut row is still rendered". Both were re-pointed, neither deleted:
+ *     the CLAIM each one made (the default framing is reachable; the row cannot
+ *     be collapsed into a control-free stub) is still asserted, against the
+ *     controls that now exist.
+ *
+ * ── v13 + v14: WHY THIS FILE NEEDED NO EIGHTH CLAIM ────────────────────────
+ * v13 added the SEVENTH kind, `nerve` ("Cranial nerves" in the Systems row), and
+ * v14 made that toggle drive the 2D live section as well as the 3D scene. Both
+ * are already covered where they belong:
+ *   • claim 2 below is a SET equality against the caller's own `expectedKinds`
+ *     (read from the shipped `ALL_KINDS`), so a Systems row that loses its seventh
+ *     button fails as `hooks-incomplete` with the missing key named — which is
+ *     exactly what the mutation table in `verify:area-toggles` §12 exercises;
+ *   • the section/PiP parity that v14 created is a RENDERING claim, asserted by
+ *     `verify:area-toggles` §11 (138 + 12 procedural parts, the twelve admitted
+ *     iff `kinds.has('nerve')`, the worker's own `extractContours` slicing each of
+ *     them) and by `verify:cranial-nerve-render` (47/47), not by a DOM predicate
+ *     that would have to guess at pixels.
+ * What this file must NOT do is acquire a claim that the 2D surface has no nerve
+ * part: that was true through v13 and is false by design from v14 onwards.
  *
  * Node-only entry point (no browser, no server, no precondition):
  *   node -e "import('./scripts/verify/checks.mjs').then(m=>console.log(m.readCtSourceCoverage()))"
@@ -185,9 +223,10 @@ export function ctCoverageReading(reading, coverage = readCtSourceCoverage()) {
  * The boot-preset check (TELENCEPHALON_PLAN §5/§9: "Brainstem focus" is the
  * first-time default).
  *
- * Reading: `{ bootActiveLabels, bootActivePresets, storedPreset }` — the header
- * preset buttons reporting `aria-pressed="true"` at a CLEAN boot, plus the stored
- * `neuroaxis.viewPreset` value read at the same moment.
+ * Reading: `{ rowFraming, bootActiveLabels, bootActivePresets, storedPreset }` —
+ * the header's OWN toggle rows at a CLEAN boot (`rowFraming`), the pressed preset
+ * labels/ids when a preset row exists (`bootActiveLabels` / `bootActivePresets`),
+ * and the stored `neuroaxis.viewPreset` value read at the same moment.
  *
  * v11 re-point (the preset row became the SHORTCUT row beneath the Areas/Systems
  * rows, and two new actions — Reset / All — joined the same `.header-presets`
@@ -195,11 +234,24 @@ export function ctCoverageReading(reading, coverage = readCtSourceCoverage()) {
  * buttons. When it is present the verdict is decided by the MACHINE HOOK
  * (`brainstem-focus`), not by text — so a third button whose label merely
  * contains "Brainstem focus" (Reset's own tooltip does) can neither fake the
- * default nor muddy the printed reading. `bootActiveLabels` remains the fallback
- * and stays the printed evidence, so the predicate keeps working with the
- * narrower reading shape the Node mirror feeds it
- * (`audit-checks.test.mjs`'s fixtures pass only the labels); it is also now built
- * from the preset buttons ALONE.
+ * default nor muddy the printed reading.
+ *
+ * v12–v12g RE-POINT (this review task). The preset row is GONE, so there is no
+ * `data-preset` button left to read: `rowFraming` is the post-v12 statement of
+ * the same fact, derived by `audit.mjs` from the two rows' own `aria-pressed`
+ * states, which are the app's single layer state:
+ *
+ *     brainstem-focus  ⇔  every area pressed  ∧  every kind pressed  ∧
+ *                         the region-backed Vasculature button NOT pressed
+ *
+ * That is exact, not approximate: `AREAS` partitions `ALL_REGIONS` minus
+ * `vasculature` and `SYSTEM_REGION_BUTTONS` is that complement, so
+ * "all areas pressed ∧ vasculature off" ⟺ `layers.regions === ALL_REGIONS \
+ * {vasculature}` (the preset's own region set), and "all kinds pressed" ⟺
+ * `layers.kinds === ALL_KINDS`. Precedence: `rowFraming` when the audit supplies
+ * it, else the v11 `data-preset` hook, else the label fallback (the fixture
+ * `verify:audit-checks` feeds). A `rowFraming` that is present but wrong FAILS —
+ * it never falls through to the label.
  *
  * `storedPreset` is reported so the two causes can never be confused: a
  * non-default active preset that matches a stored key is a returning visitor's
@@ -210,28 +262,53 @@ export function ctCoverageReading(reading, coverage = readCtSourceCoverage()) {
 export function presetFocusReading(reading) {
   const active = Array.isArray(reading?.bootActiveLabels) ? reading.bootActiveLabels : []
   const activePresets = Array.isArray(reading?.bootActivePresets) ? reading.bootActivePresets : null
+  const framing = reading?.rowFraming !== null && typeof reading?.rowFraming === 'object' ? reading.rowFraming : null
   const stored = reading?.storedPreset ?? null
   const labelled = active.some((label) => /brainstem focus/i.test(String(label)))
-  const hooked = activePresets === null ? labelled : activePresets.includes('brainstem-focus')
-  const focused = hooked && labelled
+  /**
+   * The post-v12 reading: the two rows say the default framing. `buttonCount`
+   * guards against the vacuous pass a header with NO buttons would otherwise get
+   * ("every area pressed" is trivially true over an empty set).
+   */
+  const framed =
+    framing === null
+      ? null
+      : Number(framing.buttonCount ?? 0) > 0 &&
+        framing.areasAll === true &&
+        framing.systemsAll === true &&
+        framing.vascularRegion === false
+  const hooked =
+    framed !== null
+      ? framed
+      : activePresets !== null && activePresets.length > 0
+        ? activePresets.includes('brainstem-focus')
+        : labelled
+  const focused = hooked && (labelled || framed === true)
   const cause =
     stored !== null && stored !== ''
       ? `active preset came from the STORED preference "${stored}" (the check must run from a clean profile)`
       : 'no stored preference — this is the code default'
+  const framedDetail =
+    framing === null
+      ? 'rows not read'
+      : `areas all on ${String(framing.areasAll)} · systems all on ${String(framing.systemsAll)} · ` +
+        `Vasculature system region off ${String(framing.vascularRegion === false)} · ${String(framing.buttonCount ?? 0)} row button(s)`
 
   if (!focused) {
     return verdict(
       false,
       'not-brainstem-focus',
-      `the boot preset is not Brainstem focus (active: ${active.join(', ') || 'none'}; ` +
+      `the boot framing is not the documented Brainstem focus default (row state: ${framedDetail}; ` +
+        `pressed row labels: ${active.join(', ') || 'none'}; ` +
         `pressed data-preset: ${activePresets === null ? 'not read' : (activePresets.join(', ') || 'none')}; ${cause})`,
     )
   }
   return verdict(
     true,
     'default-brainstem-focus',
-    `default preset is Brainstem focus (header reports "${active.join(', ')}"` +
-      `${activePresets === null ? '' : `, pressed data-preset [${activePresets.join(', ')}]`}; ${cause})`,
+    `the boot framing is the documented Brainstem focus default (row state: ${framedDetail}` +
+      `${activePresets === null || activePresets.length === 0 ? '' : `, pressed data-preset [${activePresets.join(', ')}]`}` +
+      `${labelled ? `, header reports "${active.join(', ')}"` : ''}; ${cause})`,
   )
 }
 
@@ -240,18 +317,38 @@ export function presetFocusReading(reading) {
  * brainstem/diencephalon/cerebellum tree row may carry the tree's `is-off`
  * class (TaxonomyTree `layerOff` = region layer off OR kind layer off).
  *
- * Reading: `{ offRows, rowsSeen, storedPreset }`. `rowsSeen === 0` is a FAILURE,
- * not a pass: the tree renders leaves only while a subdivision is open, so a
- * collapsed tree must not be able to make this assertion pass vacuously.
+ * Reading: `{ offRows, rowsSeen, storedPreset, nerveRowsSeen?, nerveOff? }`.
+ * `rowsSeen === 0` is a FAILURE, not a pass: the tree renders leaves only while
+ * a subdivision is open, so a collapsed tree must not be able to make this
+ * assertion pass vacuously.
+ *
+ * v13 (this review task) adds the optional nerve half. The twelve cranial-nerve
+ * rows sit in the brainstem regions the probe already sweeps, so they were
+ * covered by the generic assertion — but only incidentally, and a reader could
+ * not tell whether ANY nerve row was inspected. `nerveRowsSeen` / `nerveOff`
+ * make the new kind's boot state a named claim with its own numbers:
+ * `DEFAULT_LAYERS.kinds` is `ALL_KINDS`, so `layers.kinds.has('nerve')` is true
+ * at the documented default and the twelve rows must NOT be dim; a slice that
+ * forgot to put `nerve` in the default kind set would dim them and, before this
+ * claim, could only have been caught by the generic list. Both fields are
+ * optional so the synthetic fixtures fed by `verify:audit-checks` stay valid —
+ * when they are absent the claim is reported as informational.
  */
 export function presetDimmingReading(reading) {
   const off = Array.isArray(reading?.offRows) ? reading.offRows : []
   const rowsSeen = typeof reading?.rowsSeen === 'number' ? reading.rowsSeen : -1
+  const nerveRowsSeen = typeof reading?.nerveRowsSeen === 'number' ? reading.nerveRowsSeen : null
+  const nerveOff = Array.isArray(reading?.nerveOff) ? reading.nerveOff : null
   const stored = reading?.storedPreset ?? null
   const cause =
     stored !== null && stored !== ''
       ? `the active preset came from the STORED preference "${stored}"`
       : 'no stored preference — this is the code default'
+  const nerveDetail =
+    nerveRowsSeen === null
+      ? ''
+      : ` · cranial-nerve rows inspected ${nerveRowsSeen}` +
+        `${nerveOff === null ? '' : `, dimmed ${nerveOff.length}`}`
 
   if (rowsSeen === 0) {
     return verdict(
@@ -266,22 +363,45 @@ export function presetDimmingReading(reading) {
       false,
       'brainstem-rows-dimmed',
       `${off.length} brainstem-family tree row(s) are dimmed at default framing: ${off.join(', ')} ` +
-        `(the default preset must keep every non-telencephalon structure at full strength; ${cause})`,
+        `(the default preset must keep every non-telencephalon structure at full strength; ${cause}${nerveDetail})`,
+    )
+  }
+  if (nerveRowsSeen !== null && nerveOff !== null && nerveOff.length > 0) {
+    return verdict(
+      false,
+      'nerve-rows-dimmed',
+      `${nerveOff.length} cranial-nerve tree row(s) are dimmed at default framing: ${nerveOff.join(', ')} ` +
+        `(the v13 'nerve' kind is in ALL_KINDS, so it is layer-ON at the documented default and its twelve ` +
+        `rows must not be dim; ${cause})`,
     )
   }
   return verdict(
     true,
     'no-brainstem-rows-dimmed',
     `no brainstem/diencephalon/cerebellum tree row is layer-off at default framing ` +
-      `(${rowsSeen} row(s) inspected; ${cause})`,
+      `(${rowsSeen} row(s) inspected; ${cause}${nerveDetail})`,
   )
 }
 
 /* ------------------------- (4b) v11 — the two header toggle rows */
 
 /**
- * The v11 contract of the header's TWO toggle rows (`docs/SWARM_V11_PLAN.md` §1,
- * `PLAN.md` §1) — the control that replaced the preset row as the primary one.
+ * The contract of the header's TWO toggle rows (`docs/SWARM_V11_PLAN.md` §1,
+ * `PLAN.md` §1) — the control that replaced the preset row as the primary one —
+ * as it stands AFTER the v12–v12g header change.
+ *
+ * v12–v12g moved three things, and this predicate follows them (it does not
+ * relax: each claim still names a way to fail):
+ *   • `vasculature` is no longer an AREA — it became the region-backed
+ *     `Vasculature` button in the SYSTEMS row, carrying `data-system-region`
+ *     (and `data-region`). The partition claim therefore reads
+ *     `AREAS ∪ SYSTEM_REGION_BUTTONS`, which is what the store derives the
+ *     latter from (`ALL_REGIONS` minus the areas' regions).
+ *   • Reset / All are gone; the per-axis All modules are
+ *     `areas-all-on` / `areas-all-off` / `systems-all-on` / `systems-all-off`.
+ *   • The preset shortcut row (and its `data-preset` hooks) is gone; the row's
+ *     surviving load-bearing members are the region-backed `Vasculature` button
+ *     and the `clinical-motor` category button, both asserted below.
  *
  * Reading (every field is a plain value read from the DOM / the shipped source,
  * built by `audit.mjs`'s `HEADER_ROWS_PROBE`):
@@ -289,22 +409,26 @@ export function presetDimmingReading(reading) {
  *   rows       `{ areas: { present, role, name, buttons }, systems: {…} }` — the
  *              two `role="group"` containers and their accessible group names.
  *   toggles    one entry per toggle button: `{ hook, key, text, pressed, name,
- *              tag, type }`. `hook` is `data-area` / `data-kind`; `pressed` is a
- *              REAL boolean or `null` when `aria-pressed` is missing/unreadable;
- *              `name` is the accessible name (`aria-label`).
+ *              tag, type }`. `hook` is `data-area` / `data-kind` /
+ *              `data-system-region`; `pressed` is a REAL boolean or `null` when
+ *              `aria-pressed` is missing/unreadable; `name` is `aria-label`.
  *   expected   the shipped declarations: `expectedAreas`, `expectedKinds`,
- *              `allRegions` and `areaRegions` (area id → its regions), all parsed
- *              out of `src/state/store.ts` / `src/data/load.ts` — never retyped.
+ *              `expectedSystemRegions`, `allRegions` and `areaRegions`
+ *              (area id → its regions), all parsed out of `src/state/store.ts` /
+ *              `src/data/load.ts` — never retyped.
  *   layers     the layer state read from the LEGEND checkboxes at the same
  *              moment: `{ regions: {…}, kinds: {…} }` (bare ids, booleans).
- *   actions    `[{ key, pressed, name }]` for `data-header-action` (reset / all).
- *   presets    `[{ id, label, pressed }]` for the preset shortcut row's REAL
- *              buttons — the documented-default assertion that must survive the
- *              new rows (the brief forbids removing it).
+ *   actions    `[{ key, pressed, name }]` for `data-header-action`
+ *              (the four All modules + `clinical-motor`).
+ *   presets    `[{ id, label, pressed }]` for a preset shortcut row when one
+ *              exists. The post-v12 header has none, so this array is empty and
+ *              must stay AN EMPTY, WELL-FORMED array: a non-empty entry that is
+ *              malformed still fails, and an empty array is reported as the
+ *              post-v12 fact rather than as a pass.
  *
  * Returns an ARRAY of verdicts (one per claim) rather than a single verdict: the
- * v11 contract has several independent falsifiable parts, and collapsing them
- * would make a failure unreadable. Every part prints its own numbers. Nothing is
+ * contract has several independent falsifiable parts, and collapsing them would
+ * make a failure unreadable. Every part prints its own numbers. Nothing is
  * skipped on a missing field: an absent row/button/hook FAILS.
  */
 export function headerToggleRowsReading(reading) {
@@ -315,6 +439,7 @@ export function headerToggleRowsReading(reading) {
   const toggles = Array.isArray(reading?.toggles) ? reading.toggles : []
   const expectedAreas = Array.isArray(reading?.expectedAreas) ? reading.expectedAreas : []
   const expectedKinds = Array.isArray(reading?.expectedKinds) ? reading.expectedKinds : []
+  const expectedSystemRegions = Array.isArray(reading?.expectedSystemRegions) ? reading.expectedSystemRegions : []
   const allRegions = Array.isArray(reading?.allRegions) ? reading.allRegions : []
   const areaRegions = reading?.areaRegions ?? null
   const layerRegions = reading?.layers?.regions ?? null
@@ -323,6 +448,7 @@ export function headerToggleRowsReading(reading) {
   const presets = Array.isArray(reading?.presets) ? reading.presets : []
   const areaToggles = toggles.filter((t) => t?.hook === 'data-area')
   const kindToggles = toggles.filter((t) => t?.hook === 'data-kind')
+  const systemRegionToggles = toggles.filter((t) => t?.hook === 'data-system-region')
 
   /* ---- 1. both rows exist, as labelled groups -------------------------- */
   const describeRow = (key) => {
@@ -344,18 +470,22 @@ export function headerToggleRowsReading(reading) {
   /* ---- 2. the machine hooks, total over the shipped sets ---------------- */
   const areaKeys = areaToggles.map((t) => String(t.key))
   const kindKeys = kindToggles.map((t) => String(t.key))
+  const systemRegionKeys = systemRegionToggles.map((t) => String(t.key))
   const keysOk =
-    expectedAreas.length > 0 && expectedKinds.length > 0 &&
+    expectedAreas.length > 0 && expectedKinds.length > 0 && expectedSystemRegions.length > 0 &&
     areaKeys.length === expectedAreas.length &&
     expectedAreas.every((id) => areaKeys.filter((key) => key === id).length === 1) &&
     kindKeys.length === expectedKinds.length &&
-    expectedKinds.every((kind) => kindKeys.filter((key) => key === kind).length === 1)
+    expectedKinds.every((kind) => kindKeys.filter((key) => key === kind).length === 1) &&
+    systemRegionKeys.length === expectedSystemRegions.length &&
+    expectedSystemRegions.every((region) => systemRegionKeys.filter((key) => key === region).length === 1)
   add(
     keysOk,
     keysOk ? 'hooks-total' : 'hooks-incomplete',
-    `every area and kind the app declares has exactly one toggle with its machine hook ` +
+    `every area, kind and region-backed system the app declares has exactly one toggle with its machine hook ` +
       `(areas ${areaKeys.join(', ') || 'none'} vs ${expectedAreas.join(', ') || 'none'}; ` +
-      `systems ${kindKeys.join(', ') || 'none'} vs ${expectedKinds.join(', ') || 'none'})`,
+      `systems ${kindKeys.join(', ') || 'none'} vs ${expectedKinds.join(', ') || 'none'}; ` +
+      `system regions ${systemRegionKeys.join(', ') || 'none'} vs ${expectedSystemRegions.join(', ') || 'none'})`,
   )
 
   /* ---- 3. real buttons, aria-pressed, accessible names (2.5.3) ---------- */
@@ -381,23 +511,28 @@ export function headerToggleRowsReading(reading) {
       `${new Set(names).size} unique`,
   )
 
-  /* ---- 4. the partitions ---------------------------------------------- */
+  /* ---- 4. the partitions (areas ∪ region-backed systems over ALL_REGIONS) */
   const claims = new Map()
   for (const area of expectedAreas) {
     const regions = Array.isArray(areaRegions?.[area]) ? areaRegions[area] : null
     if (regions === null) continue
     for (const region of regions) claims.set(region, [...(claims.get(region) ?? []), area])
   }
+  for (const region of expectedSystemRegions) {
+    claims.set(region, [...(claims.get(region) ?? []), `system-region:${region}`])
+  }
   const unclaimed = allRegions.filter((region) => !claims.has(region))
   const doubleClaimed = [...claims.entries()].filter(([, owners]) => owners.length !== 1)
   const partitionOk =
-    allRegions.length > 0 && areaRegions !== null && unclaimed.length === 0 && doubleClaimed.length === 0
+    allRegions.length > 0 && areaRegions !== null && expectedSystemRegions.length > 0 &&
+    unclaimed.length === 0 && doubleClaimed.length === 0
   add(
     partitionOk,
     partitionOk ? 'areas-partition-total-disjoint' : 'areas-partition-broken',
-    `the ${expectedAreas.length} area buttons partition ALL_REGIONS exactly: ` +
-      `${allRegions.length} region(s) ` +
+    `the ${expectedAreas.length} area buttons + the ${expectedSystemRegions.length} region-backed system ` +
+      `button(s) partition ALL_REGIONS exactly: ${allRegions.length} region(s) ` +
       `${expectedAreas.map((id) => `${id}→[${(areaRegions?.[id] ?? []).join('+') || '?'}]`).join(' · ')}` +
+      `${expectedSystemRegions.length === 0 ? '' : ` · ${expectedSystemRegions.map((region) => `system:${region}`).join(' · ')}`}` +
       (partitionOk ? '' : ` — unclaimed ${JSON.stringify(unclaimed)}, multiply claimed ${JSON.stringify(doubleClaimed)}`),
   )
   const kindsTotal =
@@ -419,56 +554,115 @@ export function headerToggleRowsReading(reading) {
     if (layerKinds === null) return true
     return t.pressed !== (layerKinds[String(t.key)] === true)
   })
+  const systemRegionMismatch = systemRegionToggles.filter((t) => {
+    if (layerRegions === null) return true
+    return t.pressed !== (layerRegions[String(t.key)] === true)
+  })
   const pressedOk =
     layerRegions !== null && layerKinds !== null && areaToggles.length > 0 &&
-    kindToggles.length > 0 && areaMismatch.length === 0 && kindMismatch.length === 0
+    kindToggles.length > 0 && systemRegionToggles.length > 0 &&
+    areaMismatch.length === 0 && kindMismatch.length === 0 && systemRegionMismatch.length === 0
   add(
     pressedOk,
     pressedOk ? 'pressed-matches-layers' : 'pressed-disagrees-with-layers',
     `every button's aria-pressed is the SAME fact as the layer set the legend reads ` +
       `(areas ${areaToggles.map((t) => `${t.key}=${t.pressed}`).join(', ')}; ` +
       `systems ${kindToggles.map((t) => `${t.key}=${t.pressed}`).join(', ')}; ` +
+      `system regions ${systemRegionToggles.map((t) => `${t.key}=${t.pressed}`).join(', ')}; ` +
       `legend regions ${JSON.stringify(layerRegions ?? null)}, kinds ${JSON.stringify(layerKinds ?? null)})` +
-      (pressedOk ? '' : ` — disagreeing: ${JSON.stringify([...areaMismatch, ...kindMismatch].map((t) => t.key))}`),
+      (pressedOk
+        ? ''
+        : ` — disagreeing: ${JSON.stringify(
+            [...areaMismatch, ...kindMismatch, ...systemRegionMismatch].map((t) => t.key),
+          )}`),
   )
 
-  /* ---- 6. Reset restores the documented default ------------------------- */
-  const reset = actions.find((action) => String(action?.key) === 'reset') ?? null
-  const defaultPreset = presets.find((preset) => String(preset?.id) === 'brainstem-focus') ?? null
-  const resetOk =
-    reset !== null && typeof reset.pressed === 'boolean' && String(reset.name ?? '').length > 0 &&
-    defaultPreset !== null && typeof defaultPreset.pressed === 'boolean' &&
-    reset.pressed === defaultPreset.pressed
+  /* ---- 6. the two per-axis All modules are wired to their own axis -------
+   * v12g RE-POINT. This claim used to read "the Reset action is pressed exactly
+   * when the preset row reports the documented default". Reset no longer exists
+   * (v12 removed it with the preset row); the claim it made — the header can
+   * reach "everything on" and "everything off" per axis, and says so in its own
+   * pressed state — is now made about the four module buttons, and it is
+   * falsifiable in both directions: a module whose slice is fully on must be
+   * pressed, and one whose slice is fully off must be pressed on the OFF button
+   * instead. A button that is always pressed, or one wired to the wrong axis,
+   * fails. */
+  const MODULES = ['areas-all-on', 'areas-all-off', 'systems-all-on', 'systems-all-off']
+  const moduleOf = (key) => actions.find((action) => String(action?.key) === key) ?? null
+  const moduleMissing = MODULES.filter((key) => moduleOf(key) === null)
+  const moduleMalformed = MODULES.map(moduleOf).filter(
+    (action) => action !== null && typeof action?.pressed !== 'boolean',
+  )
+  /* The two modules' slices are what `Header.tsx` computes: the areas module owns
+   * the AREAS' regions alone, the systems module owns `SYSTEM_REGION_BUTTONS` PLUS
+   * `ALL_KINDS` — so at the documented default the systems module reads UNPRESSED
+   * (the vascular region is off), which is exactly the state that makes it
+   * falsifiable: an "always pressed" button fails here. */
+  const allAreasOn = areaToggles.length > 0 && areaToggles.every((t) => t.pressed === true)
+  const allAreasOff = areaToggles.length > 0 && areaToggles.every((t) => t.pressed === false)
+  const allSystemsOn =
+    kindToggles.length > 0 && systemRegionToggles.length > 0 &&
+    kindToggles.every((t) => t.pressed === true) &&
+    systemRegionToggles.every((t) => t.pressed === true)
+  const allSystemsOff =
+    kindToggles.length > 0 && systemRegionToggles.length > 0 &&
+    kindToggles.every((t) => t.pressed === false) &&
+    systemRegionToggles.every((t) => t.pressed === false)
+  const modulesOk =
+    moduleMissing.length === 0 && moduleMalformed.length === 0 &&
+    moduleOf('areas-all-on')?.pressed === allAreasOn &&
+    moduleOf('areas-all-off')?.pressed === allAreasOff &&
+    moduleOf('systems-all-on')?.pressed === allSystemsOn &&
+    moduleOf('systems-all-off')?.pressed === allSystemsOff
   add(
-    resetOk,
-    resetOk ? 'reset-bound-to-default' : 'reset-not-bound-to-default',
-    `the Reset action is pressed exactly when the preset row reports the documented default ` +
-      `(reset=${JSON.stringify(reset?.pressed ?? null)} "${String(reset?.name ?? '')}" vs ` +
-      `data-preset="brainstem-focus"=${JSON.stringify(defaultPreset?.pressed ?? null)} ` +
-      `"${String(defaultPreset?.label ?? '')}")`,
+    modulesOk,
+    modulesOk ? 'all-modules-bound-to-their-axis' : 'all-modules-not-bound',
+    `the four per-axis All module buttons report the axis state the rows read ` +
+      `(areas-all-on=${JSON.stringify(moduleOf('areas-all-on')?.pressed ?? null)} vs areas all pressed ${allAreasOn}; ` +
+      `areas-all-off=${JSON.stringify(moduleOf('areas-all-off')?.pressed ?? null)} vs areas all unpressed ${allAreasOff}; ` +
+      `systems-all-on=${JSON.stringify(moduleOf('systems-all-on')?.pressed ?? null)} vs kinds+system-regions all pressed ${allSystemsOn}; ` +
+      `systems-all-off=${JSON.stringify(moduleOf('systems-all-off')?.pressed ?? null)} vs kinds+system-regions all unpressed ${allSystemsOff})` +
+      (modulesOk ? '' : ` — missing ${JSON.stringify(moduleMissing)}`),
   )
 
-  /* ---- 7. the default-framing assertion survives the new rows ------------ */
-  const presetButtonsOk = presets.length > 0 && presets.every(
+  /* ---- 7. the Systems row's non-kind members survive --------------------
+   * v12 RE-POINT + v13 extension. This claim used to be "the preset shortcut row
+   * is still rendered as real aria-pressed buttons (9)". The row was removed by
+   * design in v12, so asserting it would demand the product be bent back. The
+   * load-bearing part of the old claim is kept and re-aimed at the two controls
+   * that now carry those two jobs inside the Systems row: the region-backed
+   * `Vasculature` button (the vascular region is reachable) and the
+   * `clinical-motor` category button (the one framing that is not a single area
+   * or kind stays reachable). A `presets` array that is present and NON-empty is
+   * still validated as well-formed, so a half-restored preset row fails. */
+  const vascular = systemRegionToggles.find((t) => String(t.key) === 'vasculature') ?? null
+  const clinical = actions.find((action) => String(action?.key) === 'clinical-motor') ?? null
+  const wellFormedPresets = presets.every(
     (preset) => String(preset?.id ?? '').length > 0 && String(preset?.label ?? '').length > 0 &&
       typeof preset?.pressed === 'boolean',
   )
+  const rowMembersOk =
+    vascular !== null && typeof vascular.pressed === 'boolean' &&
+    String(vascular.name ?? '').length > 0 && String(vascular.text ?? '').length > 0 &&
+    clinical !== null && typeof clinical.pressed === 'boolean' &&
+    String(clinical.name ?? '').length > 0 && wellFormedPresets
   add(
-    presetButtonsOk,
-    presetButtonsOk ? 'preset-shortcuts-still-real' : 'preset-shortcuts-gone',
-    `the preset shortcut row is still rendered as real aria-pressed buttons (${presets.length}: ` +
-      `${presets.map((preset) => `${preset.id}=${preset.pressed}`).join(', ') || 'none'}) — the documented ` +
-      'default framing stays reachable and asserted (a menu/select would delete that assertion)',
+    rowMembersOk,
+    rowMembersOk ? 'vascular-and-clinical-motor-reachable' : 'vascular-or-clinical-motor-missing',
+    `the Systems row still reaches the vascular region and the clinical-motor framing through its own ` +
+      `controls (Vasculature system-region button ${vascular === null ? 'MISSING' : `"${String(vascular.name)}" pressed=${JSON.stringify(vascular.pressed)}`}; ` +
+      `Clinical motor action ${clinical === null ? 'MISSING' : `"${String(clinical.name)}" pressed=${JSON.stringify(clinical.pressed)}`}); ` +
+      `preset shortcuts rendered: ${presets.length}${presets.length === 0 ? ' (post-v12: the row is gone by design, and this claim now covers its two surviving jobs)' : ''}`,
   )
 
   /* ---- 8. no ambiguous label for a hook-free click ---------------------- */
   /* The v11 change added a SECOND header button reading exactly `Nuclei` (the
    * preset of that name and the `nucleus` system toggle), which is precisely the
    * class of collision that makes a text-based click silently address a different
-   * control. The rule asserted here: any exact visible text carried by more than
-   * one header button must be carried ONLY by hooked controls, and the documented
-   * v8 preset label `Vasculature` may appear at most once (it is the label three
-   * v8 checks used to click by exact text before v11 re-pointed them). */
+   * control. v12 removed the preset, so that particular collision is gone — but
+   * the rule is kept, and it is now the assertion that pins the v12 arrangement:
+   * the `Vasculature` text (the v8 label three audit steps used to click by exact
+   * text) is carried by exactly ONE control, and it carries a machine hook. */
   const headerButtons = Array.isArray(reading?.headerButtons) ? reading.headerButtons : []
   const byText = new Map()
   for (const button of headerButtons) {

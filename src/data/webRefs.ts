@@ -584,6 +584,27 @@ const curated: Record<string, WebRef[]> = {
     { source: 'wikipedia', label: 'Wikipedia — Postcentral gyrus', url: wiki('Postcentral gyrus') },
     { ...KAAS_SOMATOSENSORY },
   ],
+
+  /*
+   * v13 — the twelve cranial nerves, curated rather than left to the automatic
+   * Wikipedia fallback. The fallback derives a title from the display name
+   * ("CN I Olfactory nerve"), which resolves to nothing, so a `kind: 'nerve'`
+   * record would have shown an empty panel without these entries. Every title
+   * below is a real English Wikipedia article; the Skull article carries the
+   * foramina the twelve records name in `course`.
+   */
+  'nrv-cn1-olfactory': [{ source: 'wikipedia', label: 'Wikipedia — Olfactory nerve', url: wiki('Olfactory nerve') }],
+  'nrv-cn2-optic': [{ source: 'wikipedia', label: 'Wikipedia — Optic nerve', url: wiki('Optic nerve') }],
+  'nrv-cn3-oculomotor': [{ source: 'wikipedia', label: 'Wikipedia — Oculomotor nerve', url: wiki('Oculomotor nerve') }],
+  'nrv-cn4-trochlear': [{ source: 'wikipedia', label: 'Wikipedia — Trochlear nerve', url: wiki('Trochlear nerve') }],
+  'nrv-cn5-trigeminal': [{ source: 'wikipedia', label: 'Wikipedia — Trigeminal nerve', url: wiki('Trigeminal nerve') }],
+  'nrv-cn6-abducens': [{ source: 'wikipedia', label: 'Wikipedia — Abducens nerve', url: wiki('Abducens nerve') }],
+  'nrv-cn7-facial': [{ source: 'wikipedia', label: 'Wikipedia — Facial nerve', url: wiki('Facial nerve') }],
+  'nrv-cn8-vestibulocochlear': [{ source: 'wikipedia', label: 'Wikipedia — Vestibulocochlear nerve', url: wiki('Vestibulocochlear nerve') }],
+  'nrv-cn9-glossopharyngeal': [{ source: 'wikipedia', label: 'Wikipedia — Glossopharyngeal nerve', url: wiki('Glossopharyngeal nerve') }],
+  'nrv-cn10-vagus': [{ source: 'wikipedia', label: 'Wikipedia — Vagus nerve', url: wiki('Vagus nerve') }],
+  'nrv-cn11-accessory': [{ source: 'wikipedia', label: 'Wikipedia — Accessory nerve', url: wiki('Accessory nerve') }],
+  'nrv-cn12-hypoglossal': [{ source: 'wikipedia', label: 'Wikipedia — Hypoglossal nerve', url: wiki('Hypoglossal nerve') }],
 }
 
 /** Authoritative journal overview for the brainstem regions (RSNA RadioGraphics 2019). */

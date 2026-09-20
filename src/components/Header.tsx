@@ -108,6 +108,11 @@ const KIND_LABELS: Record<Kind, string> = {
   surface: 'Surface',
   context: 'Context',
   vessel: 'Vessels',
+  // v13 (PLAN.md §2 item 4, §6): the twelve cranial nerves. The label is the
+  // Systems-row button's visible text, so it must stay a PREFIX of the accessible
+  // name `kindAccessibleName` builds below ("Cranial nerves — show/hide the nerve
+  // system (nerve)") for WCAG 2.5.3, exactly like the six labels above it.
+  nerve: 'Cranial nerves',
 }
 
 /** One system's accessible name: the visible label first, then what it switches. */
@@ -336,8 +341,11 @@ export default function Header() {
 
         {/*
          * Row "Systems" — the orthogonal axis the user already had, as toggles:
-         * `ALL_KINDS` mapped in order, so the six buttons are total and disjoint
-         * over the kinds by construction. Presented second (`order: 1`).
+         * `ALL_KINDS` mapped in order, so the buttons are total and disjoint
+         * over the kinds by construction (v13: seven kinds including `nerve`,
+         * which needs no special case here — the `ALL_KINDS.map` above emits its
+         * `data-kind`, label and `aria-pressed` like every other kind).
+         * Presented second (`order: 2`).
          */}
         <div
           className="header-systems"

@@ -9,14 +9,14 @@
     "laterality": "paired",
     "color": "#06b6d4",
     "function": "The central part of the lateral ventricle — the long horizontal segment between the frontal horn (at the interventricular foramen) and the atrium, roofed by the body of the corpus callosum and floored by the thalamus medially and the caudate nucleus laterally, with the choroid plexus running along its floor through the choroidal fissure. It is the segment that defines the thalamostriate groove: the thalamostriate vein and the stria terminalis mark the caudothalamic junction along its floor, the vein of Galen's tributaries (internal cerebral veins) run in the tela choroidea above the thalamus, and the subependymal venous angle at the foramen of Monro is the surgical landmark for the anterior third ventricle. Its width and the height of the corpus callosum above it are the standard measures of ventricular enlargement.",
-    "contextNote": "Authored at a documented plane: the body is the segment of the lateral-ventricle cast that the v8 bake splits between the frontal horn and the atrium — the splitter planes are z = +25 (foramen/body boundary, measured from the baked cast) and z = −6 (atrium boundary), which reproduce the segment's measured extent y 40.1…59.3, z −6…27.9, centroid (5.5, 50.2, 10.7) probed from tel-lateral-ventricle-l by the v8 content-authoring run. The plane anchors are recorded so the split is documented rather than implicit (docs/NEUROATLAS_V8_PLAN.md §1c, §4.5).",
+    "contextNote": "Authored at a documented plane: the body is the segment of the lateral-ventricle cast that the v8 bake splits between the frontal horn and the atrium — the boundaries are the plane z = +28 (foramen/body boundary — the anterior limit of this segment on the baked cast) and the plane z = −6 (atrium boundary), which reproduce the segment's measured extent y 40.1…59.3, z −6…27.9 (the frontal horn's documented extent, z 25.2…37.5, overlaps this segment across the boundary because both numbers describe one continuous cast, not a cut mesh), centroid (5.5, 50.2, 10.7) probed from tel-lateral-ventricle-l by the v8 content-authoring run. The plane anchors are recorded so the split is documented rather than implicit (docs/NEUROATLAS_V8_PLAN.md §1c, §4.5).",
     "connections": {
       "afferent": [
-        "Interventricular foramen (vent-interventricular-foramen) anteriorly — CSF arriving from the third ventricle and from the frontal horn",
-        "Choroid plexus of the lateral ventricle (vent-choroid-plexus-lateral), which occupies the floor of the body from the foramen posteriorly"
+        "Choroid plexus of the lateral ventricle (vent-choroid-plexus-lateral), which occupies the floor of the body",
+        "Frontal horn (vent-lateral-ventricle-frontal-horn) anteriorly"
       ],
       "efferent": [
-        "Atrium (vent-lateral-ventricle-atrium) posteriorly, then the temporal horn, the cerebral aqueduct and the fourth ventricle",
+        "Interventricular foramen of Monro (vent-interventricular-foramen) anteriorly → third ventricle → cerebral aqueduct → fourth ventricle; the atrium and temporal horn posteriorly are terminal recesses, not a route to the aqueduct",
         "Venous drainage of the ependymal surface through the thalamostriate and internal cerebral veins, which converge at the venous angle behind the foramen of Monro"
       ]
     },

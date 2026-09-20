@@ -307,7 +307,7 @@
       }
     ],
     "waypoints": [[1.5, 14, -3.5], [1.5, 8, -3.5], [1.5, -8, -4], [1.5, -18, -4], [1.2, -30, -3.5], [1, -44, -2], [1, -50, 0]],
-    "tubeRadius": 0.4,
+    "tubeRadius": 0.3,
     "color": "#a78bfa",
     "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
     "refs": [
@@ -355,7 +355,7 @@
     "direction": "descending",
     "modality": "Visceromotor — descending sympathetic (and hypothalamic autonomic) control of preganglionic sympathetic neurons",
     "origin": "Posterolateral hypothalamus (paraventricular and lateral hypothalamic area)",
-    "target": "Intermediolateral cell column of the spinal cord (T1–L2), especially the ciliospinal center of Budge (C8–T2) for the oculosympathetics",
+    "target": "Descends through the lateral brainstem tegmentum to the cervical cord, where the pathway continues to the intermediolateral cell column of the spinal cord (T1–L2) and its ciliospinal centre of Budge (C8–T2) for the oculosympathetics — drawn in this atlas only to the cervicomedullary junction, because no spinal-cord geometry is committed",
     "decussation": "None — uncrossed; descends ipsilaterally through the lateral brainstem tegmentum",
     "somatotopy": "Runs in the lateral tegmentum dorsolateral to the medial lemniscus and spinothalamic fibers — the reason lateral brainstem lesions produce ipsilateral Horner syndrome",
     "function": "Carries hypothalamic sympathetic commands to the spinal preganglionic neurons that drive pupil dilation, lid elevation (Müller muscle), facial sweating, and vasomotor tone. Interruption anywhere along its course produces ipsilateral central Horner syndrome — ptosis, miosis, and anhidrosis without extraocular or visual loss.",
@@ -510,7 +510,7 @@
     "target": "Ipsilateral ventral posteromedial nucleus (VPM) of the thalamus",
     "decussation": "None — uncrossed, ipsilateral ascent in the dorsolateral pontine tegmentum near the mesencephalic trigeminal tract/central gray region",
     "somatotopy": "Retains ipsilateral perioral representation; occupies a dorsal position relative to the crossed ventral trigeminothalamic fibers",
-    "function": "A small uncrossed complement of the trigeminal sensory system, conveying fine mechanoreceptive information from the oral cavity to the ipsilateral VPM. Its existence explains why unilateral brainstem lesions may leave some ipsilateral oral touch intact and why the face has partial bilateral thalamic representation.",
+    "function": "A small uncrossed complement of the trigeminal sensory system, conveying fine mechanoreceptive information from the oral cavity to the ipsilateral VPM. Its existence and size are debated: the modern reading is that nearly all second-order trigeminal axons cross, and that ipsilateral oral touch is partly preserved after a lateral pontine lesion because the brainstem trigeminal complex itself projects bilaterally — the disputed route should not be taught as settled.",
     "clinical": [
       {
         "syndrome": "Isolated unilateral lesions (rare, clinically silent)",
@@ -708,7 +708,7 @@
     "waypoints": [[18, 16, -6], [23, 20, 6], [27, 15, 12], [28, 14, -14], [24, 20, -34], [20, 27, -52], [13, 30, -66]],
     "tubeRadius": 0.7,
     "color": "#a78bfa",
-    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate", "lvl-tel-convexity"],
+    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Visual System\"",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Cerebral Hemispheres and Vascular Supply\""

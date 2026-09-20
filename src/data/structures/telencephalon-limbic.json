@@ -64,7 +64,7 @@
     "laterality": "paired",
     "color": "#d97706",
     "meshes": false,
-    "contextNote": "Authored structure — schematic placement: the dentate gyrus is a 1–2 mm cytoarchitectural blade (granule-cell layer plus hilus) that has no separate baked mesh. The record is positioned on the medial concave edge of the baked hippocampal cast (x ≈ 21.5, y ≈ 12, z ≈ −9, probed from ctx-hippocampus-l by the v8 content-authoring run), and the pickable volume stays `nuc-hippocampus`. The v8 plan (§1f, §2.4) makes this honest record-level granularity explicit.",
+    "contextNote": "Authored structure — schematic placement: the dentate gyrus is a 1–2 mm cytoarchitectural blade (granule-cell layer plus hilus) that has no separate baked mesh. The record is positioned on the medial concave edge of the baked hippocampal cast (x ≈ 16, y ≈ 14, z ≈ −2, the record's own origin3d, probed from ctx-hippocampus-l by the v8 content-authoring run), and the pickable volume stays `nuc-hippocampus`. The v8 plan (§1f, §2.4) makes this honest record-level granularity explicit.",
     "function": "The thin, three-layered (allocortical) blade of cortex tucked between the hippocampus and the subiculum: it is the first relay of the trisynaptic circuit, receiving the perforant path and sending mossy fibres to CA3, and it is one of the very few sites of adult neurogenesis in the human brain. Its granule-cell layer acts as a pattern separator that converts similar experiences into distinguishable memory codes.",
     "connections": {
       "afferent": [
@@ -282,7 +282,7 @@
       "lvl-midbrain-sc",
       "lvl-post-comm"
     ],
-    "origin3d": [22, 21, -2],
+    "origin3d": [25, 15, -4],
     "size3d": [2.2, 3.5, 9],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"

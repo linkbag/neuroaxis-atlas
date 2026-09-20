@@ -46,7 +46,7 @@
       [2, 23.5, 23.5]
     ],
     "tubeRadius": 0.55,
-    "levels": ["lvl-thalamus-rostral", "lvl-tel-thalamostriate"],
+    "levels": ["lvl-thalamus-rostral"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
@@ -62,7 +62,7 @@
     "laterality": "midline",
     "color": "#94a3b8",
     "meshes": false,
-    "contextNote": "Authored structure — schematic placement: the chiasmatic crossing is anchored at the midline just above the sella (x = 0, y ≈ 23.5, z ≈ 23.5), immediately anterior to the `surf-optic-chiasm` landmark record that carries the surface/landmark role (x = 0, y = 29, z = 10 in the diencephalon group). The two records are deliberately distinct: the surface landmark marks the structure on the plates, this context record carries the fibre-crossing semantics and the clinical territory of the chiasm. BP3D's optic-chiasm mesh (FMA 90717, BP5710) is registered by the v8 geometry tasks.",
+    "contextNote": "Authored structure — schematic placement: the chiasmatic crossing is anchored on the committed chiasm geometry (the ctx-optic-chiasm-l/-r pair measures y 10.40…18.62, z 14.26…23.47, centre [0.09, 14.51, 18.86], so the record sits at [0, 14.5, 19]), at the midline just above the sella and at the same point as the `surf-optic-chiasm` landmark record in the diencephalon group — the two records are deliberately distinct in role (fibre-crossing semantics vs surface landmark) but no longer disagree in position. The two records are deliberately distinct: the surface landmark marks the structure on the plates, this context record carries the fibre-crossing semantics and the clinical territory of the chiasm. BP3D's optic-chiasm mesh (FMA 90717, BP5710) is registered by the v8 geometry tasks.",
     "function": "The X-shaped midline crossing where the two optic nerves exchange their nasal retinal fibres: about 53 % of the axons (the nasal retina of each eye, which subserves the temporal visual field of that eye) cross to the contralateral side, while the temporal retinal fibres stay ipsilateral. The result is the fundamental reorganization of the visual pathway — from that point onward every structure carries the contralateral half-field rather than the contralateral eye. The crossing is topographically ordered (the macular fibres occupy the central and posterior part, the inferior nasal fibres loop forward into the contralateral nerve — Wilbrand's knee — and the dorsal fibres pass posteriorly), and the chiasm sits directly above the pituitary sella between the internal carotid arteries, which is why sellar masses compress it from below and in front.",
     "connections": {
       "afferent": [
@@ -92,8 +92,8 @@
         "vascular": "Pituitary apoplexy (haemorrhagic infarction of an adenoma); the chiasm is compressed rather than infarcted"
       }
     ],
-    "levels": ["lvl-thalamus-rostral"],
-    "origin3d": [0, 23.5, 23.5],
+    "levels": ["lvl-midbrain-sc", "lvl-post-comm"],
+    "origin3d": [0, 14.5, 19],
     "size3d": [3.5, 1.2, 1.5],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",

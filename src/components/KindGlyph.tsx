@@ -12,6 +12,10 @@ export const KIND_GLYPH: Record<Kind, string> = {
   surface: '▢',
   vessel: '✚',
   context: '◻',
+  // v13 (PLAN.md §2 item 7): the cranial nerves. A distinct mark from all six
+  // above — the taxonomy tree, search hits and the info panel render it next to
+  // a nerve row, where reusing the nucleus dot would read as a nucleus.
+  nerve: '✦',
 }
 
 export const DIRECTION_GLYPH: Record<TractRecord['direction'], string> = {

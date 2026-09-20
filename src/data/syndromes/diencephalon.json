@@ -65,7 +65,7 @@
   {
     "id": "syn-pineal-region",
     "name": "Pineal region tumor with gaze palsy",
-    "eponym": "Parinaud (dorsal midbrain syndrome)",
+    "eponym": "Parinaud (mass effect)",
     "structures": ["nuc-pineal-gland", "nuc-pretectal", "nuc-superior-colliculus", "nuc-edinger-westphal"],
     "vascularTerritory": "None — mass effect (pineal region tumor compressing the pretectal plate, posterior commissure and cerebral aqueduct) with obstructive hydrocephalus",
     "presentation": "Progressive vertical gaze palsy (upgaze first) with light-near dissociation, lid retraction (Collier sign), convergence-retraction nystagmus on attempted upgaze, and headache/papilledema from aqueductal hydrocephalus; children may add precocious puberty from germinoma hCG secretion.",

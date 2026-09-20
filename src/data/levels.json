@@ -11,7 +11,7 @@
   { "id": "lvl-midbrain-sc", "name": "Midbrain — superior colliculus (CN III)", "y": 14 },
   { "id": "lvl-post-comm", "name": "Posterior commissure / pretectal", "y": 19 },
   { "id": "lvl-thalamus-mid", "name": "Diencephalon — mid-thalamus (mammillary bodies)", "y": 28 },
-  { "id": "lvl-thalamus-rostral", "name": "Diencephalon — rostral thalamus / hypothalamus (optic chiasm)", "y": 36 },
+  { "id": "lvl-thalamus-rostral", "name": "Diencephalon — rostral thalamus / hypothalamus", "y": 36 },
   { "id": "lvl-tel-thalamostriate", "name": "Telencephalon — thalamostriate groove / body of lateral ventricle", "y": 48 },
   { "id": "lvl-tel-basal-ganglia", "name": "Telencephalon — basal ganglia and internal capsule", "y": 58 },
   { "id": "lvl-tel-centrum-semiovale", "name": "Telencephalon — centrum semiovale", "y": 68 },

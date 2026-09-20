@@ -51,6 +51,27 @@
  * feeds them real DOM readings; `scripts/verify/audit-checks.test.mjs` feeds the
  * same predicates synthetic readings and the SHIPPED manifests, so the checks are
  * falsifiable without a browser and cannot drift from the assertions run here.
+ *
+ * ── v14 review: WHICH BLOCKS THIS FILE WAS RE-POINTED FOR ───────────────────
+ * Three classes of stale claim were removed rather than satisfied by bending the
+ * product back, and the review task that owns this file (`review-qa`) names them
+ * because the orchestrator is the only lane that runs them:
+ *   • the FOUR v11 default-framing clicks (`[data-header-action="reset"]`, which
+ *     v12 deleted with the preset row) → one `restoreDefaultFraming()` helper that
+ *     composes the default from `areas-all-on` + `systems-all-on` + Vasculature
+ *     off, with its own composite pass/fail so a missing hook cannot silently
+ *     produce a pass (blocks R2, R3, R3b, R4, R5 and the v8 vascular block);
+ *   • the preset-row READS (`.header-presets`, `[data-preset]`) → kept as
+ *     zero-valued readings with an explanation, because asserting their absence
+ *     is itself the check that the removed row has not come back;
+ *   • R3b, which asserted the Plates live-section hash was INVARIANT to the
+ *     Cranial-nerves toggle → now asserts the hash CHANGES and round-trips, which
+ *     is what v14's procedural nerve section parts make true. The claim that the
+ *     payload did not grow (`SECTION_PARTS` 138, no `nrv-*` GLB) is enforced in
+ *     the Node lane (`verify:area-toggles` §11), not claimed here.
+ * `scripts/verify/area-toggles.mjs` §13 parses every static probe below and §11
+ * additionally refuses any `clickHook(...)` call site naming a hook the shipped
+ * Header no longer renders — the guard against this file's own failure mode.
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { register } from 'node:module'
@@ -742,6 +763,109 @@ const hookState = (selector) => `(() => {
   };
 })()`
 
+/* ======================================================================
+ * v12 RE-POINT — "RESTORE THE DOCUMENTED DEFAULT" WITHOUT A RESET BUTTON.
+ *
+ * Through v11 every block that needed the default framing clicked
+ * `[data-header-action="reset"]`, which was bound to the store's own
+ * `applyViewPreset('brainstem-focus')`. v12 removed both the preset row and the
+ * Reset action, so those clicks were dead — a check that "passes by not running"
+ * is this project's known failure mode, hence this helper.
+ *
+ * WHAT IT DOES. It reproduces the documented default framing exactly, using ONLY
+ * controls the post-v12 header really has:
+ *
+ *     1. `areas-all-on`     → every region the Areas row owns is layer-on
+ *     2. `systems-all-on`   → every kind is layer-on, and the vascular region is
+ *                             layer-on too
+ *     3. `vasculature` off  → the vascular SYSTEM REGION is switched off, which is
+ *                             the one thing brainstem-focus excludes
+ *
+ * Result: `layers.regions === ALL_REGIONS \\ {vasculature}` and
+ * `layers.kinds === ALL_KINDS`, i.e. both shape and content identical to
+ * `DEFAULT_LAYERS` (`AREAS` partitions `ALL_REGIONS` minus `vasculature` and
+ * `SYSTEM_REGION_BUTTONS` is that complement, `store.ts:1213–1228`). Each step is
+ * idempotent in the store's own sense: `Header.toggleArea`/`setSlice` only write
+ * the ids whose state differs from the target, so clicking a module twice is a
+ * no-op rather than a flip.
+ *
+ * WHAT IT DOES NOT RESTORE, STATED RATHER THAN HIDDEN. The default preset also
+ * carries `hidden` (the 32 cortex-preset structure ids) and `emphasis` (empty).
+ * No post-v12 control writes `hidden`: the two All modules call
+ * `toggleRegionLayer`/`toggleKindLayer`, and those actions deliberately touch
+ * `layers.regions`/`layers.kinds` only (`store.ts:1495–1507`). `clinical-motor`
+ * can APPLY a preset (and its "off" branch applies `all`, which clears `hidden`),
+ * but nothing re-applies brainstem-focus's `hidden` set. Blocks that compare
+ * rendered geometry after this restore therefore also assert `hidden` explicitly
+ * — see `restoreDefaultFraming`'s return value and block R's check — instead of
+ * assuming it came back.
+ * ====================================================================== */
+const RESTORE_DEFAULT_SCRIPT = `(() => {
+  const click = (selector) => {
+    const b = document.querySelector(selector);
+    if (b === null || b.tagName !== 'BUTTON') return 'MISSING ' + selector;
+    b.click();
+    return 'clicked ' + selector;
+  };
+  const steps = [];
+  steps.push(click('[data-header-action="areas-all-on"]'));
+  steps.push(click('[data-header-action="systems-all-on"]'));
+  const vascular = document.querySelector('[data-system-region="vasculature"]');
+  if (vascular === null) {
+    steps.push('MISSING [data-system-region="vasculature"]');
+  } else if (vascular.getAttribute('aria-pressed') === 'true') {
+    vascular.click();
+    steps.push('clicked [data-system-region="vasculature"] (off)');
+  } else {
+    steps.push('vasculature already off');
+  }
+  const read = (selector) => {
+    const b = document.querySelector(selector);
+    if (b === null) return null;
+    const raw = b.getAttribute('aria-pressed');
+    return raw === 'true' ? true : raw === 'false' ? false : null;
+  };
+  const areas = [...document.querySelectorAll('[data-area]')];
+  const kinds = [...document.querySelectorAll('[data-kind]')];
+  const vascularNow = read('[data-system-region="vasculature"]');
+  return {
+    steps: steps,
+    areasAllOn: areas.length > 0 && areas.every((b) => b.getAttribute('aria-pressed') === 'true'),
+    systemsAllOn: kinds.length > 0 && kinds.every((b) => b.getAttribute('aria-pressed') === 'true'),
+    vascularOff: vascularNow === false,
+    buttonCount: areas.length + kinds.length,
+  };
+})()`
+
+/**
+ * Restore the documented default framing and RETURN a printable summary
+ * (`lastFramingReading` holds the raw probe result for callers that need the
+ * numbers). Any missing hook makes the reading false — a dead control cannot
+ * produce a silent pass. A short settle is included because the click path goes
+ * through the store and React's re-render.
+ */
+let lastFramingReading = null
+async function restoreDefaultFraming(label = 'default') {
+  const reading = await evaluate(RESTORE_DEFAULT_SCRIPT)
+  await sleep(500)
+  lastFramingReading = reading
+  const landed = reading !== null && reading.areasAllOn === true && reading.systemsAllOn === true &&
+    reading.vascularOff === true && Number(reading.buttonCount ?? 0) > 0
+  const steps = reading === null ? 'the restore probe returned nothing' : String(reading.steps.join(' → '))
+  landed
+    ? ok(
+      'COMPOSED DEFAULT (' + label + '): areas-all-on + systems-all-on + Vasculature off reproduces the ' +
+        'documented default framing — ' + steps,
+    )
+    : bad(
+      'COMPOSED DEFAULT (' + label + '): the post-v12 header could not reproduce the documented default framing (' +
+        (reading === null ? 'the restore probe returned nothing' : JSON.stringify(reading)) +
+        ') — the v12 re-point of this block has no target and every assertion below would be measuring an ' +
+        'arbitrary state',
+    )
+  return landed ? 'composed default: ' + steps : 'COMPOSED DEFAULT FAILED: ' + steps
+}
+
 const sectionStats = `(() => {
   const c = document.querySelector('.section-canvas');
   if (!c) return null;
@@ -818,7 +942,7 @@ const HEADER_ROWS_PROBE = `(() => {
     };
   };
   const toggles = [];
-  for (const hook of ['data-area', 'data-kind']) {
+  for (const hook of ['data-area', 'data-kind', 'data-system-region']) {
     for (const button of document.querySelectorAll('[' + hook + ']')) {
       toggles.push({
         hook: hook,
@@ -840,6 +964,10 @@ const HEADER_ROWS_PROBE = `(() => {
     pressed: boolAttr(button, 'aria-pressed'),
     name: button.getAttribute('aria-label') || '',
   }));
+  /* v12: the preset shortcut row is GONE — this sweep returns [] by design. It is
+     kept (rather than deleted) so that if a preset row ever returns, its buttons
+     are read again and validated by headerToggleRowsReading claim 7; an empty
+     array is the documented post-v12 fact, not a silently skipped read. */
   const presets = [...document.querySelectorAll('.header-presets button[data-preset]')].map((button) => ({
     id: button.getAttribute('data-preset') || '',
     label: (button.textContent || '').trim(),
@@ -847,10 +975,33 @@ const HEADER_ROWS_PROBE = `(() => {
   }));
   const headerButtons = [...document.querySelectorAll('.app-header button')].map((button) => ({
     text: (button.textContent || '').trim(),
-    hook: ['data-preset', 'data-area', 'data-kind', 'data-header-action']
+    hook: ['data-preset', 'data-area', 'data-kind', 'data-system-region', 'data-region', 'data-header-action']
       .filter((name) => button.getAttribute(name) !== null)
       .join('+') || '',
   }));
+  /* v12g — THE DOCUMENTED DEFAULT FRAMING, read off the rows themselves. This is
+     the post-v12 form of "the boot preset is Brainstem focus": no preset button
+     exists to read any more, so the same fact is expressed in the vocabulary the
+     header actually has. It is exact, because AREAS partitions ALL_REGIONS
+     minus vasculature and SYSTEM_REGION_BUTTONS is that complement:
+     "every area pressed and vasculature system region unpressed" ⟺ regions ===
+     ALL_REGIONS \\ {vasculature}, and "every kind pressed" ⟺ kinds === ALL_KINDS.
+     buttonCount is reported so an empty header can never pass vacuously. */
+  const rowButtons = toggles.filter((t) => t.hook !== undefined);
+  const systemRegionButton = rowButtons.filter((t) => t.hook === 'data-system-region' && t.key === 'vasculature')[0] || null;
+  const rowFraming = {
+    areasAll: rowButtons.filter((t) => t.hook === 'data-area').length > 0 &&
+      rowButtons.filter((t) => t.hook === 'data-area').every((t) => t.pressed === true),
+    systemsAll: rowButtons.filter((t) => t.hook === 'data-kind').length > 0 &&
+      rowButtons.filter((t) => t.hook === 'data-kind').every((t) => t.pressed === true),
+    vascularRegion: systemRegionButton === null ? null : systemRegionButton.pressed,
+    buttonCount: rowButtons.length,
+    counts: {
+      areas: rowButtons.filter((t) => t.hook === 'data-area').length,
+      systems: rowButtons.filter((t) => t.hook === 'data-kind').length,
+      systemRegions: rowButtons.filter((t) => t.hook === 'data-system-region').length,
+    },
+  };
   const legend = {};
   for (const row of document.querySelectorAll('.legend-row.legend-toggle')) {
     if (row.closest('.legend-divisions') !== null) continue;
@@ -867,6 +1018,7 @@ const HEADER_ROWS_PROBE = `(() => {
     actions: actions,
     presets: presets,
     headerButtons: headerButtons,
+    rowFraming: rowFraming,
     legend: legend,
     activeTab: tab,
   };
@@ -876,19 +1028,27 @@ const HEADER_ROWS_PROBE = `(() => {
  * Turn one `HEADER_ROWS_PROBE` reading into the pure predicate's input: the
  * expected sets come from the shipped declarations parsed above, and the layer
  * sets are sliced out of the legend readback by the app's own region/kind lists.
+ *
+ * v12: `expectedSystemRegions` is the store's OWN complement rule
+ * (`SYSTEM_REGION_BUTTONS = ALL_REGIONS.filter(region => !AREAS.some(area =>
+ * area.regions.includes(region)))`, `store.ts:1226`), evaluated here over the two
+ * declarations parsed out of that file — never retyped.
  */
 function headerReadingFrom(probe) {
   const legend = probe?.legend ?? {}
   const pick = (keys) =>
     Object.fromEntries(keys.filter((key) => typeof legend[key] === 'boolean').map((key) => [key, legend[key]]))
+  const areaClaims = new Set((AREA_TABLE_SOURCE ?? []).flatMap((area) => area.regions ?? []))
   return {
     rows: probe?.rows ?? {},
     toggles: probe?.toggles ?? [],
     actions: probe?.actions ?? [],
     presets: probe?.presets ?? [],
     headerButtons: probe?.headerButtons ?? [],
+    rowFraming: probe?.rowFraming ?? null,
     expectedAreas: AREA_IDS,
     expectedKinds: ALL_KINDS_SOURCE ?? [],
+    expectedSystemRegions: ALL_REGIONS_FROM_DIVISIONS.filter((region) => !areaClaims.has(region)),
     allRegions: ALL_REGIONS_FROM_DIVISIONS,
     areaRegions: AREA_REGIONS_MAP,
     layers: {
@@ -926,6 +1086,77 @@ const TREE_REGION_DIM_PROBE = `(() => {
     out.push({ label: name, on: on, off: off });
   }
   return out;
+})()`
+
+/**
+ * v13 — the taxonomy tree's "Cranial nerves" subdivision, read the way the tree
+ * really renders it: one `.tree-sub-row` per subdivision, whose leaf rows carry
+ * `is-off` when `TaxonomyTree.layerOff(layers, entry.region, entry.kind)` is true
+ * (`TaxonomyTree.tsx:23–24, 39, 50` — region layer off OR kind layer off).
+ *
+ * Why a separate probe: the twelve nerve records sit in FOUR different regions
+ * (telencephalon 2, midbrain 2, pons 4, medulla 4), so "the tree dims nerve rows
+ * when the kind is off" is a claim about one subdivision NAME appearing under
+ * several regions — a per-region count would hide the telencephalic pair (the
+ * `TREE_REGION_DIM_PROBE` family test excludes telencephalon) and would not say
+ * whether ANY nerve row was inspected. `subdivisionFound: false` is a FAILURE in
+ * the caller, never a pass: a probe that found nothing must not be able to make
+ * the assertion vacuous.
+ */
+const TREE_NERVE_DIM_PROBE = `(() => {
+  const subdivision = 'cranial nerves';
+  const regions = [];
+  let rows = 0, off = 0;
+  const names = [];
+  for (const sub of document.querySelectorAll('.tree-sub-row')) {
+    const subName = ((sub.querySelector('.tree-sub-name') || {}).textContent || '').trim().toLowerCase();
+    if (subName !== subdivision) continue;
+    const block = sub.closest('.tree-subdivision');
+    const region = sub.closest('.tree-region');
+    const regionName = region === null
+      ? ''
+      : ((region.querySelector('.tree-region-name') || {}).textContent || '').trim();
+    regions.push(regionName);
+    if (block === null) continue;
+    for (const row of block.querySelectorAll('.tree-leaf-row')) {
+      rows += 1;
+      names.push((row.textContent || '').trim().slice(0, 32));
+      if (row.classList.contains('is-off')) off += 1;
+    }
+  }
+  return {
+    subdivisionFound: regions.length > 0,
+    subdivisionRows: regions.length,
+    regions: regions,
+    rows: rows,
+    off: off,
+    sample: names.slice(0, 4)
+  };
+})()`
+
+/**
+ * Open every "Cranial nerves" subdivision in the taxonomy tree (and the region
+ * rows that hold them) WITHOUT toggling an open one closed — the tree renders
+ * leaves only while both levels are expanded (`TaxonomyTree.tsx:128, 144`), so a
+ * closed tree would make the dim assertion silently vacuous. The A0 block opens
+ * its own family of subdivisions the same way; this helper exists so the v13
+ * nerve claims in block R do not depend on what an earlier block left open.
+ */
+const OPEN_NERVE_SUBDIVISIONS = `(() => {
+  let openedRegions = 0, openedSubdivisions = 0;
+  for (const sub of [...document.querySelectorAll('.tree-sub-row')]) {
+    const subName = ((sub.querySelector('.tree-sub-name') || {}).textContent || '').trim().toLowerCase();
+    if (subName !== 'cranial nerves') continue;
+    const region = sub.closest('.tree-region');
+    const regionRow = region === null ? null : region.querySelector('.tree-region-row');
+    if (regionRow !== null && regionRow.getAttribute('aria-expanded') !== 'true') { regionRow.click(); openedRegions += 1; }
+  }
+  for (const sub of [...document.querySelectorAll('.tree-sub-row')]) {
+    const subName = ((sub.querySelector('.tree-sub-name') || {}).textContent || '').trim().toLowerCase();
+    if (subName !== 'cranial nerves') continue;
+    if (sub.getAttribute('aria-expanded') !== 'true') { sub.click(); openedSubdivisions += 1; }
+  }
+  return 'opened ' + openedRegions + ' region(s) and ' + openedSubdivisions + ' subdivision(s)';
 })()`
 
 /** The cortical-division legend rows of one surface (Plates or the PiP panel). */
@@ -1328,24 +1559,52 @@ try {
   await sleep(1200)
 
   const bootPreset = await evaluate(`(() => {
-    /* v11 re-point: the preset shortcut row is addressed by its MACHINE HOOK
-       (the data-preset attribute) and the two new actions (Reset / All) sit in
-       the same '.header-presets' group, so a bare '.header-presets button' sweep
-       would mix a framing ACTION into the "which preset is active" reading. The
-       group, its role, its aria-label and the preset labels themselves are
-       unchanged from v10 — that is the default-framing assertion the brief
-       forbids removing — and the total count is reported alongside so a
-       collapsed row (a <select>, a hidden menu) cannot pass this check by
-       simply holding no buttons. */
+    /* v12–v12g RE-POINT (this review task). Through v11 this probe swept
+       '.header-presets button' for the pressed preset. The v12 header REMOVED
+       that row and the Reset / All pair; the same fact is now read from the two
+       toggle rows the header does have:
+
+         brainstem-focus  ⇔  every [data-area] pressed  ∧  every [data-kind]
+                             pressed  ∧  [data-system-region="vasculature"] NOT
+                             pressed
+
+       and that reading is exact, not approximate — see the long note in
+       scripts/verify/checks.mjs above \`presetFocusReading\`. Pixels and the DOM
+       contract are the same claim either way: what changed is which controls
+       carry it. The preset-row fields are still reported (as zeros / empty) so a
+       half-restored row would show up in the log rather than disappear. */
+    const pressed = (b) => { const raw = b.getAttribute('aria-pressed'); return raw === 'true' ? true : raw === 'false' ? false : null; };
+    const rows = (hook) => [...document.querySelectorAll('[' + hook + ']')];
+    const areaButtons = rows('data-area');
+    const kindButtons = rows('data-kind');
+    const systemRegionButtons = rows('data-system-region');
+    const vascular = systemRegionButtons.filter((b) => b.getAttribute('data-system-region') === 'vasculature')[0] || null;
+    const rowFraming = {
+      areasAll: areaButtons.length > 0 && areaButtons.every((b) => pressed(b) === true),
+      systemsAll: kindButtons.length > 0 && kindButtons.every((b) => pressed(b) === true),
+      vascularRegion: vascular === null ? null : pressed(vascular),
+      buttonCount: areaButtons.length + kindButtons.length + systemRegionButtons.length,
+      counts: { areas: areaButtons.length, systems: kindButtons.length, systemRegions: systemRegionButtons.length },
+    };
     const presets = [...document.querySelectorAll('.header-presets button')];
     const presetButtons = presets.filter((b) => b.getAttribute('data-preset') !== null);
-    const pressed = (b) => { const raw = b.getAttribute('aria-pressed'); return raw === 'true' ? true : raw === 'false' ? false : null; };
-    const active = presetButtons.filter((b) => b.getAttribute('aria-pressed') === 'true')
-      .map((b) => b.textContent.trim());
-    const activeIds = presetButtons.filter((b) => b.getAttribute('aria-pressed') === 'true')
+    const activeIds = presetButtons.filter((b) => pressed(b) === true)
       .map((b) => b.getAttribute('data-preset'));
+    const active = presetButtons.filter((b) => pressed(b) === true)
+      .map((b) => b.textContent.trim());
+    const rowLabels = [...areaButtons, ...kindButtons, ...systemRegionButtons]
+      .filter((b) => pressed(b) === true)
+      .map((b) => b.textContent.trim());
+    /* The tree dimming sweep. v13 note: the twelve cranial-nerve rows live in
+       the midbrain/pons/medulla regions this sweep already visits, so they are
+       covered here AND counted separately below (\`nerveRowsSeen\` / \`nerveOff\`),
+       which is what makes "the nerve kind is on at the default framing" a named
+       claim instead of an incidental one. */
+    const nerveSubdivision = 'cranial nerves';
     const offRows = [];
+    const nerveOff = [];
     let rowsSeen = 0;
+    let nerveRowsSeen = 0;
     for (const region of document.querySelectorAll('.tree-region')) {
       const name = (region.querySelector('.tree-region-name')?.textContent || '').toLowerCase();
       if (name.indexOf('telencephalon') !== -1) continue;
@@ -1354,11 +1613,20 @@ try {
         rowsSeen++;
         if (row.classList.contains('is-off')) offRows.push((row.textContent || '').trim().slice(0, 24));
       }
+      for (const sub of region.querySelectorAll('.tree-sub-row')) {
+        const subName = (sub.querySelector('.tree-sub-name')?.textContent || '').trim().toLowerCase();
+        if (subName !== nerveSubdivision) continue;
+        for (const row of sub.parentElement.querySelectorAll('.tree-leaf-row')) {
+          nerveRowsSeen++;
+          if (row.classList.contains('is-off')) nerveOff.push((row.textContent || '').trim().slice(0, 32));
+        }
+      }
     }
     let stored = null;
     try { stored = window.localStorage.getItem('neuroaxis.viewPreset'); } catch (error) { stored = null; }
     return {
-      bootActiveLabels: active,
+      rowFraming: rowFraming,
+      bootActiveLabels: rowLabels,
       bootActivePresets: activeIds,
       presetButtonsWithHook: presetButtons.length,
       headerPresetButtons: presets.length,
@@ -1371,18 +1639,22 @@ try {
       offRows: offRows.slice(0, 8),
       offCount: offRows.length,
       rowsSeen,
+      nerveRowsSeen,
+      nerveOff: nerveOff.slice(0, 8),
       storedPreset: stored,
     };
   })()`)
-  info('boot preset reading (' + String(expandRegions) + ', ' + String(expandSubdivisions) + '): '
+  info('boot framing reading (' + String(expandRegions) + ', ' + String(expandSubdivisions) + '): '
     + JSON.stringify({
-      active: bootPreset.bootActiveLabels,
-      activePresets: bootPreset.bootActivePresets,
-      presetButtons: bootPreset.presetButtonsWithHook + '/' + bootPreset.headerPresetButtons
-        + ' in .header-presets (' + (bootPreset.actionLabels ?? []).join(', ') + ' = the v11 actions)',
+      rowFraming: bootPreset.rowFraming ?? null,
+      pressedRowLabels: bootPreset.bootActiveLabels,
+      presetRow: bootPreset.presetButtonsWithHook + '/' + bootPreset.headerPresetButtons
+        + ' buttons in .header-presets (post-v12: the row is removed, both counts are 0 unless it returns)',
       stored: bootPreset.storedPreset,
       rowsSeen: bootPreset.rowsSeen,
       offCount: bootPreset.offCount,
+      nerveRowsSeen: bootPreset.nerveRowsSeen,
+      nerveOff: bootPreset.nerveOff,
     }))
   const focusVerdict = presetFocusReading(bootPreset)
   focusVerdict.ok ? ok(focusVerdict.detail) : bad(focusVerdict.detail)
@@ -1392,13 +1664,15 @@ try {
   /* ======================================================================
    * A0b — v11: THE TWO TOGGLE ROWS AT A CLEAN BOOT.
    *
-   * docs/SWARM_V11_PLAN.md §1 + PLAN.md §1. Read at the SAME clean-boot moment
-   * as the preset reading above (before any check clicks anything), because the
-   * boot contract is: both rows present and labelled, every area/kind covered by
-   * exactly one aria-pressed toggle whose accessible name starts with its
-   * visible text, each button's pressed state the SAME fact as the layer set the
-   * legend reads, the default framing reachable (Reset pressed exactly when the
-   * documented default preset is), and the preset shortcut row still real.
+   * docs/SWARM_V11_PLAN.md §1 + PLAN.md §1, RE-POINTED by this review task to the
+   * post-v12 header. Read at the SAME clean-boot moment as the framing reading
+   * above (before any check clicks anything), because the boot contract is: both
+   * rows present and labelled, every area/kind/region-backed-system covered by
+   * exactly one aria-pressed toggle whose accessible name starts with its visible
+   * text, each button's pressed state the SAME fact as the layer set the legend
+   * reads, the two per-axis All modules bound to their own axis, and the region
+   * backed `Vasculature` + `Clinical motor` members still reachable from the
+   * Systems row.
    *
    * The predicate is `checks.headerToggleRowsReading` (pure, so the Node mirror
    * can exercise it without Chrome and so a failure names which claim broke);
@@ -1406,8 +1680,8 @@ try {
    * ==================================================================== */
   const bootHeaderRaw = await evaluate(HEADER_ROWS_PROBE)
   /* The clean-boot pressed set, kept OUTSIDE the branch below because block R
-     asserts that Reset reproduces exactly it ("Reset restores the documented
-     default", not "Reset lands somewhere plausible"). */
+     asserts that the composed default restore reproduces exactly it ("the default
+     framing is reachable from the controls", not "some plausible state"). */
   const bootPressed = (bootHeaderRaw?.toggles ?? [])
     .map((toggle) => toggle.hook + ':' + toggle.key + '=' + toggle.pressed)
     .sort()
@@ -1417,30 +1691,39 @@ try {
   } else {
     const bootHeader = headerReadingFrom(bootHeaderRaw)
     info(
-      'v11 header rows at boot: ' +
+      'v11/v12 header rows at boot: ' +
         Object.entries(bootHeaderRaw.rows ?? {})
           .map(([row, value]) => `${row} present=${value.present} role=${value.role} buttons=${value.buttons}`)
           .join(' · ') +
         ' · toggles ' +
         bootHeader.toggles.map((t) => `${t.hook}:${t.key}=${t.pressed}`).join(' ') +
         ' · actions ' + bootHeader.actions.map((a) => `${a.key}=${a.pressed}`).join(' ') +
-        ' · preset buttons ' + bootHeader.presets.map((p) => `${p.id}=${p.pressed}`).join(' '),
+        ' · preset buttons ' + (bootHeader.presets.length === 0
+          ? '0 (post-v12: the shortcut row is removed by design)'
+          : bootHeader.presets.map((p) => `${p.id}=${p.pressed}`).join(' ')),
     )
     for (const verdictRow of headerToggleRowsReading(bootHeader)) {
       verdictRow.ok ? ok(verdictRow.detail) : bad(verdictRow.detail)
     }
-    /* The header must not have lost the group the boot-preset assertion reads,
-       and the two v11 actions must live in it (PLAN.md §4). */
-    bootPreset.headerPresetButtons >= bootPreset.presetButtonsWithHook && bootPreset.presetButtonsWithHook > 0
+    /* v12 RE-POINT (was: ".header-presets holds the preset row + the two v11
+       actions"). The claim is the same one — the header must expose the whole
+       default framing through real, individually addressable controls — and it is
+       now made about the four per-axis All modules, whose hooks are the ones the
+       Node lane (`verify:area-toggles`) drives too. A header that lost one of them
+       fails here by hook name. */
+    const MODULE_HOOKS = ['areas-all-on', 'areas-all-off', 'systems-all-on', 'systems-all-off']
+    const moduleHooks = (bootHeader.actions ?? []).map((action) => String(action.key))
+    const missingModules = MODULE_HOOKS.filter((hook) => !moduleHooks.includes(hook))
+    missingModules.length === 0
       ? ok(
-        'v11 A0b: the preset shortcut row is still a real button group inside .header-presets (' +
-          bootPreset.presetButtonsWithHook + ' preset button(s) with a data-preset hook + ' +
-          (bootPreset.headerPresetButtons - bootPreset.presetButtonsWithHook) + ' v11 action(s): ' +
-          (bootPreset.actionLabels ?? []).join(', ') + ')',
+        'v12 A0b: the header carries both per-axis All modules as real hooked buttons (' +
+          MODULE_HOOKS.map((hook) => 'data-header-action="' + hook + '"').join(' + ') +
+          '; all header actions seen: ' + moduleHooks.join(', ') + ')',
       )
       : bad(
-        'v11 A0b: .header-presets holds ' + bootPreset.presetButtonsWithHook + ' preset button(s) and ' +
-          bootPreset.headerPresetButtons + ' button(s) total — the documented-default assertion has no target',
+        'v12 A0b: the header is missing ' + missingModules.length + ' of the four All-module hooks (' +
+          JSON.stringify(missingModules) + '); actions seen: ' + JSON.stringify(moduleHooks) +
+          ' — the framing is no longer reachable from the controls',
       )
   }
 
@@ -1539,7 +1822,7 @@ try {
       pressed: chip === null ? null : chip.getAttribute('aria-pressed'),
       legendNucleus: input === null ? null : input.checked,
       sameTextButtons: colliding.length,
-      sameTextHooks: colliding.map((b) => ['data-preset', 'data-kind'].filter((n) => b.getAttribute(n) !== null).join('+')),
+      sameTextHooks: colliding.map((b) => ['data-preset', 'data-kind', 'data-system-region', 'data-region'].filter((n) => b.getAttribute(n) !== null).join('+')),
     };
   })()`
   const layerBefore = await evaluate(layerToggleProbe)
@@ -2890,35 +3173,63 @@ try {
       legendVasculature: legend('vasculature'),
       legendVessel: legend('vessel'),
       legendNucleus: legend('nucleus'),
+      legendTract: legend('tract'),
+      legendVentricle: legend('ventricle'),
       swatch: [...document.querySelectorAll('.legend-row')].some(
         (r) => r.textContent.trim() === 'Cerebral arteries'),
-      presetButton: [...document.querySelectorAll('button')].some(
-        (b) => b.textContent.trim() === 'Vasculature'),
+      /* v12 RE-POINT: the v8 preset button is gone; the region-backed
+         "Vasculature" button in the Systems row is what carries the v8 label now
+         (Header.tsx:1228 passes \`label: 'Vasculature'\` for the one
+         SYSTEM_REGION_BUTTON today). Addressed by its MACHINE HOOK. */
+      systemRegionButton: (() => {
+        const b = document.querySelector('[data-system-region="vasculature"]');
+        if (b === null) return null;
+        const raw = b.getAttribute('aria-pressed');
+        return { text: (b.textContent || '').trim(), pressed: raw === 'true' ? true : raw === 'false' ? false : null };
+      })(),
+      /* Kept as a printed cross-check: the exact text "Vasculature" must still be
+         carried by exactly ONE button, and the hooks it carries are reported. */
+      exactLabelButtons: [...document.querySelectorAll('button')]
+        .filter((b) => b.textContent.trim() === 'Vasculature')
+        .map((b) => ['data-preset', 'data-system-region', 'data-region', 'data-area'].filter((n) => b.getAttribute(n) !== null).join('+') || 'NO HOOK'),
+      presetRowButtons: document.querySelectorAll('.header-presets button').length,
     }
   })()`
 
-  /* v11 RE-POINT (was: `clickText('Brainstem focus')`). The default framing is now
-   * reached through the header's Reset action, which the v11 header binds to the
-   * store's EXISTING `applyViewPreset('brainstem-focus')` — so this step asserts
-   * BOTH that Reset lands on the documented default (the preset button reads
-   * pressed at the same moment) and that the default framing is what v8 claims. */
-  const resetClick = await evaluate(clickHook('[data-header-action="reset"]'))
-  await sleep(500)
+  /* v12 RE-POINT (was: `clickHook('[data-header-action="reset"]')` reading
+   * `[data-preset="brainstem-focus"]` beside it). The default framing is now
+   * reached by COMPOSING the two All modules with the vascular region off — see
+   * `restoreDefaultFraming` above, which asserts it landed and prints its steps. */
+  const resetClick = await restoreDefaultFraming('v8 vascular block')
   const resetState = await evaluate(`(() => {
-    const reset = document.querySelector('[data-header-action="reset"]');
-    const preset = document.querySelector('[data-preset="brainstem-focus"]');
-    const read = (b) => (b === null ? null : b.getAttribute('aria-pressed'));
-    return { reset: read(reset), defaultPreset: read(preset), presetLabel: preset === null ? null : (preset.textContent || '').trim() };
+    const read = (selector) => {
+      const b = document.querySelector(selector);
+      if (b === null) return null;
+      const raw = b.getAttribute('aria-pressed');
+      return raw === 'true' ? true : raw === 'false' ? false : null;
+    };
+    const areas = [...document.querySelectorAll('[data-area]')];
+    const kinds = [...document.querySelectorAll('[data-kind]')];
+    return {
+      areasAllOn: areas.length > 0 && areas.every((b) => b.getAttribute('aria-pressed') === 'true'),
+      systemsAllOn: kinds.length > 0 && kinds.every((b) => b.getAttribute('aria-pressed') === 'true'),
+      vascularRegion: read('[data-system-region="vasculature"]'),
+      areaButtons: areas.length,
+      kindButtons: kinds.length,
+      areasOn: areas.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.getAttribute('data-area')),
+    };
   })()`)
   const vascDefault = await evaluate(vascularState)
-  resetState.reset === 'true' && resetState.defaultPreset === 'true'
+  resetState.areasAllOn === true && resetState.systemsAllOn === true && resetState.vascularRegion === false
     ? ok(
-      'v11: ' + String(resetClick) + ' restores the documented default framing (Reset aria-pressed=true and ' +
-        'data-preset="brainstem-focus" (' + String(resetState.presetLabel) + ') aria-pressed=true at the same moment)',
+      'v11/v12: the composed default reads the documented framing on the rows themselves (every one of the ' +
+        String(resetState.areaButtons) + ' area buttons pressed: ' + (resetState.areasOn ?? []).join(', ') +
+        '; every one of the ' + String(resetState.kindButtons) + ' systems pressed; ' +
+        'Vasculature system region off) — ' + String(resetClick),
     )
     : bad(
-      'v11: the Reset action did not land on the documented default framing (' + JSON.stringify(resetState) + ', ' +
-        String(resetClick) + ')',
+      'v11/v12: the default framing is not readable from the rows after the restore (' + JSON.stringify(resetState) +
+        ', ' + String(resetClick) + ')',
     )
   if (!vascDefault.regionRowFound) {
     bad('the taxonomy tree has no "Cerebral vasculature" region row — the v8 region did not reach the tree')
@@ -2939,87 +3250,126 @@ try {
     ? ok('the palette legend documents the new "Cerebral arteries" family')
     : bad('the palette legend has no "Cerebral arteries" row')
 
-  if (!vascDefault.presetButton) {
-    bad('the header has no "Vasculature" preset button')
+  /* v12 RE-POINT (was: `if (!vascDefault.presetButton)`, i.e. "is there a button
+     reading exactly Vasculature?"). The preset button is gone; the v8 label now
+     belongs to the region-backed System button. The check keeps BOTH halves of
+     the old assertion: a Vasculature control must exist (by machine hook, with its
+     pressed state readable) AND the exact text must still be carried by exactly
+     one header button — so a second control re-using the v8 label, which would
+     make a text-based click ambiguous again, fails here. */
+  if (vascDefault.systemRegionButton === null) {
+    bad(
+      'the Systems row has no [data-system-region="vasculature"] button — the v8 vascular region is unreachable ' +
+        'from the header (exact-text "Vasculature" buttons found: ' + JSON.stringify(vascDefault.exactLabelButtons) +
+        ', .header-presets buttons: ' + String(vascDefault.presetRowButtons) + ')',
+    )
   } else {
+    vascDefault.exactLabelButtons.length === 1 &&
+      vascDefault.exactLabelButtons[0].includes('data-system-region') &&
+      vascDefault.presetRowButtons === 0
+      ? ok(
+        'v12: exactly one header button reads exactly "Vasculature" (' +
+          String(vascDefault.systemRegionButton.text) + ', hooks ' + vascDefault.exactLabelButtons[0] + ') and the ' +
+          'removed .header-presets row contributes 0 buttons',
+      )
+      : bad(
+        'v12: the "Vasculature" label is not carried by exactly the one region-backed system button (' +
+          JSON.stringify({ exact: vascDefault.exactLabelButtons, presetRow: vascDefault.presetRowButtons }) + ')',
+      )
     /* ------------------------------------------------------------------ (1)
-     * v11 RE-POINT: THE NEW PRIMARY CONTROL. The Areas row's `Cerebral
-     * vasculature` toggle is what the user asked for (an area switch, not a
-     * preset), so the vascular REGION is now driven through it — addressed by
-     * `data-area`, never by its label. Both directions are asserted (the same
-     * button must also switch it back off), and the tree AND the legend must
-     * follow, because the region layer is the one fact all three read. */
-    const areaOnClick = await evaluate(clickHook('[data-area="vasculature"]'))
+     * v11 RE-POINT, v12 RE-ADDRESSED: THE PRIMARY CONTROL. Through v11 this was
+     * the Areas row's `Cerebral vasculature` toggle addressed by `data-area`; v12
+     * moved the region into the Systems row under `data-system-region`. The claim
+     * is unchanged: the vascular REGION is driven through its own hooked control,
+     * both directions are asserted (the same button must switch it back off), and
+     * the tree AND the legend must follow, because the region layer is the one
+     * fact all three read. */
+    const areaOnClick = await evaluate(clickHook('[data-system-region="vasculature"]'))
     await sleep(700)
     const vascAreaOn = await evaluate(vascularState)
-    const areaOnState = await evaluate(hookState('[data-area="vasculature"]'))
+    const areaOnState = await evaluate(hookState('[data-system-region="vasculature"]'))
     vascAreaOn.regionOff === false && vascAreaOn.legendVasculature === true && areaOnState?.pressed === true
       ? ok(
-        'v11: ' + String(areaOnClick) + ' switches the vascular REGION on in the tree, in the legend and in its own ' +
+        'v11/v12: ' + String(areaOnClick) + ' switches the vascular REGION on in the tree, in the legend and in its own ' +
           'aria-pressed (' + String(areaOnState.name) + ')',
       )
       : bad(
-        'v11: the Areas toggle did not turn the vascular region on (' +
+        'v11/v12: the Systems-row Vasculature toggle did not turn the vascular region on (' +
           JSON.stringify({ tree: vascAreaOn.regionOff, legend: vascAreaOn.legendVasculature, button: areaOnState }) + ')',
       )
     vascAreaOn.legendNucleus === true
-      ? ok('v11: the area toggle is a REGION switch only — the nucleus kind layer is untouched (' + vascAreaOn.legendNucleus + ')')
-      : bad('v11: the area toggle also changed the nucleus KIND layer (' + JSON.stringify(vascAreaOn) + ')')
-    const areaOffClick = await evaluate(clickHook('[data-area="vasculature"]'))
+      ? ok('v11: the region-backed system button is a REGION switch only — the nucleus kind layer is untouched (' + vascAreaOn.legendNucleus + ')')
+      : bad('v11: the region-backed system button also changed the nucleus KIND layer (' + JSON.stringify(vascAreaOn) + ')')
+    const areaOffClick = await evaluate(clickHook('[data-system-region="vasculature"]'))
     await sleep(700)
     const vascAreaOff = await evaluate(vascularState)
     vascAreaOff.regionOff === true && vascAreaOff.legendVasculature === false
-      ? ok('v11: ' + String(areaOffClick) + ' switches it back off (the toggle is symmetric: tree + legend both off again)')
-      : bad('v11: the area toggle did not switch the vascular region back off (' + JSON.stringify(vascAreaOff) + ')')
+      ? ok('v11/v12: ' + String(areaOffClick) + ' switches it back off (the toggle is symmetric: tree + legend both off again)')
+      : bad('v11/v12: the region-backed system button did not switch the vascular region back off (' + JSON.stringify(vascAreaOff) + ')')
 
     /* ------------------------------------------------------------------ (2)
-     * The v8 preset claim itself, now addressed by its MACHINE HOOK
-     * (`[data-preset="vasculature"]`) instead of by the exact label text — the
-     * label stays in the assertion message as evidence, not as the target. */
-    const presetClick = await evaluate(clickHook('[data-preset="vasculature"]'))
-    await sleep(700)
-    const vascOn = await evaluate(vascularState)
-    vascOn.regionOff === false && vascOn.legendVasculature === true
-      ? ok('the Vasculature preset (' + String(presetClick) + ') switches the vascular region layer ON in both the tree and the legend')
-      : bad('the Vasculature preset did not turn the vascular region on (' + JSON.stringify(vascOn) + ')')
-    vascOn.legendNucleus === false
-      ? ok('the Vasculature preset is the arterial cast: nuclei are layer-off by kind, vessels are on')
-      : bad('the Vasculature preset leaves the nucleus kind layer on — it is not the cast view the plan describes')
+     * RE-POINTED BY THIS REVIEW TASK, with the deletion named.
+     *
+     * v8's claim was "the `Vasculature` PRESET switches the vascular region layer
+     * ON in both the tree and the legend, and leaves the nucleus kind layer off —
+     * it is the arterial cast". v12 removed the preset row, so the control that
+     * made that claim does not exist: asserting `[data-preset="vasculature"]`
+     * would demand the product be bent back, and asserting nothing would delete a
+     * real v8 claim.
+     *
+     * The claim is therefore re-pointed at the controls that now compose the same
+     * cast, and it is asserted in the SAME two directions as before:
+     *   (a) the System-region button alone turns the region on and touches no kind
+     *       (already asserted above, kept);
+     *   (b) adding Systems{Nuclei,Tracts,Ventricles}=off produces the arterial cast
+     *       — region on, vessels on, the three kinds off (claim (3) below, which is
+     *       now the ONLY path and therefore the pass condition, not a cross-check).
+     * DELETED, NAMED: nothing. The `presetButton` field of the `vascularState`
+     * probe was replaced by `systemRegionButton` + `exactLabelButtons` (the exact
+     * text "Vasculature" is still counted, and its hooks are printed), so the
+     * assertion that "the header exposes a Vasculature control" survives verbatim.
+     * ------------------------------------------------------------------ */
 
     /* ------------------------------------------------------------------ (3)
-     * v11's OWN CLAIM, and the reason the two rows exist: the orthogonal axes
-     * COMPOSE the cast the single preset used to describe. From the default,
-     * Areas{Cerebral vasculature}=on plus Systems{Nuclei,Tracts,Ventricles}=off
-     * must produce the same three readings the preset produces — if either row
-     * were wired to a different set, the two paths would disagree. */
+     * v11's OWN CLAIM — now THE claim rather than a cross-check: the orthogonal
+     * axes COMPOSE the cast the single preset used to describe. From the default,
+     * Systems{Vasculature}=on plus Systems{Nuclei,Tracts,Ventricles}=off must give
+     * the arterial cast: region on, vessels on, nucleus/tract/ventricle kinds off.
+     * Every step is addressed by a machine hook, and each step's outcome is
+     * printed, so a mis-wired button names itself. */
     const composeSteps = []
-    composeSteps.push(String(await evaluate(clickHook('[data-header-action="reset"]'))))
-    await sleep(700)
-    composeSteps.push(String(await evaluate(clickHook('[data-area="vasculature"]'))))
+    composeSteps.push(String(await restoreDefaultFraming('vascular cast composition')))
+    composeSteps.push(String(await evaluate(clickHook('[data-system-region="vasculature"]'))))
     await sleep(600)
     for (const kind of ['nucleus', 'tract', 'ventricle']) {
       composeSteps.push(String(await evaluate(clickHook(`[data-kind="${kind}"]`))))
       await sleep(600)
     }
     const vascComposed = await evaluate(vascularState)
-    const composedAgrees =
-      vascComposed.regionOff === vascOn.regionOff &&
-      vascComposed.legendVasculature === vascOn.legendVasculature &&
-      vascComposed.legendVessel === vascOn.legendVessel &&
-      vascComposed.legendNucleus === vascOn.legendNucleus
-    composedAgrees
+    const castOk =
+      vascComposed.regionOff === false &&
+      vascComposed.legendVasculature === true &&
+      vascComposed.legendVessel === true &&
+      vascComposed.legendNucleus === false &&
+      vascComposed.legendTract === false &&
+      vascComposed.legendVentricle === false
+    castOk
       ? ok(
-        'v11: the two rows COMPOSE the arterial cast without the preset — Areas{Cerebral vasculature}=on + ' +
-          'Systems{Nuclei,Tracts,Ventricles}=off gives the same reading as the preset ' +
-          JSON.stringify({ regionOff: vascComposed.regionOff, vasculature: vascComposed.legendVasculature, vessel: vascComposed.legendVessel, nucleus: vascComposed.legendNucleus }),
+        'v11/v12: the two rows COMPOSE the arterial cast with no preset — Vasculature system region = on + ' +
+          'Systems{Nuclei,Tracts,Ventricles} = off gives region on, vessel on, the three kinds off ' +
+          JSON.stringify({ regionOff: vascComposed.regionOff, vasculature: vascComposed.legendVasculature, vessel: vascComposed.legendVessel, nucleus: vascComposed.legendNucleus, tract: vascComposed.legendTract, ventricle: vascComposed.legendVentricle }),
       )
       : bad(
-        'v11: the Areas/Systems rows do not compose what the Vasculature preset describes (rows ' +
-          JSON.stringify(vascComposed) + ' vs preset ' + JSON.stringify(vascOn) + '), steps: ' + composeSteps.join(' | '),
+        'v11/v12: the Areas/Systems rows do not compose the arterial cast the v8 preset described (' +
+          JSON.stringify(vascComposed) + '), steps: ' + composeSteps.join(' | '),
       )
-    /* back to the cast for the artery-selection half below (the preset path). */
-    await evaluate(clickHook('[data-preset="vasculature"]'))
-    await sleep(700)
+    /* Stay in the cast for the artery-selection half below — the SAME composed
+       state the assertion above just measured, re-asserted so the two halves
+       cannot run against different framings. */
+    const castHold = await evaluate(vascularState)
+    castHold.legendVasculature === true && castHold.legendVessel === true
+      ? ok('v11/v12: the arterial cast is still active for the artery-selection half (region + vessel layers on)')
+      : bad('v11/v12: the cast did not hold before the artery-selection half (' + JSON.stringify(castHold) + ')')
 
     // Open the vascular region in the tree, then select an artery through it.
     await evaluate(`(() => {
@@ -3089,20 +3439,40 @@ try {
         : bad('the artery record has no clinical section')
     }
 
-    // Round trip: back to the default via the v11 Reset action (was
-    // `clickText('Brainstem focus')`), the overlay must be off again.
-    const backClick = await evaluate(clickHook('[data-header-action="reset"]'))
-    await sleep(500)
+    /* Round trip: back to the default by composing the two All modules with the
+       vascular region off (v12 RE-POINT — the v11 Reset action no longer exists;
+       see `restoreDefaultFraming`), the overlay must be off again and the rows
+       must read the default. */
+    const backClick = await restoreDefaultFraming('v8 round trip')
     const vascBack = await evaluate(vascularState)
-    const backPreset = await evaluate(hookState('[data-preset="brainstem-focus"]'))
-    vascBack.regionOff === true && vascBack.legendVasculature === false && backPreset?.pressed === true
+    const backRows = await evaluate(`(() => {
+      const read = (selector) => {
+        const b = document.querySelector(selector);
+        if (b === null) return null;
+        const raw = b.getAttribute('aria-pressed');
+        return raw === 'true' ? true : raw === 'false' ? false : null;
+      };
+      const areas = [...document.querySelectorAll('[data-area]')];
+      const kinds = [...document.querySelectorAll('[data-kind]')];
+      return {
+        areasAllOn: areas.length > 0 && areas.every((b) => b.getAttribute('aria-pressed') === 'true'),
+        systemsAllOn: kinds.length > 0 && kinds.every((b) => b.getAttribute('aria-pressed') === 'true'),
+        vascularRegion: read('[data-system-region="vasculature"]'),
+        areasAllOnPressed: read('[data-header-action="areas-all-on"]'),
+        systemsAllOnPressed: read('[data-header-action="systems-all-on"]'),
+      };
+    })()`)
+    vascBack.regionOff === true && vascBack.legendVasculature === false &&
+      backRows.areasAllOn === true && backRows.systemsAllOn === true && backRows.vascularRegion === false
       ? ok(
-        'v11: ' + String(backClick) + ' hides the vascular layer again and reports the documented default ' +
-          '(region toggle is the only switch; data-preset="brainstem-focus" pressed=true)',
+        'v11/v12: ' + String(backClick) + ' hides the vascular layer again and the rows report the documented ' +
+          'default (region toggle is the only switch; every area + kind pressed, Vasculature off, and the two All ' +
+          'modules agree: areas-all-on=' + String(backRows.areasAllOnPressed) + ', systems-all-on=' +
+          String(backRows.systemsAllOnPressed) + ')',
       )
       : bad(
         'the vascular layer did not return to off (' + JSON.stringify(vascBack) + ', ' +
-          JSON.stringify(backPreset) + ', ' + String(backClick) + ')',
+          JSON.stringify(backRows) + ', ' + String(backClick) + ')',
       )
   }
 
@@ -4971,7 +5341,7 @@ try {
   })()`
 
   /* ---------------------------------------------------------------- R1 */
-  const r1ResetClick = await evaluate(clickHook('[data-header-action="reset"]'))
+  const r1ResetClick = await restoreDefaultFraming('R1 default restore')
   await sleep(1200)
   const r1Header = await evaluate(HEADER_ROWS_PROBE)
   const r1Legend = await evaluate(LEGEND_LAYERS_PROBE)
@@ -4985,21 +5355,25 @@ try {
       'v11 R1 (' + String(r1ResetClick) + '): areas ' +
         r1Reading.toggles.filter((t) => t.hook === 'data-area').map((t) => t.key + '=' + t.pressed).join(' ') +
         ' · systems ' + r1Reading.toggles.filter((t) => t.hook === 'data-kind').map((t) => t.key + '=' + t.pressed).join(' ') +
+        ' · system regions ' + r1Reading.toggles.filter((t) => t.hook === 'data-system-region').map((t) => t.key + '=' + t.pressed).join(' ') +
         ' · legend regions ' + JSON.stringify(r1Reading.layers.regions) +
         ' · legend kinds ' + JSON.stringify(r1Reading.layers.kinds),
     )
     if (r1Failed.length === 0) {
-      ok('v11 R1: after Reset the live header still satisfies all ' + r1Verdicts.length + ' toggle-row claims (' + r1Verdicts.map((v) => v.label).join(', ') + ')')
+      ok('v11 R1: after the composed default restore the live header still satisfies all ' + r1Verdicts.length + ' toggle-row claims (' + r1Verdicts.map((v) => v.label).join(', ') + ')')
     } else {
       for (const entry of r1Failed) bad('v11 R1: ' + entry.detail)
     }
-    /* The boot reading (A0b) and the Reset reading (R1) must be the SAME pressed
-       set — that is "Reset restores the documented default" stated as one fact. */
+    /* The boot reading (A0b) and the R1 reading must be the SAME pressed set —
+       that is "the documented default framing is reachable from the controls"
+       stated as one fact. v12 RE-POINT: the restore is composed (two All modules
+       + the vascular region off) because the Reset action and the preset row no
+       longer exist; the claim it proves is unchanged. */
     const resetPressed = r1Reading.toggles.map((t) => t.hook + ':' + t.key + '=' + t.pressed).sort().join(' | ')
     if (bootPressed.length > 0 && bootPressed === resetPressed) {
-      ok('v11 R1: Reset reproduces the CLEAN-BOOT pressed set exactly — ' + resetPressed)
+      ok('v11/v12 R1: the composed default restore reproduces the CLEAN-BOOT pressed set exactly — ' + resetPressed)
     } else {
-      bad('v11 R1: Reset does not reproduce the clean-boot pressed set (boot: ' + bootPressed + ' vs reset: ' + resetPressed + ')')
+      bad('v11/v12 R1: the composed default restore does not reproduce the clean-boot pressed set (boot: ' + bootPressed + ' vs restored: ' + resetPressed + ')')
     }
   }
 
@@ -5064,7 +5438,7 @@ try {
 
   /* ---------------------------------------------------------------- R2 */
   await goto3D()
-  await evaluate(clickHook('[data-header-action="reset"]'))
+  await restoreDefaultFraming('R2 baseline')
   await sleep(1400)
   const r2Base3D = await threeCanvasRead('default (3D tab)')
   await gotoPlates()
@@ -5192,15 +5566,47 @@ try {
   await sleep(1400)
 
   /* ---------------------------------------------------------------- R3 */
+  /* v13 EXTENSION (this review task). The sweep used to cover `nucleus` and
+   * `context` — two kinds with committed GLBs. It now also covers `nerve`, the
+   * kind this run added, because "the new Systems toggle really filters the
+   * surfaces" is a claim that must FAIL if the behaviour regresses rather than a
+   * claim stated in prose.
+   *
+   * What is different about `nerve` and why the assertions below have their own
+   * branch: the twelve cranial-nerve records are `meshes: false` with a sized
+   * schematic placement (PLAN.md §5 — no GLB may be added, the anatomy budget has
+   * <0.2 MiB of headroom), so they reach the 3D structure pass through
+   * `SceneLayers.isStructureVisible` → `NucleusMesh`'s `status: 'fallback'` body,
+   * drawn at `origin3d` scaled by `size3d` and named by the record id. Measured on
+   * the shipped graph: 12 records admitted with the kind on, 0 with it off, 24
+   * drawn bodies (each record is `laterality: 'paired'`).
+   *
+   * The PLATES LIVE SECTION is the honest half of the same measurement: the 2D
+   * canvas paints `SECTION_PARTS`, which is one entry per committed GLB
+   * (`sectionAssets.ts:155`), and there are ZERO nerve GLBs — so the nerve toggle
+   * cannot change those pixels, and this block asserts that fact instead of
+   * pretending to a parity it does not have. The synthetic claim that WOULD catch
+   * a regression is made in the Node lane (`verify:area-toggles` §11: a nerve
+   * part is admitted iff `kinds.has('nerve')`), and a nerve part that ever lands
+   * in the manifest without this sweep noticing would change `SECTION_PARTS`
+   * length — printed below. */
   const kindSweep = []
   await goto3D()
-  for (const kind of ['nucleus', 'context']) {
-    await evaluate(clickHook('[data-header-action="reset"]'))
+  for (const kind of ['nucleus', 'context', 'nerve']) {
+    await restoreDefaultFraming('R3 baseline (' + kind + ')')
     await sleep(1400)
     const baseline = await threeCanvasRead('default before ' + kind + ' (3D tab)')
     const off = await v11ToggleRow('data-kind', kind)
     await gotoPlates()
     const afterPlates = await platesCanvasRead(kind + ' off (Plates tab)')
+    /* The tree must be EXPANDED before its dim state can be read; a collapsed tree
+       would make the assertion pass by not running. */
+    const treeOpened = kind === 'nerve' ? String(await evaluate(OPEN_NERVE_SUBDIVISIONS)) : null
+    if (kind === 'nerve') {
+      await sleep(600)
+      info('v13 R3[nerve] tree expansion: ' + treeOpened)
+    }
+    const treeNerve = kind === 'nerve' ? await evaluate(TREE_NERVE_DIM_PROBE) : null
     await goto3D()
     const after = await threeCanvasRead(kind + ' off (3D tab)')
     const lost = (baseline.meshes ?? []).filter((name) => !(after.meshes ?? []).includes(name))
@@ -5215,6 +5621,7 @@ try {
     const entry = {
       kind,
       lost: lost.length,
+      lostNames: lost.slice(0, 6),
       three: [baseline.three?.hash, after.three?.hash],
       pip: [baseline.pip?.hash, after.pip?.hash],
       plates: [afterPlates.plates?.hash, legendPlates.plates?.hash],
@@ -5235,6 +5642,26 @@ try {
     } else {
       bad('v11 R3[' + kind + ']: a 3D-surface reading did not change (3D ' + baseline.three?.hash + '→' + after.three?.hash +
         ', PiP ' + baseline.pip?.hash + '→' + after.pip?.hash + ')')
+    }
+    if (kind === 'nerve') {
+      /* The nerve kind's own two claims, with the numbers the Node lane measured. */
+      const nerveLost = lost.filter((name) => name.startsWith('nrv-'))
+      nerveLost.length >= 12
+        ? ok('v13 R3[nerve]: the twelve cranial-nerve schematic structures left the 3D scene (' + nerveLost.length +
+          ' mesh(es) named nrv-*, e.g. ' + nerveLost.slice(0, 3).join(', ') + ')')
+        : bad('v13 R3[nerve]: switching the Cranial nerves system off removed only ' + nerveLost.length +
+          ' nrv-* mesh(es) from the 3D scene (expected ≥ 12; lost overall ' + lost.length + ')')
+      if (treeNerve === null) {
+        bad('v13 R3[nerve]: the tree nerve-row probe returned nothing, so "the tree dims nerve rows when the kind is off" DID NOT RUN')
+      } else if (treeNerve.subdivisionFound === false) {
+        bad('v13 R3[nerve]: the taxonomy tree has no "Cranial nerves" subdivision row — the twelve records never reached the tree (' +
+          JSON.stringify(treeNerve) + ')')
+      } else {
+        treeNerve.rows > 0 && treeNerve.off === treeNerve.rows
+          ? ok('v13 R3[nerve]: with the kind off, all ' + treeNerve.off + '/' + treeNerve.rows +
+            ' rows of the tree\'s "Cranial nerves" subdivision carry is-off (' + (treeNerve.regions ?? []).join(', ') + ')')
+          : bad('v13 R3[nerve]: the tree did not dim the nerve rows with the kind off (' + JSON.stringify(treeNerve) + ')')
+      }
     }
     if (afterPlates.plates?.hash !== undefined && legendPlates.plates?.hash !== undefined &&
       afterPlates.plates.hash === legendPlates.plates.hash) {
@@ -5262,45 +5689,177 @@ try {
     await goto3D()
   }
   info(
-    'v11 R3 sweep: ' + kindSweep.map((entry) => entry.kind + ' removed ' + entry.lost + ' mesh(es) · 3D ' +
+    'v11/v13 R3 sweep: ' + kindSweep.map((entry) => entry.kind + ' removed ' + entry.lost + ' mesh(es) (' +
+      (entry.lostNames ?? []).slice(0, 2).join(', ') + (entry.lost > 2 ? ', …' : '') + ') · 3D ' +
       entry.three.join('→') + ' · PiP ' + entry.pip.join('→') + ' · Plates ' + entry.plates.join('→') +
       ' · round trip ' + (entry.restore ? 'yes' : 'NO') + ' · legend path equal ' + (entry.equalPath ? 'yes' : 'NO')).join(' | '),
   )
 
-  /* ---------------------------------------------------------------- R4 */
-  await evaluate(clickHook('[data-header-action="reset"]'))
+  /* ======================================================================
+   * R3b — v14: THE PLATES HALF OF THE "Cranial nerves" TOGGLE IS NOW LIVE.
+   *
+   * THIS BLOCK IS RE-POINTED, NOT RE-WORDED. Through v13 it asserted the
+   * OPPOSITE: that the Plates live-section pixel hash is INVARIANT to the
+   * Cranial-nerves toggle, because the 2D canvas painted `SECTION_PARTS` only —
+   * one entry per committed GLB (`getManifest().parts.map(metaFor)`, 138 parts,
+   * none of them a nerve) — so "the toggle filters the 3D surface only" was a
+   * measured fact rather than a defect. v14 (this run) deliberately makes that
+   * false: the twelve courses reach the live section as PROCEDURAL registry parts
+   * (`sectionAssets.partsForCanvas()` = the 138 committed GLBs + the 12
+   * `SECTION_NERVE_PARTS`, and `registryNerveParts()` hands the worker the tube
+   * geometry swept by the same builder `TractTube` draws; `SectionCanvas`'s
+   * visible-list filter and its worker registry both use those two functions).
+   * Keeping the old verdict would have left the orchestrator's browser run
+   * reporting a failure for the feature it was asked to build.
+   *
+   * WHAT IS ASSERTED NOW, and why each half is falsifiable rather than a vibe:
+   *   • the Systems row really renders the `[data-kind="nerve"]` control (its
+   *     hook, text and state are read, not assumed) — with a missing button the
+   *     click below cannot have toggled anything;
+   *   • the Plates canvas pixel hash CHANGES when that control is clicked off and
+   *     CHANGES BACK when it is clicked on again. The round trip is the important
+   *     half: a hash that merely drifted (an unrelated repaint between reads, a
+   *     plane move) would not return to the value it started from.
+   *
+   * THE PAYLOAD INVARIANTS ARE NOT WEAKENED BY THIS RE-POINT, they stay enforced
+   * where they can be measured honestly: `verify:area-toggles` §11 is the Node
+   * lane that asserts `SECTION_PARTS.length === 138`, that the manifest still
+   * carries 138 parts with no `nrv-*` entry, that no `nrv-*.glb` exists under
+   * `src/assets/anatomy`, and that the twelve nerve contours come from
+   * `registryNerveParts()`. This block asserts what only a browser can see: that
+   * the reaction reaches the PAINTED PIXELS of the same canvas the PiP mounts.
+   * ==================================================================== */
+  await restoreDefaultFraming('R3b Plates nerve parity')
+  await gotoPlates()
+  const nerveControl = await evaluate(hookState('[data-kind="nerve"]'))
+  if (nerveControl === null) {
+    bad(
+      'v14 R3b: the Systems row does not render a [data-kind="nerve"] control (the Cranial nerves toggle cannot ' +
+        'reach the Plates surface, and every measurement below would be of an untoggled canvas)',
+    )
+  } else {
+    ok(
+      'v14 R3b: the Cranial nerves control is on screen — text "' + String(nerveControl.text) + '", aria-label "' +
+        String(nerveControl.name) + '", pressed=' + String(nerveControl.pressed) + ' at the default framing',
+    )
+  }
+  const platesNerveOn = await platesCanvasRead('nerve ON (Plates tab)')
+  await evaluate(clickHook('[data-kind="nerve"]'))
+  await sleep(1800)
+  const platesNerveOff = await platesCanvasRead('nerve OFF (Plates tab)')
+  await evaluate(clickHook('[data-kind="nerve"]'))
   await sleep(1600)
-  const r4 = await threeCanvasRead('after Reset (3D tab)')
+  const platesNerveBack = await platesCanvasRead('nerve ON again (Plates tab)')
+  const platesOnHash = platesNerveOn.plates?.hash
+  const platesOffHash = platesNerveOff.plates?.hash
+  const platesBackHash = platesNerveBack.plates?.hash
+  const platesReacts = platesOnHash !== undefined && platesOffHash !== undefined && platesOnHash !== platesOffHash
+  const platesRoundTrips = platesBackHash !== undefined && platesBackHash === platesOnHash
+  platesReacts
+    ? ok(
+      'v14 R3b: the Plates live section REACTS to the Cranial nerves toggle (hash ' + platesOnHash + ' with the kind on ' +
+        '→ ' + platesOffHash + ' with it off): the section registry now carries the twelve PROCEDURAL nerve parts, so ' +
+        'whatever the canvas slices, the PiP shows, and the same toggle drives both. Through v13 this block asserted ' +
+        'the opposite (invariance, because SECTION_PARTS held 138 committed GLBs and no nerve) — that is exactly the ' +
+        'claim this run made false on purpose',
+    )
+    : bad(
+      'v14 R3b: the Plates live-section hash did NOT change with the Cranial nerves toggle (' + String(platesOnHash) +
+        ' → ' + String(platesOffHash) + ') — either the nerve contours never reach the canvas (registry/visible-list ' +
+        'regression: `partsForCanvas()` and `registryNerveParts()` are the two call sites) or no nerve tube crosses ' +
+        'the current plane, which the Node lane excludes by measuring the crossing planes per nerve',
+    )
+  platesRoundTrips
+    ? ok(
+      'v14 R3b: …and the toggle round-trips the canvas exactly (hash back to ' + platesBackHash + ' after the second ' +
+        'click), so the change above is the nerve slice and not paint drift',
+    )
+    : bad(
+      'v14 R3b: the Plates hash did not return to its "kind on" value after the toggle round trip (' + String(platesOnHash) +
+        ' → ' + String(platesOffHash) + ' → ' + String(platesBackHash) + ') — the two readings are not comparable, so ' +
+        'the reaction claimed above is not established',
+    )
+  info(
+    'v14 R3b Plates nerve toggle: on ' + statsLine(platesNerveOn.plates) + ' · off ' + statsLine(platesNerveOff.plates) +
+      ' · on again ' + statsLine(platesNerveBack.plates) + ' · control pressed=' + String(nerveControl?.pressed ?? null),
+  )
+
+  /* ---------------------------------------------------------------- R4 */
+  await restoreDefaultFraming('R4 default restore')
+  await sleep(1600)
+  const r4 = await threeCanvasRead('after the composed default restore (3D tab)')
   const r4Header = await evaluate(HEADER_ROWS_PROBE)
   const r4Pressed = (r4Header?.toggles ?? []).map((t) => t.hook + ':' + t.key + '=' + t.pressed).sort().join(' | ')
   if (bootPressed.length > 0 && r4Pressed === bootPressed) {
-    ok('v11 R4: after the whole v11 sweep, Reset reproduces the clean-boot pressed set exactly — ' + r4Pressed)
+    ok('v11/v12 R4: after the whole sweep, the composed default restore reproduces the clean-boot pressed set exactly — ' + r4Pressed)
   } else {
-    bad('v11 R4: Reset no longer reproduces the clean-boot pressed set (boot ' + bootPressed + ' vs now ' + r4Pressed + ')')
+    bad('v11/v12 R4: the composed default restore no longer reproduces the clean-boot pressed set (boot ' + bootPressed + ' vs now ' + r4Pressed + ')')
   }
+  /* The render comparison below is only meaningful if `hidden` is also back to its
+   * boot value: the restore path cannot write `hidden` (see `restoreDefaultFraming`),
+   * so it is ASSERTED here instead of assumed. If a future block applies a preset
+   * whose `hidden` set differs, this fails and names the reason rather than
+   * producing a misleading "the render did not come back" verdict. */
+  const r4Hidden = await evaluate(`(() => {
+    const rows = [...document.querySelectorAll('.tree-leaf-row')];
+    return { rendered: rows.length, dimmed: rows.filter((row) => row.classList.contains('is-off')).length };
+  })()`)
+  const r2Hidden = r2Base3D.treeDim === null ? null : {
+    rendered: (r2Base3D.treeDim ?? []).reduce((sum, row) => sum + row.on + row.off, 0),
+    dimmed: (r2Base3D.treeDim ?? []).reduce((sum, row) => sum + row.off, 0),
+  }
+  info(
+    'v11/v12 R4 hidden-set proxy (rendered tree rows · is-off count): baseline ' + JSON.stringify(r2Hidden) +
+      ' vs after the restore ' + JSON.stringify(r4Hidden) +
+      ' — the composed restore writes regions + kinds only, so an equal is-off count is what makes the ' +
+      'render comparison below a comparison of the same structure state',
+  )
   const r4RenderOk = sameStringList(r2Base3D.meshes, r4.meshes)
   if (r4RenderOk) {
-    ok('v11 R4: Reset also restores the documented default RENDER — ' + (r2Base3D.meshes ?? []).length +
+    ok('v11/v12 R4: the composed restore also restores the documented default RENDER — ' + (r2Base3D.meshes ?? []).length +
       ' mesh names identical to the default captured at the start of block R')
   } else {
-    bad('v11 R4: Reset does not restore the default render (meshes ' + (r2Base3D.meshes ?? []).length + ' → ' +
-      (r4.meshes ?? []).length + ')')
+    bad('v11/v12 R4: the composed restore does not restore the default render (meshes ' + (r2Base3D.meshes ?? []).length + ' → ' +
+      (r4.meshes ?? []).length + '; if the hidden-set proxy above also differs, the cause is the preset-only `hidden` ' +
+      'set the post-v12 controls cannot write)')
   }
   await gotoPlates()
-  const r4Plates = await platesCanvasRead('after Reset (Plates tab)')
+  const r4Plates = await platesCanvasRead('after the composed default restore (Plates tab)')
   if (sameStats(r2BasePlates.plates, r4Plates.plates, 'hash') && sameStringList(r2BasePlates.platesRows, r4Plates.platesRows)) {
-    ok('v11 R4: the Plates live section returns to the default pixels too (hash ' + r2BasePlates.plates?.hash +
+    ok('v11/v12 R4: the Plates live section returns to the default pixels too (hash ' + r2BasePlates.plates?.hash +
       ', division rows ' + (r4Plates.platesRows ?? []).length + ')')
   } else {
-    bad('v11 R4: the Plates surface did not return to the default (Plates ' + r2BasePlates.plates?.hash + ' → ' +
+    bad('v11/v12 R4: the Plates surface did not return to the default (Plates ' + r2BasePlates.plates?.hash + ' → ' +
       r4Plates.plates?.hash + ', rows ' + JSON.stringify(r2BasePlates.platesRows) + ' → ' + JSON.stringify(r4Plates.platesRows) + ')')
   }
+  /* v12 RE-POINT (was: "Reset and data-preset=\"brainstem-focus\" both report
+     pressed at the default framing"). Both of those controls are gone; the same
+     claim is now made about the controls that carry the framing:
+       • the four All modules report their axis state (claim 6 of
+         `headerToggleRowsReading`, asserted above through `r4Header`);
+       • the ROW STATE itself is the documented default — every area and kind
+         pressed, the vascular system region off — which is what
+         `presetFocusReading` decided at boot (A0) and what `restoreDefaultFraming`
+         re-established here. */
   const r4Actions = (r4Header?.actions ?? []).map((action) => action.key + '=' + action.pressed).join(' ')
-  const defaultPresetPressed = (r4Header?.presets ?? []).filter((preset) => preset.id === 'brainstem-focus')[0]?.pressed ?? null
-  if (defaultPresetPressed === true && /reset=true/.test(r4Actions)) {
-    ok('v11 R4: Reset and data-preset="brainstem-focus" both report pressed at the default framing (' + r4Actions + ')')
+  const r4Framing = r4Header?.rowFraming ?? null
+  const r4RowsReadDefault =
+    r4Framing !== null && r4Framing.areasAll === true && r4Framing.systemsAll === true &&
+    r4Framing.vascularRegion === false && Number(r4Framing.buttonCount ?? 0) > 0
+  const r4ModulesPressed =
+    /areas-all-on=true/.test(r4Actions) && /systems-all-on=true/.test(r4Actions) &&
+    /areas-all-off=false/.test(r4Actions) && /systems-all-off=false/.test(r4Actions)
+  if (r4RowsReadDefault && r4ModulesPressed) {
+    ok(
+      'v11/v12 R4: the rows and the All modules both report the documented default framing (' + r4Actions +
+        '; row state ' + JSON.stringify(r4Framing) + ') — ' + String(r4Header?.presets?.length ?? 0) +
+        ' preset-shortcut button(s) rendered (post-v12: 0 by design)',
+    )
   } else {
-    bad('v11 R4: the default framing is not reported by both controls (actions ' + r4Actions + ', default preset ' + String(defaultPresetPressed) + ')')
+    bad(
+      'v11/v12 R4: the default framing is not reported by both the rows and the All modules (actions ' + r4Actions +
+        ', row state ' + JSON.stringify(r4Framing) + ')',
+    )
   }
 
   /* ---------------------------------------------------------------- R5 */

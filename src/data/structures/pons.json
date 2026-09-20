@@ -113,7 +113,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#14b8a6",
-    "function": "Second-order relay of the trigeminal system for large-fiber discriminative touch, pressure and dental pulp sensation: entering portio-major afferents of CN V terminate here, and the neurons project chiefly through the decussating ventral trigeminothalamic (trigeminal lemniscus) tract to the contralateral ventral posteromedial nucleus (VPM), with a smaller ipsilateral dorsal trigeminothalamic stream.",
+    "function": "Second-order relay of the trigeminal system for large-fiber discriminative touch, pressure and periodontal mechanoreception: entering portio-major afferents of CN V terminate here, and the neurons project chiefly through the decussating ventral trigeminothalamic (trigeminal lemniscus) tract to the contralateral ventral posteromedial nucleus (VPM), with a smaller ipsilateral dorsal trigeminothalamic stream.",
     "connections": {
       "afferent": ["Mechanoreceptive afferents of the CN V sensory root (portio major) from face, oral cavity and tooth pulp"],
       "efferent": ["Ventral trigeminothalamic tract (tract-trigeminothalamic-ventral) to contralateral VPM", "Dorsal trigeminothalamic tract (tract-trigeminothalamic-dorsal), ipsilateral"]
@@ -436,7 +436,7 @@
     "color": "#14b8a6",
     "function": "Laminated nucleus forming the acoustic tubercle on the dorsolateral brainstem surface over the inferior cerebellar peduncle: its principal (fusiform) cells integrate auditory input with somatosensory and vestibular modulation and project directly into the contralateral lateral lemniscus, contributing to spectral-shape cues used for vertical-plane sound localization.",
     "connections": {
-      "afferent": ["Auditory nerve afferents (high-frequency fibers)", "Somatosensory and vestibular modulatory inputs"],
+      "afferent": ["Auditory nerve afferents across the tonotopic range (the nucleus maps high frequencies dorsally)", "Somatosensory and vestibular modulatory inputs"],
       "efferent": ["Contralateral lateral lemniscus (tract-lateral-lemniscus) via the acoustic striae"]
     },
     "bloodSupply": "AICA branches",
@@ -632,7 +632,7 @@
     "clinical": [
       {
         "syndrome": "Coma and arousal failure",
-        "findings": "Bilateral paramedian damage of the upper brainstem reticular core (basilar tip occlusion) abolishes arousal while sparing sleep-wake behavioral cycling capacity of the cortex — the classic brainstem basis of coma.",
+        "findings": "Bilateral paramedian damage of the upper brainstem reticular core (basilar tip occlusion) abolishes arousal while the cortex itself is structurally spared — the classic brainstem (ascending reticular activating system) basis of coma.",
         "vascular": "Basilar artery paramedian perforators"
       },
       {
@@ -704,7 +704,7 @@
       }
     ],
     "levels": ["lvl-pons-middle"],
-    "origin3d": [7, -8, 6],
+    "origin3d": [17.1, -4.8, -3.5],
     "size3d": [1.5, 2, 1.5],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
@@ -719,7 +719,7 @@
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "CN VI rootlets emerge ventromedially at the pontomedullary junction, between the pyramid and the middle cerebellar peduncle, then run the longest intracranial subarachnoid course of any cranial nerve up the clival dura before entering the cavernous sinus and orbit.",
+    "function": "CN VI rootlets emerge ventromedially at the pontomedullary junction, between the pyramid and the middle cerebellar peduncle, then run the longest cisternal subarachnoid course in the posterior fossa, up the clival dura to Dorello's canal before entering the cavernous sinus and orbit.",
     "clinical": [
       {
         "syndrome": "Ipsilateral abducens palsy",

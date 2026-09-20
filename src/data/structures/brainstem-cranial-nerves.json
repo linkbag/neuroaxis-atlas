@@ -1,0 +1,676 @@
+[
+  {
+    "id": "nrv-cn3-oculomotor",
+    "name": "CN III Oculomotor nerve",
+    "synonyms": [
+                  "oculomotor nerve",
+                  "nervus oculomotorius",
+                  "third cranial nerve",
+                  "CN III",
+                  "common oculomotor nerve"
+                ],
+    "region": "midbrain",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Motor (somatic motor to four extraocular muscles and the levator palpebrae) plus parasympathetic (visceral motor, preganglionic, to the pupillary sphincter and the ciliary muscle); no sensory component",
+    "course": "From the oculomotor nucleus (nuc-oculomotor) and the Edinger-Westphal nucleus (nuc-edinger-westphal) in the midbrain tegmentum at the level of the superior colliculus, the fascicles pass ventrally through the red nucleus and the medial part of the crus cerebri, emerging in the interpeduncular fossa at the medial edge of the cerebral peduncle — the surface landmark `surf-cn3-exit` — from where the cisternal segment runs forward and laterally through the interpeduncular and crural cisterns, between the posterior cerebral artery above and the superior cerebellar artery below. It then pierces the dura lateral to the posterior clinoid process, runs in the lateral wall of the cavernous sinus (holding the highest position in the wall throughout, with CN IV descending below it as the two nerves run forward), and enters the orbit through the superior orbital fissure — the foramen this nerve uses — dividing into a superior division (superior rectus, levator palpebrae) and an inferior division (medial rectus, inferior rectus, inferior oblique, and the preganglionic parasympathetic root to the ciliary ganglion).",
+    "function": "The principal motor nerve of the eye: it innervates the medial rectus (adduction), the superior and inferior recti (elevation in adduction and depression in adduction), the inferior oblique (elevation in abduction with extorsion) and the levator palpebrae superioris (eyelid opening), and it supplies the parasympathetic fibres that constrict the pupil and accommodate the lens. Its Edinger-Westphal fibres synapse in the ciliary ganglion and reach the sphincter pupillae and ciliary muscle, which is why a lesion of this nerve produces mydriasis and loss of accommodation as well as diplopia and ptosis. Because the fascicles travel through the red nucleus and the crus cerebri, an intrinsic midbrain lesion adds contralateral hemiparesis or tremor to the palsy — the anatomical basis of the Weber, Benedikt, Claude and Nothnagel syndromes at the bottom of this record. The nerve is the efferent limb of both the pupillary light reflex and the near triad.",
+    "connections": {
+                     "afferent": [
+                       "Oculomotor nucleus (nuc-oculomotor) — the somatic motor neurons whose axons form this nerve",
+                       "Edinger-Westphal nucleus (nuc-edinger-westphal) — the preganglionic parasympathetic neurons; the child record of nuc-oculomotor in the registry, which is why the two are named together",
+                       "Supranuclear drive from the frontal eye fields (ctx-frontal-eye-fields) and the paramedian pontine reticular formation (nuc-pprf) reaches this nerve only through the nucleus; the nerve itself carries no afferent fibres",
+                       "Pretectal area (nuc-pretectal) projects to the Edinger-Westphal nucleus and is the relay that closes the pupillary light-reflex loop on this nerve"
+                     ],
+                     "efferent": [
+                       "Superior division to the superior rectus and levator palpebrae superioris",
+                       "Inferior division to the medial rectus, inferior rectus and inferior oblique",
+                       "Preganglionic parasympathetic fibres to the ciliary ganglion, then the short ciliary nerves to the pupillary sphincter and ciliary muscle",
+                       "Rootlets leave the midbrain through the interpeduncular fossa at `surf-cn3-exit` and the nerve traverses the lateral wall of the cavernous sinus with the internal carotid artery (vasc-internal-carotid-artery) and the posterior communicating artery (vasc-posterior-communicating-artery)"
+                     ]
+                   },
+    "bloodSupply": "The cisternal segment lies between the posterior cerebral artery (vasc-posterior-cerebral-artery) and the superior cerebellar artery (vasc-superior-cerebellar-artery), both of which give it small branches and both of which can compress it: a posterior-communicating-artery aneurysm at the internal carotid (vasc-posterior-communicating-artery) is the classic compressive lesion, because the artery crosses immediately above the nerve in the cistern and the aneurysm's dome points down onto the pupillomotor fibres that run on the nerve's superomedial surface. In the cavernous sinus the nerve is supplied by the meningohypophyseal trunk and the inferolateral trunk of the internal carotid, which is why a cavernous-sinus lesion spares the pupil (the pupillomotor fibres lie peripherally in the cisternal segment but are less exposed in the sinus) and why ischaemic palsy from diabetic small-vessel disease typically spares it too.",
+    "clinical": [
+      {
+        "syndrome": "Complete oculomotor palsy — \"down and out\" with ptosis and mydriasis",
+        "findings": "Ptosis from levator failure, a dilated unreactive pupil from sphincter paralysis, and an eye that rests down and out (unopposed lateral rectus and superior oblique) with impaired adduction, elevation and depression: the patient has diplopia in all directions except outward gaze, and the ptosis may hide it. The palsy localizes to this nerve anywhere along its course, and the FIRST question is whether the pupil is involved, because a pupil-involving palsy is compressive (aneurysm, uncal herniation, tumour) and a pupil-sparing palsy in a vasculopath is usually ischaemic.",
+        "vascular": "Posterior communicating artery aneurysm (internal carotid) or diabetic microvascular ischaemia of the vasa nervorum",
+        "note": "The pupillomotor fibres are the most superficial in the cisternal nerve, where the posterior communicating artery crosses it — that arrangement, not the size of the lesion, is why compression dilates the pupil early."
+      },
+      {
+        "syndrome": "Weber syndrome (syn-weber) — fascicular CN III palsy with contralateral hemiparesis",
+        "findings": "A midbrain lesion of the fascicles as they cross the crus cerebri produces ipsilateral oculomotor palsy with a contralateral hemiparesis (corticospinal fibres): the palsy and the weakness are on opposite sides, which is what identifies the lesion as fascicular rather than at the nerve's exit.",
+        "vascular": "Paramedian branches of the posterior cerebral artery, or a small midbrain haemorrhage/infarct",
+        "note": "The pupil may or may not be involved depending on whether the Edinger-Westphal fibres are caught; the crossed hemiparesis, not the pupil, is the localizing sign."
+      },
+      {
+        "syndrome": "Benedikt, Claude and Nothnagel syndromes (syn-benedikt, syn-claude, syn-nothnagel)",
+        "findings": "Fascicular CN III palsy with a contralateral tremor and extrapyramidal rigidity is Benedikt (red nucleus and cerebellothalamic fibres); with contralateral ataxia and no weakness is Claude (red nucleus, superior cerebellar peduncle); and with ipsilateral cerebellar ataxia of the limbs plus contralateral hemianesthesia is Nothnagel (tectum and quadrigeminal region). All three share the oculomotor palsy and separate by the adjacent structure the lesion has taken.",
+        "vascular": "Posterior cerebral artery perforators and the superior cerebellar artery territory",
+        "note": "These are the named midbrain syndromes that make a fascicular third-nerve palsy a localizing sign rather than a nerve sign."
+      },
+      {
+        "syndrome": "Uncal herniation with a blown pupil",
+        "findings": "Expanding supratentorial mass shifts the uncus over the tentorial edge and stretches the cisternal oculomotor nerve against the posterior clinoid and the petroclinoid ligament: the first sign is an ipsilateral dilated pupil that reacts poorly (the superficial pupillomotor fibres fail first), then a complete palsy of the nerve with ptosis and a down-and-out eye, then contralateral hemiparesis from peduncular compression. It is a neurosurgical emergency and the pupil is the earliest reliable sign.",
+        "vascular": "Compressive (mass effect); the posterior cerebral artery can also be occluded at the same time, adding an occipital infarct",
+        "note": "Pupil first, then palsy, then weakness — the pupil's early involvement is the anatomical consequence of the fibre arrangement in the nerve."
+      },
+      {
+        "syndrome": "Cavernous-sinus syndrome with combined ophthalmoplegia",
+        "findings": "A lesion of the cavernous sinus (aneurysm, meningioma, pituitary apoplexy, thrombosis, Tolosa-Hunt) adds CN IV, CN V1 and CN V2 involvement to the CN III palsy, often with proptosis and chemosis, and characteristically spares the pupil or involves it later; the combination of a third-nerve palsy with facial pain in the V1 distribution is the localizing clue to the sinus rather than the orbit or the cistern.",
+        "vascular": "Internal carotid artery (vasc-internal-carotid-artery) aneurysm, carotid-cavernous fistula, or meningohypophyseal-trunk supply to the nerve"
+      }
+    ],
+    "levels": ["lvl-midbrain-sc", "lvl-pons-rostral", "lvl-thalamus-mid"],
+    "origin3d": [5, 8.5, 14],
+    "size3d": [2.2, 1.4, 6.5],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` and owns no manifest part and no section part. The ellipsoid at origin3d [5, 8.5, 14] with radii size3d [2.2, 1.4, 6.5] spans z ≈ 7.5–20.5 au and is a SCHEMATIC placement, not anatomy: it runs from the midbrain's anterior surface, where the nerve's rootlets leave at the landmark `surf-cn3-exit` ([2, 9.5, 8.5], a committed surface record), forward through the interpeduncular cistern toward the cavernous sinus, and it deliberately does not attempt to model the fascicular intracerebral course or the orbital divisions. The nearest committed geometry is the midbrain envelope `ctx-midbrain-surface` (baked, bbox z −14.4…+11.6 at y 2.4…20.3), the internal carotid artery (vasc-internal-carotid-artery) and the posterior communicating artery (vasc-posterior-communicating-artery), which are exactly the structures that define the cisternal segment clinically. The record is useful without a mesh because the content is the localizing one: which fibres fail first when the nerve is compressed, and how the fascicular lesion produces a crossed syndrome."
+  },
+  {
+    "id": "nrv-cn4-trochlear",
+    "name": "CN IV Trochlear nerve",
+    "synonyms": [
+                  "trochlear nerve",
+                  "nervus trochlearis",
+                  "fourth cranial nerve",
+                  "CN IV",
+                  "pathetic nerve (obsolete)"
+                ],
+    "region": "midbrain",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Motor (somatic motor to the superior oblique only); no sensory and no parasympathetic component",
+    "course": "From the trochlear nucleus (nuc-trochlear) in the midbrain tegmentum just caudal to the oculomotor nucleus, the fibres run dorsolaterally around the periaqueductal gray and emerge on the DORSAL surface of the midbrain below the inferior colliculus — the only cranial nerve to exit dorsally — where the landmark `surf-cn4-exit` marks the crossing of the fibres in the anterior medullary velum. The cisternal (subarachnoid) segment then runs a long, slim course around the cerebral peduncle, passing between the posterior cerebral and superior cerebellar arteries through the ambient (perimesencephalic) cistern, then forward to pierce the tentorium and run in the lateral wall of the cavernous sinus (holding its position below CN III throughout that wall), to enter the orbit through the superior orbital fissure — the foramen this nerve uses — and reach the superior oblique.",
+    "function": "Innervates only the superior oblique muscle, whose tendon runs through the trochlea and whose action is to depress the eye in adduction, intort it, and abduct it slightly; the nerve's action therefore appears as a failure of depression when the eye is adducted, which is why the patient with a trochlear palsy complains of vertical diplopia that is worst going down stairs or reading, and why the compensatory head tilt is away from the side of the lesion. The trochlear nucleus is the only cranial-nerve nucleus whose fibres decussate completely before exiting, so a nuclear lesion produces a palsy of the CONTRALATERAL superior oblique while a fascicular or cisternal lesion produces an ipsilateral one. Its long cisternal course makes it the most vulnerable of the ocular motor nerves to closed head injury.",
+    "connections": {
+                     "afferent": [
+                       "Trochlear nucleus (nuc-trochlear) — the somatic motor neurons, the sole source of the nerve's fibres; the nucleus lies at the level of the inferior colliculus and its fibres decussate in the anterior medullary velum before exiting",
+                       "Supranuclear input reaches the nucleus from the medial longitudinal fasciculus and the paramedian pontine reticular formation (nuc-pprf) for vertical gaze; the nerve itself carries no afferents",
+                       "The mesencephalic trigeminal nucleus (nuc-mesencephalic-v) and its tract (tract-mesencephalic-v) run in the same dorsal midbrain region and are the proprioceptive companion of the extraocular muscles, but they are NOT the trochlear nerve's afferents — the eye muscles' proprioception travels with CN V"
+                     ],
+                     "efferent": [
+                       "Superior oblique muscle of the ipsilateral eye (contralateral to the nucleus, because of the dorsal decussation)",
+                       "Rootlets emerge dorsally at `surf-cn4-exit` — the dorsal exit is the anatomical oddity that makes a trochlear palsy after head trauma a recognisable clinical story",
+                       "The cisternal nerve passes the ambient cistern and the lateral cavernous-sinus wall alongside the internal carotid artery (vasc-internal-carotid-artery) before entering the orbit through the superior orbital fissure"
+                     ]
+                   },
+    "bloodSupply": "The cisternal segment is supplied by small branches of the superior cerebellar artery (vasc-superior-cerebellar-artery) and the posterior cerebral artery (vasc-posterior-cerebral-artery), the two vessels it passes between; a dolichoectatic or elongated superior cerebellar artery can compress the nerve and produce a chronic trochlear palsy with diplopia. In the cavernous sinus it is supplied by the meningohypophyseal trunk of the internal carotid (vasc-internal-carotid-artery). Because the nerve is thin and its supply is segmental, microvascular ischaemia of the nerve (diabetes, hypertension) is a common cause of an isolated, pupil-sparing trochlear palsy that recovers over months.",
+    "clinical": [
+      {
+        "syndrome": "Trochlear (superior oblique) palsy — vertical diplopia with a head tilt",
+        "findings": "Failure to depress the adducted eye produces vertical diplopia that is worst on downward gaze and on the side of the lesion's field; the patient tilts the head AWAY from the affected side to fuse (Bielschowsky head-tilt test: the hypertropia worsens when the head is tilted toward the affected side). A long-standing palsy produces a compensatory facial asymmetry and neck tilt that can be mistaken for a congenital torticollis.",
+        "vascular": "Microvascular ischaemia of the vasa nervorum (diabetes, hypertension) is the commonest cause of an isolated palsy; compression by the superior cerebellar artery is the commonest cause of a chronic one",
+        "note": "The head tilt is the diagnostic sign and its direction distinguishes a trochlear palsy from a skew deviation, which is a brainstem sign rather than a nerve sign."
+      },
+      {
+        "syndrome": "Post-traumatic trochlear palsy",
+        "findings": "Closed head injury — even a modest one — tears the thin cisternal nerve against the tentorial edge or the petroclinoid ligament, because its long course around the midbrain is unprotected; the palsy may be bilateral after severe trauma, and it is the commonest traumatic ocular motor palsy in some series.",
+        "note": "Mechanical; the nerve's dorsal exit and long cisternal course are the anatomical reason it, and not CN III or VI, is the nerve most often torn in head injury"
+      },
+      {
+        "syndrome": "Nuclear versus fascicular trochlear palsy (crossed palsy)",
+        "findings": "A lesion of the trochlear NUCLEUS (or of the decussating fibres in the anterior medullary velum) paralyses the superior oblique of the opposite eye — a crossed palsy that also involves the contralateral superior oblique in a bilateral nuclear lesion; a lesion of the fascicle or the cisternal nerve paralyses the ipsilateral muscle. The distinction localizes the damage inside the midbrain rather than outside it, and it is the only cranial nerve for which the rule is inverted.",
+        "vascular": "Dorsal midbrain infarct or haemorrhage (posterior cerebral artery perforators)",
+        "note": "A nuclear lesion never occurs alone in practice: look for an associated internuclear ophthalmoplegia, Horner syndrome or ataxia of the adjacent structures."
+      },
+      {
+        "syndrome": "Trochlear palsy in the cavernous sinus and orbit",
+        "findings": "In the sinus or the orbital apex the nerve is part of a combined ophthalmoplegia with CN III, CN V1/V2 and CN VI, often with proptosis and periorbital pain; the palsy is then not localizing on its own. A tumour of the superior orbital fissure can produce an isolated trochlear palsy with orbital pain before any other sign.",
+        "vascular": "Internal carotid artery aneurysm or carotid-cavernous fistula in the sinus; superior orbital fissure syndrome"
+      }
+    ],
+    "levels": ["lvl-pons-rostral", "lvl-midbrain-ic"],
+    "origin3d": [3.5, 7.5, -12],
+    "size3d": [1.2, 1.2, 3],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brainstem I: Surface Anatomy and Cranial Nerves'",
+              "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [3.5, 7.5, −12] with radii size3d [1.2, 1.2, 3] spans z ≈ −15…−9 au, from the dorsal midbrain surface — where the rootlets emerge at the landmark `surf-cn4-exit` ([1.5, 7.5, −8], a committed surface record) — forward to the ambient cistern, and it is a SCHEMATIC placement, not anatomy: the long wrap-around course to the cavernous sinus is represented by this short segment only, because an honest schematic cannot pretend to trace 4 cm of cisternal nerve with an ellipsoid. The nearest committed geometry is the midbrain envelope `ctx-midbrain-surface` (baked, bbox z −14.4…+11.6) and the superior cerebellar artery (vasc-superior-cerebellar-artery), the vessel it passes under. The record is useful without a mesh because the content is the localizing one: the dorsal exit, the complete decussation that inverts the nuclear palsy, and the head-tilt test."
+  },
+  {
+    "id": "nrv-cn5-trigeminal",
+    "name": "CN V Trigeminal nerve",
+    "synonyms": [
+                  "trigeminal nerve",
+                  "nervus trigeminus",
+                  "fifth cranial nerve",
+                  "CN V",
+                  "trifacial nerve (obsolete)"
+                ],
+    "region": "pons",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Mixed — general sensory (touch, pain, temperature, and proprioception from the face, mouth, teeth, nasal cavity, orbit and dura) plus branchial motor (muscles of mastication, tensor tympani, tensor veli palatini, mylohyoid and the anterior digastric)",
+    "course": "A large sensory root and a small motor root emerge from the lateral surface of the mid-pons at the junction of the pons and the middle cerebellar peduncle — the landmark `surf-cn5-exit` — and run forward in the cerebellopontine and prepontine cisterns (the cisternal segment, at the trigeminal root entry zone, where a looping artery can compress the nerve) to the petrous apex, where they pass beneath the tentorial attachment through Meckel's cave and the trigeminal (semilunar) ganglion. From the ganglion the nerve divides into three divisions: V1 (ophthalmic) leaves through the superior orbital fissure, V2 (maxillary) through the foramen rotundum, and V3 (mandibular) through the foramen ovale — the three skull-base foramina that name the nerve's divisions and that make the pattern of sensory loss localizing. V3 alone carries the motor fibres, which run with the sensory root through the foramen ovale.",
+    "function": "The great sensory nerve of the head: it supplies the face, the scalp as far back as the vertex, the cornea and conjunctiva, the nasal and oral mucosae, the teeth and gingivae, the dura of the anterior and middle cranial fossae, and the meninges of the tentorium, and it carries the afferent limb of the corneal blink reflex, the sneeze reflex and the jaw-jerk reflex. Its branchial motor fibres innervate the muscles of mastication (masseter, temporalis, medial and lateral pterygoids), the tensor tympani (which damps loud sound), the tensor veli palatini (which opens the Eustachian tube) and the mylohyoid and anterior digastric (which elevate the floor of the mouth in swallowing). Uniquely, its proprioceptive fibres for the jaw and the extraocular muscles have their cell bodies in the mesencephalic trigeminal nucleus (nuc-mesencephalic-v) inside the brainstem rather than in the ganglion — the only primary sensory neurons in that position — and their axons form the mesencephalic trigeminal tract (tract-mesencephalic-v). Its central processes descend to the spinal trigeminal nucleus (nuc-spinal-trigeminal) and its tract (tract-spinal-trigeminal) for pain and temperature, and synapse in the principal sensory nucleus (nuc-principal-sensory-v) for discriminative touch.",
+    "connections": {
+                     "afferent": [
+                       "Trigeminal (semilunar) ganglion — the cell bodies of the general sensory fibres, from which the three divisions V1, V2 and V3 collect; note that no `nuc-` record exists for the ganglion, so it is named here in prose",
+                       "Mesencephalic trigeminal nucleus (nuc-mesencephalic-v) and its tract (tract-mesencephalic-v) — the proprioceptive fibres of the jaw and extraocular muscles, whose cell bodies lie in the brainstem",
+                       "Principal (main) sensory trigeminal nucleus (nuc-principal-sensory-v) — discriminative touch and pressure from the face, projecting to the thalamus (nuc-vpm)",
+                       "Spinal trigeminal nucleus (nuc-spinal-trigeminal) and tract (tract-spinal-trigeminal) — pain and temperature, organized in the onion-skin pattern (perioral fibres most rostral, periauricular fibres most caudal), which is why a caudal lesion produces the peripheral facial numbness of the lateral medullary syndrome while a rostral one spares the face's periphery",
+                       "Mesencephalic rootlets also carry the afferent limb of the jaw-jerk reflex, whose efferent limb is the motor nucleus below"
+                     ],
+                     "efferent": [
+                       "Trigeminal motor nucleus (nuc-trigeminal-motor) — the branchial motor neurons, whose fibres leave with the sensory root through the foramen ovale to the muscles of mastication and the four accessory muscles",
+                       "Rootlets leave the lateral pons at `surf-cn5-exit`; the cisternal segment then runs to Meckel's cave, where the ganglion lies against the petrous apex and the internal carotid artery (vasc-internal-carotid-artery) passes just below and medial to it",
+                       "Central processes synapse in the principal and spinal trigeminal nuclei; the ascending projection is the trigeminothalamic tract to the ventral posteromedial nucleus (nuc-vpm) and, for pain, to the intralaminar and posterior thalamic nuclei",
+                       "The reflex circuits close inside the brainstem (corneal reflex: spinal trigeminal afferent to the facial nucleus; jaw jerk: mesencephalic afferent to the motor nucleus), so they test the nerve AND the brainstem level together"
+                     ]
+                   },
+    "bloodSupply": "The cisternal segment and the root entry zone are supplied by small branches of the basilar artery (vasc-basilar-artery), the superior cerebellar artery (vasc-superior-cerebellar-artery) and the anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery), which cross the nerve in the cerebellopontine angle; the trigeminal ganglion and the divisions are supplied by the middle meningeal artery, the accessory meningeal artery and the internal carotid's meningohypophyseal branches. The arterial relationship at the root entry zone is the whole mechanism of trigeminal neuralgia from neurovascular compression, and the same relationship explains why an aneurysm of the basilar or superior cerebellar artery can present as facial pain before any weakness — the artery touches the nerve before it touches the brainstem.",
+    "clinical": [
+      {
+        "syndrome": "Trigeminal neuralgia (tic douloureux)",
+        "findings": "Paroxysmal, electric-shock-like unilateral facial pain in one or more divisions (V2 and V3 most often), triggered by chewing, brushing the teeth, a cold wind or touching a trigger zone, with a completely normal neurological examination between attacks. It is a disease of the root entry zone: in most cases an elongated superior cerebellar artery loops against the nerve, and in a younger patient or with sensory loss it means a demyelinating plaque, a tumour of the cerebellopontine angle or Meckel's cave, or a vascular malformation.",
+        "vascular": "Superior cerebellar artery (or AICA, or a dolichoectatic basilar artery) compressing the trigeminal root entry zone; the microvascular-decompression operation is the anatomical treatment",
+        "note": "Sensory loss ON the same side as the pain, or a corneal reflex reduction, means the pain is secondary (a lesion), not idiopathic trigeminal neuralgia."
+      },
+      {
+        "syndrome": "Trigeminal sensory neuropathy — the division pattern localizes the foramen",
+        "findings": "Loss in V1 alone points to the superior orbital fissure or the cavernous sinus; V2 alone to the foramen rotundum or the sinus; V3 alone to the foramen ovale or the infratemporal fossa; all three with a numb chin point to the ganglion, Meckel's cave or the brainstem. The corneal reflex is the most sensitive bedside test of the V1 limb, and its loss with a normal ipsilateral facial motor response (CN VII intact) puts the lesion on the trigeminal side.",
+        "note": "A numb chin with a normal examination otherwise is a classic presentation of a metastatic lesion at the petrous apex or the mandible, not of a benign trigeminal neuropathy."
+      },
+      {
+        "syndrome": "Trigeminal motor palsy — jaw deviation and a flaccid bite",
+        "findings": "Weakness of the pterygoid muscles makes the jaw deviate TOWARD the side of the lesion on opening (the intact contralateral lateral pterygoid pushes the jaw across), and the masseter and temporalis waste with a reduced jaw jerk; it is almost never isolated, because the motor fibres leave through the foramen ovale with the sensory root, so an isolated motor palsy localizes to the motor nucleus in the pons or to a lesion at the foramen ovale.",
+        "note": "The jaw-jerk reflex is the brainstem correlate: it is reduced by an ipsilateral motor lesion and exaggerated by a corticobulbar (supranuclear) lesion."
+      },
+      {
+        "syndrome": "Trigeminal involvement in brainstem syndromes",
+        "findings": "A lateral medullary infarct destroys the descending spinal trigeminal tract and nucleus and produces ipsilateral facial pain and temperature loss in the onion-skin pattern, with contralateral loss of pain and temperature from the body (spinothalamic tract) — the classical crossed sensory deficit. A midpontine lesion produces IPSILATERAL facial sensory loss with CONTRALATERAL hemiparesis and hemisensory loss (Millard-Gubler/Foville territory with trigeminal involvement), because the trigeminal fibres reach the pons at the level of the motor and principal sensory nuclei and the corticospinal tract is already there.",
+        "vascular": "PICA and vertebral artery for the medullary pattern; paramedian and circumferential basilar branches for the pontine one",
+        "note": "The corneal reflex is often the only sign of a small lateral medullary infarct; testing it is not optional."
+      }
+    ],
+    "levels": ["lvl-pons-middle", "lvl-midbrain-ic"],
+    "origin3d": [5.5, -9, -1],
+    "size3d": [2.6, 2, 4.5],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\"",
+              "Snell, Clinical Neuroanatomy, trigeminal system sections",
+              "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [5.5, −9, −1] with radii size3d [2.6, 2, 4.5] spans z ≈ −5.5…+3.5 au at the mid-pons, running from the lateral pontine surface — where the rootlets leave at the landmark `surf-cn5-exit` ([17.1, −4.8, −3.5] — the measured crossing of this nerve's own course with ctx-pons-surface, registered by the v15 audit; this schematic body marks the root's intrapontine-to-cisternal segment and is not required to contain the landmark) — postero- and medially toward the petrous apex and Meckel's cave. It is a SCHEMATIC placement, not anatomy: the three divisions, the ganglion and the peripheral course are NOT drawn, and no attempt is made to reach the foramina rotundum and ovale, which lie outside the committed brainstem geometry. The nearest committed geometry is the pons envelope `ctx-pons-surface` (baked, bbox x ±18.1, y −24.5…+5.8, z −11.5…+16.7), the basilar artery (vasc-basilar-artery) and the superior cerebellar artery (vasc-superior-cerebellar-artery), the vessel whose loop against this nerve's root entry zone is the mechanism of trigeminal neuralgia. The record is useful without a mesh because the content is the localizing one: the three foramina that name the divisions, the onion-skin pattern of the spinal trigeminal nucleus, and the root-entry-zone mechanism."
+  },
+  {
+    "id": "nrv-cn6-abducens",
+    "name": "CN VI Abducens nerve",
+    "synonyms": ["abducens nerve", "nervus abducens", "sixth cranial nerve", "CN VI", "abducent nerve"],
+    "region": "pons",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Motor (somatic motor to the lateral rectus only); no sensory and no parasympathetic component",
+    "course": "From the abducens nucleus (nuc-abducens) in the caudal pons, beneath the facial colliculus of the fourth-ventricle floor, the fibres run ventrally, laterally and caudally through the pontine tegmentum — passing the facial nucleus's fibres that loop around the nucleus (the internal genu of CN VII) — and emerge at the pontomedullary junction just lateral to the corticospinal pyramid, at the landmark `surf-cn6-exit`. The cisternal segment then ascends almost vertically through the prepontine cistern, hugging the clivus, and passes through the narrow Dorello canal beneath the petrosphenoidal (Gruber) ligament into the cavernous sinus; it then runs in the sinus lateral to the internal carotid artery and enters the orbit through the superior orbital fissure — the foramen this nerve uses — to reach the lateral rectus. No other cranial nerve has such a long, fixed, ascending cisternal course, which is why it is the nerve most often stretched by raised intracranial pressure and by downward displacement of the brainstem.",
+    "function": "Innervates only the lateral rectus, the muscle that abducts the eye; failure of the nerve therefore produces an inability to abduct the eye past the midline with horizontal diplopia that is worst on gaze to the affected side — the patient turns the head instead. Because the abducens nucleus contains both the motor neurons for the lateral rectus and the internuclear neurons that cross the midline to the contralateral medial-rectus subnucleus of CN III, a NUCLEAR lesion produces an ipsilateral horizontal gaze palsy (neither eye crosses the midline) rather than an isolated abduction deficit, which is the single most useful distinction between a nuclear and a nerve lesion. The nucleus is also the target of the paramedian pontine reticular formation (nuc-pprf) for horizontal conjugate gaze.",
+    "connections": {
+                     "afferent": [
+                       "Abducens nucleus (nuc-abducens) — the motor neurons for the lateral rectus plus the internuclear neurons that cross to the contralateral oculomotor nucleus (nuc-oculomotor) through the medial longitudinal fasciculus",
+                       "Paramedian pontine reticular formation (nuc-pprf) and the medial vestibular nucleus (nuc-vestibular-medial) drive the nucleus for horizontal gaze; the nerve itself carries no afferents",
+                       "Frontal eye fields (ctx-frontal-eye-fields) reach the nucleus through the PPRF — the supranuclear route that a nuclear lesion is tested against"
+                     ],
+                     "efferent": [
+                       "Lateral rectus muscle of the ipsilateral eye",
+                       "Rootlets emerge at the pontomedullary junction at `surf-cn6-exit`, then the nerve passes through the Dorello canal under the petrosphenoidal ligament — the choke point where raised intracranial pressure and clival lesions act",
+                       "In the cavernous sinus the nerve lies lateral to the internal carotid artery (vasc-internal-carotid-artery) and receives sympathetic fibres from the carotid plexus that it carries into the orbit (the anatomical reason for the occasional oculosympathetic paresis with a cavernous-sinus lesion)",
+                       "Internuclear neurons from the nucleus cross the midline and ascend in the medial longitudinal fasciculus to the contralateral medial rectus subnucleus, which is what makes conjugate gaze and what makes a nuclear lesion a gaze palsy"
+                     ]
+                   },
+    "bloodSupply": "The cisternal segment is supplied by small branches of the basilar artery (vasc-basilar-artery) and the anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery), which run through the prepontine cistern beside it; the petrous and cavernous portions are supplied by the dorsal meningeal and meningohypophyseal branches of the internal carotid (vasc-internal-carotid-artery). The ascending course beside the basilar artery is the anatomical reason it is the first nerve to be compressed by a vertebrobasilar dolichoectasia, and the reason an AICA or basilar aneurysm can present with an isolated abducens palsy.",
+    "clinical": [
+      {
+        "syndrome": "Abducens palsy — failure of abduction with horizontal diplopia",
+        "findings": "The eye cannot be abducted past the midline (or abducts incompletely), diplopia is maximal on gaze to the affected side and is horizontal, and the patient turns the head to fuse. The palsy localizes to the nerve anywhere from the nucleus to the orbit, and an isolated, pupil-sparing sixth-nerve palsy in a patient over 50 with vascular risk factors is usually microvascular and recovers in three months.",
+        "vascular": "Microvascular ischaemia of the vasa nervorum (diabetes, hypertension); or compression by a dolichoectatic basilar artery (vasc-basilar-artery)",
+        "note": "An isolated sixth-nerve palsy is the commonest false localizing sign: it can be the presenting sign of raised intracranial pressure, a pontine glioma, a nasopharyngeal carcinoma at the petrous apex or a Gradenigo syndrome, so imaging is the rule."
+      },
+      {
+        "syndrome": "False localizing abducens palsy of raised intracranial pressure",
+        "findings": "Raised pressure displaces the brainstem caudally and stretches the long, fixed, ascending cisternal nerve against the clivus and the petrosphenoidal ligament, producing a (usually bilateral) abduction palsy with no lesion in the nerve's own pathway; it is accompanied by the other signs of raised pressure (headache, papilloedema, a false localizing sign in a patient whose CT is otherwise normal).",
+        "note": "The nerve's anatomy, not its pathology, is the localizing point: a long nerve tethered at both ends is stretched by displacement of either end."
+      },
+      {
+        "syndrome": "Nuclear (gaze palsy) versus fascicular (crossed) sixth-nerve lesions",
+        "findings": "A nuclear lesion destroys motor and internuclear neurons together, producing an ipsilateral horizontal GAZE palsy with facial palsy on the same side (because the facial fibres loop around the nucleus at that level); a fascicular lesion as the fibres cross the corticospinal tract produces the Foville and Millard-Gubler syndromes — ipsilateral abducens (or gaze) palsy with CONTRALATERAL hemiparesis, often with an ipsilateral facial palsy.",
+        "vascular": "Paramedian branches of the basilar artery (pontine infarct); Millard-Gubler and Foville are the classic brainstem localizers (syn-millard-gubler, syn-foville)",
+        "note": "The one-and-a-half syndrome (syn-one-and-a-half) is the neighbouring lesion: a PPRF/MLF lesion adds an internuclear ophthalmoplegia to the ipsilateral gaze palsy, leaving only abduction of the contralateral eye."
+      },
+      {
+        "syndrome": "Gradenigo syndrome and petrous-apex lesions",
+        "findings": "Petrous apicitis or a petrous-apex tumour involving the Dorello canal and Meckel's cave produces the triad of an ipsilateral abducens palsy, deep facial or retro-orbital pain (V1/V2) and hearing loss or otorrhoea — the anatomical combination of the structures that share the petrous apex.",
+        "note": "The petrous apex is where the sixth nerve and the trigeminal ganglion meet; a patient with diplopia, facial pain and ear symptoms has a lesion there, not in the orbit."
+      }
+    ],
+    "levels": ["lvl-pons-caudal", "lvl-pontomedullary"],
+    "origin3d": [4.5, -18, 5],
+    "size3d": [1.6, 9, 2],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [4.5, −18, 5] with radii size3d [1.6, 9, 2] spans y ≈ −27…−9 au, a long thin vertical body that stands for the nerve's ascending cisternal course: it starts at the pontomedullary-junction landmark `surf-cn6-exit` ([2.5, −24, 7.5], a committed surface record, which it overlaps at its lower end) and runs up the clivus. It is a SCHEMATIC placement, not anatomy — the Dorello canal, the cavernous-sinus segment and the superior orbital fissure are not drawn, and the ellipsoid's length is a deliberate stand-in for the nerve's length. The nearest committed geometry is the pons envelope `ctx-pons-surface` (baked, bbox y −24.5…+5.8, z −11.5…+16.7) and the basilar artery (vasc-basilar-artery) that the nerve runs beside. The record is useful without a mesh because the content is the localizing one: the Dorello canal, the nuclear-versus-fascicular distinction, and the false localizing sign."
+  },
+  {
+    "id": "nrv-cn7-facial",
+    "name": "CN VII Facial nerve",
+    "synonyms": [
+                  "facial nerve",
+                  "nervus facialis",
+                  "seventh cranial nerve",
+                  "CN VII",
+                  "nervus intermedius (sensory and parasympathetic root)"
+                ],
+    "region": "pons",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Mixed — branchial motor (muscles of facial expression plus stapedius, stylohyoid and the posterior digastric), general sensory (a small concha/ear-canal zone), special sensory (taste from the anterior two-thirds of the tongue) and visceral motor (parasympathetic secretomotor to the lacrimal, submandibular, sublingual and nasal glands)",
+    "course": "The motor root and the smaller nervus intermedius emerge at the pontomedullary junction, lateral to the abducens rootlets, in the cerebellopontine angle — the landmark `surf-cn7-exit` — and pass with CN VIII into the internal acoustic meatus (the foramen this nerve uses at the skull base) and then into the facial canal of the petrous temporal bone. In the canal the fibres reach the geniculate ganglion, where the greater petrosal nerve leaves for the pterygopalatine ganglion (lacrimal and nasal glands) and the nerve turns posteriorly (the external genu over the oval window), giving off the nerve to stapedius and the chorda tympani (taste from the anterior tongue plus secretomotor fibres to the submandibular and sublingual glands) before exiting the skull through the stylomastoid foramen. Outside the skull it enters the parotid gland and divides into the temporal, zygomatic, buccal, marginal mandibular and cervical branches to the muscles of facial expression. The cisternal segment between the brainstem and the meatus is the short one that neurovascular compression acts on.",
+    "function": "Three nerves in one sheath. Its branchial motor fibres innervate all the muscles of facial expression (orbicularis oculi and oris, buccinator, the muscles of the nose and the platysma), plus stapedius (which damps loud sound, so its paralysis causes hyperacusis), stylohyoid and the posterior belly of the digastric — so the nerve closes the eye, seals the lips, produces the social face and the corneal reflex's efferent limb. Its parasympathetic fibres run from the superior salivatory nucleus (nuc-superior-salivatory) to the pterygopalatine and submandibular ganglia for tear and saliva production, which is why a dry eye and a dry mouth accompany a complete lesion. Its special sensory fibres carry taste from the anterior two-thirds of the tongue and the soft palate, with cell bodies in the geniculate ganglion and central processes that join the nervus intermedius to the rostral nucleus solitarius (nuc-solitarius-rostral). The long intratemporal course is the reason a facial palsy can be the first sign of a parotid tumour, a temporal-bone fracture, cholesteatoma or Ramsay Hunt syndrome.",
+    "connections": {
+                     "afferent": [
+                       "Facial nucleus (nuc-facial) — the branchial motor neurons, whose axons run in the motor root; the nucleus receives bilateral corticobulbar input for the upper face and contralateral-dominant input for the lower face",
+                       "Superior salivatory nucleus (nuc-superior-salivatory) — the preganglionic parasympathetic neurons for the lacrimal, nasal, submandibular and sublingual glands",
+                       "Nucleus solitarius, rostral gustatory part (nuc-solitarius-rostral) — the central target of the taste fibres carried in the nervus intermedius",
+                       "Spinal trigeminal nucleus (nuc-spinal-trigeminal) — the central target of the small general sensory zone of the concha and the external auditory canal",
+                       "Trigeminal afferents (CN V, nrv-cn5-trigeminal) supply the corneal reflex's afferent limb; this nerve supplies the efferent limb, so the reflex tests both"
+                     ],
+                     "efferent": [
+                       "Muscles of facial expression through the five parotid branches, plus stapedius, stylohyoid and the posterior digastric",
+                       "Greater petrosal nerve to the pterygopalatine ganglion (lacrimal and nasal glands) and chorda tympani to the submandibular ganglion (submandibular and sublingual glands)",
+                       "Taste fibres from the anterior two-thirds of the tongue and soft palate turn centrally into the rostral nucleus solitarius, which then projects to the thalamus (nuc-vpm) and the insula for conscious taste",
+                       "Rootlets leave at the pontomedullary junction at `surf-cn7-exit` and the nerve crosses the cerebellopontine angle with CN VIII (nrv-cn8-vestibulocochlear) into the internal acoustic meatus — the two nerves share a foramen and therefore fail together when a lesion is at the meatus",
+                       "The nerve carries preganglionic fibres that turn into the facial canal toward the geniculate ganglion, the anatomical reason a lesion in the canal produces loss of tearing and taste in addition to the palsy (a lesion outside the stylomastoid foramen does not)"
+                     ]
+                   },
+    "bloodSupply": "The cisternal segment and the root exit zone are crossed by the anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery), whose loop in the cerebellopontine angle is the vessel that compresses this nerve's root entry zone in hemifacial spasm — the facial-nerve analogue of trigeminal neuralgia. The intratemporal nerve is supplied by the petrosal branch of the middle meningeal artery and by the stylomastoid branch of the posterior auricular artery; in the parotid it is supplied by the superficial temporal and transverse facial arteries. The artery at the root exit zone is load-bearing clinically: an AICA loop causes hemifacial spasm, and the same vessel occluding produces an AICA syndrome with facial palsy, deafness and vertigo together.",
+    "clinical": [
+      {
+        "syndrome": "Peripheral facial palsy (Bell's palsy and its mimics)",
+        "findings": "A complete lower-motor-neuron palsy paralyses the whole ipsilateral face: the forehead cannot be wrinkled, the eye cannot be closed (with a risk of exposure keratitis), the mouth droops and the patient cannot whistle or hold liquid on that side; hyperacusis, loss of taste in the anterior tongue and a dry eye accompany it when the lesion is inside the facial canal (the geniculate and chorda segments), and are absent when the lesion is distal to the stylomastoid foramen. Bell's palsy is idiopathic and self-limiting in most cases; the mimics that must be excluded are a parotid tumour, cholesteatoma, temporal-bone fracture, sarcoidosis, Lyme disease, Guillain-Barré syndrome and a pontine lesion.",
+        "vascular": "Microvascular ischaemia and viral inflammation of the nerve inside the facial canal; the diagnosis of exclusion is the reason imaging is advised when the palsy is progressive, painful or recurrent",
+        "note": "The site of the lesion is read off the associated signs: loss of tearing (greater petrosal), hyperacusis (stapedius), loss of taste (chorda tympani), loss of saliva (chorda tympani) — a stepwise localization along the facial canal."
+      },
+      {
+        "syndrome": "Central (supranuclear) facial palsy with forehead sparing",
+        "findings": "A corticobulbar lesion above the pons spares the upper face, because the motor neurons for the frontalis and orbicularis oculi receive bilateral cortical input while the lower-face neurons receive only contralateral input: the patient has a drooping mouth but can still wrinkle the forehead and close the eye tightly. It is the single most useful bedside distinction between a hemispheric or capsular lesion and a brainstem or nerve lesion, and it is accompanied by the other signs of the causal lesion (hemiparesis, aphasia, hemianopia or a brainstem crossed syndrome).",
+        "vascular": "Middle cerebral artery or internal capsule territory (with hemiparesis); a pontine lesion produces the peripheral type instead, with the crossed pattern of Millard-Gubler (syn-millard-gubler)",
+        "note": "The rule is anatomical, not clinical folklore: bilateral corticobulbar supply to the upper-face motor neurons is what spares the forehead."
+      },
+      {
+        "syndrome": "Hemifacial spasm (root-entry-zone compression)",
+        "findings": "Intermittent, involuntary, unilateral clonic contractions of the muscles of facial expression, beginning around the orbicularis oculi and spreading to the mouth, that persist in sleep and can be triggered by voluntary movement; it is usually caused by an arterial loop (most often AICA or the posterior inferior cerebellar artery) compressing the facial nerve at its root exit zone, and microvascular decompression is curative.",
+        "vascular": "Anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery), occasionally the vertebral or basilar artery",
+        "note": "The facial-nerve twin of trigeminal neuralgia: both are diseases of the root entry zone, and both are treated by moving the artery rather than by cutting the nerve."
+      },
+      {
+        "syndrome": "Ramsay Hunt syndrome and other intratemporal causes",
+        "findings": "Varicella-zoster reactivation in the geniculate ganglion produces a facial palsy with severe ear pain, vesicles in the external canal or the concha (the sensory zone of CN VII), hearing loss and vertigo — the combination that localizes the lesion to the geniculate ganglion and the meatus rather than to the canal alone.",
+        "note": "The vesicles sit exactly in the nerve's own sensory distribution, which is why their presence names the diagnosis; a facial palsy with sensorineural hearing loss should always raise the meatus as the site."
+      }
+    ],
+    "levels": ["lvl-pons-caudal", "lvl-pontomedullary"],
+    "origin3d": [3, -22.5, -6],
+    "size3d": [1.8, 3.4, 4.5],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Patten, Neurological Differential Diagnosis, 2nd ed., facial palsy localization sections",
+              "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [3, −22.5, −6] with radii size3d [1.8, 3.4, 4.5] spans z ≈ −10.5…−1.5 au at the pontomedullary junction, standing for the cisternal segment between the brainstem surface and the internal acoustic meatus: its posterior end overlaps the landmark `surf-cn7-exit` ([6.5, −23, −3], a committed surface record) and its anterior end reaches toward the meatus. It is a SCHEMATIC placement, not anatomy: the intratemporal facial canal, the geniculate ganglion and the parotid branches are not drawn, and the small posterior displacement from the landmark is a drawing convention to keep this nerve's ellipsoid separable from CN VIII's. The nearest committed geometry is the pons envelope `ctx-pons-surface` (baked, bbox y −24.5…+5.8, z −11.5…+16.7) and the anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery), the vessel whose loop at the root exit zone causes hemifacial spasm. The record is useful without a mesh because the content is the localizing one: the stepwise canal signs, the forehead-sparing central rule, and the branchial-motor/parasympathetic/taste triple modality."
+  },
+  {
+    "id": "nrv-cn8-vestibulocochlear",
+    "name": "CN VIII Vestibulocochlear nerve",
+    "synonyms": [
+                  "vestibulocochlear nerve",
+                  "nervus vestibulocochlearis",
+                  "eighth cranial nerve",
+                  "CN VIII",
+                  "acoustic nerve (obsolete)",
+                  "statoacoustic nerve"
+                ],
+    "region": "pons",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Special sensory — hearing (cochlear division) and balance/head position (vestibular division); no motor component of any kind",
+    "course": "The two divisions emerge together from the pontomedullary junction at the lateral end of the sulcus between the pons and the medulla, alongside CN VII, at the landmark `surf-cn8-exit`, and cross the cerebellopontine angle as a short cisternal segment (about 1 cm) to enter the internal acoustic meatus — the foramen this nerve uses at the skull base — where the facial nerve runs with them. Inside the meatus the cochlear division passes to the spiral ganglion and the organ of Corti through the modiolus of the cochlea, and the vestibular division passes to the vestibular (Scarpa) ganglion and then to the utricle, saccule and the three semicircular canals. The meatus is a tight, shared compartment, which is why a lesion there (acoustic neuroma, meningioma, meatal fracture) produces deafness, vertigo AND a facial palsy together — the anatomical reason for the classic combination.",
+    "function": "Carries the two special senses of the inner ear. The cochlear division transmits the tonotopically organized output of the organ of Corti (hair cells to spiral ganglion to the cochlear nuclei, nuc-cochlear-ventral and nuc-cochlear-dorsal), which is the first stage of the auditory pathway to the superior olivary complex (nuc-superior-olivary), the inferior colliculus (nuc-inferior-colliculus) and the auditory cortex (ctx-a1); its fibres are organized by frequency, so a lesion produces a sensorineural hearing loss with impaired speech discrimination rather than the conductive pattern of a middle-ear lesion. The vestibular division carries head-acceleration and head-position signals from the semicircular canals and otolith organs to the four vestibular nuclei (nuc-vestibular-superior, -medial, -lateral and -inferior) and, through the cerebellum (nuc-dentate and the flocculonodular lobe), drives the vestibulo-ocular reflex for gaze stabilization, the vestibulospinal reflexes for posture, and the conscious sense of head orientation that reaches the thalamus and the parietal cortex. An acute imbalance of its two sides produces the cardinal vestibular syndrome of vertigo, nystagmus and postural instability.",
+    "connections": {
+                     "afferent": [
+                       "Ventral cochlear nucleus (nuc-cochlear-ventral) and dorsal cochlear nucleus (nuc-cochlear-dorsal) — the first central relays of hearing; the ventral nucleus projects to the superior olivary complex (nuc-superior-olivary) for sound localization, the dorsal nucleus to the contralateral inferior colliculus (nuc-inferior-colliculus)",
+                       "Superior vestibular nucleus (nuc-vestibular-superior), medial vestibular nucleus (nuc-vestibular-medial), lateral vestibular nucleus (nuc-vestibular-lateral) and inferior vestibular nucleus (nuc-vestibular-inferior) — the four first-order vestibular relays, whose central targets are the abducens nucleus (nuc-abducens) via the medial longitudinal fasciculus, the cerebellum and the thalamus",
+                       "Note on the registry: no `nuc-` record exists for the spiral or vestibular ganglia, so those first-order cell groups are named here in prose rather than linked",
+                       "Rootlets enter the brainstem at the pontomedullary junction at `surf-cn8-exit`, immediately dorsal to the facial nerve's rootlets, which is why a lesion at the meatus involves both nerves"
+                     ],
+                     "efferent": [
+                       "The vestibular nerve is classically afferent-only, but it does carry the efferents of the olivocochlear bundle from the superior olivary complex to the outer hair cells, and the vestibular nuclei give the reflex efferents (to CN III, IV and VI through the MLF and to the spinal cord through the vestibulospinal tracts) that stabilise gaze and posture",
+                       "The efferent limb of the vestibular reflex arcs is therefore the ocular motor nerves (nrv-cn3-oculomotor, nrv-cn4-trochlear, nrv-cn6-abducens) and the vestibulospinal tracts, not this nerve",
+                       "Its afferents together with the cochlear nuclei form the auditory pathway that reaches the auditory cortex (ctx-a1) through the inferior colliculus and the medial geniculate nucleus (nuc-mgn)"
+                     ]
+                   },
+    "bloodSupply": "The nerve and the inner ear it serves are supplied by the labyrinthine artery, a branch of the anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery) that runs with the nerve through the internal acoustic meatus; the labyrinthine artery is an end artery, so its occlusion causes sudden, permanent sensorineural deafness with vestibular failure rather than a transient deficit. The AICA's territory is the reason an AICA infarct produces the combination of vertigo, deafness, tinnitus, facial palsy and ipsilateral cerebellar ataxia, and the reason the nerve's blood supply, not just its structure, is what fails in sudden deafness in the elderly.",
+    "clinical": [
+      {
+        "syndrome": "Vestibular schwannoma (acoustic neuroma) at the internal acoustic meatus",
+        "findings": "A slow-growing tumour of the vestibular division produces unilateral sensorineural hearing loss with poor speech discrimination, tinnitus, and later imbalance; because the meatus is shared, growth eventually adds a facial palsy (CN VII), a reduced corneal reflex and facial numbness (CN V). The early picture is a hearing loss out of proportion to the audiogram's apparent severity, which is why speech discrimination testing is the key bedside finding.",
+        "note": "Bilateral vestibular schwannomas mean neurofibromatosis type 2; the shared meatus is the anatomical reason this tumour has a syndromic signature at all."
+      },
+      {
+        "syndrome": "Vestibular neuritis and labyrinthitis (acute unilateral vestibular failure)",
+        "findings": "Acute, severe, continuous vertigo with nausea and vomiting, horizontal-torsional nystagmus that beats away from the affected ear, and a positive head-impulse test on the affected side, with NO hearing loss (neuritis) or WITH hearing loss and tinnitus (labyrinthitis). The absence of the other brainstem signs is what separates it from a lateral medullary or AICA infarct, and the head-impulse test is the sign that localizes the failure to the vestibular nerve.",
+        "vascular": "Post-viral inflammation of the vestibular division; an AICA infarct is the vascular mimic and is suggested by the additional deafness, facial palsy or ataxia",
+        "note": "The HINTS examination (head impulse, nystagmus type, test of skew) separates a peripheral from a central cause at the bedside, because a central lesion can present as isolated vertigo."
+      },
+      {
+        "syndrome": "AICA syndrome",
+        "findings": "Occlusion of the anterior inferior cerebellar artery produces vertigo with vomiting, ipsilateral sensorineural deafness and tinnitus, ipsilateral facial palsy, ipsilateral cerebellar ataxia, and a crossed sensory loss (ipsilateral face, contralateral body) — the whole output of this nerve's compartment failing at once, because the labyrinthine branch and the facial and vestibular nerve roots share it.",
+        "vascular": "Anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery)",
+        "note": "The combination of deafness and vertigo with a facial palsy and ataxia is the reason a patient with 'labyrinthitis' who also has a facial droop needs urgent imaging."
+      },
+      {
+        "syndrome": "Sensorineural hearing loss — cochlear versus retrocochlear localization",
+        "findings": "A cochlear lesion (hair-cell loss from noise, ototoxic drugs or Menière disease) produces recruitment and preserved or disproportionate speech discrimination, while a retrocochlear lesion of this nerve or the meatus produces poor discrimination, a disproportionate loss of speech understanding and often an abnormal auditory brainstem response; the distinction is the bedside version of the question 'inner ear or nerve?', and it decides whether the patient needs an MRI of the meatus.",
+        "vascular": "Labyrinthine artery occlusion (an AICA branch) causes sudden retrocochlear-pattern deafness; the vascular cause is an emergency for the ear as well as for the brainstem"
+      }
+    ],
+    "levels": ["lvl-pons-caudal", "lvl-pontomedullary"],
+    "origin3d": [7.5, -21, -6.5],
+    "size3d": [1.3, 1.6, 3.6],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Auditory System'",
+              "Fix, High-Yield Neuroanatomy, Ch. \"Auditory and Vestibular Systems\"",
+              "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [7.5, −21, −6.5] with radii size3d [1.3, 1.6, 3.6] spans z ≈ −10.1…−2.9 au at the pontomedullary junction and stands for the short cisternal segment into the internal acoustic meatus; its anterior end overlaps the landmark `surf-cn8-exit` ([6.8, −22, −4.5], a committed surface record). It is a SCHEMATIC placement, not anatomy: the meatus, the cochlea, the labyrinth and the two divisions are not drawn, and the slight lateral offset from CN VII's ellipsoid is a drawing convention to keep the two nerves separable where they in fact run together. The nearest committed geometry is the pons envelope `ctx-pons-surface` (baked, bbox y −24.5…+5.8, z −11.5…+16.7) and the anterior inferior cerebellar artery (vasc-anterior-inferior-cerebellar-artery) whose labyrinthine branch supplies the nerve and the inner ear. The record is useful without a mesh because the content is the localizing one: the shared meatus, the cochlear-versus-retrocochlear distinction, and the HINTS examination."
+  },
+  {
+    "id": "nrv-cn9-glossopharyngeal",
+    "name": "CN IX Glossopharyngeal nerve",
+    "synonyms": ["glossopharyngeal nerve", "nervus glossopharyngeus", "ninth cranial nerve", "CN IX"],
+    "region": "medulla",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Mixed — branchial motor (stylopharyngeus), visceral motor (parasympathetic to the parotid), general sensory (posterior third of the tongue, oropharynx, tonsil, middle ear, Eustachian tube), special sensory (taste from the posterior third of the tongue) and visceral afferent (carotid body and sinus)",
+    "course": "Three to five rootlets emerge from the postolivary sulcus of the rostral medulla, just above the vagal rootlets and dorsal to the inferior olive, at the landmark `surf-cn9-exit`, and run forward and laterally through the cerebellopontine cistern (the cisternal segment, where a PICA loop can compress the root) to the jugular foramen, where the nerve passes through its own compartment, the pars nervosa — the foramen this nerve uses at the skull base — with the inferior petrosal sinus. It then descends between the internal carotid artery and the internal jugular vein, curves forward around the stylopharyngeus (which it supplies), passes between the internal and external carotid arteries, and distributes to the pharyngeal plexus, the tonsil, the posterior third of the tongue and the parotid gland through the otic ganglion, with the carotid sinus nerve (of Hering) descending to the carotid bifurcation.",
+    "function": "The nerve of the oropharynx and the carotid bifurcation. Its branchial motor fibres supply stylopharyngeus (which elevates the pharynx in swallowing); its parasympathetic fibres run from the inferior salivatory nucleus through the tympanic plexus and the lesser petrosal nerve to the otic ganglion and thence to the parotid gland; its general sensory fibres supply the posterior third of the tongue, the tonsil, the oropharynx and the middle ear, and carry the afferent limb of the GAG REFLEX; its special sensory fibres carry taste from the posterior third of the tongue to the rostral nucleus solitarius (nuc-solitarius-rostral); and its visceral afferents carry chemoreceptor and baroreceptor information from the carotid body and carotid sinus to the caudal nucleus solitarius (nuc-solitarius-caudal), which is the afferent limb of blood-pressure and oxygen-sensing reflexes. Its motor fibres arise from the nucleus ambiguus (nuc-ambiguus) and its parasympathetic fibres from the inferior salivatory nucleus, which has no separate registry record and is therefore named in prose.",
+    "connections": {
+                     "afferent": [
+                       "Nucleus ambiguus (nuc-ambiguus) — the branchial motor neurons for stylopharyngeus, shared with CN X and the cranial root of CN XI",
+                       "Nucleus solitarius, caudal cardiorespiratory part (nuc-solitarius-caudal) — the central target of the carotid-body chemoreceptor and carotid-sinus baroreceptor afferents, the afferent limb of the reflexes that control breathing and blood pressure",
+                       "Nucleus solitarius, rostral gustatory part (nuc-solitarius-rostral) — the central target of taste from the posterior third of the tongue",
+                       "Spinal trigeminal nucleus (nuc-spinal-trigeminal) — the general sensory afferents from the posterior tongue, tonsil, pharynx and middle ear, which is why a lateral medullary lesion reduces the gag reflex and the pain/temperature sense of the oropharynx",
+                       "Inferior salivatory nucleus — the parasympathetic source for the parotid; no registry record exists for it, so it is named here in prose"
+                     ],
+                     "efferent": [
+                       "Stylopharyngeus through the pharyngeal plexus — the only muscle this nerve supplies directly",
+                       "Parasympathetic secretomotor fibres through the tympanic plexus, lesser petrosal nerve and otic ganglion to the parotid gland",
+                       "Rootlets leave the postolivary sulcus at `surf-cn9-exit`, then the nerve passes through the pars nervosa of the jugular foramen (nrv-cn10-vagus and nrv-cn11-accessory share the same foramen and are therefore injured together by a jugular-foramen lesion)",
+                       "The dorsal motor nucleus of the vagus (nuc-dmv) sends a small contingent of preganglionic fibres with this nerve to the pharyngeal and mucosal glands, which is why the ninth nerve contributes to vagal-phase secretion even though its own secretomotor output goes to the parotid",
+                       "Carotid sinus nerve (of Hering) to the carotid body and sinus — the pathway whose interruption abolishes the baroreflex on that side"
+                     ]
+                   },
+    "bloodSupply": "The cisternal root is supplied by small perforating branches of the posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) and the vertebral artery (vasc-vertebral-artery), and the nerve descends into the neck immediately medial to the internal carotid artery (vasc-internal-carotid-artery) at its bifurcation — an anatomical relationship that makes the nerve vulnerable during carotid endarterectomy (where its injury causes dysphagia and loss of the gag reflex) and that explains why glossopharyngeal neuralgia is so often caused by a PICA loop at the root entry zone. The proximity of the carotid bifurcation is also the reason the nerve's baroreceptor fibres are accessible to carotid-sinus massage and to stenting.",
+    "clinical": [
+      {
+        "syndrome": "Glossopharyngeal neuralgia",
+        "findings": "Paroxysmal, severe, lancinating pain in the posterior tongue, tonsil, pharynx, angle of the jaw or ear, triggered by swallowing, coughing, yawning or talking — and, in the vagal variant, accompanied by bradycardia, hypotension and syncope (because the vagal efferents are activated at the same time). The pain is in the nerve's own sensory distribution and the examination is normal between attacks.",
+        "vascular": "A PICA or vertebral artery loop compressing the glossopharyngeal root entry zone; microvascular decompression is the treatment",
+        "note": "The syncopal form is the dangerous one: the combination of throat pain and cardiac arrest localizes the lesion to the region shared by CN IX and CN X."
+      },
+      {
+        "syndrome": "Loss of the gag reflex and pharyngeal sensory loss (jugular-foramen lesion)",
+        "findings": "A jugular-foramen lesion (glomus jugulare tumour, meningioma, metastasis, thrombosis) damages CN IX, X and XI together, producing loss of the gag reflex, a deviated uvula, hoarseness, dysphagia, and weakness and wasting of the sternocleidomastoid and trapezius — the Vernet syndrome; adding CN XII through the hypoglossal canal gives the Collet-Sicard syndrome, and adding a Horner syndrome gives Villaret syndrome.",
+        "note": "The gag reflex tests CN IX (afferent) and CN X (efferent) together, so its loss localizes to the pair, not to one nerve — the bedside version of the shared jugular foramen."
+      },
+      {
+        "syndrome": "Glossopharyngeal palsy with loss of parotid secretion and taste",
+        "findings": "An isolated IX lesion is rare: it produces a dry mouth (loss of parotid secretomotor drive), loss of taste in the posterior third of the tongue, reduced pharyngeal sensation and a mild dysphagia, and it is usually part of a jugular-foramen or brainstem picture rather than a solitary nerve palsy. The taste loss is separable from that of CN VII because the two nerves serve different thirds of the tongue.",
+        "note": "Taste is served by three nerves — CN VII (anterior two-thirds), CN IX (posterior third) and CN X (epiglottis) — so the pattern of taste loss is itself a localizing sign."
+      },
+      {
+        "syndrome": "Lateral medullary (Wallenberg) syndrome with glossopharyngeal involvement",
+        "findings": "The lateral medullary infarct destroys the nucleus ambiguus, the spinal trigeminal tract and the vestibular nuclei, producing vertigo, nystagmus, ipsilateral facial pain and temperature loss, hoarseness, dysphagia, a drooping palate and a reduced gag reflex with contralateral body sensory loss — a rostrocaudal gradient in which the glossopharyngeal fibres are the rostral end of the nerve output that fails here.",
+        "vascular": "Posterior inferior cerebellar artery or vertebral artery occlusion",
+        "note": "The glossopharyngeal and vagal deficits are efferent (ambiguus) and afferent (solitary and spinal trigeminal) at once, which is why the palatal and gag findings are asymmetric rather than absent."
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [5, -31, 5.5],
+    "size3d": [1.3, 2.4, 4.2],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Fix, High-Yield Neuroanatomy, autonomic nervous system section",
+              "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [5, −31, 5.5] with radii size3d [1.3, 2.4, 4.2] spans z ≈ 1.3…9.7 au along the rostral medulla's lateral surface, standing for the cisternal root on its way to the jugular foramen; its posterior end overlaps the landmark `surf-cn9-exit` ([5, −31, 4.5], a committed surface record). It is a SCHEMATIC placement, not anatomy: the jugular foramen, the tympanic plexus, the otic ganglion and the carotid-sinus nerve are not drawn. The nearest committed geometry is the medulla envelope `ctx-medulla-surface` (baked, bbox x ±11.1, y −50.8…−18.7, z −8.5…+13.0), the inferior olivary nucleus (nuc-inferior-olive-principal) that the rootlets lie dorsal to, and the posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) that supplies and can compress the root. The record is useful without a mesh because the content is the localizing one: the shared jugular foramen, the three-nerve taste pattern, and the baroreceptor afferents."
+  },
+  {
+    "id": "nrv-cn10-vagus",
+    "name": "CN X Vagus nerve",
+    "synonyms": ["vagus nerve", "nervus vagus", "tenth cranial nerve", "CN X", "pneumogastric nerve"],
+    "region": "medulla",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Mixed — branchial motor (pharynx and larynx through the pharyngeal plexus and the recurrent laryngeal nerve), visceral motor (parasympathetic to the heart, airways and gut), general sensory (pharynx, larynx, external ear), special sensory (taste from the epiglottis) and visceral afferent (aortic arch, lungs, heart, gut)",
+    "course": "Eight to ten rootlets emerge from the postolivary sulcus of the medulla, below the glossopharyngeal rootlets, dorsal to the inferior olive, at the landmark `surf-cn10-exit`, and run laterally through the cerebellopontine cistern (the cisternal segment, where a PICA loop can compress it) to the jugular foramen, where it passes through the pars vascularis with the internal jugular vein — the foramen this nerve uses at the skull base. In the foramen it forms the superior (jugular) ganglion, and just below it the inferior (nodose) ganglion; it then descends in the carotid sheath between the internal carotid artery (or the common carotid below the bifurcation) and the internal jugular vein, gives off the pharyngeal branches, the superior laryngeal nerve, and — on the right side looping under the subclavian artery, on the left under the aortic arch — the recurrent laryngeal nerve, and continues as the posterior and anterior vagal trunks through the oesophageal hiatus into the thorax and abdomen. The recurrent laryngeal nerve's different courses on the two sides are the anatomical reason a left-sided aortic arch lesion paralyses the left vocal fold.",
+    "function": "The longest cranial nerve and the principal parasympathetic outflow of the body: its preganglionic fibres from the dorsal motor nucleus (nuc-dmv) slow the heart, constrict the bronchi, and drive secretomotor and motor function throughout the gut as far as the splenic flexure; its branchial motor fibres from the nucleus ambiguus (nuc-ambiguus) innervate the muscles of the soft palate (except tensor veli palatini), the pharynx (except stylopharyngeus) and, through the recurrent and superior laryngeal nerves, all the intrinsic muscles of the larynx — so this nerve is what makes voice, cough, swallow and airway protection possible. Its visceral afferents from the aortic arch baroreceptors, the aortic bodies, the lungs, the heart and the gut ascend to the caudal nucleus solitarius (nuc-solitarius-caudal), which closes the reflex loops for heart rate, respiration and vomiting; its general sensory and taste fibres (from the epiglottis) reach the spinal trigeminal and rostral solitary nuclei; and its auricular branch (of Alderman) supplies a small zone of the external ear, which is why stimulation of the ear canal can cause cough or syncope.",
+    "connections": {
+                     "afferent": [
+                       "Dorsal motor nucleus of the vagus (nuc-dmv) — the preganglionic parasympathetic source, the largest visceral efferent column of the brainstem",
+                       "Nucleus ambiguus (nuc-ambiguus) — the branchial motor source for the pharynx and larynx, shared with CN IX and the cranial root of CN XI",
+                       "Nucleus solitarius, caudal cardiorespiratory part (nuc-solitarius-caudal) — the central target of the aortic arch baroreceptor and chemoreceptor, pulmonary, cardiac and gastrointestinal afferents; the afferent limb of the baroreflex, the cough reflex and the vomiting reflex",
+                       "Nucleus solitarius, rostral gustatory part (nuc-solitarius-rostral) — taste from the epiglottis and the pharynx"
+                     ],
+                     "efferent": [
+                       "Pharyngeal plexus and the superior laryngeal nerve to the pharyngeal and cricothyroid muscles",
+                       "Recurrent laryngeal nerve to all the other intrinsic laryngeal muscles (the reason a recurrent laryngeal palsy causes hoarseness and a weak cough)",
+                       "Parasympathetic fibres to the cardiac plexus (slowing the heart), the pulmonary plexus (bronchoconstriction and secretion) and the enteric nervous system (motility and secretion as far as the splenic flexure)",
+                       "Rootlets leave the postolivary sulcus at `surf-cn10-exit` and the nerve passes through the jugular foramen with CN IX and CN XI — a shared foramen that makes a jugular-foramen lesion a three-nerve syndrome",
+                       "The auricular branch (Alderman's nerve) to the external ear, which shares its sensory field with CN VII and the upper cervical nerves"
+                     ]
+                   },
+    "bloodSupply": "The cisternal root is supplied by perforating branches of the posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) and the vertebral artery (vasc-vertebral-artery); in the neck the nerve descends in the carotid sheath between the internal carotid artery (vasc-internal-carotid-artery) and the internal jugular vein, and the left recurrent laryngeal nerve loops under the aortic arch while the right loops under the right subclavian artery. That asymmetry is directly load-bearing: an aortic-arch aneurysm, an enlarged left atrium or a mediastinal mass paralyses the left vocal fold through the left recurrent nerve, and the same vessel relationship is why the left nerve is the one injured in thoracic surgery. Within the thorax the vagus runs with the oesophagus, which is the reason oesophageal carcinoma invades it early.",
+    "clinical": [
+      {
+        "syndrome": "Vagal (nuclear and infranuclear) palsy — palatal, pharyngeal and laryngeal failure",
+        "findings": "A unilateral lesion of the nucleus ambiguus or of the vagus droops the ipsilateral palate, deviates the uvula AWAY from the side of the lesion, paralyses the ipsilateral vocal fold with hoarseness and a bovine cough, and impairs swallowing with a risk of aspiration; bilateral lesions produce near-complete loss of pharyngeal and laryngeal function, and the loss of the afferent limb (nucleus solitarius) removes the protective cough. The side of the uvular deviation and the side of the vocal-fold palsy localize the lesion to the same side as the nerve.",
+        "vascular": "PICA or vertebral artery for a nuclear/lateral medullary lesion; the neck and mediastinum for a peripheral one",
+        "note": "The uvula deviates AWAY from the lesion because the intact contralateral palatal muscles pull it across — the opposite of the tongue's rule, and a classic bedside trap."
+      },
+      {
+        "syndrome": "Recurrent laryngeal nerve palsy (an aortic-arch or mediastinal sign)",
+        "findings": "Paralysis of the ipsilateral vocal fold with hoarseness, a weak cough and loss of the ability to raise pitch; the left nerve's long intrathoracic course under the aortic arch makes a left-sided palsy a classic presentation of an aortic-arch aneurysm, an enlarged left atrium (mitral stenosis), a mediastinal tumour or an apical lung carcinoma, while a right-sided palsy points below the right subclavian artery or at the thyroid.",
+        "vascular": "Aortic arch (left recurrent nerve) or right subclavian artery (right recurrent nerve) — the vessel the nerve loops around is the vessel that names the level of the lesion",
+        "note": "A patient with hoarseness and a normal larynx on examination needs a chest imaging study, because the nerve can be paralysed far from the larynx."
+      },
+      {
+        "syndrome": "Vagal dysautonomia, cough syncope and bradyarrhythmia",
+        "findings": "Loss of vagal cardiac modulation removes beat-to-beat control of heart rate (producing a fixed tachycardia) while preserved sympathetic tone leaves the patient orthostatic; the opposite — vagal overactivity from irritation of the auricular branch in the external canal, from oesophageal distension or from a jugular-foramen lesion — causes cough syncope and sudden bradycardia or asystole. Gastroparesis and impaired intestinal motility follow loss of the gut's vagal drive.",
+        "vascular": "Not primarily vascular; the neural-crest and brainstem lesions that cause dysautonomia are degenerative, surgical or traumatic",
+        "note": "Vagal and sympathetic failure must be separated: vagal failure causes tachycardia and gut stasis, sympathetic failure causes orthostatic hypotension and a Horner syndrome."
+      },
+      {
+        "syndrome": "Jugular-foramen and Collet-Sicard syndromes (CN IX, X, XI, XII)",
+        "findings": "A lesion at the jugular foramen takes CN IX, X and XI together (Vernet syndrome) and, when it extends to the hypoglossal canal, adds CN XII (Collet-Sicard syndrome), producing loss of the gag reflex, palatal and vocal-fold palsy, dysphagia, and weakness of the sternocleidomastoid, trapezius and tongue on one side — the combination that names the skull base as the site rather than the brainstem, because the brainstem syndromes produce crossed findings and a partial pattern.",
+        "vascular": "Glomus jugulare tumour, meningioma, metastasis or internal jugular vein thrombosis",
+        "note": "The one-sided, multiple-nerve, non-crossed pattern is what makes this a skull-base syndrome: at the foramen the nerves are physically together, and no brainstem lesion takes exactly this set without adding long-tract signs."
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [5.5, -14, 6],
+    "size3d": [1.4, 21, 1.6],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Fix, High-Yield Neuroanatomy, autonomic nervous system section",
+              "Snell, Clinical Neuroanatomy, brainstem and cranial nerves chapters"
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [5.5, −14, 6] with radii size3d [1.4, 21, 1.6] spans y ≈ −35…+7 au: a long, thin, nearly vertical body that stands for the nerve's descent in the carotid sheath. Its lower end overlaps the medullary landmark `surf-cn10-exit` ([5, −34, 4.5], a committed surface record) and its upper end reaches the jugular-foramen level at the skull base. It is a SCHEMATIC placement, not anatomy: the jugular foramen, the ganglia, the recurrent laryngeal loop and the thoracic course are not drawn, and no attempt is made to follow the nerve into the neck beyond the atlas box. The nearest committed geometry is the medulla envelope `ctx-medulla-surface` (baked, bbox y −50.8…−18.7), the inferior olivary nucleus (nuc-inferior-olive-principal) the rootlets lie dorsal to, and the vertebral artery (vasc-vertebral-artery) whose PICA branch supplies and can compress the root. The record is useful without a mesh because the content is the localizing one: the shared jugular foramen, the uvular-deviation rule in the direction opposite the tongue's, and the aortic-arch lesion that presents as hoarseness."
+  },
+  {
+    "id": "nrv-cn11-accessory",
+    "name": "CN XI Accessory nerve",
+    "synonyms": [
+                  "accessory nerve",
+                  "nervus accessorius",
+                  "eleventh cranial nerve",
+                  "CN XI",
+                  "spinal accessory nerve (spinal root)"
+                ],
+    "region": "medulla",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Motor only, with two roots of different origin: branchial motor (cranial root, to the larynx through the recurrent laryngeal nerve) and somatic motor (spinal root, to sternocleidomastoid and trapezius). No sensory, no parasympathetic component",
+    "course": "The cranial root arises from the caudal part of the nucleus ambiguus (nuc-ambiguus) in the medulla and leaves the postolivary sulcus as a few rootlets with the vagal rootlets at the landmark `surf-cn11-exit`; the spinal root arises from the accessory nucleus in the anterior horn of the upper five or six cervical segments, ascends inside the spinal canal as a chain of rootlets, and enters the posterior cranial fossa through the foramen magnum — the foramen THIS ROOT uses — before joining the cranial rootlets. The united trunk's cisternal course then crosses the cerebellopontine and jugular (pars vascularis) cisterns to the jugular foramen (pars vascularis) — the foramen the common trunk uses — where the two roots separate: the cranial root joins the vagus and is distributed through its pharyngeal and recurrent laryngeal branches to the larynx, while the spinal root descends as the external branch to supply the sternocleidomastoid and then the trapezius. The spinal root's subcutaneous course across the posterior triangle of the neck is long and superficial, which is why it is the nerve most often injured in neck surgery — a functional rather than an anatomical distinction from the other eleven.",
+    "function": "Two nerves in one sheath. The cranial root is a branchiomotor nerve that supplies the intrinsic muscles of the larynx through the vagus's recurrent laryngeal nerve, so a lesion of the cranial root contributes to hoarseness and to laryngeal airway control. The spinal root is the somatic motor nerve of the sternocleidomastoid (head rotation to the opposite side and head flexion) and the trapezius (shoulder elevation, scapular rotation and head extension), so its failure produces the dropped shoulder and the inability to shrug, together with weakness of head rotation away from the affected side and, in long-standing disease, winging of the scapula. The accessory nucleus receives corticospinal input, so the muscle is under voluntary cortical control — but it is also driven by the vestibulospinal and reticulospinal tracts for postural tone, which is why the shoulder droop is often more prominent than the weakness on formal testing.",
+    "connections": {
+                     "afferent": [
+                       "Nucleus ambiguus (nuc-ambiguus) — the branchial motor source of the cranial root, shared with CN IX and CN X; the rootlets emerge with the vagal rootlets at `surf-cn11-exit`",
+                       "Accessory nucleus of the upper cervical spinal cord (segments C1–C5/6) — the somatic motor source of the spinal root; no registry record exists for it, because the taxonomy covers the brainstem and diencephalon and the spinal cord is out of its region set, so it is named here in prose",
+                       "Corticospinal fibres descending from the motor cortex (ctx-m1) drive the accessory nucleus for voluntary head rotation and shoulder movement, and the corticobulbar fibres reach the cranial root's ambiguus neurons",
+                       "No sensory component: the nerve carries no afferent fibres of its own, so all proprioceptive information from the two muscles travels with the cervical spinal nerves"
+                     ],
+                     "efferent": [
+                       "Cranial root: through the vagus to the pharyngeal plexus and the recurrent laryngeal nerve, to the muscles of the larynx",
+                       "Spinal root: the external branch to the sternocleidomastoid and the trapezius — tested clinically by shrugging the shoulders against resistance and by turning the head against the examiner's hand",
+                       "The spinal rootlets enter the skull through the foramen magnum, so a Chiari malformation, a foramen-magnum meningioma or a vertebral-artery dissection can damage the nerve before it reaches the jugular foramen",
+                       "The common trunk traverses the jugular foramen (nrv-cn9-glossopharyngeal and nrv-cn10-vagus share the foramen), which is why the three nerves fail together in Vernet syndrome and why the accessory palsy is the sign that distinguishes a jugular-foramen lesion from a purely medullary one"
+                     ]
+                   },
+    "bloodSupply": "The cisternal and foraminal portions are supplied by the posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) and the vertebral artery (vasc-vertebral-artery), whose V3 segment loops behind the atlas immediately lateral to the upper cervical accessory rootlets — the anatomical reason the nerve can be injured by a vertebral-artery dissection or by C1-C2 surgery. In the posterior triangle of the neck the spinal root runs superficially over the levator scapulae, supplied by small branches of the transverse cervical and occipital arteries; its superficial course, with no bony protection, is why it is injured by lymph-node biopsy, carotid surgery and penetrating neck trauma.",
+    "clinical": [
+      {
+        "syndrome": "Accessory-nerve palsy — drooping shoulder with weak shrugging",
+        "findings": "Weakness and wasting of the trapezius produce a dropped shoulder, an inability to shrug against resistance, winging of the scapula with the arm abducted, and weakness of head extension; sternocleidomastoid weakness makes it difficult to turn the head to the OPPOSITE side and to flex the neck against resistance. The winging is different from that of long thoracic-nerve palsy: the accessory's is most obvious with the arm abducted rather than elevated forward. The pattern localizes to the accessory nerve's external branch or to its spinal root, and the missing sensory loss is what separates it from a cervical radiculopathy.",
+        "vascular": "Not primarily vascular; the commonest causes are surgical (neck dissection, lymph-node biopsy, carotid endarterectomy, internal jugular cannulation) and traumatic",
+        "note": "The palsy is a double sign: the same nerve supplies two muscles with different actions, so the examination must test head rotation and shoulder elevation separately."
+      },
+      {
+        "syndrome": "Jugular-foramen syndrome and Vernet syndrome with accessory involvement",
+        "findings": "A jugular-foramen lesion takes CN IX, X and XI: loss of the gag reflex, palatal and vocal-fold palsy with hoarseness and dysphagia, plus a dropped shoulder and weak head rotation. The accessory palsy is the finding that identifies a skull-base lesion rather than a medullary one, because a medullary lesion that destroys the nucleus or rootlets almost always adds long-tract or crossed sensory findings, and an isolated nuclear lesion would not affect the trapezius on the same side as the tongue or palate.",
+        "vascular": "Glomus jugulare tumour, meningioma, metastasis, or jugular-vein thrombosis",
+        "note": "The three-nerve, one-sided, non-crossed pattern is the skull-base signature; the accessory component is its most conspicuous motor sign."
+      },
+      {
+        "syndrome": "Foramen-magnum and high-cervical lesions of the spinal root",
+        "findings": "The spinal root ascends through the foramen magnum, so a Chiari malformation, a foramen-magnum meningioma, a vertebral-artery dissection or a C1-C2 fracture can produce an accessory palsy with or without a myelopathy; the palsy may be the first sign of a foramen-magnum tumour, and it is typically accompanied by the sensory and long-tract signs of the level.",
+        "vascular": "Vertebral artery (vasc-vertebral-artery) dissection or compression at the foramen magnum",
+        "note": "A patient with a dropped shoulder and a normal neck examination still needs imaging of the foramen magnum, because the spinal root's intracranial ascent is the one part of this nerve that shares the posterior fossa."
+      },
+      {
+        "syndrome": "Accessory-nerve injury in neck surgery",
+        "findings": "The external branch runs subcutaneously across the posterior triangle, where it is at risk during radical neck dissection, cervical lymph-node biopsy, internal jugular vein cannulation and carotid endarterectomy; the injury produces immediate shoulder drop and pain, with a characteristic compensatory elevation of the affected shoulder and a reduced ability to carry weight on that side.",
+        "vascular": "Iatrogenic; the transverse cervical artery's branches mark the plane in which the nerve runs",
+        "note": "The clinical value of the anatomy here is preventive: identification of the nerve at the posterior border of the sternocleidomastoid is the step that prevents the palsy."
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-spinal-medulla"],
+    "origin3d": [6.5, -36, 3],
+    "size3d": [1.2, 9, 1.6],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\"",
+              "Snell, Clinical Neuroanatomy, brainstem and cranial nerves chapters"
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [6.5, −36, 3] with radii size3d [1.2, 9, 1.6] spans y ≈ −45…−27 au along the lateral medulla, standing for the united trunk's course from the medullary rootlets to the jugular foramen: its lower end overlaps the landmark `surf-cn11-exit` ([6, −43, 2], a committed surface record, itself an elongated placement for the spinal root's ascent through the foramen magnum — which lies outside the committed brainstem geometry and is therefore NOT drawn). It is a SCHEMATIC placement, not anatomy: the cervical accessory nucleus, the spinal rootlets inside the canal, the foramen magnum and the separation of the cranial and spinal roots in the jugular foramen are not represented. The nearest committed geometry is the medulla envelope `ctx-medulla-surface` (baked, bbox y −50.8…−18.7) and the vertebral artery (vasc-vertebral-artery). The record is useful without a mesh because the content is the localizing one: the two roots with their two different foramina, the double muscle sign, and the superficial cervical course that makes the nerve a surgical landmark."
+  },
+  {
+    "id": "nrv-cn12-hypoglossal",
+    "name": "CN XII Hypoglossal nerve",
+    "synonyms": ["hypoglossal nerve", "nervus hypoglossus", "twelfth cranial nerve", "CN XII"],
+    "region": "medulla",
+    "subdivision": "Cranial nerves",
+    "kind": "nerve",
+    "laterality": "paired",
+    "color": "#14b8a6",
+    "meshes": false,
+    "modality": "Motor (somatic motor to all the intrinsic and extrinsic muscles of the tongue except palatoglossus); no sensory, no parasympathetic component",
+    "course": "The preolivary sulcus of the medulla, between the pyramid and the inferior olive, gives rise to a linear series of 10–15 fine filaments at the landmark `surf-cn12-exit`; their short cisternal course — the rootlets run through the cerebellomedullary (lateral medullary) cistern, which is the segment a vertebral or PICA aneurysm can compress — converges laterally and anteriorly into two bundles that pierce the dura and pass through the hypoglossal canal of the occipital bone — the foramen this nerve uses — with a meningeal branch and the venous plexus, where the vertebral artery's course around the canal is the clinically load-bearing relationship (an aberrant or dolichoectatic vertebral artery, or a dissection, compresses the nerve inside the canal). Outside the skull the nerve descends between the internal carotid artery and the internal jugular vein, loops forward around the occipital artery and the sternocleidomastoid branch, crosses the internal and external carotid arteries and the lingual artery, and runs forward above the hyoid and deep to the mylohyoid and the posterior digastric to distribute to the tongue, carrying with it the C1 fibres that supply the geniohyoid and the thyrohyoid. Its long, looped course means it is injured in the neck as well as in the canal.",
+    "function": "The motor nerve of the tongue: it innervates all the intrinsic muscles (which change the tongue's shape) and all the extrinsic muscles except palatoglossus — genioglossus (which protrudes the tongue), hyoglossus (which depresses it), styloglossus (which retracts and elevates it) and the rest — so it is the nerve of articulation, mastication, swallowing and airway protection. The genioglossus is the key muscle clinically: it pulls the tongue forward and is the muscle that keeps the airway open in sleep, which is why hypoglossal dysfunction causes obstructive sleep apnoea and why bilateral genioglossus paralysis obstructs the airway. Corticobulbar input to the hypoglossal nucleus is predominantly CONTRALATERAL for genioglossus, so a supranuclear lesion deviates the tongue away from the lesion, while a nuclear or nerve lesion deviates it TOWARD the lesion and adds wasting and fasciculations — the single most useful distinction this nerve offers at the bedside.",
+    "connections": {
+                     "afferent": [
+                       "Hypoglossal nucleus (nuc-hypoglossal) — the somatic motor neurons, a paramedian column under the hypoglossal trigone of the fourth-ventricle floor; the rootlets leave the preolivary sulcus at `surf-cn12-exit`",
+                       "Corticobulbar fibres from the motor cortex (ctx-m1) — predominantly contralateral for genioglossus, which is the anatomical reason a supranuclear lesion deviates the tongue away from the lesion",
+                       "Reticular and solitary-nucleus inputs (nuc-solitarius-caudal, nuc-medullary-reticular) drive the tongue's automatic movements in swallowing and chewing, which is why the tongue can still swallow after a cortical lesion that has weakened voluntary protrusion",
+                       "No sensory component: the tongue's sensation and taste travel with CN V (general sensation), CN VII, CN IX and CN X (taste)"
+                     ],
+                     "efferent": [
+                       "Intrinsic muscles of the tongue (longitudinal, transverse and vertical) — shape and precision movements",
+                       "Extrinsic muscles except palatoglossus: genioglossus, hyoglossus, styloglossus and chondroglossus",
+                       "The C1 fibres that travel with the nerve to the geniohyoid and thyrohyoid after leaving it in the neck — the anatomical reason this nerve is not purely 'cranial'",
+                       "The nerve traverses the hypoglossal canal with the vertebral artery looping around the canal's outside (vasc-vertebral-artery), which is why an aberrant vertebral artery or a dissection produces an isolated twelfth-nerve palsy"
+                     ]
+                   },
+    "bloodSupply": "The cisternal rootlets and the canal segment are supplied by small branches of the vertebral artery (vasc-vertebral-artery) and the posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery); in the neck the nerve is supplied by the ascending pharyngeal and occipital arteries, whose branches it also crosses on its way to the tongue. The vertebral artery's relationship to the hypoglossal canal is the key vascular fact: the artery loops medially around the canal in most people, so a dolichoectatic or dissecting vertebral artery compresses the nerve against the canal's wall and produces an isolated hypoglossal palsy with tongue wasting — the classic vascular cause of a twelfth-nerve palsy, and the reason a hypoglossal palsy with neck pain or a headache must be investigated urgently for dissection.",
+    "clinical": [
+      {
+        "syndrome": "Hypoglossal (lower motor neuron) palsy — tongue deviates TOWARD the lesion",
+        "findings": "The tongue is weak, wasted and fasciculating on the affected side and deviates TOWARD the side of the lesion on protrusion, because the intact contralateral genioglossus pushes the tip across the midline; speech becomes dysarthric (lingual consonants), chewing and swallowing are impaired, and in long-standing cases the tongue is visibly atrophic with a wrinkled mucosa. The side of the deviation therefore names the side of the lesion — the opposite of the supranuclear rule below.",
+        "vascular": "Vertebral artery compression at the hypoglossal canal, or a medullary infarct (medial medullary syndrome); in the neck, carotid dissection, tumour or surgical injury",
+        "note": "An isolated twelfth-nerve palsy demands imaging of the canal and the skull base: the nerve can be compressed by an aberrant vertebral artery, a meningioma, a chordoma or a metastasis at the occipital condyle."
+      },
+      {
+        "syndrome": "Supranuclear (corticobulbar) palsy — tongue deviates AWAY from the lesion",
+        "findings": "A lesion above the nucleus (motor cortex, corona radiata, internal capsule) weakens the tongue contralaterally, and because genioglossus has predominantly contralateral cortical input the tongue deviates AWAY from the side of the hemispheric lesion; there is no wasting and no fasciculation, and the tongue retains its automatic movements in swallowing. A capsular lesion adds a contralateral hemiparesis, which is the localizing combination.",
+        "vascular": "Middle cerebral artery territory or the internal capsule (vasc-middle-cerebral-artery; lenticulostriate perforators, vasc-lenticulostriate-arteries)",
+        "note": "Tongue TOWARD the lesion = nuclear or nerve (lower motor neuron, with wasting); tongue AWAY = supranuclear. The presence of wasting and fasciculation settles it before any imaging."
+      },
+      {
+        "syndrome": "Medial medullary syndrome with hypoglossal involvement (Dejerine syndrome)",
+        "findings": "An infarct of the medial medulla destroys the hypoglossal nerve's rootlets or nucleus together with the pyramid and the medial lemniscus: ipsilateral tongue weakness and wasting that deviates toward the lesion, contralateral hemiparesis, and contralateral loss of position and vibration sense — the three-way crossed pattern that names the level.",
+        "vascular": "Anterior spinal artery or vertebral artery paramedian branches (vasc-vertebral-artery)",
+        "note": "The hypoglossal palsy is the ipsilateral element; the crossed weakness and sensory loss are what separate a medullary lesion from an isolated nerve palsy."
+      },
+      {
+        "syndrome": "Bilateral hypoglossal palsy with tongue atrophy and obstructive sleep apnoea",
+        "findings": "Bilateral involvement — motor neuron disease, syringobulbia, Chiari malformation, a foramen-magnum lesion or bilateral carotid dissection — produces a small, wrinkled, fasciculating tongue with severe dysarthria and dysphagia, and, because the genioglossus is the muscle that holds the airway open, obstructive sleep apnoea and respiratory failure in sleep; it is one of the bulbar presentations of amyotrophic lateral sclerosis.",
+        "note": "The tongue is a muscle like any other, so bilateral lower-motor-neuron disease shows the full picture of atrophy, fasciculation and weakness — and the airway consequence is the immediate danger."
+      }
+    ],
+    "levels": ["lvl-olivary", "lvl-pontomedullary"],
+    "origin3d": [3, -33, 10],
+    "size3d": [1.3, 2.2, 3.8],
+    "refs": [
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
+              "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\"",
+              "Patten, Neurological Differential Diagnosis, 2nd ed., cranial nerve examination sections"
+            ],
+    "contextNote": "Authored structure — schematic placement: no cranial-nerve mesh is committed and none may be added (the GLB budget has under 0.2 MiB of headroom and verify:anatomy freezes the existing bounding boxes), so this record is `meshes: false` with a sized schematic ellipsoid and no manifest or section part. The ellipsoid at origin3d [3, −33, 10] with radii size3d [1.3, 2.2, 3.8] spans z ≈ 6.2…13.8 au on the anterior surface of the rostral medulla, posterior to the medullary envelope's anterior edge (the baked `ctx-medulla-surface` reaches z ≈ +13.0) and standing for the rootlets' convergence toward the hypoglossal canal; it overlaps the landmark `surf-cn12-exit` ([3.5, −32, 6.5], a committed surface record) at its posterior end. It is a SCHEMATIC placement, not anatomy: the preolivary sulcus, the canal, the vertebral artery's loop around it and the nerve's long looped cervical course are not drawn. The nearest committed geometry is the medulla envelope `ctx-medulla-surface` (baked, bbox x ±11.1, y −50.8…−18.7, z −8.5…+13.0), the pyramid (tract-pyramid) it emerges beside, the inferior olivary nucleus (nuc-inferior-olive-principal) and the vertebral artery (vasc-vertebral-artery). The record is useful without a mesh because the content is the localizing one: the toward-versus-away deviation rule, the canal's vascular relationship, and the crossed pattern of the medial medullary syndrome."
+  }
+]
