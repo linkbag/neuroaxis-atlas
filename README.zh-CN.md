@@ -157,4 +157,113 @@ CT 烘焙缺失或失败并不致命：`ct-manifest.json` 带有 `status: 'unava
 
 实时工具栏列出一组指向该断面层级的 “open source ↗” 层片：被映射影像自身的页面，加上 UBC、MSU、Harvard Whole Brain Atlas 与 BrainMaps.org 参考 —— 后两者仅作外链。许可裁定与获取证据：[docs/IMAGING_SOURCES.md](docs/IMAGING_SOURCES.md)（v3 来源）与 [docs/IMAGING_SOURCES_V4.md](docs/IMAGING_SOURCES_V4.md)（v4 来源）；完整溯源与逐字署名行：[docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)。
 
+<a id="telencephalon-v7--the-rest-of-the-brain"></a>
+
+## 端脑（v7）—— 脑的其余部分
+
+v7 把**端脑**（大脑半球、基底节、边缘结构、侧脑室与端脑白质）叠加到脑干 + 间脑图谱上，**同时不放弃“脑干才是本应用主体”这一原则**。规格：[`docs/TELENCEPHALON_PLAN.md`](docs/TELENCEPHALON_PLAN.md) §2 AMENDMENT B（空间）、
+§3（数据模型）、§4（几何 + 预算）、§5（渲染/UX）、§6（图版）、§9（验收）。
+
+### 新增了什么
+
+| | |
+| --- | --- |
+| **规范空间（AMENDMENT B）** | x ±48（未变）· **y −55…+85** · **z −75…+55**。`src/components/viewer3d/clipPlanes.ts` 中的 `CLIP_BOUNDS` 仍是唯一的声明处 —— 裁剪滑块、断面平面几何、PiP 相机、图版↔裁剪同步与层标尺都由它派生。**y = +45 以下没有任何东西移动**：13 个原有层级锚点保持其确切的 y 值，默认横断平面仍是橄榄锚点（y = −34），x/z 仍为 0。 |
+| **层级** | 13 个既有锚点 + **4 个新的端脑锚点**：`lvl-tel-thalamostriate` **+48**、`lvl-tel-basal-ganglia` **+58**、`lvl-tel-centrum-semiovale` **+68**、`lvl-tel-convexity` **+78**（共 17 个）。它们驱动裁剪平面、吸附到图版、层标尺与实时断面。 |
+| **解剖网格** | `src/assets/anatomy/` 中 **22 个新的已提交 GLB**（合计 106 个部件，渲染三角形 570,096 / 800,000）：2 个半球壳（`ctx-hemisphere-l/-r`）、大脑白质核心、胼胝体、侧脑室、尾状核、壳核、苍白球、海马、杏仁核、穹窿 + 连合、脉络丛。 |
+| **注册表** | 46 条 `telencephalon` 条目（共 183 条），分布在五个细分下：**Cerebral cortex · Basal ganglia · Limbic system · Telencephalic white matter · Lateral ventricles**。38 条新的作者撰写结构记录位于 `src/data/structures/telencephalon-*.json`。 |
+| **图版** | 3 张新的作者撰写 SVG（共 15 张）：`plate-tel-axial-58`（19 个带标注区域，同步到 `lvl-tel-basal-ganglia`）、`plate-tel-sagittal-hemisphere`、`plate-tel-coronal-fornix`。 |
+| **纤维束** | 4 条带路点的作者撰写通路 —— 视辐射、扣带、钩束、上纵束。 |
+
+### 它如何渲染 —— 皮层幽灵，以及为何脑干仍是主体
+
+计划 §5 把这定为可用性核心，因此默认值本身就是功能：
+
+- **半球是半透明的幽灵。** `createGhostShellMaterial`
+  （`src/geometry/materials.ts`）以 **不透明度 0.14**（计划 §5 的窗口
+  0.12–0.18）渲染两个壳，带 **`depthWrite: false`**、**仅正面**（一个闭合水密的实体会被绘制两次，从而把两层半透明叠成浑浊的内部，并使应用中最大网格的填充率翻倍）以及 `renderOrder −2`。脑干、间脑与小脑可以径直穿过它们读出。
+- **视图预设（计划 §5），以 Brainstem focus 为默认** —— 新访客以脑干优先启动；该选择像质量切换一样持久化（`localStorage
+  neuroaxis.viewPreset`），因此回访者保留自己的取景：
+
+  | 预设 | 行为 |
+  | --- | --- |
+  | **Brainstem focus** *（默认）* | 皮层记录被隐藏，于是幽灵降为**极淡的轮廓**（`GHOST_OUTLINE_OPACITY` 0.05），由脑干/间脑/小脑承担画面。 |
+  | **Deep structures** | 幽灵皮层 + 通过自发光强调抬升的基底节与边缘结构（`emphasised`，0.18 —— 低于悬停值，因此强调永远不会被误认为一次交互）。 |
+  | **Whole brain** | 每个结构使用自己的材质。 |
+  | **Cortex only** | 隐藏所有非端脑记录：只剩半球。 |
+  | All · Nuclei · Tracts · Clinical motor | v1–v6 的预设，未改变。 |
+
+  这需要在图层模型上增加一对附加字段（`AtlasLayers.hidden` / `.emphasis`，结构级集合），因为“隐藏皮层”与“强调基底节”跨越了 `regions`/`kinds` 无法表达的按区域与按类型边界。空集合意味着“行为与 v6 完全一致”，这也是 Legend 开关与旧预设未被触动的原因。
+- **每一个新结构都可从 3D、树、搜索与图版中选中。** 清单 slug 与注册表 id 在一张表（`src/geometry/anatomyAssets.ts` 中的 `ANATOMY_RECORD_LINKS`）中对齐，3D 过程与实时断面注册表都读取它 —— 许多记录共享一个网格（尾状核的头/体/尾是同一个尾状核；脑室各角/房是同一个脑室铸型；胼胝体各部是同一个胼胝体），这正是注册表自身配对规则在半球尺度上的体现。
+- **原点处没有占位几何。** 不拥有网格、也没有作者撰写的放置的记录被显式列出（`TEL_CONTENT_ONLY_IDS`），并被排除在 3D 实体过程之外，同时仍可从树、搜索与图版完全访问。在 v7 之前，38 条端脑记录中有 32 条会在 `[0, 0, 0]` 处绘制一个单位球。
+- **爆炸**把半球壳沿 ±x 向外分开 —— **100 % 时每个壳 16 au**
+  （`src/components/viewer3d/SceneLayers.tsx` 中的 `HEMISPHERE_EXPLODE_FACTOR`），而核团为
+  **6 au**（`NucleusMesh`：`explodeDirection · explode · 6`）。更大的系数是有意为之：一个宽约 110 au 的外廓必须让开它的孪生体，而不是从某一轴上扇开，并且在 100 % 时 32 au 的间隙会露出胼胝体、穹窿与脑室。核团规则未变，其他所有类型都保持其规范位置。
+- **CT 覆盖范围是被陈述的，而非被隐藏。** Visible Human CT 序列是一次**仅头部的扫描，其自身的头顶位于规范 y ≈ 36.25 au**（实测；记录在 `ct-manifest.json` 的
+  `intensity.sourceCoverage.superiorMostDataYAu` 与 `registration.residuals.coverageNote` 中）。在该平面之上，CT 网格有站点但没有数据，因此 CT 图层报告 **`unavailable`**，而不是给出一张过期的切片，实时断面工具栏也直说序列止于此，并且 **MRI 是记录在案的模态**。MRI 网格覆盖整个 AMENDMENT B 盒体
+  （`coverage.fractionInsideFov = 1`，979,371/979,371 个站点），因此它能在 +48/+58/+68/+78 处绘制。
+  UI 中的数字从清单读取 —— 不存在第二个会漂移的常量。
+
+### 数据来源
+
+端脑几何来自 **BodyParts3D 4.0**（本项目已拥有的归档，
+`assets-src/bp3d/isa_BP3D_4.0_obj_99.zip`，2,234 个网格）—— **CC BY 4.0**，与脑干、间脑和小脑网格相同的来源与许可。**没有新数据源，也没有新的许可工作**：该归档本来就包含整个端脑。
+
+署名，逐字（也见 [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)）：*BodyParts3D, © The Database Center for Life Science, licensed under CC BY 4.0.* 皮层带派生自这些数据 —— 见下文的如实说明的局限。
+
+### 如何重新烘焙（确定性，仅用 Node，不含时钟/随机数）
+
+```bash
+node scripts/lib/register.mjs            # 1. REGISTER  BP3D meshes → canonical space (assets-src/bp3d/canonical/tel-*.obj)
+node scripts/build-anatomy-geometry.mjs --all          # 2. GEOMETRY  bake every recipe → src/assets/anatomy/*.glb + manifest
+node scripts/build-anatomy-geometry.mjs --manifest     #    gate: rebuild the manifest from disk + enforce the budgets (exit 1 = over)
+node scripts/build-anatomy-geometry.mjs --stats --tel-check   #    per-part tris/bytes + ribbon watertightness and thickness
+node scripts/build-mri-grid.mjs          # 3. GRIDS     resample the CC0 OpenNeuro T1w over the AMENDMENT B box
+node scripts/build-ct-grid.mjs           #              resample the NLM Visible Human CT over the same box
+```
+
+用 `--part <slug>` 烘焙单个部件（并用 `--resolution <au>` 覆盖其体素步长）；
+`node scripts/build-anatomy-geometry.mjs --list` 会打印每个 slug。SDF 核、配方
+契约与预算报告记录在 [docs/GEOMETRY_PIPELINE.md](docs/GEOMETRY_PIPELINE.md)。
+
+`node scripts/build-anatomy-geometry.mjs --all` 是*集成者*的命令：只要有任何配方模块加载失败，它就是硬失败，因此一个坏掉的配方会阻断其余一切重新烘焙 —— 迭代时请优先用 `--part`。
+
+### 实测预算（本次提交）
+
+| 预算 | 上限 | 实测 | 结论 |
+| --- | --- | --- | --- |
+| 渲染三角形（场景） | ≤ 800,000 | **570,096** | PASS |
+| 已提交解剖 GLB 载荷 | ≤ 14 MiB | **13,755,548 B = 13.12 MiB** | PASS |
+| 核团汇合载荷 | ≤ 3 MiB | **2.81 MiB** | PASS |
+| 单部件上限 | context ≤ 4 MiB · csf ≤ 1.5 MiB · nucleus ≤ 80 KiB | 最大核团 `ctx-caudate-r` 76 KiB | PASS |
+| 半球壳三角形上限（计划 §4） | 各 ≤ 90,000 | `ctx-hemisphere-l` 78,512 · `ctx-hemisphere-r` 80,080 | PASS |
+| 影像载荷 | ≤ 10 MiB | **9,132,531 B = 8.71 MiB / 80 files** | PASS |
+
+前四行以 `node scripts/build-anatomy-geometry.mjs --manifest` 为准，任何超限都会以 1 退出；最后一行由 `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` 强制。
+
+### 如实说明的局限（v7）
+
+- **皮层带是派生的，不是扫描来的。** BodyParts3D **没有显式的皮层灰质表面** ——
+  该归档中唯一的皮层概念解析到海马。因此皮层带采用标准构造法：取配准后的大脑白质表面，
+  按皮层厚度（**2.9 au ≈ 3.5 mm**，计划 §1 的 3–4 mm 窗口）向外成带，
+  再刻出半球间裂、外侧裂与脑室空间。它是*建模*的软膜表面，不是真实皮层的分割，
+  它继承的是白质表面的脑回起伏，而不是复现真实的沟回细节。
+- **有四条纤维束没有网格。** 视辐射、扣带、钩束与上纵束**以路点路径的形式撰写**
+  （与 v1–v6 的纤维束一样），因为源归档中不含纤维几何。它们是示意性中心线，不是纤维追踪。
+- **CT 不覆盖半球。** Visible Human 序列止于 **y ≈ 36.25 au**；见上文
+  *它如何渲染*。CT 仿射被有意做得**与 v4 逐字节一致**（未重新拟合），因此
+  13 个既有层级锚点及其 CT 采样都未改变 —— 要让 CT 顶点与 MRI 对齐需要约 +45 au 的平移，
+  并且会移动每一个既有层级，那是一次单独的重新配准，明确不在范围内。
+- **配准是近似的，并且被披露。** 端脑网格继承脑干烘焙有文档记载的
+  配准残差（中线 ≤ 1.25 au），而派生皮层带在此之上又叠加了厚度模型自身的误差。
+- **有些记录是纯内容的。** 20 条端脑记录被有意不绘制为 3D
+  实体（见 `TEL_CONTENT_ONLY_IDS`）—— 要么因为另一条记录已经绘制了它们的网格，
+  要么因为它们是某个网格的子区域。它们仍可从树、搜索与
+  图版完全选中，实时断面也仍会绘制它们所属的区域。
+- **有一项预算上限被提高。** **核团汇合载荷上限 2.5 MiB → 3 MiB** 是 v7 提高的唯一
+  数字，并且它与测量值一起记录在
+  `scripts/build-anatomy-geometry.mjs`（`BUDGETS`）中。按计划要求，先削减的是分辨率。两项
+  运行级约束 —— **800,000 个渲染三角形**与 **14 MiB 已提交
+  解剖载荷** —— 未变且通过。
+
 <!-- CHUNK-MARKER -->
