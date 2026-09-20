@@ -4,6 +4,21 @@
 
 **一个交互式、写实的 Web 图谱，涵盖间脑、中脑（mesencephalon）与菱脑（脑桥、延髓、小脑）—— 自 v7 起叠加端脑（大脑半球、基底节、边缘系统、脑室），自 v8 起加入脑血管（Willis 环与主要脑动脉）以及深部功能/投射内容，自 v9 起加入躯体定位图、皮层分区切面图层、可重跑的影像配准与模拟切面面板，v10 的显示轮次（整框平面辅助器、分区级可见性与 solo、四角面板缩放、皮层分区质量，以及被移除的皮层标签），以及自 v13/v14 起作为第七个系统、以作者撰写走行几何呈现的十二对脑神经（CN I Olfactory → CN XII Hypoglossal）** —— 可点选的 3D 核团与纤维束、与 3D 裁剪平面双向同步的带标注 2D 断面图版、以真实 MRI / CT / 冷冻切片影像作为断面底图的断面视图（Plates 标签页画布与 3D 主切面）、临床综合征浏览器，以及每个结构各自的神经生理、连接、血供与参考文献。使用 Vite、React 18、TypeScript、three.js（`@react-three/fiber`）与 zustand 构建。交互模型受 [ashemag/human-atlas](https://github.com/ashemag/human-atlas) 启发；**所有解剖内容与图版插图都是为本项目创作的原创示意图作品，并且自 v2 写实化升级起，外廓曲面派生自 [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/)（CC BY 4.0）** —— 见 [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)。
 
+## 第三方数据许可
+
+本仓库中的原创部分 —— 全部代码、全部撰写文本、SVG 图版插图与作者撰写的 3D 几何 —— 采用 **MIT** 许可（见 [LICENSE](LICENSE)）。另有四套第三方数据集以处理后的形式随本仓库分发，其条款随所提交文件一并生效：
+
+| 来源 | 本仓库中包含的内容 | 许可 | 义务 |
+| --- | --- | --- | --- |
+| [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/)（© DBCLS） | 外廓曲面，以及动脉 / 视路网格 | **CC BY 4.0** | 署名 |
+| OpenNeuro `ds007313` | 所提交的 T1 MRI 体数据 | **CC0** | 无 |
+| NLM Visible Human Project | 冷冻切片照片与 CT 体数据 | NLM 条款与条件 | 需致谢，原文照录：*Courtesy of the U.S. National Library of Medicine*；所提交数据为固定快照，并非实时镜像 |
+| UBC Functional Neuroanatomy | 断面显微照片 | **CC BY-NC-SA 4.0** | 署名，**仅限非商业用途**，并以相同方式共享 |
+
+**UBC 显微照片为非商业许可（CC BY-NC-SA 4.0）。** 若需商业使用，应移除或替换这部分图像 —— 其余部分均为宽松许可（MIT / CC BY / CC0）或仅需致谢。界面中提到的其他来源（MSU human brain series、Harvard Whole Brain Atlas、BrainMaps.org、neuroanatomy.ca）**仅为外链，未提交其任何数据**。
+
+完整的来源信息、逐文件源 URL 与许可文本见 [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)。
+
 ## 功能特性
 
 - **写实的 v2 渲染** — 由真实扫描派生的脑干/间脑/小脑外廓、有机雕琢的核团、CSF 空间、带 SSAO/bloom/SMAA 的 PBR 光照，以及 High/Balanced 质量切换（详见下文）。

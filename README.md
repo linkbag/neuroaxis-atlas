@@ -4,6 +4,21 @@
 
 **An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum) — with the telencephalon (cerebral hemispheres, basal ganglia, limbic system, ventricles) layered on from v7, the cerebral vasculature (circle of Willis and the major cerebral arteries) plus the deep functional/projection content from v8, and the somatotopic map, the cortical-division section layer, the re-runnable imaging registration and the simulated-section panel from v9, and the v10 display round (full-box plane helpers, division-level visibility with solo, four-corner panel resize, cortical-division quality, and the dropped cortex label)** — selectable 3D nuclei and fiber tracts, labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
+## Third-party data licences
+
+The original work in this repository — all code, all authored text, the SVG plate artwork and the authored 3D geometry — is **MIT** licensed (see [LICENSE](LICENSE)). Four third-party datasets are redistributed here in processed form, and their terms travel with the committed files:
+
+| source | what is committed here | licence | obligation |
+| --- | --- | --- | --- |
+| [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (© DBCLS) | the envelope surfaces and the artery / optic-pathway meshes | **CC BY 4.0** | attribution |
+| OpenNeuro `ds007313` | the committed T1 MRI volume | **CC0** | none |
+| NLM Visible Human Project | the cryosection photographs and the CT volume | NLM Terms and Conditions | acknowledgement, verbatim: *Courtesy of the U.S. National Library of Medicine*; the committed set is a frozen snapshot, not a live mirror |
+| UBC Functional Neuroanatomy | the section micrographs | **CC BY-NC-SA 4.0** | attribution, **non-commercial use only**, and share-alike |
+
+**The UBC micrographs are non-commercial (CC BY-NC-SA 4.0).** If you intend to use this atlas commercially, those images are the part to remove or replace — everything else here is permissive (MIT / CC BY / CC0) or acknowledgement-only. The other sources named in the UI (MSU human brain series, Harvard Whole Brain Atlas, BrainMaps.org, neuroanatomy.ca) are **link-outs only: no data from them is committed**.
+
+Full provenance, per-file source URLs and the licence texts are in [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
+
 ## Features
 
 - **Realistic v2 rendering** — real-scan-derived brainstem/diencephalon/cerebellum envelopes, organically sculpted nuclei, CSF spaces, PBR lighting with SSAO/bloom/SMAA, and a High/Balanced quality toggle (details below).
