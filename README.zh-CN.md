@@ -76,4 +76,85 @@ node scripts/build-anatomy-geometry.mjs --selftest                             #
 
 注意：配方分辨率以解剖保真度为目标；上面已提交的载荷是通过 `--part <slug> --resolution <au>` 把最大的外廓/CSF 部件重新烘焙得更粗，以拟合 §2.7 预算。任何烘焙之后，请运行 `--manifest`，使清单与预算门禁反映已提交的 GLB。流水线细节：[docs/GEOMETRY_PIPELINE.md](docs/GEOMETRY_PIPELINE.md)。
 
+## 真实影像（v4）—— 以真实 MRI、CT 与断面照片作为断面视图
+
+规格：[docs/IMAGING_V4_PLAN.md](docs/IMAGING_V4_PLAN.md)；许可裁定、逐字许可引文与获取日期：[docs/IMAGING_SOURCES_V4.md](docs/IMAGING_SOURCES_V4.md)；每一条署名行：[docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)。
+
+自 v4 起，断面呈现面**以真实影像为先**：只要真实数据覆盖该平面，真实切片就是断面的*底板*，而模拟的结构轮廓以半透明叠加层绘制在其上。在没有任何模态覆盖的平面上，模拟断面仍是诚实的回退（它是*每一个*平面上唯一存在的东西，也是承载标签的那一层）。
+
+三个断面呈现面一起移动 —— 3D 切面、模拟切面面板（3D 标签页）与 2D 实时断面画布（Plates 标签页 → *Live section*）—— 它们都由同一份 `clip.x/y/z` + `sectionUnderlay` store 状态驱动。**其中只有两个是影像呈现面**：面板按构造只显示模拟切面、不呈现影像（v9，见下文）；Plates 标签页与 3D 主切面才绘制真实模态。
+
+- **面板（3D 标签页，右下角）** — **v9 用 2D 模拟切面面板替换了 GPU 模板裁剪的画中画。** 它挂载的是 *Plates* 标签页所挂载的*同一个* `SectionCanvas`，因此显示的是由 worker 裁剪出的模拟断面 —— **没有裁剪过的 3D 几何、没有平面辅助器，也永远没有真实影像** —— 并带有方位标签（L/R/A/P/S/I，患者左侧约定）、`y = −24.0 au` 平面读数、轴向覆盖、隐藏/恢复，以及**尺寸会被记住的可缩放窗口**（`neuroaxis.sectionPipSize`，钳制在 224–880 × 170–640 px）。隐藏它是可逆的：每当它被隐藏 —— 包括在一次加载了已持久化 `hidden` 值的全新访问中 —— 一个 **“Live section ▸” 恢复胶囊**就占据它的角落，因此该功能无需清除 `localStorage` 也能被发现；点击它即可重新显示面板。退役的 GPU 路径（画布内渲染器、私有相机 + 渲染目标、模板一致性/封盖通道、MSAA 看门狗、`?pipdebug` 叠加层、剪裁位块传送、真实切片背景采样器）是被**删除**，而不是被搁置。面板自身的影像作用域在其画布挂载期间把 store 保持在关闭影像的状态 —— 用户在 Plates 标签页的选择永远不会被改写 —— 并且一个像素守卫在该画布上下文上遮蔽 `drawImage`/`putImageData`，作为第二重结构性保证。完整契约、局限与证据：[v9](#v9--somatotopy-cortical-divisions-measured-imaging-registration-and-a-simulated-section-panel) 与 `npm run verify:pip-contract`。
+- **2D 实时断面画布**（Plates 标签页 → *Live section*）—— 一个 Web Worker 用当前平面裁剪每个可见结构的三角形，串联闭合轮廓，并按分类学配色做奇偶填充（横断：前方朝上，患者左侧在图像右侧 —— 与作者撰写的 SVG 图版一致）。在画布内点击/拖动会设置另外两个滑块（十字线放置）；一个层片可吸附到最近的作者图版；被选中/悬停的结构会带标签高亮。工具栏自带**平面滑块条** —— 每个轴一个带标签的滚动条（Sagittal · x、Coronal · z、Transverse · y），范围与 3D 裁剪停靠面板相同的规范区间，每行一个 `−42.0 au` 读数，当前活动断面轴被强调，以及一个与停靠面板共享同一个 `snapToPlate` 设置的 “Snap to levels” 复选框 —— 因此无需离开 Plates 标签页就能连续拖动平面；它写入画布本来就在读取的同一组 `clip` store 字段，所以滑块与十字线在两个方向上始终保持一致。性能防护：仅 worker 做轮廓计算，拖动时 15 Hz + 0.25 au 的平面量化，标签页隐藏时跳过绘制，画布 dpr ≤ 1.5，隐藏时 PiP 完全跳过。
+
+### 模态工具栏（Plates 标签页 → Live section）
+
+| 控件 | 作用 |
+| --- | --- |
+| **Auto (real-first)** — 默认 | 选择*确实覆盖该平面*的最佳真实模态：锚定照片（±1.5 au）→ CT → MRI → 无。真实切片成为底板；轮廓以 65 % 不透明度叠加，并带清晰描边；选择/悬停高亮不受影响。 |
+| **MRI** | 仅使用连续 T1 网格，带 uint8 窗宽低/高滑块。 |
+| **CT** | 仅使用连续 CT 网格，带 **brain / bone** 窗预设（Hounsfield 窗来自 `ct-manifest.json`）。 |
+| **Photo** | 仅使用内嵌照片（平面锚定图版 + 按层级映射的显微照片）—— 从不悄悄切换模态。 |
+| **Simulated only** | 完全不用真实影像 —— 明确就是 v3 的示意断面。 |
+| **Opacity** | 真实影像的 alpha（默认 100 %：它是底板，不是衬底）。 |
+| **Sources / credit** | “Open source ↗” 层片（活动影像在前，然后是 UBC / MSU / Harvard Whole Brain Atlas / BrainMaps 参考）以及**当前模态的逐字署名行**，始终可见；画布会在实际绘制的那张影像的左下角打印同一行。 |
+
+只有当构建根本无法提供某个模态时，该模态按钮才会被禁用 —— 原因写在其 tooltip 中，例如 *"no embeddable CT grid in this build — re-bake with: node scripts/build-ct-grid.mjs"*。某个已覆盖模态*内部*的空平面仍然可选，并由画布提示行解释（“no photograph is anchored at this plane — showing the simulated section”）。Harvard 与 BrainMaps 仅作外链，从不内嵌。
+
+### 模态可用性、许可与署名
+
+| 模态 | 覆盖范围 | 来源 | 许可 | 逐字署名 |
+| --- | --- | --- | --- | --- |
+| **染色 / 照片**（76 张图版） | 按平面：**22 张 NLM Visible Human 轴位冷冻切片**（y = +34.0 … −52.2 au，在延髓/脑桥/中脑段最密）+ 9 张 UBC 水平图版（y = +10 … −44）+ 15 张 UBC 冠状图版（z = +26 … −54）+ 3 张 Commons CT 图版，均为 ±1.5 au；另有 17 张 UBC 按层级映射的显微照片位于横断平面（每个作者层级都有一张） | **NLM Visible Human Project** 冷冻切片（Brigham and Women's Hospital / Harvard Medical School 头部）；UBC `neuroanatomy.ca` 显微照片 / 水平 / 冠状查看器；MSU Human Brain Atlas 冠状细胞染色 | NLM Terms and Conditions (2019) —— 注明出处即可再分发（冷冻切片 + CT）；**CC BY-NC-SA 4.0**（UBC —— 非商业教育用途，记录于 ATTRIBUTION）；站点许可并需强制署名（brainmuseum.org）；CC0（Commons CT 切片） | `Courtesy of the U.S. National Library of Medicine` · `© University of British Columbia, CC BY-NC-SA 4.0` · `University of Wisconsin and Michigan State Comparative Mammalian Brain Collections, and the National Museum of Health and Medicine; preparation funded by the National Science Foundation and the National Institutes of Health` · `CT of a normal brain — Mikael Häggström, M.D., via Wikimedia Commons, CC0 1.0 (public domain dedication)` |
+| **MRI**（连续，全部 3 个轴） | 三个轴上的每一个平面位置 | OpenNeuro **ds007313**（3 T MPRAGE，头部 + 颈椎），重采样到规范网格 | **CC0**（不要求署名；为溯源而标注） | `ds007313 doi:10.18112/openneuro.ds007313.v1.0.0, OpenNeuro CC0` |
+| **CT**（连续，全部 3 个轴） | 三个轴上的每一个平面位置 | **NLM Visible Human Project** —— “Additional Head Images” 头部 CT（Brigham and Women's Hospital / Harvard Medical School 头部，463 张轴位 DICOM 切片，1.5 mm） | NLM Terms and Conditions (2019) —— 注明出处即可再分发；已提交的网格是一个**冻结的 2026-09-10 快照**，不是 NLM 的实时镜像 | `Courtesy of the U.S. National Library of Medicine` |
+
+两个网格都是位于**同一规范盒体与间距**上的 `uint8` 体数据（45 × 81 × 67，原点 x −27 / y −55 / z −56 au），行主序、x 变化最快，每体素约 1.23 × 1.25 × 1.24 au，并带有一个清单记录 dims/origin/spacing、配准块（常量 + 实测残差）以及来源/许可/署名。CT 以 Hounsfield 单位烘焙（`storedHU = stored16 · 1 − 1200`），带 `brain (−20…100 HU)` 与 `bone (200…1600 HU)` 预设。
+
+### Visible Human 冷冻切片（v4b）
+
+**22 张冻结 Visible Human 头部的全彩轴位照片**在它们各自所在的横断平面上就是真实底板 —— `src/assets/imaging/stains/vhp-0017.jpg` … `vhp-0721.jpg`。它们来自 NLM Visible Human Project（Brigham and Women's Hospital / Harvard Medical School 头部）的 *Additional Head Images* 冷冻切片序列，是在标本块被逐层铣削时拍摄的，因此每一张图版都是**物理切面**的照片，而不是重建结果。
+
+- **它们是什么：** 528 × 764 px，**0.294 mm/px**（视场 155.2 × 224.6 mm），**0.147 mm 层间距**，索引 0001–1477。已提交的 22 张图版是索引 17 … 721，即该序列的上部至中部区域，为在延髓 / 脑桥 / 中脑段获得更高密度而精挑细选。
+- **内容逐字保持：** 以原生尺寸重新编码的 JPEG q80 —— **不裁剪、不旋转、不缩放、不加标注、不改变颜色**。逐图版的源 URL 在清单中（`…/cryo/jpeg/halfSize/axial/NNNN.02.jpg.gz`）。
+- **致谢，逐字：** `Courtesy of the U.S. National Library of Medicine` —— 在 UI 中渲染（画布左下角署名、PiP 署名、Plates 工具栏），并附每张图版自身的来源链接，完全按 NLM Terms and Conditions 的要求。
+- **许可：** NLM Terms and Conditions (2019)，注明出处即可再分发。已提交的集合是一个**冻结的 2026-09-10 快照 —— 不是 NLM 的实时镜像**；它在运行时从不重新同步，这正是本项目满足 NLM “维护最新版本**或**说明此点” 这一条件的方式（完整引文见 [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)）。
+- **它们是如何配准的。** 图版的*顺序*与相对间距来自有文档记载的 0.147 mm 层间距；*绝对*放置来自 `y = +36.0 − (index − 1) × 0.1225 au`，其中 **+36.0 au 是同一供体头颅顶点的实测值**，通过对完整视野的头部 CT DICOM 序列、经由已提交 CT 网格自身的规范配准测得（并非从图谱盒体假设而来）。曾尝试对参照做程序化拟合，但**被拒绝**：它达到 r = 0.92 并否证了与之竞争的 `y₁ ≈ −8 au` 映射（r = 0.29），但其标志点残差在 ±5 au 容差下偏差 20–210 au，因此交付的是计划中有文档记载的回退方案。侧向放置按图版进行：`fit.dx` 是该图版自身实测的左右对称轴（平均镜像相关 r = 0.51），而 `fit.scale = 4.0816 px/au`（倒数修正形式 —— 该图版为 0.245 *au 每像素*）。
+- **如实说明的局限。** 每一张图版都带有 **±10 au（≈ ±12 mm）的绝对平面不确定度**，在清单的 `planeValueNote` 中*逐图版*披露，并显示在 Plates UI 中。图版的**顺序**与**相对间距**是精确的；绝对平面是有文档记载的放置，而不是经标志点验证的配准。这些图版是**逐平面的锚点，不是连续的摄影体数据** —— 把滑块移离锚点后，`Auto` 会依次回退到 CT、再回退到 MRI，并明确说明这一点。**行方向（前方朝上还是朝下）依据的是来源有文档记载的拍摄实践加上本模块的约定，而 `mirrorX: false` 是“有文档但未被证明”的**（为它计算的两个非对称统计量分别得 |r| = 0.16 与 0.21，且符号相反）；二者都在配准记录中标为未决问题。完整方法、搜索网格、残差与方位证据：`assets-src/imaging3/VHP_ANCHORS.md`（被 git 忽略的工作产物）。
+- **`v4c-qa` 独立重新测量了什么**（`node scripts/verify-imaging-v4b.mjs` + 记录在配准记录中的原始图版探针）：**侧向（列）轴是实测的** —— 在 22 张已提交图版上，图版的镜像对称轴为竖直，**平均 |r| = 0.59**（在水平镜像下少 160 倍，为 0.12），这正是让逐图版 `dx` 成为测量而非假设的原因；已提交图版在物理上是**连续的** —— 图版 *i* 与图版 *i+1* 按存储状态相关 **r = 0.9935**，而翻转行后为 0.176、相隔 200 个索引时为 0.10，即该序列确实是同一个层叠标本以 0.147 mm 采样，图版*顺序*是精确的。这两个探针都不能确定**绝对**平面或**行方向**，原因如上：它们**在没有目视检查的情况下无法被验证**，而本环境无法访问任何视觉模型（`read_image`：*"model 'deepseek-flash' does not declare image input"*；`modlens_read_image`：*"claude-cli provider failed … vision reachable through codex, which modlens is not yet allowed to reuse"*）。同一供体的头部 CT **确实**在磁盘上，但它是一个脑盒体重采样，视场小于图版画幅，因此也无法锚定绝对平面 —— 对*完整视野*头颈图版构图做的交叉检查未能收敛，被记录为不确定，而未据此采取行动。
+
+### 如实说明的局限（在引用某个平面位置之前请先阅读）
+
+- **照片是按平面的，不是连续的。** 每张图版被锚定到一个规范平面值，安装容差 ±1.5 au，因此在两张照片之间移动滑块会回退到 CT/MRI（Auto）或模拟断面，画布会说明是哪一种。照片*序列*覆盖在脑干段被有意做得比半球段更密。
+- **配准是近似的，并且被披露。** 这些照片是物理切片的照片 —— 不存在体素配准。它们的 `planeValue` 来自来源自身的标注（UBC 查看器的标志点标签、Commons 的 4 mm 切片索引）加上逐图像的组织测量，其 `fit {scale, dx, dy, mirrorX}` 是一阶仿射；照片的绝对平面误差量级为一个层步（≈5–6 au）。**22 张 Visible Human 冷冻切片是整组中最松的：它们的绝对平面带有 ±10 au（≈ ±12 mm）的不确定度** —— 这是实测的，不是假设的；见上文 *Visible Human 冷冻切片* 与 `assets-src/imaging3/VHP_ANCHORS.md`。MRI 与 CT 体数据以实测、可重跑的校正进行配准（中线残差 ≤ 1.25 au；CT 脑桥面残差相对风格化图谱外廓平均 2.04 au），并且两个清单都逐字报告其残差。
+- **MRI、CT 与照片来自不同个体。** OpenNeuro 受试者、NLM Visible Human 供体与 UBC/MSU 标本被放在*同一个规范图谱坐标系*中；图谱几何是共同参照系，每种模态保留其自身有文档记载的仿射，而不继承另一个受试者的拟合。
+- **这只是一个学习辅助工具。** NeuroAxis 不是医疗器械，这些影像都不用于诊断（见下文*教育免责声明*）。
+
+### 已提交载荷与预算
+
+> **v7 更新。** 这些数字是 **v4/v6 的测量值**，按原样保留作为那次烘焙的记录。
+> 当前 v7（AMENDMENT B）的数字见下文
+> [端脑（v7）](#telencephalon-v7--the-rest-of-the-brain)：规范盒体扩展为
+> x ±48 / y −55…85 / z −75…+55，因此**两个 uint8 网格现在都是 `[81, 113, 107]` = 各 979,371 B**，
+> 影像载荷为 **80 个文件共 8.71 MiB**，对照 `docs/TELENCEPHALON_PLAN.md` §2/§4 设定的
+> **10 MiB** 上限（v7 之前的 8 MiB 限制已被取代；v4 新增的 ≤ 4 MiB 子上限未变，且仍然满足）。
+
+`src/assets/imaging/` 存放 **80 个文件共 7.30 MiB**（磁盘实测）—— **76 张已提交染色照片**（6.82 MiB：22 张 `vhp-*` 冷冻切片 1.18 MiB，9 张 `ubc-h*` + 15 张 `ubc-c*` 2.73 MiB，3 张 `wikict-*` 0.14 MiB，17 张 `ubc-m*` + 10 张 `bmm-*` v3 显微照片 2.77 MiB）、`mri-t1.bin`（238 KiB）+ `mri-manifest.json`、`ct.bin`（238 KiB）+ `ct-manifest.json` —— 处于计划 §4 预算之内：**影像载荷总计 ≤ 8 MiB**（实测 7.30 MiB，余量 0.70 MiB）以及 **v4 新增资产 ≤ 4 MiB**（实测 3.11 MiB：`ct.bin` + 24 张 UBC 图版 + 3 张 Commons CT 图版；v4b 冷冻切片为 1.18 MiB，对照其自身 ≤ 1.75 MB 的子上限，且不计入那个 v4 余量）。原始下载保留在被 git 忽略的 `assets-src/` 中；每一张内嵌图版都是内容逐字副本（不裁剪、不修图），仅做技术性修改（整数 2× 降采样、alpha 压平到白色、v3/v4 照片的无损滤波 PNG 重编码；v4b 冷冻切片在原生尺寸下的 JPEG q80 重编码；网格的 uint8 重采样），逐文件记录在 `assets-src/imaging2/processed-photos.json` 与 `assets-src/imaging3/analysis/local-files.json` 中。
+
+**重新烘焙**（确定性，仅用 Node，不含时钟/随机数 —— 已提交产物在多次运行间逐字节一致；原始输入保留在被 git 忽略的 `assets-src/` 中）：
+
+```bash
+node scripts/build-mri-grid.mjs          # → src/assets/imaging/mri-t1.bin + mri-manifest.json + QA previews (exit ≠ 0 on a registration-QA violation)
+node scripts/build-mri-grid.mjs --probe  # inspect the source NIfTI header without writing
+node scripts/build-ct-grid.mjs           # → src/assets/imaging/ct.bin + ct-manifest.json + QA previews (exit ≠ 0 on QA violation)
+node scripts/build-ct-grid.mjs --tune    # re-run the CT↔MRI registration search and print the candidate table
+node scripts/build-ct-grid.mjs --probe   # inspect the source DICOM series header without writing
+```
+
+CT 烘焙缺失或失败并不致命：`ct-manifest.json` 带有 `status: 'unavailable'`，CT 图层会注册为禁用 —— 工具栏随后以该原因禁用 CT 按钮，PiP 提示也如此说明，而 Auto 直接回退到 MRI/照片。
+
+### 署名与外链（v3 行为，未改变）
+
+实时工具栏列出一组指向该断面层级的 “open source ↗” 层片：被映射影像自身的页面，加上 UBC、MSU、Harvard Whole Brain Atlas 与 BrainMaps.org 参考 —— 后两者仅作外链。许可裁定与获取证据：[docs/IMAGING_SOURCES.md](docs/IMAGING_SOURCES.md)（v3 来源）与 [docs/IMAGING_SOURCES_V4.md](docs/IMAGING_SOURCES_V4.md)（v4 来源）；完整溯源与逐字署名行：[docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)。
+
 <!-- CHUNK-MARKER -->

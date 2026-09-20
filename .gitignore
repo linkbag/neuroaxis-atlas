@@ -39,3 +39,7 @@ _vhpwork/
 _work/
 crops/
 PLAN.md
+
+# v16 publication hygiene — swarm run scratch
+.dsh-swarm/_*
+PLAN-run-*.md
