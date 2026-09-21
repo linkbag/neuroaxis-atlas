@@ -429,9 +429,18 @@ export default function TractTube({ tract, highlight, mirrored = false, variant 
     const created = variant === 'vessel'
       ? createVesselMaterial(tract.color)
       : createTractMaterial(tract.color, { direction: tract.direction })
-    created.vertexColors = true
+    // v18b — vertex colors are the TRACT length gradient, and they are what made
+    // the granular vessels read as pale straws: the gradient's pale tips
+    // multiplied over the crimson base, so the new branches looked pink/white
+    // next to the solid bright-red committed arteries. The committed vessel GLBs
+    // draw WITHOUT vertex colors and WITHOUT the striation map — the vessel
+    // variant now matches them exactly, so the whole network reads as one
+    // bright-red system. The tract preset keeps its gradient.
+    created.vertexColors = variant !== 'vessel'
     created.needsUpdate = true
-    created.normalMap = striationTextureFor(striationRepeatFor(tract.tubeRadius))
+    if (variant !== 'vessel') {
+      created.normalMap = striationTextureFor(striationRepeatFor(tract.tubeRadius))
+    }
     return created
   }, [tract, variant])
   useEffect(() => () => material.dispose(), [material])
