@@ -415,3 +415,94 @@ node assets-src/bp3d/parse-objs.mjs assets-src/bp3d/raw-vasc/*.obj
 
 The JSON carries each file's size and sha256, so a reviewer can confirm byte-for-byte that the
 meshes on disk are the ones this inventory describes.
+
+---
+
+## 8. v17 — which elements a shipped record now names, and which are still unregistered
+
+Added by run `run-mtze6lyq-t83x` (`integrate-docs`). §1–§7 above are the v8 acquisition record and are
+unchanged; this section is the **registration ledger after v17**, computed from three committed/on-disk
+sources rather than restated: the archive inventory (`assets-src/bp3d/raw-vasc/vasc-inventory.json`,
+133 meshes / 272 concept→element mappings / 33 groups), the v8 bake record
+(`assets-src/bp3d/REGISTRATION.md`), and the 39 authored course records in
+`src/data/structures/vasculature-courses.json`.
+
+**Ledger.** An element file counts as **registered** iff (a) it belongs to a §3.1 group row that names an
+atlas record, or (b) `REGISTRATION.md` lists it as baked (this covers the two internal-carotid elements,
+whose §3.1 row reads "source only" while `REGISTRATION.md` shows they were baked as
+`vasc-internal-carotid-artery-left/right`), or (c) a shipped v17 course record names it in `elementIds`.
+
+| | files | raw faces |
+| --- | --- | --- |
+| Vascular element files in this inventory (§3 + §3.1, distinct) | **107** | 136,244 |
+| — registered by the v8 bake (§3.1 rows naming a record + the 2 ICA elements) | 93 | 124,554 |
+| — named by a v17 course as its basis | 28 | 44,012 |
+| — **registered by either route (union)** | **99** | 127,222 |
+| — **still unregistered** | **8** | **9,022** |
+
+(The other **26** of the inventory's 133 meshes are the optic-pathway and deep-limbic groups of §5 —
+`optic-nerve` 4, `fornix` 3, `optic-chiasm` 2, `optic-tract` 2, `lgn` 2, `mgn` 2, `amygdala` 2,
+`hippocampus` 2, `mammillary` 2, `parahippocampal` 2, `stria-terminalis` 2, `septal` 1 — and are registered
+by their own content runs, not by this ledger. The vascular 107 / 136,244 faces is exactly the §3.1 total.)
+
+### 8.1 What the 39 v17 records name (28 distinct elements, 46 mentions)
+
+Every id below was checked to exist in the archive's 272 concept→element mappings — **0 missing**. The
+concept strings are the archive's own.
+
+| FJ element | archive group(s) | archive concept | named by (v17 record) |
+| --- | --- | --- | --- |
+| `FJ1662` `FJ1662M` | `mca`, `mcaBranch` | anterolateral central branch of the middle cerebral artery (right / left) | `vasc-lateral-lenticulostriate-arteries`, `…-1`, `…-2` |
+| `FJ1663` `FJ1663M` | `mca`, `mcaBranch` | anterolateral central branch of the MCA (right / left) | `vasc-lateral-lenticulostriate-arteries`, `…-3`, `…-4` |
+| `FJ1660` `FJ1660M` `FJ1694` `FJ1694M` | `mcaBranch`, `mcaInsular` | zone / insular part of the middle cerebral artery | `vasc-mca-insular-segment` |
+| `FJ1664` `FJ1664M` | `mca`, `mcaBranch` | superior terminal branch of the MCA | `vasc-mca-superior-terminal-branch`, `vasc-mca-inferior-terminal-branch`, the four `vasc-mca-m4-*` branches |
+| `FJ1673` `FJ1673M` | `mca`, `mcaBranch` | inferior terminal branch / branch to the angular gyrus | `vasc-mca-angular-branch` |
+| `FJ1693` `FJ1693M` | `mca`, `mcaBranch` | middle temporal branch of the MCA | `vasc-mca-middle-temporal-branch` |
+| `FJ1717` `FJ1717M` | `mca`, `mcaBranch` | posterior temporal branch of the MCA | `vasc-mca-posterior-temporal-branch` |
+| `FJ1729` `FJ1729M` | `mca`, `mcaBranch` | temporo-occipital branch of the MCA | `vasc-mca-temporo-occipital-branch` |
+| `FJ1683` `FJ1683M` | `scaBranch` | lateral branch of the superior cerebellar artery | `vasc-sca-lateral-branch` |
+| `FJ1688` `FJ1688M` | `scaBranch` | medial branch of the superior cerebellar artery | `vasc-sca-medial-branch` |
+| `FJ1675` `FJ1675M` | `pcaBranch` | thalamogeniculate artery (right / left) | `vasc-pca-thalamogeniculate-arteries` |
+| `FJ1721` `FJ1721M` | `pcaBranch` | posteromedial central branch of the posterior cerebral artery | `vasc-pca-posteromedial-central-branches` |
+| `FJ1657` `FJ1657M` | `spinal` | anterior spinal artery (right / left) | `vasc-anterior-spinal-artery` |
+
+**6 of the 28 were named by no atlas record before v17** — the two anterior-spinal halves and the four PCA
+central/perforator elements (`FJ1675`, `FJ1675M`, `FJ1721`, `FJ1721M`), which §3.1 files as
+"source only — support". The other 22 were already inside a committed body (the MCA tree, the insular part,
+the cerebellar branches), so naming them records **which element the authored course follows**, not a new
+bake.
+
+**The 26 PICA elements are still one concept.** `FJ1700`–`FJ1715` (+ `M`) all carry the single concept
+`BP7797 posterior inferior cerebellar artery`; the archive does not name PICA's segments, which is why
+`vasc-pica-tonsillomedullary-segment` / `-telovelotonsillar-segment` are authored from the documented
+four-segment scheme and their `anchorNote` says so.
+
+### 8.2 The 8 elements still unregistered, with the reason
+
+| FJ element(s) | group | concept | faces | why it is still unregistered |
+| --- | --- | --- | --- | --- |
+| `FJ1659` `FJ1659M` | `mcaBranch` (only) | branch of the middle cerebral artery | 1,214 each | untyped generic branch elements that belong to no named branch; the territory they cover is what the named M4 courses address. Claiming them would assert a segmentation the archive does not make |
+| `FJ1712` `FJ1712M` | `mcaBranch` (only) | branch of the middle cerebral artery | 360 each | same class as above |
+| `FJ1695` `FJ1695M` | `ophthalmic` | ophthalmic artery | 2,410 each | the optic-nerve supply; `REGISTRATION.md` records it as deliberately not registered (orbital course, no atlas content, no budget) and v17 is the cerebral vasculature, not the orbit |
+| `FJ3483` `FJ3564` | `carotid` | common carotid artery (left / right) | 170 / 884 | extracranial; `PLAN.md` §2.4 puts it out of scope |
+
+**Deliberately NOT authored, and not registration gaps:** the **posterior spinal artery** has no element in
+this archive at all (checked against the 272 concept mappings) and no committed envelope to hug, so no
+record names it (`PLAN.md` §2.4); the ophthalmic artery has an element but is out of the run's scope; no
+element in the archive names a pericallosal, callosomarginal, frontopolar, orbitofrontal, calcarine,
+parieto-occipital, splenial, labyrinthine, pontine-perforator, lenticulostriate or Heubner artery — those
+courses are `documented-course` and each `anchorNote` says so.
+
+### 8.3 Reproducing §8
+
+```powershell
+# the v17 claims and the archive's own groups, joined by FJ id (read-only, no writes)
+node -e "const a=require('./src/data/structures/vasculature-courses.json');const s=new Set();for(const r of a)for(const f of (r.vesselCourse?.elementIds??[]))s.add(f);console.log(s.size,'distinct FJ named by a shipped vessel course')"
+node scripts/verify/vasc-courses.mjs   # 2171 assertions: 39/39 ids registered, every elementId resolves
+node scripts/verify/vessel-render.mjs  # 75/75: the merged course table, payload, blob suppression
+```
+
+`npm run verify:vasc-courses` prints the per-course radius/basis table and the archive's per-surface
+triangle counts; `review-qa` independently resolved all 46 `elementIds` mentions against this document and
+the archive inventory (46/46 resolved, 10 of them filed "source only" — consistent with the
+`documented-course`/`bp3d-element` split above).

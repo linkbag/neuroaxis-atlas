@@ -199,6 +199,7 @@ const { tubeGeometryFor } = tractTube
 const {
   SECTION_PARTS,
   SECTION_NERVE_PARTS,
+  SECTION_VESSEL_PARTS,
   partsForCanvas,
   registryNerveParts,
 } = sectionAssets
@@ -359,8 +360,9 @@ assert(
   `found ${SECTION_NERVE_PARTS.length}`,
 )
 assert(
-  partsForCanvas().length === SECTION_PARTS.length + SECTION_NERVE_PARTS.length,
-  'partsForCanvas() is the committed parts plus the procedural ones',
+  partsForCanvas().length ===
+    SECTION_PARTS.length + SECTION_NERVE_PARTS.length + SECTION_VESSEL_PARTS.length,
+  'partsForCanvas() is the committed parts plus the procedural ones (nerves + vessels)',
   `found ${partsForCanvas().length}`,
 )
 
@@ -553,8 +555,10 @@ assert(
   'hasNerveCourse() is true for all twelve ids (the suppression key)',
 )
 assert(
-  /if \(hasNerveCourse\(record\.id\)\) return null/.test(SOURCE.sceneLayers),
-  'the structure pass returns null for a course-bearing record (the marker is retired in the render)',
+  /hasNerveCourse\(record\.id\) \|\| hasVesselCourse\(record\.id\) \|\| hasVesselCourseGroup\(record\.id\)/.test(
+    SOURCE.sceneLayers,
+  ),
+  'the structure pass returns null for a course-bearing record — nerves, vessel courses AND vessel group heads (the marker is retired in the render; the group check is what retired the lenticulostriate blobs the user flagged)',
 )
 assert(
   structures.filter((record) => /^nrv-/.test(record.id)).length === 12,

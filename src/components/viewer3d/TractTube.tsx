@@ -46,7 +46,7 @@ import type { ThreeEvent } from '@react-three/fiber'
 import type { TractRecord } from '../../types'
 import { useAtlasStore } from '../../state/store'
 import { toCatmullRom } from '../../geometry/curves'
-import { createTractMaterial } from '../../geometry/materials'
+import { createTractMaterial, createVesselMaterial } from '../../geometry/materials'
 import { getStriationNormalTexture } from '../../geometry/textures'
 
 /* ------------------------------------------------------------------ */
@@ -287,6 +287,14 @@ export interface TractTubeProps {
    * driver slot) is the collision that would make the twin draw unmirrored.
    */
   mirrored?: boolean
+  /**
+   * v18 — vessel-kind courses take the ARTERIAL material (`createVesselMaterial`,
+   * the same crimson family the committed vessel meshes use) instead of the
+   * direction-tinted white-matter preset: a granular branch drawn pale beside its
+   * bright-red parent read as a different object class, which is what the user
+   * flagged ("colors are different — all bright red").
+   */
+  variant?: 'tract' | 'vessel'
 }
 
 /**
@@ -374,7 +382,7 @@ export function tractFrameRegistrySize(): number {
   return tractFrameRegistry.size
 }
 
-export default function TractTube({ tract, highlight, mirrored = false }: TractTubeProps) {
+export default function TractTube({ tract, highlight, mirrored = false, variant = 'tract' }: TractTubeProps) {
   const hoveredId = useAtlasStore((s) => s.hoveredId)
   const selectedId = useAtlasStore((s) => s.selectedId)
   const labelVisibility = useAtlasStore((s) => s.labelVisibility)
@@ -413,12 +421,19 @@ export default function TractTube({ tract, highlight, mirrored = false }: TractT
   // three re-acquires disposed materials, so the StrictMode
   // setup→cleanup→setup cycle is safe (same pattern as NucleusMesh).
   const material = useMemo(() => {
-    const created = createTractMaterial(tract.color, { direction: tract.direction })
+    // v18 — vessel-kind courses take the ARTERIAL material (the same crimson
+    // family the committed vessel meshes use) instead of the direction-tinted
+    // white-matter preset: a granular branch drawn pale beside its bright-red
+    // parent read as a different object class, which is what the user flagged
+    // ("colors are different — all bright red").
+    const created = variant === 'vessel'
+      ? createVesselMaterial(tract.color)
+      : createTractMaterial(tract.color, { direction: tract.direction })
     created.vertexColors = true
     created.needsUpdate = true
     created.normalMap = striationTextureFor(striationRepeatFor(tract.tubeRadius))
     return created
-  }, [tract])
+  }, [tract, variant])
   useEffect(() => () => material.dispose(), [material])
 
   // Selected tubes breathe; dimming fades opacity. Both lerp toward the

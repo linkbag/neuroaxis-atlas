@@ -23,6 +23,26 @@
  * see `RUNNERS.surface` (the hooks), `RUNNERS.partition` (the regions), and
  * `RUNNERS.render` (the rows) for the per-claim notes.
  *
+ * ── v17 RE-COUNT (task `review-qa`): THREE STALE LITERALS IN §9/§11 ─────────
+ * Run against the v17 tree BEFORE this edit, §9/§11 failed **6 assertions**, all
+ * of them counts the product had already moved past, none of them a product
+ * defect:
+ *   • `partsForCanvas().length === 138 + 12` → **190**, because v17 added the 40
+ *     procedural VESSEL course metas the run plan §5.2 row 5 mandates;
+ *   • `registryNerveParts().length === 12` and its four dependent assertions →
+ *     **24**, because the v17 mirror twin hands the worker one part per authored
+ *     side PLUS one per mirrored twin (the number `cranial-nerve-render.mjs:370`
+ *     already pinned).
+ * The literals were not updated, they were REMOVED: every count in §11 is now a
+ * sum of terms read from the shipped tables, each term asserted against its own
+ * table and printed (`[2D domain]`, `[2D worker]`, `[2D slice]`, `[2D handoff]`),
+ * so the next family to land fails with the term named instead of drifting
+ * silently. §11 also gained the vessel half of the same claim (kind + region
+ * ablation, the mirrored twin proven to be the reflection rather than a cached
+ * duplicate, the worker slicing all 101 registry parts) and the one OPEN handoff
+ * is asserted against `SectionCanvas.tsx` so it cannot be forgotten. Nothing was
+ * deleted; the two instructions the old text carried are both still asserted.
+ *
  * ── WHAT THIS PROVES NOW ────────────────────────────────────────────────────
  * It imports the SHIPPED store (`src/state/store.ts`), the SHIPPED `Header.tsx`,
  * the SHIPPED render-path modules (`SceneLayers`, `NucleusMesh`,
@@ -63,16 +83,20 @@
  *      taxonomised records, the 3D structure pass (12 records / 24 bodies on, 0
  *      off), the taxonomy tree's dim rule, the Legend swatch and token, and the 2D
  *      half — RE-POINTED AT v14, which is the run that made the Plates live
- *      section react. The canvas now takes 138 committed-GLB parts + 12
- *      PROCEDURAL nerve parts (`partsForCanvas()`), so this section asserts the
- *      DOMAIN (138 / 12 / 150), the ABLATION (12 nerve parts admitted with the
- *      kind on, 0 with it off, the 138 committed admissions byte-identical), the
- *      worker's own geometry (`registryNerveParts()`: 12 parts, indices in range)
- *      and a real `extractContours` slice per nerve, while the PAYLOAD invariants
- *      stay asserted (manifest 138 parts, no `nrv-*` GLB on disk). Through v13 the
- *      same section asserted "no nerve part exists"; that claim is now false by
- *      design, and audit.mjs R3b's matching pixel-INVARIANCE claim is re-pointed
- *      with it;
+ *      section react, and RE-COUNTED AT v17 by `review-qa`. The canvas now takes
+ *      138 committed-GLB parts + 12 PROCEDURAL nerve parts + 40 PROCEDURAL vessel
+ *      course parts = **190 metas**, so this section asserts the DOMAIN as a sum of
+ *      terms read from the shipped tables (`NERVE_COURSES`, `VESSEL_COURSES`), the
+ *      ABLATION of both families (every nerve/vessel meta admitted with its kind on
+ *      and none with it off, the vessel family additionally needing the vasculature
+ *      region, the 138 committed admissions byte-identical), the worker's own
+ *      geometry (`registryNerveParts()` 24 = 12 + 12 mirrored; `registryVesselParts()`
+ *      77 = 40 + 37 mirrored, every twin proven the reflection of its authored side,
+ *      indices in range) and a real `extractContours` slice per part (101 parts), while
+ *      the PAYLOAD invariants stay asserted (manifest 138 parts, no `nrv-*` GLB, no
+ *      committed GLB carrying a granular course id). Through v13 the same section
+ *      asserted "no nerve part exists"; that claim is now false by design, and
+ *      audit.mjs R3b's matching pixel-INVARIANCE claim is re-pointed with it;
  *  12  the v11 carry-over item-4 divergence (the canvas painting divisions the rule
  *      excludes at y = 6 / 26 / 30 / 32) re-measured by executing the canvas' own
  *      `buildLobeLayer` and the shipped rule at every plane the browser lane names;
@@ -1661,43 +1685,115 @@ RUNNERS.nerve = async () => {
     `opacity ${nucleus.KIND_OPACITY.nerve} · hint ${nucleus.hintForKind('nerve')}`,
   )
 
-  /* v14 RE-POINT OF THE 2D HALF. Through v13 this block asserted the opposite of
-   * this run's goal: `SECTION_PARTS` is one entry per COMMITTED GLB (138), none is
-   * a nerve, so the gate could honestly claim "the Plates surface cannot react to
-   * this toggle" and the browser lane asserted the matching pixel INVARIANCE
-   * (audit.mjs R3b). v14 routes the twelve courses into the live section as
-   * PROCEDURAL parts (route (a): `partsForCanvas()` = the 138 committed GLBs +
-   * `SECTION_NERVE_PARTS`, and `registryNerveParts()` hands the worker the tube
-   * geometry swept by the same builder `TractTube` draws), so the section DOES
-   * react now and asserting invariance would be asserting a defect.
+  /* v14 RE-POINT OF THE 2D HALF, RE-POINTED AGAIN BY THE v17 REVIEW (`review-qa`).
    *
-   * What is asserted instead, all of it re-measured here:
-   *   • the domain split stays exactly as documented — 138 committed-GLB parts,
-   *     12 procedural nerve parts, 150 on the canvas;
-   *   • the NERVE TOGGLE is the ablation: 12 nerve parts admitted with the kind on
-   *     and 0 with it off, while the 138 committed-GLB admissions are identical
-   *     sets (so the twelve are the toggle's ONLY 2D effect);
+   * Through v13 this block asserted the opposite of the v14/v17 goal: `SECTION_PARTS`
+   * is one entry per COMMITTED GLB (138), none is a nerve, so the gate could honestly
+   * claim "the Plates surface cannot react to this toggle". v14 routed the twelve
+   * nerve courses into the live section as PROCEDURAL parts (`partsForCanvas()` =
+   * 138 committed GLBs + `SECTION_NERVE_PARTS`, the worker fed by
+   * `registryNerveParts()`), and v17 added the 40 granular VESSEL courses through the
+   * same shared route (`SECTION_VESSEL_PARTS` / `registryVesselParts()`).
+   *
+   * WHAT WENT STALE AND WHY THIS RE-POINT IS NOT COSMETIC (measured before the edit):
+   * lane 9 pinned three literals that the product had already moved past —
+   *   • `partsForCanvas().length === 138 + 12` → **190** after v17 (the 40 vessel
+   *     metas), so the gate failed on a count the plan §5.2 row 5 mandates;
+   *   • `registryNerveParts().length === 12` (×4 dependent assertions) → **24** after
+   *     the v17 mirror twin, which is one part per authored side PLUS one per
+   *     mirrored twin and is what the 3D pass draws (`cranial-nerve-render.mjs:370`
+   *     already pinned 24; lane 9 did not follow).
+   * The literals are gone: every count below is now a SUM OF TERMS read from the
+   * shipped modules, and each term is asserted against its own table, so the next
+   * family to land cannot silently move a number — it fails here with the term named.
+   *
+   * What is asserted instead, all of it re-measured here by executing the shipped
+   * decision (`canvas.isPartVisible`) and the shipped builder (`registry*Parts()`):
+   *   • the domain split as four printed terms — 138 committed-GLB parts + 12 nerve
+   *     + 40 vessel = 190 on the canvas;
+   *   • the NERVE TOGGLE is the ablation: every nerve part admitted with the kind on
+   *     and 0 with it off, while the 138 committed-GLB admissions are identical sets;
+   *   • the VESSEL family is gated by BOTH controls the plan §5.3 names — the
+   *     `vessel` kind and the `vasculature` region — checked as two separate
+   *     ablations over the same 40 metas;
+   *   • the worker registry the 2D contour comes from: one part per authored side
+   *     plus one per mirrored twin, the twin proven to be the REFLECTION (bbox
+   *     x-negated, y/z identical) rather than a cached duplicate — the inherited
+   *     bug the v17 render task fixed;
+   *   • the shipped contour worker really slices every procedural part (nerve AND
+   *     vessel), with no non-finite loop;
    *   • the payload invariants this gate exists to protect are unchanged: the
    *     manifest still carries 138 parts, no `nrv-*` GLB exists on disk, and no
    *     committed part's admission moved.
    * `SECTION_PARTS` is still counted (138) wherever it is used, so every other
    * claim in this file keeps its domain. */
+  const curves = await import(moduleUrl('src/geometry/curves.ts'))
+  const vessels = await import(moduleUrl('src/geometry/vasculature-courses.ts'))
   const canvasParts = section.partsForCanvas()
   const committedOn = section.SECTION_PARTS.filter((meta) => canvas.isPartVisible(meta, onLayers))
   const committedOff = section.SECTION_PARTS.filter((meta) => canvas.isPartVisible(meta, offLayers))
   const nervePartMetas = canvasParts.filter((meta) => meta.taxonomyKind === 'nerve')
+  /* `taxonomyKind: 'vessel'` appears on BOTH families in `partsForCanvas()`: the 14
+   * shipped artery records have committed GLBs (26 of their 30 vessel bodies are
+   * manifest parts) and the 40 granular course records are procedural. The two are
+   * separated by provenance, not by the label — which is exactly why the gate must
+   * print both terms instead of one count. */
+  const committedVesselParts = section.SECTION_PARTS.filter((meta) => meta.taxonomyKind === 'vessel')
+  const vesselPartMetas = section.SECTION_VESSEL_PARTS
+  const labelledVesselParts = canvasParts.filter((meta) => meta.taxonomyKind === 'vessel')
   const nerveOn = nervePartMetas.filter((meta) => canvas.isPartVisible(meta, onLayers))
   const nerveOff = nervePartMetas.filter((meta) => canvas.isPartVisible(meta, offLayers))
+  const vesselKindOffLayers = mkLayers(ALL_KINDS.filter((kind) => kind !== 'vessel'))
+  const vesselOn = vesselPartMetas.filter((meta) => canvas.isPartVisible(meta, onLayers))
+  const vesselOff = vesselPartMetas.filter((meta) => canvas.isPartVisible(meta, vesselKindOffLayers))
+  const vesselLabelledOff = labelledVesselParts.filter((meta) => canvas.isPartVisible(meta, vesselKindOffLayers))
+  /* The region axis (§5.3): the Vasculature system button writes `layers.regions`,
+   * so a vessel contour must need the vasculature REGION as well as the kind. */
+  const regionOffLayers = {
+    regions: new Set(ALL_REGIONS.filter((region) => region !== 'vasculature')),
+    kinds: new Set(ALL_KINDS),
+    hidden: new Set(),
+  }
+  const vesselRegionOff = vesselPartMetas.filter((meta) => canvas.isPartVisible(meta, regionOffLayers))
+  const lateralityOf = (id) => taxonomy.find((entry) => entry.id === id)?.laterality ?? null
+  const pairedNerveIds = curves.NERVE_COURSES.filter((course) => lateralityOf(course.id) === 'paired').map((course) => course.id)
+  const pairedVesselIds = vessels.VESSEL_COURSES
+    .filter((course) => vessels.isPairedVessel(course, lateralityOf(course.id)))
+    .map((course) => course.id)
+
   equal('the committed-GLB section domain is unchanged (SECTION_PARTS)', section.SECTION_PARTS.length, 138)
-  equal('the 2D canvas draws the 138 committed GLBs plus the twelve procedural nerve parts',
-    canvasParts.length, 138 + 12)
+  equal('the procedural nerve part count is the shipped nerve table (v14)',
+    section.SECTION_NERVE_PARTS.length, curves.NERVE_COURSES.length)
+  equal('the procedural vessel part count is the shipped vessel table (v17)',
+    section.SECTION_VESSEL_PARTS.length, vessels.VESSEL_COURSES.length)
+  equal('the 2D canvas domain = committed GLBs + nerve parts + vessel parts',
+    canvasParts.length,
+    section.SECTION_PARTS.length + section.SECTION_NERVE_PARTS.length + section.SECTION_VESSEL_PARTS.length)
   equal('the committed-GLB domain holds no nerve part (there is still no nerve GLB)', section.SECTION_PARTS.filter((meta) => meta.taxonomyKind === 'nerve').length, 0)
-  equal('the procedural nerve parts are the twelve courses (v14)', nervePartMetas.length, 12)
-  equal('every procedural nerve part names its course id', nervePartMetas.filter((meta) => /^nrv-/.test(meta.slug)).length, 12)
-  equal('the Cranial nerves toggle admits ALL twelve nerve parts',
-    nerveOn.map((meta) => meta.slug).length, 12)
-  equal('…and turning it off removes EXACTLY the twelve (the 2D ablation this gate now measures)',
-    nerveOff.length, 0)
+  equal('no committed GLB carries a granular course id (the 40 v17 courses are procedural only — zero payload)',
+    section.SECTION_PARTS.filter((meta) => vessels.VESSEL_COURSE_IDS.some((id) => meta.slug === id || meta.slug.startsWith(`${id}-`))).length, 0)
+  equal('the canvas labels the committed artery bodies AND the procedural course metas "vessel"',
+    labelledVesselParts.length, committedVesselParts.length + vesselPartMetas.length)
+  info(
+    `[2D vessel provenance] committed artery bodies labelled vessel ${committedVesselParts.length} (the 14 shipped ` +
+      `records' meshes) + procedural course parts ${vesselPartMetas.length} (the ${vessels.VESSEL_COURSE_IDS.length} ` +
+      `v17 courses) = ${labelledVesselParts.length} vessel-labelled part(s) on the canvas`,
+  )
+  equal('the procedural nerve parts are one per nerve course (v14)', nervePartMetas.length, curves.NERVE_COURSES.length)
+  equal('every procedural nerve part names its course id',
+    nervePartMetas.filter((meta) => /^nrv-/.test(meta.slug)).length, curves.NERVE_COURSES.length)
+  equal('the Cranial nerves toggle admits ALL nerve parts', nerveOn.length, nervePartMetas.length)
+  equal('…and turning it off removes EXACTLY those (the 2D ablation this gate measures)', nerveOff.length, 0)
+  equal('the procedural vessel parts are one per granular vessel course (v17)',
+    vesselPartMetas.length, vessels.VESSEL_COURSES.length)
+  equal('every procedural vessel part names its course id',
+    vesselPartMetas.filter((meta) => /^vasc-/.test(meta.slug)).length, vessels.VESSEL_COURSES.length)
+  equal('the Vessels system toggle admits ALL vessel course metas', vesselOn.length, vesselPartMetas.length)
+  equal('…and turning the vessel KIND off removes EXACTLY those', vesselOff.length, 0)
+  equal('…and removes every vessel-labelled part, committed bodies included (one kind, one decision)',
+    vesselLabelledOff.length, 0)
+  equal('…and turning the vasculature REGION off removes EXACTLY those too (the second control, §5.3)',
+    vesselRegionOff.length, 0)
   equal('…while the committed-GLB admission is byte-identical on and off',
     committedOn.length, committedOff.length)
   equalJson(
@@ -1705,23 +1801,88 @@ RUNNERS.nerve = async () => {
     sorted(committedOn.map((meta) => meta.slug)),
     sorted(committedOff.map((meta) => meta.slug)),
   )
+  info(
+    `[2D domain] committed GLB parts ${section.SECTION_PARTS.length} + procedural nerve parts ` +
+      `${section.SECTION_NERVE_PARTS.length} (${curves.NERVE_COURSE_IDS.length} courses) + procedural vessel parts ` +
+      `${section.SECTION_VESSEL_PARTS.length} (${vessels.VESSEL_COURSE_IDS.length} courses) = ${canvasParts.length} ` +
+      `on the canvas · nerve toggle on ${nerveOn.length} / off ${nerveOff.length} · vessel course metas on ` +
+      `${vesselOn.length} / off ${vesselOff.length} · vessel-labelled parts off ${vesselLabelledOff.length} · ` +
+      `vasculature region off ${vesselRegionOff.length} · committed admissions ${committedOn.length} identical on and off`,
+  )
 
   /* The procedural parts carry REAL geometry from the one shared builder — the
    * same mesh the 3D pass draws — and the worker's own slicer cuts it. */
   const contours = await import(moduleUrl('src/components/section/contours.ts'))
-  const workerParts = section.registryNerveParts()
-  equal('registryNerveParts() hands the worker one part per course', workerParts.length, 12)
+  const nerveWorkerParts = section.registryNerveParts()
+  const vesselWorkerParts = section.registryVesselParts()
+  const workerParts = [...nerveWorkerParts, ...vesselWorkerParts]
+  const midlineNerveIds = curves.NERVE_COURSES.map((course) => course.id).filter((id) => !pairedNerveIds.includes(id))
+  const midlineVesselIds = vessels.VESSEL_COURSES.map((course) => course.id).filter((id) => !pairedVesselIds.includes(id))
+  equal('registryNerveParts() = one part per authored nerve side + one per mirrored twin',
+    nerveWorkerParts.length, curves.NERVE_COURSES.length + pairedNerveIds.length)
+  equal('registryVesselParts() = one part per authored vessel side + one per mirrored twin',
+    vesselWorkerParts.length, vessels.VESSEL_COURSES.length + pairedVesselIds.length)
+  equal('registryCoursePartsAll() is the two families and nothing else (the one-call route the canvas can take)',
+    section.registryCoursePartsAll().length, nerveWorkerParts.length + vesselWorkerParts.length)
   equal('every worker part carries positions',
-    workerParts.filter((part) => part.positions instanceof Float32Array && part.positions.length > 0).length, 12)
+    workerParts.filter((part) => part.positions instanceof Float32Array && part.positions.length > 0).length, workerParts.length)
   equal('every worker part carries indices',
-    workerParts.filter((part) => part.indices instanceof Uint32Array && part.indices.length > 0).length, 12)
+    workerParts.filter((part) => part.indices instanceof Uint32Array && part.indices.length > 0).length, workerParts.length)
   equal('every index is inside its own vertex array',
     workerParts.filter((part) => {
       if (!(part.positions instanceof Float32Array) || !(part.indices instanceof Uint32Array)) return false
       const count = part.positions.length / 3
       for (const index of part.indices) if (!(index < count)) return false
       return true
-    }).length, 12)
+    }).length, workerParts.length)
+  equal('every worker part slug is unique (the `#mirror` twin cannot collide with its authored side)',
+    new Set(workerParts.map((part) => part.slug)).size, workerParts.length)
+
+  /* The mirrored twin must be the REFLECTION, not the authored geometry handed back
+   * from the id-keyed tube cache — the inherited bug the v17 render task fixed. */
+  const boundsOf = (part) => {
+    const min = [Infinity, Infinity, Infinity]
+    const max = [-Infinity, -Infinity, -Infinity]
+    for (let i = 0; i < part.positions.length; i += 3) {
+      for (let axis = 0; axis < 3; axis += 1) {
+        const value = part.positions[i + axis]
+        if (value < min[axis]) min[axis] = value
+        if (value > max[axis]) max[axis] = value
+      }
+    }
+    return { min, max }
+  }
+  const mirrorRows = []
+  for (const part of workerParts) {
+    if (!part.slug.endsWith('#mirror')) continue
+    const authoredPart = workerParts.find((other) => other.slug === part.slug.slice(0, -'#mirror'.length))
+    if (authoredPart === undefined) {
+      mirrorRows.push({ slug: part.slug, ok: false, why: 'no authored twin in the registry' })
+      continue
+    }
+    const a = boundsOf(authoredPart)
+    const b = boundsOf(part)
+    const xNegated = Math.abs(b.min[0] + a.max[0]) <= 0.05 && Math.abs(b.max[0] + a.min[0]) <= 0.05
+    const yzKept = Math.abs(b.min[1] - a.min[1]) <= 0.05 && Math.abs(b.max[1] - a.max[1]) <= 0.05 &&
+      Math.abs(b.min[2] - a.min[2]) <= 0.05 && Math.abs(b.max[2] - a.max[2]) <= 0.05
+    mirrorRows.push({ slug: part.slug, ok: xNegated && yzKept, xNegated, yzKept, authored: a, mirror: b })
+  }
+  equal('every procedural course has a mirrored twin in the worker registry (paired nerves + paired vessels)',
+    mirrorRows.length, pairedNerveIds.length + pairedVesselIds.length)
+  equalJson('every mirrored twin is the x → −x REFLECTION of its authored side (no cached duplicate)',
+    mirrorRows.filter((row) => !row.ok).map((row) => `${row.slug}:${row.ok === false ? (row.why ?? `xNegated=${row.xNegated} yzKept=${row.yzKept}`) : ''}`),
+    [])
+  info(
+    `[2D worker] nerve ${curves.NERVE_COURSES.length} authored + ${pairedNerveIds.length} mirrored (midline ${midlineNerveIds.length}) ` +
+      `= ${nerveWorkerParts.length} · vessel ${vessels.VESSEL_COURSES.length} authored + ${pairedVesselIds.length} mirrored ` +
+      `(midline ${midlineVesselIds.length}) = ${vesselWorkerParts.length} · both families ${workerParts.length} part(s)`,
+  )
+  info(
+    `[2D mirror] example: ${mirrorRows[0]?.slug ?? '(none)'} authored x [${(mirrorRows[0]?.authored.min[0] ?? NaN).toFixed(3)}, ` +
+      `${(mirrorRows[0]?.authored.max[0] ?? NaN).toFixed(3)}] → twin x [${(mirrorRows[0]?.mirror.min[0] ?? NaN).toFixed(3)}, ` +
+      `${(mirrorRows[0]?.mirror.max[0] ?? NaN).toFixed(3)}] (y/z unchanged)`,
+  )
+
   const sliceRows = []
   let slicedPlanes = 0
   let slicedLoops = 0
@@ -1746,18 +1907,40 @@ RUNNERS.nerve = async () => {
     }
     slicedPlanes += crossing
     slicedLoops += loops
-    sliceRows.push({ slug: part.slug, crossing, loops })
+    sliceRows.push({ slug: part.slug, family: /^nrv-/.test(part.slug) ? 'nerve' : 'vessel', crossing, loops })
   }
-  equal('every nerve part has at least one crossing plane the worker can slice, with at least one loop',
-    sliceRows.filter((row) => row.loops > 0).length, 12)
-  equal('no contour the worker computes for a nerve part is non-finite', nonFiniteLoops, 0)
+  const nerveSliced = sliceRows.filter((row) => row.family === 'nerve')
+  const vesselSliced = sliceRows.filter((row) => row.family === 'vessel')
+  equal('every NERVE part has at least one crossing plane the worker can slice, with at least one loop',
+    nerveSliced.filter((row) => row.loops > 0).length, nerveSliced.length)
+  equal('every VESSEL part has at least one crossing plane the worker can slice, with at least one loop',
+    vesselSliced.filter((row) => row.loops > 0).length, vesselSliced.length)
+  equal('no contour the worker computes is non-finite (both families)', nonFiniteLoops, 0)
   info(
-    `[nerve·2D] committed GLB parts ${section.SECTION_PARTS.length} (nerve-labelled among them ` +
-      `${section.SECTION_PARTS.filter((meta) => meta.taxonomyKind === 'nerve').length}) + procedural nerve parts ` +
-      `${nervePartMetas.length} = ${canvasParts.length} on the canvas · nerve toggle on ${nerveOn.length} / off ` +
-      `${nerveOff.length} · committed admissions ${committedOn.length} identical on and off · the worker sliced ` +
-      `${slicedPlanes} crossing plane(s) into ${slicedLoops} loop(s) ` +
-      `(per nerve: ${sliceRows.map((row) => `${row.slug.replace('nrv-cn', '')}:${row.loops}`).join(' ')})`,
+    `[2D slice] the worker sliced ${slicedPlanes} crossing plane(s) into ${slicedLoops} loop(s) over ` +
+      `${workerParts.length} procedural part(s) — nerve ${nerveSliced.reduce((sum, row) => sum + row.loops, 0)} loop(s), ` +
+      `vessel ${vesselSliced.reduce((sum, row) => sum + row.loops, 0)} loop(s)`,
+  )
+
+  /* THE ONE OPEN HANDOFF, PINNED SO IT CANNOT BE FORGOTTEN (v17 review). `partsForCanvas()`
+   * — the visible list — carries the 40 vessel metas, but the 2D contour comes from the
+   * worker registry, which `SectionCanvas`'s init effect builds itself. That effect
+   * appends the nerve family and NOT the vessel family, so today the vessel contours
+   * are computed by no one and painted nowhere (`registryVesselParts()` above proves
+   * the geometry and the slicer are ready — the missing piece is one line). This
+   * assertion states the shipped code as it is and FAILS the moment the line lands,
+   * which is what routes the fix to the next editor instead of hiding it. */
+  const canvasSource = readSource('src/components/section/SectionCanvas.tsx')
+  const registryPushes = [...canvasSource.matchAll(/registryParts\.push\(\.\.\.(\w+)\(\)\)/g)].map((match) => match[1])
+  equalJson(
+    'SectionCanvas.tsx hands the worker the procedural families it appends (v17: the vessel family is the open handoff)',
+    registryPushes,
+    ['registryNerveParts'],
+  )
+  info(
+    `[2D handoff] SectionCanvas.tsx appends ${JSON.stringify(registryPushes)} to the worker registry; ` +
+      `registryVesselParts() returns ${vesselWorkerParts.length} ready part(s) that reach it when ` +
+      `\`registryParts.push(...registryVesselParts())\` joins that effect`,
   )
   /* The falsifiable half: a SYNTHETIC nerve part must be admitted iff the kind is
    * on AND its region is on — i.e. the 2D decision really does know the new kind. */
@@ -3007,12 +3190,19 @@ console.log('  the seven Systems are ALL_KINDS; each control toggles exactly its
 console.log('  layers.kinds (the one decision the 3D scene, the 2D live section and the PiP all read); the')
 console.log('  documented default framing is reachable by composing the two All modules with the vascular')
 console.log('  region off; the v13 nerve kind is sliced on the 3D surface and dimmed in the tree, and the 2D')
-console.log('  half is RE-POINTED at v14 — the Plates live section really does react now: the canvas registry is')
-console.log('  138 committed GLB parts + 12 PROCEDURAL nerve parts, the twelve are admitted iff the nerve kind')
-console.log('  is on and rejected otherwise, the 138 committed admissions do not move, and the worker\'s own')
-console.log('  extractContours slices a real cross-section out of every one of the twelve; the v11 item-4')
-console.log('  divergence is re-measured at every plane the browser lane names. Payload invariants unchanged:')
-console.log('  the manifest still holds 138 parts and no nrv-*.glb exists — route (a) costs 0 bytes.')
+console.log('  half is RE-POINTED at v14 and RE-COUNTED at v17 — the Plates live section reacts to BOTH')
+console.log('  procedural families now: the canvas registry is 138 committed GLB parts + 12 nerve parts +')
+console.log('  40 vessel course parts = 190 metas (every term read from the shipped tables, none pinned), the')
+console.log('  nerve and vessel metas are admitted iff their kind is on and rejected otherwise, the vessel')
+console.log('  metas additionally need the vasculature REGION, the 138 committed admissions do not move, and the')
+console.log('  worker\'s own extractContours slices a real cross-section out of every one of the 101 registry')
+console.log('  parts (24 nerve = 12 authored + 12 mirrored; 77 vessel = 40 authored + 37 mirrored, each twin')
+console.log('  proven the x → −x reflection of its authored side). The one OPEN handoff is asserted, not hidden:')
+console.log('  SectionCanvas.tsx still appends only registryNerveParts() to the worker registry, so the vessel')
+console.log('  contours are ready but not yet painted; that assertion fails the moment the line lands. The v11')
+console.log('  item-4 divergence is re-measured at every plane the browser lane names. Payload invariants')
+console.log('  unchanged: the manifest still holds 138 parts, no nrv-*.glb exists and no committed GLB carries a')
+console.log('  granular course id — route (a) costs 0 bytes.')
 console.log('  The matching browser-lane claim (audit.mjs R3b, which through v13 asserted pixel INVARIANCE) is')
 console.log('  re-pointed to assert the hash CHANGES and round-trips; only the orchestrator can run it.')
 console.log('  Rendered pixels and real pointer/keyboard use stay orchestrator-only: Chrome cannot start in')

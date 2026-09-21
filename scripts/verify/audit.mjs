@@ -72,6 +72,18 @@
  * `scripts/verify/area-toggles.mjs` §13 parses every static probe below and §11
  * additionally refuses any `clickHook(...)` call site naming a hook the shipped
  * Header no longer renders — the guard against this file's own failure mode.
+ *
+ * ── v17 review (`review-qa`): THE ONE COUNT THIS FILE PINNED IS NOW DERIVED ──
+ * The v8 vascular block asserted `vascDefault.regionCount === 14` — the 14 v8
+ * artery records. The v17 vasculature run added 39 authored + 1 built-in granular
+ * course records to the same region (14 → 53 `vessel` rows), which moves that tree
+ * count. The literal is replaced by a count DERIVED from `src/data/taxonomy.json`
+ * (the rows the registry files in region "vasculature"), printed together with the
+ * vessel-kind total, so the check still fails on a tree/registry disagreement but
+ * cannot go stale when the next vessel lands. No assertion was deleted: the block
+ * trades one pinned number for two derived terms. The four re-pointed click sites
+ * and the `restoreDefaultFraming()` helper above are unchanged — verified by
+ * running `verify:area-toggles` §11, which reads this file's click sites.
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { register } from 'node:module'
@@ -3234,9 +3246,40 @@ try {
   if (!vascDefault.regionRowFound) {
     bad('the taxonomy tree has no "Cerebral vasculature" region row — the v8 region did not reach the tree')
   } else {
-    vascDefault.regionCount === 14
-      ? ok('the tree carries the vascular region with all 14 artery records ("Cerebral vasculature", count 14)')
-      : bad(`the vascular region row reports ${vascDefault.regionCount} records, expected 14`)
+    /* v17 RE-POINT (`review-qa`; the run plan's §7.11.1 names this site).
+     *
+     * Through v16 this check pinned the literal 14 — the 14 v8 artery RECORDS.
+     * The v17 vasculature run landed 39 authored + 1 built-in granular course
+     * records in the same region, so the tree row count moved 14 → 53 and the
+     * literal would have failed the browser lane for a change the plan mandated.
+     *
+     * The literal is GONE, not updated: the expected count is derived here from
+     * the shipped registry (`src/data/taxonomy.json`, read by this Node process),
+     * and both of its terms are printed, so the check cannot pass by agreeing with
+     * a number someone typed and it cannot go stale the next time a vessel lands.
+     * The claim is unchanged: the tree's "Cerebral vasculature" row must report
+     * exactly the rows the registry files in that region. */
+    const taxonomySource = readSourceFile('src/data/taxonomy.json')
+    const taxonomyRows = taxonomySource === null ? null : JSON.parse(taxonomySource)
+    const rows = Array.isArray(taxonomyRows)
+      ? taxonomyRows
+      : (taxonomyRows?.rows ?? taxonomyRows?.structures ?? [])
+    const expectedVascularRows = rows.filter((row) => row.region === 'vasculature').length
+    const expectedVesselRows = rows.filter((row) => row.kind === 'vessel').length
+    if (expectedVascularRows === 0) {
+      bad('the registry could not be read for the vascular region count (src/data/taxonomy.json missing or unshaped)')
+    } else {
+      vascDefault.regionCount === expectedVascularRows
+        ? ok(
+          `v17: the tree carries the vascular region with every shipped vessel row ("Cerebral vasculature", count ` +
+            `${vascDefault.regionCount} = ${expectedVascularRows} row(s) in region "vasculature", of which ` +
+            `${expectedVesselRows} are kind "vessel" — derived from the registry, not pinned)`,
+        )
+        : bad(
+          `v17: the vascular region row reports ${vascDefault.regionCount} records, expected ${expectedVascularRows} ` +
+            `(the rows the shipped registry files in region "vasculature"; ${expectedVesselRows} of kind "vessel")`,
+        )
+    }
     vascDefault.regionOff === true
       ? ok('the default Brainstem-focus framing has the vascular region layer OFF (hidden by region, plan §2)')
       : bad('the default framing does not have the vascular region layer off — the arterial overlay would sit on the brainstem by default')

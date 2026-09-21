@@ -66,6 +66,26 @@
  * What this file must NOT do is acquire a claim that the 2D surface has no nerve
  * part: that was true through v13 and is false by design from v14 onwards.
  *
+ * ── v17 REVIEW AMENDMENT (`review-qa`) — THE VESSEL FAMILY, AND WHY STILL NO
+ *    EIGHTH CLAIM ─────────────────────────────────────────────────────────────
+ * v17 added 40 granular vessel courses through the same procedural route, so the
+ * 2D parity claim moved from "138 + 12" to "138 + 12 + 40 = 190 canvas metas",
+ * with the worker registry split by family (24 nerve parts = 12 authored + 12
+ * mirrored, 77 vessel parts = 40 authored + 37 mirrored, 3 midline courses
+ * single). Those numbers live in the rendering gate — `verify:area-toggles` §11,
+ * re-pointed by this review from three stale literals to sums of terms read from
+ * the shipped tables — and NOT here: none of the predicates below reads a section
+ * part count, so nothing in this file needed a number changed. Two consequences
+ * are recorded here so the next reader does not have to re-derive them:
+ *   • the vessel contours are computed but not yet PAINTED: `SectionCanvas.tsx`'s
+ *     worker registry appends `registryNerveParts()` only, so the 77 ready vessel
+ *     parts do not reach the worker. §11 asserts that call site as it is (it fails
+ *     the moment the one-line append is added, which is what routes the fix);
+ *   • `verify:cranial-nerve-render.mjs` is RED at 46/47 for the same data landing:
+ *     its `partsForCanvas()` identity predates the vessel term (`found 190`,
+ *     expected `138 + 12`). That file is outside this review task's write scope —
+ *     the re-point is one added `+ SECTION_VESSEL_PARTS.length`.
+ *
  * Node-only entry point (no browser, no server, no precondition):
  *   node -e "import('./scripts/verify/checks.mjs').then(m=>console.log(m.readCtSourceCoverage()))"
  */

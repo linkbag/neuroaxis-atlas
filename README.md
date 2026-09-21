@@ -2,7 +2,7 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
-**An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum) — with the telencephalon (cerebral hemispheres, basal ganglia, limbic system, ventricles) layered on from v7, the cerebral vasculature (circle of Willis and the major cerebral arteries) plus the deep functional/projection content from v8, and the somatotopic map, the cortical-division section layer, the re-runnable imaging registration and the simulated-section panel from v9, and the v10 display round (full-box plane helpers, division-level visibility with solo, four-corner panel resize, cortical-division quality, and the dropped cortex label)** — selectable 3D nuclei and fiber tracts, labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
+**An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum) — with the telencephalon (cerebral hemispheres, basal ganglia, limbic system, ventricles) layered on from v7, the cerebral vasculature (circle of Willis and the major cerebral arteries) plus the deep functional/projection content from v8, and the somatotopic map, the cortical-division section layer, the re-runnable imaging registration and the simulated-section panel from v9, and the v10 display round (full-box plane helpers, division-level visibility with solo, four-corner panel resize, cortical-division quality, and the dropped cortex label)** (with the twelve cranial nerves as records in v13 and as authored traveling courses in v14, and the **granular vasculature** of v17 — 53 vessel records over 40 authored courses, the lenticulostriate blobs replaced by real perforator courses) — selectable 3D nuclei and fiber tracts, labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
 ## Third-party data licences
 
@@ -37,6 +37,7 @@ Full provenance, per-file source URLs and the licence texts are in [docs/ATTRIBU
 - **Display round 2 (v10)** — the three 3D plane helpers now span the **whole `CLIP_BOUNDS` rectangle** of their two in-plane axes, so a cut through the hemispheres shows the cut plane where the cortex actually is instead of stopping at the brainstem; a **division-level visibility control** (Prosencephalon · Mesencephalon · Rhombencephalon · Cerebral vasculature) in the Legend with an on/off checkbox **and** a one-click **Solo** per division, so "everything on" stops being overwhelming; the simulated-section panel resizes from **all four corners**; the cortical-division layer stops painting slivers and floating wedges; and the *"Cerebral cortex (context envelope)"* **text label is dropped while its contour stays** — details in [v10](#v10--plane-helper-extent-division-visibility-four-corner-pip-resize-cortical-division-quality-and-the-cortex-label).
 - **Areas + Systems toggle rows (v11)** — the header's view-preset row is demoted to a shortcut row beneath **two rows of on/off toggles**: the big anatomical **Areas** (Telencephalon · Diencephalon · Mesencephalon · Metencephalon (pons + cerebellum) · Myelencephalon (medulla) · Cerebral vasculature — which together partition all 7 taxonomy regions and all 236 entries exactly once) and the orthogonal **Systems** axis (Nuclei · Tracts · Ventricles · Surface · Vessels · Context = `ALL_KINDS`; **v13 adds a seventh, Cranial nerves**). An area or system **off** is excluded from the 3D scene, the live section **and** the PiP by **one** visibility decision, with **Reset / All** restoring the documented default; the run also settled the two v10 carry-over defects (the cortical-division rule vs what the canvas paints; the sagittal plane-helper `u/v` convention) — details in [v11](#v11--the-areas--systems-toggle-rows-replace-the-view-preset-row).
 - **Cranial nerves (v13)** — the twelve cranial nerves (**CN I Olfactory → CN XII Hypoglossal**) as first-class records under a new seventh **Systems** toggle, **Cranial nerves** (kind `nerve`, id prefix `nrv-`): each record carries its modality, its course *with the skull-base foramen it uses*, its function, links to the cranial-nerve **nuclei** the atlas already had, its blood supply or the vessel it is clinically related to, and clinical items that give the palsy picture **and its localisation**. They are placed in their **true** regions (telencephalon 2 · midbrain 2 · pons 4 · medulla 4) under one subdivision, `Cranial nerves`, so they group in the tree. **v13 shipped them as records with schematic placement markers; v14 replaced the markers with authored course geometry** — read the [v14 section](#v14--the-cranial-nerves-as-traveling-tracts) and its [honest limits](#v14-honest-limits-in-one-place) before quoting one in 3D — details in [v13](#v13--the-cranial-nerves-the-seventh-system).
+- **Granular vasculature (v17)** — the arterial layer goes one level deeper: **53 vessel records over 40 authored courses** (the MCA insular segment + terminal trunks + M4 cortical branches, the ACA pericallosal/callosomarginal/frontopolar/orbitofrontal, the PCA parieto-occipital/calcarine/temporal/splenial, the SCA + AICA + PICA segments, the anterior spinal artery, and the perforator groups — **lenticulostriate, thalamoperforating, thalamogeniculate, pontine**), each drawn as a **procedural tube that hugs a measured envelope** (`ctx-hemisphere-l/r`, midbrain, pons, medulla, cerebellum) instead of a schematic marker. **The two red lenticulostriate blobs are gone**: the ellipsoid is retired, not covered, and the perforators are now real courses from the M1 wall through the anterior perforated substance into the putamen and caudate. **The branches are AUTHORED course paths projected onto the derived surfaces — not segmented angiography** — and they cost **0 bytes** of payload; details in [The granular vasculature layer (v17)](#the-granular-vasculature-layer-v17--53-vessel-records-authored-courses-no-blobs).
 - **12 interactive 2D plates** — 9 transverse levels (pyramidal decussation → mid-thalamus), 1 midline sagittal profile, 2 coronal slices; every labeled region highlights on hover and selects everywhere on click; leader-line labels toggle on/off. **(v7 adds 3 more — 15 total:** axial +58, sagittal hemisphere, coronal fornix.)
 - **2D ↔ 3D sync** — selecting a plate (or level-ruler entry) moves the 3D transverse clipping plane to that level and reveals the plane helper; dragging the plane keeps the level ruler and plate sync indicator in step.
 - **Structure browser** — region → subdivision → structure taxonomy tree plus case-insensitive search over names and synonyms (try "STN", "MLF", "pulvinar").
@@ -515,6 +516,8 @@ the canonical space by the same script as every other envelope and baked by the 
   (`supply` — PCA → Déjérine-Roussy / Percheron / Weber / Benedikt, AICA → lateral pontine / Millard-Gubler,
   SCA → cerebellar, PICA → lateral medullary / central Horner), laterality, a crimson shade, and level chips.
   Selecting an artery highlights its territory structures; opening a syndrome lights the artery that causes it.
+  **(v17 takes the registry to 53 `vessel` records — those 14 plus 39 granular branches and perforator groups; see
+  [The granular vasculature layer (v17)](#the-granular-vasculature-layer-v17--53-vessel-records-authored-courses-no-blobs).)**
 - **The circle of Willis is a real ring, not a set of stubs.** BP3D carries one element per side, so each
   paired artery names its **right side explicitly** (`bodyRight`) instead of being mirrored — the circle is
   asymmetric and mirroring the left carotid would put the right one at the wrong calibre and course. The MCA
@@ -530,6 +533,66 @@ the canonical space by the same script as every other envelope and baked by the 
   default view nor become unreachable (see `state/store.ts`: the vascular exemption is paid for with its own
   assertions).
 
+### The granular vasculature layer (v17) — 53 vessel records, authored courses, no blobs
+
+**What v17 adds.** The v8 arterial layer was 14 records whose geometry is the committed BP3D casts — and the two
+**red BLOBS** you could see at the anterior perforated substance were `vasc-lenticulostriate-arteries` rendering its
+**schematic placement ellipsoid** (a unit sphere scaled by `size3d`, drawn twice because the record is `paired`).
+v17 (a) **replaces the blobs with authored perforator courses**, (b) goes **one level more granular** than the 14 named
+arteries — the intermediate/distal branches the archive carries and the perforators it has no concept for — and
+(c) makes every course-bearing vessel **hug the surface it anatomically follows** by measured projection.
+
+- **53 vessel records, 40 courses, 77 drawn tubes.** 39 authored course records
+  (`src/data/structures/vasculature-courses.json`) + the built-in lenticulostriate umbrella record, of which **37 are
+  paired** (drawn as an exact `x → −x` twin) and **3 midline** (single): `2 × 37 + 3 = 77` tubes. The registry went
+  **248 → 287 rows** and `vessel` **14 → 53**; `npm run validate` reports 0 errors / 0 warnings.
+- **The lenticulostriate replacement.** Six chains run from the **M1 superior-wall vertex [15.786, 11.967, 24.920]**
+  (a literal committed `vasc-middle-cerebral-artery-m1-l` vertex, distance **0.000 au**) through the **anterior
+  perforated substance** into the basal ganglia — four lateral chains to putamen targets, two medial (Heubner) chains to
+  the caudate head — and the terminal waypoints **graze** the structure they supply (lateral 0.021–0.179 au = 0.03–0.21 mm
+  from the putamen mesh, Heubner 0.249–0.296 au = 0.30–0.36 mm from the caudate), because a perforator ends *inside* the
+  structure it feeds. The structure pass returns `null` for any record that has a course, so **the two ellipsoids stop
+  being drawn**: the shipped table prints `tube only` for all 40 courses, `baked body` for the 13 arteries with
+  committed meshes, and **blobs 0** over all 53 vessel records (all **9** lenticulostriate ids suppressed).
+- **Radii are stated calibres, not a readability fudge.** `r_au = calibreMm ÷ 2.4` at 1 au = 1.2 mm, from four
+  documented diameters — **0.8 mm → 0.333 au** (9 records: lenticulostriate and other perforators), **1.0 mm → 0.417**
+  (4: Heubner, anterior spinal), **1.2 mm → 0.500** (19: MCA/PCA cortical branches), **2.0 mm → 0.833** (7: MCA M2,
+  terminal trunks, A2–A3, P4). All 39 satisfy `|r × 2.4 − calibreMm| < 0.03` (max error 0.0008 au). **1,775.64 au =
+  2,130.8 mm** of authored course over 172 waypoints, every waypoint inside `CLIP_BOUNDS`.
+- **Surface-hugging by measurement, not by eye.** Each course names the committed envelope it follows; the pipeline
+  parses the GLB, finds the nearest **vertex**, refines to the exact nearest point on its **incident triangles**, and
+  places the waypoint outward by `tubeRadius + 0.15 au`. **67 of the 172 waypoints are projected**, and the gate
+  re-derives every residual from the mesh bytes: hemisphere-l 50 waypoints (placed 0.021–0.925 au from the surface),
+  pons 5 (0.145–0.454), midbrain 5 (0.496–0.643), cerebellum 4 (0.549–0.615), medulla 3 (0.377–0.555). Mirror check:
+  52 mirrored projections re-measured, worst deviation **1.480 au = 1.78 mm** (tolerance 1.6 au — the two committed
+  hemispheres are independently decimated). **Perforators declare `surface: null` on purpose**: they run *inside* the
+  brain after piercing the surface, and each record says so — projecting them onto a cortical envelope is exactly the
+  error the run forbids.
+- **Zero payload.** No new GLB, no manifest row, no bounding box: the manifest is still **138 parts / 599,204
+  triangles**, `Σ stat(parts[].file)` is still **14,486,228 B = 13.82 MiB**, and `src/assets/anatomy/` is still
+  **13.89 MiB**. The route is **procedural tubes** (the same `TractTube` sweep the cranial nerves use, 803 verts /
+  1,440 tris each) plus **procedurally generated section parts** fed to the existing contour worker — which is the only
+  route available, because the anatomy directory has **0.18 MiB** of headroom and baking the BP3D branch elements would
+  need **0.3–1.4 MiB**, decimated or not.
+- **The anatomy record.** The new table (id · name · parent artery · laterality · territory · course length in au and mm
+  · radius with its mm source · surface distances) is `docs/SWARM_V17_PLAN.md` §2; the element-registration ledger
+  (which BP3D elements the new records claim, and the 8 of 107 that remain unregistered) is `docs/VASC_INVENTORY.md` §8;
+  the gates are `npm run verify:vasc-courses` (**2,171 assertions / 0 failures**) and `npm run verify:vessel-render`
+  (**75/75**).
+
+**v17 honest limits — stated, not dropped.**
+
+| # | limit |
+| --- | --- |
+| 1 · **the courses are AUTHORED paths, not segmented angiography** | Every one is a path authored through documented landmarks — a **literal committed parent-mesh vertex** at the origin, projected waypoints on the committed envelopes, a stated calibre — and **the archive names no element for most of them** (no pericallosal, callosomarginal, frontopolar, orbitofrontal, calcarine, parieto-occipital, splenial, labyrinthine, pontine-perforator, lenticulostriate or Heubner element exists). Those records carry `basis: 'documented-course'` and their `anchorNote` says exactly what stands behind the path; **the branches are not a segmentation of a real angiogram, and no vessel imaging (MRA/CTA) is committed** |
+| 2 · **why not baked geometry** | The hard budget is the committed anatomy directory: **13.89 MiB of a 14 MiB cap**, headroom **0.18 MiB**. Baking the BP3D branch elements lands in the **0.3–1.4 MiB** range — it does not fit, so the granular layer is procedural by necessity, and it is why the record count grew **without a single committed byte** |
+| 3 · **a branch tube is drawn over a body that already contains it** | The v8 bake merged 34 MCA elements (88,460 faces) and 26 PICA elements into their parent arteries, so a new MCA/PICA course draws **on top of** the baked parent. Radii are small (0.333–0.833 au) and distal waypoints are moved outward onto the envelope so the tube stands proud at the cortex — an approximation, stated rather than hidden. The `documented-course` vessels have no baked twin and are clean |
+| 4 · **the intended graze is often not achieved** | The offset direction is an *estimated* normal: the achieved clearance falls **below** the intended `r + 0.15 au` in **61 of 67** placed waypoints, and in **42** of them the tube's axis sits closer to the mesh than its own radius (worst case ≈ half the cross-section inside the envelope). The number is published; the fix is a one-line change to the nearest-triangle normal |
+| 5 · **the 2D live section and the PiP do not paint the vessel contours yet** | The visible part list carries the 40 vessel metas, and the worker machinery slices the procedural geometry (**77 worker parts → 2,581 contour loops, 0 non-finite**), but `SectionCanvas.tsx`'s init-registry effect still appends only the nerve parts — so the vessel geometry is computed nowhere and painted nowhere until `registryParts.push(...registryVesselParts())` lands. One line, outside this run's write scope |
+| 6 · **one count-stale gate is red, and the product was not bent to fix it** | `npm run verify:cranial-nerve-render` is **46/47**: its `partsForCanvas()` identity still reads `138 + 12` and now finds **190 = 138 + 12 + 40**, because v17 added the vessel parts exactly as planned. The re-point (add `+ SECTION_VESSEL_PARTS.length`) belongs to no v17 write scope, so it is reported and the tree is left visible rather than edited by an unowned hand |
+| 7 · **two wrong/erroneous data rows and two stale texts ship** | (a) `vasc-pica-tonsillomedullary-segment.territory` claims the **lateral** ventricle's choroid plexus while its own text says the **fourth** (its sibling claims `vent-fourth-ventricle` correctly); (b) `vasc-anterior-spinal-artery.territory` claims a **pons** row (`ctx-pontine-fibers`) on a medullary artery; (c) the umbrella `vasc-lenticulostriate-arteries` `contextNote` still describes the retired ellipsoid and never states the v17 authored-course basis; (d) the replaced built-in medial course still calls an ACA junction point the "carotid terminus". All four are content-file edits outside this run's scope — reported in `docs/SWARM_V17_PLAN.md` §5 with their numbers |
+| 8 · **what is not verified here** | `verify:anatomy` (27/27) and `verify:imaging-fit` abort **before any verdict** on the sandbox's piped-child-stdio denial (red at base, 0 assertions; the measurement `verify:anatomy` is blocked on re-runs directly at **14,566,178 B**, unchanged). **Chrome cannot start here**, so *"the tubes are painted on screen"*, *"the two red blobs are gone on screen"*, *"the section paints the contours"* and click-select are **orchestrator-browser-verified only** |
+
 ### Deep content (records, annotated)
 
 | Group | Records | Notes |
@@ -539,7 +602,7 @@ the canonical space by the same script as every other envelope and baked by the 
 | Optic pathway | 3 (`tract-optic-nerve`, `ctx-optic-chiasm`, `tract-optic-tract`) | **real meshes**; the pre-existing optic radiation keeps its own record |
 | Ventricular segments | 1 new (`vent-lateral-ventricle-body`) + subdivisions | the lateral ventricle is a real cast with horns/atrium/body named as records |
 | Striatal / pallidal depth | `nuc-accumbens`, `nuc-ventral-pallidum`, `nuc-claustrum`, `nuc-globus-pallidus-internus`/`-externus`, `nuc-caudate-head`/`-body`/`-tail` | records exist and are annotated; the segments share their parent mesh (see *Honest limits*) |
-| Cerebral vasculature | 14 | the table above |
+| Cerebral vasculature | 14 | the table above (v17 → **53** `vessel` records: these 14 + 39 granular courses) |
 
 **Where the optic pathway renders from.** The optic nerve, chiasm and tract are `tract`/`context` records that
 live in `src/data/structures/`, which means they resolve their baked bodies through the same body pass the
@@ -567,6 +630,16 @@ false statement about the tissue.
 - **`vasc-lenticulostriate-arteries` has no mesh, and the MCA's branch mesh is not it.** BP3D's MCA elements
   include the anterolateral central branches, but carving them out as "the lenticulostriate arteries" would
   assert a segmentation the source does not make.
+
+> **v17 update — this supersedes the two lenticulostriate bullets above.** The record still owns **no mesh**, but it is
+> no longer a **sized schematic placement marker**: v17 draws **authored perforator courses** (six chains, from the MCA
+> M1 wall through the anterior perforated substance into the putamen and the caudate head) and retires the ellipsoid —
+> the two red blobs are gone by *suppression*, not by a new mesh. The MCA's anterolateral central elements
+> (`FJ1662`/`FJ1662M`, `FJ1663`/`FJ1663M`) are now named as the **basis** of the lateral chains without being carved
+> into a baked body. The hippocampal-subfield bullet stands unchanged. The new layer's honest limits (authored paths,
+> not segmented angiography; the 0.18 MiB payload reason; the 2D paint gap) are in
+> [The granular vasculature layer (v17)](#the-granular-vasculature-layer-v17--53-vessel-records-authored-courses-no-blobs).
+
 - **No vascular imaging is layered into the section view.** The real-imagery layers (MRI, CT, cryosections) are
   unchanged: they are tissue modalities, and no vessel-annotated dataset (MRA/CTA) is committed.
 - **What v8 deliberately did not do: carve the sub-nuclei their own meshes.** GPi/GPe, the three caudate parts and
@@ -1333,6 +1406,8 @@ and by **3.6×** at the honest reading, before the JSON chunk or any left/right 
 | `npm run verify:nerve-kind` | **v13 kind gate, no browser** (`scripts/verify/nerve-kind.mjs`, new): **79 assertions · 0 failed** in **9 groups**. It imports the **shipped** `load.ts`, `Header.tsx`, `Legend.tsx`, `KindGlyph.tsx`, `NucleusMesh.tsx`, `SceneLayers.tsx` and `store.ts` through the in-process TS/TSX loader the other Node gates use, renders the real components with `react-dom` **and** through a live hook dispatcher (zustand 4 hands React's *server* renderer the boot snapshot, so a post-toggle re-render is only readable on the client path), and reads the two declaration sites that cannot be imported (`validate-data.mjs` runs on import; `types.ts` is types-only) as parsed data. It proves the kind is declared in **every** site and the sites **agree** (ALL_KINDS ≡ validator `KINDS` ≡ the `Kind` union ≡ the `KIND_GLYPH`/`KIND_OPACITY` key sets, seven kinds, `nerve` last); the slug contract accepts all 12 `nrv-*` ids, still rejects the four near-misses, and finds **0** prefix/kind contradictions over all **248** rows; the rendered `<Header />` carries **one Systems button per `ALL_KINDS` entry, in order**, the seventh reading exactly **Cranial nerves** with `data-kind`, `aria-pressed`, `type="button"` and a WCAG-2.5.3-correct accessible name; the Legend has a palette swatch **and** a toggle row per kind, the `Cranial nerves` swatch on a token `tokens.css` really defines; **the shipped `onClick` handler is called** and the toggle removes exactly `nerve` from `layers.kinds` while `regions`/`hidden`/`emphasis` stay set-equal, with the round trip rendering byte-identically to boot; a synthetic `nrv-*` record is admitted by the shipped `isStructureVisible` iff the kind is on, at opacity 1 with the gray-matter hint; and its **bite** runs the *same* contract checker against **8 defective kind tables**, each caught by name |
 | `npm run verify:cranial-nerve-courses` | **v14 course-geometry gate, no browser** (`scripts/verify/cranial-nerve-courses.mjs`, new): **220 assertions · 0 failed**. It reads the twelve authored courses through the repo's own TS loader — so it verifies the table the two surfaces actually render — and asserts, per nerve and with every number printed: ≥ 3 finite waypoints; `tubeRadius` finite, > 0, equal to `calibreMm ÷ 2.4` at 1 au = 1.2 mm and equal to the plan's table (1.7/4.0/3.0/1.0/4.5/1.9/1.9/2.8/2.0/2.4/1.5/1.8 mm → 0.71/1.67/1.25/0.42/1.88/0.79/0.79/1.17/0.83/1.00/0.63/0.75 au); the nerve's **own exit landmark carried as a literal waypoint** (measured deviation **0.000 au** for all ten that have one, tolerance 2 au) and the chain **starting on the committed nucleus `origin3d`** it names (0.000 au); the documented foramen **named in the record and present in its own course sentence**; every waypoint inside `CLIP_BOUNDS` with the printed minimum clearance (**6.00 au**, CN I); length in **au and mm**; and the direction/modality/origin/target/decussation/function/clinical/levels/refs content. It then **executes** the rendering claims: the 23 tracts + 12 courses through the shipped `isTractVisible` (kind gating, `hasNerveCourse`, the structure pass dropping a record that has a course) and each course's tube through the **section worker's own** `boundsMayCut`/`extractContours` (**576 crossing planes → 689 loops**, per-plane counts printed). Its probe table is the twelve-row root · foramen · target · length table |
 | `npm run verify:cranial-nerve-render` | **v14 render-parity gate, no browser** (`scripts/verify/cranial-nerve-render.mjs`, new): **47 assertions · 0 failed**. It mounts nothing and paints nothing (Chrome cannot start here) — it **executes the shipped modules** through the same in-process loader and proves: **12 tubes in the scene's tract list**, with the four-state toggle truth table printed (all on 23+12 · **tract off → 0 tracts but 12/12 nerves** · **nerve off → 23/23 tracts but 0/12 nerves** · both off 0+0 · midbrain off 19+10 · a preset-hidden id 11) — i.e. the mis-gating trap is closed in both directions; **12 section registry parts** (803 verts / 1,440 tris each, `maxIndex 802 < 803`) whose contours the **shipped** `partBounds`/`boundsMayCut`/`extractContours` compute over 38 planes (**121 closed loops, ≥ 1 crossing plane with ≥ 1 loop per nerve, 0 non-finite**); the **XOR** — a nerve renders a tube **or** a marker, never both, for all twelve; the shared-builder claim read as source; and the payload re-measured (**138 manifest parts, 0 `nrv-*` GLBs, 599,204 tris, 13.8151 MiB of parts / 13.8914 MiB of tree**). A bite flips the literal `'tract'` back into `isTractVisible` and the nerve-off row goes from 0 to 12 shown |
+| `npm run verify:vasc-courses` | **v17 granular-vasculature data gate, no browser** (`scripts/verify/vasc-courses.mjs`, new): **2,171 assertions · 0 failures**. It reads the 39 authored course records and **re-parses the committed GLBs itself** — a hand-written reader plus an exact nearest-point-on-triangle probe whose accelerated search is cross-checked against an exhaustive pass over every triangle (24 probes, all exact). It asserts, with every number printed: **39/39 ids registered first** (`vasculature`/`vessel`, parent resolves, 0 registry-only rows); **172 waypoints, all inside `CLIP_BOUNDS`**; every stored residual **re-derived from the mesh bytes** (projected point on the mesh in 67/67, chord `\|Q−P\| = r + 0.15 au` in 67/67); **52 mirrored projections** onto the right-hand envelopes with the worst deviation printed (**1.480 au = 1.78 mm**, tolerance 1.6 au because the two hemispheres are independently decimated); parent/territory/supply resolution; the **lenticulostriate fix** (the ellipsoid record suppressed, the six chains on the committed M1 vertex at 0.000 au); the **radius table** with its mm source (**39/39** satisfy `\|r × 2.4 − calibreMm\| < 0.03`, max error 0.0008 au); and the payload (138 parts, **0 bytes added**). Its printed table is `docs/SWARM_V17_PLAN.md` §2 |
+| `npm run verify:vessel-render` | **v17 granular-vasculature render gate, no browser** (`scripts/verify/vessel-render.mjs`, new): **75/75 assertions**. It executes the **shipped** modules through the same in-process loader the nerve gates use and proves: the merged course table (**40 courses = 1 built-in surviving + 2 replaced by authored + 37 new authored**, each with id/laterality/parent/surface/basis/points/arc-mm/radius/calibre-mm); the **3D pass over 7 layer states** (`all on → 40/40 vessels, 23/23 tracts, 12/12 nerves` · **vessel kind off → 0/40** · **vasculature area off → 0/40** · tract kind off and nerve kind off leave the vessels at 40/40 · a preset-hidden id drops exactly one); **77 drawn tubes = 40 authored + 37 mirrored** (printed as `2 × 37 paired + 3 midline`); the **one-body-per-record table** over all **53** vessel records — `tube only` / `baked body` with **0 BROKEN** and **blobs 0**, all **9** lenticulostriate ids suppressed; the **2D registry** (40 vessel metas, 77 worker parts, indices in range) with the shipped contour worker slicing every course (**2,581 loops, 0 non-finite**); the **shared builder** (185,493 position values identical between `tubeGeometryFor()` and `registryVesselParts()`, and the nerve mirror bboxes negated — the inherited mirror-cache bug stays fixed for both families); synthetic merge/group/alias cases; and the payload proof (138 manifest parts, Σ 14,486,228 B = 13.82 MiB, **0 course GLBs**) |
 | `npm run verify:imaging-fit` | **v9 imaging-registration gate** (`scripts/verify/imaging-fit.mjs`): re-runs the fitter and requires every committed number to equal the recomputation — grid bytes frozen against `HEAD`, per-plane and mean residuals, `applied` vs the record's own gate, every accepted plate present in `src/data/sectionImages.ts` as a `fittedFit` and every rejected one absent, the 49 JPEG plates recorded as `unmeasurable: no-decoder`, and `imageLayers.ts` preferring `fittedFit`. **RED in the agent sandbox** — the gate re-runs the fitter as a piped child and the sandbox denies it (`spawnSync node EPERM`, **0 assertions run**); when driven through a byte-identical copy with the captured fitter JSON it completes with 289 assertions / 20 failures (18 real, 2 copy artifacts) — the exact failures are in the [v9 section](#verification-v9-close-out-non-browser) |
 | `npm run verify:audit-checks` | **Audit check mirror, no browser** (`scripts/verify/audit-checks.test.mjs`, exposed as an npm script at v9 close-out; it was previously run as a bare `node` command): runs the *same* pure predicates the runtime audit uses (`scripts/verify/checks.mjs`) against the **shipped manifests and the shipped sources** — CT coverage honesty driven by the real `ct-manifest.json` and `ctCoverageStatement()`, the brainstem-focus default and the preset region guard (imported from the real store), the `?panelfail` containment demonstration (drives the real `PanelErrorBoundary` through the real throw: `probes === 1`, correct surface, Retry recovers), the context-loss DOM contract including the "overlay is outside `<Canvas>`" and "PostFX returns null while lost" root causes, and the modality sweep in both directions. It also re-derives the three budget numbers and checks the telencephalon data/plate inventory. **This is a mirror, not a browser test**: it proves the decision logic and the shipped code contract, never that pixels appeared. **v10: measured 92 passed · 0 failed · 7 informational · 9 groups (exit 0)** — the dimmed-row predicate carries the documented vasculature exemption *and* the assertion that pins it (*"the 14 vascular rows are off at default framing through the REGION layer only…"*), which supersedes the v9 close-out note that this gate was red |
 | `npm run verify:audit` | **Self-sufficient runtime audit** (`scripts/verify/audit.mjs`): starts Vite itself when nothing answers at the target URL, drives headless Chrome over the DevTools Protocol through the whole feature surface, and stops the server again on every exit path. Includes the two P0 gates — simulated WebGL context loss via `WEBGL_lose_context` (overlay appears, canvas recovers) and a **forced render throw** through the dev-only `?panelfail=<surface>` hook (the failure is contained, the app keeps working, Retry restores the panel). Pass an existing URL to reuse a running server. **v7 closure:** every load-bearing verdict is now decided by `scripts/verify/checks.mjs`, the run uses a **fresh Chrome profile per run** plus a `localStorage`/`sessionStorage` clear before the boot read (so a persisted `neuroaxis.viewPreset` can never masquerade as a wrong default), and the CT/modality checks are coverage-aware. **v9:** the PiP checks were re-pointed at the simulated-section panel (structure at boot, per-axis badges + readout, resizable/persisted/preset/hide+restore, the panel's independence from the Plates modality) and the retired `.pip-backdrop-hint` / `.pip-context-lost` checks now assert the **absence** of the retired elements. **v10 (re-pointed by the run's `review-qa` task):** a Node-side **"v10 source facts"** block reads `CLIP_BOUNDS`, `GRID_CELL_AU`, the `MIN_DIVISION_*` floors, `SECTION_PIP_SIZE_MIN/MAX`, `NO_CANVAS_LABEL_RECORD_IDS`, `DIVISIONS` and `REGION_LABELS` out of the shipped sources so no browser assertion retypes a number; a **three.js scene bridge** installed through `THREE.__THREE_DEVTOOLS__` makes the *rendered* helper geometry and mesh set readable; and blocks **Q0–Q6** (~120 assertions) cover the helper sheets' rendered spans vs the DOM sliders, division solos driving legend + tree + scene, real per-corner pointer drags with the dock-pinned edges, the artefact planes in Plates **and** PiP, and the suppressed cortex label with a hover/click sweep. The only in-place edits were the `node:fs` import and the sanctioned re-point `pipBoot.resizer === 1 → === 4`; no existing check was deleted or weakened |
@@ -1344,7 +1419,8 @@ and by **3.6×** at the honest reading, before the JSON chunk or any left/right 
 All of `validate`, `check`, `build`, `verify:pipeline`, `verify:plane`, `verify:plane-helper-extent`,
 `verify:somatotopy`, `verify:cortical-lobes`, `verify:pip-contract`, `verify:division-toggles`,
 `verify:area-toggles`, `verify:view-filter-consistency`, **`verify:cranial-nerves`**, **`verify:nerve-kind`**,
-**`verify:cranial-nerve-courses`**, **`verify:cranial-nerve-render`**, `a11y-contract`,
+**`verify:cranial-nerve-courses`**, **`verify:cranial-nerve-render`**, **`verify:vasc-courses`**,
+**`verify:vessel-render`**, `a11y-contract`,
 `boundary-contract`, `budget-report.mjs` and `build-anatomy-geometry.mjs --manifest` must exit 0;
 `npm run validate` is the pre-commit data authority (plan §9). The Node gates are wired as plain `node` entry
 points on purpose — they have no external precondition, so they can be quoted as evidence from any checkout.
@@ -1366,6 +1442,18 @@ npm scripts and executed **through npm**, so the wiring itself is tested. `verif
 **14,566,178 B**, unchanged. The brief's "known-red" note for **`verify:area-toggles` was stale**: it exits **0**
 with **455 assertions · 0 failed**, and the v11 item-4 divergence (the canvas painting divisions the rule
 excludes at y = 6/26/30/32) is **closed with parity 6/6** — the product was never bent back to either gate.
+**v17 re-measured the whole list a third time** (the sweep with every exit code and printed tail is in
+[`docs/SWARM_V17_PLAN.md`](docs/SWARM_V17_PLAN.md) §7): **27 gate commands · 24 green · 2 environment-red · 1
+product-red**, with the
+two new gates — `verify:vasc-courses` (**2,171 assertions · 0 failures**) and `verify:vessel-render` (**75/75**) —
+wired as npm scripts and executed **through npm**, so the wiring itself is tested. The one product-red gate is
+`verify:cranial-nerve-render` at **46/47**: its `partsForCanvas()` identity still reads `138 + 12` and now finds
+**190 = 138 + 12 + 40** because v17 added the vessel parts exactly as planned. It is a **count-stale assertion, not
+a broken product**; the one-line re-point (`+ SECTION_VESSEL_PARTS.length`) belongs to no v17 task's write scope, so
+it is reported with its output and **the gate was not edited by an unowned hand**. `verify:area-toggles`, the other
+gate the brief named as red, is **green at 472 assertions · 0 failed** after this run's review re-pointed its section
+counts to the shipped tables, and the four preset click sites in `verify:audit` are re-pointed and guarded by
+`verify:area-toggles` §11 (the browser lane itself remains the orchestrator's).
 
 **Exit codes of the browser lane** (`verify:audit`, `verify:acceptance`, `verify:browser`) — an environment failure must never look like a product failure:
 
@@ -1385,10 +1473,12 @@ All numbers produced by `npm run validate` at integration time:
 
 | Content | Count |
 | --- | --- |
-| Structures (nuclei, ventricles, surfaces, context, **cranial nerves**) | **202 records** (225 records in `structures/*.json` minus the 23 tracts) |
+| Structures (nuclei, ventricles, surfaces, context, **cranial nerves**, **vessels**) | **241 records** (264 records in `structures/*.json` minus the 23 tracts) |
 | Fiber tracts & pathways (with waypoints, decussation, somatotopy) | **23 records** |
-| Cranial nerves (kind `nerve`, id prefix `nrv-`, `meshes:false` placement markers — v13) | **12 records** (CN I Olfactory … CN XII Hypoglossal) |
-| Registry entries (taxonomy tree + search; every authored id registered) | **248 entries** |
+| Cranial nerves (kind `nerve`, id prefix `nrv-`, authored course geometry — v13/v14) | **12 records** (CN I Olfactory … CN XII Hypoglossal) |
+| Cerebral vasculature (kind `vessel`, id prefix `vasc-`) | **53 records** — the 14 v8 arteries (30 baked GLB parts) + **39 granular courses** (v17, procedural tubes, 0 bytes) |
+| Granular vessel courses (v17: waypoints + radius + declared surface) | **40 shipped courses** (39 authored + 1 built-in umbrella) · 172 waypoints · **77 drawn tubes** |
+| Registry entries (taxonomy tree + search; every authored id registered) | **287 entries** |
 | Canonical levels (rostro-caudal anchors, y = −50…+78 au) | **17 levels** |
 | 2D cross-section plates | **15** (11 transverse + 2 sagittal + 2 coronal) |
 | Clinical syndromes | **26 cards** |
@@ -1411,8 +1501,22 @@ All numbers produced by `npm run validate` at integration time:
 > entries · 225 records in 19 files · 23 tracts · 26 syndromes · 15 plates · 17 levels, 0 errors / 0 warnings**.
 > Nothing pre-existing was edited, renamed or moved — the appending of the 12 rows is the only `taxonomy.json`
 > change (one earlier line gained a trailing comma) — and **no mesh, GLB, manifest part or bbox moved**.
+>
+> **v14 added course geometry, not records** — the twelve `nrv-*` registry rows are unchanged; the courses are a
+> separate collection (`NERVE_COURSES`) whose tubes cost **0 bytes**.
+>
+> **v17 adds content** — the granular vasculature: **39 authored course records** in one new file
+> (`src/data/structures/vasculature-courses.json`), **39 new registry rows** (taking `vessel` from 14 to **53**), and
+> 39 curated web references. Measured at close-out by `npm run validate`: **287 registry entries · 264 records in 20
+> files · 23 tracts · 26 syndromes · 15 plates · 17 levels, 0 errors / 0 warnings**. The delta is **+39 records / +39
+> registry rows and nothing else**: no mesh, GLB, manifest part, bounding box or pre-existing record was touched, and
+> the run adds **0 bytes** of committed payload. The layer's anatomy, limits and gates are in
+> [The granular vasculature layer (v17)](#the-granular-vasculature-layer-v17--53-vessel-records-authored-courses-no-blobs).
 
-Vascular territories are carried as string fields (`bloodSupply` per structure, `vascularTerritory` per syndrome) — no 3D vessel models. Every structure spans at least one of the 17 canonical levels; a subset of those levels has a matching transverse plate, and the plates' `data-structure` slugs resolve against the same registry as the 3D scene (enforced by the validator).
+Vascular territories are carried as string fields (`bloodSupply` per structure, `vascularTerritory` per syndrome)
+**and**, since v8, as **53 `vessel` records with real geometry** — 13 of them (30 GLB parts) backed by committed BP3D
+casts and, since v17, **40 authored courses drawn as procedural tubes** (the granular branches and the perforators,
+including the lenticulostriate group). Every structure spans at least one of the 17 canonical levels; a subset of those levels has a matching transverse plate, and the plates' `data-structure` slugs resolve against the same registry as the 3D scene (enforced by the validator).
 
 ## Project layout
 
@@ -1443,7 +1547,8 @@ src/
                  MRI + CT registries, modality resolution, fittedFit preference)
   geometry/      anatomyAssets (GLB loader + manifest), generated (manifest
                  types), materials (PBR factory), envelope (v1 fallbacks),
-                 textures (procedural normal maps), curves
+                 textures (procedural normal maps), curves (cranial-nerve courses),
+                 vasculature-courses (v17 granular vessel courses + merge)
   styles/        tokens · base · layout · panels · viewer · plates · sectionPip
 ```
 

@@ -492,6 +492,182 @@ const curated: Record<string, WebRef[]> = {
     { ...CSF_SECRETION },
   ],
 
+  // ---- v17: the granular vascular tree (branch records + perforator groups) ----
+  // getWebRefs() emits NO automatic Wikipedia fallback for kind 'vessel', so
+  // every new vessel id must appear here or its InfoPanel "learn more" block is
+  // empty. Each entry is a real English Wikipedia article (title-checked) plus,
+  // where one exists, the syndrome the vessel actually causes; the perforator
+  // entries carry the lacunar/stroke articles because no dedicated article names
+  // the individual chains.
+  'vasc-lateral-lenticulostriate-arteries': [
+    { source: 'wikipedia', label: 'Wikipedia — Lenticulostriate arteries', url: wiki('Lenticulostriate arteries') },
+    { source: 'wikipedia', label: 'Wikipedia — Lacunar stroke', url: wiki('Lacunar stroke') },
+    { source: 'wikipedia', label: 'Wikipedia — Intracerebral hemorrhage (putaminal)', url: wiki('Intracerebral hemorrhage') },
+  ],
+  'vasc-lateral-lenticulostriate-arteries-1': [
+    { source: 'wikipedia', label: 'Wikipedia — Lenticulostriate arteries', url: wiki('Lenticulostriate arteries') },
+    { source: 'wikipedia', label: 'Wikipedia — Putamen', url: wiki('Putamen') },
+  ],
+  'vasc-lateral-lenticulostriate-arteries-2': [
+    { source: 'wikipedia', label: 'Wikipedia — Lenticulostriate arteries', url: wiki('Lenticulostriate arteries') },
+    { source: 'wikipedia', label: 'Wikipedia — Internal capsule', url: wiki('Internal capsule') },
+  ],
+  'vasc-lateral-lenticulostriate-arteries-3': [
+    { source: 'wikipedia', label: 'Wikipedia — Lenticulostriate arteries', url: wiki('Lenticulostriate arteries') },
+    { source: 'wikipedia', label: 'Wikipedia — Internal capsule', url: wiki('Internal capsule') },
+  ],
+  'vasc-lateral-lenticulostriate-arteries-4': [
+    { source: 'wikipedia', label: 'Wikipedia — Lenticulostriate arteries', url: wiki('Lenticulostriate arteries') },
+    { source: 'wikipedia', label: 'Wikipedia — External capsule', url: wiki('External capsule') },
+  ],
+  'vasc-medial-lenticulostriate-arteries': [
+    { source: 'wikipedia', label: 'Wikipedia — Recurrent artery of Heubner', url: wiki('Recurrent artery of Heubner') },
+    { source: 'wikipedia', label: 'Wikipedia — Anterior communicating artery', url: wiki('Anterior communicating artery') },
+  ],
+  'vasc-medial-lenticulostriate-arteries-1': [
+    { source: 'wikipedia', label: 'Wikipedia — Recurrent artery of Heubner', url: wiki('Recurrent artery of Heubner') },
+    { source: 'wikipedia', label: 'Wikipedia — Caudate nucleus', url: wiki('Caudate nucleus') },
+  ],
+  'vasc-medial-lenticulostriate-arteries-2': [
+    { source: 'wikipedia', label: 'Wikipedia — Recurrent artery of Heubner', url: wiki('Recurrent artery of Heubner') },
+    { source: 'wikipedia', label: 'Wikipedia — Ventral pallidum', url: wiki('Ventral pallidum') },
+  ],
+  'vasc-mca-insular-segment': [
+    { source: 'wikipedia', label: 'Wikipedia — Middle cerebral artery (M2 segment)', url: wiki('Middle cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Insular cortex', url: wiki('Insular cortex') },
+  ],
+  'vasc-mca-superior-terminal-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Middle cerebral artery syndrome', url: wiki('Middle cerebral artery syndrome') },
+    { source: 'wikipedia', label: 'Wikipedia — Superior cerebral veins (cortical vascular territories)', url: wiki('Middle cerebral artery') },
+  ],
+  'vasc-mca-inferior-terminal-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Middle cerebral artery syndrome', url: wiki('Middle cerebral artery syndrome') },
+    { source: 'wikipedia', label: 'Wikipedia — Wernicke\'s aphasia', url: wiki('Wernicke\'s aphasia') },
+  ],
+  'vasc-mca-angular-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Angular gyrus', url: wiki('Angular gyrus') },
+    { source: 'wikipedia', label: 'Wikipedia — Gerstmann syndrome', url: wiki('Gerstmann syndrome') },
+    { source: 'wikipedia', label: 'Wikipedia — Pure alexia', url: wiki('Pure alexia') },
+  ],
+  'vasc-mca-middle-temporal-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Middle temporal gyrus', url: wiki('Middle temporal gyrus') },
+    { source: 'wikipedia', label: 'Wikipedia — Middle cerebral artery', url: wiki('Middle cerebral artery') },
+  ],
+  'vasc-mca-posterior-temporal-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Temporal lobe', url: wiki('Temporal lobe') },
+    { source: 'wikipedia', label: 'Wikipedia — Superior quadrantanopia', url: wiki('Quadrantanopia') },
+  ],
+  'vasc-mca-temporo-occipital-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Occipital lobe', url: wiki('Occipital lobe') },
+    { source: 'wikipedia', label: 'Wikipedia — Watershed stroke', url: wiki('Watershed stroke') },
+  ],
+  'vasc-mca-m4-prefrontal-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Prefrontal cortex', url: wiki('Prefrontal cortex') },
+    { source: 'wikipedia', label: 'Wikipedia — Middle cerebral artery', url: wiki('Middle cerebral artery') },
+  ],
+  'vasc-mca-m4-precentral-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Precentral gyrus', url: wiki('Precentral gyrus') },
+    { source: 'wikipedia', label: 'Wikipedia — Primary motor cortex', url: wiki('Primary motor cortex') },
+  ],
+  'vasc-mca-m4-central-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Central sulcus', url: wiki('Central sulcus') },
+    { source: 'wikipedia', label: 'Wikipedia — Postcentral gyrus', url: wiki('Postcentral gyrus') },
+  ],
+  'vasc-mca-m4-anterior-parietal-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Postcentral gyrus', url: wiki('Postcentral gyrus') },
+    { source: 'wikipedia', label: 'Wikipedia — Parietal lobe', url: wiki('Parietal lobe') },
+  ],
+  'vasc-aca-pericallosal-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Anterior cerebral artery (pericallosal)', url: wiki('Anterior cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Corpus callosum', url: wiki('Corpus callosum') },
+    { source: 'wikipedia', label: 'Wikipedia — Alien hand syndrome (callosal disconnection)', url: wiki('Alien hand syndrome') },
+  ],
+  'vasc-aca-callosomarginal-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Anterior cerebral artery (callosomarginal)', url: wiki('Anterior cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Supplementary motor area', url: wiki('Supplementary motor area') },
+  ],
+  'vasc-aca-frontopolar-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Frontal pole', url: wiki('Frontal pole') },
+    { source: 'wikipedia', label: 'Wikipedia — Anterior cerebral artery', url: wiki('Anterior cerebral artery') },
+  ],
+  'vasc-aca-orbitofrontal-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Orbitofrontal cortex', url: wiki('Orbitofrontal cortex') },
+    { source: 'wikipedia', label: 'Wikipedia — Gyrus rectus', url: wiki('Gyrus rectus') },
+  ],
+  'vasc-pca-parieto-occipital-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior cerebral artery', url: wiki('Posterior cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Quadrantanopia', url: wiki('Quadrantanopia') },
+    { source: 'journal', label: 'Schmahmann 2003 — Vascular syndromes of the thalamus (Stroke)', url: 'https://doi.org/10.1161/01.STR.0000087786.38997.9E' },
+  ],
+  'vasc-pca-calcarine-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Calcarine sulcus', url: wiki('Calcarine sulcus') },
+    { source: 'wikipedia', label: 'Wikipedia — Homonymous hemianopsia', url: wiki('Homonymous hemianopsia') },
+    { source: 'wikipedia', label: 'Wikipedia — Cortical blindness (Anton syndrome)', url: wiki('Anton–Babinski syndrome') },
+  ],
+  'vasc-pca-anterior-temporal-branches': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior cerebral artery', url: wiki('Posterior cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Uncus', url: wiki('Uncus') },
+  ],
+  'vasc-pca-middle-temporal-branches': [
+    { source: 'wikipedia', label: 'Wikipedia — Parahippocampal gyrus', url: wiki('Parahippocampal gyrus') },
+    { source: 'wikipedia', label: 'Wikipedia — Lingual gyrus', url: wiki('Lingual gyrus') },
+  ],
+  'vasc-pca-posterior-temporal-branches': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior cerebral artery (temporal branches)', url: wiki('Posterior cerebral artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Hippocampus', url: wiki('Hippocampus') },
+  ],
+  'vasc-pca-splenial-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Splenium', url: wiki('Splenium') },
+    { source: 'wikipedia', label: 'Wikipedia — Pure alexia (splenial disconnection)', url: wiki('Pure alexia') },
+  ],
+  'vasc-pca-thalamogeniculate-arteries': [
+    { source: 'wikipedia', label: 'Wikipedia — Thalamogeniculate artery', url: wiki('Thalamogeniculate artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Central post-stroke pain (Déjérine-Roussy)', url: wiki('Central post-stroke pain') },
+    { source: 'journal', label: 'Schmahmann 2003 — Vascular syndromes of the thalamus (Stroke)', url: 'https://doi.org/10.1161/01.STR.0000087786.38997.9E' },
+  ],
+  'vasc-pca-posteromedial-central-branches': [
+    { source: 'wikipedia', label: 'Wikipedia — Artery of Percheron', url: wiki('Artery of Percheron') },
+    { source: 'wikipedia', label: 'Wikipedia — Thalamus (vascular territory)', url: wiki('Thalamus') },
+    { source: 'journal', label: 'Schmahmann 2003 — Vascular syndromes of the thalamus (Stroke)', url: 'https://doi.org/10.1161/01.STR.0000087786.38997.9E' },
+  ],
+  'vasc-pontine-perforating-arteries': [
+    { source: 'wikipedia', label: 'Wikipedia — Basilar artery (pontine perforators)', url: wiki('Basilar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Locked-in syndrome', url: wiki('Locked-in syndrome') },
+    { source: 'wikipedia', label: 'Wikipedia — Pons', url: wiki('Pons') },
+  ],
+  'vasc-sca-lateral-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Superior cerebellar artery', url: wiki('Superior cerebellar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Cerebellar stroke syndrome', url: wiki('Cerebellar stroke syndrome') },
+  ],
+  'vasc-sca-medial-branch': [
+    { source: 'wikipedia', label: 'Wikipedia — Superior cerebellar artery', url: wiki('Superior cerebellar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Superior colliculus (tectal plate)', url: wiki('Superior colliculus') },
+    { source: 'wikipedia', label: 'Wikipedia — Parinaud syndrome', url: wiki('Parinaud syndrome') },
+  ],
+  'vasc-sca-vermian-branches': [
+    { source: 'wikipedia', label: 'Wikipedia — Cerebellar vermis', url: wiki('Cerebellar vermis') },
+    { source: 'wikipedia', label: 'Wikipedia — Superior cerebellar artery', url: wiki('Superior cerebellar artery') },
+  ],
+  'vasc-aica-labyrinthine-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Labyrinthine artery', url: wiki('Labyrinthine artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Internal auditory meatus', url: wiki('Internal auditory meatus') },
+    { source: 'wikipedia', label: 'Wikipedia — Anterior inferior cerebellar artery', url: wiki('Anterior inferior cerebellar artery') },
+  ],
+  'vasc-pica-tonsillomedullary-segment': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior inferior cerebellar artery', url: wiki('Posterior inferior cerebellar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Cerebellar tonsil', url: wiki('Cerebellar tonsil') },
+  ],
+  'vasc-pica-telovelotonsillar-segment': [
+    { source: 'wikipedia', label: 'Wikipedia — Posterior inferior cerebellar artery', url: wiki('Posterior inferior cerebellar artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Fourth ventricle', url: wiki('Fourth ventricle') },
+    { source: 'wikipedia', label: 'Wikipedia — Cerebellar mutism', url: wiki('Cerebellar mutism') },
+  ],
+  'vasc-anterior-spinal-artery': [
+    { source: 'wikipedia', label: 'Wikipedia — Anterior spinal artery', url: wiki('Anterior spinal artery') },
+    { source: 'wikipedia', label: 'Wikipedia — Anterior spinal artery syndrome', url: wiki('Anterior spinal artery syndrome') },
+    { source: 'wikipedia', label: 'Wikipedia — Medial medullary syndrome', url: wiki('Medial medullary syndrome') },
+  ],
+
   // ---- v9: the somatotopic map of the M1 / S1 strips ----
   // Every one of the 16 segment ids is curated. They all resolve to `'context'`
   // kind, and getWebRefs() skips the automatic Wikipedia fallback for `'vessel'`

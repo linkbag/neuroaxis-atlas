@@ -32,7 +32,9 @@
     "verify:cranial-nerves": "node scripts/verify/cranial-nerves.mjs",
     "verify:nerve-kind": "node scripts/verify/nerve-kind.mjs",
     "verify:cranial-nerve-courses": "node scripts/verify/cranial-nerve-courses.mjs",
-    "verify:cranial-nerve-render": "node scripts/verify/cranial-nerve-render.mjs"
+    "verify:cranial-nerve-render": "node scripts/verify/cranial-nerve-render.mjs",
+    "verify:vasc-courses": "node scripts/verify/vasc-courses.mjs",
+    "verify:vessel-render": "node scripts/verify/vessel-render.mjs"
   },
   "dependencies": {
     "@react-three/drei": "9.114.3",

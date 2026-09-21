@@ -21,7 +21,15 @@
  *    the SAME sweep and the SAME `isTractVisible` gate — but keyed on the
  *    record's OWN registry kind (`nerve`), so the Systems row's "Cranial
  *    nerves" button controls exactly the twelve and the "Tracts" button
- *    controls exactly the 23 (`src/geometry/curves.ts` holds the courses).
+ *    controls exactly the 23 (`src/geometry/curves.ts` holds the courses);
+ *  - v17: the same route for VESSEL COURSES (`src/geometry/vasculature-
+ *    courses.ts`). A course-bearing artery renders as a procedural tube here
+ *    and in the live section, is admitted by `isTractVisible` on its OWN
+ *    registry kind (`vessel` + region `vasculature`), draws its mirror twin when
+ *    the registry calls it `paired`, and stops drawing the schematic placement
+ *    ellipsoid it used to fall back to — which is what removes the two red
+ *    lenticulostriate blobs the user screenshotted. Zero payload: the tube is
+ *    swept from the authored waypoints, exactly like a nerve's.
  *
  * Selection/hover dimming: the lit id set (open syndrome wins over a plain
  * selection — store.highlightIdSet) stays at full brightness/emissive while
@@ -58,6 +66,13 @@ import SomatotopyOverlay from './SomatotopyOverlay'
 import TractTube from './TractTube'
 import { SOMATOTOPY_RECORD_IDS } from '../../geometry/somatotopy'
 import { NERVE_COURSES, hasNerveCourse, type NerveCourseRecord } from '../../geometry/curves'
+import {
+  VESSEL_COURSES,
+  hasVesselCourse,
+  hasVesselCourseGroup,
+  isPairedVessel,
+  type VesselCourseRecord,
+} from '../../geometry/vasculature-courses'
 
 /** Envelope gray (plan §6 context palette) — fed to the factory material. */
 const CONTEXT_COLOR = '#94a3b8'
@@ -105,8 +120,10 @@ export const GHOST_OUTLINE_OPACITY = 0.05
  *   • `anatomySlugsForRecord` has no link for an `nrv-*` id, so the slug handed
  *     to `NucleusMesh` is the record id itself — a manifest miss, which settles
  *     to `status: 'fallback'` and draws the shared unit sphere scaled by
- *     `size3d` at `origin3d` (exactly what `nuc-subiculum` and
- *     `vasc-lenticulostriate-arteries` do);
+ *     `size3d` at `origin3d` (exactly what `nuc-subiculum` does — v17 removed
+ *     the other example this line used to give, `vasc-lenticulostriate-
+ *     arteries`, whose fallback ellipsoid WAS the two red blobs the user
+ *     screenshotted: it now has a course and is suppressed below);
  *   • `isSolidKind('nerve')` is true, so `emphasis` may lift it — which is
  *     correct for an opaque body and would be wrong for an envelope.
  * The v13 slice adds no pass, no manifest part and no GLB (PLAN.md §5); if a
@@ -211,6 +228,30 @@ export function nerveCoursesVisible(
   courses: readonly NerveCourseRecord[],
   layers: SceneLayerSets,
 ): NerveCourseRecord[] {
+  return courses.filter((course) => isTractVisible(course.id, layers))
+}
+
+/**
+ * The VESSEL-COURSE pass's admission list — the artery courses that survive the
+ * one decision (v17, the vessel half of the same route).
+ *
+ * Exactly the nerve pass above, one table over: a vessel course resolves through
+ * `getTaxonomyEntry` to `region: 'vasculature'` and `kind: 'vessel'`, so the
+ * Areas row's **Vasculature** button and the Systems row's **vessel** button
+ * gate it — and nothing else does. With the vessel kind off, 0 vessel courses
+ * draw and no nerve or tract disappears; with the vasculature area off, the
+ * same 0; with the TRACT kind off, the vessel courses stay (the kind is the
+ * record's own, never a literal).
+ *
+ * Exported for the same reason the other predicates are: a gate cannot mount
+ * the R3F canvas, so the pass's decision is a pure function over (courses, layer
+ * state) and `scripts/verify/vessel-render.mjs` executes it and prints the
+ * counts of every layer state.
+ */
+export function vesselCoursesVisible(
+  courses: readonly VesselCourseRecord[],
+  layers: SceneLayerSets,
+): VesselCourseRecord[] {
   return courses.filter((course) => isTractVisible(course.id, layers))
 }
 
@@ -618,6 +659,22 @@ export default function SceneLayers() {
     [layerSets],
   )
 
+  /**
+   * v17 §5 — the vessel courses as TUBES, the same pass one table over.
+   *
+   * An artery course is the same object a tract and a nerve are (a Catmull-Rom
+   * path with a radius and a colour), so it renders through the SAME
+   * `<TractTube>` and the SAME gate, and its own registry kind (`vessel`) plus
+   * its own region (`vasculature`) decide visibility. The domains stay separate:
+   * this pass adds COURSES beside the committed vessel dataset (owned by the
+   * data tasks, untouched here), so every gate that sweeps the committed vessel
+   * records keeps its domain while the granular branch tree is drawn as tubes.
+   */
+  const visibleVesselCourses = useMemo(
+    () => vesselCoursesVisible(VESSEL_COURSES, layerSets),
+    [layerSets],
+  )
+
   return (
     <group name="scene-layers">
       <ContextEnvelopes highlight={highlight} />
@@ -654,7 +711,25 @@ export default function SceneLayers() {
         // course. The record itself stays complete: `origin3d`, `size3d`,
         // `function`, `modality`, `course` and the clinical items are still read
         // by the InfoPanel, the content gates and the course anchor chain.
-        if (hasNerveCourse(record.id)) return null
+        // v18 — a record is suppressed when IT owns a course, or when it is the
+        // GROUP HEAD of courses its children carry (the lenticulostriate parent
+        // `vasc-lateral-lenticulostriate-arteries` owns no path itself — its four
+        // children do — so without the group check the parent's schematic
+        // ellipsoid kept rendering beside the children's tubes, which is exactly
+        // the "blob" the user flagged).
+        if (hasNerveCourse(record.id) || hasVesselCourse(record.id) || hasVesselCourseGroup(record.id)) return null
+        // v17 §5 — the same rule for a VESSEL that now has a course. This is
+        // the line that removes the two red lenticulostriate blobs: the record
+        // `vasc-lenticulostriate-arteries` (and every granular perforator
+        // record that joins it) has no `LINKS` entry in anatomyAssets.ts, so
+        // before this pass it fell through to `NucleusMesh`'s fallback — one
+        // unit sphere scaled by `size3d` at `origin3d`, drawn twice for a
+        // `paired` record. `hasVesselCourse` is true for exactly the ids the
+        // course table owns, so the ellipsoid stops being drawn for those and
+        // ONLY those; the record keeps its registry row, its `territory[]`, its
+        // `supply[]` syndrome links and its InfoPanel page, and the body it
+        // keeps is the procedural tube below ("one record, one body").
+        if (hasVesselCourse(record.id)) return null
         // Ventricle records keep their parametric v1 shape as the fallback;
         // NucleusMesh upgrades to the committed GLB when the manifest has one.
         const override = record.kind === 'ventricle' ? cachedVentricleGeometry(record.id) : undefined
@@ -726,6 +801,23 @@ export default function SceneLayers() {
         // twin on the other side, so a crossing can be followed from the
         // ipsilateral root to the contralateral target.
         const paired = getTaxonomyEntry(course.id)?.laterality === 'paired'
+        return (
+          <Fragment key={course.id}>
+            <TractTube tract={course} highlight={highlight} variant="vessel" />
+            {paired && <TractTube tract={course} highlight={highlight} mirrored variant="vessel" />}
+          </Fragment>
+        )
+      })}
+      {/* v17 §5 — the VESSEL courses: the same tube, the same gate, their OWN
+          registry kind. Each is a `VesselCourseRecord` (a `TractRecord` superset
+          carrying the parent artery, the hugged surface and the basis of the
+          path), so `TractTube` needs no branch and no second renderer exists.
+          `isPairedVessel` prefers the registry's own `laterality` and falls back
+          to the record's, so a paired artery draws BOTH sides (`x → −x` twin)
+          while a midline one (the anterior spinal artery, the vermian branches)
+          stays single — mirroring a midline vessel would double it. */}
+      {visibleVesselCourses.map((course) => {
+        const paired = isPairedVessel(course, getTaxonomyEntry(course.id)?.laterality)
         return (
           <Fragment key={course.id}>
             <TractTube tract={course} highlight={highlight} />

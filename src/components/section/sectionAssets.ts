@@ -15,7 +15,7 @@
  * COPIED out for the worker: the parsed BufferGeometries back the 3D scene
  * and must never have their attributes detached by transfer.
  */
-import type { Region } from '../../types'
+import type { Region, Vec3 } from '../../types'
 import { getTaxonomyEntry } from '../../data/load'
 import {
   getManifest,
@@ -27,6 +27,12 @@ import {
 } from '../../geometry/anatomyAssets'
 import type { AnatomyPart } from '../../geometry/generated'
 import { NERVE_COURSES, type NerveCourseRecord } from '../../geometry/curves'
+import {
+  VESSEL_COURSES,
+  isPairedVessel,
+  mirrorVesselCourse,
+  type VesselCourseRecord,
+} from '../../geometry/vasculature-courses'
 import { tubeGeometryFor } from '../viewer3d/TractTube'
 import type { WorkerRegistryPart } from './contourWorker'
 
@@ -156,7 +162,7 @@ function metaFor(part: AnatomyPart): SectionPartMeta {
 /** Every committed GLB as a section part, in manifest order (stable). */
 export const SECTION_PARTS: readonly SectionPartMeta[] = getManifest().parts.map(metaFor)
 
-/* ------------------------------------------- v14 cranial-nerve courses */
+/* ------------------------------------- v14/v17 the shared COURSE route */
 
 /**
  * THE PROBLEM THIS SOLVES (PLAN.md §4). The live section paints committed GLB
@@ -180,33 +186,54 @@ export const SECTION_PARTS: readonly SectionPartMeta[] = getManifest().parts.map
  * the intersection of the SAME geometry the user sees in 3D — one builder, one
  * cache, by construction rather than by coincidence.
  *
+ * v17 GENERALIZES THE ROUTE TO VESSELS. A cranial-nerve course and a vessel
+ * course are the same object (a `TractRecord` superset with `waypoints` +
+ * `tubeRadius` + `color`), so both flow through ONE adapter below —
+ * `registryCourseParts` — and the only per-family parts are two thin wrappers
+ * (`registryNerveParts`, `registryVesselParts`) that supply the meta mapper and
+ * the mirror mapper. The vessel half is what puts the granular arteries in the
+ * 2D section and the PiP, with the same zero payload.
+ *
  * `SECTION_PARTS` itself is UNCHANGED (138 entries, byte-identical), so every
  * count-based gate that sweeps it — `view-filter-consistency`'s 102/102,
  * `cranial-nerves.mjs`'s and `audit.mjs`'s `138` assertions — keeps its domain.
  * Only the canvas's own two call sites move to `partsForCanvas()`.
  */
 
-/** Where a nerve course sits in the draw order — the solid-body bucket. */
-const NERVE_SECTION_KIND: SectionKind = 'nucleus'
+/** Where a course sits in the draw order — the solid-body bucket. */
+const COURSE_SECTION_KIND: SectionKind = 'nucleus'
 
 /**
  * The procedural section part for one course. `slug` and `group` are both the
- * course id (the same `nrv-*` id the 3D scene selects by, and the same id
+ * course id (the same id the 3D scene selects by, and the same id
  * `isPartVisible`'s taxonomy lookup resolves), `region` comes from the course,
- * and `taxonomyKind: 'nerve'` is what makes the Systems row's "Cranial nerves"
- * button gate the nerve contours — `isPartVisible` prefers `taxonomyKind` over
- * the draw bucket, so no change to that predicate is needed.
+ * and `taxonomyKind` is the course's OWN kind — what makes the Systems row's
+ * "Cranial nerves" button gate the nerve contours and the "vasculature" area +
+ * vessel system buttons gate the artery contours. `isPartVisible` prefers
+ * `taxonomyKind` over the draw bucket, so no change to that predicate is needed.
  */
-function nerveCourseMeta(course: NerveCourseRecord): SectionPartMeta {
+function courseMeta(
+  course: { id: string; region: Region; kind: string; color: string },
+): SectionPartMeta {
   const entry = getTaxonomyEntry(course.id)
   return {
     slug: course.id,
     group: course.id,
     region: course.region,
-    kind: NERVE_SECTION_KIND,
+    kind: COURSE_SECTION_KIND,
     taxonomyKind: entry?.kind ?? course.kind,
     color: entry?.color ?? course.color,
   }
+}
+
+/** The section part for one cranial-nerve course. */
+function nerveCourseMeta(course: NerveCourseRecord): SectionPartMeta {
+  return courseMeta(course)
+}
+
+/** The section part for one vessel course (`taxonomyKind: 'vessel'`). */
+function vesselCourseMeta(course: VesselCourseRecord): SectionPartMeta {
+  return courseMeta(course)
 }
 
 /**
@@ -217,51 +244,141 @@ function nerveCourseMeta(course: NerveCourseRecord): SectionPartMeta {
 export const SECTION_NERVE_PARTS: readonly SectionPartMeta[] = NERVE_COURSES.map(nerveCourseMeta)
 
 /**
+ * One section part per VESSEL course, in course order (v17). These are the
+ * granular arteries `src/geometry/vasculature-courses.ts` owns: the
+ * lenticulostriate perforators that replaced the two red ellipsoids, plus every
+ * authored branch course merged in from `vasculature-courses.json`. Their
+ * `taxonomyKind` is `'vessel'` and their `region` is `'vasculature'`, so the
+ * Systems row's vessel button and the Areas row's Vasculature button are the
+ * two controls — the same pair that gates the committed artery GLBs.
+ */
+export const SECTION_VESSEL_PARTS: readonly SectionPartMeta[] = VESSEL_COURSES.map(vesselCourseMeta)
+
+/**
  * What the live section draws: the committed GLB parts followed by the
- * procedural cranial-nerve parts. The canvas's visible-list filter and its
- * worker registry both read THIS, so a nerve is drawn iff its contours came
- * back from the worker — which cannot happen unless the worker was handed its
- * geometry, which is why the registry below is the only other change.
+ * procedural course parts of both families. The canvas's visible-list filter and
+ * its worker registry both read THIS (through `registryCourseParts` below), so a
+ * course is drawn iff its contours came back from the worker — which cannot
+ * happen unless the worker was handed its geometry.
  */
 export function partsForCanvas(): readonly SectionPartMeta[] {
-  return [...SECTION_PARTS, ...SECTION_NERVE_PARTS]
+  return [...SECTION_PARTS, ...SECTION_NERVE_PARTS, ...SECTION_VESSEL_PARTS]
 }
 
 /**
- * The cranial-nerve part of the worker registry: the tube geometry the 3D pass
- * renders, copied into worker-owned transferable arrays by the same adapter the
- * committed parts use (`registryPartFromGeometry`), which already accepts an
- * arbitrary `BufferGeometry`.
+ * THE SHARED COURSE ROUTE (v17) — one cadence, two families.
+ *
+ * The route owns the CADENCE both families share: one authored part per course,
+ * one `#mirror` twin when the registry calls the course `paired`, the twin
+ * re-slugged so it cannot collide with the authored side in the worker registry,
+ * and a course whose sweep yields no positions skipped (the canvas then simply
+ * has no contour entry for that slug, exactly as it does for a GLB that failed
+ * to load). The two things that legitimately differ — the meta mapper and the
+ * sweep itself — are supplied per family by `registryNerveParts` and
+ * `registryVesselParts` below.
  *
  * Copied, not shared: `registryPartFromGeometry` builds FRESH `Float32Array` /
  * `Uint32Array` views, so transferring these to the worker cannot detach an
  * attribute the 3D scene is still drawing (the parsed GLB geometries have the
  * same constraint and get the same treatment).
- *
- * A course whose sweep yields no positions returns null and is skipped — the
- * canvas then simply has no contour entry for that slug, exactly as it does for
- * a GLB that failed to load.
  */
-export function registryNerveParts(): WorkerRegistryPart[] {
+function registryCourseParts<TCourse extends { id: string }>(
+  courses: readonly TCourse[],
+  authoredPartFor: (course: TCourse) => WorkerRegistryPart | null,
+  mirroredPartFor: (course: TCourse) => WorkerRegistryPart | null,
+  isPaired: (course: TCourse) => boolean,
+): WorkerRegistryPart[] {
   const parts: WorkerRegistryPart[] = []
-  for (const course of NERVE_COURSES) {
-    const part = registryPartFromGeometry(nerveCourseMeta(course), tubeGeometryFor(course))
+  for (const course of courses) {
+    const part = authoredPartFor(course)
     if (part !== null) parts.push(part)
-    // v17 — paired nerves sweep their MIRROR-IMAGE course as well, so the 2D
-    // section shows both sides exactly as the 3D pass does (SceneLayers renders
-    // the same twin). The mirrored part keeps the record id as its GROUP — so a
-    // contour on either side selects/highlights the same record — and gets a
-    // suffixed slug so it cannot collide with the authored side in the worker
-    // registry. Nerves the registry does not call `paired` stay one-sided.
-    if (getTaxonomyEntry(course.id)?.laterality !== 'paired') continue
-    const mirroredCourse: NerveCourseRecord = {
-      ...course,
-      waypoints: course.waypoints.map(([x, y, z]) => [-x, y, z] as [number, number, number]),
-    }
-    const mirrored = registryPartFromGeometry(nerveCourseMeta(mirroredCourse), tubeGeometryFor(mirroredCourse))
+    if (!isPaired(course)) continue
+    const mirrored = mirroredPartFor(course)
     if (mirrored !== null) parts.push({ ...mirrored, slug: `${mirrored.slug}#mirror` })
   }
   return parts
+}
+
+/** Mirror one canonical point across the mid-sagittal plane (x → −x). */
+function mirrorWaypoints(waypoints: readonly Vec3[]): Vec3[] {
+  return waypoints.map(([x, y, z]) => [-x, y, z] as Vec3)
+}
+
+/**
+ * The cranial-nerve part of the worker registry — the tube geometry the 3D pass
+ * renders, one part per authored side plus one per mirrored twin.
+ *
+ * Its count is UNCHANGED by v17's vessel work (12 authored + 12 mirrored = 24
+ * for the twelve paired nerves): the vessel family has its own entry point
+ * below, so every gate that pins this number keeps its domain. The pairing rule
+ * is the registry's own `laterality`, byte-identical to v14/v17's nerve sweep.
+ */
+export function registryNerveParts(): WorkerRegistryPart[] {
+  return registryCourseParts(
+    NERVE_COURSES,
+    // The v14 call shape, unchanged: one procedural part per course, swept by the
+    // shared `tubeGeometryFor` and copied by the shared
+    // `registryPartFromGeometry` adapter.
+    (course) => registryPartFromGeometry(nerveCourseMeta(course), tubeGeometryFor(course)),
+    (course) => {
+      // v17 — the mirrored twin MUST be swept under its own cache key.
+      // `tubeGeometryFor` is keyed on the id by default, so sweeping the
+      // mirrored twin under the authored id would return the AUTHORED geometry
+      // from the cache and the "mirror" part would be a duplicate of the
+      // authored side instead of its reflection. `#mirror` is the same key
+      // suffix `TractTube`'s mirrored instance uses, so the 2D contour IS the
+      // geometry the 3D twin draws.
+      const mirrored: NerveCourseRecord = { ...course, waypoints: mirrorWaypoints(course.waypoints) }
+      return registryPartFromGeometry(
+        nerveCourseMeta(mirrored),
+        tubeGeometryFor(mirrored, `${course.id}#mirror`),
+      )
+    },
+    (course) => getTaxonomyEntry(course.id)?.laterality === 'paired',
+  )
+}
+
+/**
+ * The VESSEL part of the worker registry (v17) — the same shared route, the
+ * vessel table, the vessel meta mapper. This is what makes the granular
+ * arteries appear in the live section and the PiP with zero payload.
+ *
+ * The pairing rule is `isPairedVessel`, i.e. the SAME rule the 3D pass uses
+ * (registry `laterality` first, the record's own as the fallback), so a course
+ * that draws both sides in 3D also hands the worker both sides here — the two
+ * surfaces cannot disagree about a side.
+ *
+ * HANDOFF (one line, outside this task's write scope): `SectionCanvas`'s worker
+ * registry builds `SECTION_PARTS` in a loop and then appends the procedural
+ * families — its single call site is `registryParts.push(...registryNerveParts())`
+ * (SectionCanvas.tsx, the init-registry effect). The vessel family reaches the
+ * worker when that effect also appends `...registryVesselParts()`. This function
+ * and `partsForCanvas()` are both ready for it; the visible-list side needs no
+ * further change, so the moment that one line lands the artery contours paint.
+ * `scripts/verify/vessel-render.mjs` prints this handoff on every run instead of
+ * letting it pass unnoticed.
+ */
+export function registryVesselParts(): WorkerRegistryPart[] {
+  return registryCourseParts(
+    VESSEL_COURSES,
+    (course) => registryPartFromGeometry(vesselCourseMeta(course), tubeGeometryFor(course)),
+    (course) => {
+      const mirrored = mirrorVesselCourse(course)
+      return registryPartFromGeometry(
+        vesselCourseMeta(mirrored),
+        tubeGeometryFor(mirrored, `${course.id}#mirror`),
+      )
+    },
+    (course) => isPairedVessel(course, getTaxonomyEntry(course.id)?.laterality),
+  )
+}
+
+/**
+ * Every procedural course part (nerves + vessels) — exported so a caller that
+ * owns the canvas can take the whole route in one call.
+ */
+export function registryCoursePartsAll(): WorkerRegistryPart[] {
+  return [...registryNerveParts(), ...registryVesselParts()]
 }
 
 /* ------------------------------------------------- v9 cortical-lobe layer */

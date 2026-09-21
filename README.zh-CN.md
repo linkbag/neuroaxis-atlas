@@ -2,7 +2,7 @@
 
 # NeuroAxis — 三维脑干图谱
 
-**一个交互式、写实的 Web 图谱，涵盖间脑、中脑（mesencephalon）与菱脑（脑桥、延髓、小脑）—— 自 v7 起叠加端脑（大脑半球、基底节、边缘系统、脑室），自 v8 起加入脑血管（Willis 环与主要脑动脉）以及深部功能/投射内容，自 v9 起加入躯体定位图、皮层分区切面图层、可重跑的影像配准与模拟切面面板，v10 的显示轮次（整框平面辅助器、分区级可见性与 solo、四角面板缩放、皮层分区质量，以及被移除的皮层标签），以及自 v13/v14 起作为第七个系统、以作者撰写走行几何呈现的十二对脑神经（CN I Olfactory → CN XII Hypoglossal）** —— 可点选的 3D 核团与纤维束、与 3D 裁剪平面双向同步的带标注 2D 断面图版、以真实 MRI / CT / 冷冻切片影像作为断面底图的断面视图（Plates 标签页画布与 3D 主切面）、临床综合征浏览器，以及每个结构各自的神经生理、连接、血供与参考文献。使用 Vite、React 18、TypeScript、three.js（`@react-three/fiber`）与 zustand 构建。交互模型受 [ashemag/human-atlas](https://github.com/ashemag/human-atlas) 启发；**所有解剖内容与图版插图都是为本项目创作的原创示意图作品，并且自 v2 写实化升级起，外廓曲面派生自 [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/)（CC BY 4.0）** —— 见 [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)。
+**一个交互式、写实的 Web 图谱，涵盖间脑、中脑（mesencephalon）与菱脑（脑桥、延髓、小脑）—— 自 v7 起叠加端脑（大脑半球、基底节、边缘系统、脑室），自 v8 起加入脑血管（Willis 环与主要脑动脉）以及深部功能/投射内容，自 v9 起加入躯体定位图、皮层分区切面图层、可重跑的影像配准与模拟切面面板，v10 的显示轮次（整框平面辅助器、分区级可见性与 solo、四角面板缩放、皮层分区质量，以及被移除的皮层标签），以及自 v13/v14 起作为第七个系统、以作者撰写走行几何呈现的十二对脑神经（CN I Olfactory → CN XII Hypoglossal），以及 v17 的**细粒度血管层**（53 条血管记录、40 条作者撰写走行，豆纹动脉的两个红色椭球被真实穿通支走行取代）** —— 可点选的 3D 核团与纤维束、与 3D 裁剪平面双向同步的带标注 2D 断面图版、以真实 MRI / CT / 冷冻切片影像作为断面底图的断面视图（Plates 标签页画布与 3D 主切面）、临床综合征浏览器，以及每个结构各自的神经生理、连接、血供与参考文献。使用 Vite、React 18、TypeScript、three.js（`@react-three/fiber`）与 zustand 构建。交互模型受 [ashemag/human-atlas](https://github.com/ashemag/human-atlas) 启发；**所有解剖内容与图版插图都是为本项目创作的原创示意图作品，并且自 v2 写实化升级起，外廓曲面派生自 [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/)（CC BY 4.0）** —— 见 [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)。
 
 ## 第三方数据许可
 
@@ -37,6 +37,7 @@
 - **显示轮次 2（v10）** — 三个 3D 平面辅助器现在跨越其两个平面内轴的**整个 `CLIP_BOUNDS` 矩形**，因此穿过半球的切面会显示出皮层实际所在处的切面，而不是止步于脑干；Legend 中新增**分区级可见性控件**（Prosencephalon · Mesencephalon · Rhombencephalon · Cerebral vasculature），含开/关复选框**以及**每个分区的一键 **Solo**，于是“全部打开”不再令人不知所措；模拟切面面板可从**四个角**缩放；皮层分区图层不再绘制细条与漂浮楔形；并且 *"Cerebral cortex (context envelope)"* 的**文字标签被移除，但其轮廓保留** —— 细节见 [v10](#v10--plane-helper-extent-division-visibility-four-corner-pip-resize-cortical-division-quality-and-the-cortex-label)。
 - **Areas + Systems 开关行（v11）** — 页眉的视图预设行被降级为**两行开/关开关**下方的快捷行：大的解剖学 **Areas**（Telencephalon · Diencephalon · Mesencephalon · Metencephalon (pons + cerebellum) · Myelencephalon (medulla) · Cerebral vasculature —— 它们合起来把全部 7 个分类学区域与全部 236 条条目恰好各划分一次）与正交的 **Systems** 轴（Nuclei · Tracts · Ventricles · Surface · Vessels · Context = `ALL_KINDS`；**v13 加入第七项 Cranial nerves**）。某个 area 或 system **关闭**时，会由**同一个**可见性决策把它从 3D 场景、实时断面**以及** PiP 中排除，**Reset / All** 可恢复有文档记载的默认状态；这一轮还了结了 v10 的两处遗留缺陷（皮层分区规则 vs 画布实际绘制的内​​容；矢状平面辅助器的 `u/v` 约定）—— 细节见 [v11](#v11--the-areas--systems-toggle-rows-replace-the-view-preset-row)。
 - **脑神经（v13）** — 十二对脑神经（**CN I Olfactory → CN XII Hypoglossal**）作为一等记录，归入新的第七个 **Systems** 开关 **Cranial nerves**（kind `nerve`，id 前缀 `nrv-`）：每条记录都带有它的模态、它的走行*以及它所穿过的颅底孔*、它的功能、指向图谱已有脑神经**核团**的链接、它的血供或与之临床相关的血管，以及给出麻痹表现**及其定位**的临床条目。它们被放置在**真实**所属区域（telencephalon 2 · midbrain 2 · pons 4 · medulla 4），统一归入一个 subdivision `Cranial nerves`，因此在树中会聚成组。**v13 以记录 + 示意性放置标记的形式交付；v14 用作者撰写的走行几何替换了这些标记** —— 在 3D 中引用某一条之前，请先阅读 [v14 章节](#v14--the-cranial-nerves-as-traveling-tracts)及其[如实说明的局限](#v14-honest-limits-in-one-place) —— 细节见 [v13](#v13--the-cranial-nerves-the-seventh-system)。
+- **细粒度血管层（v17）** — 动脉图层再深入一个层级：**53 条血管记录、40 条作者撰写走行**（MCA 岛段 + 终末主干 + M4 皮层支，ACA 胼周/胼缘/额极/眶额动脉，PCA 顶枕/距状/颞支/压部动脉，SCA + AICA + PICA 各段，脊髓前动脉，以及穿通支群 —— **豆纹动脉、丘脑穿通动脉、丘脑膝状体动脉、脑桥穿通动脉**），每一条都渲染为一根**贴合实测外廓**（`ctx-hemisphere-l/r`、中脑、脑桥、延髓、小脑）的**程序化管道**，而不是示意性标记。**豆纹动脉的两个红色色块消失了**：椭球被*退役*而非被遮盖，穿通支现在是真实走行 —— 从 M1 壁穿过前穿质进入壳核与尾状核。**这些分支是投影到派生曲面上的作者撰写走行路径，不是分割血管造影**，并且它们花费 **0 字节**载荷；细节见[细粒度血管层（v17）](#the-granular-vasculature-layer-v17--53-vessel-records-authored-courses-no-blobs)。
 - **12 张交互式 2D 图版** — 9 个横断层级（锥体交叉 → 丘脑中段）、1 张正中矢状剖面、2 张冠状切片；每个带标注区域在悬停时高亮、点击时在所有位置选中；引线标签可开/关。**（v7 再增加 3 张 —— 共 15 张：** 轴位 +58、矢状半球、冠状穹窿。）
 - **2D ↔ 3D 同步** — 选中一张图版（或层标尺条目）会把 3D 横断裁剪平面移到该层并显示平面辅助器；拖动平面会让层标尺与图版同步指示器保持同步。
 - **结构浏览器** — 区域 → 细分 → 结构的分类学树，外加对名称与同义词的大小写不敏感搜索（试试 "STN"、"MLF"、"pulvinar"）。
@@ -457,6 +458,32 @@ Chrome 死在 **`mojo::PlatformChannel` 内部** —— 它无法创建自己为
   默认视图，也不会变得不可达（见 `state/store.ts`：血管豁免是用它自己的
   断言换来的）。
 
+<a id="the-granular-vasculature-layer-v17--53-vessel-records-authored-courses-no-blobs"></a>
+
+### 细粒度血管层（v17）—— 53 条血管记录、作者撰写走行、不再有色块
+
+**v17 新增了什么。** v8 的动脉图层是 14 条记录，其几何是已提交的 BP3D 铸型 —— 而你在前穿质处看到的两个**红色色块**，就是 `vasc-lenticulostriate-arteries` 在渲染它的**示意性放置椭球**（一个按 `size3d` 缩放的单位球，因记录是 `paired` 而绘制两次）。v17（a）**用作者撰写的穿通支走行取代这两个色块**，（b）比 14 条命名动脉**再深入一个层级** —— 既包括档案确实携带的中间与远端分支，也包括它根本没有概念的穿通支 —— 以及（c）让每一条带走行的血管都通过**实测投影贴合其解剖上遵循的曲面**。
+
+- **53 条血管记录、40 条走行、77 根实际绘制的管道。** 39 条作者撰写走行记录（`src/data/structures/vasculature-courses.json`）+ 内置的豆纹动脉总记录，其中 **37 条成对**（以精确的 `x → −x` 孪生体再画一次）、**3 条中线**（单根）：`2 × 37 + 3 = 77` 根管道。注册表从 **248 → 287 行**，`vessel` 从 **14 → 53**；`npm run validate` 报告 0 错误 / 0 警告。
+- **豆纹动脉的替换。** 六条链从 **M1 上壁顶点 [15.786, 11.967, 24.920]**（已提交 `vasc-middle-cerebral-artery-m1-l` 的一个真实顶点，距离 **0.000 au**）出发，穿过**前穿质**进入基底节 —— 四条外侧链到壳核目标，两条内侧（Heubner）链到尾状核头 —— 终末路点**擦过**它所供应的结构（外侧距壳核网格 0.021–0.179 au = 0.03–0.21 mm，Heubner 距尾状核 0.249–0.296 au = 0.30–0.36 mm），因为穿通支正是*终止在*它所供应的结构内部。结构渲染通道对任何带走行的记录返回 `null`，因此**两个椭球不再被绘制**：已交付的表格为全部 40 条走行打印 `tube only`、为 13 条有已提交网格的动脉打印 `baked body`，并在全部 53 条血管记录上给出 **blobs 0**（9 条豆纹动脉 id 全部被抑制）。
+- **半径是有出处的管径，不是可读性折中。** 在 1 au = 1.2 mm 下 `r_au = calibreMm ÷ 2.4`，取自四个有文档记载的直径 —— **0.8 mm → 0.333 au**（9 条：豆纹动脉与其他穿通支）、**1.0 mm → 0.417**（4 条：Heubner、脊髓前动脉）、**1.2 mm → 0.500**（19 条：MCA/PCA 皮层支）、**2.0 mm → 0.833**（7 条：MCA M2、终末主干、A2–A3、P4）。39/39 满足 `|r × 2.4 − calibreMm| < 0.03`（最大误差 0.0008 au）。172 个路点共 **1,775.64 au = 2,130.8 mm** 作者撰写走行，每个路点都在 `CLIP_BOUNDS` 内。
+- **贴合曲面靠测量，不靠肉眼。** 每条走行都声明它遵循的已提交外廓；流水线解析 GLB，找到最近**顶点**，再细化到其**相邻三角形**上的精确最近点，然后把路点沿外法向偏移 `tubeRadius + 0.15 au`。**172 个路点中有 67 个被投影**，门禁从网格字节重新推导每一个残差：左半球 50 个路点（放置后距曲面 0.021–0.925 au）、脑桥 5 个（0.145–0.454）、中脑 5 个（0.496–0.643）、小脑 4 个（0.549–0.615）、延髓 3 个（0.377–0.555）。镜像检查：重新测量 52 个镜像投影，最差偏差 **1.480 au = 1.78 mm**（容差 1.6 au —— 两个已提交半球是各自独立抽取的）。**穿通支有意声明 `surface: null`**：它们穿破曲面后*在脑内*走行，且每条记录都如此说明 —— 把它们投影到皮层外廓上正是本轮明确禁止的错误。
+- **零载荷。** 没有新 GLB、没有 manifest 行、没有包围盒移动：manifest 仍是 **138 个部件 / 599,204 个三角形**，`Σ stat(parts[].file)` 仍是 **14,486,228 B = 13.82 MiB**，`src/assets/anatomy/` 仍是 **13.89 MiB**。路线是**程序化管道**（与脑神经相同的 `TractTube` 扫掠，每根 803 顶点 / 1,440 三角形）加上喂给既有轮廓 worker 的**程序化断面部件** —— 这是唯一可行的路线，因为解剖目录只剩 **0.18 MiB** 余量，而烘焙 BP3D 分支元素需要 **0.3–1.4 MiB**，即使抽稀也不够。
+- **解剖记录。** 新表格（id · 名称 · 父动脉 · 侧别 · 供血区 · 走行长度 au 与 mm · 半径及其 mm 出处 · 曲面距离）在 `docs/SWARM_V17_PLAN.md` §2；元素注册台账（新记录声明了哪些 BP3D 元素、107 个中还有哪 8 个未注册）在 `docs/VASC_INVENTORY.md` §8；门禁是 `npm run verify:vasc-courses`（**2,171 条断言 / 0 失败**）与 `npm run verify:vessel-render`（**75/75**）。
+
+**v17 如实说明的局限 —— 说出来，而不是丢掉。**
+
+| # | 局限 |
+| --- | --- |
+| 1 · **这些走行是作者撰写路径，不是分割血管造影** | 每一条都是通过有文档记载的地标撰写的路径 —— 起点是**已提交父网格的一个真实顶点**，中间路点投影到已提交外廓，管径有出处 —— 并且**档案对其中大多数根本没有命名元素**（不存在胼周、胼缘、额极、眶额、距状、顶枕、压部、迷路、脑桥穿通、豆纹或 Heubner 元素）。这些记录带有 `basis: 'documented-course'`，其 `anchorNote` 明确说明路径背后到底是什么；**这些分支不是真实血管造影的分割，也没有提交任何血管影像数据集（MRA/CTA）** |
+| 2 · **为什么不用烘焙几何** | 硬预算是已提交解剖目录：**14 MiB 上限中的 13.89 MiB**，余量 **0.18 MiB**。烘焙 BP3D 分支元素落在 **0.3–1.4 MiB** 区间 —— 放不下，因此细粒度层在架构上只能是程序化的，也正是记录数增长却**没有增加一个已提交字节**的原因 |
+| 3 · **分支管道画在一个已经包含它的实体之上** | v8 烘焙把 34 个 MCA 元素（88,460 面）与 26 个 PICA 元素合并进其父动脉，因此新的 MCA/PICA 走行会画在**已烘焙的父体之上**。半径很小（0.333–0.833 au），远端路点被向外移到外廓上，使管道在皮层处凸出 —— 这是一个近似，被说明而不是被隐藏。`documented-course` 血管没有烘焙孪生体，是干净的 |
+| 4 · **预期的“擦过”常常没有实现** | 偏移方向是*估计*法向：**67 个**放置路点中有 **61 个**的实际间隙**低于**预期的 `r + 0.15 au`，其中 **42 个**管道轴线比自身半径更靠近网格（最坏情况约半个截面陷入外廓之内）。数字被公布；修复是改用最近三角形法向的一行改动 |
+| 5 · **2D 实时断面与 PiP 目前还不绘制血管轮廓** | 可见部件列表已携带 40 条血管 meta，worker 机制也已切分程序化几何（**77 个 worker 部件 → 2,581 个轮廓环，0 个非有限值**），但 `SectionCanvas.tsx` 的初始化注册表 effect 仍只追加神经部件 —— 因此在 `registryParts.push(...registryVesselParts())` 落地之前，血管几何在任何地方都没有被计算、也没有被绘制。一行代码，且不在本轮的写入范围内 |
+| 6 · **一个计数过期的门禁是红的，而产品没有被弯折去迁就它** | `npm run verify:cranial-nerve-render` 为 **46/47**：它的 `partsForCanvas()` 恒等式仍写着 `138 + 12`，而现在找到 **190 = 138 + 12 + 40**，因为 v17 正是按计划加入了血管部件。重新指向（加上 `+ SECTION_VESSEL_PARTS.length`）不属于任何 v17 任务的写入范围，因此它被如实报告、树保持可见，而不是被一只非属主的手改掉 |
+| 7 · **两条错误数据行与两处过期文本仍随版本发布** | (a) `vasc-pica-tonsillomedullary-segment.territory` 声明的是**侧**脑室的脉络丛，而它自己的正文写的是**第四**脑室（其兄弟记录正确地声明 `vent-fourth-ventricle`）；(b) `vasc-anterior-spinal-artery.territory` 在一条延髓动脉上声明了一行**脑桥**结构（`ctx-pontine-fibers`）；(c) 总记录 `vasc-lenticulostriate-arteries` 的 `contextNote` 仍在描述已退役的椭球，从未说明 v17 的作者撰写走行依据；(d) 被替换的内置内侧走行仍把 ACA 的一个连接点称作“颈动脉终末”。四处都是本轮写入范围之外的内容文件编辑 —— 已在 `docs/SWARM_V17_PLAN.md` §5 连同数字报告 |
+| 8 · **这里没有验证的东西** | `verify:anatomy`（27/27）与 `verify:imaging-fit` 在沙箱对管道化子进程 stdio 的拒绝下、**在任何裁决之前**就中止（基线为红，0 条断言；`verify:anatomy` 被阻断的那项测量直接重跑为 **14,566,178 B**，未变）。**Chrome 无法在这里启动**，因此 *"管道真的被绘制在屏幕上"*、*"两个红色色块在屏幕上已消失"*、*"断面绘制轮廓"* 与点击选中**仅由编排器浏览器验证** |
+
 ### 深部内容（记录，带注释）
 
 | 组 | 记录 | 说明 |
@@ -492,6 +519,9 @@ Chrome 死在 **`mojo::PlatformChannel` 内部** —— 它无法创建自己为
 - **`vasc-lenticulostriate-arteries` 没有网格，MCA 的分支网格也不是它。** BP3D 的 MCA 元素
   包含前外侧中央支，但把它们切出来当作“豆纹动脉”，就等于断言一个
   来源并未做出的分割。
+
+> **v17 更新 —— 取代上面两条关于豆纹动脉的条目。** 该记录仍然**没有网格**，但它不再是**有尺寸的示意性放置标记**：v17 绘制**作者撰写的穿通支走行**（六条链，从 MCA M1 壁穿过前穿质进入壳核与尾状核头），并让椭球退役 —— 两个红色色块是被*抑制*掉的，不是被新网格取代的。MCA 的前外侧中央元素（`FJ1662`/`FJ1662M`、`FJ1663`/`FJ1663M`）现在被命名为外侧链的**依据**，而不是被切出一个烘焙实体。关于海马亚区的那一条不变。新图层的如实局限（作者撰写路径而非分割血管造影；0.18 MiB 载荷原因；2D 绘制缺口）见[细粒度血管层（v17）](#the-granular-vasculature-layer-v17--53-vessel-records-authored-courses-no-blobs)。
+
 - **断面视图中没有叠加血管影像。** 真实影像图层（MRI、CT、冷冻切片）未变：
   它们是组织模态，且没有提交任何带血管标注的数据集（MRA/CTA）。
 - **v8 有意没有做的事：为亚核团切出各自的网格。** GPi/GPe、尾状核的三部分与
@@ -1199,6 +1229,8 @@ Catmull-Rom 弧长。**root** 列是走行的第一个路点：十对具有脑�
 | `npm run verify:nerve-kind` | **v13 kind 门禁，无浏览器**（`scripts/verify/nerve-kind.mjs`，新增）：**9 组共 79 条断言 · 0 失败**。它通过其他 Node 门禁所用的进程内 TS/TSX 加载器导入**已交付的** `load.ts`、`Header.tsx`、`Legend.tsx`、`KindGlyph.tsx`、`NucleusMesh.tsx`、`SceneLayers.tsx` 与 `store.ts`，用 `react-dom` **以及**一个实时钩子派发器渲染真实组件（zustand 4 交给 React *服务端*渲染器的是启动快照，因此切换后的重渲染只能在客户端路径上读到），并把两个无法导入的声明处（`validate-data.mjs` 在导入时运行；`types.ts` 只有类型）作为解析后的数据读取。它证明该 kind 在**每一个**位置都被声明，且各位置**一致**（ALL_KINDS ≡ 校验器 `KINDS` ≡ `Kind` 联合 ≡ `KIND_GLYPH`/`KIND_OPACITY` 键集合，七个 kind，`nerve` 在最后）；slug 契约接受全部 12 个 `nrv-*` id，仍拒绝四个近似项，并在全部 **248** 行中发现 **0** 处前缀/kind 矛盾；渲染出的 `<Header />` **按 `ALL_KINDS` 每项一个 Systems 按钮、按顺序**，第七个恰好读作 **Cranial nerves**，带 `data-kind`、`aria-pressed`、`type="button"` 以及符合 WCAG 2.5.3 的无障碍名称；Legend 每个 kind 都有一个调色板色块**与**一行开关，`Cranial nerves` 色块使用的 token 由 `tokens.css` 真正定义；**已交付的 `onClick` 处理函数被调用**，开关恰好从 `layers.kinds` 中移除 `nerve`，而 `regions`/`hidden`/`emphasis` 保持集合相等，往返渲染与启动状态逐字节相同；一条合成的 `nrv-*` 记录当且仅当 kind 打开时被已交付的 `isStructureVisible` 纳入，不透明度为 1 且用灰质提示；并且它的**咬合**对 **8 个有缺陷的 kind 表**运行*同一*契约检查器，每一个都按名称被捕获 |
 | `npm run verify:cranial-nerve-courses` | **v14 走行几何门禁，无浏览器**（`scripts/verify/cranial-nerve-courses.mjs`，新增）：**220 条断言 · 0 失败**。它通过仓库自己的 TS 加载器读取十二对作者撰写的走行 —— 因此它验证的是两个呈现面实际渲染的那张表 —— 并逐神经、打印每个数字地断言：≥ 3 个有限路点；`tubeRadius` 有限、> 0、等于 1 au = 1.2 mm 下的 `calibreMm ÷ 2.4`，且等于计划表（1.7/4.0/3.0/1.0/4.5/1.9/1.9/2.8/2.0/2.4/1.5/1.8 mm → 0.71/1.67/1.25/0.42/1.88/0.79/0.79/1.17/0.83/1.00/0.63/0.75 au）；该神经**自己的出脑标志作为字面量路点**（对十个有标志的神经测得偏差 **0.000 au**，容差 2 au），且链**从它所命名的已提交核团 `origin3d` 起始**（0.000 au）；有文档记载的孔**在记录中被命名并出现在它自己的走行句子中**；每个路点都在 `CLIP_BOUNDS` 内并打印最小间隙（**6.00 au**，CN I）；长度以 **au 与 mm** 给出；以及 direction/modality/origin/target/decussation/function/clinical/levels/refs 内容。随后它**执行**渲染主张：23 条纤维束 + 12 对走行通过已交付的 `isTractVisible`（kind 门控、`hasNerveCourse`、结构过程丢弃有走行的记录），以及每条走行的管道通过**断面 worker 自己的** `boundsMayCut`/`extractContours`（**576 个相交平面 → 689 个环**，逐平面计数打印）。它的探针表就是那张十二行的 根 · 孔 · 目标 · 长度表 |
 | `npm run verify:cranial-nerve-render` | **v14 渲染一致性门禁，无浏览器**（`scripts/verify/cranial-nerve-render.mjs`，新增）：**47 条断言 · 0 失败**。它不挂载任何东西，也不绘制任何东西（Chrome 无法在这里启动）—— 它通过同一个进程内加载器**执行已交付模块**并证明：**场景的纤维束列表中有 12 根管道**，并打印四状态开关真值表（全开 23+12 · **tract 关 → 0 条纤维束但 12/12 神经** · **nerve 关 → 23/23 条纤维束但 0/12 神经** · 两者都关 0+0 · 中脑关 19+10 · 一个被预设隐藏的 id 11）—— 即错误门控陷阱在两个方向上都被封住；**12 个断面注册表部件**（每个 803 个顶点 / 1,440 个三角形，`maxIndex 802 < 803`），其轮廓由**已交付的** `partBounds`/`boundsMayCut`/`extractContours` 在 38 个平面上计算（**121 个闭合环，每对神经 ≥ 1 个相交平面且 ≥ 1 个环，0 个非有限值**）；**XOR** —— 一对神经渲染管道**或**标记，绝不两者同时，对全部十二对成立；共享构建器主张作为源文本读取；载荷重新测量（**138 个 manifest 部件、0 个 `nrv-*` GLB、599,204 个三角形、部件 13.8151 MiB / 目录树 13.8914 MiB**）。一次咬合把字面量 `'tract'` 翻回 `isTractVisible`，于是 nerve-off 那行从 0 变成显示 12 |
+| `npm run verify:vasc-courses` | **v17 细粒度血管数据门禁，无浏览器**（`scripts/verify/vasc-courses.mjs`，新增）：**2,171 条断言 · 0 失败**。它读取 39 条作者撰写走行记录，并**自行重新解析已提交的 GLB** —— 一个手写的读取器加一个精确的“三角形上最近点”探针，其加速搜索会与遍历每个三角形的穷举版本交叉核对（24 个探针，全部精确）。它打印每一个数字并断言：**39/39 个 id 先注册**（`vasculature`/`vessel`、父级可解析、0 条仅有注册表的行）；**172 个路点全部在 `CLIP_BOUNDS` 内**；每个存储残差都**从网格字节重新推导**（67/67 的投影点落在网格上，67/67 的弦长 `\|Q−P\| = r + 0.15 au`）；**52 个镜像投影**落到右侧外廓上并打印最差偏差（**1.480 au = 1.78 mm**，容差 1.6 au，因为两个半球是各自独立抽取的）；父级/供血区/supply 解析；**豆纹动脉修复**（椭球记录被抑制，六条链落在已提交 M1 顶点上，0.000 au）；**半径表**及其 mm 出处（**39/39** 满足 `\|r × 2.4 − calibreMm\| < 0.03`，最大误差 0.0008 au）；以及载荷（138 个部件，**新增 0 字节**）。其打印出的表即 `docs/SWARM_V17_PLAN.md` §2 |
+| `npm run verify:vessel-render` | **v17 细粒度血管渲染门禁，无浏览器**（`scripts/verify/vessel-render.mjs`，新增）：**75/75 条断言**。它通过神经门禁所用的同一个进程内加载器执行**已交付模块**并证明：合并后的走行表（**40 条走行 = 1 条内置存活 + 2 条被作者撰写版替换 + 37 条全新作者撰写**，每条都带 id/侧别/父级/surface/basis/点数/弧长 mm/半径/管径 mm）；**7 种图层状态下的 3D 通道**（`全开 → 40/40 血管、23/23 纤维束、12/12 神经` · **vessel 类型关 → 0/40** · **vasculature 区域关 → 0/40** · tract 关与 nerve 关都让血管保持 40/40 · 一个被预设隐藏的 id 恰好掉一个）；**77 根绘制管道 = 40 作者撰写 + 37 镜像**（以 `2 × 37 成对 + 3 中线` 两项之和打印）；覆盖全部 **53** 条血管记录的**一记录一实体表** —— `tube only` / `baked body`，**0 BROKEN**、**blobs 0**，9 条豆纹动脉 id 全部被抑制；**2D 注册表**（40 条血管 meta、77 个 worker 部件、索引在范围内）以及已交付轮廓 worker 对每条走行的切分（**2,581 个环，0 个非有限值**）；**共享构建器**（`tubeGeometryFor()` 与 `registryVesselParts()` 之间 185,493 个位置值完全一致，神经镜像包围盒取负 —— 继承来的镜像缓存缺陷在两个家族中都保持修复）；合成的合并/分组/别名用例；以及载荷证明（138 个 manifest 部件、Σ 14,486,228 B = 13.82 MiB、**0 个走行 GLB**） |
 | `npm run verify:imaging-fit` | **v9 影像配准门禁**（`scripts/verify/imaging-fit.mjs`）：重跑拟合器并要求每个已提交数字都等于重算值 —— 网格字节对 `HEAD` 冻结、逐平面与平均残差、`applied` 与记录自身的门控、每张被接受的图版都作为 `fittedFit` 出现在 `src/data/sectionImages.ts` 中、每张被拒绝的都不出现、49 张 JPEG 图版记录为 `unmeasurable: no-decoder`，以及 `imageLayers.ts` 优先使用 `fittedFit`。**在 agent 沙箱中为红** —— 门禁把拟合器作为管道子进程重跑，而沙箱拒绝它（`spawnSync node EPERM`，**0 条断言运行**）；当通过一份逐字节相同的副本、使用捕获到的拟合器 JSON 驱动时，它完成于 289 条断言 / 20 处失败（18 个真实、2 个副本产物）—— 确切的失败见 [v9 一节](#verification-v9-close-out-non-browser) |
 | `npm run verify:audit-checks` | **审计检查镜像，无浏览器**（`scripts/verify/audit-checks.test.mjs`，在 v9 收尾时暴露为一个 npm 脚本；此前是作为裸 `node` 命令运行的）：对**已交付的清单与已交付的源码**运行运行时审计所用的*同一组*纯谓词（`scripts/verify/checks.mjs`）—— 由真实 `ct-manifest.json` 与 `ctCoverageStatement()` 驱动的 CT 覆盖诚实性、brainstem-focus 默认值与预设区域守卫（从真实 store 导入）、`?panelfail` 包含演示（通过真实抛出驱动真实 `PanelErrorBoundary`：`probes === 1`、正确的呈现面、Retry 恢复）、上下文丢失的 DOM 契约（包括“叠加层在 `<Canvas>` 之外”与“PostFX 在丢失期间返回 null”这两个根因），以及两个方向上的模态清扫。它还会重新推导那三个预算数字，并检查端脑数据/图版清单。**这是镜像，不是浏览器测试**：它证明的是决策逻辑与已交付代码契约，从不证明像素出现过。**v10：实测 92 通过 · 0 失败 · 7 信息性 · 9 组（exit 0）** —— 变暗行谓词带有有文档记载的血管豁免*以及*钉住它的那条断言（*"the 14 vascular rows are off at default framing through the REGION layer only…"*），这取代了称该门禁为红的 v9 收尾说明 |
 | `npm run verify:audit` | **自足式运行时审计**（`scripts/verify/audit.mjs`）：当目标 URL 无人应答时自行启动 Vite，通过 DevTools Protocol 驱动无头 Chrome 走遍整个功能面，并在每条退出路径上再次停止服务器。包含两个 P0 门禁 —— 通过 `WEBGL_lose_context` 模拟 WebGL 上下文丢失（叠加层出现、画布恢复），以及通过仅开发环境的 `?panelfail=<surface>` 钩子**强制渲染抛出**（失败被包含、应用继续工作、Retry 恢复面板）。传入一个已有 URL 可复用正在运行的服务器。**v7 收尾：**每个承重裁决现在都由 `scripts/verify/checks.mjs` 决定，该轮使用**每次运行全新的 Chrome profile**，并在读取启动状态前清空 `localStorage`/`sessionStorage`（因此被持久化的 `neuroaxis.viewPreset` 绝不可能伪装成错误的默认值），且 CT/模态检查感知覆盖范围。**v9：**PiP 检查被重新指向模拟切面面板（启动时的结构、逐轴徽章 + 读数、可缩放/持久化/预设/隐藏+恢复、面板对 Plates 模态的独立性），而退役的 `.pip-backdrop-hint` / `.pip-context-lost` 检查现在断言那些退役元素**不存在**。**v10（由该轮的 `review-qa` 任务重新指向）：**一个 Node 侧 **"v10 source facts"** 块从已交付源码读取 `CLIP_BOUNDS`、`GRID_CELL_AU`、`MIN_DIVISION_*` 阈值、`SECTION_PIP_SIZE_MIN/MAX`、`NO_CANVAS_LABEL_RECORD_IDS`、`DIVISIONS` 与 `REGION_LABELS`，因此没有任何浏览器断言会重打某个数字；一个通过 `THREE.__THREE_DEVTOOLS__` 安装的 **three.js 场景桥**让*渲染出的*辅助器几何与网格集合可读；并且 **Q0–Q6** 块（约 120 条断言）覆盖辅助器片的渲染跨度 vs DOM 滑块、驱动图例 + 树 + 场景的分区 solo、带停靠固定边的真实逐角指针拖动、Plates **与** PiP 中的产物平面，以及被抑制的皮层标签并做悬停/点击清扫。唯一的就地编辑是 `node:fs` 导入与经批准的重新指向 `pipBoot.resizer === 1 → === 4`；没有任何既有检查被删除或削弱 |
@@ -1210,7 +1242,8 @@ Catmull-Rom 弧长。**root** 列是走行的第一个路点：十对具有脑�
 `validate`、`check`、`build`、`verify:pipeline`、`verify:plane`、`verify:plane-helper-extent`、
 `verify:somatotopy`、`verify:cortical-lobes`、`verify:pip-contract`、`verify:division-toggles`、
 `verify:area-toggles`、`verify:view-filter-consistency`、**`verify:cranial-nerves`**、**`verify:nerve-kind`**、
-**`verify:cranial-nerve-courses`**、**`verify:cranial-nerve-render`**、`a11y-contract`、
+**`verify:cranial-nerve-courses`**、**`verify:cranial-nerve-render`**、**`verify:vasc-courses`**、
+**`verify:vessel-render`**、`a11y-contract`、
 `boundary-contract`、`budget-report.mjs` 与 `build-anatomy-geometry.mjs --manifest` 全
 都必须以 0 退出；
 `npm run validate` 是提交前的数据权威（计划 §9）。Node 门禁被有意接成普通的 `node` 入口
@@ -1233,6 +1266,16 @@ npm 脚本并**通过 npm** 执行，因此接线本身也被测试。`verify:an
 **14,566,178 B**，未变。任务书中关于 **`verify:area-toggles` 的“已知为红”说明已经过时**：它以 **0**
 退出，带 **455 条断言 · 0 失败**，而 v11 第 4 项的分歧（画布在 y = 6/26/30/32 处绘制了规则
 排除的分区）**以一致性 6/6 闭合** —— 产品从未为迎合任何一个门禁而被掰回去。
+**v17 第三次重新测量了整个清单**（带每个退出码与打印尾部的清扫见
+[`docs/SWARM_V17_PLAN.md`](docs/SWARM_V17_PLAN.md) §7）：**27 条门禁命令 · 24 绿 · 2 环境红 · 1 产品红**，其中
+两个新门禁 —— `verify:vasc-courses`（**2,171 条断言 · 0 失败**）与 `verify:vessel-render`（**75/75**）——
+已接成 npm 脚本并**通过 npm** 执行，因此接线本身也被测试。唯一的产品红门禁是
+`verify:cranial-nerve-render`，为 **46/47**：它的 `partsForCanvas()` 恒等式仍写着 `138 + 12`，而现在找到
+**190 = 138 + 12 + 40**，因为 v17 正是按计划加入了血管部件。它是**计数过期的断言，而不是坏掉的产品**；
+重新指向（`+ SECTION_VESSEL_PARTS.length`）不属于任何 v17 任务的写入范围，因此它连同输出被如实报告，
+并且**该门禁没有被一只非属主的手改掉**。任务书点名的另一个红门禁 `verify:area-toggles` 在本轮评审把它的
+分节计数重新指向已交付表格之后为**绿：472 条断言 · 0 失败**，而 `verify:audit` 中的四处预设点击位点
+也已被重新指向并由 `verify:area-toggles` §11 守卫（浏览器通道本身仍归编排器）。
 
 **浏览器通道的退出码**（`verify:audit`、`verify:acceptance`、`verify:browser`）—— 环境失败绝不能看起来像产品失败：
 
@@ -1252,10 +1295,12 @@ npm 脚本并**通过 npm** 执行，因此接线本身也被测试。`verify:an
 
 | 内容 | 数量 |
 | --- | --- |
-| 结构（核团、脑室、表面、context、**脑神经**） | **202 条记录**（`structures/*.json` 中的 225 条记录减去 23 条纤维束） |
+| 结构（核团、脑室、表面、context、**脑神经**、**血管**） | **241 条记录**（`structures/*.json` 中的 264 条记录减去 23 条纤维束） |
 | 纤维束与通路（带路点、交叉、躯体定位） | **23 条记录** |
-| 脑神经（kind `nerve`、id 前缀 `nrv-`、`meshes:false` 放置标记 —— v13） | **12 条记录**（CN I Olfactory … CN XII Hypoglossal） |
-| 注册表条目（分类学树 + 搜索；每个作者撰写的 id 都已注册） | **248 条** |
+| 脑神经（kind `nerve`、id 前缀 `nrv-`、作者撰写走行几何 —— v13/v14） | **12 条记录**（CN I Olfactory … CN XII Hypoglossal） |
+| 脑血管（kind `vessel`、id 前缀 `vasc-`） | **53 条记录** —— v8 的 14 条动脉（30 个已烘焙 GLB 部件）+ **39 条细粒度走行**（v17，程序化管道，0 字节） |
+| 细粒度血管走行（v17：路点 + 半径 + 声明的曲面） | **40 条已交付走行**（39 条作者撰写 + 1 条内置总记录）· 172 个路点 · **77 根绘制管道** |
+| 注册表条目（分类学树 + 搜索；每个作者撰写的 id 都已注册） | **287 条** |
 | 规范层级（头尾侧锚点，y = −50…+78 au） | **17 个层级** |
 | 2D 断面图版 | **15 张**（11 张横断 + 2 张矢状 + 2 张冠状） |
 | 临床综合征 | **26 张卡片** |
@@ -1278,8 +1323,20 @@ npm 脚本并**通过 npm** 执行，因此接线本身也被测试。`verify:an
 > 条目 · 19 个文件中的 225 条记录 · 23 条纤维束 · 26 个综合征 · 15 张图版 · 17 个层级，0 错误 / 0 警告**。
 > 没有任何既有内容被编辑、重命名或移动 —— 追加这 12 行是 `taxonomy.json`
 > 唯一的改动（早先的一行多了一个尾随逗号）—— 并且**没有任何网格、GLB、manifest 部件或 bbox 移动**。
+>
+> **v14 加入的是走行几何，而不是记录** —— 十二行 `nrv-*` 注册表条目未变；走行是一个独立集合
+> （`NERVE_COURSES`），其管道花费 **0 字节**。
+>
+> **v17 新增内容** —— 细粒度血管：一个新文件（`src/data/structures/vasculature-courses.json`）中的
+> **39 条作者撰写走行记录**、**39 行新注册表条目**（把 `vessel` 从 14 带到 **53**），以及 39 条精选网络参考。
+> 收尾时由 `npm run validate` 测得：**287 条注册表条目 · 20 个文件中的 264 条记录 · 23 条纤维束 · 26 个综合征 ·
+> 15 张图版 · 17 个层级，0 错误 / 0 警告**。增量是 **+39 条记录 / +39 行注册表条目，仅此而已**：没有任何网格、
+> GLB、manifest 部件、包围盒或既有记录被触碰，本轮新增 **0 字节**已提交载荷。该图层的解剖、局限与门禁见
+> [细粒度血管层（v17）](#the-granular-vasculature-layer-v17--53-vessel-records-authored-courses-no-blobs)。
 
-血管供血区以字符串字段承载（每个结构一个 `bloodSupply`，每个综合征一个 `vascularTerritory`）—— 没有 3D 血管模型。每个结构至少跨越 17 个规范层级中的一个；其中一部分层级有匹配的横断图版，而图版的 `data-structure` slug 与 3D 场景解析到同一个注册表（由校验器强制）。
+血管供血区以字符串字段承载（每个结构一个 `bloodSupply`，每个综合征一个 `vascularTerritory`），并且自 v8 起
+还以 **53 条带真实几何的 `vessel` 记录**承载 —— 其中 13 条（30 个 GLB 部件）由已提交的 BP3D 铸型支撑，
+而自 v17 起另有 **40 条作者撰写走行以程序化管道绘制**（细粒度分支与穿通支，包括豆纹动脉群）。每个结构至少跨越 17 个规范层级中的一个；其中一部分层级有匹配的横断图版，而图版的 `data-structure` slug 与 3D 场景解析到同一个注册表（由校验器强制）。
 
 ## 项目结构
 
@@ -1310,7 +1367,8 @@ src/
                  MRI + CT registries, modality resolution, fittedFit preference)
   geometry/      anatomyAssets (GLB loader + manifest), generated (manifest
                  types), materials (PBR factory), envelope (v1 fallbacks),
-                 textures (procedural normal maps), curves
+                 textures (procedural normal maps), curves (cranial-nerve courses),
+                 vasculature-courses (v17 granular vessel courses + merge)
   styles/        tokens · base · layout · panels · viewer · plates · sectionPip
 ```
 
