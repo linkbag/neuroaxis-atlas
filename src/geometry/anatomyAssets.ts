@@ -282,10 +282,13 @@ const LINKS: Record<string, AnatomyRecordLink> = {
   /* --- v8 cerebral vasculature: the circle of Willis and its trunks --------
      docs/NEUROATLAS_V8_PLAN.md §1a/§2. One record per named artery, one element
      set per side (`body` + `bodyRight`), two segments under the MCA and the PCA
-     (`also`/`alsoRight`). `vasc-lenticulostriate-arteries` is deliberately
-     ABSENT: BP3D has no lenticulostriate concept (its record's `contextNote`
-     says so), so the record renders its schematic placement marker at the
-     anterior perforated substance rather than borrowing the MCA's branches. */
+     (`also`/`alsoRight`).
+     THE INVARIANT THIS TABLE OBEYS (v18b, measured): a record's body is a
+     COMMITTED `LINKS` slug **XOR** a course — never both, never a slug the
+     manifest does not carry. An entry whose slug was never registered, meshed or
+     baked is worse than no entry at all: `NucleusMesh` settles to its unit-sphere
+     fallback, so the record draws a schematic blob that no gate visited (the
+     v18 blob family: see the two ABSENT records below). */
   'vasc-internal-carotid-artery': { body: 'vasc-internal-carotid-artery-l', bodyRight: 'vasc-internal-carotid-artery-r', region: 'vasculature', paired: true, render: 'body' },
   'vasc-vertebral-artery': { body: 'vasc-vertebral-artery-l', bodyRight: 'vasc-vertebral-artery-r', region: 'vasculature', paired: true, render: 'body' },
   'vasc-basilar-artery': { body: 'vasc-basilar-artery', region: 'vasculature', paired: false, render: 'body' },
@@ -314,7 +317,29 @@ const LINKS: Record<string, AnatomyRecordLink> = {
   'vasc-anterior-inferior-cerebellar-artery': { body: 'vasc-anterior-inferior-cerebellar-artery-l', bodyRight: 'vasc-anterior-inferior-cerebellar-artery-r', region: 'vasculature', paired: true, render: 'body' },
   'vasc-posterior-inferior-cerebellar-artery': { body: 'vasc-posterior-inferior-cerebellar-artery-l', bodyRight: 'vasc-posterior-inferior-cerebellar-artery-r', region: 'vasculature', paired: true, render: 'body' },
   'vasc-anterior-choroidal-artery': { body: 'vasc-anterior-choroidal-artery-l', bodyRight: 'vasc-anterior-choroidal-artery-r', region: 'vasculature', paired: true, render: 'body' },
-  'vasc-posterior-medial-choroidal-artery': { body: 'vasc-posterior-medial-choroidal-artery-l', bodyRight: 'vasc-posterior-medial-choroidal-artery-r', region: 'vasculature', paired: true, render: 'body' },
+
+  /* --- the two v8 vessel records that own NO committed body ---------------
+     Both are deliberately ABSENT here, and in both cases the record's body is
+     the COURSE it owns in `src/geometry/vasculature-courses.ts` — the deletion
+     is what makes `hasVesselCourse` the whole story instead of half of it:
+
+       • `vasc-lenticulostriate-arteries` — BP3D has no lenticulostriate concept
+         (its record's `contextNote` says so). ABSENT since v8, when its
+         schematic placement marker at the anterior perforated substance WAS the
+         two red blobs the user reported; v17/v18 gave the family its measured
+         courses (the lateral/medial ladders) and the marker is suppressed.
+       • `vasc-posterior-medial-choroidal-artery` — REMOVED in v18b. This entry
+         claimed `…-l`/`…-r` while neither slug was ever registered in
+         scripts/lib/register.mjs, canonically meshed or baked, so the manifest
+         has no such part: the record drew the unit-sphere fallback at origin3d
+         [14, 18, −6], size3d [4, 4, 6], twice (it is `paired`) — a crimson
+         translucent sphere in the vasculature view that `verify:vessel-render`
+         could not see, because that gate modelled a baked body as "has a LINKS
+         entry" rather than "has a committed GLB". The archive element pair
+         `FJ1727`/`FJ1727M` (880 faces, FMA 50630) names the artery and is
+         source-only in `docs/VASC_INVENTORY.md`; the record now draws the
+         measured course authored from committed meshes instead, and this table
+         states no body it cannot deliver. ---------------------------------- */
 }
 
 /**

@@ -413,3 +413,118 @@ executed **through npm** in §7, so the wiring is tested rather than asserted. `
    base, neither a product failure).
 9. **All browser claims** (§6) — the orchestrator's lane, `verify:audit` R3b and the "blobs are gone on screen" verdict
    included.
+
+---
+
+## 12. Falsification report — v18b, task `review-fixes` (the reviewer)
+
+**Why this section is here and not in the v18 plan.** My exclusive write scope for this task is **this file**. The v18 run's
+own plan is `PLAN.md` at the repo root (415 lines, gitignored, the architect task's file, holding edits E1–E8) — **the review
+did not touch it**, and no other repo file was written by this task either. If the v18 plan is to carry the falsification
+record, the orchestrator ports this section into it (or into its `docs/SWARM_V18_PLAN.md` archive).
+
+**Method (and its limits).** Two read-only probes executed the *shipped* modules — TypeScript `transpileModule` + node
+module hooks, so the real `isStructureVisible` / `TractTube` material branch / `createVesselMaterial` /
+`getAnatomyPart` / `hasVesselCourse` run, not a restatement of them — and parsed the committed GLB position buffers
+directly. Every number below was printed by one of those probes or by a gate. The probes are scratch, not gates; a browser
+lane still owns "what the pixels show" and is **not claimed here**.
+
+### 12.1 What I tried to break, and what held
+
+| attack | measurement (printed) | verdict |
+| --- | --- | --- |
+| **1a. Does any path still render a PALE vessel tube?** Every `<TractTube>` mount in the repo, with its props | 6 JSX mounts in 3 passes: tract `:805-806` **no variant**, nerve `:822-823` **no variant**, vessel `:839-840` **both `variant="vessel"`**. No other module in `src/` mounts `<TractTube>`; no other module mounts `<NucleusMesh>` | **held** |
+| **1b. Does the variant actually reach the material?** The component read end to end | `TractTube.tsx:385` default `variant='tract'` → `:429-431` `createVesselMaterial(tract.color)` / `createTractMaterial(…)` → `:439` `created.vertexColors = variant !== 'vessel'` → `:441-443` striation map only for non-vessels → `:445` deps `[tract, variant]` | **held** |
+| **1c. What does the material really carry?** All 41 vessel courses + all 12 nerve courses through the memo's own branch | vessel: `material === course.color` verbatim (`#991b1b` ×14, `#dc2626` ×27), `vertexColors false`, striation map dropped (tissue map kept), emissive = the same crimson. nerve: `#b4d2c5` / `#c8d9cd` (pale, direction-tinted), `vertexColors true`, striation map ON. `buildTractGeometry` still writes the 0.787…1.000 (linear) length-gradient attribute — inert for vessels **only** because `vertexColors=false` | **held** — no pale tube, no crimson nerve |
+| **1d. Do the tubes match the COMMITTED arteries?** Tube colour vs registry colour vs 2D part colour | 41/41 courses: 3D `#991b1b` = taxonomy `#991b1b` = 2D `#991b1b` (14), 3D `#dc2626` = taxonomy = 2D (27). Committed meshes take the same literal (`NucleusMesh.tsx:165` `makeAnatomyMaterial(hint, record.color)`) | **held** (colour; see F1 for opacity) |
+| **2. Does any vasculature record still render a bare ellipsoid?** The whole structure pass reproduced with the real predicates, every mounted slug resolved through `getAnatomyPart` | 264 records → the records that reach the `NucleusMesh` mount: **26 committed `LINKS` bodies + 74 id-keyed committed bodies + 64 fallback ellipsoids = 164** (165 before the fix — `PLAN.md` §4 measured the 165th as the blob). 53 records suppressed to course tubes · 7 envelope pass · 16 somatotopy pass. Records whose mounted slug is NOT a manifest part: **64, every one of them non-vasculature** (the documented v1 placeholder family: `ctx-v1/v2/a1/a2/wernicke/broca/m1/s1/sma/…`, `nuc-subiculum`, `nuc-ca1`, `surf-cn3…cn12-exit`, `tract-pyramid`, `vent-lateral-ventricle-body`, …). **vasculature-region blobs: 0 of 53** | **held** — the list is finite, printed, and contains no vessel |
+| **2b. The two records the brief named** | `vasc-lenticulostriate-arteries`: `hasVesselCourse` **true** (a `VESSEL_COURSES` drawing course, 3 waypoints), `hasVesselCourseGroup` false, no `LINKS` body → SceneLayers returns **null** at `:736`, before the mount at `:764` (order asserted). `vasc-posterior-medial-choroidal-artery`: **in `VESSEL_COURSES` too**, `LINKS` body deleted, its two old slugs are absent from the manifest (so the pre-fix fallback sphere at `origin3d [14, 18, −6]`, `size3d [4, 4, 6]` is exactly what it drew) | **the brief's attribution was wrong; the fix's is right** |
+| **2c. The replacement body — the fix's own strongest claim** | GLB buffers parsed: ORIGIN is a literal vertex of `vasc-posterior-cerebral-artery-p2-l` (6.2e-4 au), MIDDLE of `ctx-midbrain-surface` (4.8e-4), TERMINAL of `ctx-choroid-plexus-l` (3.7e-4); the quoted residuals reproduce (6.584 vs 6.583 au · 12.663 vs 12.664 au); waypoint chain **23.171 au = 27.8 mm** vs the note's 23.18 | **held** |
+| **2d. "One record, one body"** | 0 records draw both a course tube and a `LINKS` body; 0 of **39** `ANATOMY_RECORD_LINKS` entries declare an uncommitted slug (the phantom is gone) | **held** |
+| **3. Is the 2D side consistent?** (the brief said verify rather than assume) | `partsForCanvas() = 191 = 138 + 12 + 41`; vessel 2D parts 41/41 read the taxonomy colour; nerve 2D parts 12/12 read it; `SECTION_PARTS` is built from the manifest, so the deleted `LINKS` line could not move it | **colour held — but see F3: the vessel contours are never painted** |
+
+### 12.2 What did NOT hold — open items (none of them fixed here: out of this task's write scope)
+
+1. **F1 (visible, user-facing) — the vessel tubes are more SOLID than the committed arteries they must match.**
+   `TractTube.tsx:350` lerps every tube's opacity toward `dimmed ? 0.15 : 1`, so a vessel tube settles at **1.0**, while
+   `NucleusMesh.tsx:186-187` pins a committed artery at `KIND_OPACITY.vessel = 0.5` (measured both). Colour now agrees
+   (12.1/1d) and opacity does not: the granular branches become the most opaque red objects in the scene. This is
+   `PLAN.md` §5 **E6**, which did not ship. One field + one line in `TractTube.tsx`.
+2. **F2 (gate hole — the defect class is still unwatchable).** `verify:vessel-render` still models "has a baked body" as
+   *a `LINKS` entry* (`vessel-render.mjs:648`), the exact blindness that kept the blob green through v17 and v18; and its
+   mount assertion `:599-604` is now satisfied by the **nerve** block (measured: the regex matches `SceneLayers.tsx:822-823`
+   and **not** `:839-840`), so it stays true even if the vessel mounts lose `variant="vessel"` **or are deleted outright**
+   (both mutations measured against the real source text). **No gate script mentions `variant="vessel"` or
+   `createVesselMaterial` at all (0 files)**, so the fix for the user's actual complaint is covered by nothing.
+   This is `PLAN.md` §5 **E7** (+ optional E8); the ready diff is quoted there, `:599-604` and `:647-648` + one assertion.
+3. **F3 (2D hole, carried over from §11.2 above) — the granular vessels are in the 2D pipeline but never painted.**
+   `SectionCanvas.tsx:2126` still pushes only `registryNerveParts()`, so `registryVesselParts()` (79 worker parts,
+   computed and asserted by `vessel-render`) never reaches the worker and no vessel contour exists. The gate prints this as
+   a note rather than a failure (`vessel-render.mjs:1084-1093`) and `area-toggles` asserts it as an open handoff. The 2D
+   colour census is therefore *consistent but not yet visible*: on the live section and the PiP the granular arteries are
+   absent. One line (the §11.2 fix), in a file this run does not own.
+4. **F4 (data/design) — the lateral parent course duplicates its first child.** `vasc-lateral-lenticulostriate-arteries`
+   (5 waypoints) shares its **first four** waypoints with `…-1` and differs only in the terminal (1.68 au = 2.0 mm apart);
+   sampled over the whole path the two centerlines are a mean **0.207 au** apart, and the other three children are
+   0.38–0.58 au away (tube radius 0.333 au) — so the fan's trunk is drawn by five coincident tubes and the parent is a
+   "mean branch" no single perforator follows. `mergeVesselCourses`' documented rule ("the record becomes a group and its own
+   tube is withdrawn", `vasculature-courses.ts:887-890`) never fires for these ids: both parents arrive as authored
+   **replacements**, which short-circuit at `:876` before the ladder test at `:890` — measured `groupedIds 0`,
+   `VESSEL_COURSE_GROUPS 0`, and `hasVesselCourseGroup()` therefore **constant-false** (the third term of the
+   `SceneLayers.tsx:736` suppression is dead code). Either withdraw the two parent tubes or state that they are intended
+   family representatives.
+5. **F5 (documentation drift, low).** (a) `SceneLayers.tsx:752-757` still claims "the `anatomySlug` a record hands
+   `NucleusMesh` is always either a real committed GLB or the record id itself (which is a manifest slug for the whole
+   v1–v6 set)" — measured: **64** of the records the pass mounts hand a record id that is not one of the 138 manifest parts
+   and draw the fallback ellipsoid (pre-existing, not a v18 regression; the ellipsoid *is* the authored body for those).
+   (b) The diagnose note that the lenticulostriate parent is a *group head* is wrong — all nine lenticulostriate records
+   are **drawing courses** (F4).
+6. **F6 (process — the fix is UNCOMMITTED, and that is fragile).** `git status`: `SceneLayers.tsx`,
+   `anatomyAssets.ts`, `vasculature-courses.ts` modified, **nothing staged, no stash, 206 insertions**. `HEAD` (`8d80572`)
+   still carries both defects: at HEAD the `variant="vessel"` mounts are the **nerve** block (`:806-807`, inside the map
+   that starts at `:799`) and the vessel block has none, and the phantom `LINKS` line is still there. A `git checkout`,
+   `stash` or fresh clone of HEAD silently restores both defects — and (F2) every gate stays green. Also note the fix
+   touched `src/geometry/anatomyAssets.ts`, which `PLAN.md` §8 assigns to the `vessel-blob` task; it was required (the
+   gate's `doubleBodied` assertion is 0 only with the phantom line deleted) and the task disclosed it.
+
+### 12.3 The sweep I re-ran (28 commands, this checkout, working tree)
+
+| gate | exit | printed |
+| --- | --- | --- |
+| `validate` / `check` / `build` | **0** / **0** / **0** | `0 errors, 0 warning(s)` · `tsc --noEmit` silent · vite build clean |
+| `verify:pipeline` | **0** | `138/138 parts · 599204 triangles · 386 loops across 13 planes · 0 problem(s)` |
+| `verify:plane` | **0** | `10827 assertions` |
+| `verify:plane-helper-extent` | **0** | `206 passed · 0 failed` |
+| `verify:somatotopy` / `verify:cortical-lobes` | **0** / **0** | `45/0` · `564/564` |
+| `verify:pip-contract` | **0** | `187 passed · 0 failed` |
+| `verify:division-toggles` | **0** | `251 assertions passed · 0 failed` |
+| `verify:area-toggles` | **0** | tail prints the still-open §11.2 handoff (F3) |
+| `verify:view-filter-consistency` | **0** | `102/102 assertions passed` (138 parts · 264 structures · 23 tracts) |
+| `verify:cranial-nerves` | **0** | `451 run · 451 passed · 0 failed` · manifest still 138 |
+| `verify:nerve-kind` | **0** | `79 passed · 0 failed` · `138 parts · 138 GLBs` |
+| `verify:cranial-nerve-courses` | **0** | `220 run · 0 failures` |
+| `verify:cranial-nerve-render` | **0** | `12 courses · 3D tubes 12/12 · 2D parts 12 · 47/47 assertions` (the v17 §7 46/47 note is closed) |
+| `verify:vasc-courses` | **0** | `2171 assertions, 0 failures` · `13.82 MiB of 14 MiB — this run adds 0 bytes` |
+| `verify:vessel-render` | **0** | `41 courses (2 built-in + 2 replaced + 37 authored) + 0 group(s) · 3D tubes 79 = 41 + 38 · 2D parts 41 (79 worker) · 2618 contour loops · blobs 0 · 75/75 assertions` |
+| `verify:audit-checks` / `verify:closure-bite` | **0** / **0** | `92/0 · 7 informational` · its own mutations caught, restored copy `92/0` |
+| `verify:boundary-contract` / `verify:a11y-contract` | **0** / **0** | `22/0` · `38/0` |
+| `verify:budget-report` | **0** | `5 passed` · `599,204 tris` · GLB `13.82 MiB` · imaging `9.02 MiB` |
+| `verify:anatomy` | **1** | `spawnSync powershell EPERM` — dies before any verdict (environment; matches §8/§11.8) |
+| `verify:imaging-fit` | **1** | `spawnSync C:\nvm4w\nodejs\node.exe EPERM` — environment, 0 assertions |
+| `node scripts/verify-imaging-v4.mjs` / `-v4b.mjs` | **0** / **0** | v4 PASSED · `22/22 cryosections, credit verbatim in 5 records` |
+| `node scripts/build-anatomy-geometry.mjs --manifest` | **0** | `MANIFEST + BUDGET PASS` · `599,204 / ≤ 800,000 rendered tris` |
+
+The two `EPERM` reds are sandbox-level (a child process's piped stdio is denied), fail identically at base, and cannot be
+caused by a colour/mount/table edit. `verify:acceptance`, `verify:audit` and `verify:browser` need Chrome and were **not
+run and are not claimed** by this task.
+
+### 12.4 Verdict
+
+**Both defects are fixed in the working tree as measured, and the fix survives every attack I could mount on it** — the
+vessel pass takes the arterial material with the course colour verbatim (no gradient, no striation), the nerve pass is back
+on its own pale preset, no vasculature record can draw a bare ellipsoid, and the replacement body for the one blob that
+really was on screen is measured from committed geometry to 3 decimals. What still stands between this tree and the user's
+screenshot being right is **F1** (the tubes are opaque red where the committed arteries are half-transparent red), **F3**
+(the granular vessels never reach the 2D section because of the unlanded §11.2 line) and **F6** (the fix is a working-tree
+edit; `HEAD` still holds both defects). **F2 is the one that matters next time**: nothing in the repo can catch a colour
+regression today.

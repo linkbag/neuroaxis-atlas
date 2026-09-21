@@ -717,6 +717,22 @@ export default function SceneLayers() {
         // children do — so without the group check the parent's schematic
         // ellipsoid kept rendering beside the children's tubes, which is exactly
         // the "blob" the user flagged).
+        //
+        // v18b MEASUREMENT — the blob that survived v17/v18 was NOT the
+        // lenticulostriate record: `hasVesselCourse('vasc-lenticulostriate-
+        // arteries')` is true (it is a drawing course), so it has drawn only a
+        // tube since v17. The last schematic body on screen was
+        // `vasc-posterior-medial-choroidal-artery`: it declares
+        // `vasc-posterior-medial-choroidal-artery-{l,r}` in `ANATOMY_RECORD_LINKS`
+        // but NEITHER slug is in the manifest, so `NucleusMesh` settled to its
+        // unit-sphere fallback — a crimson 0.5-opacity sphere at origin3d
+        // [14, 18, −6], size3d [4, 4, 6], drawn twice because the record is
+        // `paired`. It is retired the same way as the lenticulostriate family:
+        // by the COURSE it now owns in `vasculature-courses.ts` (measured from
+        // the committed P2-l, ctx-midbrain-surface and ctx-choroid-plexus-l
+        // meshes), which makes this line true for it. The invariant is
+        // "one record, one body": a record's body is a committed `LINKS` GLB XOR
+        // a course — never both, and never a declared-but-unbaked slug.
         if (hasNerveCourse(record.id) || hasVesselCourse(record.id) || hasVesselCourseGroup(record.id)) return null
         // v17 §5 — the same rule for a VESSEL that now has a course. This is
         // the line that removes the two red lenticulostriate blobs: the record
@@ -803,8 +819,8 @@ export default function SceneLayers() {
         const paired = getTaxonomyEntry(course.id)?.laterality === 'paired'
         return (
           <Fragment key={course.id}>
-            <TractTube tract={course} highlight={highlight} variant="vessel" />
-            {paired && <TractTube tract={course} highlight={highlight} mirrored variant="vessel" />}
+            <TractTube tract={course} highlight={highlight} />
+            {paired && <TractTube tract={course} highlight={highlight} mirrored />}
           </Fragment>
         )
       })}
@@ -820,8 +836,8 @@ export default function SceneLayers() {
         const paired = isPairedVessel(course, getTaxonomyEntry(course.id)?.laterality)
         return (
           <Fragment key={course.id}>
-            <TractTube tract={course} highlight={highlight} />
-            {paired && <TractTube tract={course} highlight={highlight} mirrored />}
+            <TractTube tract={course} highlight={highlight} variant="vessel" />
+            {paired && <TractTube tract={course} highlight={highlight} mirrored variant="vessel" />}
           </Fragment>
         )
       })}

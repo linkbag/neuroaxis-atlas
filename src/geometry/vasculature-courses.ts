@@ -69,6 +69,27 @@
  * envelope — and then `surfaceNote`/`anchorNote` says why, greppable rather
  * than inferable). A course the sources do not support is not authored here.
  *
+ * ## v18b — the blob that outlived v17, and one colour per family
+ *
+ * The v17 pass removed the two lenticulostriate ellipsoids and its gate has
+ * printed `blobs 0` ever since, yet one crimson translucent sphere remained on
+ * screen. A sweep of EVERY record the structure pass mounts, resolving each
+ * declared `ANATOMY_RECORD_LINKS` slug against the manifest instead of merely
+ * checking that the link exists, found exactly one such record in the atlas:
+ * `vasc-posterior-medial-choroidal-artery`, whose two declared body slugs were
+ * never registered or baked. It is now the third shape above — a record with a
+ * body that never existed — and it is retired the same way as the other two: by
+ * the measured course it owns in `BUILT_IN_VESSEL_COURSES`. The invariant the
+ * sweep enforces: a record's body is a COMMITTED `LINKS` GLB **XOR** a course.
+ *
+ * The same pass closed the last 3D↔2D colour disagreement. The 2D section part
+ * takes its colour from the taxonomy row (`sectionAssets.registryPartFromCourse`)
+ * while the 3D tube takes it from this table, and the three built-in records used
+ * to carry `#b91c1c` where their own registry row, their own structure record and
+ * their 2D part all say `#991b1b`. One vessel family, one colour: every built-in
+ * here now matches its taxonomy row, so the colour census over the merged table
+ * reads 41/41 (it read 39/40 before).
+ *
  * Canonical space (PLAN.md §1): x = +patient-LEFT, y = +superior, z = +anterior,
  * 1 au = 1.2 mm; CLIP_BOUNDS x[−58,58] y[−55,116] z[−76,72].
  */
@@ -102,7 +123,13 @@ export interface VesselCourseHead {
   surfaceNote?: string
   /** How the path is grounded. */
   basis: VesselCourseBasis
-  /** The BP3D element ids behind the path (`[]` for a documented course). */
+  /**
+   * The BP3D element ids behind the path (`[]` when no archive element names
+   * it). A `'documented-course'` path may still NAME a source-only element the
+   * inventory maps to this record but that was never registered, meshed or
+   * baked — `vasc-posterior-medial-choroidal-artery` is exactly that case — and
+   * then `anchorNote` must state that no baked body is claimed for it.
+   */
   elementIds: string[]
   /** What stands behind the path — the honesty statement, per vessel. */
   anchorNote: string
@@ -275,7 +302,7 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     waypoints: [M1_TAKEOFF, M1_APS_MID, APS_ENTRY],
     tubeRadius: 0.333,
     calibreMm: 0.8,
-    color: '#b91c1c',
+    color: '#991b1b',
     synonyms: ['Lateral lenticulostriate arteries', 'Anterolateral central arteries'],
     clinical: LENTICULOSTRIATE_CLINICAL,
     refs: LENTICULOSTRIATE_REFS,
@@ -313,7 +340,7 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     waypoints: [M1_TAKEOFF, M1_APS_MID, APS_ENTRY, [18.5, 25.5, 19.4], [22.0, 31.5, 13.0]],
     tubeRadius: 0.333,
     calibreMm: 0.8,
-    color: '#b91c1c',
+    color: '#991b1b',
     clinical: LENTICULOSTRIATE_CLINICAL,
     refs: LENTICULOSTRIATE_REFS,
   },
@@ -349,10 +376,135 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     waypoints: [HEUBNER_ORIGIN, [8.3, 17.2, 26.9], [12.3, 19.254, 25.518], [11.8, 25.5, 25.4], [10.5, 38.0, 24.0]],
     tubeRadius: 0.417,
     calibreMm: 1.0,
-    color: '#b91c1c',
+    color: '#991b1b',
     synonyms: ['Recurrent artery of Heubner', 'Medial striate artery'],
     clinical: LENTICULOSTRIATE_CLINICAL,
     refs: LENTICULOSTRIATE_REFS,
+  },
+  {
+    /**
+     * v18b — THE LAST SCHEMATIC BLOB, retired by the course it now owns.
+     *
+     * `verify:vessel-render`'s `blobs 0` line was green while this record still
+     * drew a crimson translucent sphere, because the gate modelled "has a baked
+     * body" as "has a `LINKS` entry" (`anatomyAssets.ts`) instead of "has a
+     * COMMITTED GLB". This record is the one entry in the whole atlas where the
+     * two disagree: it declared
+     * `vasc-posterior-medial-choroidal-artery-{l,r}` and neither slug has ever
+     * been registered, canonically meshed or baked (the archive element pair
+     * `FJ1727`/`FJ1727M`, 880 faces, FMA 50630, names the concept and is
+     * source-only). `NucleusMesh` therefore settled to its unit-sphere fallback —
+     * one sphere scaled by `size3d` [4, 4, 6] at `origin3d` [14, 18, −6], drawn
+     * twice because the record is `paired` — which is the red translucent blob
+     * left in the vasculature view after v17 removed the lenticulostriate pair.
+     *
+     * The measured path below is the replacement body (PLAN.md §5 E3): every
+     * waypoint is a vertex of a mesh this tree has already committed, and the
+     * residual of each rule is quoted in `anchorNote`. With the record in the
+     * table, `hasVesselCourse` returns true for it and `SceneLayers` stops
+     * mounting the ellipsoid — the same route, and the same "one record, one
+     * body" rule, the lenticulostriate family already travels.
+     */
+    id: 'vasc-posterior-medial-choroidal-artery',
+    name: 'Posterior medial choroidal artery',
+    region: 'vasculature',
+    kind: 'vessel',
+    laterality: 'paired',
+    parent: 'vasc-posterior-cerebral-artery',
+    surface: 'ctx-midbrain-surface',
+    surfaceNote:
+      'The cisternal segment hugs the committed `ctx-midbrain-surface` envelope (the same surface the three SCA courses ' +
+      'declare): its middle waypoint is a literal vertex of it, 0.000 au from the surface. The TERMINAL is the opposite ' +
+      'relation — a choroidal artery ends ON the plexus — so it is a deliberate graze on the committed ' +
+      '`ctx-choroid-plexus-l` mesh (a literal plexus vertex), 12.664 au (15.20 mm) from the P2 take-off, which is the ' +
+      'cisternal + choroidal-fissure interval the path crosses.',
+    basis: 'documented-course',
+    elementIds: ['FJ1727', 'FJ1727M'],
+    anchorNote:
+      'MEASURED PATH (documented-course basis): the archive element pair `FJ1727`/`FJ1727M` (880 faces each, FMA 50630) ' +
+      'names this artery, but it is neither registered in scripts/lib/register.mjs nor canonically meshed nor baked — ' +
+      'no GLB for it exists in the manifest — so the element ids are named here and NO baked body is claimed. All three ' +
+      'waypoints are instead measured on committed meshes (1 au = 1.2 mm): ' +
+      'ORIGIN [10.363, 13.456, −16.527] is the most posterior committed vertex of `vasc-posterior-cerebral-artery-p2-l` ' +
+      '(the distal, quadrigeminal end of the P2 segment — where this artery leaves the PCA); the nearest committed ' +
+      '`ctx-midbrain-surface` vertex is 6.583 au (7.90 mm) away, the cisternal interval at the take-off. ' +
+      'MIDDLE [5.244, 14.752, −12.595] IS that midbrain vertex — the collicular (tectal) surface the artery runs ' +
+      'medially above, which is the record’s own words. ' +
+      'TERMINAL [18.832, 22.802, −17.664] is the `ctx-choroid-plexus-l` vertex nearest the take-off: the plexus at the ' +
+      'atrium (its glomus), 12.664 au (15.20 mm) from the origin, i.e. a graze — the artery ends ON the plexus. ' +
+      'Chord arc 23.18 au = 27.8 mm, the cisternal + fissure segment. The intraventricular continuation along the ' +
+      'plexus body toward the interventricular foramen, and the medial branch’s velum-interpositum run, are documented ' +
+      'in this record’s own `territory[]` and `function` and are NOT drawn as a second tube: one record, one body. ' +
+      'Calibre stated as 0.8 mm (the small-artery figure this table uses) → tubeRadius 0.333 au (r = d / 2.4).',
+    territory: [
+      'vent-choroid-plexus-lateral',
+      'vent-lateral-ventricle-atrium',
+      'vent-lateral-ventricle-body',
+      'vent-third-ventricle',
+      'nuc-pulvinar',
+      'nuc-mgn',
+      'nuc-habenula',
+      'tract-fornix',
+      'nuc-thalamic-reticular',
+    ],
+    supply: [],
+    direction: 'descending',
+    modality: 'Arterial blood (oxygenated) — choroidal branches of the posterior cerebral artery',
+    origin: 'P2 segment of the posterior cerebral artery, in the ambient and quadrigeminal cistern',
+    target: 'Choroid plexus of the lateral ventricle (body, atrium/glomus and temporal horn) and of the third ventricle',
+    decussation: 'No crossing: each posterior choroidal artery supplies its own hemisphere.',
+    function:
+      'The choroidal supply of the posterior circulation: the medial posterior choroidal artery arises from the P2 ' +
+      'segment of the posterior cerebral artery and runs medially above the tectum to the third ventricle and the ' +
+      'interventricular foramen region, while the lateral posterior choroidal artery arises more distally and runs ' +
+      'laterally into the lateral ventricle to supply the choroid plexus of the body, the atrium (its glomus) and the ' +
+      'temporal horn. Together they supply the choroid plexus of the lateral and third ventricles, the posterior ' +
+      'thalamus and habenula region, and the adjacent fornix and pulvinar — the territory that makes the plexus a ' +
+      'vascular as well as a CSF structure.',
+    waypoints: [
+      [10.363, 13.456, -16.527],
+      [5.244, 14.752, -12.595],
+      [18.832, 22.802, -17.664],
+    ],
+    tubeRadius: 0.333,
+    calibreMm: 0.8,
+    color: '#991b1b',
+    levels: ['lvl-midbrain-sc', 'lvl-post-comm', 'lvl-thalamus-mid', 'lvl-thalamus-rostral', 'lvl-tel-thalamostriate'],
+    synonyms: [
+      'arteria choroidea posterior medialis',
+      'medial posterior choroidal artery',
+      'posterior choroidal arteries (medial and lateral — this record documents both branches)',
+    ],
+    clinical: [
+      {
+        syndrome: 'Choroid plexus tumour supply',
+        findings:
+          'Choroid plexus papillomas and carcinomas, and intraventricular meningiomas of the trigone, are fed by the ' +
+          'posterior choroidal arteries (and the anterior choroidal artery anteriorly); recognizing the pedicle is what ' +
+          'makes embolization and surgical control possible.',
+        vascular: 'Posterior choroidal arteries (with the anterior choroidal artery)',
+      },
+      {
+        syndrome: 'Posterior choroidal territory infarction',
+        findings:
+          'Occlusion produces infarction of the posterior thalamus and the adjacent plexus, adding hemisensory loss, ' +
+          'visual field defects and memory disturbance to the picture of a posterior cerebral artery infarct; isolated ' +
+          'occlusion is uncommon because the artery arises from the PCA itself.',
+        vascular: 'Posterior cerebral artery (posterior choroidal branches)',
+      },
+      {
+        syndrome: 'Intraventricular haemorrhage from the choroidal vessels',
+        findings:
+          'The choroidal arteries are the source of intraventricular haemorrhage in the premature (germinal matrix) and ' +
+          'of blood in the ventricles in adults with hypertension or vascular malformation; blood in the ventricle is ' +
+          'what produces hydrocephalus.',
+        vascular: 'Choroidal arteries (with the germinal matrix in neonates)',
+      },
+    ],
+    refs: [
+      'Blumenfeld, H. (2nd ed.). Neuroanatomy through Clinical Cases — Brain and Environs: Cranium, Ventricles, and Meninges.',
+      'Blumenfeld, H. (2nd ed.). Neuroanatomy through Clinical Cases — Cerebral Hemispheres and Vascular Supply.',
+    ],
   },
 ]
 
