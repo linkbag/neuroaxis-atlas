@@ -247,6 +247,19 @@ export function registryNerveParts(): WorkerRegistryPart[] {
   for (const course of NERVE_COURSES) {
     const part = registryPartFromGeometry(nerveCourseMeta(course), tubeGeometryFor(course))
     if (part !== null) parts.push(part)
+    // v17 — paired nerves sweep their MIRROR-IMAGE course as well, so the 2D
+    // section shows both sides exactly as the 3D pass does (SceneLayers renders
+    // the same twin). The mirrored part keeps the record id as its GROUP — so a
+    // contour on either side selects/highlights the same record — and gets a
+    // suffixed slug so it cannot collide with the authored side in the worker
+    // registry. Nerves the registry does not call `paired` stay one-sided.
+    if (getTaxonomyEntry(course.id)?.laterality !== 'paired') continue
+    const mirroredCourse: NerveCourseRecord = {
+      ...course,
+      waypoints: course.waypoints.map(([x, y, z]) => [-x, y, z] as [number, number, number]),
+    }
+    const mirrored = registryPartFromGeometry(nerveCourseMeta(mirroredCourse), tubeGeometryFor(mirroredCourse))
+    if (mirrored !== null) parts.push({ ...mirrored, slug: `${mirrored.slug}#mirror` })
   }
   return parts
 }

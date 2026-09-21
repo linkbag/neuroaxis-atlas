@@ -700,24 +700,39 @@ export default function SceneLayers() {
         }
         return <Fragment key={record.id}>{leftSlugs.map((slug) => body(slug, false, slug))}</Fragment>
       })}
-      {visibleTracts.map((tract) => (
-        // v8 note: a tract that owns a committed body is drawn by the STRUCTURE
-        // pass above, not here — `visibleStructures` is fed by every file under
-        // `src/data/structures/`, and that includes the tract-SHAPED records that
-        // live there (the optic nerve, the optic tract, the fornix). This loop is
-        // `src/data/tracts.json` only, whose 23 records stay procedural, exactly
-        // as REALISM_PLAN §7 decided ("tracts stay procedural"). So: no baked-body
-        // branch here, and nothing below y = +45 changes.
-        <TractTube key={tract.id} tract={tract} highlight={highlight} />
-      ))}
+      {visibleTracts.map((tract) => {
+        // v17 — paired tracts draw their MIRROR-IMAGE twin (x → −x) so both sides
+        // of a bilateral pathway are on screen. The authored chain is one side's
+        // anatomy, and one-sided rendering is what made crossing
+        // (ipsilateral → contralateral) hard to track. The twin selects, hovers
+        // and highlights as the same record; only its geometry is mirrored.
+        // Tracts registered `midline` (the decussations, the commissures) stay
+        // single — mirroring those would duplicate the crossing itself.
+        const paired = getTaxonomyEntry(tract.id)?.laterality === 'paired'
+        return (
+          <Fragment key={tract.id}>
+            <TractTube tract={tract} highlight={highlight} />
+            {paired && <TractTube tract={tract} highlight={highlight} mirrored />}
+          </Fragment>
+        )
+      })}
       {/* v14 §5 — the twelve cranial-nerve courses, same tube, same gate, their
           OWN registry kind. Each is a `NerveCourseRecord`: a superset of
           `TractRecord` (waypoints + tubeRadius + direction + colour) carrying
           the `region` and `foramen` a nerve needs, so `TractTube` needs no
           branch and no new renderer exists. */}
-      {visibleNerveCourses.map((course) => (
-        <TractTube key={course.id} tract={course} highlight={highlight} />
-      ))}
+      {visibleNerveCourses.map((course) => {
+        // v17 — same mirror rule as the tracts above: a paired nerve draws its
+        // twin on the other side, so a crossing can be followed from the
+        // ipsilateral root to the contralateral target.
+        const paired = getTaxonomyEntry(course.id)?.laterality === 'paired'
+        return (
+          <Fragment key={course.id}>
+            <TractTube tract={course} highlight={highlight} />
+            {paired && <TractTube tract={course} highlight={highlight} mirrored />}
+          </Fragment>
+        )
+      })}
     </group>
   )
 }

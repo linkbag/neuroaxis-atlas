@@ -327,10 +327,10 @@ assert(
   'SceneLayers routes the course table through the exported nerveCoursesVisible(NERVE_COURSES, layerSets)',
 )
 assert(
-  /visibleNerveCourses\.map\(\(course\)\s*=>\s*\(\s*<TractTube key=\{course\.id\} tract=\{course\} highlight=\{highlight\} \/>/.test(
-    SOURCE.sceneLayers,
-  ),
-  'SceneLayers mounts one <TractTube> per visible course (the existing tube path, no new renderer)',
+  /visibleNerveCourses\.map\(\(course\)\s*=>\s*\{/.test(SOURCE.sceneLayers) &&
+    /<TractTube tract=\{course\} highlight=\{highlight\} \/>/.test(SOURCE.sceneLayers) &&
+    /<TractTube tract=\{course\} highlight=\{highlight\} mirrored \/>/.test(SOURCE.sceneLayers),
+  'SceneLayers mounts TWO <TractTube> per paired course — authored side plus mirrored twin (v17 both-sides rendering)',
 )
 assert(
   /const kind = entry\?\.kind \?\? 'tract'/.test(SOURCE.sceneLayers) &&
@@ -366,8 +366,8 @@ assert(
 
 const nerveParts = registryNerveParts()
 assert(
-  nerveParts.length === 12,
-  'registryNerveParts() returns twelve non-null worker parts',
+  nerveParts.length === 24,
+  'registryNerveParts() returns twenty-four worker parts — twelve authored sides plus twelve mirrored twins (v17 both-sides rendering)',
   `found ${nerveParts.length}`,
 )
 assert(

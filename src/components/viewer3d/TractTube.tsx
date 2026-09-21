@@ -229,11 +229,11 @@ export function buildTractGeometry(tract: TractRecord): THREE.BufferGeometry {
  * The cache is keyed on the record id, so twelve nerve courses add twelve
  * entries and a layer toggle never re-sweeps anything.
  */
-export function tubeGeometryFor(tract: TractRecord): THREE.BufferGeometry {
-  const cached = tubeCache.get(tract.id)
+export function tubeGeometryFor(tract: TractRecord, cacheKey: string = tract.id): THREE.BufferGeometry {
+  const cached = tubeCache.get(cacheKey)
   if (cached) return cached
   const geometry = buildTractGeometry(tract)
-  tubeCache.set(tract.id, geometry)
+  tubeCache.set(cacheKey, geometry)
   return geometry
 }
 
@@ -277,6 +277,16 @@ export interface TractTubeProps {
   tract: TractRecord
   /** Ids kept lit while everything else dims (selection or open syndrome). */
   highlight: Set<string> | null
+  /**
+   * v17 — sweep the MIRROR-IMAGE course (x → −x) for paired structures: the
+   * authored chain is one side's anatomy, and the renderer draws exactly one tube
+   * per record, so paired nerves and tracts appeared on one side only. The twin
+   * selects, hovers, labels and highlights as the SAME record (every id-based
+   * read stays `tract.id`); only the geometry cache and the frame-driver slot are
+   * keyed with a suffix, because two instances sharing one cache entry (or one
+   * driver slot) is the collision that would make the twin draw unmirrored.
+   */
+  mirrored?: boolean
 }
 
 /**
@@ -364,20 +374,38 @@ export function tractFrameRegistrySize(): number {
   return tractFrameRegistry.size
 }
 
-export default function TractTube({ tract, highlight }: TractTubeProps) {
+export default function TractTube({ tract, highlight, mirrored = false }: TractTubeProps) {
   const hoveredId = useAtlasStore((s) => s.hoveredId)
   const selectedId = useAtlasStore((s) => s.selectedId)
   const labelVisibility = useAtlasStore((s) => s.labelVisibility)
   const setHovered = useAtlasStore((s) => s.setHovered)
   const selectStructure = useAtlasStore((s) => s.selectStructure)
 
+  /**
+   * v17 — the mirrored twin sweeps x → −x. Every id-based read (selection,
+   * hover, highlight, click, label) stays on the REAL record id, so clicking
+   * either side selects the same record; only the geometry cache key and the
+   * frame-driver slot are suffixed, because two instances sharing one cache
+   * entry (or one driver slot) is the collision that would make the twin draw
+   * unmirrored geometry over the authored side.
+   */
+  const instanceKey = mirrored ? `${tract.id}#mirror` : tract.id
+  const effectiveTract = useMemo<TractRecord>(
+    () =>
+      mirrored
+        ? { ...tract, waypoints: tract.waypoints.map(([x, y, z]) => [-x, y, z] as [number, number, number]) }
+        : tract,
+    [mirrored, tract],
+  )
+
   const isSelected = selectedId === tract.id
   const isHovered = hoveredId === tract.id
   const syndromeLit = highlight !== null && highlight.has(tract.id) && !isSelected
   const dimmed = highlight !== null && !highlight.has(tract.id)
 
-  // Geometry is memoized per tract id (module cache — layer toggles reuse it).
-  const geometry = useMemo(() => tubeGeometryFor(tract), [tract])
+  // Geometry is memoized per instance key (module cache — layer toggles reuse
+  // it); the mirrored twin sweeps its own negated-waypoint geometry.
+  const geometry = useMemo(() => tubeGeometryFor(effectiveTract, instanceKey), [effectiveTract, instanceKey])
 
   // Factory material per instance (direction-tinted white matter with the
   // tangent striation normal map); vertex colors enable the length gradient,
@@ -406,7 +434,7 @@ export default function TractTube({ tract, highlight }: TractTubeProps) {
   // owner — and a tube is never left stale.
   const frameDriverRef = useTractFrameDriver()
   useEffect(() => {
-    tractFrameRegistry.set(tract.id, {
+    tractFrameRegistry.set(instanceKey, {
       material,
       isSelected,
       syndromeLit,
@@ -415,10 +443,10 @@ export default function TractTube({ tract, highlight }: TractTubeProps) {
     })
     if (frameDriverRef.current === null) frameDriverRef.current = stepAllTracts
     return () => {
-      tractFrameRegistry.delete(tract.id)
+      tractFrameRegistry.delete(instanceKey)
       if (frameDriverRef.current === stepAllTracts) frameDriverRef.current = null
     }
-  }, [tract.id, material, isSelected, syndromeLit, isHovered, dimmed, frameDriverRef])
+  }, [instanceKey, material, isSelected, syndromeLit, isHovered, dimmed, frameDriverRef])
 
   const handleOver = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation()
@@ -436,9 +464,9 @@ export default function TractTube({ tract, highlight }: TractTubeProps) {
   }
 
   const midpoint = useMemo(() => {
-    const p = toCatmullRom(tract.waypoints).getPoint(0.5)
+    const p = toCatmullRom(effectiveTract.waypoints).getPoint(0.5)
     return [p.x, p.y, p.z] as [number, number, number]
-  }, [tract])
+  }, [effectiveTract])
 
   return (
     <mesh
