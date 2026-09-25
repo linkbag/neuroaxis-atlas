@@ -19,7 +19,7 @@
       "gyrus": "paracentral lobule and the medial end of the precentral gyrus, behind the superior end of the cingulate sulcus",
       "mesh": "ctx-hemisphere-l",
       "strip": "M1 (precentral)",
-      "somatotopicOrder": "order 0 of 7, arc s = 0.00 au from the toe",
+      "somatotopicOrder": "order 0 of 8, arc s = 0.00 au from the toe",
       "surfaceNormal": [
         -0.759,
         0.633,
@@ -87,7 +87,7 @@
       "gyrus": "superior rim of the hemisphere adjacent to the paracentral lobule (leg band of the precentral gyrus)",
       "mesh": "ctx-hemisphere-l",
       "strip": "M1 (precentral)",
-      "somatotopicOrder": "order 1 of 7, arc s = 7.84 au from the toe",
+      "somatotopicOrder": "order 1 of 8, arc s = 7.84 au from the toe",
       "surfaceNormal": [
         0.857,
         0.186,
@@ -155,7 +155,7 @@
       "gyrus": "superior convexity of the precentral gyrus, first segment to leave the medial surface",
       "mesh": "ctx-hemisphere-l",
       "strip": "M1 (precentral)",
-      "somatotopicOrder": "order 2 of 7, arc s = 19.33 au from the toe",
+      "somatotopicOrder": "order 2 of 8, arc s = 19.33 au from the toe",
       "surfaceNormal": [
         -0.716,
         0.4,
@@ -223,7 +223,7 @@
       "gyrus": "upper lateral convexity of the precentral gyrus (arm band)",
       "mesh": "ctx-hemisphere-l",
       "strip": "M1 (precentral)",
-      "somatotopicOrder": "order 3 of 7, arc s = 27.05 au from the toe",
+      "somatotopicOrder": "order 3 of 8, arc s = 27.05 au from the toe",
       "surfaceNormal": [
         -0.416,
         0.692,
@@ -292,7 +292,7 @@
       "gyrus": "lateral convexity of the precentral gyrus at the hand-knob (the \"omega\" of the central sulcus)",
       "mesh": "ctx-hemisphere-l",
       "strip": "M1 (precentral)",
-      "somatotopicOrder": "order 4 of 7, arc s = 37.29 au from the toe",
+      "somatotopicOrder": "order 4 of 8, arc s = 37.29 au from the toe",
       "surfaceNormal": [
         0.624,
         0.251,
@@ -360,7 +360,7 @@
       "gyrus": "lower lateral convexity of the precentral gyrus (face band), above the lateral fissure",
       "mesh": "ctx-hemisphere-l",
       "strip": "M1 (precentral)",
-      "somatotopicOrder": "order 5 of 7, arc s = 51.66 au from the toe",
+      "somatotopicOrder": "order 5 of 8, arc s = 51.66 au from the toe",
       "surfaceNormal": [
         0.88,
         -0.276,
@@ -428,7 +428,7 @@
       "gyrus": "opercular surface of the precentral gyrus, immediately above the lateral fissure",
       "mesh": "ctx-hemisphere-l",
       "strip": "M1 (precentral)",
-      "somatotopicOrder": "order 6 of 7, arc s = 64.09 au from the toe",
+      "somatotopicOrder": "order 6 of 8, arc s = 64.09 au from the toe",
       "surfaceNormal": [
         0.322,
         0.655,
@@ -497,7 +497,7 @@
       "gyrus": "opercular surface of the precentral gyrus, at the inferior end of the strip",
       "mesh": "ctx-hemisphere-l",
       "strip": "M1 (precentral)",
-      "somatotopicOrder": "order 7 of 7, arc s = 74.57 au from the toe",
+      "somatotopicOrder": "order 7 of 8, arc s = 74.57 au from the toe",
       "surfaceNormal": [
         0.95,
         -0.245,
@@ -565,7 +565,7 @@
       "gyrus": "paracentral lobule and the medial end of the postcentral gyrus, behind the superior end of the cingulate sulcus",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
-      "somatotopicOrder": "order 0 of 7, arc s = 0.00 au from the toe",
+      "somatotopicOrder": "order 0 of 8, arc s = 0.00 au from the toe",
       "surfaceNormal": [
         -0.318,
         0.401,
@@ -633,7 +633,7 @@
       "gyrus": "superior rim of the hemisphere adjacent to the paracentral lobule (leg band of the postcentral gyrus)",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
-      "somatotopicOrder": "order 1 of 7, arc s = 7.84 au from the toe",
+      "somatotopicOrder": "order 1 of 8, arc s = 7.84 au from the toe",
       "surfaceNormal": [
         -0.206,
         0.255,
@@ -701,7 +701,7 @@
       "gyrus": "superior convexity of the postcentral gyrus, first segment to leave the medial surface",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
-      "somatotopicOrder": "order 2 of 7, arc s = 19.33 au from the toe",
+      "somatotopicOrder": "order 2 of 8, arc s = 19.33 au from the toe",
       "surfaceNormal": [
         -0.676,
         0.666,
@@ -769,7 +769,7 @@
       "gyrus": "upper lateral convexity of the postcentral gyrus (arm band)",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
-      "somatotopicOrder": "order 3 of 7, arc s = 27.05 au from the toe",
+      "somatotopicOrder": "order 3 of 8, arc s = 27.05 au from the toe",
       "surfaceNormal": [
         0.842,
         -0.412,
@@ -837,7 +837,7 @@
       "gyrus": "lateral convexity of the postcentral gyrus at the hand-knob (the \"omega\" of the central sulcus)",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
-      "somatotopicOrder": "order 4 of 7, arc s = 37.29 au from the toe",
+      "somatotopicOrder": "order 4 of 8, arc s = 37.29 au from the toe",
       "surfaceNormal": [
         -0.263,
         0.734,
@@ -905,7 +905,7 @@
       "gyrus": "lower lateral convexity of the postcentral gyrus (face band), above the lateral fissure",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
-      "somatotopicOrder": "order 5 of 7, arc s = 51.66 au from the toe",
+      "somatotopicOrder": "order 5 of 8, arc s = 51.66 au from the toe",
       "surfaceNormal": [
         0.836,
         -0.522,
@@ -973,7 +973,7 @@
       "gyrus": "opercular surface of the postcentral gyrus, immediately above the lateral fissure",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
-      "somatotopicOrder": "order 6 of 7, arc s = 64.09 au from the toe",
+      "somatotopicOrder": "order 6 of 8, arc s = 64.09 au from the toe",
       "surfaceNormal": [
         0.577,
         0.816,
@@ -1041,7 +1041,7 @@
       "gyrus": "opercular surface of the postcentral gyrus, at the inferior end of the strip",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
-      "somatotopicOrder": "order 7 of 7, arc s = 74.57 au from the toe",
+      "somatotopicOrder": "order 7 of 8, arc s = 74.57 au from the toe",
       "surfaceNormal": [
         0.871,
         0.247,

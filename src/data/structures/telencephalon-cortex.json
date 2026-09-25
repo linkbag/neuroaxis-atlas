@@ -461,7 +461,7 @@
   {
     "id": "surf-planum-temporale",
     "name": "Planum temporale",
-    "synonyms": ["temporal plane", "auditory association cortex of the superior temporal plane"],
+    "synonyms": ["temporal plane", "auditory association cortex of the superior temporal plane (host gyrus of A2)"],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",

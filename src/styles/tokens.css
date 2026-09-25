@@ -15,9 +15,23 @@
   /* Lines & text */
   --border-subtle: #1f2b3d;
   --border-strong: #2c3a52;
+  /* v19 (audit ux-005, WCAG 2.1 SC 1.4.11) — a container border may be subtle,
+   * but the boundary of an INTERACTIVE control is the information that
+   * identifies it: `--border-strong` measures 1.55:1 on `--bg-panel` while
+   * `.btn`'s fill is 1.08:1, so the 1 px border was the only cue and it failed
+   * the 3:1 non-text floor. `--border-interactive` is the same hue family at
+   * 3.54:1 (#5b7093 on --bg-panel, 3.26:1 on --bg-elevated) and is used by
+   * `.btn` and `button.chip` only — panels and cards keep `--border-strong`. */
+  --border-interactive: #5b7093;
   --text-primary: #e5e7eb;
   --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  /* v19 (audit ux-003, WCAG 2.1 SC 1.4.3) — was #64748b, measured 3.73:1 on
+   * `--bg-panel`, 3.44:1 on `--bg-elevated` and 3.93:1 on `--bg-page` while
+   * being used for 0.68–0.8 rem text (hints, ruler coordinates, plate-chip
+   * orientation, viewer hint over the #1b2436 gradient, 4.26:1). #8496ad
+   * measures 5.88 / 5.42 / 6.19 / 5.14 — every surface clears 4.5:1 — and stays
+   * visibly dimmer than `--text-secondary` (6.93 / 6.39). */
+  --text-muted: #8496ad;
 
   /* Accents & status */
   --accent: #38bdf8;

@@ -38,7 +38,7 @@
  * is identical, the striation/selection-pulse logic is untouched, and the
  * material handed to the pass is the same instance the mesh uses.
  */
-import { useEffect, useMemo, useRef, type MutableRefObject } from 'react'
+import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
@@ -326,14 +326,49 @@ interface TractFrameEntry {
   syndromeLit: boolean
   isHovered: boolean
   dimmed: boolean
+  /**
+   * v19 (audit mat-1) — the opacity this tube settles at when it is neither
+   * dimmed nor highlighted: `1` for a tract (opaque white matter), `0.5` for a
+   * vessel course. Before this field the pass lerped every tube toward `1`, so a
+   * granular artery settled at opacity 1 while the committed artery it branches
+   * from is drawn at `KIND_OPACITY.vessel = 0.5` with `depthWrite: false`
+   * (`materials.createVesselMaterial`) — the branches out-shone their own trunks,
+   * which is the v18 "one bright-red network" contract inverted.
+   */
+  idleOpacity: number
 }
+
+/** 0.5 — the arterial preset's opacity (`createVesselMaterial`, and
+ *  `KIND_OPACITY.vessel` in NucleusMesh). */
+const VESSEL_IDLE_OPACITY = 0.5
 
 /** Insertion-ordered (a Map), so the frame pass visits tubes in mount order —
  *  exactly the order R3F ran the previous per-tube callbacks in. */
 const tractFrameRegistry = new Map<string, TractFrameEntry>()
 
-/** The shared frame pass' signature (see stepAllTracts). */
-type TractFrameStep = (time: number, delta: number) => void
+/**
+ * v19 (audit rob-001) — WHICH registry entry owns the frame pass.
+ *
+ * The v10 consolidation documented "exactly ONE of them claims the frame driver
+ * (the first to commit) which advances the whole registry in insertion order",
+ * but the token was a `useRef` created per component INSTANCE, so every mounted
+ * tube set its own token and every one of them ran `stepAllTracts` — with 149
+ * tubes mounted that is the whole registry (149 lerps) walked 149× per frame,
+ * and the documented `min(1, delta*8)` fade applied 149 times per frame instead
+ * of once (which is why the fade was instant in practice).
+ *
+ * The owner is now derived from the registry itself: the FIRST entry in
+ * insertion order (a `Map`, so the order is the mount order the old per-tube
+ * callbacks ran in) is the one that steps; every other callback returns
+ * immediately. Ownership therefore transfers by itself when the owner unmounts
+ * — no hand-over bookkeeping, and no stall if the owner is the only tube that
+ * ever unmounts.
+ */
+let tractDriverKey: string | null = null
+
+function refreshTractDriverKey(): void {
+  tractDriverKey = tractFrameRegistry.size === 0 ? null : (tractFrameRegistry.keys().next().value ?? null)
+}
 
 /** One call per tube, identical maths to the pre-consolidation callback. */
 function stepTractFrame(entry: TractFrameEntry, time: number, delta: number): void {
@@ -347,28 +382,29 @@ function stepTractFrame(entry: TractFrameEntry, time: number, delta: number): vo
         ? EMISSIVE_HOVER
         : EMISSIVE_IDLE
   material.emissiveIntensity = THREE.MathUtils.lerp(material.emissiveIntensity, emissiveTarget, alpha)
-  material.opacity = THREE.MathUtils.lerp(material.opacity, entry.dimmed ? 0.15 : 1, alpha)
+  material.opacity = THREE.MathUtils.lerp(
+    material.opacity,
+    entry.dimmed ? 0.15 : entry.idleOpacity,
+    alpha,
+  )
   material.depthWrite = material.opacity > 0.99
 }
 
 /**
  * THE single active `useFrame` for every tract tube — whichever mounted
- * instance owns the driver token. Renders nothing.
+ * instance currently owns the driver key (the first registry entry, see
+ * `tractDriverKey`). Renders nothing.
  *
- * It is hosted by the tubes themselves because that keeps the change inside
- * this module: exactly ONE mounted tube subscribes a callback that steps the
- * whole registry, and the token is handed over on unmount (see the effect in
- * TractTube). Before the effect commits `driverRef.current` is null and the
- * frame pass is a no-op, so the first frame after mount is simply not animated.
+ * Every mounted tube still subscribes ONE `useFrame` callback (hooks cannot be
+ * conditional), but a callback that does not own the key returns immediately:
+ * one registry walk per frame, the documented `min(1, delta*8)` alpha applied
+ * once. Hosting it in the tubes keeps the change inside this module.
  */
-function useTractFrameDriver(): MutableRefObject<TractFrameStep | null> {
-  const driverRef = useRef<TractFrameStep | null>(null)
+function useTractFrameDriver(instanceKey: string): void {
   useFrame((state, delta) => {
-    const driver = driverRef.current
-    if (driver === null) return
-    driver(state.clock.elapsedTime, delta)
+    if (tractDriverKey !== instanceKey) return
+    stepAllTracts(state.clock.elapsedTime, delta)
   })
-  return driverRef
 }
 
 /** The one function every mounted tube's callback dispatches to. */
@@ -452,11 +488,9 @@ export default function TractTube({ tract, highlight, mirrored = false, variant 
   // Published to the shared frame pass instead of registering a private
   // useFrame per tube (QUALITY_PLAN §3 item 10, AUDIT §2.14): the entry is
   // refreshed on every render, so the pass always sees the current selection/
-  // hover/syndrome state, and it is withdrawn on unmount. The FIRST tube to
-  // commit claims the driver token; the one-frame gap between two instances'
-  // effects is harmless because the pass reads the registry, not the token
-  // owner — and a tube is never left stale.
-  const frameDriverRef = useTractFrameDriver()
+  // hover/syndrome state, and it is withdrawn on unmount. Ownership of the pass
+  // is the first registry entry — see `tractDriverKey` (v19, audit rob-001).
+  useTractFrameDriver(instanceKey)
   useEffect(() => {
     tractFrameRegistry.set(instanceKey, {
       material,
@@ -464,13 +498,14 @@ export default function TractTube({ tract, highlight, mirrored = false, variant 
       syndromeLit,
       isHovered,
       dimmed,
+      idleOpacity: variant === 'vessel' ? VESSEL_IDLE_OPACITY : 1,
     })
-    if (frameDriverRef.current === null) frameDriverRef.current = stepAllTracts
+    refreshTractDriverKey()
     return () => {
       tractFrameRegistry.delete(instanceKey)
-      if (frameDriverRef.current === stepAllTracts) frameDriverRef.current = null
+      refreshTractDriverKey()
     }
-  }, [instanceKey, material, isSelected, syndromeLit, isHovered, dimmed, frameDriverRef])
+  }, [instanceKey, material, isSelected, syndromeLit, isHovered, dimmed, variant])
 
   const handleOver = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation()

@@ -66,7 +66,7 @@
  * @types/react 18.3, which is what `npm run check` verifies.)
  */
 
-import { useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import Header from './components/Header'
 import SearchBox from './components/SearchBox'
 import TaxonomyTree from './components/TaxonomyTree'
@@ -86,6 +86,23 @@ const TABS: { id: ActiveTab; label: string; title: string }[] = [
   { id: 'plates', label: 'Plates', title: '2D cross-section plates (transverse · sagittal · coronal)' },
   { id: 'syndromes', label: 'Syndromes', title: 'Clinical syndrome browser' },
 ]
+
+/**
+ * v19 (audit ux-009) — the tab bar declared `role="tablist"` / `role="tab"`
+ * without implementing the WAI-ARIA tabs pattern: every tab was in the tab
+ * order and no arrow key moved between them, so a keyboard user had three
+ * extra stops and no way to walk the tabs. The two rules the pattern actually
+ * requires are implemented below — roving `tabindex` (only the selected tab is
+ * a tab stop) and Left/Right/Home/End moving selection AND focus — while the
+ * markup, ids, labels and click behaviour are unchanged.
+ */
+function tabAfterArrow(current: number, key: string): number {
+  if (key === 'ArrowRight') return (current + 1) % TABS.length
+  if (key === 'ArrowLeft') return (current - 1 + TABS.length) % TABS.length
+  if (key === 'Home') return 0
+  if (key === 'End') return TABS.length - 1
+  return current
+}
 
 /** Initial sidebar visibility: collapsed by default on tablet/phone widths. */
 function initialSidebarOpen(): boolean {
@@ -119,6 +136,9 @@ export function AppContent() {
   const activeTab = useAtlasStore((s) => s.activeTab)
   const setActiveTab = useAtlasStore((s) => s.setActiveTab)
   const [sidebarOpen, setSidebarOpen] = useState(initialSidebarOpen)
+  /** v19 (audit ux-009) — the tab buttons, so the arrow keys can move FOCUS with
+   *  the selection (the tabs pattern requires both). */
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   return (
     <div className={`app-shell ${sidebarOpen ? 'is-sidebar-open' : 'is-sidebar-closed'}`}>
@@ -176,7 +196,7 @@ export function AppContent() {
       {/* ------------------------------------------------------- center pane */}
       <main className="center-pane">
         <div className="center-tabs" role="tablist" aria-label="Main views">
-          {TABS.map((tab) => {
+          {TABS.map((tab, index) => {
             const active = activeTab === tab.id
             return (
               <button
@@ -188,7 +208,22 @@ export function AppContent() {
                 aria-controls="center-body"
                 title={tab.title}
                 className={`center-tab${active ? ' is-active' : ''}`}
+                /* v19 (audit ux-009) — roving tabindex: the selected tab is the
+                 * single tab stop, the arrows (handled on the tablist) move it. */
+                tabIndex={active ? 0 : -1}
+                ref={(node) => {
+                  tabRefs.current[index] = node
+                }}
                 onClick={() => setActiveTab(tab.id)}
+                onKeyDown={(event) => {
+                  const next = tabAfterArrow(index, event.key)
+                  if (next === index && !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+                    return
+                  }
+                  event.preventDefault()
+                  setActiveTab(TABS[next].id)
+                  tabRefs.current[next]?.focus()
+                }}
               >
                 {tab.label}
               </button>

@@ -168,6 +168,28 @@ export default function Header() {
   }
 
   /**
+   * v19 — ONE button for the arterial system. The Systems row used to list both
+   * "Vessels" (the `vessel` KIND toggle) and "Vasculature" (the `vasculature`
+   * REGION toggle) — two controls for one system, verified to address exactly the
+   * same 53 records in both directions (the kind set and the region set are
+   * identical), so the user saw redundancy and the two toggles could disagree.
+   * "Vasculature" (the system name) stays and now carries BOTH layers: one
+   * button, one coherent state, read identically by the 3D scene, the live
+   * section, the PiP and the tree's dimming rule.
+   */
+  const toggleVasculature = (on: boolean): void => {
+    toggleArea(['vasculature'], on)
+    // Asymmetric on purpose. Turning the system ON also puts its KIND layer on,
+    // so the arterial system stays reachable after a preset (e.g. Clinical
+    // motor) left the `vessel` kind off. Turning it OFF deliberately leaves the
+    // kind axis alone: the default framing's own state is "vascular region off,
+    // vessel kind ON" (DEFAULT_LAYERS), and the composition contract
+    // (areas-all-on + systems-all-on + vascular-off == DEFAULT_LAYERS) must keep
+    // reproducing it exactly — a symmetric toggle would silently break that.
+    if (on && !layers.kinds.has('vessel')) toggleKindLayer('vessel')
+  }
+
+  /**
    * v12d — ONE helper for the two All modules: set exactly the given layer slice
    * to `on`, through the same per-region/per-kind toggles the two rows use. Both
    * modules are thin wrappers over it, so neither can invent a layer state the
@@ -205,12 +227,18 @@ export default function Header() {
       </div>
 
       {/*
-       * v12b — the rows flow in ONE wrapping flex line instead of a column: the
-       * Areas row is given `flexBasis: 100%` so it still owns the first line, and
-       * the Systems row plus the All on/All off module share the second line, with
-       * the module pushed to the right (`marginLeft: 'auto'`). The module keeps
-       * its own DOM position and its `data-header-action` hooks, so the browser
-       * lane's selectors and the accessibility tree are unchanged.
+       * v12b — the rows flow in ONE wrapping flex line instead of a column.
+       * v19 (audit ux-033) — the comment used to claim the grouping is enforced
+       * by layout ("the Areas row is given `flexBasis: 100%` … the module pushed
+       * to the right (`marginLeft: 'auto'`)"). It is not, and measuring the
+       * shipped styles shows `flexBasis` and `marginLeft` appear nowhere in this
+       * file: the four children carry `order` 0/1/2/3 and wrap by content width,
+       * so which controls share a line is a function of the viewport, not of the
+       * code. What actually says which axis a module acts on is the module's own
+       * accessible name (`aria-label="Show or hide all areas"`) plus its
+       * `data-header-action` / `data-row` hooks. Enforcing the line grouping is a
+       * layout change that only a browser can verify, so it is left as the
+       * measured state rather than claimed.
        */}
       <div
         className="header-rows"
@@ -218,15 +246,17 @@ export default function Header() {
       >
         {/*
          * v12e — TWO All modules, one per axis, each on ITS OWN group's line:
-         * the Areas module shares the Areas row's line (order 1, right-aligned by
-         * `marginLeft: 'auto'`) and the Systems module shares the Systems row's
-         * line (order 3, same right alignment). The Systems row itself carries
-         * `flexBasis: 100%` (order 2), which is what forces it onto a fresh line so
-         * the two groups cannot interleave. No "Areas"/"Systems" text inside the
-         * boxes: a box sitting on the row it acts on is what says which axis it is.
-         * The axis still lives in the accessible name and the data hook
-         * (areas-all-on/off, systems-all-on/off), because two buttons both reading
-         * "All on" would be ambiguous for a screen reader and the browser lane.
+         * the Areas module shares the Areas row's line (order 1) and the Systems
+         * module shares the Systems row's line (order 3).
+         * v19 (audit ux-002, WCAG 2.5.3 Label in Name) — the accessible name now
+         * BEGINS with the visible text: the button reads "All on" and is named
+         * "All on — every area", so `name.includes("All on")` holds and a
+         * speech-input user saying the words on the button activates it. The old
+         * names ("All areas on — show every area") failed that test — the defect
+         * this file carried from v12e and that `verify:area-toggles` pinned.
+         * The axis still lives in the name's tail and in the data hook
+         * (areas-all-on/off, systems-all-on/off), because two buttons both
+         * reading "All on" would be ambiguous for a screen reader.
          */}
         <div
           className="header-all-module"
@@ -248,8 +278,8 @@ export default function Header() {
             data-header-action="areas-all-on"
             className={`btn${allAreasOn ? ' is-active' : ''}`}
             aria-pressed={allAreasOn}
-            aria-label="All areas on — show every area"
-            title="All areas on — display every area of the neuraxis"
+            aria-label="All on — every area"
+            title="All on — display every area of the neuraxis. Switches the AREA layers only: the v7 structure-level framing set (cerebral cortex, telencephalic white matter, lateral ventricles) is a separate axis — the Clinical motor button is what changes it."
             onClick={() => setSlice(areaRegions, [], true)}
           >
             All on
@@ -257,10 +287,10 @@ export default function Header() {
           <button
             type="button"
             data-header-action="areas-all-off"
-            className="btn"
+            className={`btn${allAreasOff ? ' is-active' : ''}`}
             aria-pressed={allAreasOff}
-            aria-label="All areas off — hide every area"
-            title="All areas off — remove every area from the 3D and section views"
+            aria-label="All off — every area"
+            title="All off — remove every area from the 3D and section views"
             onClick={() => setSlice(areaRegions, [], false)}
           >
             All off
@@ -286,8 +316,8 @@ export default function Header() {
             data-header-action="systems-all-on"
             className={`btn${allSystemsOn ? ' is-active' : ''}`}
             aria-pressed={allSystemsOn}
-            aria-label="All systems on — show every system"
-            title="All systems on — display every structure system"
+            aria-label="All on — every system"
+            title="All on — display every structure system. Switches the SYSTEM layers (kinds + the region-backed Vasculature button) only: the v7 structure-level framing set is a separate axis — the Clinical motor button is what changes it."
             onClick={() => setSlice(systemRegions, ALL_KINDS, true)}
           >
             All on
@@ -295,10 +325,10 @@ export default function Header() {
           <button
             type="button"
             data-header-action="systems-all-off"
-            className="btn"
+            className={`btn${allSystemsOff ? ' is-active' : ''}`}
             aria-pressed={allSystemsOff}
-            aria-label="All systems off — hide every system"
-            title="All systems off — remove every structure system"
+            aria-label="All off — every system"
+            title="All off — remove every structure system"
             onClick={() => setSlice(systemRegions, ALL_KINDS, false)}
           >
             All off
@@ -341,11 +371,15 @@ export default function Header() {
 
         {/*
          * Row "Systems" — the orthogonal axis the user already had, as toggles:
-         * `ALL_KINDS` mapped in order, so the buttons are total and disjoint
-         * over the kinds by construction (v13: seven kinds including `nerve`,
-         * which needs no special case here — the `ALL_KINDS.map` above emits its
-         * `data-kind`, label and `aria-pressed` like every other kind).
-         * Presented second (`order: 2`).
+         * `ALL_KINDS` mapped in order, so the buttons are total and disjoint over
+         * the kinds by construction, with ONE deliberate omission: `vessel` has no
+         * button of its own, because the region-backed "Vasculature" button below
+         * covers exactly the same records (the kind `vessel` and region
+         * `vasculature` sets are the same 53 rows, verified both ways) and
+         * carries both layers — one system, one button, so the row cannot show
+         * two controls for one system. `nerve` (v13) needs no special case here —
+         * the map emits its `data-kind`, label and `aria-pressed` like every other
+         * kind. Presented second (`order: 2`).
          */}
         <div
           className="header-systems"
@@ -355,7 +389,7 @@ export default function Header() {
           style={{ ...rowStyle, order: 2 }}
         >
           <span className="header-row-label" style={rowLabelStyle}>Systems</span>
-          {ALL_KINDS.map((kind) => {
+          {ALL_KINDS.filter((kind) => kind !== 'vessel').map((kind) => {
             const on = layers.kinds.has(kind)
             return (
               <button
@@ -380,7 +414,12 @@ export default function Header() {
            * the two rows cannot both claim a region or leave one unreachable.
            */}
           {SYSTEM_REGION_BUTTONS.map((entry) => {
-            const on = layers.regions.has(entry.id)
+            // v19 — the vascular button carries BOTH layers (see toggleVasculature),
+            // so it reads ON only when both are: a preset that leaves the `vessel`
+            // kind off must not render this button lit while nothing draws.
+            const on = entry.id === 'vasculature'
+              ? layers.regions.has('vasculature') && layers.kinds.has('vessel')
+              : layers.regions.has(entry.id)
             return (
               <button
                 key={entry.id}
@@ -391,7 +430,7 @@ export default function Header() {
                 title={`${entry.label} — show/hide the ${entry.id} system (a system, not a division of the neuraxis)`}
                 aria-pressed={on}
                 aria-label={`${entry.label} — show/hide the ${entry.id} system`}
-                onClick={() => toggleArea([entry.id], !on)}
+                onClick={() => (entry.id === 'vasculature' ? toggleVasculature(!on) : toggleArea([entry.id], !on))}
               >
                 {entry.label}
               </button>

@@ -53,6 +53,11 @@ function LeafRow({ leaf, selectedId, hoveredId, layers, syndromeSet }: {
         onPointerEnter={() => setHovered(entry.id)}
         onPointerLeave={() => setHovered(null)}
         title={leaf.record ? entry.name : `${entry.name} — authored record pending`}
+        /* v19 (audit ux-011) — the selected row was marked by colour alone
+         * (`is-selected` background + border). The tree is the app's structure
+         * browser and its main keyboard path, so the state is now programmatic
+         * too (SC 1.4.1 / 4.1.2). */
+        aria-current={selected ? 'true' : undefined}
       >
         <KindGlyph kind={entry.kind} color={entry.color} title={entry.kind} />
         <span className="tree-leaf-name">{entry.name}</span>

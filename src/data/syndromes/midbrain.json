@@ -30,7 +30,7 @@
     "id": "syn-claude",
     "name": "Claude syndrome",
     "eponym": "Claude",
-    "structures": ["nuc-red-nucleus", "nuc-oculomotor", "nuc-dentate", "tract-scp"],
+    "structures": ["nuc-red-nucleus", "nuc-oculomotor", "tract-scp"],
     "vascularTerritory": "Paramedian branches of the posterior cerebral artery",
     "presentation": "Ipsilateral CN III palsy with pronounced contralateral cerebellar ataxia — dysmetria, intention tremor, and incoordination — typically out of proportion to any weakness.",
     "cause": "Dorsal tegmental infarct in the paramedian PCA territory damaging the CN III fascicles together with the red nucleus and the dentatorubrothalamic (superior cerebellar peduncle) outflow; the ataxia reflects interruption of cerebellar output before its decussation.",

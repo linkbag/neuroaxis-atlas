@@ -361,6 +361,19 @@ export const DEFAULT_SECTION_UNDERLAY: SectionUnderlay = {
   ctWindowPreset: 'brain',
 }
 
+/**
+ * v19 (audit rob-023) — `windowMin`/`windowMax` are the only persisted numbers
+ * with a uint8 domain, and they were the only ones accepted at ANY finite value:
+ * a hand-edited or corrupted `neuroaxis.sectionUnderlay` carrying `1e9`, `-1e9`
+ * or an inverted pair reaches `imageLayers.windowMap`, whose `wMax > wMin` test
+ * then maps every sample to 0 or 255 — a silently CONSTANT base plate (all black
+ * or all white) with no error and no way for the user to know why. Clamped on
+ * READ and on WRITE, the same rule the sibling `opacity` field already follows.
+ */
+function clampWindowValue(value: number): number {
+  return Math.min(255, Math.max(0, Math.round(value)))
+}
+
 function isUnderlayKind(value: unknown): value is SectionUnderlayKind {
   return (
     value === 'auto' ||
@@ -416,8 +429,8 @@ function initialSectionUnderlay(): SectionUnderlay {
               // included, so the slider still means what it says.
               next.opacity = isV3Payload ? next.opacity : Math.min(1, Math.max(0, opacity))
             }
-            if (isFiniteNumber(record.windowMin)) next.windowMin = record.windowMin
-            if (isFiniteNumber(record.windowMax)) next.windowMax = record.windowMax
+            if (isFiniteNumber(record.windowMin)) next.windowMin = clampWindowValue(record.windowMin)
+            if (isFiniteNumber(record.windowMax)) next.windowMax = clampWindowValue(record.windowMax)
             if (typeof record.realFirst === 'boolean') next.realFirst = record.realFirst
             if (isCtWindowPreset(record.ctWindowPreset)) next.ctWindowPreset = record.ctWindowPreset
           }
@@ -1579,8 +1592,12 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
           1,
           Math.max(0, isFiniteNumber(partial.opacity) ? partial.opacity : previous.opacity),
         ),
-        windowMin: isFiniteNumber(partial.windowMin) ? partial.windowMin : previous.windowMin,
-        windowMax: isFiniteNumber(partial.windowMax) ? partial.windowMax : previous.windowMax,
+        windowMin: isFiniteNumber(partial.windowMin)
+          ? clampWindowValue(partial.windowMin)
+          : previous.windowMin,
+        windowMax: isFiniteNumber(partial.windowMax)
+          ? clampWindowValue(partial.windowMax)
+          : previous.windowMax,
         realFirst:
           typeof partial.realFirst === 'boolean' ? partial.realFirst : previous.realFirst,
         ctWindowPreset: isCtWindowPreset(partial.ctWindowPreset)

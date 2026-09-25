@@ -255,9 +255,18 @@ function createThirdVentricleSlitGeometry(): THREE.BufferGeometry {
 
 /**
  * Geometry overrides for authored records whose 3D shape is more than an
- * ellipsoid: the three ventricle records render as their parametric envelopes
- * (slit / tube / tent). Returns undefined for any other id — callers fall back
- * to the record's origin3d/size3d ellipsoid.
+ * ellipsoid: the three ventricle records are drawn with their parametric
+ * envelopes (slit / tube / tent) while the committed GLB loads, and the
+ * envelope IS the drawn body for any of them the manifest does not carry.
+ * Returns undefined for any other id — callers fall back to the record's
+ * origin3d/size3d ellipsoid.
+ *
+ * v19 (audit pos-5) — the sentence that used to be here ("the three ventricle
+ * records render as their parametric envelopes") read as a fact about the
+ * shipped scene. It is a fact about this FUNCTION: `NucleusMesh` upgrades to the
+ * committed GLB as soon as one resolves, so on the shipped build these three
+ * geometries are the loading/fallback stand-in, not a claim about the final
+ * image.
  */
 export function ventricleGeometryFor(id: string): THREE.BufferGeometry | undefined {
   switch (id) {

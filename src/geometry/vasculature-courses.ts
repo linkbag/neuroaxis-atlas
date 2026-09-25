@@ -287,7 +287,16 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
       LENTICULOSTRIATE_SURFACE_NOTE +
       ' 0.8 mm calibre at 1 au = 1.2 mm gives tubeRadius 0.333 au; the drawn radius is the stated calibre, not a measurement.',
     territory: ['nuc-putamen', 'nuc-caudate-head', 'ctx-internal-capsule', 'nuc-globus-pallidus-externus'],
-    supply: ['lacunar-infarction-internal-capsule', 'striatocapsular-infarction'],
+    // v19 (audit FAC-VN-004) — was ['lacunar-infarction-internal-capsule',
+    // 'striatocapsular-infarction']: neither id is a card in
+    // `src/data/syndromes/*.json` (all 26 cards are `syn-*`), so the reverse
+    // artery→syndrome index built by `load.ts` pointed at nothing and the two
+    // clinical entities were unreachable. Every other course record carries its
+    // clinical content in `clinical[]` and an empty `supply[]`; this record does
+    // the same (LENTICULOSTRIATE_CLINICAL below names both entities by name).
+    // Adding the two cards is a registry-first content decision, recorded as an
+    // open item in docs/audit/v19/CORRECTIONS.md.
+    supply: [],
     direction: 'descending',
     modality: 'Arterial blood (oxygenated) — end-artery perforators of the MCA',
     origin: 'Superior wall of the M1 segment of the middle cerebral artery, at the anterior perforated substance',
@@ -327,7 +336,10 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
       LENTICULOSTRIATE_SURFACE_NOTE +
       ' 0.8 mm calibre at 1 au = 1.2 mm gives tubeRadius 0.333 au.',
     territory: ['nuc-putamen', 'nuc-globus-pallidus-externus', 'ctx-internal-capsule'],
-    supply: ['lacunar-infarction-internal-capsule', 'striatocapsular-infarction'],
+    // v19 (audit FAC-VN-004) — see the umbrella record above: the ids were not
+    // syndrome cards. This record is withdrawn from the drawn set by the v18
+    // authored replacement of the same id, so the array was dead data as well.
+    supply: [],
     direction: 'descending',
     modality: 'Arterial blood (oxygenated) — end-artery perforators of the MCA',
     origin: 'M1 segment of the middle cerebral artery (superior wall), at the anterior perforated substance',
@@ -363,7 +375,9 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
       LENTICULOSTRIATE_SURFACE_NOTE +
       ' Heubner is the largest of the group: 1.0 mm calibre at 1 au = 1.2 mm gives tubeRadius 0.417 au.',
     territory: ['nuc-caudate-head', 'nuc-putamen', 'ctx-internal-capsule'],
-    supply: ['recurrent-artery-of-heubner-territory-infarction'],
+    // v19 (audit FAC-VN-004) — see the umbrella record above: this record is
+    // withdrawn from the drawn set by the v18 authored replacement.
+    supply: [],
     direction: 'descending',
     modality: 'Arterial blood (oxygenated) — the largest medial perforator of the ACA',
     origin: 'Anterior cerebral artery at the internal carotid terminus, anterior to the anterior communicating artery',

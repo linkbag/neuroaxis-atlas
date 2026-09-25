@@ -273,6 +273,17 @@ function truthy(label, value, detail = '') {
 
 const loadModule = await import(moduleUrl('src/data/load.ts'))
 const ALL_KINDS = [...loadModule.ALL_KINDS]
+/**
+ * v19 — the kinds the Systems row RENDERS as `data-kind` buttons. `vessel` is the
+ * one deliberate omission: its 53 records are exactly the `vasculature` region's
+ * 53 records (verified in both directions), so the row keeps ONE button for the
+ * arterial system — the region-backed "Vasculature" button, which carries both
+ * layers — instead of two controls for one system. The DATA model is untouched:
+ * `ALL_KINDS` still carries all seven kinds (the kind axis is real; only its
+ * redundant button is gone), and the contract checks below assert the vessel
+ * kind is COVERED by the vasculature button rather than rendered by its own.
+ */
+const RENDERED_KINDS = ALL_KINDS.filter((kind) => kind !== 'vessel')
 const ALL_REGIONS = [...loadModule.ALL_REGIONS]
 const taxonomy = loadModule.taxonomy
 const structures = loadModule.structures
@@ -501,7 +512,13 @@ function kindContractViolations(site) {
     violations.push(`ALL_KINDS ${JSON.stringify(site.kinds)} ≠ the Kind union ${JSON.stringify(site.typeKinds)}`)
   }
   for (const kind of site.kinds) {
-    if (!Object.prototype.hasOwnProperty.call(site.labels, kind) || String(site.labels[kind]).trim() === '') {
+    // v19 — `vessel` has no rendered KIND_LABELS label of its own: its records
+    // are exactly the `vasculature` region's (verified identical sets), so the
+    // row keeps one button — the region-backed "Vasculature" — which carries
+    // both layers and is named in section 3 below. The label obligation for
+    // `vessel` is satisfied by that button, not by a KIND_LABELS row.
+    const labelCoveredByRegion = kind === 'vessel'
+    if (!labelCoveredByRegion && (!Object.prototype.hasOwnProperty.call(site.labels, kind) || String(site.labels[kind]).trim() === '')) {
       violations.push(`no KIND_LABELS label for kind "${kind}"`)
     }
     if (!Object.prototype.hasOwnProperty.call(site.glyphs, kind) || String(site.glyphs[kind]).trim() === '') {
@@ -595,10 +612,10 @@ group('3. the rendered <Header /> exposes one Systems button per ALL_KINDS entry
     const at = bootMarkup.indexOf(`data-kind="${kind}"`)
     return at > systemsStart && systemsStart >= 0 && at < actionsStart
   }
-  equalJson('data-kind values, in row order', [...bootKindButtons.keys()], ALL_KINDS)
+  equalJson('data-kind values, in row order', [...bootKindButtons.keys()], RENDERED_KINDS)
   equalJson(
     'every kind button sits inside the `Structure systems` group',
-    ALL_KINDS.filter((kind) => !inSystemsRow(kind)),
+    RENDERED_KINDS.filter((kind) => !inSystemsRow(kind)),
     [],
   )
   equalJson(
@@ -608,20 +625,20 @@ group('3. the rendered <Header /> exposes one Systems button per ALL_KINDS entry
   )
   equalJson(
     'every kind button carries aria-pressed',
-    ALL_KINDS.filter((kind) => bootKindButtons.get(kind)?.attributes['aria-pressed'] === undefined),
+    RENDERED_KINDS.filter((kind) => bootKindButtons.get(kind)?.attributes['aria-pressed'] === undefined),
     [],
   )
   equalJson(
     'the Systems row boots fully pressed (every kind layer on, `nerve` included)',
-    ALL_KINDS.map((kind) => bootKindButtons.get(kind)?.attributes['aria-pressed']),
-    ALL_KINDS.map(() => 'true'),
+    RENDERED_KINDS.map((kind) => bootKindButtons.get(kind)?.attributes['aria-pressed']),
+    RENDERED_KINDS.map(() => 'true'),
   )
   equalJson(
     'every kind button declares type="button"',
-    ALL_KINDS.filter((kind) => bootKindButtons.get(kind)?.attributes.type !== 'button'),
+    RENDERED_KINDS.filter((kind) => bootKindButtons.get(kind)?.attributes.type !== 'button'),
     [],
   )
-  const labels = ALL_KINDS.map((kind) => bootKindButtons.get(kind)?.text ?? '')
+  const labels = RENDERED_KINDS.map((kind) => bootKindButtons.get(kind)?.text ?? '')
   equalJson('every kind button has a non-empty label', labels.filter((label) => label.trim() === ''), [])
   equalJson('the labels are unique (no two systems read alike)', labels.length, new Set(labels).size)
   equalJson('the `nerve` button reads exactly "Cranial nerves"', bootKindButtons.get('nerve')?.text, 'Cranial nerves')
@@ -632,7 +649,7 @@ group('3. the rendered <Header /> exposes one Systems button per ALL_KINDS entry
   )
   equalJson(
     'visible text is a PREFIX of the accessible name (WCAG 2.5.3), for every kind',
-    ALL_KINDS.filter((kind) => {
+    RENDERED_KINDS.filter((kind) => {
       const button = bootKindButtons.get(kind)
       if (button === undefined) return true
       const name = String(button.attributes['aria-label'] ?? '')
@@ -692,10 +709,10 @@ group('4. the rendered <Legend /> has a swatch AND a toggle row for every kind')
   // own names — and the split is asserted to be complete, so a dropped row cannot
   // hide in "not a kind, not a region".
   const toggleRows = readLegendToggleRows(bootLegend)
-  const kindRows = toggleRows.filter((row) => !row.division && ALL_KINDS.includes(row.label))
+  const kindRows = toggleRows.filter((row) => !row.division && RENDERED_KINDS.includes(row.label))
   const regionRows = toggleRows.filter((row) => !row.division && !ALL_KINDS.includes(row.label))
   const divisionRows = toggleRows.filter((row) => row.division)
-  equalJson('the Legend renders one toggle row per kind, in ALL_KINDS order', kindRows.map((row) => row.label), ALL_KINDS)
+  equalJson('the Legend renders one toggle row per kind, in the row\'s order (vessel covered by the vasculature region row)', kindRows.map((row) => row.label), RENDERED_KINDS)
   equalJson('and one per region (the second ALL_* map in the same panel)', regionRows.map((row) => row.label), ALL_REGIONS)
   equalJson('the division control is a third, separate family of rows', divisionRows.length > 0, true)
   equalJson('every kind toggle row is checked at boot (the nerve layer is on)', kindRows.filter((row) => !row.checked).map((row) => row.label), [])
@@ -724,16 +741,30 @@ group('5. toggling the `nerve` kind changes exactly the nerve layer — through 
   // The live tree first: its props must agree with the rendered DOM contract.
   const liveBoot = liveKindButtons(Header)
   info('rendering through the live dispatcher (useSyncExternalStore → getSnapshot, the client path): a server render would keep printing the BOOT snapshot because zustand hands React `api.getServerState || api.getInitialState`')
-  equalJson('the live element tree carries one Systems button per kind', [...liveBoot.keys()], ALL_KINDS)
+  equalJson('the live element tree carries one Systems button per kind (vessel covered by the region-backed button)', [...liveBoot.keys()], RENDERED_KINDS)
   equalJson(
     'the live aria-pressed readings equal the rendered DOM attributes at boot',
-    ALL_KINDS.map((kind) => String(liveBoot.get(kind)?.['aria-pressed'])),
-    ALL_KINDS.map((kind) => bootKindButtons.get(kind)?.attributes['aria-pressed']),
+    RENDERED_KINDS.map((kind) => String(liveBoot.get(kind)?.['aria-pressed'])),
+    RENDERED_KINDS.map((kind) => bootKindButtons.get(kind)?.attributes['aria-pressed']),
   )
   equalJson(
     'every Systems button carries a callable onClick',
-    ALL_KINDS.filter((kind) => typeof liveBoot.get(kind)?.onClick !== 'function'),
+    RENDERED_KINDS.filter((kind) => typeof liveBoot.get(kind)?.onClick !== 'function'),
     [],
+  )
+  // v19 — the vessel kind is COVERED, not rendered: the region-backed
+  // "Vasculature" button carries both layers (see Header's toggleVasculature),
+  // and no data-kind="vessel" button exists. Both halves are asserted, so the
+  // coverage cannot silently stop covering.
+  equalJson(
+    'no data-kind="vessel" button is rendered (the arterial system has one button)',
+    [...bootKindButtons.keys()].filter((kind) => kind === 'vessel'),
+    [],
+  )
+  equalJson(
+    'the region-backed "Vasculature" button covers the vessel kind (its label names the system)',
+    readButtons(bootMarkup).filter((button) => button.attributes['data-system-region'] === 'vasculature').map((button) => button.text),
+    ['Vasculature'],
   )
 
   // OFF — by CALLING the handler the button really passes, not a re-typed action.
@@ -751,7 +782,7 @@ group('5. toggling the `nerve` kind changes exactly the nerve layer — through 
   const liveOff = liveKindButtons(Header)
   equalJson(
     'the live re-render flips exactly the `nerve` button to aria-pressed=false',
-    ALL_KINDS.filter((kind) => Boolean(liveOff.get(kind)?.['aria-pressed']) !== (kind !== 'nerve')),
+    RENDERED_KINDS.filter((kind) => Boolean(liveOff.get(kind)?.['aria-pressed']) !== (kind !== 'nerve')),
     [],
   )
   const offMarkup = render(Header)
@@ -775,7 +806,7 @@ group('5. toggling the `nerve` kind changes exactly the nerve layer — through 
   equalJson('the round-tripped header renders byte-identically to boot', render(Header) === bootMarkup, true)
   equalJson(
     'the live tree is back to every button pressed',
-    ALL_KINDS.filter((kind) => liveKindButtons(Header).get(kind)?.['aria-pressed'] !== true),
+    RENDERED_KINDS.filter((kind) => liveKindButtons(Header).get(kind)?.['aria-pressed'] !== true),
     [],
   )
 }

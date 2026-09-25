@@ -260,7 +260,7 @@
   {
     "id": "nuc-ventral-striatum",
     "name": "Ventral striatum",
-    "synonyms": ["nucleus accumbens septi", "NAc", "fundus striati"],
+    "synonyms": ["limbic striatum", "fundus striati"],
     "region": "telencephalon",
     "subdivision": "Basal ganglia",
     "kind": "nucleus",
@@ -310,7 +310,7 @@
   {
     "id": "nuc-accumbens",
     "name": "Nucleus accumbens",
-    "synonyms": ["NAc", "nucleus accumbens septi", "accumbens nucleus", "ventral striatum (accumbens core and shell)"],
+    "synonyms": ["NAc", "nucleus accumbens septi", "accumbens nucleus", "accumbens core and shell"],
     "region": "telencephalon",
     "subdivision": "Basal ganglia",
     "kind": "nucleus",

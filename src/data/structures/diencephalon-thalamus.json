@@ -581,7 +581,7 @@
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "context",
-    "laterality": "paired",
+    "laterality": "midline",
     "color": "#94a3b8",
     "function": "Y-shaped sheet of myelinated fibers that partitions the thalamus into anterior, medial and lateral nuclear masses; the centromedian and parafascicular nuclei are embedded within its laminae, and its perforating vessels are a favored site of hypertensive thalamic hemorrhage.",
     "contextNote": "Context record: white-matter lamina tagged on plate-thalamus-mid and plate-coronal-thalamus; not a functional nucleus — see the individual thalamic nucleus records.",
@@ -608,7 +608,7 @@
       }
     ],
     "levels": ["lvl-thalamus-mid"],
-    "origin3d": [6.5, 28.5, 0.5],
+    "origin3d": [0, 28.5, 0.5],
     "size3d": [1.2, 4, 4.5],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"

@@ -93,12 +93,6 @@
   min-width: 0;
 }
 
-.header-presets {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
 .header-actions {
   margin-left: auto;
   display: flex;
@@ -309,7 +303,14 @@
 
 @media (max-width: 1024px) {
   .app-shell {
-    grid-template-columns: 264px minmax(0, 1fr);
+    /* v19 (audit ux-031 / td-04) — the sidebar narrows to 264 px here, so the
+     * named width must narrow with it: `.app-header`'s first grid column reads
+     * `var(--sidebar-w, 320px)`, and while this block hard-coded the literal the
+     * two drifted by exactly 56 px, putting the toggle rows 56 px right of the
+     * 3D view's left border the v12f comment promises they sit on. One
+     * declaration again, so they cannot drift. */
+    --sidebar-w: 264px;
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr) minmax(160px, 34vh);
     grid-template-areas:
       'header header'
@@ -367,6 +368,12 @@
   }
 
   .app-header {
+    /* v19 (audit ux-032, WCAG 2.1 SC 1.4.10 Reflow) — the shell is one column
+     * here, but this grid kept its own three columns (`var(--sidebar-w, 320px)
+     * minmax(0, 1fr) auto`), so at a 320 px viewport the header's first column
+     * alone was 320 px and the shell could only be read by scrolling sideways.
+     * One column: brand, toggle rows and actions stack. */
+    grid-template-columns: minmax(0, 1fr);
     padding: 8px 10px;
     gap: var(--space-2);
   }

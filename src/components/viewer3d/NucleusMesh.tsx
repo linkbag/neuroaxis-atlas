@@ -78,6 +78,16 @@ export function hintForKind(kind: StructureRecord['kind']): MaterialHint {
   return 'nucleus'
 }
 
+/**
+ * v19 (audit FEA-015) — the radial travel (in au) a nucleus moves per unit of the
+ * explode slider. It was an inline `6` on three lines, which is why the README's
+ * "the nuclei's 6 au" statement had no symbol a gate could read; it is named and
+ * exported here so a source-reading assertion can pin it the way
+ * `audit-checks.test.mjs` pins `GHOST_SHELL_OPACITY`. The hemisphere shells'
+ * counterpart is `HEMISPHERE_EXPLODE_FACTOR` (16) in SceneLayers.tsx.
+ */
+export const NUCLEUS_EXPLODE_AU = 6
+
 /** Selection emphasis, softer than v1 (0.55/0.42/0.28) for ACES + IBL. */
 const EMISSIVE_SELECTED = 0.38
 const EMISSIVE_SYNDROME = 0.28
@@ -178,9 +188,18 @@ export default function NucleusMesh({
     ? [mirrored ? -centroid[0] : centroid[0], centroid[1], centroid[2]]
     : [mirrored ? -origin[0] : origin[0], origin[1], origin[2]]
   const [dirX, dirZ] = record.kind === 'nucleus' ? explodeDirection(anchor) : [0, 0]
+  // v19 (audit FEA-015) — the radial travel per unit of the explode slider is a
+  // NAMED export rather than the inline literal `6` it used to be, so the number
+  // README quotes ("the nuclei's 6 au", against the hemisphere shells' 16 au in
+  // `SceneLayers.HEMISPHERE_EXPLODE_FACTOR`) can be read by a gate instead of
+  // being a claim with nothing behind it.
   const position: [number, number, number] = glbGeometry
-    ? [dirX * explode * 6, 0, dirZ * explode * 6]
-    : [anchor[0] + dirX * explode * 6, anchor[1], anchor[2] + dirZ * explode * 6]
+    ? [dirX * explode * NUCLEUS_EXPLODE_AU, 0, dirZ * explode * NUCLEUS_EXPLODE_AU]
+    : [
+        anchor[0] + dirX * explode * NUCLEUS_EXPLODE_AU,
+        anchor[1],
+        anchor[2] + dirZ * explode * NUCLEUS_EXPLODE_AU,
+      ]
   const scale: [number, number, number] = glbGeometry || geometry ? [1, 1, 1] : (record.size3d ?? [1, 1, 1])
 
   material.opacity = dimmed ? 0.15 : KIND_OPACITY[record.kind]

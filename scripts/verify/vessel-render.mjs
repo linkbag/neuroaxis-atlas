@@ -680,8 +680,10 @@ assert(
 )
 assert(doubleBodied.length === 0, 'no vessel renders both a baked body and a course tube', doubleBodied.join(' '))
 assert(
-  /if \(hasVesselCourse\(record\.id\)\) return null/.test(SOURCE.sceneLayers),
-  'the structure pass returns null for a course-bearing vessel record (the ellipsoid is retired in the render)',
+  /hasNerveCourse\(record\.id\) \|\| hasVesselCourse\(record\.id\) \|\| hasVesselCourseGroup\(record\.id\)\) return null/.test(
+    SOURCE.sceneLayers,
+  ),
+  'the structure pass returns null for a course-bearing vessel record AND for a group head (the ellipsoid is retired in the render — the group check is what retires the grandparent lenticulostriate blob)',
 )
 assert(
   VESSEL_COURSES.every((course) => hasVesselCourse(course.id)) && !hasVesselCourse('tract-corticospinal-lateral'),

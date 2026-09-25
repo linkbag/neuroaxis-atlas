@@ -491,12 +491,20 @@ export function headerToggleRowsReading(reading) {
   const areaKeys = areaToggles.map((t) => String(t.key))
   const kindKeys = kindToggles.map((t) => String(t.key))
   const systemRegionKeys = systemRegionToggles.map((t) => String(t.key))
+  /* v19 — the Systems row renders one `data-kind` button per kind EXCEPT
+     `vessel`: its 53 records are exactly the `vasculature` region's 53 (verified
+     both directions), so the row keeps ONE button for the arterial system — the
+     region-backed "Vasculature" button, which carries both layers (Header's
+     toggleVasculature). The hooks rule is therefore total iff every kind but
+     `vessel` has exactly one data-kind toggle AND the `vasculature`
+     system-region toggle exists. */
+  const renderedKinds = expectedKinds.filter((kind) => kind !== 'vessel')
   const keysOk =
     expectedAreas.length > 0 && expectedKinds.length > 0 && expectedSystemRegions.length > 0 &&
     areaKeys.length === expectedAreas.length &&
     expectedAreas.every((id) => areaKeys.filter((key) => key === id).length === 1) &&
-    kindKeys.length === expectedKinds.length &&
-    expectedKinds.every((kind) => kindKeys.filter((key) => key === kind).length === 1) &&
+    kindKeys.length === renderedKinds.length &&
+    renderedKinds.every((kind) => kindKeys.filter((key) => key === kind).length === 1) &&
     systemRegionKeys.length === expectedSystemRegions.length &&
     expectedSystemRegions.every((region) => systemRegionKeys.filter((key) => key === region).length === 1)
   add(
@@ -504,7 +512,7 @@ export function headerToggleRowsReading(reading) {
     keysOk ? 'hooks-total' : 'hooks-incomplete',
     `every area, kind and region-backed system the app declares has exactly one toggle with its machine hook ` +
       `(areas ${areaKeys.join(', ') || 'none'} vs ${expectedAreas.join(', ') || 'none'}; ` +
-      `systems ${kindKeys.join(', ') || 'none'} vs ${expectedKinds.join(', ') || 'none'}; ` +
+      `systems ${kindKeys.join(', ') || 'none'} vs ${renderedKinds.join(', ') || 'none'} — "vessel" is covered by the system-region button; ` +
       `system regions ${systemRegionKeys.join(', ') || 'none'} vs ${expectedSystemRegions.join(', ') || 'none'})`,
   )
 
@@ -556,12 +564,14 @@ export function headerToggleRowsReading(reading) {
       (partitionOk ? '' : ` — unclaimed ${JSON.stringify(unclaimed)}, multiply claimed ${JSON.stringify(doubleClaimed)}`),
   )
   const kindsTotal =
-    expectedKinds.length > 0 && kindKeys.length === expectedKinds.length &&
-    expectedKinds.every((kind) => kindKeys.includes(kind))
+    expectedKinds.length > 0 && kindKeys.length === renderedKinds.length &&
+    renderedKinds.every((kind) => kindKeys.includes(kind)) &&
+    systemRegionKeys.includes('vasculature')
   add(
     kindsTotal,
     kindsTotal ? 'systems-partition-total' : 'systems-partition-broken',
-    `the ${kindKeys.length} systems buttons are exactly ALL_KINDS (${expectedKinds.join(', ')})`,
+    `the ${kindKeys.length} kind buttons cover ALL_KINDS minus "vessel" (${renderedKinds.join(', ')}) and the ` +
+      `${expectedSystemRegions.length} region-backed button(s) carry "vessel" (${systemRegionKeys.join(', ') || 'none'})`,
   )
 
   /* ---- 5. pressed ⇔ the layer sets the legend reads --------------------- */

@@ -3999,8 +3999,7 @@
       "vent-lateral-ventricle-atrium"
     ],
     "supply": [
-      "syn-dejerine-roussy",
-      "syn-tuberothalamic"
+      "syn-dejerine-roussy"
     ],
     "contextNote": "Authored from the archive inventory: `FJ1675`/`FJ1675M` (778 faces) carries the concept \"thalamogeniculate artery\" (BP8899) and is registered as source-only (not baked) in docs/VASC_INVENTORY.md Â§3 â€” it is the element the plan names as the basis for this record. The course is authored from the committed P2 geometry: origin [12.285, 4.026, 9.610] au is the most posterior committed vertex of `vasc-posterior-cerebral-artery-p2-l`, and the two following waypoints are authored from the documented course (they run medially and upward into the posterolateral thalamus, measured against the committed `ctx-thalamus-l` mesh rather than projected onto an envelope).",
     "connections": {
@@ -4746,9 +4745,9 @@
       "lvl-pons-rostral"
     ],
     "origin3d": [
-      5.2,
-      10.7,
-      -13.6
+      0.961,
+      -3.998,
+      16.562
     ],
     "size3d": [
       1,

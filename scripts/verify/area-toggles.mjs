@@ -27,7 +27,7 @@
  * Run against the v17 tree BEFORE this edit, §9/§11 failed **6 assertions**, all
  * of them counts the product had already moved past, none of them a product
  * defect:
- *   • `partsForCanvas().length === 138 + 12` → **190**, because v17 added the 40
+ *   • `partsForCanvas().length === 138 + 12` → **191**, because v17 added the 41
  *     procedural VESSEL course metas the run plan §5.2 row 5 mandates;
  *   • `registryNerveParts().length === 12` and its four dependent assertions →
  *     **24**, because the v17 mirror twin hands the worker one part per authored
@@ -39,9 +39,32 @@
  * so the next family to land fails with the term named instead of drifting
  * silently. §11 also gained the vessel half of the same claim (kind + region
  * ablation, the mirrored twin proven to be the reflection rather than a cached
- * duplicate, the worker slicing all 101 registry parts) and the one OPEN handoff
- * is asserted against `SectionCanvas.tsx` so it cannot be forgotten. Nothing was
- * deleted; the two instructions the old text carried are both still asserted.
+ * duplicate, the worker slicing all 103 registry parts) and the one OPEN handoff
+ * was asserted against `SectionCanvas.tsx` so it could not be forgotten. Nothing
+ * was deleted; the two instructions the old text carried are both still asserted.
+ *
+ * ── v19 RE-POINT (task `final-review`): FOUR PINS MOVED TO POST-FIX TRUTH ────
+ * The v19 corrections pass (`docs/audit/v19/CORRECTIONS.md`) made three PRODUCT
+ * changes that this gate had pinned to the pre-fix state on purpose ("fails the
+ * moment someone fixes this"). Each is a correct product change that must survive;
+ * the assertion is what moved (plan D7). Named, one by one:
+ *   • §7 `the four All-module buttons are the ONLY header controls whose
+ *     accessible name misses its visible text (pinned defect)` — ux-002 fixed the
+ *     four WCAG 2.5.3 (Label in Name) failures, so the violating set is now EMPTY
+ *     and the pin is re-pointed at `[]` (the search is unchanged and still total);
+ *   • §7 `all four module buttons carry their own axis in the accessible name` —
+ *     re-pointed from the four PRE-fix names to the four shipped names, and the
+ *     reader changed from "the violating buttons" to "all four module buttons",
+ *     so the assertion no longer depends on a violation existing to have a subject;
+ *   • §9 `SectionCanvas.tsx hands the worker the procedural families it appends
+ *     (v17: the vessel family is the open handoff)` — the v17/v19 vessel-contour
+ *     handoff (FEA-003 / sec-4 / rob-021 / td-05) LANDED, exactly as the pin's own
+ *     comment demanded, so the expected list is now the two families the effect
+ *     really appends.
+ * No assertion was deleted and no product code was bent: every count below is
+ * still read from the shipped tables at run time (v17 §9/§11 reported 191 canvas
+ * metas, 79 vessel worker parts, 103 registry parts — this file's prose now says
+ * the same numbers the run prints).
  *
  * ── WHAT THIS PROVES NOW ────────────────────────────────────────────────────
  * It imports the SHIPPED store (`src/state/store.ts`), the SHIPPED `Header.tsx`,
@@ -83,16 +106,17 @@
  *      taxonomised records, the 3D structure pass (12 records / 24 bodies on, 0
  *      off), the taxonomy tree's dim rule, the Legend swatch and token, and the 2D
  *      half — RE-POINTED AT v14, which is the run that made the Plates live
- *      section react, and RE-COUNTED AT v17 by `review-qa`. The canvas now takes
- *      138 committed-GLB parts + 12 PROCEDURAL nerve parts + 40 PROCEDURAL vessel
- *      course parts = **190 metas**, so this section asserts the DOMAIN as a sum of
+ *      section react, and RE-COUNTED AT v17 by `review-qa` and at v19 by
+ *      `final-review`. The canvas now takes
+ *      138 committed-GLB parts + 12 PROCEDURAL nerve parts + 41 PROCEDURAL vessel
+ *      course parts = **191 metas**, so this section asserts the DOMAIN as a sum of
  *      terms read from the shipped tables (`NERVE_COURSES`, `VESSEL_COURSES`), the
  *      ABLATION of both families (every nerve/vessel meta admitted with its kind on
  *      and none with it off, the vessel family additionally needing the vasculature
  *      region, the 138 committed admissions byte-identical), the worker's own
  *      geometry (`registryNerveParts()` 24 = 12 + 12 mirrored; `registryVesselParts()`
- *      77 = 40 + 37 mirrored, every twin proven the reflection of its authored side,
- *      indices in range) and a real `extractContours` slice per part (101 parts), while
+ *      79 = 41 + 38 mirrored, every twin proven the reflection of its authored side,
+ *      indices in range) and a real `extractContours` slice per part (103 parts), while
  *      the PAYLOAD invariants stay asserted (manifest 138 parts, no `nrv-*` GLB, no
  *      committed GLB carrying a granular course id). Through v13 the same section
  *      asserted "no nerve part exists"; that claim is now false by design, and
@@ -578,6 +602,15 @@ function bindImplementations(module) {
 /** The area table as the checks see it (the shipped one unless a defect is armed). */
 const areaTable = () => impl.AREAS
 const kindTable = () => impl.ALL_KINDS
+/**
+ * v19 — the kinds the Systems row RENDERS as `data-kind` buttons. `vessel` is
+ * the one deliberate omission: its 53 records are exactly the `vasculature`
+ * region's 53 (verified both directions), so the row keeps ONE button for the
+ * arterial system — the region-backed "Vasculature" button, which carries both
+ * layers (Header's toggleVasculature). `ALL_KINDS` itself is untouched: the kind
+ * axis is real in the data model; only its redundant button is gone.
+ */
+const renderedKinds = () => kindTable().filter((kind) => kind !== 'vessel')
 const systemRegionTable = () => impl.SYSTEM_REGION_BUTTONS
 const findArea = (id) => areaTable().find((area) => area.id === id)
 
@@ -1235,7 +1268,7 @@ RUNNERS.render = async () => {
   const presetButtons = buttons.filter((button) => button.attributes['data-preset'] !== undefined)
 
   equal('rendered area buttons', areaButtons.length, areaTable().length)
-  equal('rendered system buttons (one per kind)', kindButtons.length, kindTable().length)
+  equal('rendered system buttons (one per kind; vessel covered by the region-backed button)', kindButtons.length, renderedKinds().length)
   equal('rendered region-backed system buttons', systemRegionButtons.length, systemRegionTable().length)
   equalJson(
     'rendered data-header-action hooks, in DOM order',
@@ -1282,9 +1315,9 @@ RUNNERS.render = async () => {
     ['true', 'true', 'true', 'true', 'true'],
   )
   equalJson(
-    'the rendered systems row boots fully pressed (seven kinds, v13)',
+    'the rendered systems row boots fully pressed (v19: the kinds the row renders — vessel is covered by the region-backed button)',
     kindButtons.map((button) => button.attributes['aria-pressed']),
-    ['true', 'true', 'true', 'true', 'true', 'true', 'true'],
+    renderedKinds().map(() => 'true'),
   )
   equalJson(
     'the rendered region-backed Systems row boots with the vascular region off',
@@ -1299,7 +1332,7 @@ RUNNERS.render = async () => {
 
   // The machine hooks must be complete, unique, and in the documented order.
   equalJson('data-area values, in row order', areaButtons.map((button) => button.attributes['data-area']), areaTable().map((a) => a.id))
-  equalJson('data-kind values, in row order', kindButtons.map((button) => button.attributes['data-kind']), [...kindTable()])
+  equalJson('data-kind values, in row order (vessel covered by the region-backed button)', kindButtons.map((button) => button.attributes['data-kind']), [...renderedKinds()])
   equalJson(
     'data-system-region values, in row order',
     systemRegionButtons.map((button) => button.attributes['data-system-region']),
@@ -1346,18 +1379,29 @@ RUNNERS.render = async () => {
       names.some((name) => name.includes(area.regions.join(' + '))),
     )
   }
-  for (const kind of kindTable()) {
+  for (const kind of renderedKinds()) {
     truthy(`the "${kind}" system button names the kind it switches`, names.some((name) => name.includes(`(${kind})`)))
   }
+  // v19 — the vessel kind is covered, not rendered: the region-backed
+  // "Vasculature" button carries both layers, and no data-kind="vessel" button
+  // exists. Both halves asserted, so coverage cannot silently stop covering.
+  truthy(
+    'no data-kind="vessel" button is rendered (the arterial system has one button)',
+    !kindButtons.some((button) => button.attributes['data-kind'] === 'vessel'),
+  )
+  truthy(
+    'the region-backed "Vasculature" button names the vessel system it carries',
+    names.some((name) => name.startsWith('Vasculature') && name.includes('vasculature')),
+  )
   truthy(
     'the v13 nerve button reads exactly "Cranial nerves" and names its kind',
     kindButtons.some((button) => button.attributes['data-kind'] === 'nerve' && button.text === 'Cranial nerves') &&
       names.some((name) => name.startsWith('Cranial nerves') && name.includes('(nerve)')),
   )
 
-  /* ── WCAG 2.5.3 IN THE FOUR ALL-MODULE BUTTONS: A MEASURED DEFECT, PINNED ────
-   * The four per-axis module buttons are the ONE place in this header where the
-   * accessible name does not contain the visible text:
+  /* ── WCAG 2.5.3 IN THE FOUR ALL-MODULE BUTTONS: FIXED AT v19, PINNED ────────
+   * Through v18 the four per-axis module buttons were the ONE place in this header
+   * where the accessible name did not contain the visible text:
    *
    *     visible "All on"   accessible "All areas on — show every area"
    *     visible "All off"  accessible "All areas off — hide every area"
@@ -1365,42 +1409,61 @@ RUNNERS.render = async () => {
    *     visible "All off"  accessible "All systems off — hide every system"
    *
    * `"All areas on — show every area".includes("All on")` is false, so a voice
-   * control user saying the words on the button cannot activate it: that is a real
-   * WCAG 2.5.3 (Label in Name) failure introduced with the v12e/v12g modules in
-   * `src/components/Header.tsx`, and it is OUTSIDE this task's write scope (the
-   * review task owns three verify scripts, not the header). It is therefore
-   * recorded here the way this repo records a known, owned defect: the exemption is
-   * documented, the SEARCH is asserted (exactly four, named, with their strings),
-   * and the moment the labels are fixed this pin FAILS and forces the exemption to
-   * be deleted rather than silently outliving the bug. The orchestrator must route
-   * it to a header owner; a fix is one option: `aria-label="All on — every area"`
-   * (or "All on areas"), which contains the visible text. */
+   * control user saying the words printed on the button could not activate it: a
+   * real WCAG 2.5.3 (Label in Name) failure, recorded here as an owned defect with
+   * the SEARCH asserted (exactly four, named, with their strings) and a pin that
+   * says "fails the moment someone fixes the labels".
+   *
+   * v19 (audit ux-002) fixed them — `src/components/Header.tsx` now names them
+   * "All on — every area" / "All off — every area" / "All on — every system" /
+   * "All off — every system", each beginning with its visible text and each still
+   * carrying its own axis so the two "All on" buttons stay distinguishable.
+   *
+   * THIS IS THE RE-POINT OF THAT PIN (task `final-review`, plan D7). What changed:
+   *   1. the violating set is now asserted to be EMPTY (the search — over every
+   *      hooked header action, not just the modules — is unchanged and still total,
+   *      so a regression that breaks 2.5.3 on ANY header control fails here);
+   *   2. the "carry their own axis" assertion now reads ALL FOUR module buttons
+   *      rather than only the violating ones, and its expected value is the four
+   *      shipped names — so it no longer needs a violation to exist to have a
+   *      subject;
+   *   3. a direct `name.startsWith(text)` assertion states the 2.5.3 test itself
+   *      instead of only its negation.
+   * Nothing was deleted. The product was NOT bent back to satisfy the old text. */
   const actionLabels = actionButtons.map((button) => ({
     hook: button.attributes['data-header-action'],
     text: button.text,
     name: nameOf(button),
   }))
   const violating = actionLabels.filter((entry) => !entry.name.includes(entry.text))
-  const moduleViolations = violating.filter((entry) => ALL_MODULE_HOOKS.includes(entry.hook))
+  const moduleLabels = ALL_MODULE_HOOKS.map((hook) => {
+    const found = actionLabels.find((entry) => entry.hook === hook)
+    return found ?? { hook, text: '(missing)', name: '(missing)' }
+  })
   equalJson(
-    'the four All-module buttons are the ONLY header controls whose accessible name misses its visible text (pinned defect)',
+    "no header control's accessible name misses its visible text (WCAG 2.5.3 — v19 ux-002 fixed the four module buttons)",
     violating.map((entry) => entry.hook),
-    ALL_MODULE_HOOKS,
+    [],
   )
   equalJson(
-    'all four module buttons carry their own axis in the accessible name (so the two "All on" buttons are distinguishable)',
-    moduleViolations.map((entry) => `${entry.hook}: "${entry.name}"`),
+    'all four module buttons begin with their visible text AND carry their own axis (so the two "All on" buttons are distinguishable)',
+    moduleLabels.map((entry) => `${entry.hook}: "${entry.name}"`),
     [
-      'areas-all-on: "All areas on — show every area"',
-      'areas-all-off: "All areas off — hide every area"',
-      'systems-all-on: "All systems on — show every system"',
-      'systems-all-off: "All systems off — hide every system"',
+      'areas-all-on: "All on — every area"',
+      'areas-all-off: "All off — every area"',
+      'systems-all-on: "All on — every system"',
+      'systems-all-off: "All off — every system"',
     ],
   )
+  truthy(
+    'every module button\'s accessible name STARTS WITH its visible text (the SC 2.5.3 test itself)',
+    moduleLabels.every((entry) => entry.name.startsWith(entry.text)),
+    moduleLabels.map((entry) => `"${entry.name}".startsWith("${entry.text}")=${entry.name.startsWith(entry.text)}`).join(' · '),
+  )
   info(
-    '[a11y·PINNED DEFECT] WCAG 2.5.3 (Label in Name) fails for exactly ' + violating.length +
-      ' of ' + actionLabels.length + ' action button(s): ' + violating.map((entry) => `"${entry.text}" ∩ "${entry.name}"`).join(' · ') +
-      ' — reported, not fixed (Header.tsx is outside this task\'s write scope); the pin above fails once it is fixed',
+    '[a11y] WCAG 2.5.3 (Label in Name) holds for all ' + actionLabels.length + ' hooked header action button(s): ' +
+      violating.length + ' name(s) miss the visible text (was 4 of 4 module buttons through v18 — v19 ux-002 fixed them) · ' +
+      'module names: ' + moduleLabels.map((entry) => `"${entry.text}" ∩ "${entry.name}"`).join(' · '),
   )
   truthy(
     'exactly one control reads exactly "Vasculature" (the v8 label, still unambiguous)',
@@ -1509,7 +1572,7 @@ RUNNERS.wiring = () => {
   const report = JSON.parse(jsonLine)
   const boot = { regions: sorted(store.DEFAULT_LAYERS.regions), kinds: sorted(store.DEFAULT_LAYERS.kinds) }
   equal('the probe rendered every area button as an element', report.areaCount, areaTable().length)
-  equal('the probe rendered every system button as an element', report.kindCount, kindTable().length)
+  equal('the probe rendered every system button as an element', report.kindCount, renderedKinds().length)
   equal('the probe rendered every region-backed system button as an element', report.systemRegionCount, systemRegionTable().length)
   equalJson('the probe found every header action', report.actions, [...ALL_MODULE_HOOKS, 'clinical-motor'])
   equalJson('every toggle button carries an onClick', report.missingHandlers, [])
@@ -1567,7 +1630,7 @@ RUNNERS.wiring = () => {
   equalJson(
     '[wired] the probe read every system button pressed at boot',
     report.bootKindPressed,
-    [true, true, true, true, true, true, true],
+    renderedKinds().map(() => true),
   )
   equalJson(
     '[wired] the probe read the vascular system region unpressed at boot',
@@ -1692,12 +1755,12 @@ RUNNERS.nerve = async () => {
    * claim "the Plates surface cannot react to this toggle". v14 routed the twelve
    * nerve courses into the live section as PROCEDURAL parts (`partsForCanvas()` =
    * 138 committed GLBs + `SECTION_NERVE_PARTS`, the worker fed by
-   * `registryNerveParts()`), and v17 added the 40 granular VESSEL courses through the
+   * `registryNerveParts()`), and v17 added the 41 granular VESSEL courses through the
    * same shared route (`SECTION_VESSEL_PARTS` / `registryVesselParts()`).
    *
    * WHAT WENT STALE AND WHY THIS RE-POINT IS NOT COSMETIC (measured before the edit):
    * lane 9 pinned three literals that the product had already moved past —
-   *   • `partsForCanvas().length === 138 + 12` → **190** after v17 (the 40 vessel
+   *   • `partsForCanvas().length === 138 + 12` → **191** after v17 (the 41 vessel
    *     metas), so the gate failed on a count the plan §5.2 row 5 mandates;
    *   • `registryNerveParts().length === 12` (×4 dependent assertions) → **24** after
    *     the v17 mirror twin, which is one part per authored side PLUS one per
@@ -1710,12 +1773,12 @@ RUNNERS.nerve = async () => {
    * What is asserted instead, all of it re-measured here by executing the shipped
    * decision (`canvas.isPartVisible`) and the shipped builder (`registry*Parts()`):
    *   • the domain split as four printed terms — 138 committed-GLB parts + 12 nerve
-   *     + 40 vessel = 190 on the canvas;
+   *     + 41 vessel = 191 on the canvas (re-measured at v19: the run prints 191);
    *   • the NERVE TOGGLE is the ablation: every nerve part admitted with the kind on
    *     and 0 with it off, while the 138 committed-GLB admissions are identical sets;
    *   • the VESSEL family is gated by BOTH controls the plan §5.3 names — the
    *     `vessel` kind and the `vasculature` region — checked as two separate
-   *     ablations over the same 40 metas;
+   *     ablations over the same 41 metas;
    *   • the worker registry the 2D contour comes from: one part per authored side
    *     plus one per mirrored twin, the twin proven to be the REFLECTION (bbox
    *     x-negated, y/z identical) rather than a cached duplicate — the inherited
@@ -1922,25 +1985,35 @@ RUNNERS.nerve = async () => {
       `vessel ${vesselSliced.reduce((sum, row) => sum + row.loops, 0)} loop(s)`,
   )
 
-  /* THE ONE OPEN HANDOFF, PINNED SO IT CANNOT BE FORGOTTEN (v17 review). `partsForCanvas()`
-   * — the visible list — carries the 40 vessel metas, but the 2D contour comes from the
-   * worker registry, which `SectionCanvas`'s init effect builds itself. That effect
-   * appends the nerve family and NOT the vessel family, so today the vessel contours
-   * are computed by no one and painted nowhere (`registryVesselParts()` above proves
-   * the geometry and the slicer are ready — the missing piece is one line). This
-   * assertion states the shipped code as it is and FAILS the moment the line lands,
-   * which is what routes the fix to the next editor instead of hiding it. */
+  /* THE ONE OPEN HANDOFF, NOW CLOSED (pinned through v18 so it could not be
+   * forgotten; RE-POINTED at its post-fix truth in v19 by `final-review`, plan
+   * D7). `partsForCanvas()` — the visible list — carried the 41 vessel metas
+   * through v18 while the 2D contour came from the worker registry that
+   * `SectionCanvas`'s init effect builds itself, and that effect appended ONLY the
+   * nerve family: the vessel contours were computed by no one and painted nowhere,
+   * even though `registryVesselParts()` above proves the geometry and the slicer
+   * were ready. The pin said "fails the moment the line lands", and it did.
+   *
+   * v19 (`FEA-003` / `sec-4` / `rob-021` / `td-05`) landed it:
+   * `registryParts.push(...registryVesselParts())` now sits beside the nerve append
+   * — deliberately as its own line, because `verify:cranial-nerve-render` pins the
+   * nerve call site verbatim. This assertion still reads the SHIPPED SOURCE and
+   * still asserts the exact list of families the effect appends, in order, so a
+   * dropped append fails here by name; what changed is the expected value (the two
+   * families that are now appended) and the direction of the failure (it now fails
+   * if a family is REMOVED, which is the regression this repo can actually
+   * suffer). */
   const canvasSource = readSource('src/components/section/SectionCanvas.tsx')
   const registryPushes = [...canvasSource.matchAll(/registryParts\.push\(\.\.\.(\w+)\(\)\)/g)].map((match) => match[1])
   equalJson(
-    'SectionCanvas.tsx hands the worker the procedural families it appends (v17: the vessel family is the open handoff)',
+    'SectionCanvas.tsx hands the worker every procedural family it builds (v19: nerve AND vessel — the v17 handoff is closed)',
     registryPushes,
-    ['registryNerveParts'],
+    ['registryNerveParts', 'registryVesselParts'],
   )
   info(
     `[2D handoff] SectionCanvas.tsx appends ${JSON.stringify(registryPushes)} to the worker registry; ` +
-      `registryVesselParts() returns ${vesselWorkerParts.length} ready part(s) that reach it when ` +
-      `\`registryParts.push(...registryVesselParts())\` joins that effect`,
+      `registryVesselParts() returns ${vesselWorkerParts.length} ready part(s) and they now reach the worker and the canvas ` +
+      '(was: nerve only, 79 vessel parts built and dropped)',
   )
   /* The falsifiable half: a SYNTHETIC nerve part must be admitted iff the kind is
    * on AND its region is on — i.e. the 2D decision really does know the new kind. */
@@ -3190,16 +3263,18 @@ console.log('  the seven Systems are ALL_KINDS; each control toggles exactly its
 console.log('  layers.kinds (the one decision the 3D scene, the 2D live section and the PiP all read); the')
 console.log('  documented default framing is reachable by composing the two All modules with the vascular')
 console.log('  region off; the v13 nerve kind is sliced on the 3D surface and dimmed in the tree, and the 2D')
-console.log('  half is RE-POINTED at v14 and RE-COUNTED at v17 — the Plates live section reacts to BOTH')
+console.log('  half is RE-POINTED at v14 and RE-COUNTED at v17 (191 canvas metas) and again at v19 by')
+console.log('  final-review — the Plates live section reacts to BOTH')
 console.log('  procedural families now: the canvas registry is 138 committed GLB parts + 12 nerve parts +')
-console.log('  40 vessel course parts = 190 metas (every term read from the shipped tables, none pinned), the')
+console.log('  41 vessel course parts = 191 metas (every term read from the shipped tables, none pinned), the')
 console.log('  nerve and vessel metas are admitted iff their kind is on and rejected otherwise, the vessel')
 console.log('  metas additionally need the vasculature REGION, the 138 committed admissions do not move, and the')
-console.log('  worker\'s own extractContours slices a real cross-section out of every one of the 101 registry')
-console.log('  parts (24 nerve = 12 authored + 12 mirrored; 77 vessel = 40 authored + 37 mirrored, each twin')
-console.log('  proven the x → −x reflection of its authored side). The one OPEN handoff is asserted, not hidden:')
-console.log('  SectionCanvas.tsx still appends only registryNerveParts() to the worker registry, so the vessel')
-console.log('  contours are ready but not yet painted; that assertion fails the moment the line lands. The v11')
+console.log('  worker\'s own extractContours slices a real cross-section out of every one of the 103 registry')
+console.log('  parts (24 nerve = 12 authored + 12 mirrored; 79 vessel = 41 authored + 38 mirrored, each twin')
+console.log('  proven the x → −x reflection of its authored side). The v17 vessel handoff is now CLOSED and the')
+console.log('  pin was re-pointed at v19: SectionCanvas.tsx appends BOTH registryNerveParts() and')
+console.log('  registryVesselParts(), so the vessel contours the worker slices are painted in the live section')
+console.log('  and the PiP instead of being dropped. The v11')
 console.log('  item-4 divergence is re-measured at every plane the browser lane names. Payload invariants')
 console.log('  unchanged: the manifest still holds 138 parts, no nrv-*.glb exists and no committed GLB carries a')
 console.log('  granular course id — route (a) costs 0 bytes.')

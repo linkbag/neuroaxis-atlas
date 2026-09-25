@@ -733,19 +733,22 @@ export default function SceneLayers() {
         // meshes), which makes this line true for it. The invariant is
         // "one record, one body": a record's body is a committed `LINKS` GLB XOR
         // a course — never both, and never a declared-but-unbaked slug.
+        // v19 (audit dc-01) — ONE guard, not two. A second, dedicated line
+        // testing only the vessel predicate used to sit below this one and was
+        // described as "the line that removes the two red lenticulostriate
+        // blobs"; because this guard already tested the same predicate, that line
+        // could never run. The vessel term lives here, where it is reachable, and
+        // `hasVesselCourse` is true for exactly the ids the course table owns —
+        // so the ellipsoid stops being drawn for those and ONLY those; the record
+        // keeps its registry row, its `territory[]`, its `supply[]` syndrome links
+        // and its InfoPanel page, and the body it keeps is the procedural tube
+        // below ("one record, one body"). `verify:vessel-render` pinned the
+        // deleted line's own source text; that pin now fails and must be
+        // re-pointed at this guard (gate-flip handoff recorded in
+        // docs/audit/v19/CORRECTIONS.md). The deleted line's text is deliberately
+        // NOT quoted here: a comment must not be able to satisfy a source-reading
+        // assertion.
         if (hasNerveCourse(record.id) || hasVesselCourse(record.id) || hasVesselCourseGroup(record.id)) return null
-        // v17 §5 — the same rule for a VESSEL that now has a course. This is
-        // the line that removes the two red lenticulostriate blobs: the record
-        // `vasc-lenticulostriate-arteries` (and every granular perforator
-        // record that joins it) has no `LINKS` entry in anatomyAssets.ts, so
-        // before this pass it fell through to `NucleusMesh`'s fallback — one
-        // unit sphere scaled by `size3d` at `origin3d`, drawn twice for a
-        // `paired` record. `hasVesselCourse` is true for exactly the ids the
-        // course table owns, so the ellipsoid stops being drawn for those and
-        // ONLY those; the record keeps its registry row, its `territory[]`, its
-        // `supply[]` syndrome links and its InfoPanel page, and the body it
-        // keeps is the procedural tube below ("one record, one body").
-        if (hasVesselCourse(record.id)) return null
         // Ventricle records keep their parametric v1 shape as the fallback;
         // NucleusMesh upgrades to the committed GLB when the manifest has one.
         const override = record.kind === 'ventricle' ? cachedVentricleGeometry(record.id) : undefined

@@ -161,7 +161,13 @@ export default function Legend() {
           })}
         </div>
 
-        {ALL_KINDS.map((kind: Kind) => (
+        {/* v19 — the `vessel` kind has no checkbox of its own here either: the
+            `vasculature` region row below covers the same 53 records (verified
+            identical sets, both directions) and the header's Vasculature button
+            carries both layers, so a raw kind row would be a second control for
+            one system that could desync from it. The palette swatch above stays —
+            it is the colour key, not a control. */}
+        {ALL_KINDS.filter((kind: Kind) => kind !== 'vessel').map((kind: Kind) => (
           <label key={kind} className={`legend-row legend-toggle${layers.kinds.has(kind) ? ' is-on' : ''}`}>
             <input type="checkbox" checked={layers.kinds.has(kind)} onChange={() => toggleKindLayer(kind)} />
             <span>{kind}</span>

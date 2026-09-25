@@ -91,7 +91,7 @@
       {
         "syndrome": "Ipsilateral masticatory (LMN) weakness",
         "findings": "Wasting and weakness of the ipsilateral masticatory muscles; on opening, the jaw deviates toward the weak side (unopposed lateral pterygoid of the normal side), and the jaw jerk is abolished.",
-        "vascular": "AICA or SCA short circumferential branches",
+        "vascular": "Short circumferential branches of the basilar artery (superior cerebellar artery branches at the rostral pole)",
         "note": "In striking contrast, UMN (corticobulbar) lesions weaken the jaw only slightly because the nucleus is bilaterally innervated."
       }
     ],
@@ -413,7 +413,7 @@
       {
         "syndrome": "Ipsilateral sensorineural hearing loss",
         "findings": "Destruction of the cochlear nuclei or the entering CN VIII fibers abolishes ipsilateral hearing (there is no bilateral backup at this first relay); classically produced by AICA infarction or cerebellopontine-angle tumors.",
-        "vascular": "AICA",
+        "vascular": "Short circumferential branches of the basilar artery (AICA territory for the caudal part of the nucleus)",
         "note": "Beyond the cochlear nuclei, auditory information is bilaterally represented, so central lesions cause only subtle hearing loss."
       }
     ],

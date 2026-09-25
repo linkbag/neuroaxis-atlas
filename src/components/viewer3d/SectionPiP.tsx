@@ -761,6 +761,14 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
             <button
               key={axis}
               type="button"
+              /* v19 (audit ux-007, WCAG 2.5.3): the visible text is the glyph
+               * "X"/"Y"/"Z", and the accessible name used to BE that glyph (the
+               * `title` on the parent span is not a name source). The name now
+               * starts with the visible text and says what it does. Declared
+               * BEFORE className on purpose: `verify:pip-contract` reads the
+               * serialized markup with `/class="pip-btn" aria-pressed="…">X</`, so
+               * the attribute order is part of that lane's contract. */
+              aria-label={`${axis.toUpperCase()} — section axis`}
               className="pip-btn"
               aria-pressed={axis === sectionAxis}
               onClick={() => setSectionAxis(axis)}
@@ -771,6 +779,9 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
         </span>
         <button
           type="button"
+          /* v19 (audit ux-007): `▴`/`▾` names nothing; the label states the size
+           * it switches to, which is also what the `title` documents. */
+          aria-label={`Panel size ${size.width}×${size.height} px`}
           className="pip-btn"
           aria-pressed={preset === 'large'}
           title={
@@ -783,6 +794,8 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
         </button>
         <button
           type="button"
+          /* v19 (audit ux-007): `×` as the accessible name is not a name. */
+          aria-label="Hide live section"
           className="pip-btn"
           title="Hide live section"
           onClick={() => onVisibleChange?.(false)}

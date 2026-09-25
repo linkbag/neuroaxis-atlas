@@ -576,10 +576,8 @@
     "id": "ctx-internal-capsule",
     "name": "Internal capsule (context)",
     "synonyms": [
-      "anterior limb",
-      "genu",
-      "posterior limb",
-      "retrolenticular part"
+      "capsular fibre plane",
+      "internal capsule (whole)"
     ],
     "region": "telencephalon",
     "subdivision": "Telencephalic white matter",
@@ -632,8 +630,8 @@
     "id": "ctx-lenticular-nucleus",
     "name": "Lentiform nucleus (context silhouette)",
     "synonyms": [
-      "putamen",
-      "globus pallidus"
+      "lentiform silhouette",
+      "putamen + globus pallidus envelope"
     ],
     "region": "telencephalon",
     "subdivision": "Basal ganglia",
@@ -641,7 +639,7 @@
     "laterality": "paired",
     "color": "#94a3b8",
     "function": "Silhouette of the putamen and globus pallidus lateral to the internal capsule, shown on the transverse and coronal thalamic plates for orientation; the striatopallidal loops ending here gate movement through the ventral anterior and ventral lateral thalamus.",
-    "contextNote": "Context silhouette; basal-ganglia detail is out of scope for v1 — see ctx-internal-capsule and the subthalamus records.",
+    "contextNote": "Context silhouette of the lentiform (putamen + globus pallidus) mass on plate-thalamus-mid and plate-coronal-thalamus. v19 (audit FAC-DI-008): the old sentence \"basal-ganglia detail is out of scope for v1\" was stale — v7/v8 shipped the detail it deferred, as the nucleus records nuc-putamen, nuc-globus-pallidus-internus, nuc-globus-pallidus-externus, nuc-caudate-head, nuc-caudate-body, nuc-caudate-tail, nuc-ventral-striatum and nuc-accumbens, and the capsule segments tract-internal-capsule-anterior-limb/-genu/-posterior-limb. This record is the silhouette that CONTAINS them; use the nucleus records for content.",
     "connections": {
       "afferent": [
         "Striatal input to the globus pallidus (direct and indirect pathway convergence)"
@@ -685,8 +683,8 @@
     "id": "ctx-caudate-nucleus",
     "name": "Caudate nucleus (context silhouette)",
     "synonyms": [
-      "caudate head",
-      "caudate body"
+      "caudate silhouette",
+      "C-shaped striatal silhouette"
     ],
     "region": "telencephalon",
     "subdivision": "Basal ganglia",

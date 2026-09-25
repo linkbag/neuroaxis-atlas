@@ -89,7 +89,9 @@ code {
   align-items: center;
   gap: 6px;
   padding: 5px 10px;
-  border: 1px solid var(--border-strong);
+  /* v19 (audit ux-005) — the interactive boundary, not the container one: see
+   * the token's comment in tokens.css (3:1 floor, WCAG 2.1 SC 1.4.11). */
+  border: 1px solid var(--border-interactive);
   border-radius: var(--radius-sm);
   background: var(--bg-elevated);
   color: var(--text-primary);
@@ -125,6 +127,11 @@ code {
 button.chip {
   cursor: pointer;
   transition: border-color 120ms ease, color 120ms ease;
+}
+
+/* Clickable chips are controls too (the plate strip, the imagery-source links). */
+button.chip {
+  border-color: var(--border-interactive);
 }
 
 button.chip:hover {

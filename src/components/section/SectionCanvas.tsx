@@ -195,6 +195,7 @@ import {
   partsForCanvas,
   registryNerveParts,
   registryPartFromGeometry,
+  registryVesselParts,
   useSectionGeometryStatus,
   type SectionPartMeta,
 } from './sectionAssets'
@@ -230,7 +231,9 @@ const LEVEL_MAP_WINDOW = 1.5
  *     it landed on top of the cortical-division labels — the text it collided
  *     with is the one that does carry information.
  * It is removed from the ACCESSIBILITY tree too, not just visually: the canvas
- * is a single role="img" with a fixed aria-label and contributes no text, so the
+ * element contributes no text (the wrapper is a named `role="group"` since v19 —
+ * it CONTAINS the modality toolbar, the debug readout and the structure chips, so
+ * `role="img"` would have made every one of those an unnameable atom), so the
  * only accessible instance of the name this component owns is the
  * `.section-structure-chip` below — which is why the chip is gated on the same
  * set. The other context envelopes (thalamus, level chips, division labels) keep
@@ -839,6 +842,24 @@ function contourBytes(part: SectionContourPart): number {
 const KIND_RANK: Map<string, number> = new Map(SECTION_KIND_ORDER.map((kind, index) => [kind, index]))
 const kindRankOf = (kind: string): number => KIND_RANK.get(kind) ?? SECTION_KIND_ORDER.length
 
+/**
+ * The worker-registry slug suffix a mirrored procedural twin arrives under
+ * (`sectionAssets.registryCourseParts`). The 3D pass keys its mirrored instance
+ * the same way (`TractTube`'s `instanceKey`).
+ */
+const MIRROR_SLUG_SUFFIX = '#mirror'
+
+/**
+ * v19 — the contour slugs one canvas part can arrive under: its own authored
+ * slug, plus its `#mirror` twin's slug when it has one. A committed GLB part has
+ * no twin (the registry only re-slugs the procedural course families), and a
+ * lookup that misses costs one Map read, so this is a total rule rather than a
+ * kind test that could drift from the registry.
+ */
+function contourSlugsFor(meta: SectionPartMeta): string[] {
+  return [meta.slug, `${meta.slug}${MIRROR_SLUG_SUFFIX}`]
+}
+
 /** One visible part of the current frame: its metadata, contours and path. */
 interface RenderItem {
   meta: SectionPartMeta
@@ -1210,14 +1231,15 @@ function ensureRenderOrder(
   // (and again per pointermove) now runs only when this key changes.
   //
   // v14: `partsForCanvas()` is `SECTION_PARTS` (the 138 committed GLBs) plus the
-  // twelve PROCEDURAL cranial-nerve parts (sectionAssets.SECTION_NERVE_PARTS).
-  // The filter itself is unchanged, so a nerve contour is drawn exactly when the
-  // worker returned it AND `isPartVisible` admits it — and `isPartVisible`
-  // prefers `taxonomyKind`, which is 'nerve' for a course, so the Systems row's
-  // "Cranial nerves" button is what shows and hides these twelve. `SECTION_PARTS`
-  // stays 138 for every gate that counts it.
+  // twelve PROCEDURAL cranial-nerve parts (sectionAssets.SECTION_NERVE_PARTS);
+  // v17 added the 41 vessel course metas, so the list is 138 + 12 + 41 = 191.
+  // 2D admission is unchanged: a part is drawn exactly when the worker returned a
+  // contour for it AND `isPartVisible` admits it — and `isPartVisible` prefers
+  // `taxonomyKind`, which is 'nerve'/'vessel' for a course, so the Systems row's
+  // "Cranial nerves" / "Vessels" buttons are what show and hide a course.
+  // `SECTION_PARTS` stays 138 for every gate that counts it.
   const visible = partsForCanvas().filter(
-    (meta) => args.contours.has(meta.slug) && isPartVisible(meta, args.state.layers),
+    (meta) => isPartVisible(meta, args.state.layers),
   ).sort((a, b) => kindRankOf(a.kind) - kindRankOf(b.kind))
 
   // Path2D reuse: a path is kept while its contours AND the transform are
@@ -1228,16 +1250,28 @@ function ensureRenderOrder(
   const transform = args.transform
   const items: RenderItem[] = []
   for (const meta of visible) {
-    const part = args.contours.get(meta.slug) as SectionContourPart
-    let path: Path2D | null = null
-    const bytes = contourBytes(part)
-    if (cache.pathBytes + bytes <= PATH2D_BUDGET_BYTES) {
-      path = new Path2D()
-      writePartPath(path, part, transform)
-      cache.pathBytes += bytes
-      cache.paths.set(meta.slug, path)
+    // v19 — a PAIRED procedural course draws BOTH sides in 2D. The worker is
+    // handed the authored part and its mirrored twin under `${slug}#mirror`
+    // (sectionAssets.registryCourseParts re-slugs the twin so it cannot collide
+    // in the worker registry); before v19 only the authored slug was looked up
+    // here, so the 12 mirrored nerve contours and the 38 mirrored vessel
+    // contours were sliced, transferred and then dropped — the live section and
+    // the PiP showed one side while the 3D pass drew both (v17's "both
+    // surfaces"). Both items carry the SAME `meta`, so selection, hover,
+    // dimming, labels and the taxonomy group all address one record.
+    for (const slug of contourSlugsFor(meta)) {
+      const part = args.contours.get(slug)
+      if (part === undefined) continue
+      let path: Path2D | null = null
+      const bytes = contourBytes(part)
+      if (cache.pathBytes + bytes <= PATH2D_BUDGET_BYTES) {
+        path = new Path2D()
+        writePartPath(path, part, transform)
+        cache.pathBytes += bytes
+        cache.paths.set(slug, path)
+      }
+      items.push({ meta, part, path })
     }
-    items.push({ meta, part, path })
   }
   cache.visibleParts = items
   cache.visibleFaces = [...items].reverse()
@@ -2124,6 +2158,18 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     // are not covered by `geometryStatus` (there is nothing to load), so they
     // are appended here rather than waited for.
     registryParts.push(...registryNerveParts())
+    // v19 — the VESSEL family (v17's open handoff, closed here). The 41 authored
+    // granular-artery courses and their 38 mirrored twins were already built,
+    // sliced and gated (`verify:vessel-render` §5: 2,618 contour loops, none
+    // non-finite) and `partsForCanvas()` already carried their metas, but this
+    // effect appended only the nerve family, so no artery was ever painted in the
+    // live section or the PiP. The line below is kept SEPARATE from the nerve
+    // append on purpose: several gates pin the nerve call site verbatim
+    // (`verify:cranial-nerve-render`: `/registryParts\.push\(\.\.\.registryNerveParts\(\)\)/`).
+    // Measured consequence for the canvas budget: the y sweep in
+    // docs/audit/v19/CORRECTIONS.md shows ≤ 124 loops/plane after the handoff
+    // (80 today) against DEGRADE_LOOP_LIMIT = 4000 — 0 / 53 planes degrade.
+    registryParts.push(...registryVesselParts())
     if (registryParts.length === 0) {
       // Nothing loaded and nothing pending: a real failure. Record it but let a
       // later geometry arrival clear it (the worker/store subscription keeps
@@ -2355,8 +2401,10 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
   const showHoveredEntry = hoveredEntry != null && hoveredEntry.id !== selectedId
   /**
    * v10 §5 — the chip is the ONE accessible instance of a structure name this
-   * component owns (the canvas itself is a role="img" with a fixed aria-label
-   * and no text), so suppressing the cortex envelope's label only in the paint
+   * component owns (the canvas element itself contributes no text; the wrapper
+   * is a named `role="group"` since v19, not the `role="img"` atom whose
+   * children — the modality toolbar, the debug readout, the chips — the AX tree
+   * then discarded), so suppressing the cortex envelope's label only in the paint
    * pass would leave it readable in the accessibility tree. `chipNameOf` returns
    * null for a record in `NO_CANVAS_LABEL_RECORD_IDS`, for BOTH the selected and
    * the hovered slot; selection and hover highlighting are untouched.
@@ -2380,8 +2428,20 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     <div
       ref={wrapRef}
       className="section-canvas-wrap"
-      role="img"
+      // v19 (audit ux-001) — this wrapper CONTAINS interactive controls (the
+      // modality toolbar, the plate chip, the PiP resize handles' host) and a
+      // live structure chip, so `role="img"` was a lie that cost the whole
+      // subtree its accessibility: an `img` is a leaf atom, and its children are
+      // presentational. The named `role="group"` is the same fix this repo
+      // already applied to the plate root (PlateRenderer, PLAN DEV-13). The
+      // canvas element itself stays un-named and un-focusable.
+      role="group"
       aria-label={`Live 2D ${AXIS_CAPTION[sectionAxis]} synced to the clip slider`}
+      /* v19 (audit ux-025 + ux-008) — the v16d single click does TWO things
+       * (places the crosshair AND selects the structure under the pointer) and
+       * nothing on screen said so; the same line names the keyboard alternative,
+       * because this gesture has no keyboard equivalent of its own. */
+      title="Click a structure to select it and move the cut plane in one step · keyboard: select from the taxonomy tree or the search box"
     >
       <canvas
         ref={canvasRef}

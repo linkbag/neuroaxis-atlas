@@ -57,6 +57,10 @@ export default function LevelRuler() {
               <button
                 type="button"
                 className={`ruler-item${isCurrent ? ' is-current' : ''}${plate ? ' is-plate' : ''}`}
+                /* v19 (audit ux-010) — the current level was marked visually only
+                 * (`is-current`), so "which level am I on" was not answerable
+                 * from a screen reader or from the keyboard. */
+                aria-current={isCurrent ? 'true' : undefined}
                 onClick={() => gotoLevel(level.id)}
                 title={[
                   level.name,

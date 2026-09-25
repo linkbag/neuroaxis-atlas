@@ -22,7 +22,12 @@
   color: var(--text-muted);
 }
 
-.searchbox-input:focus {
+/* v19 (audit ux-016, WCAG 2.1 SC 2.4.7) — `outline: none` cancelled the app-wide
+ * `:focus-visible` ring (base.css) for the ONE control a keyboard user reaches
+ * first, leaving a 1 px border-colour change as the only cue. Scoped to pointer
+ * focus: the ring still paints for keyboard focus, and clicking still shows the
+ * accent border without a ring. */
+.searchbox-input:focus:not(:focus-visible) {
   border-color: var(--accent);
   outline: none;
 }
@@ -187,7 +192,12 @@
 }
 
 .tree-leaf-row.is-off {
-  opacity: 0.4;
+  /* v19 (audit ux-006, WCAG 2.1 SC 1.4.3) — an "off" row is still ENABLED (it
+   * selects the structure), so its text is not exempt as an inactive control.
+   * At 0.4 the blended text measured 3.31:1 on --bg-panel (3.28:1 elevated);
+   * 0.55 measures 5.12:1 / 4.91:1 and the layer-off state is still carried by
+   * the dim relative to its siblings plus the region row's own `is-off`. */
+  opacity: 0.55;
 }
 
 .tree-leaf-name {

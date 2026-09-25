@@ -22,11 +22,11 @@
  * the registry self-cleans through the material 'dispose' event.
  *
  * v3 (SECTION_SYNC_PLAN §2.1/§4): the factory also carries the section-capping
- * hook — `enableSectionCapping(material, capColor)` opts a material into the
- * GPU live-section PiP's stencil clip-capping (filled cut faces). The five
- * presets below opt in by default so every GLB + primitive participates;
+ * hook — `enableSectionCapping(material, capColor)` records the cap-face color
+ * a GPU cut-face pass would paint. It is RECORDED ONLY since v9 removed the
+ * stencil rig (see the block comment at the section-capping registry below);
  * registering changes nothing about the material itself, and the shared
- * ALL_CLIP_PLANES / ClipSync / updateAllClipping path is untouched.
+ * ALL_CLIP_PLANES / ClipSync path is untouched.
  */
 import * as THREE from 'three'
 import { ALL_CLIP_PLANES } from '../components/viewer3d/clipPlanes'
@@ -55,10 +55,9 @@ function track<T extends THREE.Material>(material: T): T {
   return material
 }
 
-/** Read-only snapshot of registered materials (audits, tests). */
-export function registeredAnatomyMaterials(): THREE.Material[] {
-  return Array.from(materialRegistry)
-}
+/** Read-only snapshot of registered materials. v19 (audit dc-03): this had NO
+ *  caller — the "audits, tests" it claimed do not exist — so it was deleted.
+ *  Re-add it together with the consumer that needs it. */
 
 /**
  * Apply a plane set to explicit materials. Safe to call repeatedly: the
@@ -73,24 +72,30 @@ export function updateClipping(materials: Iterable<THREE.Material>, planes: THRE
   }
 }
 
-/**
- * Apply a plane set to EVERY registered material in one call (defaults to the
- * shared ALL_CLIP_PLANES). Returns the number of materials updated. The v1
- * ClipSync path keeps working without this — it mutates the shared Plane
- * constants — but GLB materials registered later re-clip through here.
- */
-export function updateAllClipping(planes: THREE.Plane[] = ALL_CLIP_PLANES): number {
-  updateClipping(materialRegistry, planes)
-  return materialRegistry.size
-}
+/* v19 (audit dc-04): `updateAllClipping()` lived here. It had no caller in
+ * src/ or scripts/, and the "GLB materials registered later re-clip through
+ * here" path it documented does not exist — the shared ALL_CLIP_PLANES
+ * constants are attached at factory time, which is why ClipSync alone
+ * suffices. Deleted rather than kept as a claim with no consumer. */
 
 /* ------------------------------------------------------------------ */
 /* Section capping registry (v3 plan §2.1/§4 — section-pip task)       */
 /* ------------------------------------------------------------------ */
 
 /**
- * Default filled cut-face color: warm tissue pink, the classic "sectioned
- * tissue" look of the three.js clipping_stencil reference.
+ * RETIRED AT v9 — RECORDED, NOT PAINTED.
+ *
+ * v19 (audit dc-02 / mat-5): this whole block is write-only. The registry has
+ * exactly one writer (`enableSectionCapping`, called by the five preset
+ * factories below) and NO reader: `grep -n "firstSectionCapColor\|sectionCapRegistry"
+ * src/` finds no consumer, and the GPU stencil rig it was built for was removed
+ * in v9 (`viewer3d/SectionPiP.tsx` states that the stencil passes are gone and
+ * the PiP now paints the same node-based renderer as the Plates tab). The
+ * cut-face color a user sees on the live section therefore comes from the
+ * contour fill, NOT from here. Deleting the block would touch seven call sites
+ * and three exported names that a future 3D cap pass may want, so the claims
+ * are corrected instead of the code being removed — the two docstrings below
+ * say what the code actually does.
  */
 export const DEFAULT_SECTION_CAP_COLOR = '#d7a58f'
 
@@ -98,18 +103,18 @@ interface SectionCapEntry {
   color: THREE.Color
 }
 
-/** Materials opted into stencil capping → their registered cap-face color. */
+/** Materials opted into stencil capping → their registered cap-face color.
+ *  Write-only since v9 (see the block comment above). */
 const sectionCapRegistry = new Map<THREE.Material, SectionCapEntry>()
 
 /**
- * Opt a material into section capping (plan §4 contract: the ONE new
- * materials-factory hook). This is a pure registry write — the material's
- * own rendering (clipping planes, presets, fresnel hook, program cache) is
- * deliberately untouched, so existing clipping behavior cannot change. The
- * GPU live-section PiP (viewer3d/SectionPiP.tsx) reads this registry to
- * build its back/front stencil passes and colored cap plane.
+ * Opt a material into section capping — a pure registry write that records the
+ * cap-face color. It changes NO rendering: the material's own presets, clipping
+ * planes and fresnel hook are untouched, and (since v9) nothing reads the
+ * registry, so this call currently has no visible effect. It is kept as the
+ * documented hook a future 3D cut-face pass would consume.
  *
- * Safe to call repeatedly: a later call just recolors the cap face.
+ * Safe to call repeatedly: a later call just recolors the recorded entry.
  * Returns the same material for chaining.
  */
 export function enableSectionCapping<T extends THREE.Material>(
@@ -130,8 +135,9 @@ export function enableSectionCapping<T extends THREE.Material>(
 
 /**
  * The cap-face color of the FIRST capped material, or null when nothing has
- * opted in yet. The PiP paints one shared tissue face (a cut face is cut
- * tissue); per-material colors stay recorded here for finer renderers.
+ * opted in yet. NO CONSUMER since v9 (audit dc-02): the cut face a user sees on
+ * the live section is painted by the contour fill, not from this registry. Kept
+ * for the future 3D cap pass; per-material colors stay recorded here.
  */
 export function firstSectionCapColor(): THREE.Color | null {
   for (const entry of sectionCapRegistry.values()) return entry.color
@@ -364,9 +370,8 @@ export function createContextMaterial(color: string = CONTEXT_COLOR): THREE.Mesh
  * culled) so the brainstem and diencephalon remain visible through it").
  *
  * It is a factory preset rather than an ad-hoc material for the same reason
- * every other material is: it must carry the shared clipping planes, join the
- * registry (so `updateAllClipping` and the section-capping audit see it) and
- * keep the PBR look of the context envelope family.
+ * every other material is: it must carry the shared clipping planes, record the
+ * section-capping hook and keep the PBR look of the context envelope family.
  *
  * Two deliberate differences from `createContextMaterial`:
  *  - `side: FrontSide` — the shell is a closed watertight solid, so drawing both

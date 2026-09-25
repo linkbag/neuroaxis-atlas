@@ -11,7 +11,7 @@
  * assertion below is one the audit itself relied on, so a future edit that breaks
  * one of them cannot silently invalidate the audit's conclusions.
  *
- * WHAT IT ASSERTS (13 groups, all against the shipped data, no re-typed table)
+ * WHAT IT ASSERTS (17 groups, all against the shipped data, no re-typed table)
  * ────────────────────────────────────────────────────────────────────────────
  *   1  CLIP_BOUNDS is the single source, and every authored coordinate
  *      (`origin3d`, tract `waypoints`, `size3d`) lies inside it.
@@ -46,13 +46,46 @@
  *  12  `docs/audit/v15/REPORT.md` exists and its summary counts are internally
  *      consistent with the six findings files (the audit's own arithmetic).
  *
+ *  13–16 were ADDED AT v19 by the `final-review` task (plan §3.8 item 5) — the
+ *      structural checks that run is required to name and wire, plus the pins for
+ *      the v19 corrections that had no gate:
+ *  13  cross-file reference integrity: every STRUCTURED reference (`parent`,
+ *      `territory[]`, `supply[]`, `mesh[]`, `anchors.mesh`,
+ *      `vesselCourse.parentArtery` / `.surface`, syndrome `structures[]`) resolves
+ *      against the record/syndrome/level/plate/manifest-slug domain, and every
+ *      id-shaped token in the free text of every structure, tract and syndrome
+ *      resolves too — modulo a PINNED five-token prose allowlist that is itself
+ *      asserted, so it cannot grow silently. This is the check that sees a renamed
+ *      or deleted id left behind in a reference or a sentence.
+ *  14  every vessel course starts on its parent artery: the parent must own a
+ *      committed manifest body, and the first waypoint must either lie on that body
+ *      (≤ 0.5 au from its bbox) or the course must DECLARE its provenance
+ *      (`basis` + `waypointBasis[0]` + `anchorNote`). Covers the 39 authored JSON
+ *      courses and the 4 `BUILT_IN_VESSEL_COURSES` chunks (symbolic first waypoints
+ *      such as `M1_TAKEOFF` are resolved from the literal constant table in the
+ *      same file). Measured, not assumed: the five off-parent courses are printed
+ *      with their distances (max 56.31 au, the distal MCA branches that arise
+ *      beyond the committed M1/M2 mesh).
+ *  15  every structure kind and every manifest hint has a material preset:
+ *      `KIND_OPACITY` covers exactly `ALL_KINDS`, every `MATERIAL_HINTS` value has
+ *      a `case` in `makeAnatomyMaterial`, every manifest `materialHint` is a
+ *      declared hint, and `hintForKind` returns only declared hints.
+ *  16  the v19 corrections that had no gate now have one: the ACoA and
+ *      thalamogeniculate `supply[]` de-links, the AChA `territory[]` addition, the
+ *      `syn-claude` structure set, the single reachable ellipsoid-suppression guard
+ *      in `SceneLayers` (the compensating assertion for the still-red
+ *      `verify:vessel-render` §3 source pin — see docs/audit/v19/REPORT.md), and
+ *      the two corrected plate frames.
+ *
  * NOT OBSERVED HERE (requires a browser): rendered pixels, pointer/focus
  * interaction, and anything the browser lane alone can see. `verify:audit` exits
  * 4 in this environment ("no check was run").
  *
- * Wire-in: `npm run verify:audit-facts` (the script entry is owned by the
- * integrator's `package.json`; `node scripts/verify/audit-facts.mjs` is the
- * direct form).
+ * Wire-in: `npm run verify:audit-facts` — the `package.json` entry the v19 plan's
+ * D5 required was added by `integrate-fixes` and this gate is now part of the run
+ * sweep (it ran 68/68 at v19 close). `node scripts/verify/audit-facts.mjs` is the
+ * direct form, and `AUDIT_FACTS_ROOT=<copy>` runs it against a mutated copy of the
+ * tree, which is how groups 13–16 were bite-tested.
  */
 import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -536,6 +569,318 @@ start('12. the v15 audit output is present and its counts are self-consistent')
   const reportText = existsSync(REPORT) ? readFileSync(REPORT, 'utf8') : ''
   truthy('REPORT.md states the unverifiable-here / rejected questions explicitly', /unverifiable-here/i.test(reportText) && /rejected/i.test(reportText))
   truthy('REPORT.md states what the audit cannot establish (no imaging, no specimen)', /not\s+(?:validated|verified)|no finding was validated|cannot establish/i.test(reportText))
+}
+
+/* ══════════════════════ 13. cross-file reference integrity ═══════════════ */
+/* Added at v19 by the final-review task (plan §3.8 item 5). WHY: the v19
+ * corrections pass renamed no id, but it DID re-point references (a syndrome card
+ * dropped a structure, an artery gained a territory entry, a laterality flipped a
+ * record from paired to midline, a vessel course's origin3d was moved onto its own
+ * first waypoint). Nothing checked that every id NAMED anywhere in the data still
+ * resolves — which is exactly the class of damage a rename or a deletion leaves
+ * behind, and this project's known failure mode is a check that cannot see it.
+ *
+ * Two assertions:
+ *   (a) STRUCTURED references must all resolve — `parent`, `territory[]`,
+ *       `supply[]`, `vesselCourse.parentArtery`, `vesselCourse.surface`,
+ *       `anchors.mesh`, and every syndrome `structures[]` entry. Domain: authored
+ *       record ids ∪ syndrome ids ∪ level ids ∪ plate ids ∪ committed manifest
+ *       slugs (a `LINKS` body is a legitimate reference target).
+ *   (b) FREE TEXT is swept for id-shaped tokens: every `(nuc|tract|vent|surf|vasc|
+ *       ctx|nrv|syn|lvl|plate)-…` token in every structure, tract and syndrome
+ *       string must resolve, except for a PINNED, printed allowlist of five
+ *       non-reference tokens. The allowlist is itself asserted, so it cannot grow
+ *       silently — adding to it is a visible edit to this file. */
+start('13. every id named anywhere in the data resolves (the orphaned-reference sweep)')
+{
+  const manifestSlugs = new Set(parts.map((p) => String(p.slug ?? p.id ?? '')))
+  const REF_DOMAIN = new Set([...IDS, ...SYNDROME_IDS, ...LEVEL_IDS, ...plates.map((p) => p.id), ...manifestSlugs])
+  const resolves = (v) => typeof v === 'string' && v !== '' && REF_DOMAIN.has(v)
+  const unresolved = []
+  const note = (where, field, value) => unresolved.push(`${where}.${field} → ${value}`)
+  for (const r of structures) {
+    if (r.parent !== undefined) note(r.id, 'parent', r.parent)
+    for (const t of r.territory ?? []) note(r.id, 'territory[]', t)
+    for (const s of r.supply ?? []) note(r.id, 'supply[]', s)
+    for (const m of r.mesh ?? []) note(r.id, 'mesh[]', m)
+    if (r.anchors !== undefined && r.anchors.mesh !== undefined) note(r.id, 'anchors.mesh', r.anchors.mesh)
+    if (r.vesselCourse !== undefined) {
+      if (r.vesselCourse.parentArtery !== undefined) note(r.id, 'vesselCourse.parentArtery', r.vesselCourse.parentArtery)
+      if (r.vesselCourse.surface !== undefined && r.vesselCourse.surface !== null) note(r.id, 'vesselCourse.surface', r.vesselCourse.surface)
+    }
+  }
+  for (const s of syndromes) for (const id of s.structures ?? []) note(s.id, 'structures[]', id)
+  const dangling = unresolved.filter((entry) => !resolves(entry.split(' → ')[1]))
+  const refCount =
+    structures.reduce((n, r) => n + (r.territory?.length ?? 0) + (r.supply?.length ?? 0) + (r.mesh?.length ?? 0) + (r.parent === undefined ? 0 : 1), 0) +
+    syndromes.reduce((n, s) => n + (s.structures?.length ?? 0), 0)
+  dangling.length === 0
+    ? ok(`every structured reference resolves (${refCount} reference value(s) over ${structures.length} records + ${syndromes.length} cards)`)
+    : bad('a structured reference points at an id that does not exist', dangling.slice(0, 10).join(' · ') + (dangling.length > 10 ? ` (+${dangling.length - 10})` : ''))
+
+  /* ── (b) the free-text sweep ─────────────────────────────────────────────── */
+  /* These five tokens are prose, not references, and each names itself as such:
+   *   plate-2                  — a finding alias in a plate contextNote
+   *   vasc-course-probe        — a probe name in a course contextNote
+   *   vasc-inventory/vasc-acquire — document/task stems, not records
+   *   tract-level              — an adjective ("tract-level finding") in two tracts */
+  const PROSE_ALLOWLIST = ['plate-2', 'tract-level', 'vasc-acquire', 'vasc-course-probe', 'vasc-inventory']
+  const ID_SHAPED = /\b(?:nuc|tract|vent|surf|vasc|ctx|nrv|syn|lvl|plate)-[a-z0-9][a-z0-9-]*/g
+  const orphans = new Map()
+  const walkText = (node, where) => {
+    if (typeof node === 'string') {
+      for (const match of node.match(ID_SHAPED) ?? []) {
+        const token = match.replace(/[.,;:)\]]+$/, '')
+        if (REF_DOMAIN.has(token) || PROSE_ALLOWLIST.includes(token)) continue
+        if (!orphans.has(token)) orphans.set(token, [])
+        if (orphans.get(token).length < 3) orphans.get(token).push(where)
+      }
+      return
+    }
+    if (Array.isArray(node)) { node.forEach((entry, index) => walkText(entry, `${where}[${index}]`)); return }
+    if (node !== null && typeof node === 'object') for (const [key, value] of Object.entries(node)) walkText(value, `${where}.${key}`)
+  }
+  for (const r of structures) walkText(r, `${r.__file}:${r.id}`)
+  for (const t of tracts) walkText(t, `tracts.json:${t.id}`)
+  for (const s of syndromes) walkText(s, `${s.__file}:${s.id}`)
+  orphans.size === 0
+    ? ok('no id-shaped token anywhere in the data text is unresolvable (a renamed or deleted id left behind would appear here)')
+    : bad(
+      'unresolvable id-shaped token(s) in the data text — either a stale reference or a new prose token to add to PROSE_ALLOWLIST',
+      [...orphans.entries()].slice(0, 8).map(([token, where]) => `${token} (${where[0]})`).join(' · '),
+    )
+  equal('the prose allowlist is exactly the documented five tokens (it cannot grow silently)', [...PROSE_ALLOWLIST].sort(), PROSE_ALLOWLIST)
+  info(`reference domain: ${IDS.size} record ids · ${SYNDROME_IDS.size} syndrome ids · ${LEVEL_IDS.size} level ids · ${plates.length} plate ids · ${manifestSlugs.size} manifest slugs`)
+}
+
+/* ═══════════════ 14. vessel courses start on their parent artery ═════════ */
+/* Added at v19 by the final-review task (plan §3.8 item 5). WHY: the v19 pass
+ * moved `vasc-sca-vermian-branches`'s origin3d ~30 au, from [5.2, 10.7, −13.6] to
+ * its own documented first waypoint, and nothing asserted that a vessel course
+ * STARTS anywhere near the artery it branches from. A course whose first waypoint
+ * drifts off its parent is a silent anatomical error that no count catches.
+ *
+ * Measured two ways, because "near" is not one number:
+ *   • the parent (`vesselCourse.parentArtery`, else the record's `parent`) must own
+ *     at least one committed manifest body — a renamed parent fails here;
+ *   • the first waypoint must either lie ON that body (≤ 0.5 au from its bbox) or
+ *     the course must DECLARE its provenance (`basis` in {documented-course,
+ *     bp3d-element} AND a `waypointBasis[0]` AND an `anchorNote`) — which is what
+ *     the four distal MCA branches do: they arise beyond the committed M1/M2 mesh,
+ *     on the cortex they were projected onto.
+ * Covers both sources: the 39 authored JSON courses and the 4 `BUILT_IN_VESSEL_COURSES`
+ * chunks in `src/geometry/vasculature-courses.ts` (their symbolic first waypoint —
+ * `M1_TAKEOFF` … — is resolved from the literal constant table in the same file). */
+start('14. every vessel course starts on its parent artery, or states its provenance')
+{
+  const manifestSlugs2 = parts
+  const bodyOfParent = (parent) => manifestSlugs2.filter((p) => {
+    const slug = String(p.slug ?? '')
+    return slug === parent || slug.startsWith(`${parent}-`)
+  })
+  const distToBox = (point, box) => {
+    let sum = 0
+    for (let axis = 0; axis < 3; axis += 1) {
+      const v = point[axis]
+      const lo = box.min[axis]
+      const hi = box.max[axis]
+      const d = v < lo ? lo - v : v > hi ? v - hi : 0
+      sum += d * d
+    }
+    return Math.sqrt(sum)
+  }
+  const courseSrc = read('src/geometry/vasculature-courses.ts')
+  const literalConstants = new Map()
+  for (const m of courseSrc.matchAll(/const ([A-Z0-9_]+)\s*:\s*[A-Za-z0-9_]+\s*=\s*\[\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\]/g)) {
+    literalConstants.set(m[1], [Number(m[2]), Number(m[3]), Number(m[4])])
+  }
+  const rows = []
+  /* (a) the authored JSON courses */
+  for (const r of structures) {
+    const vc = r.vesselCourse
+    if (vc === undefined || !Array.isArray(vc.waypoints)) continue
+    rows.push({
+      id: r.id,
+      source: 'authored json',
+      parent: vc.parentArtery ?? r.parent ?? null,
+      first: vc.waypoints[0],
+      basis: vc.basis ?? null,
+      waypointBasis: Array.isArray(vc.waypointBasis) ? vc.waypointBasis : [],
+      hasAnchorNote: typeof vc.anchorNote === 'string' && vc.anchorNote.trim().length > 0,
+    })
+  }
+  /* (b) the TS built-in courses */
+  const builtInBlock = courseSrc.slice(
+    courseSrc.indexOf('export const BUILT_IN_VESSEL_COURSES'),
+    courseSrc.indexOf('export const VESSEL_COURSES'),
+  )
+  const chunks = builtInBlock.split(/\n  \{\n/).slice(1)
+  if (chunks.length === 0) bad('the BUILT_IN_VESSEL_COURSES block could not be split into records — this check would pass vacuously')
+  for (const chunk of chunks) {
+    const id = /id: '([^']+)'/.exec(chunk)?.[1]
+    const raw = /waypoints:\s*\[([\s\S]*?)\]/.exec(chunk)?.[1] ?? ''
+    const firstToken = raw.split(',')[0].trim().replace(/^\[/, '')
+    let first = literalConstants.get(firstToken) ?? null
+    if (first === null) {
+      const nums = /(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)/.exec(firstToken)
+      if (nums !== null) first = [Number(nums[1]), Number(nums[2]), Number(nums[3])]
+    }
+    if (first === null) {
+      const nums = /(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)/.exec(raw)
+      if (nums !== null) first = [Number(nums[1]), Number(nums[2]), Number(nums[3])]
+    }
+    rows.push({
+      id: id ?? '(no id)',
+      source: 'built-in ts',
+      parent: /parent: '([^']+)'/.exec(chunk)?.[1] ?? null,
+      first,
+      basis: /basis: '([^']+)'/.exec(chunk)?.[1] ?? null,
+      waypointBasis: [...chunk.matchAll(/waypointBasis:\s*\[([^\]]*)\]/g)].flatMap((m) => m[1].split(',').map((s) => s.trim().replace(/['"]/g, '')).filter(Boolean)),
+      hasAnchorNote: /anchorNote:\s*'/.test(chunk),
+    })
+  }
+  equal('the check really read both course sources (39 authored JSON courses + 4 built-in chunks = 43 rows)', rows.length, 43)
+  const unknownParent = rows.filter((row) => row.parent === null || bodyOfParent(row.parent).length === 0)
+  unknownParent.length === 0
+    ? ok(`every course's parent artery owns a committed manifest body (${rows.length} courses, ${new Set(rows.map((r) => r.parent)).size} distinct parents)`)
+    : bad('course parent with no committed body (renamed parent?)', unknownParent.map((r) => `${r.id} → ${r.parent}`).join(' · '))
+  const unparsed = rows.filter((row) => !Array.isArray(row.first) || row.first.length !== 3 || row.first.some((v) => !Number.isFinite(v)))
+  unparsed.length === 0
+    ? ok('every course\'s first waypoint was parsed to three finite numbers (no vacuous skip)')
+    : bad('first waypoint could not be parsed', unparsed.map((r) => `${r.id} (${r.source})`).join(' · '))
+  const measured = []
+  const unfounded = []
+  for (const row of rows) {
+    if (unparsed.includes(row)) continue
+    const bodies = bodyOfParent(row.parent)
+    if (bodies.length === 0) continue
+    const distance = Math.min(...bodies.map((body) => distToBox(row.first, body.bbox)))
+    row.distance = distance
+    measured.push(row)
+    const onParent = distance <= 0.5
+    const declaresProvenance =
+      ['documented-course', 'bp3d-element'].includes(row.basis) &&
+      row.waypointBasis.length > 0 &&
+      row.hasAnchorNote
+    if (!onParent && !declaresProvenance) unfounded.push(`${row.id} (${distance.toFixed(2)} au off ${row.parent})`)
+  }
+  unfounded.length === 0
+    ? ok(`every course either starts on its parent's committed body or declares its provenance (${measured.filter((r) => r.distance <= 0.5).length} on-body, ${measured.filter((r) => r.distance > 0.5).length} declared-offset)`)
+    : bad('course starts off its parent artery with no declared provenance', unfounded.join(' · '))
+  const offsets = measured.filter((row) => row.distance > 0.5).sort((a, b) => b.distance - a.distance)
+  info(
+    `off-parent courses (measured distance from waypoint[0] to the parent body's bbox): ` +
+      (offsets.length === 0 ? 'none' : offsets.map((row) => `${row.id} ${row.distance.toFixed(2)} au (${row.basis})`).join(' · ')) +
+      ` · max on any course ${Math.max(...measured.map((row) => row.distance)).toFixed(2)} au`,
+  )
+  info(`sources: ${rows.filter((r) => r.source === 'authored json').length} authored JSON + ${rows.filter((r) => r.source === 'built-in ts').length} built-in TS`)
+}
+
+/* ═══════════ 15. every structure kind has a material preset ══════════════ */
+/* Added at v19 by the final-review task (plan §3.8 item 5). WHY: `KIND_OPACITY`,
+ * `hintForKind` and `makeAnatomyMaterial` are three tables that must agree — a kind
+ * with no opacity entry renders `undefined`, a hint with no `case` falls through to
+ * the nucleus preset silently, and a manifest `materialHint` outside the enum is
+ * exactly the v19 `mat-2` finding (12 parts declare `gray-matter`, none renders
+ * with it). Nothing connected the four lists to each other until now. */
+start('15. every structure kind and every manifest hint has a material preset')
+{
+  const loadSrc = read('src/data/load.ts')
+  const kindsRaw = /export const ALL_KINDS[^=]*=\s*\[([^\]]*)\]/.exec(loadSrc)?.[1] ?? ''
+  const KINDS = [...kindsRaw.matchAll(/'([a-z-]+)'/g)].map((m) => m[1])
+  const matSrc = read('src/geometry/materials.ts')
+  const HINTS = [...(/export const MATERIAL_HINTS = \[([^\]]*)\]/.exec(matSrc)?.[1] ?? '').matchAll(/'([a-z-]+)'/g)].map((m) => m[1])
+  const nucleusSrc = read('src/components/viewer3d/NucleusMesh.tsx')
+  const opacityBlock = /export const KIND_OPACITY[^=]*=\s*\{([\s\S]*?)\n\}/.exec(nucleusSrc)?.[1] ?? ''
+  const OPACITY_KEYS = [...opacityBlock.matchAll(/^\s*([a-z-]+)\s*:/gm)].map((m) => m[1])
+  const dispatched = [...(/export function makeAnatomyMaterial[\s\S]*?\n\}/.exec(matSrc)?.[0] ?? '').matchAll(/case '([a-z-]+)'/g)].map((m) => m[1])
+  const hintReturns = [...(/export function hintForKind[\s\S]*?\n\}/.exec(nucleusSrc)?.[0] ?? '').matchAll(/return '([a-z-]+)'/g)].map((m) => m[1])
+  const hintBranches = [...(/export function hintForKind[\s\S]*?\n\}/.exec(nucleusSrc)?.[0] ?? '').matchAll(/kind === '([a-z-]+)'/g)].map((m) => m[1])
+  truthy('the four tables were really parsed (a regex miss must fail, not pass)', KINDS.length === 7 && HINTS.length === 6 && OPACITY_KEYS.length > 0 && dispatched.length > 0,
+    `${KINDS.length} kinds · ${HINTS.length} hints · ${OPACITY_KEYS.length} opacity keys · ${dispatched.length} dispatch cases`)
+  equal('KIND_OPACITY covers exactly ALL_KINDS (a kind with no opacity renders undefined)', [...OPACITY_KEYS].sort(), [...KINDS].sort())
+  const missingCase = HINTS.filter((hint) => !dispatched.includes(hint))
+  missingCase.length === 0
+    ? ok(`every MATERIAL_HINT has a factory preset in makeAnatomyMaterial (${HINTS.join(', ')})`)
+    : bad('material hint with no factory case — it silently renders as the nucleus preset', missingCase.join(' · '))
+  const hintManifest = [...new Set(parts.map((p) => String(p.materialHint ?? '')))].filter(Boolean)
+  const unknownHints = hintManifest.filter((hint) => !HINTS.includes(hint))
+  unknownHints.length === 0
+    ? ok(`every manifest materialHint is a declared hint (${hintManifest.length} distinct over ${parts.length} parts: ${hintManifest.join(', ')})`)
+    : bad('manifest part declares a materialHint outside MATERIAL_HINTS', unknownHints.join(' · '))
+  const badReturns = hintReturns.filter((hint) => !HINTS.includes(hint))
+  const uncoveredKinds = KINDS.filter((kind) => !hintBranches.includes(kind) && !hintReturns.includes('nucleus'))
+  badReturns.length === 0 && uncoveredKinds.length === 0
+    ? ok(`hintForKind returns only declared hints and covers every kind (${hintBranches.length} explicit branches + the default)`)
+    : bad('hintForKind returns an undeclared hint or leaves a kind uncovered', `returns ${badReturns.join(', ') || 'ok'} · uncovered ${uncoveredKinds.join(', ') || 'none'}`)
+  const opacity = Object.fromEntries([...opacityBlock.matchAll(/^\s*([a-z-]+)\s*:\s*([\d.]+)/gm)].map((m) => [m[1], Number(m[2])]))
+  info(`kinds ${KINDS.join(', ')} · hints ${HINTS.join(', ')} · opacity ${KINDS.map((k) => `${k}=${opacity[k]}`).join(' ')} · hintForKind returns ${[...new Set(hintReturns)].join('/')}`)
+}
+
+/* ═══════════ 16. the v19 corrections that had no gate now have one ════════ */
+/* Added at v19 by the final-review task. WHY: the corrections pass landed five
+ * DATA changes and one CODE de-duplication whose only record was a prose row in
+ * `docs/audit/v19/CORRECTIONS.md` — a claim with no gate, which is this project's
+ * own definition of an untested claim. Each is pinned here at its post-fix value,
+ * with the reason it is true (so a future editor can tell a regression from a
+ * deliberate re-authoring). */
+start('16. the v19 corrections are pinned (they had no gate before this one)')
+{
+  const byRecordId = new Map(structures.map((r) => [r.id, r]))
+  const acoa = byRecordId.get('vasc-anterior-communicating-artery')
+  equal(
+    'vasc-anterior-communicating-artery.supply[] names the hypothalamus only (uc-19 FAC-VN-001: the ACoA is not the tuberothalamic supply)',
+    acoa?.supply, ['syn-hypothalamic'],
+  )
+  const thalamogeniculate = byRecordId.get('vasc-pca-thalamogeniculate-arteries')
+  equal(
+    'vasc-pca-thalamogeniculate-arteries.supply[] names Dejerine-Roussy only (uc-19 FAC-VN-002: one perforator must not own two thalamic syndromes)',
+    thalamogeniculate?.supply, ['syn-dejerine-roussy'],
+  )
+  const acha = byRecordId.get('vasc-anterior-choroidal-artery')
+  truthy(
+    'vasc-anterior-choroidal-artery.territory[] contains nuc-subthalamic (uc-19 FAC-VN-005: the artery that causes hemiballismus supplies its target)',
+    Array.isArray(acha?.territory) && acha.territory.includes('nuc-subthalamic'),
+    `${acha?.territory?.length ?? 0} territory entries`,
+  )
+  const claude = syndromes.find((s) => s.id === 'syn-claude')
+  equal(
+    'syn-claude.structures[] does not name the cerebellar dentate nucleus (uc-19 FAC-SYN-001: a paramedian PCA midbrain infarct cannot damage it)',
+    claude?.structures, ['nuc-red-nucleus', 'nuc-oculomotor', 'tract-scp'],
+  )
+  /* The dc-01 de-duplication: the structure pass had TWO guards for the same
+   * predicate, the second unreachable. This is the compensating assertion for
+   * `verify:vessel-render`'s §3 source pin, which still expects the deleted line
+   * (see docs/audit/v19/REPORT.md — that pin is outside the final-review write
+   * scope). It pins the MERGED guard, so the render rule is still gate-protected. */
+  const sceneSrc = read('src/components/viewer3d/SceneLayers.tsx')
+  truthy(
+    'the 3D structure pass suppresses an ellipsoid for a course-bearing nerve/vessel in ONE reachable guard (uc-19 dc-01)',
+    /if \(hasNerveCourse\(record\.id\) \|\| hasVesselCourse\(record\.id\) \|\| hasVesselCourseGroup\(record\.id\)\) return null/.test(sceneSrc),
+  )
+  /* The two plate frame corrections (FAC-TR-001, plate-4). The letters are the
+   * only part of a plate's frame a reader uses to orient it, so they are pinned:
+   * plate-thalamus-mid draws anterior at the BOTTOM (its own artwork measures
+   * corr(cy, z) = +0.78), and plate-tel-sagittal-hemisphere draws it on the RIGHT
+   * (frontal lobe at cx 520, occipital at cx 194) — the same reading as
+   * plate-sagittal-midline. */
+  const withLetters = (id) => {
+    const manifestEntry = plates.find((p) => p.id === id)
+    const svgPath = String(manifestEntry?.svg ?? `${id}.svg`).replace(/^plates\//, '')
+    const svg = read('src/data/plates', svgPath)
+    const rows = [...svg.matchAll(/<circle cx="(\d+)" cy="(\d+)"[^>]*\/><text[^>]*>([APRLSI])<\/text>/g)]
+      .map((m) => ({ x: Number(m[1]), y: Number(m[2]), letter: m[3] }))
+    return rows
+  }
+  const thalamusLetters = withLetters('plate-thalamus-mid')
+  const byY = [...thalamusLetters].sort((a, b) => a.y - b.y)
+  equal('plate-thalamus-mid frame letters match its artwork: P at the top, A at the bottom (uc-19 FAC-TR-001)',
+    [byY[0]?.letter, byY[byY.length - 1]?.letter], ['P', 'A'])
+  const telSagittalLetters = withLetters('plate-tel-sagittal-hemisphere')
+  const byX = [...telSagittalLetters].sort((a, b) => a.x - b.x)
+  equal('plate-tel-sagittal-hemisphere frame letters match its artwork: P left, A right (uc-19 plate-4)',
+    [byX[0]?.letter, byX[byX.length - 1]?.letter], ['P', 'A'])
+  info(`plate frames read from ${thalamusLetters.length + telSagittalLetters.length} labelled circles: plate-thalamus-mid ${byY.map((r) => r.letter).join('')} · plate-tel-sagittal-hemisphere ${byX.map((r) => r.letter).join('')}`)
 }
 
 /* ── verdict ─────────────────────────────────────────────────────────────── */

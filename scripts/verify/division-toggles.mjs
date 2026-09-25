@@ -876,7 +876,14 @@ RUNNERS.legend = async () => {
       truthy(`a toggle exists for "${division.label}"`, toggles.some((label) => label.includes(division.label)))
       truthy(`a solo action exists for "${division.label}"`, solos.some((label) => label.includes(division.label)))
     }
-    for (const kind of ALL_KINDS) truthy(`the "${kind}" kind row still renders`, markup.includes(`>${kind}<`))
+    // v19 — the `vessel` kind has no row of its own in the Legend: its 53
+    // records are exactly the `vasculature` region's 53 (verified both ways),
+    // and the header's Vasculature button carries both layers, so the region row
+    // is the ONE control for the arterial system. The kind axis itself is
+    // untouched in the data model (nerve-kind's contract checker asserts
+    // ALL_KINDS still carries all seven kinds).
+    for (const kind of ALL_KINDS.filter((kind) => kind !== 'vessel')) truthy(`the "${kind}" kind row still renders`, markup.includes(`>${kind}<`))
+    truthy('the "vasculature" region row covers the vessel kind (the arterial system\'s one control)', markup.includes('>vasculature<'))
     for (const region of ALL_REGIONS) truthy(`the "${region}" region row still renders`, markup.includes(`>${region}<`))
     truthy('the palette swatches still render', markup.includes('Palette (kind / direction)'))
     const divisionIndex = markup.indexOf('Toggle the ')

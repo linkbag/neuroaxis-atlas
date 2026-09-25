@@ -98,7 +98,12 @@ export default function SearchBox() {
       {listOpen && (
         <ul className="searchbox-results" id={LISTBOX_ID} role="listbox" aria-label="Search results">
           {visible.length === 0 && (
-            <li className="searchbox-empty">No structure matches “{trimmed}” — try a synonym (e.g. “STN”, “MLF”, “PICA”).</li>
+            /* v19 (audit ux-015) — a listbox owns only `option` (or `group`)
+             * children: these two informational rows were announced as an empty
+             * listbox (or dropped). They stay in the DOM for sighted readers and
+             * are marked presentational so the listbox's children are all
+             * options. */
+            <li className="searchbox-empty" role="presentation">No structure matches “{trimmed}” — try a synonym (e.g. “STN”, “MLF”, “PICA”).</li>
           )}
           {visible.map((hit, index) => (
             <li
@@ -127,7 +132,7 @@ export default function SearchBox() {
             </li>
           ))}
           {hits.length > visible.length && (
-            <li className="searchbox-more">Showing {visible.length} of {hits.length} — keep typing to narrow.</li>
+            <li className="searchbox-more" role="presentation">Showing {visible.length} of {hits.length} — keep typing to narrow.</li>
           )}
         </ul>
       )}

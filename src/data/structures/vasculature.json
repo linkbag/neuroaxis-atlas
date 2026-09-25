@@ -379,8 +379,7 @@
       "ctx-cerebral-cortex"
     ],
     "supply": [
-      "syn-hypothalamic",
-      "syn-tuberothalamic"
+      "syn-hypothalamic"
     ],
     "contextNote": "Authored from the v8 vessel inventory (docs/VASC_INVENTORY.md §3/§3.1, task vasc-acquire — BodyParts3D 4.0, CC BY 4.0): the archive we already own carries per-artery meshes, and its §3 table maps them to this very record id. The record is complete without the mesh — the territory and syndrome mappings below are the semantic content. The `territory` list documents the structures whose supply depends on the cross-flow this artery permits (both ACAs and the anterior hypothalamus), which is the functional meaning of the vessel. Mesh: `FJ1655`, 80 faces, FMA 50169 — one element spanning the midline (x −4.16…+2.71 mm).",
     "connections": {
@@ -942,9 +941,7 @@
     "name": "Lenticulostriate arteries",
     "synonyms": [
       "arteriae lenticulostriatae",
-      "lateral lenticulostriate arteries",
-      "medial lenticulostriate arteries",
-      "recurrent artery of Heubner (medial group)"
+      "lenticulostriate arteries (group)"
     ],
     "region": "vasculature",
     "subdivision": "Deep perforators",
@@ -1049,7 +1046,8 @@
       "nuc-subiculum",
       "vent-lateral-ventricle-temporal-horn",
       "vent-choroid-plexus-lateral",
-      "tract-optic-tract"
+      "tract-optic-tract",
+      "nuc-subthalamic"
     ],
     "supply": [
       "syn-hemiballismus"

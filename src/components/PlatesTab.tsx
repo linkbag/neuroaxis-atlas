@@ -501,7 +501,11 @@ export default function PlatesTab() {
 
       {mode === 'author' ? (
         <>
-          <div className="plate-strip" aria-label="Plate picker">
+          {/* v19 (audit ux-012) — `aria-label` is only honoured on an element
+           * whose role supports naming; a bare div maps to `generic` and the
+           * attribute is dropped from the accessibility tree. Its siblings
+           * ("Orientation filter", "Section axis", …) already carry the role. */}
+          <div className="plate-strip" role="group" aria-label="Plate picker">
             {visiblePlates.map((entry) => {
               const entryLevel = getPlateLevel(entry)
               const active = plate?.id === entry.id
@@ -632,6 +636,13 @@ export default function PlatesTab() {
                   value={sectionUnderlay.opacity}
                   onChange={(event) => setSectionUnderlay({ opacity: Number(event.target.value) })}
                   title="Alpha of the real image. In real-first mode (Auto) it is the section's base plate, not an underlay."
+                  /* v19 (audit ux-014) — this `<input>` is inside a `<label>` that
+                   * also wraps the `<output>` showing the live value, and
+                   * name-from-content walks the WHOLE label: the computed name was
+                   * "Opacity 65%", i.e. the name moved with the value and no
+                   * longer matched the visible "Opacity" (WCAG 2.5.3). The
+                   * explicit label pins it. */
+                  aria-label="Opacity"
                 />
                 <output>{Math.round(sectionUnderlay.opacity * 100)}%</output>
               </label>
@@ -645,6 +656,10 @@ export default function PlatesTab() {
                     className="section-select"
                     value={sectionUnderlay.ctWindowPreset}
                     disabled={!ctInstalled}
+                    /* v19 (audit ux-013) — the control had no programmatic label:
+                     * its only name source was `title`, which does not contain
+                     * the visible "CT window" string (WCAG 2.5.3). */
+                    aria-label="CT window"
                     title={
                       ctInstalled
                         ? 'Display window for the CT modality (Hounsfield units, from ct-manifest.json) — ignored while MRI or a photograph is drawn'
@@ -687,6 +702,8 @@ export default function PlatesTab() {
                         windowMin: Math.min(Number(event.target.value), sectionUnderlay.windowMax - 1),
                       })
                     }
+                    /* v19 (audit ux-014) — see the Opacity range above. */
+                    aria-label="MRI window low"
                   />
                   <output>{sectionUnderlay.windowMin}</output>
                 </label>
@@ -703,13 +720,15 @@ export default function PlatesTab() {
                         windowMax: Math.max(Number(event.target.value), sectionUnderlay.windowMin + 1),
                       })
                     }
+                    /* v19 (audit ux-014) — see the Opacity range above. */
+                    aria-label="MRI window high"
                   />
                   <output>{sectionUnderlay.windowMax}</output>
                 </label>
               </div>
             )}
 
-            <div className="section-toolbar-group section-link-chips" aria-label="Imaging sources">
+            <div className="section-toolbar-group section-link-chips" role="group" aria-label="Imaging sources">
               <span className="section-toolbar-label">Sources</span>
               {sourceChips.map((link) => (
                 <a

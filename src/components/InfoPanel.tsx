@@ -243,6 +243,29 @@ function StructureDetails({ record }: { record: StructureRecord }) {
 
       <ClinicalList items={record.clinical} />
 
+      {/*
+       * v19 (audit ux-022) — the two v13 cranial-nerve fields had NO rendering
+       * surface: `modality` and `course` were typed in `src/types.ts`, validated
+       * by `scripts/validate-data.mjs`, authored on all twelve `nrv-*` records
+       * (876–1 290 characters each) and asserted by the gates, yet no component
+       * read them, so the "payoff" README sells for v13 could not be seen in the
+       * app. They are rendered here, in the same shape as the neighbouring
+       * "Blood supply" block, and only when the record carries them.
+       */}
+      {record.modality && (
+        <section className="info-section">
+          <h3>Modality</h3>
+          <p>{record.modality}</p>
+        </section>
+      )}
+
+      {record.course && (
+        <section className="info-section">
+          <h3>Course</h3>
+          <p>{record.course}</p>
+        </section>
+      )}
+
       {record.bloodSupply && (
         <section className="info-section">
           <h3>Blood supply</h3>
@@ -328,9 +351,21 @@ function EmptyState() {
         <li><strong>Search</strong> — type a name or abbreviation (“STN”, “MLF”, “pulvinar”).</li>
         <li><strong>Taxonomy tree</strong> — browse region → subdivision → structure.</li>
         <li><strong>Level ruler</strong> — jump to a cross-section level; the 3D clip plane follows.</li>
-        <li><strong>Plates tab</strong> — interactive 2D sections synced with the 3D plane.</li>
+        <li><strong>Areas / Systems rows</strong> (header) — switch whole divisions and whole systems;
+          each group has its own <em>All on</em> / <em>All off</em> module. “Cerebral vasculature”
+          sits in the Systems row, and <em>Clinical motor</em> is a framing of that row, not a system.</li>
+        <li><strong>Plates tab</strong> — interactive 2D sections synced with the 3D plane, with the
+          modality toolbar (MRI / CT / photo / <em>Simulated only</em>) and the cortical-division
+          layer toggle.</li>
+        <li><strong>Live section / PiP</strong> — the panel over the 3D view follows the clip sliders;
+          click a contour to select it, drag its four corner handles to resize, <em>▴/▾</em> cycles
+          the preset size.</li>
         <li><strong>Syndromes tab</strong> — clinical cards that highlight the structures they involve.</li>
       </ul>
+      <p className="muted">
+        Atlas units: <strong>1 au = 1.2 mm</strong> — every “au” readout (level ruler, clip sliders,
+        PiP plane) is in millimetres divided by 1.2. The y axis is rostro-caudal (+ = rostral).
+      </p>
       <p className="muted">
         Loaded: {dataStatus.structures} structure records · {dataStatus.tracts} tracts ·{' '}
         {dataStatus.syndromes} syndromes · {dataStatus.plates} plates · {dataStatus.registry} registry
@@ -389,6 +424,10 @@ export default function InfoPanel() {
   return (
     <aside
       className={`info-panel ${sheetOpen ? 'is-open' : 'is-collapsed'}`}
+      /* v19 (audit ux-040) — the panel is a landmark and must be identifiable in
+       * a landmark list; the visible `<h2>` is hidden on phones, so the name is
+       * carried by the element itself. */
+      aria-label="Selection details"
       // A11Y-CONTRACT (AUDIT §2.18): while the sheet is collapsed the body is
       // off-screen, so it must not be tabbable. `inert` (not `aria-hidden`,
       // which would be a lie while its children stay focusable) is written as
