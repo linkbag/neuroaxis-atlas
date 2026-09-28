@@ -1379,6 +1379,34 @@ and by **3.6×** at the honest reading, before the JSON chunk or any left/right 
 | `npm run verify:anatomy` / `verify:imaging-fit` | **exit 1 — environment, not product** (`spawnSync powershell` / `node.exe` EPERM, 0 verdicts; the anatomy measurement re-run directly = 14,566,178 B) |
 | `npm run verify:audit` / `verify:acceptance` / `verify:browser` | **not run and not claimed** — Chrome cannot start in the sandbox; orchestrator lane |
 
+## Spinal cord — the neuraxis extended to the conus (branch `Spinal_included`)
+
+The atlas now carries the spinal cord in the same continuous world space: from the cervicomedullary junction (y ≈ −50 au) to the conus medullaris at L1/L2 (y ≈ −383 au) and the tip of the filum terminale (y = −390 au). The clip envelope is now y[−390, 116] (`CLIP_BOUNDS.y.min` −55 → −390).
+
+### What was added
+
+- **Region + UI** — new region `spinal`, a sixth Areas button **Spinal cord**, and 31 segment level anchors `lvl-c1…lvl-co1` in `src/data/levels.json` — one per spinal segment, each the centre of its segment tile; the tiles tile exactly [−50, −383] with boundaries −50 / −159.89 / −303.08 / −346.37 / −373.01 / −383. `src/data/levelAddressing.ts` expands the `spinalSpan` grammar (`'all'` · segments · `segment-segment` ranges · comma lists) into concrete level ids at load.
+- **74 records** — gray matter (Rexed I–X laminae, Clarke's nucleus C8–L3, intermediolateral column T1–L2, sacral parasympathetic S2–S4, Onuf's nucleus, lower motor neuron pools), white matter (gracile fasciculus at all levels, cuneate fasciculus **T6 and above only**, the three funiculi, anterior white commissure, anterior corticospinal), 31 segments + cervical/lumbar enlargements + conus + filum, dorsal/ventral rootlets, dorsal root ganglia, cauda equina, and 6 spinal vessel course families (anterior/posterior spinal arteries, radiculomedullary feeders, artery of Adamkiewicz, anterior/posterior spinal veins).
+- **Tract continuation** — 13 of the 23 tract courses continue into the cord with somatotopy preserved (the corticospinal arm representation lies medially, the leg laterally — the anatomical substrate of central cord syndrome's upper-limb predominance).
+- **8 syndrome cards** — anterior cord syndrome, spinal cord hemisection (Brown-Séquard), central cord syndrome, posterior cord syndrome, conus medullaris syndrome, cauda equina syndrome, syringomyelia, tabes dorsalis.
+
+### Rendering (procedural, zero new GLB payload)
+
+The cord is a procedural loft driven by a per-level profile table (StatPearls NBK545206): transverse diameter 13.3 mm at C5 → 8.3 mm at T8 → 9.4 mm at L3, anteroposterior ≈ 0.85 × transverse, with the cervical (C5–T1) and lumbar (L2–S3) enlargements and the thoracic minimum at T8. Gray matter is an H-shape with Rexed laminae and named columns (Clarke, intermediolateral, sacral parasympathetic) over the three funiculi zones; the conus tapers into the filum terminale. The anatomy GLB budget is untouched (13.82/14 MiB). The 2D live section paints spinal cross-sections from the same geometry, and the sagittal profile is continuous across y = −50.
+
+**Honest limit:** the spinal cord cross-sections are **authored procedural profiles with source-cited dimensions, not segmented MRI** — the gates measure the built widths against the cited numbers (13.3 / 8.3 / 9.4 mm ± 0.5 mm), but the fine internal detail is schematic and labelled as such. The spinal vessel courses are authored paths through documented landmarks (3–7 anchors each), not segmented angiography.
+
+### Verification (spinal, non-browser)
+
+| Gate | Result |
+| --- | --- |
+| `npm run verify:spinal-anatomy` *(new)* | **exit 0** — 1230 passed · 0 failed — registry-first both directions, 31 segments level-addressed, function + clinical + refs on every record, cuneate ≥T6 rule, laterality agrees with taxonomy |
+| `npm run verify:spinal-tracts` *(new)* | **exit 0** — 33/0 — 13 spinal-crossing courses with somatotopic ordering; the 23 tract records kept whole |
+| `npm run verify:spinal-geometry` *(new)* | **exit 0** — 324/324 — cited diameters measured on the built mesh (13.3 / 8.3 / 9.4 mm ± 0.5 mm), conus + filum reaching y = −390, 31 segment bands, 73 registry slugs, 14 look-alike id refusals |
+| `npm run verify:spinal-sections` *(new)* | **exit 0** — 515/515 — registry ≡ 3D element-wise; teaching points survive the slice (cuneatus absent ≤T6, lateral horn T1–L2 only, Clarke C8–L3, sacral parasympathetic at S3); 2D/3D visibility parity across 4 layer states |
+
+Pre-existing, not spinal: `verify:imaging-fit` is red on this branch exactly as on master (ubc-c09 / ubc-c21 — committed registration numbers drift from what the fitter measures).
+
 ## Scripts
 
 | Script | What it does |
