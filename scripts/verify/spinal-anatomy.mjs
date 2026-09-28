@@ -378,13 +378,13 @@ console.log('\n--- 6. spinal records: registry-first, level-addressed, prose-com
   }
 }
 
-/* ─────── 7. spinal vessel courses (spinal-vasculature.json invariants) ─────── */
+/* ─────── 7. spinal vessel courses (vasculature-courses-spinal.json invariants) ─────── */
 
 console.log('\n--- 7. spinal vessel courses: provenance trio + tube calibre ---')
 {
-  const parsed = JSON.parse(read('src/data/structures/spinal-vasculature.json'))
+  const parsed = JSON.parse(read('src/data/structures/vasculature-courses-spinal.json'))
   const vessels = Array.isArray(parsed) ? parsed : (parsed.records ?? [])
-  equal('spinal-vasculature.json carries the 6 authored course records', vessels.length, 6)
+  equal('vasculature-courses-spinal.json carries the 6 authored course records', vessels.length, 6)
   const problems = []
   for (const record of vessels) {
     const vc = record.vesselCourse

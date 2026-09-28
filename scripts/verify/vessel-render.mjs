@@ -440,10 +440,28 @@ assert(
   VESSEL_COURSES.every((course) => typeof course.anchorNote === 'string' && course.anchorNote.length > 0),
   'every course states what stands behind its path (anchorNote)',
 )
-assert(
-  VESSEL_COURSES.every((course) => typeof course.parent === 'string' && course.parent.length > 0),
-  'every course names its parent artery',
-)
+const courseNamesParent = (course) => typeof course.parent === 'string' && course.parent.length > 0
+/* A course without a named parent must declare its provenance outright — the rule
+ * audit-facts §14 applies to the same rows. The two spinal veins name no parent
+ * because the internal vertebral venous plexus is unmodeled (documented in their
+ * contextNote + anchorNote); every other course names its parent artery. */
+/* Declared provenance at the rendered-table level: basis + a non-empty anchorNote.
+ * The normalized head (readHead in src/geometry/vasculature-courses.ts) keeps
+ * `waypointBasis` out of the table — audit-facts §14 asserts the full trio
+ * (basis + waypointBasis + anchorNote) against the raw JSON records, where the
+ * field actually lives. */
+const courseDeclaresProvenance = (course) =>
+  ['documented-course', 'bp3d-element'].includes(course.basis) &&
+  typeof course.anchorNote === 'string' &&
+  course.anchorNote.length > 0
+{
+  const parentless = VESSEL_COURSES.filter((course) => !courseNamesParent(course) && !courseDeclaresProvenance(course))
+  assert(
+    parentless.length === 0,
+    'every course names its parent artery or declares its provenance (unmodeled parent documented)',
+    parentless.map((course) => course.id).join(' '),
+  )
+}
 assert(
   hasVesselCourse('vasc-lenticulostriate-arteries'),
   'the ELIPSOID OWNER (vasc-lenticulostriate-arteries) is in the course table — the blob cannot come back',
@@ -523,6 +541,7 @@ const states = [
   { label: 'tract kind off', layers: layerState({ kinds: without('tract', KINDS) }) },
   { label: 'nerve kind off', layers: layerState({ kinds: without('nerve', KINDS) }) },
   { label: 'vasculature area off', layers: layerState({ regions: without('vasculature', REGIONS) }) },
+  { label: 'spinal area off', layers: layerState({ regions: without('spinal', REGIONS) }) },
   { label: 'telencephalon area off', layers: layerState({ regions: without('telencephalon', REGIONS) }) },
   { label: 'hidden preset (first course)', layers: layerState({ hidden: [VESSEL_COURSE_IDS[0]] }) },
 ]
@@ -553,10 +572,23 @@ assert(
   'turning the VESSEL system off hides every REGISTERED vessel course and NO tract (the kind gate is per record)',
   `vessels ${toggle['vessel kind off'].vessels} (registered ${registeredCourses.length}) tracts ${toggle['vessel kind off'].tracts}`,
 )
+/* Region semantics: a vessel course belongs to the region its registry row names —
+ * 'vasculature' for the cerebral/brainstem arteries, 'spinal' for the six spinal
+ * courses (the v19 partition pinned in area-toggles.mjs: vessel kind = vasculature ⊎
+ * spinal). Each course is admitted by the vessel kind + its OWN region, so the area
+ * checks are per-region, never hard-coded to 'vasculature'. */
+const regionOf = (course) => getTaxonomyEntry(course.id)?.region ?? course.region
+const registeredVasculature = registeredCourses.filter((course) => regionOf(course) === 'vasculature')
+const registeredSpinal = registeredCourses.filter((course) => regionOf(course) === 'spinal')
 assert(
-  toggle['vasculature area off'].vessels === VESSEL_COURSES.length - registeredCourses.length,
-  "turning the AREA 'vasculature' off hides every registered vessel course",
-  `vessels ${toggle['vasculature area off'].vessels} (registered ${registeredCourses.length})`,
+  toggle['vasculature area off'].vessels === VESSEL_COURSES.length - registeredVasculature.length,
+  "turning the AREA 'vasculature' off hides every registered vessel course whose region is 'vasculature'",
+  `vessels ${toggle['vasculature area off'].vessels} (registered vasculature ${registeredVasculature.length})`,
+)
+assert(
+  toggle['spinal area off'].vessels === VESSEL_COURSES.length - registeredSpinal.length,
+  "turning the AREA 'spinal' off hides every registered vessel course whose region is 'spinal'",
+  `vessels ${toggle['spinal area off'].vessels} (registered spinal ${registeredSpinal.length})`,
 )
 assert(
   toggle['tract kind off'].vessels === registeredCourses.length,
@@ -575,9 +607,9 @@ assert(
     ) &&
     registeredCourses.every(
       (course) =>
-        vesselCoursesVisible([course], layerState({ regions: without('vasculature', REGIONS) })).length === 0,
+        vesselCoursesVisible([course], layerState({ regions: without(regionOf(course), REGIONS) })).length === 0,
     ),
-  'per course, the vessel kind and the vasculature area are the ONLY two controls that admit it',
+  'per course, the vessel kind and its OWN region (vasculature ⊎ spinal) are the ONLY two controls that admit it',
   `${registeredCourses.length} registered course(s)`,
 )
 

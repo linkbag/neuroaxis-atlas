@@ -60,14 +60,17 @@
  *      asserted, so it cannot grow silently. This is the check that sees a renamed
  *      or deleted id left behind in a reference or a sentence.
  *  14  every vessel course starts on its parent artery: the parent must own a
- *      committed manifest body, and the first waypoint must either lie on that body
- *      (≤ 0.5 au from its bbox) or the course must DECLARE its provenance
- *      (`basis` + `waypointBasis[0]` + `anchorNote`). Covers the 39 authored JSON
+ *      committed manifest body OR be itself a drawn course record (the procedural
+ *      spinal chain ASA → radiculomedullary → Adamkiewicz owns no baked bodies),
+ *      and the first waypoint must either lie on that parent (≤ 0.5 au from its
+ *      body bbox or its waypoint polyline) or the course must DECLARE its
+ *      provenance (`basis` + `waypointBasis[0]` + `anchorNote`); a parent-less
+ *      course passes only on that declaration. Covers the 45 authored JSON
  *      courses and the 4 `BUILT_IN_VESSEL_COURSES` chunks (symbolic first waypoints
  *      such as `M1_TAKEOFF` are resolved from the literal constant table in the
- *      same file). Measured, not assumed: the five off-parent courses are printed
- *      with their distances (max 56.31 au, the distal MCA branches that arise
- *      beyond the committed M1/M2 mesh).
+ *      same file). Measured, not assumed: the off-parent courses are printed
+ *      with their distances (the distal MCA branches arise beyond the committed
+ *      M1/M2 mesh; the spinal feeders arise at their own root levels).
  *  15  every structure kind and every manifest hint has a material preset:
  *      `KIND_OPACITY` covers exactly `ALL_KINDS`, every `MATERIAL_HINTS` value has
  *      a `case` in `makeAnatomyMaterial`, every manifest `materialHint` is a
@@ -695,13 +698,17 @@ start('13. every id named anywhere in the data resolves (the orphaned-reference 
  *
  * Measured two ways, because "near" is not one number:
  *   • the parent (`vesselCourse.parentArtery`, else the record's `parent`) must own
- *     at least one committed manifest body — a renamed parent fails here;
- *   • the first waypoint must either lie ON that body (≤ 0.5 au from its bbox) or
- *     the course must DECLARE its provenance (`basis` in {documented-course,
- *     bp3d-element} AND a `waypointBasis[0]` AND an `anchorNote`) — which is what
- *     the four distal MCA branches do: they arise beyond the committed M1/M2 mesh,
- *     on the cortex they were projected onto.
- * Covers both sources: the 39 authored JSON courses and the 4 `BUILT_IN_VESSEL_COURSES`
+ *     at least one committed manifest body or be itself a drawn course record (the
+ *     procedural spinal chain ASA → radiculomedullary → Adamkiewicz owns no baked
+ *     GLB bodies at all) — a renamed parent fails here either way;
+ *   • the first waypoint must either lie ON that parent (≤ 0.5 au from its body
+ *     bbox or its waypoint polyline) or the course must DECLARE its provenance
+ *     (`basis` in {documented-course, bp3d-element} AND a `waypointBasis[0]` AND
+ *     an `anchorNote`) — which is what the four distal MCA branches do (they arise
+ *     beyond the committed M1/M2 mesh, on the cortex they were projected onto) and
+ *     what the parent-less spinal veins do (the internal vertebral venous plexus is
+ *     unmodeled).
+ * Covers both sources: the 45 authored JSON courses and the 4 `BUILT_IN_VESSEL_COURSES`
  * chunks in `src/geometry/vasculature-courses.ts` (their symbolic first waypoint —
  * `M1_TAKEOFF` … — is resolved from the literal constant table in the same file). */
 start('14. every vessel course starts on its parent artery, or states its provenance')
@@ -737,6 +744,7 @@ start('14. every vessel course starts on its parent artery, or states its proven
       source: 'authored json',
       parent: vc.parentArtery ?? r.parent ?? null,
       first: vc.waypoints[0],
+      waypoints: Array.isArray(vc.waypoints) ? vc.waypoints : [],
       basis: vc.basis ?? null,
       waypointBasis: Array.isArray(vc.waypointBasis) ? vc.waypointBasis : [],
       hasAnchorNote: typeof vc.anchorNote === 'string' && vc.anchorNote.trim().length > 0,
@@ -769,42 +777,88 @@ start('14. every vessel course starts on its parent artery, or states its proven
       source: 'built-in ts',
       parent: /parent: '([^']+)'/.exec(chunk)?.[1] ?? null,
       first,
+      waypoints: first === null ? [] : [first],
       basis: /basis: '([^']+)'/.exec(chunk)?.[1] ?? null,
       waypointBasis: [...chunk.matchAll(/waypointBasis:\s*\[([^\]]*)\]/g)].flatMap((m) => m[1].split(',').map((s) => s.trim().replace(/['"]/g, '')).filter(Boolean)),
       hasAnchorNote: /anchorNote:\s*'/.test(chunk),
     })
   }
-  equal('the check really read both course sources (39 authored JSON courses + 4 built-in chunks = 43 rows)', rows.length, 43)
-  const unknownParent = rows.filter((row) => row.parent === null || bodyOfParent(row.parent).length === 0)
+  equal('the check really read both course sources (45 authored JSON courses + 4 built-in chunks = 49 rows)', rows.length, 49)
+  const declaresProvenance = (row) =>
+    ['documented-course', 'bp3d-element'].includes(row.basis) &&
+    row.waypointBasis.length > 0 &&
+    row.hasAnchorNote
+  /* A parent resolves when it owns a committed manifest body OR is itself a drawn
+   * course row — the procedural spinal chain (ASA → vasc-anterior-radiculomedullary-arteries
+   * → vasc-artery-of-adamkiewicz) parents onto courses that own no baked GLB, and
+   * the two spinal veins declare an unmodeled parent (the internal vertebral venous
+   * plexus) with full provenance. Teeth kept: a renamed parent id is neither a
+   * manifest slug prefix nor a drawn course row, so it still fails here. */
+  const courseRowIds = new Set(rows.map((row) => row.id))
+  const waypointsOf = new Map()
+  for (const row of rows) {
+    const prev = waypointsOf.get(row.id)
+    if (prev === undefined || row.waypoints.length > prev.length) waypointsOf.set(row.id, row.waypoints)
+  }
+  const unknownParent = rows.filter((row) => {
+    if (row.parent === null) return !declaresProvenance(row)
+    return bodyOfParent(row.parent).length === 0 && !courseRowIds.has(row.parent)
+  })
   unknownParent.length === 0
-    ? ok(`every course's parent artery owns a committed manifest body (${rows.length} courses, ${new Set(rows.map((r) => r.parent)).size} distinct parents)`)
+    ? ok(`every course's parent resolves — manifest body or drawn course — or the course declares its provenance (${rows.length} courses, ${new Set(rows.map((r) => r.parent)).size} distinct parents)`)
     : bad('course parent with no committed body (renamed parent?)', unknownParent.map((r) => `${r.id} → ${r.parent}`).join(' · '))
   const unparsed = rows.filter((row) => !Array.isArray(row.first) || row.first.length !== 3 || row.first.some((v) => !Number.isFinite(v)))
   unparsed.length === 0
     ? ok('every course\'s first waypoint was parsed to three finite numbers (no vacuous skip)')
     : bad('first waypoint could not be parsed', unparsed.map((r) => `${r.id} (${r.source})`).join(' · '))
+  const distToSegment = (point, a, b) => {
+    const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]]
+    const ap = [point[0] - a[0], point[1] - a[1], point[2] - a[2]]
+    const ab2 = ab[0] * ab[0] + ab[1] * ab[1] + ab[2] * ab[2]
+    const t = ab2 === 0 ? 0 : Math.max(0, Math.min(1, (ap[0] * ab[0] + ap[1] * ab[1] + ap[2] * ab[2]) / ab2))
+    const d = [ap[0] - ab[0] * t, ap[1] - ab[1] * t, ap[2] - ab[2] * t]
+    return Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2])
+  }
   const measured = []
   const unfounded = []
+  const declaredNoGeometry = []
   for (const row of rows) {
     if (unparsed.includes(row)) continue
-    const bodies = bodyOfParent(row.parent)
-    if (bodies.length === 0) continue
-    const distance = Math.min(...bodies.map((body) => distToBox(row.first, body.bbox)))
+    const bodies = row.parent === null ? [] : bodyOfParent(row.parent)
+    let distance = null
+    if (bodies.length > 0) {
+      distance = Math.min(...bodies.map((body) => distToBox(row.first, body.bbox)))
+    } else if (row.parent !== null && courseRowIds.has(row.parent)) {
+      /* The parent is itself a drawn course row (the procedural spinal chain
+       * ASA → vasc-anterior-radiculomedullary-arteries → vasc-artery-of-adamkiewicz,
+       * none of which owns a baked GLB body). Measure the first waypoint against
+       * the parent course's waypoint polyline instead of silently skipping it. */
+      const parentWps = waypointsOf.get(row.parent) ?? []
+      if (parentWps.length === 1) {
+        distance = Math.hypot(row.first[0] - parentWps[0][0], row.first[1] - parentWps[0][1], row.first[2] - parentWps[0][2])
+      } else if (parentWps.length > 1) {
+        distance = Math.min(...parentWps.slice(0, -1).map((wp, i) => distToSegment(row.first, wp, parentWps[i + 1])))
+      }
+    }
+    if (distance === null) {
+      /* No measurable parent geometry at all (parent-less vein whose parent is the
+       * unmodeled internal vertebral venous plexus). Honesty: require the declared
+       * provenance trio here rather than passing by being skipped. */
+      if (declaresProvenance(row)) declaredNoGeometry.push(row)
+      else unfounded.push(`${row.id} (no measurable parent geometry for ${row.parent ?? 'null'}, no declared provenance)`)
+      continue
+    }
     row.distance = distance
     measured.push(row)
     const onParent = distance <= 0.5
-    const declaresProvenance =
-      ['documented-course', 'bp3d-element'].includes(row.basis) &&
-      row.waypointBasis.length > 0 &&
-      row.hasAnchorNote
-    if (!onParent && !declaresProvenance) unfounded.push(`${row.id} (${distance.toFixed(2)} au off ${row.parent})`)
+    if (!onParent && !declaresProvenance(row)) unfounded.push(`${row.id} (${distance.toFixed(2)} au off ${row.parent})`)
   }
   unfounded.length === 0
-    ? ok(`every course either starts on its parent's committed body or declares its provenance (${measured.filter((r) => r.distance <= 0.5).length} on-body, ${measured.filter((r) => r.distance > 0.5).length} declared-offset)`)
+    ? ok(`every course either starts on its parent (committed body or drawn parent course, measured) or declares its provenance (${measured.filter((r) => r.distance <= 0.5).length} on-parent, ${measured.filter((r) => r.distance > 0.5).length} declared-offset, ${declaredNoGeometry.length} declared with unmodeled parent)`)
     : bad('course starts off its parent artery with no declared provenance', unfounded.join(' · '))
   const offsets = measured.filter((row) => row.distance > 0.5).sort((a, b) => b.distance - a.distance)
   info(
-    `off-parent courses (measured distance from waypoint[0] to the parent body's bbox): ` +
+    `off-parent courses (measured distance from waypoint[0] to the parent body's bbox or the parent course's polyline): ` +
       (offsets.length === 0 ? 'none' : offsets.map((row) => `${row.id} ${row.distance.toFixed(2)} au (${row.basis})`).join(' · ')) +
       ` · max on any course ${Math.max(...measured.map((row) => row.distance)).toFixed(2)} au`,
   )
