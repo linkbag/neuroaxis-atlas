@@ -38,6 +38,22 @@ export type Vec3 = [number, number, number];
 
 export interface ClinicalItem { syndrome: string; findings: string; vascular?: string; note?: string }
 
+/**
+ * SPINAL_CORD_PLAN §5 (lead contract call #1) — the second authoring form of
+ * level addressing. A record states its transverse extent as a named spinal
+ * segment span; `src/data/levelAddressing.ts` (the ONE shared helper) expands
+ * `segments` into concrete level-anchor ids at load, so the section machinery
+ * only ever sees `levels[]`. Where both forms are present they must agree.
+ * `yTop`/`yBottom` are descriptive rendering extents (schematic y mapping);
+ * `basis` records the anatomical authority for the extent.
+ */
+export interface SpinalSpan {
+  segments: string;                  // 'all' | 'T1-L2' | 'C5-T1, L2-S3' …
+  yTop: number;
+  yBottom: number;
+  basis: string;
+}
+
 export interface StructureRecord {
   id: string; name: string; synonyms?: string[];
   region: Region; subdivision: string; kind: Kind; laterality: Laterality;
@@ -46,7 +62,8 @@ export interface StructureRecord {
   connections?: { afferent?: string[]; efferent?: string[] };
   bloodSupply?: string;
   clinical?: ClinicalItem[];
-  levels?: string[];                 // level ids where visible
+  levels?: string[];                 // level ids where visible (form (a); see SpinalSpan)
+  spinalSpan?: SpinalSpan;           // form (b) — expanded into levels[] at load
   origin3d?: Vec3;                   // canonical space (one side for paired; renderer mirrors)
   size3d?: Vec3;                     // ellipsoid radii
   refs?: string[];                   // e.g. "Blumenfeld, 2nd ed., Ch. 'Diencephalon…'"
@@ -95,6 +112,7 @@ export interface TractRecord {
   waypoints: Vec3[];                 // Catmull-Rom control points (canonical space)
   tubeRadius: number; color: string;
   levels?: string[]; refs?: string[]; synonyms?: string[];
+  spinalSpan?: SpinalSpan;           // form (b) of level addressing — expanded at load
 }
 
 export interface SyndromeRecord {

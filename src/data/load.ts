@@ -15,11 +15,13 @@ import type {
   Kind,
   PlateRecord,
   Region,
+  SpinalSpan,
   StructureRecord,
   SyndromeRecord,
   TaxonomyEntry,
   TractRecord,
 } from '../types'
+import { expandSpinalSpan, SPINAL_SEGMENT_IDS } from './levelAddressing'
 import taxonomyJson from './taxonomy.json'
 import levelsJson from './levels.json'
 // v9: the somatotopic map's tree order. A pure data module (no three.js), so the
@@ -151,6 +153,38 @@ export const plates: PlateRecord[] = dedupeById(
 const taxonomyById = new Map(taxonomy.map((e) => [e.id, e] as const))
 const levelById = new Map(levels.map((l) => [l.id, l] as const))
 const recordById = new Map(allRecords.map((r) => [r.id, r] as const))
+
+/* ------------------------------------------ level addressing (contract call #1)
+ * A record addresses its transverse levels either explicitly (`levels[]`, form
+ * (a)) or through a `spinalSpan` (form (b)). The span's expansion into concrete
+ * segment level ids is computed HERE, by the ONE shared helper
+ * (src/data/levelAddressing.ts), so downstream code — sections, ruler, gates —
+ * only ever sees `levels[]` and never has to know about spans. Where both forms
+ * are present they must agree; the load throws otherwise (and
+ * scripts/verify/audit-facts.mjs pins the same agreement).
+ */
+for (const id of SPINAL_SEGMENT_IDS) {
+  if (!levelById.has(id)) {
+    throw new Error(`load: levelAddressing derives "${id}" but levels.json has no such anchor`)
+  }
+}
+for (const record of allRecords) {
+  const span = record.spinalSpan as SpinalSpan | undefined
+  if (!span) continue
+  const expanded = expandSpinalSpan(span)
+  if (!Array.isArray(record.levels) || record.levels.length === 0) {
+    record.levels = expanded
+    continue
+  }
+  const a = [...expanded].sort()
+  const b = [...record.levels].sort()
+  if (a.length !== b.length || a.some((id, i) => id !== b[i])) {
+    throw new Error(
+      `load: ${record.id} — spinalSpan expands to [${expanded.join(', ')}] but levels[] says [`
+      + `${record.levels.join(', ')}] (contract call #1: the two level-addressing forms must agree)`,
+    )
+  }
+}
 const plateById = new Map(plates.map((p) => [p.id, p] as const))
 
 const syndromesByStructure = new Map<string, SyndromeRecord[]>()

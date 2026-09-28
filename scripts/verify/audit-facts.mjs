@@ -23,8 +23,10 @@
  *      was not" — the one live v15 defect this gate pins.)
  *   4  ids are unique, display names are unique across structures + tracts, and
  *      every id's prefix matches its declared kind.
- *   5  every `levels[]` id in structures, tracts and plate manifests resolves in
- *      levels.json, and the anchor table is strictly increasing in y.
+ *   5  every record resolves its level addressing — explicit `levels[]` (form a)
+ *      or a `spinalSpan` expanded by the ONE shared helper (form b) — every id
+ *      resolves in levels.json, and where both forms are present they agree.
+ *      The anchor table is strictly increasing in y.
  *   6  the syndrome ↔ artery link is two-sided: every artery `supply[]` id is a
  *      real card, and every card that names a vascular territory is supplied by
  *      at least one artery record (the four genuinely non-arterial cards are the
@@ -88,7 +90,7 @@
  * tree, which is how groups 13–16 were bite-tested.
  */
 import { readFileSync, readdirSync, existsSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -156,6 +158,13 @@ const RECORDS = [...structures, ...tracts]
 const IDS = new Set(RECORDS.map((r) => r.id))
 const LEVEL_IDS = new Set(levels.map((l) => l.id))
 const SYNDROME_IDS = new Set(syndromes.map((s) => s.id))
+
+/* The ONE shared level-addressing helper (src/data/levelAddressing.ts) — the
+   same pure module the load pipeline runs (contract call #1: one expansion, so
+   the section machinery never has to know about spans). Imported by file URL
+   like the other Node gates import src TS modules; AUDIT_FACTS_ROOT copies are
+   honoured because P() resolves against ROOT. */
+const { expandSpinalSpan } = await import(pathToFileURL(P('src/data/levelAddressing.ts')).href)
 
 /**
  * CLIP_BOUNDS is read from its single declaration site — the same discipline the
@@ -293,20 +302,44 @@ start('4. ids are unique, display names are unique, id prefixes match kinds')
     : bad('id prefix / kind mismatch', badPrefix.join(' · '))
 }
 
-/* ══════════════════════════ 5. levels[] resolve ═══════════════════════════ */
-start('5. every levels[] id resolves, and the anchor table is strictly increasing in y')
+/* ══════════════════════ 5. level addressing resolves ══════════════════════ */
+start('5. every record resolves its levels (explicit levels[] or a spinalSpan expansion), and the anchor table is strictly increasing in y')
 {
   const badLevels = []
+  const badAgree = []
   for (const r of RECORDS) {
-    if (!Array.isArray(r.levels)) { badLevels.push(`${r.id} has no levels[]`); continue }
-    for (const l of r.levels) if (!LEVEL_IDS.has(l)) badLevels.push(`${r.id} → ${l}`)
+    /* Form (b): a spinalSpan expands to concrete ids through the ONE shared
+       helper (src/data/levelAddressing.ts) — the same code the load runs, so
+       the gate and the shipped data can never drift apart. */
+    let expanded = null
+    if (r.spinalSpan) {
+      try { expanded = expandSpinalSpan(r.spinalSpan) } catch (err) { badLevels.push(`${r.id} spinalSpan: ${err.message}`) }
+    }
+    if (Array.isArray(r.levels)) {
+      for (const l of r.levels) if (!LEVEL_IDS.has(l)) badLevels.push(`${r.id} → ${l}`)
+      if (expanded) {
+        const a = [...expanded].sort()
+        const b = [...r.levels].sort()
+        if (a.length !== b.length || a.some((id, i) => id !== b[i])) {
+          badAgree.push(`${r.id} span[${a.join(', ')}] ≠ levels[${b.join(', ')}]`)
+        }
+      }
+    } else if (expanded) {
+      if (expanded.length === 0) badLevels.push(`${r.id} spinalSpan expands to no level ids`)
+      for (const l of expanded) if (!LEVEL_IDS.has(l)) badLevels.push(`${r.id} → ${l} (spinalSpan)`)
+    } else {
+      badLevels.push(`${r.id} has no levels[] and no spinalSpan`)
+    }
   }
   for (const p of plates) {
     if (p.levelId !== undefined && p.levelId !== null && !LEVEL_IDS.has(p.levelId)) badLevels.push(`${p.id} → ${p.levelId}`)
   }
   badLevels.length === 0
-    ? ok(`every level id in ${RECORDS.length} records and ${plates.length} plate manifests resolves against ${levels.length} anchors`)
+    ? ok(`every level id in ${RECORDS.length} records (levels[] or a spinalSpan expansion) and ${plates.length} plate manifests resolves against ${levels.length} anchors`)
     : bad('unresolved level ids', badLevels.join(' · '))
+  badAgree.length === 0
+    ? ok('where a record carries both forms, the spinalSpan expansion and levels[] agree (contract call #1)')
+    : bad('level-addressing forms disagree', badAgree.join(' · '))
   const sorted = [...levels].sort((a, b) => a.y - b.y)
   const increasing = sorted.every((l, i) => i === 0 || l.y > sorted[i - 1].y)
   increasing

@@ -2032,13 +2032,19 @@ RUNNERS.nerve = async () => {
    * dropped append fails here by name; what changed is the expected value (the two
    * families that are now appended) and the direction of the failure (it now fails
    * if a family is REMOVED, which is the regression this repo can actually
-   * suffer). */
+   * suffer).
+   *
+   * SPINAL_CORD_PLAN (task spinal-platform): `spinal-geometry` added the third
+   * procedural family (`registrySpinalParts` — the cord's segment tiles) to the
+   * same handoff, so the pin grows with it: three families, still in append
+   * order, still failing by name on any dropped or reordered append. Extended,
+   * not relaxed. */
   const canvasSource = readSource('src/components/section/SectionCanvas.tsx')
   const registryPushes = [...canvasSource.matchAll(/registryParts\.push\(\.\.\.(\w+)\(\)\)/g)].map((match) => match[1])
   equalJson(
-    'SectionCanvas.tsx hands the worker every procedural family it builds (v19: nerve AND vessel — the v17 handoff is closed)',
+    'SectionCanvas.tsx hands the worker every procedural family it builds (v19: nerve, vessel AND spinal — the v17 handoff is closed)',
     registryPushes,
-    ['registryNerveParts', 'registryVesselParts'],
+    ['registryNerveParts', 'registryVesselParts', 'registrySpinalParts'],
   )
   info(
     `[2D handoff] SectionCanvas.tsx appends ${JSON.stringify(registryPushes)} to the worker registry; ` +
@@ -3304,8 +3310,9 @@ console.log('  metas additionally need the vasculature REGION, the 138 committed
 console.log('  worker\'s own extractContours slices a real cross-section out of every one of the 103 registry')
 console.log('  parts (24 nerve = 12 authored + 12 mirrored; 79 vessel = 41 authored + 38 mirrored, each twin')
 console.log('  proven the x → −x reflection of its authored side). The v17 vessel handoff is now CLOSED and the')
-console.log('  pin was re-pointed at v19: SectionCanvas.tsx appends BOTH registryNerveParts() and')
-console.log('  registryVesselParts(), so the vessel contours the worker slices are painted in the live section')
+console.log('  pin was re-pointed at v19 and extended by the spinal run: SectionCanvas.tsx appends')
+console.log('  registryNerveParts(), registryVesselParts() AND registrySpinalParts(), so the vessel contours')
+console.log('  the worker slices are painted in the live section')
 console.log('  and the PiP instead of being dropped. The v11')
 console.log('  item-4 divergence is re-measured at every plane the browser lane names. Payload invariants')
 console.log('  unchanged: the manifest still holds 138 parts, no nrv-*.glb exists and no committed GLB carries a')
