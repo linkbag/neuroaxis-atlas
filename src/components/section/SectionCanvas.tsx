@@ -194,6 +194,8 @@ import {
   isCorticalRibbonSlug,
   partsForCanvas,
   registryNerveParts,
+  registrySpinalParts,
+  spinalPartsForCanvas,
   registryPartFromGeometry,
   registryVesselParts,
   useSectionGeometryStatus,
@@ -1241,6 +1243,16 @@ function ensureRenderOrder(
   const visible = partsForCanvas().filter(
     (meta) => isPartVisible(meta, args.state.layers),
   ).sort((a, b) => kindRankOf(a.kind) - kindRankOf(b.kind))
+  // Spinal cord (plan §6): the procedural cord bodies are a NEW list appended
+  // here — `partsForCanvas()` and its pinned count identity stay byte-identical
+  // (vessel-render.mjs pins both) — and the SAME `isPartVisible` decision gates
+  // them, so the Areas "Spinal cord" toggle and the Systems row control the
+  // spinal contours exactly as they control every other part. The re-sort keeps
+  // one draw order across both lists (Array#sort is stable).
+  visible.push(
+    ...spinalPartsForCanvas().filter((meta) => isPartVisible(meta, args.state.layers)),
+  )
+  visible.sort((a, b) => kindRankOf(a.kind) - kindRankOf(b.kind))
 
   // Path2D reuse: a path is kept while its contours AND the transform are
   // unchanged, which is exactly what the cache key encodes. Rebuilding drops
@@ -2170,6 +2182,11 @@ export default function SectionCanvas({ onOpenPlate }: SectionCanvasProps) {
     // docs/audit/v19/CORRECTIONS.md shows ≤ 124 loops/plane after the handoff
     // (80 today) against DEGRADE_LOOP_LIMIT = 4000 — 0 / 53 planes degrade.
     registryParts.push(...registryVesselParts())
+    // Spinal cord (plan §6): the procedural cord bodies — one part per spinal
+    // body plus a `#mirror` twin per paired one — through the same shared
+    // `registryPartFromGeometry` adapter. SEPARATE line for the same reason as
+    // the vessel append above: the nerve call site stays verbatim-pinned.
+    registryParts.push(...registrySpinalParts())
     if (registryParts.length === 0) {
       // Nothing loaded and nothing pending: a real failure. Record it but let a
       // later geometry arrival clear it (the worker/store subscription keeps

@@ -35,6 +35,8 @@ import {
 } from '../../geometry/vasculature-courses'
 import { tubeGeometryFor } from '../viewer3d/TractTube'
 import type { WorkerRegistryPart } from './contourWorker'
+import { SPINAL_REGION } from '../../geometry/spinalCord'
+import { SPINAL_PARTS, spinalGeometry, type SpinalPart } from '../../geometry/spinalParts'
 
 /** Draw buckets — lower is painted first (section canvases stack under
  *  envelopes → ventricles → nuclei, mirroring scene layering). */
@@ -379,6 +381,76 @@ export function registryVesselParts(): WorkerRegistryPart[] {
  */
 export function registryCoursePartsAll(): WorkerRegistryPart[] {
   return [...registryNerveParts(), ...registryVesselParts()]
+}
+
+/* --------------------------------------------- spinal cord (plan §5/§6) */
+
+/**
+ * The spinal part table as section metas — one meta per procedural spinal body
+ * (src/geometry/spinalParts.ts `SPINAL_PARTS`). Same adapter rules as
+ * `courseMeta` above: `slug` is the worker registry key, `group` is the
+ * selection group (the plan's taxonomy subdivisions), `region` is the spinal
+ * region, `kind` is the part's 2D DRAW BUCKET (context → ventricle → nucleus
+ * in SECTION_KIND_ORDER, so gray matter paints over the white zones — the
+ * histology reading the plan asks for), and `taxonomyKind` is the record's OWN
+ * kind when the registry has an entry, falling back to the part's declared
+ * kind — the SAME expression the 3D mount uses (`getTaxonomyEntry(recordId)
+ * ?.kind ?? part.taxonomyKind`), so the two surfaces cannot disagree.
+ */
+function spinalMeta(part: SpinalPart): SectionPartMeta {
+  const entry = getTaxonomyEntry(part.recordId)
+  return {
+    slug: part.slug,
+    group: part.group,
+    region: SPINAL_REGION,
+    kind: part.bucket,
+    taxonomyKind: entry?.kind ?? part.taxonomyKind,
+    color: entry?.color ?? part.color,
+  }
+}
+
+/**
+ * One section part per spinal body, in part-table order (stable). These are a
+ * NEW list — `partsForCanvas()` and its pinned count identity stay
+ * byte-identical (vessel-render.mjs pins both), so the canvas appends these
+ * through `spinalPartsForCanvas()` and the worker gets them through
+ * `registrySpinalParts()`.
+ */
+export const SECTION_SPINAL_PARTS: readonly SectionPartMeta[] = SPINAL_PARTS.map(spinalMeta)
+
+/** What the live section additionally paints at spinal levels (y < −50). */
+export function spinalPartsForCanvas(): readonly SectionPartMeta[] {
+  return SECTION_SPINAL_PARTS
+}
+
+/**
+ * The spinal part of the worker registry — the procedural cord geometry copied
+ * by the shared `registryPartFromGeometry` adapter, one part per body plus one
+ * `#mirror` twin per PAIRED body (patient-left is authored, the twin is the
+ * x → −x reflection under the same suffix convention the courses use, so
+ * `contourSlugsFor`'s `[slug, slug#mirror]` lookup finds both sides).
+ *
+ * "The same geometry feeds 2D and 3D" is by construction here: both surfaces
+ * read `spinalGeometry(slug)`, which memoizes one BufferGeometry per slug per
+ * session, and `registryPartFromGeometry` copies (never shares) the arrays so
+ * the worker transfer cannot detach the 3D scene's buffers.
+ */
+export function registrySpinalParts(): WorkerRegistryPart[] {
+  const parts: WorkerRegistryPart[] = []
+  for (const part of SPINAL_PARTS) {
+    const geometry = spinalGeometry(part.slug)
+    if (geometry !== null) {
+      const made = registryPartFromGeometry(spinalMeta(part), geometry)
+      if (made !== null) parts.push(made)
+    }
+    if (!part.paired) continue
+    const mirrorSlug = `${part.slug}#mirror`
+    const mirrored = spinalGeometry(mirrorSlug)
+    if (mirrored === null) continue
+    const mirrorMade = registryPartFromGeometry({ ...spinalMeta(part), slug: mirrorSlug }, mirrored)
+    if (mirrorMade !== null) parts.push(mirrorMade)
+  }
+  return parts
 }
 
 /* ------------------------------------------------- v9 cortical-lobe layer */

@@ -73,6 +73,33 @@ import {
   isPairedVessel,
   type VesselCourseRecord,
 } from '../../geometry/vasculature-courses'
+import SpinalBodyMesh from './SpinalBodyMesh'
+import { SPINAL_REGION } from '../../geometry/spinalCord'
+import { SPINAL_PARTS, spinalGeometry, spinalRecordPart, type SpinalPart } from '../../geometry/spinalParts'
+
+/* ------------------------------------------------------- spinal cord (v20) */
+
+/**
+ * The KIND a spinal part is gated by — the record's OWN registry kind when the
+ * record has landed in taxonomy.json, the part's declared kind otherwise. The
+ * SAME resolution `sectionAssets.spinalMeta` writes into `taxonomyKind`, so the
+ * 2D `isPartVisible` decision and the 3D `layersAdmit` decision below can
+ * never disagree (view-filter-consistency's contract).
+ */
+export function spinalPartKind(part: SpinalPart): string {
+  return getTaxonomyEntry(part.recordId)?.kind ?? part.taxonomyKind
+}
+
+/**
+ * One record, one body (spinal): a record whose id maps to a procedural spinal
+ * part (cord shell, gray H, funiculi, roots, segment band) is drawn by the
+ * spinal pass, so the ordinary structure pass must skip it. REGION-GATED so a
+ * brainstem id that merely resembles a spinal slug (tract-fasciculus-gracilis
+ * and nuc-nucleus-gracilis live in the MEDULLA) can never be suppressed.
+ */
+export function isSpinalStaticBody(recordId: string): boolean {
+  return getTaxonomyEntry(recordId)?.region === 'spinal' && spinalRecordPart(recordId) !== null
+}
 
 /** Envelope gray (plan §6 context palette) — fed to the factory material. */
 const CONTEXT_COLOR = '#94a3b8'
@@ -674,6 +701,15 @@ export default function SceneLayers() {
     () => vesselCoursesVisible(VESSEL_COURSES, layerSets),
     [layerSets],
   )
+  const visibleSpinalParts = useMemo(
+    () =>
+      SPINAL_PARTS.filter(
+        (part) =>
+          layersAdmit(layerSets, SPINAL_REGION, spinalPartKind(part)) &&
+          !layerSets.hidden.has(part.recordId),
+      ),
+    [layerSets],
+  )
 
   return (
     <group name="scene-layers">
@@ -749,6 +785,10 @@ export default function SceneLayers() {
         // NOT quoted here: a comment must not be able to satisfy a source-reading
         // assertion.
         if (hasNerveCourse(record.id) || hasVesselCourse(record.id) || hasVesselCourseGroup(record.id)) return null
+        // v20 — a spinal record whose body is the procedural part table (cord
+        // shell, gray H, funiculi, roots, segment bands) must not ALSO keep a
+        // schematic ellipsoid here: one record, one body.
+        if (isSpinalStaticBody(record.id)) return null
         // Ventricle records keep their parametric v1 shape as the fallback;
         // NucleusMesh upgrades to the committed GLB when the manifest has one.
         const override = record.kind === 'ventricle' ? cachedVentricleGeometry(record.id) : undefined
@@ -795,6 +835,9 @@ export default function SceneLayers() {
         return <Fragment key={record.id}>{leftSlugs.map((slug) => body(slug, false, slug))}</Fragment>
       })}
       {visibleTracts.map((tract) => {
+        // v20 — a spinal tract record (funiculus, rootlets) whose body is the
+        // procedural spinal part table must not also draw a course tube here.
+        if (isSpinalStaticBody(tract.id)) return null
         // v17 — paired tracts draw their MIRROR-IMAGE twin (x → −x) so both sides
         // of a bilateral pathway are on screen. The authored chain is one side's
         // anatomy, and one-sided rendering is what made crossing
@@ -841,6 +884,41 @@ export default function SceneLayers() {
           <Fragment key={course.id}>
             <TractTube tract={course} highlight={highlight} variant="vessel" />
             {paired && <TractTube tract={course} highlight={highlight} mirrored variant="vessel" />}
+          </Fragment>
+        )
+      })}
+      {/* v20 §4 — the SPINAL CORD: the procedural part table (cord shell,
+          conus/filum, gray H columns, named nuclei, funiculi zones, central
+          canal, root bundles, one band per segment). One SpinalBodyMesh per
+          part, plus the `#mirror` twin for paired parts (x → −x), gated by the
+          SAME layersAdmit decision as every other pass — `spinalPartKind`
+          resolves to exactly the 2D `isPartVisible` taxonomyKind. Clicking a
+          body selects its record (the map above skips those records, so the
+          body is unique). */}
+      {visibleSpinalParts.map((part) => {
+        const geometry = spinalGeometry(part.slug)
+        if (geometry === null) return null
+        const twin = part.paired ? spinalGeometry(`${part.slug}#mirror`) : null
+        return (
+          <Fragment key={part.slug}>
+            <SpinalBodyMesh
+              slug={part.slug}
+              recordId={part.recordId}
+              geometry={geometry}
+              materialHint={part.materialHint}
+              color={part.color}
+              highlight={highlight}
+            />
+            {twin !== null && (
+              <SpinalBodyMesh
+                slug={`${part.slug}#mirror`}
+                recordId={part.recordId}
+                geometry={twin}
+                materialHint={part.materialHint}
+                color={part.color}
+                highlight={highlight}
+              />
+            )}
           </Fragment>
         )
       })}
