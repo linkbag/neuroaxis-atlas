@@ -1,0 +1,1979 @@
+[
+  {
+    "id": "ctx-seg-c1",
+    "name": "Spinal segment C1",
+    "synonyms": [
+      "C1 segment",
+      "segmentum spinale C1"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The C1 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the C1 nerve root. Its cutaneous field is the C1 dermatome (none — the C1 nerve has no cutaneous distribution), and its ventral horn motor neurons supply the suboccipital muscles (rectus capitis posterior major and minor, obliquus capitis superior and inferior). The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the C1 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the C1 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "C1 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the suboccipital muscles (rectus capitis posterior major and minor, obliquus capitis superior and inferior); sensory involvement produces numbness or neuropathic pain of none — the C1 nerve has no cutaneous distribution, with loss of the segmental reflex arc. The root is essentially motor; isolated injury produces suboccipital weakness and neck pain without a dermatome."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C1",
+      "yTop": -50,
+      "yBottom": -63.74,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1"
+    ],
+    "origin3d": [
+      2.75,
+      -56.870000000000005,
+      0
+    ],
+    "size3d": [
+      2.75,
+      6.870000000000001,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-c2",
+    "name": "Spinal segment C2",
+    "synonyms": [
+      "C2 segment",
+      "segmentum spinale C2"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The C2 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the C2 nerve root. Its cutaneous field is the C2 dermatome (the occiput and the skin behind the ear), and its ventral horn motor neurons supply the deep neck extensors together with C3. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the C2 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the C2 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "C2 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the deep neck extensors together with C3; sensory involvement produces numbness or neuropathic pain of the occiput and the skin behind the ear, with loss of the segmental reflex arc. C2 radiculopathy causes occipital pain and numbness and is a mimic of occipital neuralgia."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C2",
+      "yTop": -63.74,
+      "yBottom": -77.47,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c2"
+    ],
+    "origin3d": [
+      2.75,
+      -70.605,
+      0
+    ],
+    "size3d": [
+      2.75,
+      6.864999999999998,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-c3",
+    "name": "Spinal segment C3",
+    "synonyms": [
+      "C3 segment",
+      "segmentum spinale C3"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The C3 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the C3 nerve root. Its cutaneous field is the C3 dermatome (the neck above the clavicle), and its ventral horn motor neurons supply the deep neck flexor and infrahyoid muscles with C2 and C4. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the C3 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the C3 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "C3 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the deep neck flexor and infrahyoid muscles with C2 and C4; sensory involvement produces numbness or neuropathic pain of the neck above the clavicle, with loss of the segmental reflex arc. Isolated lesions are rare; high cervical injury at C3-C5 threatens the phrenic nucleus and ventilation."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C3",
+      "yTop": -77.47,
+      "yBottom": -91.21,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c3"
+    ],
+    "origin3d": [
+      2.75,
+      -84.34,
+      0
+    ],
+    "size3d": [
+      2.75,
+      6.869999999999997,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-c4",
+    "name": "Spinal segment C4",
+    "synonyms": [
+      "C4 segment",
+      "segmentum spinale C4"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The C4 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the C4 nerve root. Its cutaneous field is the C4 dermatome (the shoulder and the upper chest), and its ventral horn motor neurons supply the diaphragm with C3 and C5. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the C4 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the C4 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "C4 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the diaphragm with C3 and C5; sensory involvement produces numbness or neuropathic pain of the shoulder and the upper chest, with loss of the segmental reflex arc. Shoulder and supraclavicular numbness with a weak diaphragm (raised hemidiaphragm) in upper cervical root lesions."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C4",
+      "yTop": -91.21,
+      "yBottom": -104.95,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c4"
+    ],
+    "origin3d": [
+      2.75,
+      -98.08,
+      0
+    ],
+    "size3d": [
+      2.75,
+      6.8700000000000045,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-c5",
+    "name": "Spinal segment C5",
+    "synonyms": [
+      "C5 segment",
+      "segmentum spinale C5"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The C5 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the C5 nerve root. Its cutaneous field is the C5 dermatome (the lateral upper arm), and its ventral horn motor neurons supply the deltoid (shoulder abduction) and biceps (elbow flexion). The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the C5 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the C5 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "C5 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the deltoid (shoulder abduction) and biceps (elbow flexion); sensory involvement produces numbness or neuropathic pain of the lateral upper arm, with loss of the segmental reflex arc. Weak shoulder abduction and elbow flexion with a reduced biceps reflex; the level of the cervical enlargement motor pools."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C5",
+      "yTop": -104.95,
+      "yBottom": -118.68,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c5"
+    ],
+    "origin3d": [
+      2.75,
+      -111.815,
+      0
+    ],
+    "size3d": [
+      2.75,
+      6.865000000000002,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-c6",
+    "name": "Spinal segment C6",
+    "synonyms": [
+      "C6 segment",
+      "segmentum spinale C6"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The C6 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the C6 nerve root. Its cutaneous field is the C6 dermatome (the lateral forearm and the thumb), and its ventral horn motor neurons supply the biceps, brachioradialis and wrist extensors (wrist extension). The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the C6 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the C6 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "C6 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the biceps, brachioradialis and wrist extensors (wrist extension); sensory involvement produces numbness or neuropathic pain of the lateral forearm and the thumb, with loss of the segmental reflex arc. Weak wrist extension with a reduced brachioradialis reflex and numbness of the thumb."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C6",
+      "yTop": -118.68,
+      "yBottom": -132.42,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c6"
+    ],
+    "origin3d": [
+      2.75,
+      -125.55,
+      0
+    ],
+    "size3d": [
+      2.75,
+      6.86999999999999,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-c7",
+    "name": "Spinal segment C7",
+    "synonyms": [
+      "C7 segment",
+      "segmentum spinale C7"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The C7 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the C7 nerve root. Its cutaneous field is the C7 dermatome (the middle finger and the middle forearm), and its ventral horn motor neurons supply the triceps (elbow extension) and the wrist flexors. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the C7 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the C7 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "C7 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the triceps (elbow extension) and the wrist flexors; sensory involvement produces numbness or neuropathic pain of the middle finger and the middle forearm, with loss of the segmental reflex arc. Weak elbow extension and grip with a reduced triceps reflex; the classic C7 radiculopathy of cervical spondylosis."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C7",
+      "yTop": -132.42,
+      "yBottom": -146.15,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c7"
+    ],
+    "origin3d": [
+      2.75,
+      -139.285,
+      0
+    ],
+    "size3d": [
+      2.75,
+      6.865000000000009,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-c8",
+    "name": "Spinal segment C8",
+    "synonyms": [
+      "C8 segment",
+      "segmentum spinale C8"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The C8 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the C8 nerve root. Its cutaneous field is the C8 dermatome (the medial forearm and the little finger), and its ventral horn motor neurons supply the finger flexors (grip) together with T1. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the C8 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the C8 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "C8 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the finger flexors (grip) together with T1; sensory involvement produces numbness or neuropathic pain of the medial forearm and the little finger, with loss of the segmental reflex arc. Weak finger flexion and grip with medial forearm numbness; C8 is the first root below the C7 vertebra."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C8",
+      "yTop": -146.15,
+      "yBottom": -159.89,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c8"
+    ],
+    "origin3d": [
+      2.75,
+      -153.01999999999998,
+      0
+    ],
+    "size3d": [
+      2.75,
+      6.86999999999999,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t1",
+    "name": "Spinal segment T1",
+    "synonyms": [
+      "T1 segment",
+      "thoracic segment 1",
+      "segmentum spinale T1"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T1 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T1 nerve root. Its cutaneous field is the T1 dermatome (the medial upper arm), and its ventral horn motor neurons supply the intrinsic hand muscles (finger abduction and adduction). The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T1 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T1 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T1 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intrinsic hand muscles (finger abduction and adduction); sensory involvement produces numbness or neuropathic pain of the medial upper arm, with loss of the segmental reflex arc. Weak finger spread with wasting of the hand; T1 involvement produces the lower brachial plexus (Klumpke) pattern."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T1",
+      "yTop": -159.89,
+      "yBottom": -171.82,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t1"
+    ],
+    "origin3d": [
+      1.75,
+      -165.855,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.965000000000003,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t2",
+    "name": "Spinal segment T2",
+    "synonyms": [
+      "T2 segment",
+      "thoracic segment 2",
+      "segmentum spinale T2"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T2 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T2 nerve root. Its cutaneous field is the T2 dermatome (the axilla and the upper chest), and its ventral horn motor neurons supply the intercostal and intrinsic back muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T2 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T2 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T2 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and intrinsic back muscles; sensory involvement produces numbness or neuropathic pain of the axilla and the upper chest, with loss of the segmental reflex arc. Band-like thoracic pain across the upper chest is typical of thoracic root irritation."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T2",
+      "yTop": -171.82,
+      "yBottom": -183.76,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t2"
+    ],
+    "origin3d": [
+      1.75,
+      -177.79,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.969999999999999,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t3",
+    "name": "Spinal segment T3",
+    "synonyms": [
+      "T3 segment",
+      "thoracic segment 3",
+      "segmentum spinale T3"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T3 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T3 nerve root. Its cutaneous field is the T3 dermatome (the chest wall of the third intercostal space), and its ventral horn motor neurons supply the intercostal and intrinsic back muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T3 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T3 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T3 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and intrinsic back muscles; sensory involvement produces numbness or neuropathic pain of the chest wall of the third intercostal space, with loss of the segmental reflex arc. Thoracic radiculopathy produces a band of pain and hyperaesthesia at the intercostal level."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T3",
+      "yTop": -183.76,
+      "yBottom": -195.69,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t3"
+    ],
+    "origin3d": [
+      1.75,
+      -189.725,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.965000000000003,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t4",
+    "name": "Spinal segment T4",
+    "synonyms": [
+      "T4 segment",
+      "thoracic segment 4",
+      "segmentum spinale T4"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T4 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T4 nerve root. Its cutaneous field is the T4 dermatome (the nipple line — an approximate landmark dermatome), and its ventral horn motor neurons supply the intercostal and intrinsic back muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T4 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T4 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T4 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and intrinsic back muscles; sensory involvement produces numbness or neuropathic pain of the nipple line — an approximate landmark dermatome, with loss of the segmental reflex arc. The nipple line is a teaching landmark and varies between individuals."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T4",
+      "yTop": -195.69,
+      "yBottom": -207.62,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t4"
+    ],
+    "origin3d": [
+      1.75,
+      -201.655,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.965000000000003,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t5",
+    "name": "Spinal segment T5",
+    "synonyms": [
+      "T5 segment",
+      "thoracic segment 5",
+      "segmentum spinale T5"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T5 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T5 nerve root. Its cutaneous field is the T5 dermatome (the chest wall between the nipple and the xiphoid), and its ventral horn motor neurons supply the intercostal and intrinsic back muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T5 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T5 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T5 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and intrinsic back muscles; sensory involvement produces numbness or neuropathic pain of the chest wall between the nipple and the xiphoid, with loss of the segmental reflex arc. Thoracic radiculopathy produces a band of pain and hyperaesthesia at the intercostal level."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T5",
+      "yTop": -207.62,
+      "yBottom": -219.55,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t5"
+    ],
+    "origin3d": [
+      1.75,
+      -213.585,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.965000000000003,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t6",
+    "name": "Spinal segment T6",
+    "synonyms": [
+      "T6 segment",
+      "thoracic segment 6",
+      "segmentum spinale T6"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T6 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T6 nerve root. Its cutaneous field is the T6 dermatome (the xiphoid region — an approximate landmark dermatome), and its ventral horn motor neurons supply the intercostal and abdominal wall muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T6 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T6 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T6 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and abdominal wall muscles; sensory involvement produces numbness or neuropathic pain of the xiphoid region — an approximate landmark dermatome, with loss of the segmental reflex arc. T6 is the traditional sensory level for anterior spinal artery lesions of the mid-thoracic cord."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T6",
+      "yTop": -219.55,
+      "yBottom": -231.48,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t6"
+    ],
+    "origin3d": [
+      1.75,
+      -225.515,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.964999999999989,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t7",
+    "name": "Spinal segment T7",
+    "synonyms": [
+      "T7 segment",
+      "thoracic segment 7",
+      "segmentum spinale T7"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T7 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T7 nerve root. Its cutaneous field is the T7 dermatome (the upper abdomen below the xiphoid), and its ventral horn motor neurons supply the intercostal and abdominal wall muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T7 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T7 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T7 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and abdominal wall muscles; sensory involvement produces numbness or neuropathic pain of the upper abdomen below the xiphoid, with loss of the segmental reflex arc. Thoracic radiculopathy produces a band of pain and hyperaesthesia at the intercostal level."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T7",
+      "yTop": -231.48,
+      "yBottom": -243.42,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t7"
+    ],
+    "origin3d": [
+      1.75,
+      -237.45,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.969999999999999,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t8",
+    "name": "Spinal segment T8",
+    "synonyms": [
+      "T8 segment",
+      "thoracic segment 8",
+      "segmentum spinale T8"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T8 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T8 nerve root. Its cutaneous field is the T8 dermatome (the mid abdomen), and its ventral horn motor neurons supply the intercostal and abdominal wall muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T8 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T8 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T8 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and abdominal wall muscles; sensory involvement produces numbness or neuropathic pain of the mid abdomen, with loss of the segmental reflex arc. The mid-thoracic cord is the classic watershed of anterior spinal artery supply."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T8",
+      "yTop": -243.42,
+      "yBottom": -255.35,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t8"
+    ],
+    "origin3d": [
+      1.75,
+      -249.385,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.965000000000003,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t9",
+    "name": "Spinal segment T9",
+    "synonyms": [
+      "T9 segment",
+      "thoracic segment 9",
+      "segmentum spinale T9"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T9 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T9 nerve root. Its cutaneous field is the T9 dermatome (the abdomen above the umbilicus), and its ventral horn motor neurons supply the intercostal and abdominal wall muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T9 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T9 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T9 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and abdominal wall muscles; sensory involvement produces numbness or neuropathic pain of the abdomen above the umbilicus, with loss of the segmental reflex arc. Thoracic radiculopathy produces a band of pain and hyperaesthesia at the intercostal level."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T9",
+      "yTop": -255.35,
+      "yBottom": -267.28,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t9"
+    ],
+    "origin3d": [
+      1.75,
+      -261.315,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.964999999999989,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t10",
+    "name": "Spinal segment T10",
+    "synonyms": [
+      "T10 segment",
+      "thoracic segment 10",
+      "segmentum spinale T10"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T10 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T10 nerve root. Its cutaneous field is the T10 dermatome (the umbilulus — an approximate landmark dermatome), and its ventral horn motor neurons supply the intercostal and abdominal wall muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T10 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T10 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T10 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and abdominal wall muscles; sensory involvement produces numbness or neuropathic pain of the umbilulus — an approximate landmark dermatome, with loss of the segmental reflex arc. The umbilical level (Beevor sign level) is the traditional landmark for localizing thoracic cord lesions."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T10",
+      "yTop": -267.28,
+      "yBottom": -279.22,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t10"
+    ],
+    "origin3d": [
+      1.75,
+      -273.25,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.970000000000027,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t11",
+    "name": "Spinal segment T11",
+    "synonyms": [
+      "T11 segment",
+      "thoracic segment 11",
+      "segmentum spinale T11"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T11 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T11 nerve root. Its cutaneous field is the T11 dermatome (the lower abdomen), and its ventral horn motor neurons supply the intercostal and abdominal wall muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T11 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T11 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T11 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and abdominal wall muscles; sensory involvement produces numbness or neuropathic pain of the lower abdomen, with loss of the segmental reflex arc. Thoracic radiculopathy produces a band of pain and hyperaesthesia at the intercostal level."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T11",
+      "yTop": -279.22,
+      "yBottom": -291.15,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t11"
+    ],
+    "origin3d": [
+      1.75,
+      -285.185,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.964999999999975,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-t12",
+    "name": "Spinal segment T12",
+    "synonyms": [
+      "T12 segment",
+      "thoracic segment 12",
+      "segmentum spinale T12"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The T12 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the T12 nerve root. Its cutaneous field is the T12 dermatome (the suprapubic region and the flank), and its ventral horn motor neurons supply the intercostal and abdominal wall muscles. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the T12 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the T12 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "T12 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the intercostal and abdominal wall muscles; sensory involvement produces numbness or neuropathic pain of the suprapubic region and the flank, with loss of the segmental reflex arc. T12-L1 root pain radiates into the groin and is confused with hip disease."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "T12",
+      "yTop": -291.15,
+      "yBottom": -303.08,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-t12"
+    ],
+    "origin3d": [
+      1.75,
+      -297.115,
+      0
+    ],
+    "size3d": [
+      1.75,
+      5.965000000000003,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-l1",
+    "name": "Spinal segment L1",
+    "synonyms": [
+      "L1 segment",
+      "lumbar segment 1",
+      "segmentum spinale L1"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The L1 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the L1 nerve root. Its cutaneous field is the L1 dermatome (the groin and the upper thigh), and its ventral horn motor neurons supply the hip flexors together with L2. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the L1 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the L1 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "L1 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the hip flexors together with L2; sensory involvement produces numbness or neuropathic pain of the groin and the upper thigh, with loss of the segmental reflex arc. L1 root pain radiates to the groin; isolated lesions are uncommon."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "L1",
+      "yTop": -303.08,
+      "yBottom": -311.74,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-l1"
+    ],
+    "origin3d": [
+      1.95,
+      -307.40999999999997,
+      0
+    ],
+    "size3d": [
+      1.95,
+      4.3300000000000125,
+      3.3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-l2",
+    "name": "Spinal segment L2",
+    "synonyms": [
+      "L2 segment",
+      "lumbar segment 2",
+      "segmentum spinale L2"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The L2 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the L2 nerve root. Its cutaneous field is the L2 dermatome (the anterior thigh), and its ventral horn motor neurons supply the iliopsoas (hip flexion). The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the L2 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the L2 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "L2 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the iliopsoas (hip flexion); sensory involvement produces numbness or neuropathic pain of the anterior thigh, with loss of the segmental reflex arc. Weak hip flexion with anterior thigh numbness; the lumbosacral enlargement motor pools begin here."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "L2",
+      "yTop": -311.74,
+      "yBottom": -320.4,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-l2"
+    ],
+    "origin3d": [
+      1.95,
+      -316.07,
+      0
+    ],
+    "size3d": [
+      1.95,
+      4.329999999999984,
+      3.3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-l3",
+    "name": "Spinal segment L3",
+    "synonyms": [
+      "L3 segment",
+      "lumbar segment 3",
+      "segmentum spinale L3"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The L3 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the L3 nerve root. Its cutaneous field is the L3 dermatome (the anterior knee and the medial thigh), and its ventral horn motor neurons supply the quadriceps (knee extension). The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the L3 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the L3 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "L3 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the quadriceps (knee extension); sensory involvement produces numbness or neuropathic pain of the anterior knee and the medial thigh, with loss of the segmental reflex arc. Weak knee extension with a reduced knee reflex and numbness around the knee."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "L3",
+      "yTop": -320.4,
+      "yBottom": -329.06,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-l3"
+    ],
+    "origin3d": [
+      1.95,
+      -324.73,
+      0
+    ],
+    "size3d": [
+      1.95,
+      4.3300000000000125,
+      3.3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-l4",
+    "name": "Spinal segment L4",
+    "synonyms": [
+      "L4 segment",
+      "lumbar segment 4",
+      "segmentum spinale L4"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The L4 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the L4 nerve root. Its cutaneous field is the L4 dermatome (the medial leg and the ankle), and its ventral horn motor neurons supply the tibialis anterior (ankle dorsiflexion). The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the L4 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the L4 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "L4 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the tibialis anterior (ankle dorsiflexion); sensory involvement produces numbness or neuropathic pain of the medial leg and the ankle, with loss of the segmental reflex arc. Weak dorsiflexion gives a dropped-foot gait with a reduced knee reflex; the commonest lumbar root in disc herniation together with L5."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "L4",
+      "yTop": -329.06,
+      "yBottom": -337.71,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-l4"
+    ],
+    "origin3d": [
+      1.95,
+      -333.385,
+      0
+    ],
+    "size3d": [
+      1.95,
+      4.324999999999989,
+      3.3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-l5",
+    "name": "Spinal segment L5",
+    "synonyms": [
+      "L5 segment",
+      "lumbar segment 5",
+      "segmentum spinale L5"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The L5 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the L5 nerve root. Its cutaneous field is the L5 dermatome (the dorsum of the foot and the great toe), and its ventral horn motor neurons supply the extensor hallucis longus (great toe extension) and the hip abductors. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the L5 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the L5 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "L5 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the extensor hallucis longus (great toe extension) and the hip abductors; sensory involvement produces numbness or neuropathic pain of the dorsum of the foot and the great toe, with loss of the segmental reflex arc. Weak great toe and foot dorsiflexion with numbness of the dorsum of the foot; the commonest lumbar disc level."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "L5",
+      "yTop": -337.71,
+      "yBottom": -346.37,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-l5"
+    ],
+    "origin3d": [
+      1.95,
+      -342.03999999999996,
+      0
+    ],
+    "size3d": [
+      1.95,
+      4.3300000000000125,
+      3.3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-s1",
+    "name": "Spinal segment S1",
+    "synonyms": [
+      "S1 segment",
+      "sacral segment 1",
+      "segmentum spinale S1"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The S1 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the S1 nerve root. Its cutaneous field is the S1 dermatome (the lateral foot and the sole), and its ventral horn motor neurons supply the gastrocnemius and soleus (plantarflexion). The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the S1 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the S1 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "S1 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the gastrocnemius and soleus (plantarflexion); sensory involvement produces numbness or neuropathic pain of the lateral foot and the sole, with loss of the segmental reflex arc. Weak plantarflexion with an absent ankle reflex and numbness of the sole; S1 radiculopathy follows a lateral disc herniation."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "S1",
+      "yTop": -346.37,
+      "yBottom": -351.7,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-s1"
+    ],
+    "origin3d": [
+      1.4,
+      -349.03499999999997,
+      0
+    ],
+    "size3d": [
+      1.4,
+      2.664999999999992,
+      2.4
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-s2",
+    "name": "Spinal segment S2",
+    "synonyms": [
+      "S2 segment",
+      "sacral segment 2",
+      "segmentum spinale S2"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The S2 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the S2 nerve root. Its cutaneous field is the S2 dermatome (the posterior thigh), and its ventral horn motor neurons supply the hamstrings together with S1. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the S2 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the S2 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "S2 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the hamstrings together with S1; sensory involvement produces numbness or neuropathic pain of the posterior thigh, with loss of the segmental reflex arc. Posterior thigh pain in S2 radiculopathy; the sacral segments also carry bladder and sexual function."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "S2",
+      "yTop": -351.7,
+      "yBottom": -357.03,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-s2"
+    ],
+    "origin3d": [
+      1.4,
+      -354.365,
+      0
+    ],
+    "size3d": [
+      1.4,
+      2.664999999999992,
+      2.4
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-s3",
+    "name": "Spinal segment S3",
+    "synonyms": [
+      "S3 segment",
+      "sacral segment 3",
+      "segmentum spinale S3"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The S3 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the S3 nerve root. Its cutaneous field is the S3 dermatome (the perineum and the saddle region), and its ventral horn motor neurons supply the pelvic floor muscles with S4. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the S3 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the S3 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "S3 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the pelvic floor muscles with S4; sensory involvement produces numbness or neuropathic pain of the perineum and the saddle region, with loss of the segmental reflex arc. Saddle sensory loss with bladder dysfunction marks conus and cauda equina lesions."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "S3",
+      "yTop": -357.03,
+      "yBottom": -362.36,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-s3"
+    ],
+    "origin3d": [
+      1.4,
+      -359.695,
+      0
+    ],
+    "size3d": [
+      1.4,
+      2.6650000000000205,
+      2.4
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-s4",
+    "name": "Spinal segment S4",
+    "synonyms": [
+      "S4 segment",
+      "sacral segment 4",
+      "segmentum spinale S4"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The S4 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the S4 nerve root. Its cutaneous field is the S4 dermatome (the perianal skin), and its ventral horn motor neurons supply the anal sphincter and the pelvic floor. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the S4 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the S4 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "S4 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the anal sphincter and the pelvic floor; sensory involvement produces numbness or neuropathic pain of the perianal skin, with loss of the segmental reflex arc. Loss of anal tone and perianal sensation; the bulbocavernosus reflex is mediated at S2-S4."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "S4",
+      "yTop": -362.36,
+      "yBottom": -367.68,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-s4"
+    ],
+    "origin3d": [
+      1.4,
+      -365.02,
+      0
+    ],
+    "size3d": [
+      1.4,
+      2.6599999999999966,
+      2.4
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-s5",
+    "name": "Spinal segment S5",
+    "synonyms": [
+      "S5 segment",
+      "sacral segment 5",
+      "segmentum spinale S5"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The S5 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the S5 nerve root. Its cutaneous field is the S5 dermatome (the skin over the coccyx), and its ventral horn motor neurons supply the pelvic floor with S4. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the S5 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the S5 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "S5 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the pelvic floor with S4; sensory involvement produces numbness or neuropathic pain of the skin over the coccyx, with loss of the segmental reflex arc. The most caudal sensory segment; sacral sparing of S5 sensation is the key prognostic sign in complete cord injury."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "S5",
+      "yTop": -367.68,
+      "yBottom": -373.01,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-s5"
+    ],
+    "origin3d": [
+      1.4,
+      -370.345,
+      0
+    ],
+    "size3d": [
+      1.4,
+      2.664999999999992,
+      2.4
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-seg-co1",
+    "name": "Spinal segment Co1",
+    "synonyms": [
+      "Co1 segment",
+      "coccygeal segment",
+      "segmentum spinale coccygeum"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The Co1 segment of the spinal cord contains the sensory interneurons and motor neurons whose rootlets form the Co1 nerve root. Its cutaneous field is the Co1 dermatome (the skin over the coccyx — a minimal cutaneous territory), and its ventral horn motor neurons supply the small intrinsic muscles of the coccyx. The dorsal rootlets deliver primary afferents to the dorsal horn and the ventral rootlets carry motor axons out through the intervertebral foramen; the roots of this segment exit near the correspondingly numbered vertebra.",
+    "connections": {
+      "afferent": [
+        "Primary afferents of the Co1 dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Motor axons of the Co1 ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Co1 radiculopathy or segmental cord injury",
+        "findings": "Motor involvement produces weakness of the small intrinsic muscles of the coccyx; sensory involvement produces numbness or neuropathic pain of the skin over the coccyx — a minimal cutaneous territory, with loss of the segmental reflex arc. The coccygeal segment contributes the tiny coccygeal nerve and has no significant motor territory."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "Co1",
+      "yTop": -373.01,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-co1"
+    ],
+    "origin3d": [
+      1.1,
+      -378.005,
+      0
+    ],
+    "size3d": [
+      1.1,
+      4.9950000000000045,
+      1.6
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-spinal-cord",
+    "name": "Spinal cord (context envelope)",
+    "synonyms": [
+      "medulla spinalis",
+      "spinal cord",
+      "neuraxis caudal to the cervicomedullary junction"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "The context envelope of the spinal cord: the caudal continuation of the neuraxis from the cervicomedullary junction at the foramen magnum to the conus medullaris. It contains the H-shaped central gray matter surrounded by the three funiculi of white matter, the central canal, and the segmental root entry and exit zones. Thirty-one spinal segments from C1 to Co1 are addressed through the shared level-addressing contract, and the cervical and lumbar enlargements mark the limb plexuses. Only cord segments are modeled here, not the vertebral column, so segment-to-vertebra relationships are described in the records but not drawn.",
+    "connections": {
+      "afferent": [
+        "Dorsal rootlets (tract-dorsal-rootlets) at every segment"
+      ],
+      "efferent": [
+        "Ventral rootlets (tract-ventral-rootlets) at every segment"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) and posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Complete cord transection (trauma, transverse myelitis)",
+        "findings": "Bilateral motor, sensory and autonomic loss below the lesion with spinal shock initially, followed by spasticity and a reflex bladder; any sacral sparing indicates an incomplete lesion and changes the prognosis."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      0,
+      -216.5,
+      0
+    ],
+    "size3d": [
+      5.5,
+      116,
+      4.7
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-cervical-enlargement",
+    "name": "Cervical enlargement (C5-T1)",
+    "synonyms": [
+      "cervical intumescence",
+      "intumescentia cervicalis",
+      "brachial enlargement"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "The widened cervical cord from C5 to T1, where the motor and sensory neurons of the upper-limb plexus are concentrated. The ventral horns expand to hold the lateral motor neuron columns of the arm and hand, the dorsal horn is large, and the posterior funiculus carries both fasciculi. The transverse diameter of the cord is greatest here.",
+    "connections": {
+      "afferent": [
+        "Upper-limb afferents entering through the dorsal rootlets (tract-dorsal-rootlets) of C5 to T1"
+      ],
+      "efferent": [
+        "Upper-limb motor axons leaving through the ventral rootlets (tract-ventral-rootlets) of C5 to T1"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Cervical enlargement injury (central cord syndrome, C5-T1 lesion)",
+        "findings": "Weakness of the upper limbs exceeding that of the lower limbs with a cape-like or suspended sensory level, reflecting the dense upper-limb motor pools at this level; bladder dysfunction is variable."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C5-T1",
+      "yTop": -104.95,
+      "yBottom": -171.82,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1"
+    ],
+    "origin3d": [
+      0,
+      -138.39,
+      0
+    ],
+    "size3d": [
+      5.6,
+      33.44,
+      4.8
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-lumbar-enlargement",
+    "name": "Lumbar enlargement (L2-S3)",
+    "synonyms": [
+      "lumbar intumescence",
+      "intumescentia lumbosacralis",
+      "lumbosacral enlargement"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "The widened lumbosacral cord from L2 to S3, where the motor and sensory neurons of the lower-limb plexus and the sacral parasympathetic outflow are concentrated. The ventral horns hold the large lower-limb motor neuron pools including Onuf nucleus, and the lateral horn carries the sacral parasympathetic nucleus; the cord tapers caudally into the conus.",
+    "connections": {
+      "afferent": [
+        "Lower-limb and perineal afferents entering through the dorsal rootlets (tract-dorsal-rootlets) of L2 to S3"
+      ],
+      "efferent": [
+        "Lower-limb motor axons and parasympathetic fibres leaving through the ventral rootlets (tract-ventral-rootlets) of L2 to S3"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches, reinforced at the dorsal root entry zone by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Lumbar enlargement injury (conus or cauda equina compression, L2-S3 lesion)",
+        "findings": "Lower motor neuron weakness of the legs with saddle sensory loss and bladder dysfunction; the lumbosacral plexus motor pools sit here so root and cord signs overlap."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "L2-S3",
+      "yTop": -311.74,
+      "yBottom": -362.36,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3"
+    ],
+    "origin3d": [
+      0,
+      -337.05,
+      0
+    ],
+    "size3d": [
+      4.1,
+      25.31,
+      3.5
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-conus-medullaris",
+    "name": "Conus medullaris",
+    "synonyms": [
+      "conus terminalis",
+      "medullary cone"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "The tapered caudal end of the spinal cord, containing the sacral and coccygeal segments and ending at the filum terminale. It houses the sacral parasympathetic nucleus and the motor neurons of the bladder and anal sphincters, so conus lesions produce early sphincter dysfunction. In adults it lies near the L1-L2 vertebral level.",
+    "connections": {
+      "afferent": [
+        "Sacral afferents from the perineum and pelvic viscera entering through the dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Sacral parasympathetic and somatic motor axons leaving through the ventral rootlets (tract-ventral-rootlets)"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) and its conus anastomosis with the radiculomedullary feeders (vasc-anterior-radiculomedullary-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Conus medullaris syndrome",
+        "findings": "Early sphincter dysfunction with saddle anaesthesia, symmetric bilateral leg weakness and an absent bulbocavernosus reflex; onset is abrupt and pain is less prominent than in cauda equina syndrome."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "S3-Co1",
+      "yTop": -357.03,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      0,
+      -370.02,
+      0
+    ],
+    "size3d": [
+      2.4,
+      12.99,
+      2
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-filum-terminale",
+    "name": "Filum terminale",
+    "synonyms": [
+      "filum terminale internum",
+      "terminal thread"
+    ],
+    "region": "spinal",
+    "subdivision": "Spinal segments",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "The slender glial thread that extends from the tip of the conus medullaris through the lumbar cistern to attach to the coccyx, anchoring the caudal end of the cord. It is a vestige of the embryonic spinal cord and is surrounded by the roots of the cauda equina within the dural sac.",
+    "connections": {
+      "afferent": [
+        "No neural input; the filum is a connective tissue extension of the pia mater"
+      ],
+      "efferent": [
+        "No neural output"
+      ]
+    },
+    "bloodSupply": "Small filial branches of the segmental arteries (vasc-anterior-radiculomedullary-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Tethered cord (thickened filum terminale)",
+        "findings": "Mechanical traction on the conus during growth causes progressive gait disturbance, bladder dysfunction, scoliosis and foot deformity with a low-lying conus on imaging."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "Co1",
+      "yTop": -373.01,
+      "yBottom": -390,
+      "basis": "The filum descends from the conus past the coccygeal segment to the sacral attachment; the modeled extent stops at the CLIP_BOUNDS floor (y = -390) while the level addressing keeps its Co1 anchor."
+    },
+    "levels": [
+      "lvl-co1"
+    ],
+    "origin3d": [
+      0,
+      -381.51,
+      0
+    ],
+    "size3d": [
+      0.5,
+      8.5,
+      0.5
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  }
+]

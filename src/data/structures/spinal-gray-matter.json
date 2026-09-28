@@ -1,0 +1,660 @@
+[
+  {
+    "id": "ctx-dorsal-horn",
+    "name": "Dorsal horn",
+    "synonyms": ["posterior horn", "dorsal cornu", "cornu posterius medullae spinalis", "Rexed laminae I-VI"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The sensory processing territory of the spinal gray matter (Rexed laminae I-VI), receiving primary afferent input from the dorsal rootlets: nociceptive and thermal afferents terminate superficially (laminae I-II), low-threshold mechanoreceptive and proprioceptive afferents terminate in the nucleus proprius and the base of the horn (laminae III-VI). Second-order neurons of laminae I, V and VII project across the anterior white commissure to the spinothalamic tract, while propriospinal interneurons relay into reflex arcs. The horn is largest where sensory innervation is densest - the cervical and lumbar enlargements.",
+    "connections": {
+      "afferent": ["Dorsal rootlets (tract-dorsal-rootlets) carrying A-beta, A-delta and C primary afferents"],
+      "efferent": ["Spinothalamic second-order axons crossing in the anterior white commissure (tract-anterior-white-commissure)", "Propriospinal and reflex interneurons to the ventral horn"]
+    },
+    "bloodSupply": "Posterior spinal arteries and the pial plexus; the superficial laminae are watershed between posterior and anterior spinal territories",
+    "clinical": [
+      {
+        "syndrome": "Dorsal horn lesion (syringomyelia, contusion)",
+        "findings": "Damage of the central gray produces segmental, suspended dissociated sensory loss - pain and temperature are lost in the affected dermatomes while touch and proprioception are spared - with lower motor neuron signs at the level of the lesion and long-tract signs below it."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.6, -216.5, -2.4],
+    "size3d": [1.1, 116, 1.6],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-ventral-horn",
+    "name": "Ventral horn",
+    "synonyms": ["anterior horn", "ventral cornu", "cornu anterius medullae spinalis", "Rexed laminae VIII-IX"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The motor territory of the spinal gray matter (Rexed laminae VIII-IX), containing the alpha and gamma lower motor neuron columns and their interneurons - the final common pathway for all skeletal movement. Motor neurons are somatotopically organized: medial pools innervate axial and proximal girdle musculature, lateral pools (present only in the enlargements) innervate distal limb musculature, with flexor-extensor and proximal-distal ordering within each pool. The horn receives corticospinal, rubrospinal, vestibulospinal and reticulospinal input and is largest at the cervical (C5-T1) and lumbar (L2-S3) enlargements, where limb innervation concentrates.",
+    "connections": {
+      "afferent": ["Corticospinal and rubrospinal terminals on lamina IX motor neurons and interneurons", "Group Ia muscle afferents via monosynaptic stretch reflex arcs", "Vestibulospinal and reticulospinal drive to lamina VIII and medial motor pools"],
+      "efferent": ["Ventral rootlets (tract-ventral-rootlets) carrying alpha and gamma motor axons to skeletal muscle"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches (the ventral two-thirds of the cord gray matter)",
+    "clinical": [
+      {
+        "syndrome": "Lower motor neuron syndrome at the segment",
+        "findings": "A lesion destroying ventral horn cells produces flaccid paralysis of the muscles of that myotome with wasting, fasciculations, hypotonia and abolished reflexes - the pattern of poliomyelitis, anterior spinal artery infarction at the segment, or root avulsion.",
+        "vascular": "Anterior spinal artery (sulcal branches)"
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.8, -216.5, 1.8],
+    "size3d": [1.3, 116, 1.7],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., motor systems chapters"
+    ]
+  },
+  {
+    "id": "ctx-lateral-horn",
+    "name": "Lateral horn",
+    "synonyms": ["lateral cornu", "cornu laterale", "lateral horn region"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#94a3b8",
+    "function": "The small lateral protrusion of the intermediate gray (lamina VII) present ONLY from T1 to L2, where it contains the preganglionic sympathetic neurons of the intermediolateral nucleus. A comparable sacral autonomic column (S2-S4) exists without a gross lateral horn. Its strict T1-L2 extent is the anatomical reason a Horner syndrome can only be produced by a sympathetic lesion above T1.",
+    "connections": {
+      "afferent": ["Hypothalamospinal sympathetic fibers (tract-hypothalamospinal)", "Visceral and somatic interneurons of lamina VII"],
+      "efferent": ["Preganglionic sympathetic axons of the intermediolateral nucleus (nuc-intermediolateral) exiting via the ventral rootlets"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches; posterior spinal artery pial plexus",
+    "clinical": [
+      {
+        "syndrome": "Horner syndrome (lateral horn, T1)",
+        "findings": "Destruction of the T1 lateral horn or its inputs (e.g. a Brown-Séquard hemicord lesion above T1, or a syrinx at C8-T1) removes ipsilateral sympathetic tone to the head: ptosis, miosis, apparent enophthalmos and anhidrosis of the face.",
+        "note": "The lateral horn exists only at T1-L2, so Horner syndrome localizes a cord lesion to T1 or above."
+      }
+    ],
+    "spinalSpan": { "segments": "T1-L2", "yTop": -159.89, "yBottom": -320.4, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2"],
+    "origin3d": [2.6, -240.15, 0],
+    "size3d": [0.8, 80.26, 1],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., autonomic nervous system chapters",
+      "Patten, Neurological Differential Diagnosis, 2nd ed."
+    ]
+  },
+  {
+    "id": "nuc-rexed-lamina-i",
+    "name": "Rexed lamina I (marginal zone)",
+    "synonyms": ["marginal zone of Waldeyer", "lamina I", "nucleus marginalis"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The thin superficial layer capping the dorsal horn, receiving mainly A-delta and C nociceptive and thermoreceptive primary afferents. Its projection neurons (nociceptive-specific and thermospecific cells) are a major origin of the crossed spinothalamic pathway and also project to the periaqueductal gray and parabrachial region; marginal neurons are classically thermosensitive and high-threshold. This is the first synapse of pain and temperature sensation.",
+    "connections": {
+      "afferent": ["A-delta and C primary afferents from the dorsal rootlets (tract-dorsal-rootlets)", "Descending noradrenergic and serotonergic modulation from the brainstem"],
+      "efferent": ["Spinothalamic axons crossing in the anterior white commissure (tract-anterior-white-commissure)", "Spinoparabrachial and spinomesencephalic projections"]
+    },
+    "bloodSupply": "Posterior spinal arteries and pial plexus (superficial dorsal horn)",
+    "clinical": [
+      {
+        "syndrome": "First-order pain/temperature pathway lesion",
+        "findings": "Selective damage of the superficial dorsal horn (herpes zoster, syringomyelia, cord contusion) abolishes pain and temperature in the affected dermatomes with relative sparing of touch - the dissociated sensory loss that reflects the laminar segregation of nociceptive input."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.1, -216.5, -3],
+    "size3d": [0.6, 116, 0.8],
+    "refs": [
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\""
+    ]
+  },
+  {
+    "id": "nuc-rexed-lamina-ii",
+    "name": "Rexed lamina II (substantia gelatinosa)",
+    "synonyms": ["substantia gelatinosa of Rolando", "lamina II", "gelatinous substance"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The pale, translucent band of small densely packed neurons (stalk cells and small islet cells) capping the neck of the dorsal horn, receiving A-delta and C nociceptive afferents and rich in substance P and enkephalin. Its interneurons gate the transmission of nociceptive input to lamina I and V projection neurons - the circuit basis of the gate-control theory of pain - and it gives rise to the postsynaptic pathway in Lissauer's tract. Few axons of lamina II neurons leave the segment: it is a local circuit nucleus.",
+    "connections": {
+      "afferent": ["A-delta and C primary afferents via Lissauer's tract (tract-dorsal-rootlets collaterals)", "Descending serotonergic (raphe) and noradrenergic (locus coeruleus) modulation"],
+      "efferent": ["Local interneuron projections to laminae I and V (gate-control circuit)", "Dorsal horn commissural/propriospinal interneurons"]
+    },
+    "bloodSupply": "Posterior spinal arteries and pial plexus",
+    "clinical": [
+      {
+        "syndrome": "Gate-control failure / central sensitization",
+        "findings": "Loss of substantia gelatinosa inhibition (peripheral nerve injury, zoster, deafferentation) unmasks wide-dynamic-range wind-up and produces neuropathic pain; conversely its opioid receptors mediate the analgesic action of spinal opioids."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.1, -216.5, -2.7],
+    "size3d": [0.7, 116, 0.9],
+    "refs": [
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\""
+    ]
+  },
+  {
+    "id": "nuc-nucleus-proprius",
+    "name": "Nucleus proprius (Rexed laminae III-IV)",
+    "synonyms": ["nucleus proprius cornu posterioris", "proper sensory nucleus of the dorsal horn", "Rexed laminae III-IV"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The main sensory relay nucleus of the dorsal horn neck (laminae III-IV), receiving A-beta low-threshold mechanoreceptive afferents (hair follicle, touch, pressure) whose collaterals enter from the dorsal columns. Nucleus proprius neurons contribute to the postsynaptic dorsal column pathway (discriminative touch and visceral pain) and to local reflex circuits; it is largest in the enlargements where cutaneous representation is richest.",
+    "connections": {
+      "afferent": ["A-beta cutaneous mechanoreceptor afferents via dorsal column collaterals", "Proprioceptive collaterals from group I and II afferents"],
+      "efferent": ["Postsynaptic dorsal column projections to the gracile and cuneate nuclei", "Interneurons to laminae I, V and ventral horn reflex arcs"]
+    },
+    "bloodSupply": "Posterior spinal arteries and pial plexus",
+    "clinical": [
+      {
+        "syndrome": "Dorsal horn mechanoreceptive processing loss",
+        "findings": "Lesions of laminae III-IV degrade tactile discrimination and two-point discrimination in the affected dermatomes while sparing pain; the postsynaptic dorsal column pathway also carries visceral pain, which is why dorsal column stimulation relieves some pelvic pain."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.3, -216.5, -2.2],
+    "size3d": [1, 116, 1.2],
+    "refs": [
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\""
+    ]
+  },
+  {
+    "id": "nuc-rexed-lamina-v",
+    "name": "Rexed lamina V",
+    "synonyms": ["lamina V", "neck of the dorsal horn"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The neck of the dorsal horn, dominated by wide-dynamic-range (WDR) neurons that converge nociceptive, thermal and mechanoreceptive input from large receptive fields. Lamina V projection neurons are a major origin of the spinothalamic tract, and their axons cross in the anterior white commissure; WDR neurons wind up with repeated C-fiber stimulation, a key mechanism of central sensitization.",
+    "connections": {
+      "afferent": ["A-delta and C nociceptive afferents plus A-beta mechanoreceptive afferents (convergent)", "Descending modulation from the periaqueductal gray and raphe"],
+      "efferent": ["Spinothalamic and spinoreticular axons crossing in the anterior white commissure (tract-anterior-white-commissure)"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches; posterior spinal artery pial plexus (watershed zone)",
+    "clinical": [
+      {
+        "syndrome": "Central sensitization / neuropathic pain",
+        "findings": "After deafferentation or cord injury, WDR neurons develop expanded receptive fields and wind-up, producing burning dysesthesia and allodynia below the lesion; lamina V sparing is one reason some incomplete lesions preserve pain while losing touch."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.5, -216.5, -1.3],
+    "size3d": [1, 116, 1],
+    "refs": [
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
+      "Patten, Neurological Differential Diagnosis, 2nd ed."
+    ]
+  },
+  {
+    "id": "nuc-rexed-lamina-vi",
+    "name": "Rexed lamina VI",
+    "synonyms": ["lamina VI", "base of the dorsal horn"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The broad base of the dorsal horn, best developed at the enlargements, receiving group I and group II proprioceptive afferents from muscle spindles and Golgi tendon organs. Its neurons participate in flexor-extensor reflex coordination and are the rostral gateway to Clarke's nucleus (lamina VII) for the lower trunk and limbs; in the upper cord the lamina contains neurons relaying to the dorsal horn neck and cuneate-projecting circuits.",
+    "connections": {
+      "afferent": ["Group Ia, Ib and II muscle and joint afferents entering through the dorsal rootlets (tract-dorsal-rootlets)"],
+      "efferent": ["Interneurons to Clarke's nucleus (nuc-clarke) and ventral horn reflex circuits", "Propriospinal neurons coordinating flexor-extensor reflexes"]
+    },
+    "bloodSupply": "Posterior spinal arteries and pial plexus",
+    "clinical": [
+      {
+        "syndrome": "Proprioceptive reflex arc lesion",
+        "findings": "Damage of the dorsal horn base with its proprioceptive input degrades segmental stretch reflexes and coordination (ataxia without weakness), the pattern expected in tabes dorsalis where large-fiber afferents degenerate before the horn."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.5, -216.5, -0.7],
+    "size3d": [1, 116, 1],
+    "refs": [
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\""
+    ]
+  },
+  {
+    "id": "nuc-rexed-lamina-vii",
+    "name": "Rexed lamina VII (intermediate zone)",
+    "synonyms": ["intermediate zone", "lamina VII", "intermediate gray"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The intermediate gray spanning the cord between dorsal and ventral horns; it contains Clarke's nucleus (C8-L3), the intermediolateral sympathetic column (T1-L2), the sacral parasympathetic nucleus (S2-S4) and a dense interneuron population integrating visceral, somatic and descending input. Many spinothalamic and spinocerebellar relay neurons sit here, and its commissural interneurons link the two halves of the cord.",
+    "connections": {
+      "afferent": ["Visceral afferents via the splanchnic and pelvic nerves", "Descending hypothalamospinal (tract-hypothalamospinal), vestibulospinal and reticulospinal fibers", "Local dorsal and ventral horn interneurons"],
+      "efferent": ["Spinothalamic projection neurons crossing in the anterior white commissure (tract-anterior-white-commissure)", "Spinal sympathetic and parasympathetic preganglionic axons (nuc-intermediolateral, nuc-sacral-parasympathetic)"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches (ventral and intermediate gray)",
+    "clinical": [
+      {
+        "syndrome": "Intermediate zone lesion (syrinx expansion)",
+        "findings": "A central cavity expanding through the intermediate zone produces dissociated suspended sensory loss, segmental weakness and - when the intermediolateral column is caught at T1-L2 - autonomic dysfunction including Horner syndrome or disturbed sweating below the lesion."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.8, -216.5, 0],
+    "size3d": [1.2, 116, 1.4],
+    "refs": [
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., autonomic nervous system chapters"
+    ]
+  },
+  {
+    "id": "nuc-rexed-lamina-viii",
+    "name": "Rexed lamina VIII",
+    "synonyms": ["lamina VIII", "ventral horn interneuron zone"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The medial part of the ventral horn, containing commissural interneurons whose axons cross to the opposite ventral horn and a large propriospinal population. Lamina VIII is a principal termination site of descending vestibulospinal, reticulospinal and corticospinal input and organizes bilateral postural and gait reflexes; it is best developed at cervical and lumbosacral levels.",
+    "connections": {
+      "afferent": ["Vestibulospinal, reticulospinal and corticospinal terminals", "Contralateral commissural interneurons"],
+      "efferent": ["Commissural axons crossing to the opposite ventral horn", "Interneurons driving lamina IX motor neuron pools"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches",
+    "clinical": [
+      {
+        "syndrome": "Postural reflex disorganization",
+        "findings": "Bilateral lamina VIII damage (e.g. anterior spinal artery infarction) disrupts truncal and proximal limb coordination and extensor tone, adding gait ataxia to the pyramidal weakness; the commissural loss also helps explain bilateral reflex change below a central cord lesion."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.6, -216.5, 0.8],
+    "size3d": [1.1, 116, 1.2],
+    "refs": [
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., motor systems chapters"
+    ]
+  },
+  {
+    "id": "nuc-rexed-lamina-ix",
+    "name": "Rexed lamina IX (motor neuron columns)",
+    "synonyms": ["lamina IX", "ventral motor nuclei", "alpha and gamma motor neuron columns"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The discrete motor neuron groups of the ventral horn tip: alpha motor neurons of the final common pathway, gamma motor neurons of the muscle spindle, and Renshaw inhibitory interneurons. The columns are somatotopically arranged - medial groups innervate axial musculature at every level, lateral groups innervate distal limb musculature and exist only in the cervical (C5-T1) and lumbosacral (L2-S3) enlargements, with flexor and extensor pools interleaved. Their axons leave through the ventral rootlets.",
+    "connections": {
+      "afferent": ["Corticospinal (tract-corticospinal-lateral, tract-anterior-corticospinal) and rubrospinal (tract-rubrospinal) terminals", "Group Ia monosynaptic muscle afferents (stretch reflex)", "Renshaw recurrent collateral inhibition"],
+      "efferent": ["Alpha and gamma motor axons via the ventral rootlets (tract-ventral-rootlets) to skeletal muscle and muscle spindles"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches",
+    "clinical": [
+      {
+        "syndrome": "Lower motor neuron syndrome",
+        "findings": "Loss of lamina IX motor neurons produces segmental flaccid paralysis, atrophy, fasciculations and areflexia of the corresponding myotomes - the signature of poliomyelitis, spinal muscular atrophy, root avulsion or anterior horn infarction; motor neuron loss here is the final common denominator of every weakness pattern.",
+        "vascular": "Anterior spinal artery sulcal branches"
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.6, -216.5, 1.5],
+    "size3d": [1.2, 116, 1.2],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., motor systems chapters"
+    ]
+  },
+  {
+    "id": "nuc-gray-commissure",
+    "name": "Gray commissure (Rexed lamina X)",
+    "synonyms": ["gray commissure", "commissura grisea", "pericanal gray", "lamina X"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "midline",
+    "color": "#d97706",
+    "function": "The midline gray matter surrounding the central canal (Rexed lamina X), bridging the two halves of the cord across the dorsal and ventral gray commissures. It contains commissural interneurons and visceral afferent relays, and spinothalamic second-order axons destined for the opposite side course through the adjacent ventral white commissure. Lamina X relays nociceptive visceral input and is a key station in the periaqueductal gray - lamina X analgesia circuit.",
+    "connections": {
+      "afferent": ["Visceral and somatic afferents via dorsal root collaterals", "Commissural interneurons from the contralateral gray"],
+      "efferent": ["Commissural axons linking the two halves of the cord", "Ascending visceral pain pathways to the periaqueductal gray and thalamus"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches (central gray), reinforced by posterior spinal pial plexus",
+    "clinical": [
+      {
+        "syndrome": "Central cord cavity (syringomyelia)",
+        "findings": "A syrinx begins around the central canal in lamina X and interrupts crossing spinothalamic fibers first: suspended, segmental dissociated pain-temperature loss in a cape or shawl distribution with preserved touch (dorsal columns) - the classic teaching lesion of the gray commissure.",
+        "note": "The crossing fibers of the anterior white commissure are adjacent, so a small midline lesion produces bilateral suspended sensory loss."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [0, -216.5, -0.2],
+    "size3d": [1.1, 116, 0.7],
+    "refs": [
+      "Rexed B, \"A cytoarchitectonic atlas of the spinal cord in the cat\", J Comp Neurol 1954;100:297-379",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)"
+    ]
+  },
+  {
+    "id": "vent-central-canal",
+    "name": "Central canal",
+    "synonyms": ["canalis centralis", "central canal of the spinal cord"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "ventricle",
+    "laterality": "midline",
+    "color": "#06b6d4",
+    "function": "The ependyma-lined remnant of the embryonic neural tube lumen running the length of the cord within the gray commissure, containing CSF and communicating rostrally with the obex and the fourth ventricle. It is patent in the fetus and young child and progressively narrows or obliterates with age; its lining retains secretory and stem-cell properties.",
+    "connections": {
+      "afferent": ["CSF from the fourth ventricle via the obex"],
+      "efferent": ["Ependymal drainage into the central canal and perivascular spaces"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches",
+    "clinical": [
+      {
+        "syndrome": "Hydromyelia / syringomyelia",
+        "findings": "Dilatation of the central canal (hydromyelia) or a paracentral cavity (syringomyelia) expands into the gray commissure and anterior white commissure, producing cape-like dissociated pain-temperature loss and, if it enlarges, ventral horn motor signs; Chiari I malformation is the classic association with a cervicothoracic syrinx."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [0, -216.5, -0.3],
+    "size3d": [0.35, 116, 0.35],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "UpToDate, \"Syringomyelia\""
+    ]
+  },
+  {
+    "id": "nuc-clarke",
+    "name": "Clarke's nucleus (dorsal nucleus of Clarke)",
+    "synonyms": ["dorsal nucleus of Clarke", "Clarke's column", "nucleus thoracicus", "nucleus dorsalis (Stilling)"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "A column at the base of the dorsal horn (lamina VII) extending from C8 to L3, receiving group Ia and Ib proprioceptive afferents from the trunk and lower limb and giving rise to the uncrossed posterior spinocerebellar tract. Its neurons signal limb and trunk position to the ipsilateral cerebellum; below L3 (and above C8) the pathway is relayed through other nuclei, which is why the column's extent is C8-L3.",
+    "connections": {
+      "afferent": ["Group Ia and Ib muscle and Golgi tendon organ afferents of the lower trunk and lower limb via dorsal root collaterals", "Descending corticospinal modulation"],
+      "efferent": ["Posterior spinocerebellar tract (tract-posterior-spinocerebellar) ascending uncrossed to the ipsilateral cerebellum via the inferior cerebellar peduncle"]
+    },
+    "bloodSupply": "Posterior spinal arteries and pial plexus; anterior spinal sulcal branches at depth",
+    "clinical": [
+      {
+        "syndrome": "Sensory ataxia of the lower limb",
+        "findings": "Lesions of Clarke's nucleus or its afferents (tabes dorsalis, vitamin B12 deficiency, dorsal root lesions) abolish unconscious proprioception to the cerebellum: unsteady, stamping gait with positive Romberg sign despite preserved strength - and ipsilateral, because the posterior spinocerebellar fibers do not cross.",
+        "note": "The C8-L3 extent explains why lumbosacral proprioception also reaches the cerebellum through the anterior spinocerebellar pathway."
+      }
+    ],
+    "spinalSpan": { "segments": "C8-L3", "yTop": -146.15, "yBottom": -329.06, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3"],
+    "origin3d": [1.3, -237.61, -1.6],
+    "size3d": [0.7, 91.46, 0.9],
+    "refs": [
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)"
+    ]
+  },
+  {
+    "id": "nuc-intermediolateral",
+    "name": "Intermediolateral nucleus (T1-L2)",
+    "synonyms": ["intermediolateral nucleus", "intermediolateral cell column", "IML", "preganglionic sympathetic nucleus"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The column of preganglionic sympathetic neurons in the lateral horn (lamina VII) extending from T1 to L2 (the sympathetic outflow extends into the intermediomedial region at C8-T1 and L2-L3 at its fringes). Its axons exit through the ventral rootlets as white rami communicantes to the paravertebral chain; descending hypothalamospinal fibers provide the tonic vasomotor, sudomotor and pupillodilator drive. The C8-T1 portion supplies the head and neck (ciliospinal center of Budge).",
+    "connections": {
+      "afferent": ["Hypothalamospinal sympathetic fibers (tract-hypothalamospinal)", "Visceral afferents and local interneurons (lamina VII)", "Descending reticulospinal cardiovascular drive"],
+      "efferent": ["Preganglionic sympathetic axons via white rami communicantes to the sympathetic chain and prevertebral ganglia"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches",
+    "clinical": [
+      {
+        "syndrome": "Horner syndrome / autonomic dysfunction (T1-L2)",
+        "findings": "A lesion at C8-T1 destroys the ciliospinal center and produces ipsilateral Horner syndrome (ptosis, miosis, anhidrosis); lesions from T1 to L2 impair vasomotor and sudomotor tone below the level, and a complete cord lesion above T6 abolishes sympathetic control of splanchnic circulation with orthostatic hypotension and autonomic dysreflexia.",
+        "note": "The strict T1-L2 extent is the localizing key: Horner syndrome means the cord lesion reaches T1 or above."
+      }
+    ],
+    "spinalSpan": { "segments": "T1-L2", "yTop": -159.89, "yBottom": -320.4, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2"],
+    "origin3d": [2.6, -240.15, 0.1],
+    "size3d": [0.6, 80.26, 0.9],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., autonomic nervous system chapters",
+      "Patten, Neurological Differential Diagnosis, 2nd ed."
+    ]
+  },
+  {
+    "id": "nuc-sacral-parasympathetic",
+    "name": "Sacral parasympathetic nucleus (S2-S4)",
+    "synonyms": ["sacral parasympathetic nucleus", "sacral autonomic nucleus", "nucleus intermediolateralis sacralis"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The preganglionic parasympathetic neurons of the lateral intermediate gray at S2-S4 (the sacral homologue of the intermediolateral nucleus). Their axons travel in the pelvic splanchnic nerves (nervi erigentes) to the pelvic ganglia, driving detrusor contraction and bladder emptying, rectal contraction and genital erection; the pontine micturition center (Barrington's nucleus) provides the descending control that coordinates relaxation of the sphincters with detrusor contraction.",
+    "connections": {
+      "afferent": ["Pontinemicturition-center descending fibers from Barrington's nucleus", "Pelvic visceral afferents (bladder filling, rectal distension)"],
+      "efferent": ["Preganglionic parasympathetic axons via pelvic splanchnic nerves to pelvic ganglia"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches (sacral cord); lumbosacral radicular reinforcement",
+    "clinical": [
+      {
+        "syndrome": "Conus medullaris syndrome",
+        "findings": "Destruction of S2-S4 destroys the parasympathetic outflow and produces a lower motor neuron (areflexic, overflow) bladder with urinary retention and incontinence, constipation and erectile dysfunction - together with saddle anesthesia and absent bulbocavernosus and anal reflexes."
+      }
+    ],
+    "spinalSpan": { "segments": "S2-S4", "yTop": -351.7, "yBottom": -367.68, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-s2", "lvl-s3", "lvl-s4"],
+    "origin3d": [1.9, -359.69, 0.2],
+    "size3d": [0.8, 7.99, 1],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., autonomic nervous system chapters",
+      "UpToDate, \"Anatomy and localization of spinal cord disorders\""
+    ]
+  },
+  {
+    "id": "nuc-lmn-medial-column",
+    "name": "Medial motor neuron column",
+    "synonyms": ["medial motor column", "axial motor neuron column", "medial motor neuron pool"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The medial motor neuron group of lamina IX, present at every cord level, innervating the axial and proximal girdle musculature - deep neck and back muscles, intercostals and abdominal wall - through the ventral rootlets. Its motor neurons receive vestibulospinal, reticulospinal and corticospinal drive and are the substrate of posture and truncal stability; the medial pool is somatotopically proximal relative to the lateral pool.",
+    "connections": {
+      "afferent": ["Vestibulospinal, reticulospinal and corticospinal terminals", "Group Ia monosynaptic afferents from axial muscles"],
+      "efferent": ["Motor axons via the ventral rootlets (tract-ventral-rootlets) to paraspinal, intercostal and abdominal musculature"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches",
+    "clinical": [
+      {
+        "syndrome": "Axial weakness / dropped head and truncal instability",
+        "findings": "Medial column motor neuron loss (spinal muscular atrophy, poliomyelitis, proximal SMA phenotype) produces weakness of neck flexion, back extension and respiratory accessory muscles with preserved distal strength; bilateral medial column involvement at cervical levels contributes to head drop and scoliosis."
+      }
+    ],
+    "spinalSpan": { "segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.2, -216.5, 1.2],
+    "size3d": [0.9, 116, 1],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., motor systems chapters",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter"
+    ]
+  },
+  {
+    "id": "nuc-lmn-lateral-column",
+    "name": "Lateral motor neuron column",
+    "synonyms": ["lateral motor column", "limb motor neuron column", "distal limb motor neuron pool"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The lateral motor neuron group of lamina IX, present only where limbs are innervated: the cervical enlargement (C5-T1, upper limb) and the lumbosacral enlargement (L2-S3, lower limb). Its motor neurons supply distal limb musculature and are somatotopically organized within the pool - flexor and extensor groups interleave and proximal-distal ordering is preserved. The column contains the cervical and lumbar enlargements' motor apparatus and is the target of the somatotopic corticospinal termination (cervical fibers most medial, sacral most lateral).",
+    "connections": {
+      "afferent": ["Somatotopic corticospinal terminals (tract-corticospinal-lateral) and rubrospinal terminals (tract-rubrospinal)", "Group Ia monosynaptic afferents from limb muscles"],
+      "efferent": ["Motor axons via the ventral rootlets (tract-ventral-rootlets) to limb musculature"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches reinforced by the radicular feeders of the enlargements",
+    "clinical": [
+      {
+        "syndrome": "Limb-girdle lower motor neuron pattern",
+        "findings": "Selective lateral column disease (spinal muscular atrophy of the limb-girdle type, segmental poliomyelitis) produces flaccid weakness of the arm or leg myotomes of that enlargement with areflexia and atrophy while axial function is relatively spared; a C5-T1 lesion pattern produces the upper-limb-dominant wasting of monomelic amyotrophy."
+      }
+    ],
+    "spinalSpan": { "segments": "C5-T1, L2-S3", "yTop": -104.95, "yBottom": -362.36, "basis": "Named extent is the disjoint motor-pool set C5-T1 (upper-limb pool) + L2-S3 (lower-limb pool) in the level-addressing contract's comma form; yTop/yBottom bound the two pools - the intervening thoracic and L1 segments are not part of this record." },
+    "levels": ["lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3"],
+    "origin3d": [1.8, -233.66, 1.4],
+    "size3d": [1, 116, 1],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., motor systems chapters",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter"
+    ]
+  },
+  {
+    "id": "nuc-phrenic-nucleus",
+    "name": "Phrenic nucleus (C3-C5)",
+    "synonyms": ["phrenic motor nucleus", "phrenic nucleus", "diaphragm motor neuron pool"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The motor neuron column supplying the diaphragm through the phrenic nerve (C3-C5 roots, with a principal C4 contribution), located in the cervical ventral horn. Its tonic and phasic respiratory drive comes from the pre-Botzinger complex and the ventral respiratory group via bulbospinal pathways, with voluntary cortical override; the classic mnemonic 'C3, 4, 5 keep the diaphragm alive' reflects its segmental location.",
+    "connections": {
+      "afferent": ["Bulbospinal respiratory drive (pre-Botzinger complex, ventral respiratory group)", "Voluntary corticospinal input", "Phrenic afferents from the diaphragm (C3-C5)"],
+      "efferent": ["Phrenic nerve motor axons (C3-C5 roots) to the diaphragm"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches (cervical cord)",
+    "clinical": [
+      {
+        "syndrome": "Cervical cord lesion with ventilatory failure",
+        "findings": "Bilateral C3-C5 cord injury abolishes phrenic output and causes diaphragmatic paralysis requiring mechanical ventilation; a high cervical lesion above C3 also interrupts bulbospinal drive, so respiration fails completely while a lesion at C5 may spare diaphragm function but weaken it."
+      }
+    ],
+    "spinalSpan": { "segments": "C3-C5", "yTop": -77.47, "yBottom": -118.68, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c3", "lvl-c4", "lvl-c5"],
+    "origin3d": [1.2, -98.08, 1],
+    "size3d": [0.7, 20.61, 0.9],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., motor systems chapters",
+      "UpToDate, \"Anatomy and localization of spinal cord disorders\""
+    ]
+  },
+  {
+    "id": "nuc-spinal-accessory-nucleus",
+    "name": "Spinal accessory nucleus (C1-C5)",
+    "synonyms": ["spinal accessory nucleus", "accessory nucleus", "sternocleidomastoid and trapezius motor neuron pool"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The motor neuron column of the upper cervical ventral horn (C1-C5, classically C1-C5 or C1-C6) whose axons form the spinal root of the accessory nerve (CN XI): they ascend through the foramen magnum to leave the skull with the cranial root and innervate sternocleidomastoid and the upper trapezius. The nucleus is an outlying branchial-motor column that has migrated from the upper cord, which is why its fibers run cranially before exiting.",
+    "connections": {
+      "afferent": ["Corticobulbar (contralateral and ipsilateral) input for voluntary head turning and shoulder elevation", "Cervical proprioceptive afferents"],
+      "efferent": ["Spinal accessory nerve (CN XI) axons to sternocleidomastoid and trapezius"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches (upper cervical cord)",
+    "clinical": [
+      {
+        "syndrome": "CN XI palsy (shoulder droop)",
+        "findings": "Lower motor neuron damage (jugular foramen lesion, radical neck surgery, trauma) weakens ipsilateral sternocleidomastoid and trapezius: shoulder droop with winging, difficulty turning the head away from the lesion; a proximal C1-C5 cord lesion can injure the nucleus or rootlets with the same pattern plus long-tract signs."
+      }
+    ],
+    "spinalSpan": { "segments": "C1-C5", "yTop": -50, "yBottom": -118.68, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5"],
+    "origin3d": [1.2, -84.34, 0.9],
+    "size3d": [0.8, 34.34, 1],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., cranial nerve chapters",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter"
+    ]
+  },
+  {
+    "id": "nuc-onuf",
+    "name": "Onuf's nucleus (S2-S4)",
+    "synonyms": ["Onuf's nucleus", "nucleus of Onufrowicz", "sacral sphincter motor nucleus"],
+    "region": "spinal",
+    "subdivision": "Gray matter",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The somatic motor neuron group of the sacral ventral horn (S2-S4) supplying the external urethral and anal sphincters via the pudendal nerve. Its neurons differ from other lower motor neurons in their chemistry (serotonergic and noradrenergic input, relative resistance to degeneration), which is why continence is preserved until late in amyotrophic lateral sclerosis while sphincter control is lost early when the sacral cord or cauda equina is damaged.",
+    "connections": {
+      "afferent": ["Pontine micturition center and corticospinal (voluntary continence) input", "Pudendal afferents from the sphincters and perineum"],
+      "efferent": ["Pudendal nerve motor axons (S2-S4) to the external urethral and anal sphincters"]
+    },
+    "bloodSupply": "Anterior spinal artery sulcal branches; lumbosacral radicular reinforcement",
+    "clinical": [
+      {
+        "syndrome": "Conus medullaris / cauda equina sphincter failure",
+        "findings": "Destruction of Onuf's nucleus (conus lesion) or its pudendal roots (cauda equina lesion) abolishes voluntary sphincter control: urinary and fecal incontinence or retention with overflow and absent anal wink and bulbocavernosus reflexes, with saddle anesthesia; contrast with the preserved continence of ALS until late.",
+        "note": "The sacral sparing of some central cord syndromes reflects the pericanal location of sacral pathways rather than Onuf's nucleus itself."
+      }
+    ],
+    "spinalSpan": { "segments": "S2-S4", "yTop": -351.7, "yBottom": -367.68, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json." },
+    "levels": ["lvl-s2", "lvl-s3", "lvl-s4"],
+    "origin3d": [1.6, -359.69, 1.2],
+    "size3d": [0.7, 7.99, 0.8],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., motor systems chapters",
+      "UpToDate, \"Anatomy and localization of spinal cord disorders\""
+    ]
+  }
+]

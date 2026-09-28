@@ -1,0 +1,320 @@
+[
+  {
+    "id": "tract-dorsal-rootlets",
+    "name": "Dorsal rootlets",
+    "synonyms": [
+      "dorsal roots",
+      "posterior rootlets",
+      "radices dorsales",
+      "sensory rootlets"
+    ],
+    "region": "spinal",
+    "subdivision": "Roots & meninges",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#3b82f6",
+    "function": "The sensory rootlets that enter the posterolateral sulcus of the spinal cord at every segment, carrying primary afferents from the dorsal root ganglia to the dorsal horn. Each rootlet bundle joins its ventral counterpart to form the mixed spinal nerve at the intervertebral foramen. Large myelinated fibres ascend in the posterior funiculus, while small-calibre nociceptive and thermoreceptive fibres synapse in the superficial dorsal horn.",
+    "connections": {
+      "afferent": [
+        "Central processes of the dorsal root ganglion neurons (nuc-dorsal-root-ganglion)"
+      ],
+      "efferent": [
+        "Primary afferent terminals in the dorsal horn (ctx-dorsal-horn) and in the base of the dorsal horn"
+      ]
+    },
+    "bloodSupply": "Segmental radicular branches (vasc-anterior-radiculomedullary-arteries and posterior radicular arteries).",
+    "clinical": [
+      {
+        "syndrome": "Dorsal root or rootlet lesion (posterior root entry zone injury, tabes dorsalis)",
+        "findings": "Segmental sensory loss in the affected dermatomes with abolished reflex arcs and neuropathic pain; motor function is preserved because the ventral rootlets are anatomically separate."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      2.6,
+      -216.5,
+      -2.9
+    ],
+    "size3d": [
+      1.5,
+      116,
+      1.3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "tract-ventral-rootlets",
+    "name": "Ventral rootlets",
+    "synonyms": [
+      "ventral roots",
+      "anterior rootlets",
+      "radices ventrales",
+      "motor rootlets"
+    ],
+    "region": "spinal",
+    "subdivision": "Roots & meninges",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#8b5cf6",
+    "function": "The motor rootlets that emerge from the ventrolateral surface of the spinal cord at every segment, carrying axons of ventral horn motor neurons and, at thoracolumbar levels, of the intermediolateral nucleus. They converge with the dorsal rootlets at the intervertebral to form the mixed spinal nerve; anterior rootlets are purely motor and their myelinated axons include the largest motor units of the body.",
+    "connections": {
+      "afferent": [
+        "Motor axons of the ventral horn motor neurons (nuc-rexed-lamina-ix) and sympathetic preganglionic fibres of the intermediolateral nucleus (nuc-intermediolateral)"
+      ],
+      "efferent": [
+        "Axons reaching the segmental muscles and the sympathetic chain through the mixed spinal nerve"
+      ]
+    },
+    "bloodSupply": "Segmental radicular branches (vasc-anterior-radiculomedullary-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Ventral root lesion (motor radiculopathy, cauda equina compression)",
+        "findings": "Lower motor neuron weakness and reflex loss in the affected myotomes with preserved sensation; complete ventral root section produces flaccid areflexic paralysis of the segmental muscles."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      2.6,
+      -216.5,
+      2.4
+    ],
+    "size3d": [
+      1.5,
+      116,
+      1.3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "nuc-dorsal-root-ganglion",
+    "name": "Dorsal root ganglion",
+    "synonyms": [
+      "spinal ganglion",
+      "ganglion radicis dorsalis",
+      "DRG",
+      "posterior root ganglion"
+    ],
+    "region": "spinal",
+    "subdivision": "Roots & meninges",
+    "kind": "nucleus",
+    "laterality": "paired",
+    "color": "#d97706",
+    "function": "The cluster of pseudounipolar sensory neurons of each spinal nerve, sitting in the intervertebral foramen. Each cell gives a single peripheral process to its receptor field and a central process that enters the cord through the dorsal rootlets; large-diameter proprioceptive and tactile cells ascend in the posterior funiculus while small nociceptive cells synapse in the dorsal horn. The ganglion contains the first-order sensory neuron of every spinal pathway and is the site of latent herpes zoster infection.",
+    "connections": {
+      "afferent": [
+        "Peripheral sensory axons from skin, muscle, joint and visceral receptors of the segmental dermatome and myotome"
+      ],
+      "efferent": [
+        "Central processes entering the cord through the dorsal rootlets (tract-dorsal-rootlets)"
+      ]
+    },
+    "bloodSupply": "Segmental radicular arteries (vasc-anterior-radiculomedullary-arteries and posterior radicular branches).",
+    "clinical": [
+      {
+        "syndrome": "Dorsal root ganglion lesion (herpes zoster radiculitis, diabetic radiculopathy, ganglion injury)",
+        "findings": "Burning neuropathic pain with sensory loss in the affected dermatome and preserved motor function; herpes zoster erupts in the dermatome supplied by the infected ganglion and postherpetic neuralgia follows ganglion damage."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      4.6,
+      -216.5,
+      -1.2
+    ],
+    "size3d": [
+      1.3,
+      116,
+      1.5
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "ctx-cauda-equina",
+    "name": "Cauda equina",
+    "synonyms": [
+      "cauda equina",
+      "horse's tail",
+      "lumbar cistern roots"
+    ],
+    "region": "spinal",
+    "subdivision": "Roots & meninges",
+    "kind": "context",
+    "laterality": "midline",
+    "color": "#94a3b8",
+    "function": "The bundle of lumbar, sacral and coccygeal nerve roots descending in the lumbar cistern below the conus medullaris to reach their exit foramina. Because the adult spinal cord ends near the L1-L2 vertebral level, these roots travel caudally within the dural sac before exiting; the space also contains the filum terminale and cerebrospinal fluid. Lumbar puncture is performed below L2 to avoid cord injury.",
+    "connections": {
+      "afferent": [
+        "Dorsal rootlets (tract-dorsal-rootlets) of the lumbar, sacral and coccygeal segments"
+      ],
+      "efferent": [
+        "Ventral rootlets (tract-ventral-rootlets) of the lumbar, sacral and coccygeal segments forming the lumbosacral plexus"
+      ]
+    },
+    "bloodSupply": "Segmental lumbar and sacral arteries through radicular branches (vasc-anterior-radiculomedullary-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Cauda equina syndrome (large central lumbar disc herniation, tumour, trauma)",
+        "findings": "Saddle anaesthesia, bilateral leg weakness and radicular pain, loss of anal sphincter tone and bladder dysfunction with urinary retention — a neurosurgical emergency; the conus may be spared, so this is a root syndrome rather than a cord syndrome."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "L2-Co1",
+      "yTop": -311.74,
+      "yBottom": -390,
+      "basis": "The lumbar, sacral and coccygeal roots descend past the conus to their exit foramina; the modeled extent stops at the CLIP_BOUNDS floor (y = -390) while the level addressing covers L2 through Co1."
+    },
+    "levels": [
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      0,
+      -350.87,
+      0
+    ],
+    "size3d": [
+      3,
+      39.13,
+      3
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  }
+]

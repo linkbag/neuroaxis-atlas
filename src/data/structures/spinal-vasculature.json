@@ -1,0 +1,328 @@
+[
+  {
+    "id": "vasc-anterior-spinal-artery-cord",
+    "name": "Anterior spinal artery (spinal cord course)",
+    "synonyms": ["anterior spinal artery (cord segment)", "ASA cord course"],
+    "region": "spinal",
+    "subdivision": "Spinal vasculature",
+    "kind": "vessel",
+    "laterality": "midline",
+    "color": "#991b1b",
+    "parent": "vasc-anterior-spinal-artery",
+    "function": "The unpaired arterial trunk that runs the whole length of the anterior median fissure of the spinal cord (ctx-spinal-cord), from the cervicomedullary junction to the conus. It supplies the ventral two thirds of the cord — anterior and lateral funiculi, ventral and lateral horns, and the base of the dorsal horn — through sulcocommissural branches that penetrate the fissure and alternate from side to side. Its calibre is not constant: segmental radiculomedullary feeders reinforce it at cervical and thoracolumbar levels, and it is thinnest in the upper thoracic region, which makes that watershed zone vulnerable to hypotension.",
+    "territory": ["ctx-spinal-cord", "tract-anterior-funiculus", "tract-lateral-funiculus", "nuc-rexed-lamina-viii", "nuc-rexed-lamina-ix", "nuc-gray-commissure"],
+    "supply": ["syn-anterior-cord"],
+    "contextNote": "The medullary portion of the anterior spinal artery is the committed course record vasc-anterior-spinal-artery (built-in BP3D course, elements FJ1657 and FJ1657M). This record is its spinal cord continuation from the cervicomedullary junction (y = -50) to the conus (y = -383) in the same canonical space, authored as a documented course (no BP3D element binds the cord) and clipped at the model floor for the conus. Its waypoints run in the anterior median fissure at the ventral surface of the procedural cord body.",
+    "connections": {
+      "afferent": ["Segmental medullary feeders from the radiculomedullary arteries (vasc-anterior-radiculomedullary-arteries), most constant at C5-C6 and at T9-L2 through the artery of Adamkiewicz (vasc-artery-of-adamkiewicz)"],
+      "efferent": ["Sulcocommissural branches entering the anterior median fissure and supplying the ventral two thirds of the cord cross-section"]
+    },
+    "bloodSupply": "The anterior spinal artery is itself the principal artery of the ventral cord; its own wall is nourished by vasa vasorum carried with the radiculomedullary feeders.",
+    "clinical": [
+      {
+        "syndrome": "Anterior spinal artery occlusion (vasc-anterior-spinal-artery-cord)",
+        "findings": "Infarction of the ventral two thirds of the cord produces anterior cord syndrome: bilateral motor loss and loss of pain and temperature sensation below the lesion with preserved dorsal column function, plus lower motor neuron signs at the level of the infarct.",
+        "vascular": "vasc-anterior-spinal-artery-cord"
+      },
+      {
+        "syndrome": "Upper thoracic watershed injury",
+        "findings": "The upper thoracic segment of the artery is narrow and poorly collateralized, so hypotension or aortic cross-clamping infarcts the T4-T9 cord first, sometimes with a stepwise sensory level and paraparesis.",
+        "vascular": "vasc-anterior-spinal-artery-cord"
+      }
+    ],
+    "spinalSpan": {"segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."},
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [0.15, -216.5, 3.4],
+    "size3d": [0.5, 116, 0.5],
+    "refs": ["Thron A. Vascular Anatomy of the Spinal Cord: Neuroradiology and Angiosurgery (Springer)", "Standring, Gray's Anatomy, 42nd ed., \"The spinal cord and its blood supply\" chapter", "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)"],
+    "vesselCourse": {
+      "surface": "ctx-spinal-cord",
+      "surfaceNote": "The artery hugs the ventral surface of the modeled cord envelope in the anterior median fissure; the waypoints are placed on that procedural surface rather than projected onto a BP3D mesh, because no committed body exists for the cord.",
+      "basis": "documented-course",
+      "elementIds": [],
+      "anchorNote": "Documented anatomy: a single unpaired artery in the anterior median fissure from the cervicomedullary junction to the conus, where it anastomoses with the radicular branches of the lumbar and sacral arteries. The caudal waypoints stop at the conus tip (y = -377), inside the CLIP_BOUNDS floor; the level addressing covers C1 through Co1.",
+      "parentArtery": "vasc-anterior-spinal-artery",
+      "territoryBasis": "Sulcocommissural branches of this artery supply the ventral two thirds of the cord; the dorsal columns are supplied by the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+      "waypoints": [
+        [0.2, -50, 4.3],
+        [0.2, -85, 4.4],
+        [0.15, -126, 4.0],
+        [0.1, -166, 3.4],
+        [0.1, -226, 2.9],
+        [0.05, -297, 2.5],
+        [0, -349, 1.9],
+        [0, -377, 1.2]
+      ],
+      "tubeRadius": 0.25,
+      "calibreMm": 0.6,
+      "direction": "descending",
+      "color": "#991b1b",
+      "waypointBasis": ["documented-origin", "documented-course", "documented-course", "documented-course", "documented-course", "documented-course", "documented-course", "documented-termination"]
+    }
+  },
+  {
+    "id": "vasc-anterior-radiculomedullary-arteries",
+    "name": "Anterior radiculomedullary arteries",
+    "synonyms": ["radiculomedullary arteries", "anterior medullary feeders", "arteriae radiculomedullares"],
+    "region": "spinal",
+    "subdivision": "Spinal vasculature",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#991b1b",
+    "parent": "vasc-anterior-spinal-artery",
+    "function": "The segmental arteries that accompany the ventral rootlets into the cord and reinforce the anterior spinal artery (vasc-anterior-spinal-artery-cord). They arise from the vertebral, deep cervical, intercostal and lumbar arteries, enter through the intervertebral foramina at the ventral root entry zone, and turn rostrally or caudally to join the anterior spinal artery in the anterior median fissure. Most levels have a small feeder, but three to nine are large: a cervical feeder near C5-C6, the great radicular artery of Adamkiewicz at T9-L2 (vasc-artery-of-adamkiewicz), and a lumbar feeder. The narrow upper thoracic cord between the cervical feeders and the artery of Adamkiewicz is the classic watershed.",
+    "territory": ["ctx-spinal-cord", "ctx-ventral-horn"],
+    "supply": ["syn-anterior-cord"],
+    "contextNote": "Paired segmental family: the authored course is the right-side representative feeder at C6, and the renderer mirrors the paired body. The family is variable between individuals; the three large feeders and the upper thoracic watershed are constant teaching points. Authored as a documented course with no BP3D element, because no committed body exists for the spinal radicular arteries.",
+    "connections": {
+      "afferent": ["Segmental arteries arising from the vertebral, deep cervical, intercostal and lumbar arteries and entering through the intervertebral foramina with the ventral rootlets (tract-ventral-rootlets)"],
+      "efferent": ["Anastomosis with the anterior spinal artery (vasc-anterior-spinal-artery-cord) in the anterior median fissure"]
+    },
+    "bloodSupply": "Vasa vasorum carried with the feeders nourish the anterior spinal artery wall itself.",
+    "clinical": [
+      {
+        "syndrome": "Segmental feeder occlusion",
+        "findings": "Occlusion of a dominant radiculomedullary feeder — classically during aortic surgery or embolization of a radiculomedullary trunk — infarcts the cord in that feeder's territory, producing anterior cord syndrome at the affected segments.",
+        "vascular": "vasc-anterior-radiculomedullary-arteries"
+      },
+      {
+        "syndrome": "Upper thoracic watershed infarction",
+        "findings": "Between the cervical feeders and the artery of Adamkiewicz the anterior spinal artery is tenuous; systemic hypotension therefore infarcts the upper thoracic cord first, with paraparesis and a sensory level near T4-T9.",
+        "vascular": "vasc-anterior-radiculomedullary-arteries"
+      }
+    ],
+    "spinalSpan": {"segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."},
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [4, -216.5, 1.5],
+    "size3d": [2.5, 116, 2.5],
+    "refs": ["Thron A. Vascular Anatomy of the Spinal Cord: Neuroradiology and Angiosurgery (Springer)", "Standring, Gray's Anatomy, 42nd ed., \"The spinal cord and its blood supply\" chapter", "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)"],
+    "vesselCourse": {
+      "surface": null,
+      "surfaceNote": "Intraparenchymal and extraspinal portions mixed: the feeder runs from the intervertebral foramen to the cord surface, so no single atlas surface carries the course.",
+      "basis": "documented-course",
+      "elementIds": [],
+      "anchorNote": "Representative right-side feeder entering at the C6 ventral root entry zone and joining the anterior spinal artery; the family includes segmental feeders at all levels with the dominant trunks at C5-C6, T9-L2 and the lumbar region. The authored course is the right side; the paired body is mirrored by the renderer.",
+      "parentArtery": "vasc-anterior-spinal-artery",
+      "territoryBasis": "Each feeder supplements the anterior spinal artery territory at its own segments; the ventral horns and anterior funiculus are the vulnerable parenchyma.",
+      "waypoints": [
+        [6.8, -118, -0.4],
+        [4.4, -119, 1.8],
+        [2.2, -120, 3.2],
+        [0.5, -121, 4.0]
+      ],
+      "tubeRadius": 0.208,
+      "calibreMm": 0.5,
+      "direction": "ascending",
+      "color": "#991b1b",
+      "waypointBasis": ["documented-origin", "documented-course", "documented-course", "documented-termination"]
+    }
+  },
+  {
+    "id": "vasc-artery-of-adamkiewicz",
+    "name": "Artery of Adamkiewicz",
+    "synonyms": ["great radicular artery", "arteria radicularis magna", "great anterior radicular artery"],
+    "region": "spinal",
+    "subdivision": "Spinal vasculature",
+    "kind": "vessel",
+    "laterality": "midline",
+    "color": "#991b1b",
+    "parent": "vasc-anterior-radiculomedullary-arteries",
+    "function": "The great radicular artery, the largest radiculomedullary feeder of the cord, arising from a left posterior intercostal or upper lumbar artery in most individuals, entering the spinal canal between T9 and L2, ascending two to three segments with a characteristic hairpin turn, and joining the anterior spinal artery (vasc-anterior-spinal-artery-cord) to supply the thoracolumbar cord including the lumbar enlargement (ctx-lumbar-enlargement) and the conus (ctx-conus-medullaris). It is the dominant blood supply of the lower two thirds of the cord in most adults.",
+    "territory": ["ctx-lumbar-enlargement", "ctx-conus-medullaris", "nuc-lmn-lateral-column"],
+    "supply": ["syn-anterior-cord", "syn-conus-medullaris"],
+    "contextNote": "Documented anatomy: origin from a left intercostal or lumbar artery at T9-L2 in most individuals, with an ascending pre-radiculomedullary course and a hairpin before joining the anterior spinal artery. Its level and side vary; the authored course is the common left-sided T12 entry rising to join the artery at T10, addressed to the documented T9-L2 origin range. Authored as a documented course with no BP3D element.",
+    "connections": {
+      "afferent": ["Left posterior intercostal or upper lumbar artery, entering the canal through the T9-L2 intervertebral foramina with the ventral rootlets (tract-ventral-rootlets)"],
+      "efferent": ["Anterior spinal artery (vasc-anterior-spinal-artery-cord) at the lower thoracic level, with sulcocommissural supply of the lumbar enlargement and conus"]
+    },
+    "bloodSupply": "The great radicular artery is the principal feeder of the thoracolumbar cord and the lumbar enlargement.",
+    "clinical": [
+      {
+        "syndrome": "Adamkiewicz territory infarction",
+        "findings": "Occlusion or sacrifice of the great radicular artery infarcts the lower thoracic and lumbar cord, producing sudden paraplegia with a sensory level and loss of bladder control — the classic cord injury of aortic aneurysm repair and of embolization procedures near the T9-L2 intervertebral foramina.",
+        "vascular": "vasc-artery-of-adamkiewicz"
+      }
+    ],
+    "spinalSpan": {"segments": "T9-L2", "yTop": -255.35, "yBottom": -320.4, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."},
+    "levels": ["lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2"],
+    "origin3d": [0.8, -290, 1.2],
+    "size3d": [3, 25, 2.5],
+    "refs": ["Thron A. Vascular Anatomy of the Spinal Cord: Neuroradiology and Angiosurgery (Springer)", "Standring, Gray's Anatomy, 42nd ed., \"The spinal cord and its blood supply\" chapter", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018"],
+    "vesselCourse": {
+      "surface": null,
+      "surfaceNote": "Intraparenchymal entry course: from the intervertebral foramen through the ventral root zone to the anterior median fissure, so no atlas surface carries the course.",
+      "basis": "documented-course",
+      "elementIds": [],
+      "anchorNote": "Documented origin range T9-L2 with the common left-sided entry at T12 and a two to three segment ascent; the authored course enters at the T12-L1 foramen and rises to join the anterior spinal artery at T10. The exact level and side vary between individuals and are documented as such in the function text.",
+      "parentArtery": "vasc-anterior-radiculomedullary-arteries",
+      "territoryBasis": "The great radicular artery is the dominant feeder of the lumbar enlargement and conus; its sacrifice produces thoracolumbar infarction.",
+      "waypoints": [
+        [7, -302, -1.2],
+        [4.6, -296, 1],
+        [2.4, -288, 2.6],
+        [0.8, -281, 3.3],
+        [0.3, -277, 3.5]
+      ],
+      "tubeRadius": 0.333,
+      "calibreMm": 0.8,
+      "direction": "ascending",
+      "color": "#991b1b",
+      "waypointBasis": ["documented-origin", "documented-course", "documented-course", "documented-course", "documented-termination"]
+    }
+  },
+  {
+    "id": "vasc-posterior-spinal-arteries",
+    "name": "Posterior spinal arteries",
+    "synonyms": ["posterior spinal artery", "arteria spinalis posterior", "PSA"],
+    "region": "spinal",
+    "subdivision": "Spinal vasculature",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#991b1b",
+    "parent": "vasc-vertebral-artery",
+    "function": "The paired arteries that descend in the dorsolateral sulci of the cord along the dorsal root entry zones, from their origin at the vertebral arteries or the posteroinferior cerebellar arteries to the conus, where they anastomose with the radicular branches of the segmental arteries. They supply the posterior third of the cord — the dorsal columns, the base and tip of the dorsal horn, and the dorsal root entry zone — through fine penetrating branches, and are reinforced segmentally by posterior radiculomedullary feeders. They are narrower and more constant in position than the anterior spinal artery.",
+    "territory": ["tract-posterior-funiculus", "tract-gracile-fasciculus", "tract-cuneate-fasciculus", "ctx-dorsal-horn"],
+    "supply": ["syn-posterior-cord"],
+    "contextNote": "Paired course along the dorsolateral sulcus: the authored course is the right side and the renderer mirrors the paired body. Their origin from the vertebral arteries is the committed vasc-vertebral-artery record; the spinal courses themselves are documented, with no BP3D element binding them. Authored as a documented course.",
+    "connections": {
+      "afferent": ["Vertebral arteries (vasc-vertebral-artery) or the posteroinferior cerebellar arteries at the cervicomedullary junction, with segmental posterior radiculomedullary feeders at all levels"],
+      "efferent": ["Penetrating branches into the dorsal columns and the dorsal horn at the root entry zone"]
+    },
+    "bloodSupply": "The posterior spinal arteries are the principal supply of the dorsal third of the cord, supplemented by sulcocommissural branches of the anterior spinal artery.",
+    "clinical": [
+      {
+        "syndrome": "Posterior spinal artery infarction",
+        "findings": "Rare infarction producing a posterior cord syndrome with loss of vibration sense and proprioception below the lesion and sensory ataxia, while pain and temperature are spared; dorsal root entry zone involvement adds segmental sensory loss and radicular pain.",
+        "vascular": "vasc-posterior-spinal-arteries"
+      }
+    ],
+    "spinalSpan": {"segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."},
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.8, -216.5, -3.2],
+    "size3d": [0.6, 116, 0.6],
+    "refs": ["Thron A. Vascular Anatomy of the Spinal Cord: Neuroradiology and Angiosurgery (Springer)", "Standring, Gray's Anatomy, 42nd ed., \"The spinal cord and its blood supply\" chapter", "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)"],
+    "vesselCourse": {
+      "surface": "ctx-spinal-cord",
+      "surfaceNote": "The artery hugs the dorsolateral surface of the modeled cord envelope at the dorsal root entry zone; the waypoints sit on that procedural surface, since no committed body exists for the cord.",
+      "basis": "documented-course",
+      "elementIds": [],
+      "anchorNote": "Documented anatomy: a paired vessel in each dorsolateral sulcus from the cervicomedullary junction to the conus, reinforced by posterior radiculomedullary feeders. The authored course is the right side; the paired body is mirrored by the renderer.",
+      "parentArtery": "vasc-vertebral-artery",
+      "territoryBasis": "Dorsal third of the cord: dorsal columns, dorsal horn and dorsal root entry zone; the ventral two thirds belong to the anterior spinal artery (vasc-anterior-spinal-artery-cord).",
+      "waypoints": [
+        [2, -50, -3.7],
+        [2.1, -126, -3.6],
+        [1.9, -226, -2.8],
+        [1.6, -349, -1.5],
+        [1.2, -377, -0.8]
+      ],
+      "tubeRadius": 0.167,
+      "calibreMm": 0.4,
+      "direction": "descending",
+      "color": "#991b1b",
+      "waypointBasis": ["documented-origin", "documented-course", "documented-course", "documented-course", "documented-termination"]
+    }
+  },
+  {
+    "id": "vasc-anterior-spinal-veins",
+    "name": "Anterior spinal veins",
+    "synonyms": ["anterior spinal vein", "venae spinales anteriores", "ventral spinal veins"],
+    "region": "spinal",
+    "subdivision": "Spinal vasculature",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#b91c1c",
+    "function": "The longitudinal venous channels that drain the ventral surface of the spinal cord in and beside the anterior median fissure. They receive the intramedullary veins draining the ventral two thirds of the cord and empty through segmental medullary veins into the internal vertebral venous plexus within the epidural space, then upward to the intracranial venous sinuses. Like the spinal arteries they are reinforced segmentally, and their valves are few, so pressure changes in the thorax and abdomen are transmitted along the whole channel.",
+    "territory": ["ctx-spinal-cord", "tract-anterior-funiculus"],
+    "supply": [],
+    "contextNote": "The spinal venous drainage is continuous with the internal vertebral venous plexus, which the atlas does not model; the authored course therefore declares no parent vein and no parent artery, documenting the unmodeled plexus instead of inventing a parent. Paired course: the authored body is the right side, mirrored by the renderer. Authored as a documented course with no BP3D element.",
+    "connections": {
+      "afferent": ["Intramedullary venules draining the ventral two thirds of the cord cross-section"],
+      "efferent": ["Segmental medullary veins leading to the internal vertebral venous plexus, which the atlas does not model"]
+    },
+    "bloodSupply": "Not applicable to a venous channel; the vessel wall is drained by its own tributaries.",
+    "clinical": [
+      {
+        "syndrome": "Spinal venous congestion",
+        "findings": "Raised epidural venous pressure or thrombosis of the internal vertebral venous plexus congests the anterior spinal veins, producing progressive paraparesis with a sensory level and sphincter dysfunction — a congestive myelopathy that mimics anterior cord syndrome but evolves subacutely.",
+        "vascular": "vasc-anterior-spinal-veins"
+      }
+    ],
+    "spinalSpan": {"segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."},
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.25, -216.5, 3.2],
+    "size3d": [0.4, 116, 0.4],
+    "refs": ["Thron A. Vascular Anatomy of the Spinal Cord: Neuroradiology and Angiosurgery (Springer)", "Standring, Gray's Anatomy, 42nd ed., \"The spinal cord and its blood supply\" chapter", "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)"],
+    "vesselCourse": {
+      "surface": "ctx-spinal-cord",
+      "surfaceNote": "The veins lie on the ventral surface of the modeled cord envelope beside the anterior median fissure; the waypoints sit on that procedural surface, since no committed body exists for the cord.",
+      "basis": "documented-course",
+      "elementIds": [],
+      "anchorNote": "Documented anatomy: paired longitudinal ventral channels from the conus to the cervicomedullary junction, draining into segmental medullary veins and the unmodeled internal vertebral venous plexus. The authored course is the right side, ascending in the drainage direction; the paired body is mirrored by the renderer.",
+      "territoryBasis": "Venous drainage of the ventral two thirds of the cord; the dorsal third drains through the posterior spinal veins (vasc-posterior-spinal-veins).",
+      "waypoints": [
+        [0.6, -377, 1],
+        [0.7, -297, 2.3],
+        [0.6, -226, 2.7],
+        [0.6, -126, 3.8],
+        [0.5, -50, 4.1]
+      ],
+      "tubeRadius": 0.208,
+      "calibreMm": 0.5,
+      "direction": "ascending",
+      "color": "#b91c1c",
+      "waypointBasis": ["documented-origin", "documented-course", "documented-course", "documented-course", "documented-termination"]
+    }
+  },
+  {
+    "id": "vasc-posterior-spinal-veins",
+    "name": "Posterior spinal veins",
+    "synonyms": ["posterior spinal vein", "venae spinales posteriores", "dorsal spinal veins"],
+    "region": "spinal",
+    "subdivision": "Spinal vasculature",
+    "kind": "vessel",
+    "laterality": "paired",
+    "color": "#b91c1c",
+    "function": "The longitudinal venous channels that drain the dorsal surface of the spinal cord along the posterolateral aspects of the cord. They collect the intramedullary venules of the dorsal columns and dorsal horns, receive the dorsal root veins, and empty through segmental medullary veins into the unmodeled internal vertebral venous plexus. Two channels usually run on each side; the dorsal drainage is more variable than the anterior channels and anastomoses freely with them at segmental levels.",
+    "territory": ["ctx-spinal-cord", "tract-posterior-funiculus"],
+    "supply": [],
+    "contextNote": "The dorsal spinal veins drain into the internal vertebral venous plexus, which the atlas does not model; the authored course declares no parent vein and no parent artery, documenting the unmodeled plexus rather than inventing a parent. Paired course: the authored body is the right side, mirrored by the renderer. Authored as a documented course with no BP3D element.",
+    "connections": {
+      "afferent": ["Dorsal root veins and intramedullary venules of the dorsal columns and dorsal horns"],
+      "efferent": ["Segmental medullary veins leading to the internal vertebral venous plexus, which the atlas does not model"]
+    },
+    "bloodSupply": "Not applicable to a venous channel; the vessel wall is drained by its own tributaries.",
+    "clinical": [
+      {
+        "syndrome": "Dorsal venous congestion",
+        "findings": "Congestion or thrombosis of the dorsal spinal veins impairs dorsal column drainage, producing sensory ataxia with impaired proprioception and a positive Romberg sign, sometimes with radicular pain along the dorsal root entry zones.",
+        "vascular": "vasc-posterior-spinal-veins"
+      }
+    ],
+    "spinalSpan": {"segments": "all", "yTop": -50, "yBottom": -383, "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."},
+    "levels": ["lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
+    "origin3d": [1.5, -216.5, -3],
+    "size3d": [0.4, 116, 0.4],
+    "refs": ["Thron A. Vascular Anatomy of the Spinal Cord: Neuroradiology and Angiosurgery (Springer)", "Standring, Gray's Anatomy, 42nd ed., \"The spinal cord and its blood supply\" chapter", "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)"],
+    "vesselCourse": {
+      "surface": "ctx-spinal-cord",
+      "surfaceNote": "The veins lie on the dorsal surface of the modeled cord envelope beside the dorsolateral sulci; the waypoints sit on that procedural surface, since no committed body exists for the cord.",
+      "basis": "documented-course",
+      "elementIds": [],
+      "anchorNote": "Documented anatomy: paired longitudinal dorsal channels from the conus to the cervicomedullary junction, draining into segmental medullary veins and the unmodeled internal vertebral venous plexus. The authored course is the right side, ascending in the drainage direction; the paired body is mirrored by the renderer.",
+      "territoryBasis": "Venous drainage of the dorsal third of the cord; the ventral two thirds drain through the anterior spinal veins (vasc-anterior-spinal-veins).",
+      "waypoints": [
+        [1.2, -377, -0.7],
+        [1.5, -297, -1.4],
+        [1.8, -226, -2.6],
+        [1.9, -126, -3.4],
+        [1.8, -50, -3.5]
+      ],
+      "tubeRadius": 0.208,
+      "calibreMm": 0.5,
+      "direction": "ascending",
+      "color": "#b91c1c",
+      "waypointBasis": ["documented-origin", "documented-course", "documented-course", "documented-course", "documented-termination"]
+    }
+  }
+]

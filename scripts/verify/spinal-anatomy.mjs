@@ -26,7 +26,7 @@
  * Wiring into package.json (`verify:spinal-anatomy`) is phase 9 (integrate).
  */
 
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -249,6 +249,167 @@ if (spinalRecords.length === 0) {
         ok(`cuneate rule idle for ${record.id} until an extent lands`)
       }
     }
+  }
+}
+
+/* ────────── 6. spinal record content (task spinal-data, additive) ────────── */
+
+console.log('\n--- 6. spinal records: registry-first, level-addressed, prose-complete ---')
+{
+  const structureFiles = readdirSync(resolve(ROOT, 'src/data/structures'))
+    .filter((name) => name.endsWith('.json'))
+    .sort()
+  const fromStructures = structureFiles.flatMap((name) => {
+    const parsed = JSON.parse(read(`src/data/structures/${name}`))
+    return Array.isArray(parsed) ? parsed : (parsed.records ?? [])
+  })
+  const parsedTracts = JSON.parse(read('src/data/tracts.json'))
+  const allRecords = [
+    ...fromStructures,
+    ...(Array.isArray(parsedTracts) ? parsedTracts : (parsedTracts.records ?? [])),
+  ]
+  const spinalRecords = allRecords.filter((record) => record.region === 'spinal')
+  const registryRows = Array.isArray(TAXONOMY) ? TAXONOMY : (TAXONOMY.records ?? [])
+  const spinalRows = registryRows.filter((row) => row.region === 'spinal')
+  equal('the spinal registry holds its 74 rows', spinalRows.length, 74)
+  equal('the spinal files hold their 74 records', spinalRecords.length, 74)
+
+  // 6a. registry-first, BOTH directions
+  const recordById = new Map(allRecords.map((record) => [record.id, record]))
+  const rowById = new Map(spinalRows.map((row) => [row.id, row]))
+  const missing = spinalRows.filter((row) => !recordById.has(row.id)).map((row) => row.id)
+  if (missing.length === 0) ok(`every spinal registry row has an authored record (${spinalRows.length} rows)`)
+  else bad(`spinal registry rows with no record: ${missing.join(' · ')}`)
+  const unregistered = spinalRecords.filter((record) => !rowById.has(record.id)).map((record) => record.id)
+  if (unregistered.length === 0) ok(`every spinal record is registry-first (${spinalRecords.length} records)`)
+  else bad(`spinal records with no registry row: ${unregistered.join(' · ')}`)
+
+  // 6b. name + synonyms + laterality agree with the registry (crossCheckRegistry drift)
+  const drifted = []
+  for (const record of spinalRecords) {
+    const row = rowById.get(record.id)
+    if (!row) continue
+    if (record.name !== row.name) drifted.push(`${record.id} name "${record.name}" ≠ registry "${row.name}"`)
+    if (JSON.stringify(record.synonyms ?? []) !== JSON.stringify(row.synonyms ?? [])) drifted.push(`${record.id} synonyms drift`)
+    if (record.laterality !== row.laterality) drifted.push(`${record.id} laterality ${record.laterality} ≠ registry ${row.laterality}`)
+  }
+  if (drifted.length === 0) ok('registry name / synonyms / laterality agreement holds for every spinal record')
+  else for (const line of drifted) bad(line)
+
+  // 6c. anatomy honesty: function + clinical[{syndrome,findings}] + refs everywhere
+  const thin = spinalRecords.filter((r) =>
+    typeof r.function !== 'string' || r.function.trim() === '' ||
+    !Array.isArray(r.refs) || r.refs.length === 0 ||
+    !Array.isArray(r.clinical) || r.clinical.length === 0 ||
+    r.clinical.some((c) => typeof c?.syndrome !== 'string' || c.syndrome.trim() === '' || typeof c?.findings !== 'string' || c.findings.trim() === ''),
+  )
+  if (thin.length === 0) ok(`every spinal record carries function + clinical[{syndrome,findings}] + refs (${spinalRecords.length} records)`)
+  else bad(`spinal records missing function / clinical / refs: ${thin.map((r) => r.id).join(' · ')}`)
+
+  // 6d. the 31 segments are level-addressed in the RECORDS (5a covers the registry)
+  const segRecords = spinalRecords.filter((r) => /^ctx-seg-/.test(r.id))
+  equal('the records carry the 31 ctx-seg-* segments', segRecords.map((r) => r.id).sort(), [...EXPECTED_IDS].map((id) => id.replace('lvl-', 'ctx-seg-')).sort())
+  const badSeg = segRecords.filter((r) => JSON.stringify(r.levels ?? []) !== JSON.stringify([r.id.replace('ctx-seg-', 'lvl-')]))
+  if (badSeg.length === 0) ok('each ctx-seg-* record addresses exactly its own level')
+  else bad(`ctx-seg-* records with wrong levels[]: ${badSeg.map((r) => r.id).join(' · ')}`)
+
+  // 6e. cuneate ≥ T6 on the LEVELS (5d covers the span)
+  const t6Y = yOf('lvl-t6')
+  const cuneate = spinalRecords.filter((r) => /cuneate/i.test(`${r.id} ${r.name}`))
+  equal('the spinal data carries exactly one cuneate record', cuneate.length, 1)
+  for (const record of cuneate) {
+    const levels = record.levels ?? []
+    truthy(
+      `cuneate record ${record.id} addresses T6-and-above levels only (T6 y=${t6Y})`,
+      levels.length > 0 && levels.every((l) => typeof yOf(l) === 'number' && yOf(l) >= t6Y),
+    )
+  }
+
+  // 6f. laterality is declared in the {midline, paired} dichotomy
+  const badLat = spinalRecords.filter((r) => r.laterality !== 'midline' && r.laterality !== 'paired')
+  if (badLat.length === 0) ok('every spinal record declares a laterality in {midline, paired}')
+  else bad(`spinal records with an invalid laterality: ${badLat.map((r) => r.id).join(' · ')}`)
+
+  // 6g. levels[] ↔ spinalSpan agreement (audit-facts contract call #1, replicated)
+  const LABELS = EXPECTED_IDS.map((id) => {
+    const tail = id.replace('lvl-', '')
+    return tail === 'co1' ? 'Co1' : tail.toUpperCase()
+  })
+  const LABEL_INDEX = new Map(LABELS.map((label, i) => [label, i]))
+  const expandSegments = (segments) => {
+    if (segments === 'all') return [...EXPECTED_IDS]
+    const out = []
+    for (const raw of String(segments).split(',')) {
+      const token = raw.trim()
+      const range = /^([A-Za-z]+\d+)-([A-Za-z]+\d+)$/.exec(token)
+      if (range) {
+        const a = LABEL_INDEX.get(range[1])
+        const b = LABEL_INDEX.get(range[2])
+        if (a === undefined || b === undefined || a > b) throw new Error(`bad segment token "${token}"`)
+        for (let i = a; i <= b; i += 1) out.push(EXPECTED_IDS[i])
+      } else if (LABEL_INDEX.has(token)) {
+        out.push(EXPECTED_IDS[LABEL_INDEX.get(token)])
+      } else {
+        throw new Error(`bad segment token "${token}"`)
+      }
+    }
+    return out
+  }
+  const disagree = []
+  for (const r of spinalRecords) {
+    if (r.spinalSpan && Array.isArray(r.levels)) {
+      let expanded = []
+      try {
+        expanded = expandSegments(r.spinalSpan.segments)
+      } catch (err) {
+        disagree.push(`${r.id} spinalSpan: ${err.message}`)
+        continue
+      }
+      const a = [...expanded].sort()
+      const b = [...r.levels].sort()
+      if (JSON.stringify(a) !== JSON.stringify(b)) disagree.push(`${r.id} span[${a.join(', ')}] ≠ levels[${b.join(', ')}]`)
+    }
+    if (!r.spinalSpan && !Array.isArray(r.levels)) disagree.push(`${r.id} has no levels[] and no spinalSpan`)
+  }
+  if (disagree.length === 0) {
+    ok('where a spinal record carries both forms, the spinalSpan expansion and levels[] agree (contract call #1)')
+  } else {
+    for (const line of disagree) bad(line)
+  }
+}
+
+/* ─────── 7. spinal vessel courses (spinal-vasculature.json invariants) ─────── */
+
+console.log('\n--- 7. spinal vessel courses: provenance trio + tube calibre ---')
+{
+  const parsed = JSON.parse(read('src/data/structures/spinal-vasculature.json'))
+  const vessels = Array.isArray(parsed) ? parsed : (parsed.records ?? [])
+  equal('spinal-vasculature.json carries the 6 authored course records', vessels.length, 6)
+  const problems = []
+  for (const record of vessels) {
+    const vc = record.vesselCourse
+    if (!vc) { problems.push(`${record.id}: no vesselCourse block`); continue }
+    const wp = Array.isArray(vc.waypoints) ? vc.waypoints : []
+    if (wp.length === 0) problems.push(`${record.id}: no waypoints`)
+    if (!wp.every((p) => Array.isArray(p) && p.length === 3 && p.every((n) => typeof n === 'number' && Number.isFinite(n)))) {
+      problems.push(`${record.id}: malformed waypoint`)
+    }
+    const product = vc.tubeRadius * 2.4
+    const error = Math.abs(product - vc.calibreMm)
+    if (!(error < 0.03)) problems.push(`${record.id}: tubeRadius ${vc.tubeRadius} × 2.4 = ${product} ≠ calibreMm ${vc.calibreMm}`)
+    if ((vc.waypointBasis ?? []).length !== wp.length) {
+      problems.push(`${record.id}: waypointBasis covers ${(vc.waypointBasis ?? []).length}/${wp.length} waypoints`)
+    }
+    const declaresProvenance =
+      ['documented-course', 'bp3d-element'].includes(vc.basis) &&
+      Boolean((vc.waypointBasis ?? [])[0]) &&
+      typeof vc.anchorNote === 'string' && vc.anchorNote.trim().length > 0
+    if (!declaresProvenance) problems.push(`${record.id}: missing the provenance trio (basis + waypointBasis[0] + anchorNote)`)
+  }
+  if (problems.length === 0) {
+    ok('every spinal vessel course declares the provenance trio and tubeRadius × 2.4 = calibreMm (|err| < 0.03)')
+  } else {
+    for (const line of problems) bad(line)
   }
 }
 

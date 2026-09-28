@@ -1,0 +1,68 @@
+[
+  {
+    "id": "syn-anterior-cord",
+    "name": "Anterior cord syndrome",
+    "structures": ["tract-anterior-funiculus", "tract-lateral-funiculus", "nuc-rexed-lamina-viii", "nuc-rexed-lamina-ix", "tract-spinothalamic"],
+    "vascularTerritory": "Anterior spinal artery territory (vasc-anterior-spinal-artery-cord) — ventral two thirds of the cord.",
+    "presentation": "Bilateral loss of motor function and of pain and temperature sensation below the level of the lesion, with preserved vibration sense and conscious proprioception because the dorsal columns are spared. Sacral sensation may be partially preserved. The upper motor neuron picture at and below the lesion is accompanied by lower motor neuron signs at the level of the infarct. Bladder and bowel dysfunction are common and autonomic instability can follow high cervical lesions.",
+    "cause": "Infarction of the anterior spinal artery (vasc-anterior-spinal-artery-cord) or of its sulcocommissural branches, classically after aortic cross-clamping or aortic surgery, severe hypotension, fibrocartilaginous embolism, or arterial dissection; anterior cord damage also occurs with acute disc herniation and hyperextension injury. The artery of Adamkiewicz (vasc-artery-of-adamkiewicz) is the dominant feeder of the thoracolumbar cord, so its territory is most vulnerable in aortic surgery.",
+    "refs": ["AMBOSS, \"Incomplete spinal cord syndromes\" (clinical review)", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018", "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., spinal cord vascular syndromes"]
+  },
+  {
+    "id": "syn-brown-sequard",
+    "name": "Spinal cord hemisection",
+    "eponym": "Brown-Séquard syndrome",
+    "structures": ["tract-corticospinal-lateral", "tract-spinothalamic", "tract-dcml", "nuc-rexed-lamina-ix", "nuc-intermediolateral"],
+    "presentation": "Ipsilateral weakness and upper motor neuron signs below the lesion with loss of vibration sense and conscious proprioception, and contralateral loss of pain and temperature sensation beginning one or two segments below the lesion, because the anterolateral fibres cross in the anterior white commissure (tract-anterior-white-commissure) before ascending. Segmental lower motor neuron signs and a suspended sensory level appear at the lesion itself. Hemisection above T1 damages the intermediolateral column (nuc-intermediolateral) and produces an ipsilateral Horner syndrome.",
+    "cause": "Penetrating trauma is the classic cause; spinal cord hemisection also results from unilateral compression by a laterally herniated disc, a posterolateral tumor, or slow compression by a bony spur, and rarely from unilateral infarction of a sulcocommissural branch of the anterior spinal artery (vasc-anterior-spinal-artery-cord).",
+    "refs": ["AMBOSS, \"Incomplete spinal cord syndromes\" (clinical review)", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018", "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., spinal cord tract syndromes"]
+  },
+  {
+    "id": "syn-central-cord",
+    "name": "Central cord syndrome",
+    "structures": ["nuc-gray-commissure", "tract-anterior-white-commissure", "vent-central-canal", "tract-corticospinal-lateral"],
+    "presentation": "Motor impairment that is worse in the upper than in the lower limbs, because the corticospinal representation of the arm lies medially in the cord, with sacral sparing and a suspended, cape-like dissociated sensory loss around the shoulders and arms: pain and temperature are impaired where the decussating fibres of the anterior white commissure (tract-anterior-white-commissure) are interrupted, while light touch and proprioception are spared. Bladder dysfunction is usually mild and late.",
+    "cause": "Acute central cord injury, typically hyperextension of a stenotic cervical spine in older adults, with contusion or haemorrhage of the central gray; a centrally expanding syrinx (see syn-syringomyelia) or an intramedullary tumor can produce the same anatomical picture more slowly.",
+    "refs": ["AMBOSS, \"Incomplete spinal cord syndromes\" (clinical review)", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018", "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter"]
+  },
+  {
+    "id": "syn-posterior-cord",
+    "name": "Posterior cord syndrome",
+    "structures": ["tract-posterior-funiculus", "tract-gracile-fasciculus", "tract-cuneate-fasciculus", "tract-dcml"],
+    "presentation": "Selective loss of vibration sense and conscious proprioception below the lesion, with sensory ataxia, a positive Romberg sign, pseudoathetosis of the outstretched hands, and impaired two-point discrimination, while pain and temperature sensation remain intact because the anterolateral system is spared. Gait becomes ataxic and the patient relies on vision to place the feet.",
+    "cause": "The classic cause is tabes dorsalis (see syn-tabes-dorsalis) from neurosyphilis; other causes include vitamin B12 deficiency with subacute combined degeneration, dorsal column compression by a posterior tumor or cervical spondylotic ridge, and, rarely, infarction of the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "refs": ["AMBOSS, \"Incomplete spinal cord syndromes\" (clinical review)", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018", "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., dorsal column pathways"]
+  },
+  {
+    "id": "syn-conus-medullaris",
+    "name": "Conus medullaris syndrome",
+    "structures": ["ctx-conus-medullaris", "nuc-sacral-parasympathetic", "nuc-onuf", "tract-dorsal-rootlets"],
+    "presentation": "Early and prominent bladder, bowel and sexual dysfunction with urinary retention, together with symmetric saddle anesthesia over the sacral dermatomes and mild, symmetric lower motor neuron leg weakness. Reflexes of the sacral segments — bulbocavernosus and anal wink — are lost early. Pain is often midline and less radicular than in cauda equina syndrome.",
+    "cause": "Damage at the tip of the cord (ctx-conus-medullaris), most often from a thoracolumbar burst fracture at T12-L1, a large midline disc herniation, an intramedullary tumor, or ischaemia in the artery of Adamkiewicz (vasc-artery-of-adamkiewicz) territory; the conus shares the blood supply of the lumbar enlargement (ctx-lumbar-enlargement).",
+    "refs": ["AMBOSS, \"Incomplete spinal cord syndromes\" (clinical review)", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018", "UpToDate, \"Anatomy and localization of spinal cord disorders\" (clinical review)"]
+  },
+  {
+    "id": "syn-cauda-equina",
+    "name": "Cauda equina syndrome",
+    "structures": ["ctx-cauda-equina", "tract-dorsal-rootlets", "tract-ventral-rootlets", "nuc-dorsal-root-ganglion"],
+    "presentation": "Bilateral sciatic-type leg pain and radicular weakness with saddle anesthesia, late urinary retention with overflow incontinence, and loss of the sacral reflexes. Because the compressed structures are rootlets (tract-dorsal-rootlets, tract-ventral-rootlets) rather than cord, the signs are lower motor neuron in character, asymmetric, and pain is typically severe and radiating. Erectile dysfunction and anal sphincter weakness follow.",
+    "cause": "Compression of the lumbosacral rootlets (ctx-cauda-equina) below the conus, most often a massive midline lumbar disc herniation at L4-L5 or L5-S1, but also spinal canal stenosis, tumor, epidural abscess or haematoma, or traumatic fracture-dislocation; this is a surgical emergency requiring urgent decompression.",
+    "refs": ["AMBOSS, \"Incomplete spinal cord syndromes\" (clinical review)", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018", "UpToDate, \"Anatomy and localization of spinal cord disorders\" (clinical review)"]
+  },
+  {
+    "id": "syn-syringomyelia",
+    "name": "Syringomyelia",
+    "structures": ["nuc-gray-commissure", "tract-anterior-white-commissure", "vent-central-canal"],
+    "presentation": "A cape-like, suspended dissociated sensory loss across the shoulders and arms: pain and temperature are lost in the affected dermatomes because the crossing anterolateral fibres are interrupted within the anterior white commissure (tract-anterior-white-commissure), while light touch and proprioception are preserved. As the syrinx expands it damages the ventral horn cells (segmental weakness and wasting of the hands) and then the long tracts, producing upper motor neuron signs below the lesion. Trophic ulcers and neuropathic joints of the insensate hands are late complications.",
+    "cause": "A fluid-filled cavity (syrinx) centred on the central canal (vent-central-canal) or the central gray (nuc-gray-commissure) and expanding rostrocaudally; the most common association is a Chiari I malformation, and syringomyelia also follows spinal cord injury, tethered cord, and intramedullary tumors. The dissociated loss is the anatomical signature of commissural fibre interruption at the level of the syrinx.",
+    "refs": ["AMBOSS, \"Syringomyelia\" (clinical review)", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018", "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., spinal cord tract syndromes"]
+  },
+  {
+    "id": "syn-tabes-dorsalis",
+    "name": "Tabes dorsalis",
+    "structures": ["tract-posterior-funiculus", "tract-gracile-fasciculus", "tract-dcml", "nuc-dorsal-root-ganglion"],
+    "presentation": "A slowly progressive sensory ataxia with lightning pains in the legs, paraesthesiae, loss of vibration sense and proprioception, absent ankle and knee reflexes, a positive Romberg sign, and early bladder dysfunction; Charcot joints and perforating plantar ulcers follow prolonged insensitivity. Pupillary irregularity with a poor light reflex may accompany the tabetic picture.",
+    "cause": "Late neurosyphilis with degeneration of the dorsal columns (tract-posterior-funiculus) and of the dorsal root ganglia and rootlets (nuc-dorsal-root-ganglion, tract-dorsal-rootlets), the classic substrate of posterior cord syndrome (see syn-posterior-cord).",
+    "refs": ["AMBOSS, \"Neurosyphilis\" (clinical review)", "Kunam VK, Velayudhan V, Chaudhry ZA, Bobinski M, Smoker WRK, Reede DL. \"Incomplete Cord Syndromes: Clinical and Imaging Review.\" RadioGraphics 2018", "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter"]
+  }
+]

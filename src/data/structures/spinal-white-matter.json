@@ -1,0 +1,557 @@
+[
+  {
+    "id": "tract-posterior-funiculus",
+    "name": "Posterior funiculus",
+    "synonyms": [
+      "dorsal funiculus",
+      "funiculus posterior",
+      "dorsal columns of the spinal cord",
+      "posterior columns"
+    ],
+    "region": "spinal",
+    "subdivision": "White matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#3b82f6",
+    "function": "The dorsal white matter column of the spinal cord, carrying fine touch, vibration sense and conscious proprioception from the trunk and limbs toward the medulla. Its fibres ascend without interruption to the gracile and cuneate nuclei of the caudal medulla, where they synapse and secondarily decussate into the medial lemniscus. Below T6 the column contains only the gracile fasciculus; from T6 rostrally the cuneate fasciculus lies lateral to it. The column is largest at cervical levels, where both fasciculi carry upper-limb input.",
+    "connections": {
+      "afferent": [
+        "Primary afferent fibres entering through the dorsal rootlets (tract-dorsal-rootlets), including large myelinated mechanoreceptive and proprioceptive axons"
+      ],
+      "efferent": [
+        "Second-order fibres of the dorsal column nuclei crossing in the medulla to form the medial lemniscus (tract-medial-lemniscus)"
+      ]
+    },
+    "bloodSupply": "Posterior spinal arteries (vasc-posterior-spinal-arteries) and sulcocommissural branches of the anterior spinal artery (vasc-anterior-spinal-artery-cord).",
+    "clinical": [
+      {
+        "syndrome": "Posterior column lesion (tabes dorsalis, vitamin B12 deficiency, dorsal column compression)",
+        "findings": "Loss of vibration sense and conscious proprioception below the lesion with sensory ataxia and a positive Romberg sign; fine two-point discrimination is impaired while pain and temperature remain intact because the anterolateral system is spared."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      1.7,
+      -216.5,
+      -4.2
+    ],
+    "size3d": [
+      1.9,
+      116,
+      1.1
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "tract-gracile-fasciculus",
+    "name": "Gracile fasciculus (spinal cord)",
+    "synonyms": [
+      "fasciculus gracilis (cord)",
+      "column of Goll (cord)",
+      "gracile division of the posterior funiculus"
+    ],
+    "region": "spinal",
+    "subdivision": "White matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#3b82f6",
+    "function": "The medial division of the posterior funiculus, present at every spinal level, carrying fine touch, vibration and proprioceptive fibres from the lower half of the body (sacral, lumbar and lower thoracic dermatomes). Its fibres are somatotopically ordered with sacral fibres most medial, and they terminate in the gracile nucleus of the caudal medulla. Below T6 it is the only fasciculus of the posterior funiculus; above T6 the cuneate fasciculus lies lateral to it.",
+    "connections": {
+      "afferent": [
+        "First-order proprioceptive and tactile axons of the lower body entering through the dorsal rootlets (tract-dorsal-rootlets)"
+      ],
+      "efferent": [
+        "Fibres relayed from the gracile nucleus into the medial lemniscus (tract-medial-lemniscus)"
+      ]
+    },
+    "bloodSupply": "Posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Selective gracile tract lesion (tabes dorsalis, dorsal root entry zone injury)",
+        "findings": "Lower-limb proprioception and vibration sense are lost first, producing sensory ataxia with a stomping gait and unsteady stance in the dark; pain and temperature sensation are preserved."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      1.15,
+      -216.5,
+      -4.3
+    ],
+    "size3d": [
+      1.05,
+      116,
+      1
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "tract-cuneate-fasciculus",
+    "name": "Cuneate fasciculus (spinal cord)",
+    "synonyms": [
+      "fasciculus cuneatus (cord)",
+      "column of Burdach (cord)",
+      "cuneate division of the posterior funiculus"
+    ],
+    "region": "spinal",
+    "subdivision": "White matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#3b82f6",
+    "function": "The lateral division of the posterior funiculus, present only from T6 rostrally, carrying fine touch, vibration and proprioceptive fibres from the upper half of the body (upper thoracic, cervical and upper-limb dermatomes). Its fibres are somatotopically ordered with thoracic fibres medial and upper-limb fibres lateral, and they terminate in the cuneate nucleus of the caudal medulla. Its absence below T6 is a teaching point: in the lower cord the posterior funiculus consists of the gracile fasciculus alone.",
+    "connections": {
+      "afferent": [
+        "First-order proprioceptive and tactile axons of the upper body entering through the dorsal rootlets (tract-dorsal-rootlets) at T6 and above"
+      ],
+      "efferent": [
+        "Fibres relayed from the cuneate nucleus into the medial lemniscus (tract-medial-lemniscus)"
+      ]
+    },
+    "bloodSupply": "Posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Upper cervical dorsal column lesion",
+        "findings": "Vibration and proprioceptive loss in the upper limb with relatively preserved lower-limb position sense when the adjacent gracile fasciculus is spared; seen in high cervical cord compression and in lesions of the dorsal root entry zone above T6."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C1-T6",
+      "yTop": -50,
+      "yBottom": -231.48,
+      "basis": "Cuneate fibres join the posterior funiculus only from T6 rostrally; yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json, so the caudal edge stops at the bottom of the T6 tile — below that level the posterior funiculus is purely gracile."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6"
+    ],
+    "origin3d": [
+      2.55,
+      -140.74,
+      -4.2
+    ],
+    "size3d": [
+      1,
+      90.74,
+      1
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "tract-lateral-funiculus",
+    "name": "Lateral funiculus",
+    "synonyms": [
+      "lateral funiculus",
+      "funiculus lateralis",
+      "lateral column of white matter"
+    ],
+    "region": "spinal",
+    "subdivision": "White matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#8b5cf6",
+    "function": "The lateral white matter column of the spinal cord, bounded by the dorsal root entry zone behind and the ventral root exit zone in front. It contains the lateral corticospinal tract, the lateral spinothalamic tract, the anterior and posterior spinocerebellar tracts and the rubrospinal tract, so it carries the principal descending voluntary motor command as well as the ascending pain and temperature pathway and the unconscious proprioceptive pathways to the cerebellum. It is largest at the cervical and lumbar enlargements.",
+    "connections": {
+      "afferent": [
+        "Second-order pain and temperature fibres crossing in the anterior white commissure (tract-anterior-white-commissure) before ascending in the spinothalamic tract (tract-spinothalamic)"
+      ],
+      "efferent": [
+        "Lateral corticospinal fibres (tract-corticospinal-lateral) synapsing on motor neurons of the ventral horn (ctx-ventral-horn)"
+      ]
+    },
+    "bloodSupply": "Sulcocommissural branches of the anterior spinal artery (vasc-anterior-spinal-artery-cord) and perforators of the posterior spinal arteries (vasc-posterior-spinal-arteries).",
+    "clinical": [
+      {
+        "syndrome": "Brown-Séquard syndrome (cord hemisection)",
+        "findings": "Ipsilateral corticospinal weakness and ipsilateral dorsal column loss below the lesion with contralateral loss of pain and temperature beginning one or two segments above the lesion level; ipsilateral Horner syndrome appears when the hemisection is above T1."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      3.55,
+      -216.5,
+      -0.3
+    ],
+    "size3d": [
+      1.1,
+      116,
+      2.5
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "tract-anterior-funiculus",
+    "name": "Anterior funiculus",
+    "synonyms": [
+      "ventral funiculus",
+      "funiculus anterior",
+      "anterior column of white matter"
+    ],
+    "region": "spinal",
+    "subdivision": "White matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#8b5cf6",
+    "function": "The ventral white matter column of the spinal cord, lying between the anterior median fissure and the ventral root exit zone. It contains the anterior corticospinal tract, the vestibulospinal and tectospinal pathways, the reticulospinal fibres and the medial longitudinal fasciculus, and it carries the crossing fibres of the anterior white commissure. It mediates posture, antigravity tone and the uncrossed portion of the voluntary motor command.",
+    "connections": {
+      "afferent": [
+        "Vestibulospinal and reticulospinal drive from the brainstem (tract-lateral-vestibulospinal, tract-reticulospinal) descending on antigravity motor pools"
+      ],
+      "efferent": [
+        "Anterior corticospinal fibres (tract-anterior-corticospinal) terminating on motor neurons of the ventral horn (ctx-ventral-horn) and on commissural interneurons"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches.",
+    "clinical": [
+      {
+        "syndrome": "Anterior cord syndrome (anterior spinal artery occlusion)",
+        "findings": "Bilateral loss of motor function and of pain and temperature sensation below the lesion with preserved dorsal column function, reflecting damage of the anterior two thirds of the cord including this funiculus; the onset is abrupt and the prognosis for motor recovery is poor."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      2.25,
+      -216.5,
+      2.95
+    ],
+    "size3d": [
+      1.7,
+      116,
+      1.1
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "tract-anterior-white-commissure",
+    "name": "Anterior white commissure",
+    "synonyms": [
+      "ventral white commissure",
+      "commissura alba anterior",
+      "spinothalamic decussation"
+    ],
+    "region": "spinal",
+    "subdivision": "White matter",
+    "kind": "tract",
+    "laterality": "midline",
+    "color": "#a78bfa",
+    "function": "The midline crossing of the spinothalamic system: second-order axons arising from the dorsal horn and intermediate zone cross here, usually within one or two segments of their cells of origin, before turning rostrally in the contralateral spinothalamic tract. Because the crossing fibres carry pain and temperature from the dermatomes just entered, a lesion confined to this commissure produces a suspended, cape-like dissociated sensory loss with early sacral sparing.",
+    "connections": {
+      "afferent": [
+        "Second-order nociceptive and thermoreceptive axons from the dorsal horn (ctx-dorsal-horn) crossing to the opposite side"
+      ],
+      "efferent": [
+        "Crossed fibres joining the contralateral spinothalamic tract (tract-spinothalamic) in the lateral funiculus"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through the sulcocommissural branches that cross here.",
+    "clinical": [
+      {
+        "syndrome": "Central cord lesion (syringomyelia, central cord syndrome)",
+        "findings": "Dissociated sensory loss with pain and temperature lost in a suspended cape distribution while touch and proprioception are spared, because the crossing fibres are interrupted while the dorsal columns pass behind the lesion; early sacral sparing is common."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "all",
+      "yTop": -50,
+      "yBottom": -383,
+      "basis": "Segment extent per the shared level-addressing contract (src/data/levelAddressing.ts); yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6",
+      "lvl-t7",
+      "lvl-t8",
+      "lvl-t9",
+      "lvl-t10",
+      "lvl-t11",
+      "lvl-t12",
+      "lvl-l1",
+      "lvl-l2",
+      "lvl-l3",
+      "lvl-l4",
+      "lvl-l5",
+      "lvl-s1",
+      "lvl-s2",
+      "lvl-s3",
+      "lvl-s4",
+      "lvl-s5",
+      "lvl-co1"
+    ],
+    "origin3d": [
+      0,
+      -216.5,
+      1.15
+    ],
+    "size3d": [
+      2.3,
+      116,
+      0.45
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  },
+  {
+    "id": "tract-anterior-corticospinal",
+    "name": "Anterior corticospinal tract",
+    "synonyms": [
+      "ventral corticospinal tract",
+      "uncrossed corticospinal tract",
+      "direct pyramidal tract"
+    ],
+    "region": "spinal",
+    "subdivision": "White matter",
+    "kind": "tract",
+    "laterality": "paired",
+    "color": "#8b5cf6",
+    "function": "The uncrossed component of the corticospinal tract, descending in the anterior funiculus close to the anterior median fissure. Most of its fibres terminate at upper thoracic levels (the tract is usually traced to about T6), synapsing on motor neurons of the ventral horn and on commissural interneurons that project to both sides; it contributes to proximal and axial muscle control. The great majority of corticospinal fibres cross in the medullary pyramids and descend as the lateral corticospinal tract instead.",
+    "connections": {
+      "afferent": [
+        "Corticospinal axons that did not decussate in the medullary pyramids, descending from the cerebral cortex"
+      ],
+      "efferent": [
+        "Bilateral projections to the medial motor neuron columns (nuc-lmn-medial-column) and to commissural interneurons at upper thoracic levels"
+      ]
+    },
+    "bloodSupply": "Anterior spinal artery (vasc-anterior-spinal-artery-cord) through sulcocommissural branches.",
+    "clinical": [
+      {
+        "syndrome": "Anterior corticospinal tract injury (bilateral anterior cord damage)",
+        "findings": "Weakness of axial and proximal limb muscles with relative sparing of fine distal hand and foot control, reflecting the tract's bilateral termination on medial motor neuron pools; the deficit is usually overshadowed by lateral corticospinal damage."
+      }
+    ],
+    "spinalSpan": {
+      "segments": "C1-T6",
+      "yTop": -50,
+      "yBottom": -231.48,
+      "basis": "Uncrossed pyramidal fibres of this tract descend only to the upper thoracic cord; yTop/yBottom are the tile edges of the covered segment anchors in src/data/levels.json."
+    },
+    "levels": [
+      "lvl-c1",
+      "lvl-c2",
+      "lvl-c3",
+      "lvl-c4",
+      "lvl-c5",
+      "lvl-c6",
+      "lvl-c7",
+      "lvl-c8",
+      "lvl-t1",
+      "lvl-t2",
+      "lvl-t3",
+      "lvl-t4",
+      "lvl-t5",
+      "lvl-t6"
+    ],
+    "origin3d": [
+      1.5,
+      -140.74,
+      2.6
+    ],
+    "size3d": [
+      0.8,
+      90.74,
+      0.8
+    ],
+    "refs": [
+      "StatPearls, \"Neuroanatomy, Spinal Cord Morphology\" (NCBI Bookshelf)",
+      "Nolte, The Human Brain, 6th ed., \"The Spinal Cord\" chapter",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., somatosensory pathways chapters"
+    ]
+  }
+]

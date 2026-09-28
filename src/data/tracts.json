@@ -31,10 +31,10 @@
         "findings": "Ipsilateral UMN weakness below the lesion (lateral column crossed at the decussation above), with ipsilateral DCML and contralateral spinothalamic sensory loss"
       }
     ],
-    "waypoints": [[5, 40, 5], [6.5, 14, 8], [4.5, -8, 8], [3, -22, 8], [2.5, -36, 8], [1.5, -45, 5], [0, -47, 1], [-3, -52, -2]],
+    "waypoints": [[5, 40, 5], [6.5, 14, 8], [4.5, -8, 8], [3, -22, 8], [2.5, -36, 8], [1.5, -45, 5], [0, -47, 1], [-3, -52, -2], [-3.05, -85, -2], [-3.15, -120, -2], [-3.3, -160, -2], [-3.45, -200, -2], [-3.55, -240, -2], [-3.65, -280, -2], [-3.72, -320, -2], [-3.78, -355, -2], [-3.8, -383, -2]],
     "tubeRadius": 0.9,
     "color": "#8b5cf6",
-    "levels": ["lvl-thalamus-rostral", "lvl-thalamus-mid", "lvl-post-comm", "lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": ["lvl-thalamus-rostral", "lvl-thalamus-mid", "lvl-post-comm", "lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla", "lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
       "Patten, Neurological Differential Diagnosis, 2nd ed. — brainstem level plates",
@@ -138,10 +138,10 @@
         "vascular": "Posterior cerebral artery paramedian branches"
       }
     ],
-    "waypoints": [[3, 14, 2], [1.5, 10, 3], [0, 7, 3.5], [-1.5, 3, 1], [-2.5, -8, 0], [-3, -24, -1], [-3.5, -40, -1], [-3.5, -50, -2]],
+    "waypoints": [[3, 14, 2], [1.5, 10, 3], [0, 7, 3.5], [-1.5, 3, 1], [-2.5, -8, 0], [-3, -24, -1], [-3.5, -40, -1], [-3.5, -50, -2], [-3.5, -85, -2], [-3.52, -115, -2], [-3.55, -150, -2], [-3.57, -185, -2], [-3.58, -215, -2], [-3.58, -231, -2]],
     "tubeRadius": 0.45,
     "color": "#8b5cf6",
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla", "lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
       "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\"",
@@ -169,10 +169,10 @@
         "findings": "Diminished quick head-turning reflexes; overshadowed by corticospinal deficits in the same territory"
       }
     ],
-    "waypoints": [[2, 16, -5], [1.5, 12, -4], [0.5, 7, -1], [-1, 4, -2], [-1.5, -8, -3], [-1.5, -24, -3], [-1.5, -44, -3], [-1.5, -50, 1]],
+    "waypoints": [[2, 16, -5], [1.5, 12, -4], [0.5, 7, -1], [-1, 4, -2], [-1.5, -8, -3], [-1.5, -24, -3], [-1.5, -44, -3], [-1.5, -50, 1], [-1.5, -75, 1], [-1.48, -100, 1], [-1.47, -125, 1], [-1.47, -132, 1]],
     "tubeRadius": 0.4,
     "color": "#8b5cf6",
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla", "lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\""
@@ -201,10 +201,10 @@
         "vascular": "Vertebral / posterior inferior cerebellar artery territory (caudal extent)"
       }
     ],
-    "waypoints": [[4.5, -18, -4], [4.5, -24, -2], [4.5, -34, 0], [4, -44, 1], [3.5, -52, 2]],
+    "waypoints": [[4.5, -18, -4], [4.5, -24, -2], [4.5, -34, 0], [4, -44, 1], [3.5, -52, 2], [3.5, -85, 2], [3.52, -125, 2], [3.55, -165, 2], [3.58, -205, 2], [3.6, -245, 2], [3.63, -285, 2], [3.66, -325, 2], [3.7, -360, 2], [3.72, -383, 2]],
     "tubeRadius": 0.45,
     "color": "#8b5cf6",
-    "levels": ["lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": ["lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla", "lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
       "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
@@ -232,10 +232,10 @@
         "findings": "Loss of head-stabilizing reflexes contributing to truncal/head instability after anterior-funciculus damage"
       }
     ],
-    "waypoints": [[2.5, -20, -4], [1.8, -24, -3.5], [1.5, -34, -2], [1.2, -44, 0], [1, -50, 1]],
+    "waypoints": [[2.5, -20, -4], [1.8, -24, -3.5], [1.5, -34, -2], [1.2, -44, 0], [1, -50, 1], [1, -85, 1], [1.02, -120, 1], [1.04, -155, 1], [1.05, -190, 1], [1.06, -231, 1]],
     "tubeRadius": 0.4,
     "color": "#8b5cf6",
-    "levels": ["lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": ["lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla", "lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
       "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
@@ -269,10 +269,10 @@
         "vascular": "Posterior inferior cerebellar artery / vertebral"
       }
     ],
-    "waypoints": [[3, -6, -1], [3.5, -18, 0], [4, -30, 0], [3.5, -42, 1], [3, -50, 2]],
+    "waypoints": [[3, -6, -1], [3.5, -18, 0], [4, -30, 0], [3.5, -42, 1], [3, -50, 2], [3, -85, 2], [3.03, -125, 2], [3.06, -165, 2], [3.1, -205, 2], [3.13, -245, 2], [3.16, -285, 2], [3.2, -325, 2], [3.23, -360, 2], [3.25, -383, 2]],
     "tubeRadius": 0.5,
     "color": "#8b5cf6",
-    "levels": ["lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": ["lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla", "lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2", "lvl-l3", "lvl-l4", "lvl-l5", "lvl-s1", "lvl-s2", "lvl-s3", "lvl-s4", "lvl-s5", "lvl-co1"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\""
@@ -306,10 +306,10 @@
         "findings": "Bilateral MLF lesions → bilateral adduction failure with exotropia and abduction nystagmus"
       }
     ],
-    "waypoints": [[1.5, 14, -3.5], [1.5, 8, -3.5], [1.5, -8, -4], [1.5, -18, -4], [1.2, -30, -3.5], [1, -44, -2], [1, -50, 0]],
+    "waypoints": [[1.5, 14, -3.5], [1.5, 8, -3.5], [1.5, -8, -4], [1.5, -18, -4], [1.2, -30, -3.5], [1, -44, -2], [1, -50, 0], [1, -85, 0], [1.01, -115, 0], [1.02, -145, 0], [1.02, -159, 0]],
     "tubeRadius": 0.3,
     "color": "#a78bfa",
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla", "lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\"",
       "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)",
@@ -372,10 +372,10 @@
         "vascular": "Posterior inferior cerebellar artery / vertebral"
       }
     ],
-    "waypoints": [[2.5, 32, 4], [3, 26, 2], [3.5, 14, -1], [4, 2, -1.5], [4.5, -14, -1], [4.5, -34, 0], [4, -48, 1], [4, -52, 0]],
+    "waypoints": [[2.5, 32, 4], [3, 26, 2], [3.5, 14, -1], [4, 2, -1.5], [4.5, -14, -1], [4.5, -34, 0], [4, -48, 1], [4, -52, 0], [4, -85, 0], [4.05, -130, 0], [4.1, -175, 0], [4.15, -220, 0], [4.2, -265, 0], [4.25, -300, 0], [4.28, -320, 0]],
     "tubeRadius": 0.4,
     "color": "#8b5cf6",
-    "levels": ["lvl-thalamus-rostral", "lvl-thalamus-mid", "lvl-post-comm", "lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": ["lvl-thalamus-rostral", "lvl-thalamus-mid", "lvl-post-comm", "lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla", "lvl-c1", "lvl-c2", "lvl-c3", "lvl-c4", "lvl-c5", "lvl-c6", "lvl-c7", "lvl-c8", "lvl-t1", "lvl-t2", "lvl-t3", "lvl-t4", "lvl-t5", "lvl-t6", "lvl-t7", "lvl-t8", "lvl-t9", "lvl-t10", "lvl-t11", "lvl-t12", "lvl-l1", "lvl-l2"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Diencephalon: Thalamus and Hypothalamus\"",
       "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
@@ -409,10 +409,10 @@
         "note": "The DCML/spinothalamic laterality split is the exam-defining feature of cord hemisection"
       }
     ],
-    "waypoints": [[1.5, -50, -5], [2, -44, -5], [1, -42, 0], [-0.5, -41, 2], [-2.5, -32, 1.5], [-3.5, -8, 0], [-4.5, 12, -1], [-6, 28, -3]],
+    "waypoints": [[0.95, -383, -5], [1, -342, -5], [1.05, -297, -5], [1.1, -249, -5], [1.15, -202, -5], [1.2, -153, -5], [1.25, -112, -5], [1.3, -84, -5], [1.35, -71, -5], [1.5, -50, -5], [2, -44, -5], [1, -42, 0], [-0.5, -41, 2], [-2.5, -32, 1.5], [-3.5, -8, 0], [-4.5, 12, -1], [-6, 28, -3]],
     "tubeRadius": 0.7,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": ["lvl-co1", "lvl-s5", "lvl-s4", "lvl-s3", "lvl-s2", "lvl-s1", "lvl-l5", "lvl-l4", "lvl-l3", "lvl-l2", "lvl-l1", "lvl-t12", "lvl-t11", "lvl-t10", "lvl-t9", "lvl-t8", "lvl-t7", "lvl-t6", "lvl-t5", "lvl-t4", "lvl-t3", "lvl-t2", "lvl-t1", "lvl-c8", "lvl-c7", "lvl-c6", "lvl-c5", "lvl-c4", "lvl-c3", "lvl-c2", "lvl-c1", "lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Spinal Cord\"",
@@ -452,10 +452,10 @@
         "vascular": "Posterior cerebral artery — thalamogeniculate branches"
       }
     ],
-    "waypoints": [[3, -52, 3], [3.5, -40, 2], [4, -30, 1.5], [4.5, -16, 1], [5, -4, 0], [5, 8, -1], [5.5, 18, -1.5], [6, 28, -3]],
+    "waypoints": [[3.6, -383, 0], [3.55, -342, 0.3], [3.5, -297, 0.6], [3.45, -249, 0.9], [3.4, -202, 1.2], [3.35, -153, 1.5], [3.3, -112, 1.8], [3.25, -84, 2.1], [3.15, -71, 2.5], [3, -52, 3], [3.5, -40, 2], [4, -30, 1.5], [4.5, -16, 1], [5, -4, 0], [5, 8, -1], [5.5, 18, -1.5], [6, 28, -3]],
     "tubeRadius": 0.6,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": ["lvl-co1", "lvl-s5", "lvl-s4", "lvl-s3", "lvl-s2", "lvl-s1", "lvl-l5", "lvl-l4", "lvl-l3", "lvl-l2", "lvl-l1", "lvl-t12", "lvl-t11", "lvl-t10", "lvl-t9", "lvl-t8", "lvl-t7", "lvl-t6", "lvl-t5", "lvl-t4", "lvl-t3", "lvl-t2", "lvl-t1", "lvl-c8", "lvl-c7", "lvl-c6", "lvl-c5", "lvl-c4", "lvl-c3", "lvl-c2", "lvl-c1", "lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Spinal Cord\"",
@@ -555,10 +555,10 @@
         "vascular": "Posterior inferior cerebellar artery / vertebral"
       }
     ],
-    "waypoints": [[3.5, -50, 1], [4, -40, 0], [4.5, -33, -1.5], [5.5, -28, -3.5], [6.5, -22, -5], [5.5, -20, -6.5], [4.5, -19, -7.5]],
+    "waypoints": [[3.35, -329, 1], [3.38, -297, 1], [3.41, -261, 1], [3.44, -226, 1], [3.46, -190, 1], [3.47, -153, 1], [3.48, -118, 1], [3.49, -84, 1], [3.5, -71, 1], [3.5, -50, 1], [4, -40, 0], [4.5, -33, -1.5], [5.5, -28, -3.5], [6.5, -22, -5], [5.5, -20, -6.5], [4.5, -19, -7.5]],
     "tubeRadius": 0.45,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal"],
+    "levels": ["lvl-l3", "lvl-l2", "lvl-l1", "lvl-t12", "lvl-t11", "lvl-t10", "lvl-t9", "lvl-t8", "lvl-t7", "lvl-t6", "lvl-t5", "lvl-t4", "lvl-t3", "lvl-t2", "lvl-t1", "lvl-c8", "lvl-c7", "lvl-c6", "lvl-c5", "lvl-c4", "lvl-c3", "lvl-c2", "lvl-c1", "lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
       "Snell, Clinical Neuroanatomy, Ch. \"The Cerebellum\""
@@ -587,10 +587,10 @@
         "vascular": "Posterior inferior cerebellar artery / vertebral"
       }
     ],
-    "waypoints": [[4, -50, 2], [4.5, -34, 2.5], [5.5, -20, 2.5], [6.5, -6, 1.5], [5.5, 5, -1.5], [1.5, 8.5, -2.5], [-4, 4, -3.5], [-5, -16, -5.5]],
+    "waypoints": [[3.9, -362, 2], [3.92, -342, 2], [3.94, -316, 2], [3.95, -285, 2], [3.96, -249, 2], [3.97, -214, 2], [3.98, -178, 2], [3.99, -140, 2], [4, -100, 2], [4, -71, 2], [4, -50, 2], [4.5, -34, 2.5], [5.5, -20, 2.5], [6.5, -6, 1.5], [5.5, 5, -1.5], [1.5, 8.5, -2.5], [-4, 4, -3.5], [-5, -16, -5.5]],
     "tubeRadius": 0.45,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic"],
+    "levels": ["lvl-s3", "lvl-s2", "lvl-s1", "lvl-l5", "lvl-l4", "lvl-l3", "lvl-l2", "lvl-l1", "lvl-t12", "lvl-t11", "lvl-t10", "lvl-t9", "lvl-t8", "lvl-t7", "lvl-t6", "lvl-t5", "lvl-t4", "lvl-t3", "lvl-t2", "lvl-t1", "lvl-c8", "lvl-c7", "lvl-c6", "lvl-c5", "lvl-c4", "lvl-c3", "lvl-c2", "lvl-c1", "lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
       "Snell, Clinical Neuroanatomy, Ch. \"The Cerebellum\""
@@ -662,10 +662,10 @@
         "vascular": "Basilar perforators / posterior cerebral artery perforators"
       }
     ],
-    "waypoints": [[3.5, -50, 2], [3.5, -38, 1], [3, -26, 0.5], [3, -12, 0], [3, 2, 0], [3.5, 10, -1], [2.5, 22, -1], [1.8, 28, 0]],
+    "waypoints": [[3.8, -383, 2], [3.75, -342, 2], [3.7, -297, 2], [3.65, -249, 2], [3.6, -202, 2], [3.55, -153, 2], [3.5, -112, 2], [3.48, -84, 2], [3.46, -71, 2], [3.5, -50, 2], [3.5, -38, 1], [3, -26, 0.5], [3, -12, 0], [3, 2, 0], [3.5, 10, -1], [2.5, 22, -1], [1.8, 28, 0]],
     "tubeRadius": 0.45,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": ["lvl-co1", "lvl-s5", "lvl-s4", "lvl-s3", "lvl-s2", "lvl-s1", "lvl-l5", "lvl-l4", "lvl-l3", "lvl-l2", "lvl-l1", "lvl-t12", "lvl-t11", "lvl-t10", "lvl-t9", "lvl-t8", "lvl-t7", "lvl-t6", "lvl-t5", "lvl-t4", "lvl-t3", "lvl-t2", "lvl-t1", "lvl-c8", "lvl-c7", "lvl-c6", "lvl-c5", "lvl-c4", "lvl-c3", "lvl-c2", "lvl-c1", "lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Spinal Cord\"",
