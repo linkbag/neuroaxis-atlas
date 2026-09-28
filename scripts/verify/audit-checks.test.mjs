@@ -1255,13 +1255,38 @@ group('v1–v7 regression checklist — Node-verifiable surfaces')
   const belowV7 = anchors.filter((anchor) => anchor.y < 45)
   const aboveV7 = anchors.filter((anchor) => anchor.y >= 45)
   // The four v7 anchors are additive; the 13 pre-existing ones stay put. The
-  // plan's own §2 wording: "nothing below y = +45 may move".
-  belowV7.length === 13
+  // plan's own §2 wording: "nothing below y = +45 may move". SPINAL_CORD_PLAN
+  // (task `spinal-platform`) adds 31 spinal segment anchors below +45
+  // (C1 −57 … Co1 −378) — also purely additive. So below +45 must be exactly
+  // the 13 pinned pre-v7 anchors (unmoved) PLUS exactly the 31 spinal segment
+  // anchors — no third party.
+  const PRE_V7_BELOW = [-50, -46, -42, -34, -24, -18, -8, 2, 8, 14, 19, 28, 36]
+  const SPINAL_SEGMENT_ID_RE = /^lvl-(c[1-8]|t([1-9]|1[0-2])|l[1-5]|s[1-5]|co1)$/
+  const preV7Below = belowV7.filter((anchor) => PRE_V7_BELOW.includes(anchor.y))
+  const spinalBelow = belowV7.filter((anchor) => SPINAL_SEGMENT_ID_RE.test(anchor.id))
+  const otherBelow = belowV7.filter(
+    (anchor) => !PRE_V7_BELOW.includes(anchor.y) && !SPINAL_SEGMENT_ID_RE.test(anchor.id),
+  )
+  const preV7Intact =
+    preV7Below.length === 13 && PRE_V7_BELOW.every((y) => preV7Below.filter((anchor) => anchor.y === y).length === 1)
+  preV7Intact && otherBelow.length === 0
     ? ok(
         `the 13 pre-v7 transverse anchors are intact below +45 ` +
-          `(${belowV7.map((a) => a.y).join(', ')}) — none added, removed or moved`,
+          `(${preV7Below.map((a) => a.y).join(', ')}) — none removed or moved`,
       )
-    : bad(`expected 13 anchors below +45, found ${belowV7.length} (${belowV7.map((a) => a.y).join(', ')})`)
+    : bad(
+        `the 13 pre-v7 anchors below +45 are not intact — intact ${preV7Below.length}/13, ` +
+          `unexpected extras: ${otherBelow.map((a) => `${a.id}@${a.y}`).join(', ') || 'none'}`,
+      )
+  spinalBelow.length === 31
+    ? ok(
+        `the 31 spinal segment anchors are purely additive below +45 ` +
+          `(${spinalBelow.map((a) => a.y).join(', ')})`,
+      )
+    : bad(
+        `expected 31 spinal segment anchors below +45, found ${spinalBelow.length} ` +
+          `(${spinalBelow.map((a) => `${a.id}@${a.y}`).join(', ')})`,
+      )
   const sortedStrict = anchors.every((anchor, index) => index === 0 || anchor.y > anchors[index - 1].y)
   sortedStrict
     ? ok(`the ${anchors.length} level anchors are strictly increasing in y (nearestLevelTo stays unambiguous)`)

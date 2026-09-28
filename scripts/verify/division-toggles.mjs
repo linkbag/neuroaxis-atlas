@@ -7,10 +7,10 @@
  * real module, through the same in-process TS/TSX loader the Node-only audit
  * mirror uses (no copy, no re-typed table) — and drives the real actions:
  *
- *   1  the shipped source declares the four divisions and the four
+ *   1  the shipped source declares the five divisions and the four
  *      region-writing actions the UI calls (a missing action is a dead control,
  *      and a *pure function* nobody wired to the store looks identical otherwise);
- *   2  the four divisions are the documented ones and PARTITION `ALL_REGIONS`
+ *   2  the five divisions are the documented ones and PARTITION `ALL_REGIONS`
  *      exactly — no orphan, no region in two divisions (that is what makes the
  *      control complete);
  *   3  a fresh boot still reports `brainstem-focus` with the documented default
@@ -188,12 +188,14 @@ registerHooks({
 const ALL_REGIONS = (await import(moduleUrl('src/data/load.ts'))).ALL_REGIONS
 const ALL_KINDS = (await import(moduleUrl('src/data/load.ts'))).ALL_KINDS
 
-/** The four divisions, as this check *expects* them (docs/SWARM_V10_PLAN.md §2). */
+/** The five divisions, as this check *expects* them (docs/SWARM_V10_PLAN.md §2;
+ *  the `spinal` division is the SPINAL_CORD_PLAN §5 extension). */
 const EXPECTED_DIVISIONS = [
   { id: 'prosencephalon', label: 'Prosencephalon (forebrain)', regions: ['telencephalon', 'diencephalon'] },
   { id: 'mesencephalon', label: 'Mesencephalon (midbrain)', regions: ['midbrain'] },
   { id: 'rhombencephalon', label: 'Rhombencephalon (hindbrain)', regions: ['pons', 'cerebellum', 'medulla'] },
   { id: 'vasculature', label: 'Cerebral vasculature', regions: ['vasculature'] },
+  { id: 'spinal', label: 'Spinal cord', regions: ['spinal'] },
 ]
 
 /* ----------------------------------------------------------------- reporting */
@@ -410,7 +412,7 @@ RUNNERS.definition = () => {
       union.push(region)
     }
   }
-  equal('the union of the four divisions', sorted(union), sorted(ALL_REGIONS))
+  equal('the union of the five divisions', sorted(union), sorted(ALL_REGIONS))
   equal('regions claimed by two divisions', duplicates, [])
   equal('regions no division reaches', ALL_REGIONS.filter((region) => store.divisionsOf(region).length === 0), [])
   for (const region of ALL_REGIONS) {
@@ -1111,12 +1113,12 @@ console.log(JSON.stringify(steps))
   } else {
     const steps = JSON.parse(jsonLine)
     const step = (name) => steps.find((entry) => entry.name === name)?.value
-    equal('boot checkbox states', step('boot').checked, [true, true, true, false])
+    equal('boot checkbox states', step('boot').checked, [true, true, true, false, true])
     equal('after a SOLO click on the mesencephalon', step('afterSoloMesencephalon').regions, ['midbrain'])
     equal(
       'after the SOLO click only that division reads ticked',
       step('afterSoloMesencephalon').checked,
-      [false, true, false, false],
+      [false, true, false, false, false],
     )
     equal('the checkbox click on a complete division empties the view', step('afterCheckboxOff').regions, [])
     equal(
@@ -1127,7 +1129,7 @@ console.log(JSON.stringify(steps))
     equal('the vasculature checkbox adds exactly the vascular region', step('afterVascularCheckboxOn').regions, ['midbrain', 'vasculature'])
     equal('the vasculature checkbox removes exactly the vascular region', step('afterVascularCheckboxOff').regions, ['midbrain'])
     equal('a SOLO click on the forebrain isolates telencephalon + diencephalon', step('afterSoloProsencephalon').regions, ['diencephalon', 'telencephalon'])
-    equal('all four solo buttons still render after the clicks', step('afterSoloProsencephalon').buttons, 4)
+    equal('all five solo buttons still render after the clicks', step('afterSoloProsencephalon').buttons, 5)
     info(`[behaviour] ${steps.length} states captured by driving the shipped handlers: ${steps.map((entry) => entry.name).join(' → ')}`)
   }
   rmSync(tree, { recursive: true, force: true })
@@ -1138,7 +1140,7 @@ console.log(JSON.stringify(steps))
 /** The check titles, in order, mapped to their runner. */
 const TITLES = [
   ['surface', '1. the shipped source declares the contract the Legend calls'],
-  ['definition', '2. the four divisions are the documented ones and partition ALL_REGIONS'],
+  ['definition', '2. the five divisions are the documented ones and partition ALL_REGIONS'],
   ['boot', '3. a fresh boot still reports the brainstem-focus default (unchanged framing)'],
   ['solo', '4. soloing each division leaves EXACTLY its regions on (action + pure function)'],
   ['checkbox', '5. the checkbox path toggles exactly its regions (incomplete→on, complete→off, restores)'],

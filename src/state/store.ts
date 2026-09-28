@@ -1062,8 +1062,14 @@ export function viewPresetOf(layers: AtlasLayers): ViewPreset | null {
  * transient view filter, not a boot preference.
  */
 
-/** The four divisions of the reference figure. */
-export type DivisionId = 'prosencephalon' | 'mesencephalon' | 'rhombencephalon' | 'vasculature'
+/**
+ * The divisions of the reference figure. SPINAL_CORD_PLAN §5 (task
+ * `spinal-platform`) appends `'spinal'` — the spinal cord is its own division:
+ * the hindbrain split ends at the medulla (`myelencephalon` is the medulla
+ * alone), so the cord cannot join the `rhombencephalon` partition without
+ * breaking the division↔region pins every header-contract gate asserts.
+ */
+export type DivisionId = 'prosencephalon' | 'mesencephalon' | 'rhombencephalon' | 'vasculature' | 'spinal'
 
 export const DIVISIONS: readonly { id: DivisionId; label: string; regions: readonly Region[] }[] = [
   {
@@ -1078,6 +1084,7 @@ export const DIVISIONS: readonly { id: DivisionId; label: string; regions: reado
     regions: ['pons', 'cerebellum', 'medulla'],
   },
   { id: 'vasculature', label: 'Cerebral vasculature', regions: ['vasculature'] },
+  { id: 'spinal', label: 'Spinal cord', regions: ['spinal'] },
 ]
 
 /** The regions of one division, as a fresh array the caller may keep. */
@@ -1183,7 +1190,11 @@ export function toggleDivisionLayers(layers: AtlasLayers, id: DivisionId): Atlas
  * as written.
  */
 
-/** The six areas of the header's "Areas" row (the v11 partition). */
+/**
+ * The area ids (the v11 Areas row, plus `vasculature` — the v12 Systems-row
+ * carve-out that shares the id space). SPINAL_CORD_PLAN §5 (task
+ * `spinal-platform`) appends `'spinal'`, the "Spinal cord" area button.
+ */
 export type AreaId =
   | 'telencephalon'
   | 'diencephalon'
@@ -1191,6 +1202,7 @@ export type AreaId =
   | 'metencephalon'
   | 'myelencephalon'
   | 'vasculature'
+  | 'spinal'
 
 /**
  * The regions `DIVISIONS.rhombencephalon` names, as the store labels them. Read
@@ -1217,13 +1229,14 @@ export interface AreaDefinition {
 }
 
 /**
- * The AREAS table: six buttons, seven regions, each region owned exactly once.
+ * The AREAS table: seven buttons (six areas + the Systems vasculature button),
+ * eight regions, each region owned exactly once.
  * The load-time block after `areaLayersOn` proves that totality and disjointness,
  * and `scripts/verify/area-toggles.mjs` re-derives the same partition from
  * `DIVISIONS` and asserts this table equals it.
  */
 /**
- * The AREAS table: five buttons, six regions, each region owned exactly once.
+ * The AREAS table: six buttons, seven regions, each region owned exactly once.
  *
  * v12: `vasculature` is NOT here. The user asked for the arterial system to sit
  * with the other SYSTEMS (it is a system of vessels, not a division of the
@@ -1239,6 +1252,7 @@ export const AREAS: readonly AreaDefinition[] = [
   { id: 'mesencephalon', label: 'Mesencephalon (midbrain)', division: 'mesencephalon', regions: divisionRegions('mesencephalon') },
   { id: 'metencephalon', label: 'Metencephalon (pons + cerebellum)', division: 'rhombencephalon', regions: HINDBRAIN_REGIONS.filter((region) => region !== HINDBRAIN_SPLIT_MEDULLA) },
   { id: 'myelencephalon', label: 'Myelencephalon (medulla)', division: 'rhombencephalon', regions: HINDBRAIN_REGIONS.filter((region) => region === HINDBRAIN_SPLIT_MEDULLA) },
+  { id: 'spinal', label: 'Spinal cord', division: 'spinal', regions: divisionRegions('spinal') },
 ]
 
 /**

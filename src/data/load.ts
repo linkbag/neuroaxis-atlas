@@ -215,6 +215,7 @@ export const ALL_REGIONS: readonly Region[] = [
   'medulla',
   'cerebellum',
   'vasculature',
+  'spinal',
 ]
 /**
  * Every kind, in display order. v13 (PLAN.md §2/§6) appends `'nerve'`.
@@ -237,6 +238,7 @@ export const REGION_LABELS: Record<Region, string> = {
   medulla: 'Medulla',
   cerebellum: 'Cerebellum',
   vasculature: 'Cerebral vasculature',
+  spinal: 'Spinal cord',
 }
 
 /* -------------------------------------------------------------- selectors */

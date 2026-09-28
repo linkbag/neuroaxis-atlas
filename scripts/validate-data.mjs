@@ -76,7 +76,7 @@ const PLATE_ID_RE = /^plate-[a-z0-9-]+$/;
 const KEBAB_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const HEX_RE = /^#[0-9a-f]{6}$/;
 
-const REGIONS = ['telencephalon', 'diencephalon', 'midbrain', 'pons', 'medulla', 'cerebellum', 'vasculature'];
+const REGIONS = ['telencephalon', 'diencephalon', 'midbrain', 'pons', 'medulla', 'cerebellum', 'vasculature', 'spinal'];
 const KINDS = ['nucleus', 'tract', 'ventricle', 'surface', 'vessel', 'context', 'nerve'];
 const LATERALITIES = ['midline', 'paired'];
 const DIRECTIONS = ['ascending', 'descending', 'mixed'];
@@ -90,12 +90,14 @@ const ORIENTATIONS = ['transverse', 'sagittal', 'coronal'];
  * white-matter cores): the hemisphere ribbon reaches x ±56.1, y −6.8…+113.7,
  * z −72.8…+70.6 au. ~2 au of margin included.
  * Nothing below y = +45 moved — the brainstem contract is unchanged.
+ * SPINAL_CORD_PLAN (task `spinal-platform`) widens y.min −55 → −390 (conus
+ * medullaris y ≈ −383); the brainstem range above is untouched.
  * The runtime declaration is CLIP_BOUNDS in src/components/viewer3d/clipPlanes.ts;
  * keep the two in step (the v7 QA bounds check compares them).
  */
 const AXIS_BOUNDS = [
   { axis: 'x', min: -58, max: 58 },
-  { axis: 'y', min: -55, max: 116 },
+  { axis: 'y', min: -390, max: 116 },
   { axis: 'z', min: -76, max: 72 },
 ];
 

@@ -90,7 +90,7 @@
  *   6  each area toggle, each system toggle and the region-backed button add and
  *      remove EXACTLY their own slice through the store ACTIONS the buttons call;
  *   7  the DEFAULT framing is unchanged: `DEFAULT_LAYERS`, `viewPresetOf`, the
- *      boot row state (5 areas pressed, all 7 kinds pressed, vasculature off) and
+ *      boot row state (6 areas pressed, all 7 kinds pressed, vasculature off) and
  *      the pinned hidden/emphasis sets;
  *   8  the documented default framing is REACHABLE from the post-v12 controls —
  *      `areas-all-on` + `systems-all-on` + the vascular region off lands exactly on
@@ -694,13 +694,14 @@ RUNNERS.surface = () => {
 RUNNERS.partition = () => {
   const areas = areaTable()
   const systemRegions = systemRegionTable()
-  equal('the number of area buttons', areas.length, 5)
+  equal('the number of area buttons', areas.length, 6)
   equalJson('the area ids, in row order', areas.map((area) => area.id), [
     'telencephalon',
     'diencephalon',
     'mesencephalon',
     'metencephalon',
     'myelencephalon',
+    'spinal',
   ])
   equal('the number of region-backed Systems buttons (v12)', systemRegions.length, 1)
   equalJson(
@@ -758,7 +759,7 @@ RUNNERS.partition = () => {
   }
   equal('the Σ of the per-control taxonomy rows', rowsOfRegions(claimed), taxonomy.length)
   truthy(
-    'the five areas carry non-empty, distinct labels',
+    'the six areas carry non-empty, distinct labels',
     areas.every((area) => typeof area.label === 'string' && area.label.trim().length > 0) &&
       new Set(areas.map((area) => area.label)).size === areas.length,
     areas.map((area) => area.label).join(' · '),
@@ -815,13 +816,39 @@ RUNNERS.systems = () => {
      taxonomy, and the region-backed button re-reaches rows that already have a
      kind. So the claim is not "they add up to 248" (they overlap on purpose) but
      "the region-backed button's rows are exactly the vessel kind's rows" — a user
-     reaching the arteries through `Vasculature` and through `Vessels` sees the same
-     14 records. A region-backed button whose rows were NOT already covered by a
-     kind would be a row reachable only through one of the two axes. */
+     reaching the arteries through `Vasculature` and through `Vessels` sees the
+     same records. A region-backed button whose rows were NOT already covered by a
+     kind would be a row reachable only through one of the two axes.
+
+     SPINAL_CORD_PLAN §5/§6 (task `spinal-platform` + `spinal-data`) splits the
+     vessel kind across two regions ON PURPOSE: the 6 spinal vessels (anterior/
+     posterior spinal arteries + veins, radiculomedullaries, artery of Adamkiewicz)
+     live in the `spinal` region under the "Spinal cord" area — same pattern as the
+     nerve kind crossing regions. The overlap invariant is therefore extended, not
+     dropped: where both axes apply they reach the same rows; the vessel kind is
+     exactly the vasculature region plus the spinal vessels; and no row is left
+     reachable through only one axis. */
+  const kindVessel = taxonomy.filter((entry) => entry.kind === 'vessel')
+  const regionVascular = taxonomy.filter((entry) => entry.region === 'vasculature')
   equal(
-    'the vascular region\'s taxonomy rows are exactly the vessel kind\'s rows (the two axes overlap, by design)',
-    rowsOfRegions(systemRegionTable().map((entry) => entry.id)),
-    rowsOfKind('vessel'),
+    'every vessel-kind row lives in the vasculature region or the spinal region (the v11 overlap, extended by SPINAL_CORD_PLAN §5/§6)',
+    kindVessel.filter((entry) => entry.region !== 'vasculature' && entry.region !== 'spinal').map((entry) => entry.id),
+    [],
+  )
+  equal(
+    "every vascular-region row is a vessel-kind row (no row reachable only through one axis)",
+    regionVascular.filter((entry) => entry.kind !== 'vessel').map((entry) => entry.id),
+    [],
+  )
+  equal(
+    "the vascular region's taxonomy rows are exactly the vessel kind's cerebral rows (the two axes overlap, by design)",
+    sorted(regionVascular.map((entry) => entry.id)),
+    sorted(kindVessel.filter((entry) => entry.region === 'vasculature').map((entry) => entry.id)),
+  )
+  equal(
+    'the vessel kind is exactly the vascular region plus the spinal vessels (disjoint slices)',
+    kindVessel.length,
+    regionVascular.length + kindVessel.filter((entry) => entry.region === 'spinal').length,
   )
   equal(
     'every kind is layer-on at boot',
@@ -1046,7 +1073,7 @@ RUNNERS.defaults = () => {
   equalJson(
     'the boot area row (aria-pressed per button)',
     areaTable().map((area) => impl.areaLayersOn(boot, area.id)),
-    [true, true, true, true, true],
+    [true, true, true, true, true, true],
   )
   equalJson(
     'the boot region-backed Systems row (aria-pressed per button)',
@@ -1061,7 +1088,7 @@ RUNNERS.defaults = () => {
   equal(
     'the boot pressed-area count',
     areaTable().filter((area) => impl.areaLayersOn(boot, area.id)).length,
-    5,
+    6,
   )
   equal('ALL_ON_LAYERS reports the "all" preset', store.viewPresetOf(store.ALL_ON_LAYERS), 'all')
   equal('ALL_ON_LAYERS.regions', sorted(store.ALL_ON_LAYERS.regions), sorted(ALL_REGIONS))
@@ -1312,7 +1339,7 @@ RUNNERS.render = async () => {
   equalJson(
     'the rendered area row boots with the documented pressed states',
     areaButtons.map((button) => button.attributes['aria-pressed']),
-    ['true', 'true', 'true', 'true', 'true'],
+    ['true', 'true', 'true', 'true', 'true', 'true'],
   )
   equalJson(
     'the rendered systems row boots fully pressed (v19: the kinds the row renders — vessel is covered by the region-backed button)',
@@ -1503,7 +1530,10 @@ RUNNERS.wiring = () => {
 
   for (const component of ['Header', 'Legend']) {
     const componentPath = resolve(tree, `src/components/${component}.tsx`)
-    const source = readFileSync(componentPath, 'utf8')
+    // The checkout is CRLF on Windows while every anchor below is an LF literal;
+    // normalise the COPY to LF so the anchors stay byte-exact without being
+    // line-ending-sensitive. The exactly-once requirement is unchanged.
+    const source = readFileSync(componentPath, 'utf8').replace(/\r\n/g, '\n')
     if (component === 'Header') {
       // The one edit made to the copy: the store HOOK becomes a plain state read
       // (so the component can be rendered and its handlers fired outside the app),
@@ -1587,7 +1617,7 @@ RUNNERS.wiring = () => {
      that each touches only its own axis, so a module that also wrote the other
      axis' layer set would be a defect and must fail here. */
   equalJson(
-    '[wired] areas-all-on turned exactly the six area regions on (the vascular region is NOT its slice)',
+    '[wired] areas-all-on turned exactly the seven area regions on (the vascular region is NOT its slice)',
     report.afterAreasAllOn.regions,
     sorted(ALL_REGIONS.filter((region) => region !== 'vasculature')),
   )
@@ -1625,7 +1655,7 @@ RUNNERS.wiring = () => {
   equalJson(
     '[wired] the probe read the same boot aria-pressed states as section 9',
     report.bootPressed,
-    [true, true, true, true, true],
+    [true, true, true, true, true, true],
   )
   equalJson(
     '[wired] the probe read every system button pressed at boot',
@@ -2751,7 +2781,9 @@ RUNNERS['bite-partition'] = () => {
     }
 
     const target = resolve(copy, 'src/state/store.ts')
-    const pristine = readFileSync(target, 'utf8')
+    // Same CRLF/normalisation as the Header anchor above: the `from` anchors are
+    // LF literals, the Windows checkout is CRLF. Byte-exact modulo line endings.
+    const pristine = readFileSync(target, 'utf8').replace(/\r\n/g, '\n')
     const occurrences = pristine.split(mutation.from).length - 1
     occurrences === 1
       ? ok(`[${mutation.name}] the mutation anchor appears exactly once in the copy (1×)`)
@@ -3258,7 +3290,7 @@ if (failures.length > 0) {
   console.log('\nAREA-TOGGLE GATE FAILED\n')
   process.exit(1)
 }
-console.log('\n✔ the five Areas + the region-backed Vasculature button partition all 7 regions exactly once and')
+console.log('\n✔ the six Areas + the region-backed Vasculature button partition all 8 regions exactly once and')
 console.log('  the seven Systems are ALL_KINDS; each control toggles exactly its own slice of layers.regions /')
 console.log('  layers.kinds (the one decision the 3D scene, the 2D live section and the PiP all read); the')
 console.log('  documented default framing is reachable by composing the two All modules with the vascular')

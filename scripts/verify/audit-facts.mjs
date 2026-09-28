@@ -178,11 +178,11 @@ info(`data: ${structures.length} structure records in ${STRUCT_FILES.length} fil
 info(`registries: ${taxonomy.length} taxonomy rows · ${levels.length} level anchors · ${plates.length} plate manifests · ${parts.length} manifest parts`)
 
 /* ══════════════════════════ 1. CLIP_BOUNDS and coordinates ═══════════════ */
-start('1. every authored coordinate is inside CLIP_BOUNDS (x[−58,58] y[−55,116] z[−76,72])')
+start('1. every authored coordinate is inside CLIP_BOUNDS (x[−58,58] y[−390,116] z[−76,72])')
 equal('CLIP_BOUNDS has exactly three axes with a min and a max', Object.keys(CLIP).sort(), ['x', 'y', 'z'])
-equal('CLIP_BOUNDS is x[−58,58] y[−55,116] z[−76,72]', CLIP, {
+equal('CLIP_BOUNDS is x[−58,58] y[−390,116] z[−76,72]', CLIP, {
   x: { min: -58, max: 58 },
-  y: { min: -55, max: 116 },
+  y: { min: -390, max: 116 },
   z: { min: -76, max: 72 },
 })
 {
@@ -714,7 +714,9 @@ start('14. every vessel course starts on its parent artery, or states its proven
     courseSrc.indexOf('export const BUILT_IN_VESSEL_COURSES'),
     courseSrc.indexOf('export const VESSEL_COURSES'),
   )
-  const chunks = builtInBlock.split(/\n  \{\n/).slice(1)
+  // `\r?\n` because the Windows checkout is CRLF while this pattern is authored
+  // LF — byte-exact modulo line endings, teeth unchanged (0 chunks still fails).
+  const chunks = builtInBlock.split(/\r?\n  \{\r?\n/).slice(1)
   if (chunks.length === 0) bad('the BUILT_IN_VESSEL_COURSES block could not be split into records — this check would pass vacuously')
   for (const chunk of chunks) {
     const id = /id: '([^']+)'/.exec(chunk)?.[1]

@@ -16,7 +16,8 @@ export type Region =
   | 'pons'
   | 'medulla'
   | 'cerebellum'
-  | 'vasculature';
+  | 'vasculature'
+  | 'spinal';
 /**
  * The structure kinds. v13 (PLAN.md §2) appends `'nerve'` — the twelve cranial
  * nerves as first-class records. Appending (never reordering) keeps every

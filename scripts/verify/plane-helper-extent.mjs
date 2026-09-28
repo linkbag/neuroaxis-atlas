@@ -863,7 +863,7 @@ const SCRATCH = resolve(ROOT, '.dsh-scratch/v10-plane-helper')
 const TREE = resolve(SCRATCH, 'tree')
 const MUTATIONS = [
   { find: 'x: { min: -58, max: 58 },', to: 'x: { min: -58, max: 70 },' },
-  { find: 'y: { min: -55, max: 116 },', to: 'y: { min: -55, max: 130 },' },
+  { find: 'y: { min: -390, max: 116 },', to: 'y: { min: -390, max: 130 },' },
   { find: 'z: { min: -76, max: 72 },', to: 'z: { min: -90, max: 72 },' },
 ]
 

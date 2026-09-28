@@ -20,8 +20,13 @@ import * as THREE from 'three'
  *
  *   x ∈ [−58, +58]  the baked hemisphere ribbon reaches ±56.1 au
  *                   (was ±48 — the shells extended 8.1 au past it).
- *   y ∈ [−55, +116] the ribbon reaches +113.7 au at the vertex
+ *   y ∈ [−390, +116] the ribbon reaches +113.7 au at the vertex
  *                   (was +85 — 28.8 au of cortex was unreachable by the slider).
+ *                   y.min −55 → −390 (SPINAL_CORD_PLAN §1, task
+ *                   `spinal-platform`): the spinal cord runs from the
+ *                   cervicomedullary junction at y ≈ −50 to the conus
+ *                   medullaris at y ≈ −383 (~400 mm ≈ 333 au); −390 leaves the
+ *                   same ~2 au margin the measured bounds carry.
  *   z ∈ [−76, +72]  −72.8 au (occipital pole) … +70.6 au (frontal pole)
  *                   (was −75…+55 — the frontal pole stuck out by 15.7 au).
  *
@@ -32,6 +37,10 @@ import * as THREE from 'three'
  * and imagery coordinate is unchanged, and the brainstem/diencephalon/cerebellum
  * experience is unchanged at the old planes (verified in the v7 QA: baked
  * brainstem GLB bboxes Δ 0.000 au, MRI/CT legacy-level slices max |Δ| 0 of 255).
+ * The spinal extension (y.min −55 → −390) is ADDITIVE in the same spirit: it
+ * only opens the caudal range for the spinal cord — every bound at or above
+ * y = −55, and every extent derived from this table (planeHelperGeometry,
+ * slider ranges, planeGeometry axisExtents), follows the values below.
  *
  * Consumers do not retype these numbers: `ClipControls` and `SectionSliderBar`
  * read the slider min/max from here, and `section/planeGeometry.ts` derives
@@ -40,7 +49,7 @@ import * as THREE from 'three'
  */
 export const CLIP_BOUNDS = {
   x: { min: -58, max: 58 },
-  y: { min: -55, max: 116 },
+  y: { min: -390, max: 116 },
   z: { min: -76, max: 72 },
 } as const
 
