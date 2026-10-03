@@ -145,7 +145,7 @@ const rowLabelStyle: CSSProperties = {
   whiteSpace: 'nowrap',
 }
 
-export default function Header() {
+export default function Header({ onOpenRights }: { onOpenRights: () => void }) {
   const layers = useAtlasStore((s) => s.layers)
   const applyViewPreset = useAtlasStore((s) => s.applyViewPreset)
   const toggleRegionLayer = useAtlasStore((s) => s.toggleRegionLayer)
@@ -224,6 +224,11 @@ export default function Header() {
       <div className="brand">
         <h1 className="app-title">NeuroAxis</h1>
         <span className="app-subtitle">3D Brainstem Atlas — diencephalon · midbrain · rhombencephalon · telencephalon</span>
+        <div className="brand-legal">
+          <span>© 2026 Webster Wang. All rights reserved.</span>
+          <a href="mailto:websterwangai@gmail.com">websterwangai@gmail.com</a>
+          <button type="button" onClick={onOpenRights}>Rights &amp; credits</button>
+        </div>
       </div>
 
       {/*

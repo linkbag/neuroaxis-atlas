@@ -76,6 +76,7 @@ import InfoPanel from './components/InfoPanel'
 import PlatesTab from './components/PlatesTab'
 import SyndromeBrowser from './components/SyndromeBrowser'
 import ReferencesModal from './components/ReferencesModal'
+import RightsModal, { acknowledgementStored, saveAcknowledgement } from './components/RightsModal'
 import Viewer3D from './components/viewer3d/Viewer3D'
 import AppErrorBoundary from './components/AppErrorBoundary'
 import { PanelErrorBoundary, panelErrorCard } from './components/section/SectionErrorBoundary'
@@ -136,6 +137,9 @@ export function AppContent() {
   const activeTab = useAtlasStore((s) => s.activeTab)
   const setActiveTab = useAtlasStore((s) => s.setActiveTab)
   const [sidebarOpen, setSidebarOpen] = useState(initialSidebarOpen)
+  const [rightsMode, setRightsMode] = useState<'required' | 'open' | 'closed'>(() =>
+    acknowledgementStored() ? 'closed' : 'required',
+  )
   /** v19 (audit ux-009) — the tab buttons, so the arrow keys can move FOCUS with
    *  the selection (the tabs pattern requires both). */
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -144,7 +148,7 @@ export function AppContent() {
     <div className={`app-shell ${sidebarOpen ? 'is-sidebar-open' : 'is-sidebar-closed'}`}>
       {/* The header keeps its `header` grid area: the wrapper is transparent. */}
       <TransparentBoundary label="Header">
-        <Header />
+        <Header onOpenRights={() => setRightsMode('open')} />
       </TransparentBoundary>
 
       {/* ------------------------------------------------ left: browse rail */}
@@ -275,6 +279,15 @@ export function AppContent() {
       <TransparentBoundary label="References modal">
         <ReferencesModal />
       </TransparentBoundary>
+      <RightsModal
+        open={rightsMode !== 'closed'}
+        required={rightsMode === 'required'}
+        onAcknowledge={() => {
+          saveAcknowledgement()
+          setRightsMode('closed')
+        }}
+        onClose={() => setRightsMode('closed')}
+      />
     </div>
   )
 }

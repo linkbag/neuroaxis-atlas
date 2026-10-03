@@ -208,9 +208,9 @@ export default function ReferencesModal() {
           </section>
 
           <p className="modal-foot">
-            All plate artwork and 3D geometry in NeuroAxis are original schematic content authored for this
-            project — no external anatomy dataset is used. The works above are cited as the scholarly basis
-            for the neuroanatomical descriptions.
+            Original schematic artwork and text are credited to the NeuroAxis contributors. Some 3D surfaces
+            derive from BodyParts3D, and the imaging views include third-party data and photographs.
+            See Rights &amp; credits for source licenses and reuse terms.
           </p>
         </div>
       </div>
