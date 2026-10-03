@@ -20,7 +20,7 @@
  * The imagery group is now the REAL-FIRST MODALITY SWITCHER, driven by the
  * store's single `sectionUnderlay` request:
  *
- *   • `SECTION_UNDERLAY_KINDS` (Auto / MRI / CT / Photo / Simulated only) — the
+ *   • `SECTION_UNDERLAY_KINDS` (MRI / Simulated only in the public build) — the
  *     option list and labels come from the store, so the toolbar can never
  *     drift from what the layers actually implement. There is no separate
  *     "real-first" mode: **Auto IS the real-first default** (kind 'auto' = pick
@@ -98,7 +98,6 @@ import {
   ctSuperiorMostDataYAu,
   ctWindowPresets,
   getCtDataStatus,
-  getLayerLinks,
   getMriDataStatus,
   mriLayerStatus,
   MODALITY_TOLERANCE_AU,
@@ -338,7 +337,6 @@ export default function PlatesTab() {
   // plane (§2.3), plus the active modality's own provenance.
   const stainLevelId = toolbarLevelId(sectionAxis, clip.y)
   const planeValue = clip[sectionAxis]
-  const layerLinks = useMemo(() => getLayerLinks(stainLevelId), [stainLevelId])
   // The photograph the CANVAS would show at this plane: `pickImageForPlane` is
   // the ONE anchor-within-tolerance rule (with the v3 transverse level
   // fallback) that the layer registry and the PiP sampler also use, so this
@@ -404,14 +402,12 @@ export default function PlatesTab() {
                   ? GRID_CREDITS.mri
                   : null
             : null
-  // The active modality's own page first, then the reference atlases.
+  // The public live section exposes only MRI and simulation. Keep its source
+  // links aligned with those two choices instead of listing unused photo atlases.
   const sourceChips =
-    activeCredit?.sourceUrl !== undefined
-      ? [
-          { label: 'Active imagery ↗', url: activeCredit.sourceUrl },
-          ...layerLinks.filter((link) => link.url !== activeCredit.sourceUrl),
-        ]
-      : layerLinks
+    sectionUnderlay.kind === 'mri' && activeCredit?.sourceUrl !== undefined
+      ? [{ label: 'OpenNeuro MRI', url: activeCredit.sourceUrl }]
+      : []
 
   /**
    * v7 CT coverage honesty (plan §9/C3): the statement shown when the CT
@@ -635,7 +631,7 @@ export default function PlatesTab() {
                   step={0.05}
                   value={sectionUnderlay.opacity}
                   onChange={(event) => setSectionUnderlay({ opacity: Number(event.target.value) })}
-                  title="Alpha of the real image. In real-first mode (Auto) it is the section's base plate, not an underlay."
+                  title="Opacity of the MRI image beneath the simulated contours"
                   /* v19 (audit ux-014) — this `<input>` is inside a `<label>` that
                    * also wraps the `<output>` showing the live value, and
                    * name-from-content walks the WHOLE label: the computed name was
@@ -728,21 +724,23 @@ export default function PlatesTab() {
               </div>
             )}
 
-            <div className="section-toolbar-group section-link-chips" role="group" aria-label="Imaging sources">
-              <span className="section-toolbar-label">Sources</span>
-              {sourceChips.map((link) => (
-                <a
-                  key={`${link.label} ${link.url}`}
-                  className="section-link-chip"
-                  href={link.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  title={`Open source in a new tab: ${link.url}`}
-                >
-                  {link.label} ↗
-                </a>
-              ))}
-            </div>
+            {sourceChips.length > 0 && (
+              <div className="section-toolbar-group section-link-chips" role="group" aria-label="Imaging sources">
+                <span className="section-toolbar-label">Sources</span>
+                {sourceChips.map((link) => (
+                  <a
+                    key={`${link.label} ${link.url}`}
+                    className="section-link-chip"
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={`Open source in a new tab: ${link.url}`}
+                  >
+                    {link.label} ↗
+                  </a>
+                ))}
+              </div>
+            )}
 
             {activeCredit !== null ? (
               // Always-visible attribution of the modality the toolbar is
@@ -769,8 +767,7 @@ export default function PlatesTab() {
               </span>
             ) : sectionUnderlay.kind !== 'none' ? (
               <span className="section-alignment-note" role="note">
-                no real imagery resolves at this plane — the section canvas says so in place of a
-                credit line; every embedded source stays listed above
+                MRI imagery is unavailable at this plane — the simulated section remains visible.
               </span>
             ) : (
               // v9 item 4 — the images-off state, stated as a CHOICE rather than
@@ -784,8 +781,7 @@ export default function PlatesTab() {
               <span className="section-alignment-note is-imagery-off" role="note">
                 {`${SECTION_UNDERLAY_KIND_LABELS.none} (no imagery) — ${IMAGERY_OFF_STATEMENT}. `}
                 This canvas and the 3D tab&rsquo;s simulated-section panel both follow it at every
-                plane; the choice is remembered across reloads, and every embedded source stays
-                listed above.
+                plane; the choice is remembered across reloads.
               </span>
             )}
 
@@ -800,15 +796,10 @@ export default function PlatesTab() {
               </span>
             )}
 
-            {sectionUnderlay.kind !== 'none' && (
+            {sectionUnderlay.kind === 'mri' && (
               <span className="section-alignment-note" role="note">
-                {sectionUnderlay.kind === 'auto'
-                  ? 'real-first: the real slice is the base plate and the simulated contours are drawn over it at 65 %; '
-                  : sectionUnderlay.kind === 'stain'
-                    ? 'photographs are placed by a fixed per-plate fit (scale/midline offset), not registered to the contours; '
-                    : 'approximate alignment — real imagery is placed by a fixed documented affine, not registered to the contours; '}
-                photo coverage is per-plane (±{MODALITY_TOLERANCE_AU} au), so the plane between two
-                photographs honestly shows the modality fallback instead
+                MRI alignment is approximate: the volume is placed by a documented affine, not
+                registered to every simulated contour.
               </span>
             )}
 

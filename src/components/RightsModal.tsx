@@ -114,6 +114,7 @@ export default function RightsModal({ open, required, onAcknowledge, onClose }: 
 
           <section>
             <h3>Third-party credits</h3>
+            <p>The public live section offers MRI and simulated anatomy only. The credits below also document imaging material retained in the repository.</p>
             <ul className="rights-list">
               <li><strong>3D surface anatomy:</strong> BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International. The surfaces were adapted for this atlas. <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html" target="_blank" rel="noreferrer">Source and license</a>.</li>
               <li><strong>Section photographs:</strong> © University of British Columbia, CC BY-NC-SA 4.0. Copies were resized or re-encoded; reuse requires attribution, noncommercial use, and ShareAlike for adaptations. <a href="https://www.neuroanatomy.ca/" target="_blank" rel="noreferrer">Source</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">License</a>.</li>

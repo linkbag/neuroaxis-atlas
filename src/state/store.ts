@@ -113,7 +113,7 @@ export type SectionAxis = 'x' | 'y' | 'z'
  * What the live-section canvas paints as real imagery (v3 SECTION_SYNC_PLAN
  * §2.3 + v4 IMAGING_V4_PLAN §4 "real-first default", task `modality-layers`).
  *
- *  - `'auto'`  — **v4 default**: real-first. Draw the best real modality that
+ *  - `'auto'`  — historical real-first mode. Draw the best real modality that
  *                actually covers this plane: an anchored photograph inside its
  *                tolerance window → else CT (when the grid is available) →
  *                else MRI (when available) → else nothing, in which case the
@@ -126,17 +126,14 @@ export type SectionAxis = 'x' | 'y' | 'z'
  *                `windowMin`/`windowMax` (uint8).
  *  - `'none'`  — explicit **"simulated only"**: no real imagery is ever drawn.
  *
- * v3 stored `'none' | 'stain' | 'mri'`; the two new values are additive, so a
- * v3 payload still parses (see initialSectionUnderlay).
+ * The public interface offers only MRI and Simulated only. Historical values
+ * remain in this type for internal imaging QA; persisted values are migrated.
  */
 export type SectionUnderlayKind = 'auto' | 'mri' | 'ct' | 'stain' | 'none'
 
-/** Modality-switcher button order for the UI (integration wires the buttons). */
+/** Public live-section choices. Older modes remain in the type for historical QA. */
 export const SECTION_UNDERLAY_KINDS: readonly SectionUnderlayKind[] = [
-  'auto',
   'mri',
-  'ct',
-  'stain',
   'none',
 ]
 
@@ -344,16 +341,17 @@ const V3_DEFAULT_KIND: SectionUnderlayKind = 'none'
 const V3_DEFAULT_OPACITY = 0.6
 
 /**
- * v4 real-first defaults (plan §4). Two values change from v3 on purpose:
- *  - `kind: 'auto'` — real imagery is the default look, with an honest hint
- *    when a plane has none;
+ * Public defaults: continuous MRI is the default imagery, with the simulated
+ * section available at every plane. Previous Auto / CT / Photo preferences
+ * are mapped to MRI when read from storage.
+ * The v4 opacity default remains:
  *  - `opacity: 1` — the image is now the section's BASE plate, not a subdued
  *    underlay beneath opaque contour fills, so it renders at full strength by
  *    default. (v3's 0.6 was calibrated for the underlay role.)
- * A persisted value still wins over both (see initialSectionUnderlay).
+ * A supported persisted MRI / Simulated choice still wins (see initialSectionUnderlay).
  */
 export const DEFAULT_SECTION_UNDERLAY: SectionUnderlay = {
-  kind: 'auto',
+  kind: 'mri',
   opacity: 1,
   windowMin: 60,
   windowMax: 180,
@@ -375,13 +373,9 @@ function clampWindowValue(value: number): number {
 }
 
 function isUnderlayKind(value: unknown): value is SectionUnderlayKind {
-  return (
-    value === 'auto' ||
-    value === 'mri' ||
-    value === 'ct' ||
-    value === 'stain' ||
-    value === 'none'
-  )
+  // Migrate saved Auto / CT / Photo selections to the MRI default. They are
+  // unavailable in the public live section, including through store writes.
+  return value === 'mri' || value === 'none'
 }
 
 function isCtWindowPreset(value: unknown): value is CtWindowPreset {
@@ -411,6 +405,10 @@ function initialSectionUnderlay(): SectionUnderlay {
         const parsed: unknown = JSON.parse(raw)
         if (parsed !== null && typeof parsed === 'object') {
           const record = parsed as Record<string, unknown>
+          // A retired modality may carry opacity and window values calibrated
+          // for a different image. Start MRI with its own defaults instead of
+          // carrying those stale display settings into the public build.
+          if (record.kind === 'auto' || record.kind === 'ct' || record.kind === 'stain') return next
           const kind = isUnderlayKind(record.kind) ? record.kind : null
           const opacity = isFiniteNumber(record.opacity) ? record.opacity : null
           const isV3Payload = record.schemaVersion !== SECTION_UNDERLAY_SCHEMA_VERSION
@@ -1473,7 +1471,7 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
   activeTab: '3d',
   plateId: null,
   clip: { ...DEFAULT_CLIP },
-  snapToPlate: true,
+  snapToPlate: false,
   explode: 0,
   layers: initialLayers(),
   labelVisibility: true,

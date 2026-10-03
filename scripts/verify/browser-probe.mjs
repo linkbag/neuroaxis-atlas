@@ -271,7 +271,7 @@ const pixelStats = `(() => {
   return (100*painted/sampled).toFixed(1) + '% painted of ' + c.width + 'x' + c.height;
 })()`
 
-for (const label of ['CT', 'MRI', 'Photo', 'Simulated only']) {
+for (const label of ['MRI', 'Simulated only']) {
   await evaluate(`(() => {
     const b = [...document.querySelectorAll('button')].find(x => x.textContent.trim() === ${JSON.stringify(label)});
     if (b) b.click();

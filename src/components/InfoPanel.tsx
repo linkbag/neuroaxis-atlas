@@ -355,7 +355,7 @@ function EmptyState() {
           each group has its own <em>All on</em> / <em>All off</em> module. “Cerebral vasculature”
           sits in the Systems row, and <em>Clinical motor</em> is a framing of that row, not a system.</li>
         <li><strong>Plates tab</strong> — interactive 2D sections synced with the 3D plane, with the
-          modality toolbar (MRI / CT / photo / <em>Simulated only</em>) and the cortical-division
+          imagery choices (MRI / <em>Simulated only</em>) and the cortical-division
           layer toggle.</li>
         <li><strong>Live section / PiP</strong> — the panel over the 3D view follows the clip sliders;
           click a contour to select it, drag its four corner handles to resize, <em>▴/▾</em> cycles

@@ -225,9 +225,8 @@ try {
   const before = await evaluate(canvasStats)
   const moved = await evaluate(`(() => {
     const ranges = [...document.querySelectorAll('.section-plane-sliders input[type=range]')];
-    // Use the SAGITTAL slider: with 'snap to levels' on (the default), the
-    // transverse plane snaps back to the nearest level anchor, so a +4 au move
-    // legitimately produces no plane change and no repaint. x/z never snap.
+    // Use the SAGITTAL slider: x/z never snap, regardless of the transverse
+    // "Snap to levels" preference (off by default in the public build).
     const target = ranges.find(r => /sagittal/i.test(r.getAttribute('aria-label') || '')) || ranges[0];
     if (!target) return 'no slider to move';
     const before = target.value;
