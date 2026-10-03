@@ -28,6 +28,7 @@ import {
 import { CLIP_BOUNDS } from '../components/viewer3d/clipPlanes'
 
 export type ActiveTab = '3d' | 'plates' | 'syndromes'
+export type PlatesMode = 'author' | 'live'
 /**
  * View presets (plan §1.1 feature 2 + docs/TELENCEPHALON_PLAN.md §5).
  *
@@ -348,7 +349,8 @@ const V3_DEFAULT_OPACITY = 0.6
  *  - `opacity: 1` — the image is now the section's BASE plate, not a subdued
  *    underlay beneath opaque contour fills, so it renders at full strength by
  *    default. (v3's 0.6 was calibrated for the underlay role.)
- * A supported persisted MRI / Simulated choice still wins (see initialSectionUnderlay).
+ * A supported persisted MRI / Simulated choice is read at boot; an explicit
+ * visit to the Plates tab starts its live section in MRI mode.
  */
 export const DEFAULT_SECTION_UNDERLAY: SectionUnderlay = {
   kind: 'mri',
@@ -549,6 +551,7 @@ export interface AtlasState {
   selectedId: string | null
   hoveredId: string | null
   activeTab: ActiveTab
+  platesMode: PlatesMode
   plateId: string | null
   clip: ClipState
   snapToPlate: boolean
@@ -573,6 +576,7 @@ export interface AtlasActions {
   selectStructure: (id: string | null, opts?: SelectOptions) => void
   setHovered: (id: string | null) => void
   setActiveTab: (tab: ActiveTab) => void
+  setPlatesMode: (mode: PlatesMode) => void
   /** Select a plate; transverse plates also move the 3D clip plane to their level. */
   setPlate: (id: string | null) => void
   setClip: (partial: Partial<ClipState>) => void
@@ -1469,6 +1473,7 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
   selectedId: null,
   hoveredId: null,
   activeTab: '3d',
+  platesMode: 'live',
   plateId: null,
   clip: { ...DEFAULT_CLIP },
   snapToPlate: false,
@@ -1493,7 +1498,33 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
 
   setHovered: (id) => set({ hoveredId: id }),
 
-  setActiveTab: (tab) => set({ activeTab: tab }),
+  setActiveTab: (tab) => {
+    if (tab !== 'plates') {
+      set({ activeTab: tab })
+      return
+    }
+    set((s) => {
+      // A direct Plates-tab visit always begins at the public default shown in
+      // the toolbar. Level-ruler navigation below is different: it opens an
+      // authored plate at the chosen level.
+      const mriUnderlay: SectionUnderlay = { ...s.sectionUnderlay, kind: 'mri' }
+      persistSectionUnderlay(mriUnderlay)
+      if (sectionPipImageryScope.depth > 0) {
+        // The 3D panel temporarily holds the live store in images-off mode.
+        // Update its saved value so its unmount restores MRI, not the prior
+        // Simulated choice, after React switches to the Plates view.
+        sectionPipImageryScope.saved = mriUnderlay
+        return { activeTab: tab, platesMode: 'live', sectionAxis: 'y' }
+      }
+      return {
+        activeTab: tab,
+        platesMode: 'live',
+        sectionAxis: 'y',
+        sectionUnderlay: mriUnderlay,
+      }
+    })
+  },
+  setPlatesMode: (mode) => set({ platesMode: mode }),
 
   setPlate: (id) =>
     set((s) => {
@@ -1634,6 +1665,7 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
         clip: { ...s.clip, y: level.y, showHelper: true },
         plateId: plate ? plate.id : null,
         activeTab: 'plates',
+        platesMode: 'author',
       }
     }),
 }))

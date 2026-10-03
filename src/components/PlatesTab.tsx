@@ -104,7 +104,6 @@ import {
 } from './section/imageLayers'
 
 type OrientationFilter = 'all' | PlateRecord['orientation']
-type SectionMode = 'author' | 'live'
 
 const FILTERS: { id: OrientationFilter; label: string }[] = [
   { id: 'all', label: 'All' },
@@ -309,8 +308,9 @@ export default function PlatesTab() {
   const setSectionAxis = useAtlasStore((s) => s.setSectionAxis)
   const sectionUnderlay = useAtlasStore((s) => s.sectionUnderlay)
   const setSectionUnderlay = useAtlasStore((s) => s.setSectionUnderlay)
+  const mode = useAtlasStore((s) => s.platesMode)
+  const setMode = useAtlasStore((s) => s.setPlatesMode)
   const [filter, setFilter] = useState<OrientationFilter>('all')
-  const [mode, setMode] = useState<SectionMode>('author')
   // The two grid fetches settle asynchronously and their state is not in the
   // store (imageLayers owns it), so the toolbar re-renders on a 1 s tick while
   // it is mounted: a button disabled as "still loading" enables itself as soon
@@ -781,7 +781,7 @@ export default function PlatesTab() {
               <span className="section-alignment-note is-imagery-off" role="note">
                 {`${SECTION_UNDERLAY_KIND_LABELS.none} (no imagery) — ${IMAGERY_OFF_STATEMENT}. `}
                 This canvas and the 3D tab&rsquo;s simulated-section panel both follow it at every
-                plane; the choice is remembered across reloads.
+                plane. Opening the Plates tab again starts with MRI.
               </span>
             )}
 
