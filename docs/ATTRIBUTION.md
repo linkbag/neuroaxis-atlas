@@ -1,5 +1,10 @@
 # Attribution & Sources
 
+**Current public build (2026-10-03):** The ten MSU/brainmuseum coronal images
+described in the historical v3/v4 notes below have been removed from the source
+tree, section-image manifest, and deployed bundle pending permission. Links to
+the source site remain. The notes below preserve the acquisition history.
+
 NeuroAxis — 3D Brainstem Atlas. This document records every external work that
 informed the project and the licensing/citation policy applied to it.
 

@@ -41,10 +41,9 @@
  *  6. PAYLOAD — total `src/assets/imaging/**` bytes <= 10 MiB (AMENDMENT B,
  *     docs/TELENCEPHALON_PLAN.md §2/§4) and the 22 cryosections <= 1.75 MB,
  *     measured on disk.
- *  7. NON-REGRESSION — the pre-v4b manifest is intact: the 17 UBC micrographs,
- *     9 UBC horizontal, 15 UBC coronal, 10 MSU coronal and 3 Commons CT entries
- *     are still present, appending did not reorder them, and no existing entry
- *     changed its plane / level / credit.
+ *  7. NON-REGRESSION — the retained pre-v4b manifest entries are intact: the
+ *     17 UBC micrographs, 9 UBC horizontal, 15 UBC coronal and 3 Commons CT
+ *     entries remain after the ten MSU images were removed pending permission.
  *
  * Optional deep check (skipped, with a notice, when the gitignored raw data is
  * not on disk): every committed plate re-decodes to 528 x 764 through the same
@@ -510,7 +509,6 @@ if (ctManifest.credit !== CREDIT) {
   }
   const expect = [
     ['17 UBC micrographs (ubcNotes)', recordSize('const ubcNotes'), 17],
-    ['10 MSU coronal stains (bmmNotes)', recordSize('const bmmNotes'), 10],
     ['9 UBC horizontal planes (ubcHPlane)', recordSize('const ubcHPlane'), 9],
     ['15 UBC coronal planes (ubcCPlane)', recordSize('const ubcCPlane'), 15],
     ['UBC horizontal indices [12..20]', literalIds(), 9],
@@ -526,7 +524,7 @@ if (ctManifest.credit !== CREDIT) {
   /* the vhp entries must come last: appending may not reorder or displace */
   const firstVhp = sectionImages.indexOf("id: 'vhp-")
   const lastOther = Math.max(
-    ...['id: \'ubc-h', 'id: \'ubc-c', 'id: \'wikict-', 'id: \'ubc-m', 'id: \'bmm-'].map((s) =>
+    ...['id: \'ubc-h', 'id: \'ubc-c', 'id: \'wikict-', 'id: \'ubc-m'].map((s) =>
       sectionImages.lastIndexOf(s),
     ),
   )

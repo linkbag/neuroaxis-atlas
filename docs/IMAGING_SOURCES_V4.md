@@ -1,5 +1,9 @@
 # Imaging Sources V4 — licence verdicts & acquisition record
 
+**Current public build (2026-10-03):** The ten MSU images mentioned in this
+historical acquisition record have been removed pending permission. They are
+not in the current source tree or deployed bundle.
+
 Research deliverable for the NeuroAxis v4 swarm run ("real cross-section imagery
 as the primary section view"). Companion to `docs/IMAGING_V4_PLAN.md` §3, the v3
 record in `docs/IMAGING_SOURCES.md`, and the credit lines in

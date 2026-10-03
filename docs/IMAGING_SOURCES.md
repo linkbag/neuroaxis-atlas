@@ -1,5 +1,9 @@
 # Imaging Sources & License Verdicts
 
+**Current public build (2026-10-03):** The ten MSU images described in this
+historical v3 record have been removed from the repository and deployed bundle
+pending permission. MSU pages remain available as links only.
+
 Status of the real-imagery layer for NeuroAxis v3 ("section sync & multi-modality").
 Companion to `docs/SECTION_SYNC_PLAN.md` §1 and `docs/ATTRIBUTION.md`.
 All licenses/pages verified **2026-09-08** at the live source (this document was

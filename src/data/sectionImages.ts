@@ -3,9 +3,8 @@
  * imagery" additions).
  *
  * One entry per embedded real-image file (all in src/assets/imaging/stains/):
- *  • v3 — 17 UBC brainstem/spinal-cord micrographs (`ubc-m01..m17`) and 10 MSU
- *    Human Brain Atlas coronal cell stains (`bmm-*`). These entries are
- *    UNCHANGED by v4: same ids, same files, same credits.
+ *  • v3 — 17 UBC brainstem/spinal-cord micrographs (`ubc-m01..m17`).
+ *    The ten former MSU coronal cell stains were removed from the public build.
  *  • v4 — 9 UBC horizontal (transverse) section photographs (`ubc-h*`) and 15
  *    UBC coronal section photographs (`ubc-c*`) from the same CC BY-NC-SA 4.0
  *    site, plus CC0 CT slices from Wikimedia Commons (`wikict-*`).
@@ -28,8 +27,7 @@
  * the credit strings below are the EXACT lines required by the sources and MUST
  * be shown verbatim in-UI whenever the corresponding real image is displayed.
  * This software is non-commercial and educational; UBC content is distributed
- * under CC BY-NC-SA 4.0, brainmuseum content under the site's explicit
- * permission policy, and the Wikimedia CT slices are CC0 (no attribution
+ * under CC BY-NC-SA 4.0, and the Wikimedia CT slices are CC0 (no attribution
  * required — credited anyway for provenance).
  *
  * ── v4 field semantics (all optional on the v3 entries, so they keep working):
@@ -105,18 +103,6 @@ import ubc15 from '../assets/imaging/stains/ubc-m15.jpg'
 import ubc16 from '../assets/imaging/stains/ubc-m16.jpg'
 import ubc17 from '../assets/imaging/stains/ubc-m17.jpg'
 
-// ---- MSU Human Brain Atlas coronal cell stains (brainmuseum.org series) ----
-import bmm2240 from '../assets/imaging/stains/bmm-2240.jpg'
-import bmm2390 from '../assets/imaging/stains/bmm-2390.jpg'
-import bmm2500 from '../assets/imaging/stains/bmm-2500.jpg'
-import bmm2660 from '../assets/imaging/stains/bmm-2660.jpg'
-import bmm2800 from '../assets/imaging/stains/bmm-2800.jpg'
-import bmm3270 from '../assets/imaging/stains/bmm-3270.jpg'
-import bmm3440 from '../assets/imaging/stains/bmm-3440.jpg'
-import bmm3600 from '../assets/imaging/stains/bmm-3600.jpg'
-import bmm3710 from '../assets/imaging/stains/bmm-3710.jpg'
-import bmm3820 from '../assets/imaging/stains/bmm-3820.jpg'
-
 // ---- v4: UBC horizontal (transverse) section photographs -------------------
 import ubcH12 from '../assets/imaging/stains/ubc-h12.png'
 import ubcH13 from '../assets/imaging/stains/ubc-h13.png'
@@ -177,7 +163,7 @@ import vhp0681 from '../assets/imaging/stains/vhp-0681.jpg'
 import vhp0701 from '../assets/imaging/stains/vhp-0701.jpg'
 import vhp0721 from '../assets/imaging/stains/vhp-0721.jpg'
 
-export type ImageSource = 'ubc' | 'brainmuseum' | 'commons-ct' | 'vhp-nlm'
+export type ImageSource = 'ubc' | 'commons-ct' | 'vhp-nlm'
 export type SectionAxis = 'transverse' | 'coronal' | 'sagittal'
 
 /** The plane-axis letters a fitted correction may name (canonical axes). */
@@ -223,7 +209,7 @@ export const REGISTRATION_STATUS = {
  *
  *  - `no-annotations`    its manifest entry declares no `planeValue`, so there is
  *                        no plane to compare a cross-section against (the 17 UBC
- *                        micrographs and the 10 MSU coronal stains);
+ *                        micrographs);
  *  - `no-declared-scale`  it has a plane but no `fit.scale` at all, so a tissue
  *                        pixel cannot be converted to canonical au (the 3 CC0
  *                        Commons CT plates);
@@ -906,7 +892,7 @@ export interface SectionImage {
   fittedFit?: SectionImageFit
   /** What is KNOWN about `fit` — measured, or a stated documented default. */
   registration?: SectionImageRegistration
-  /** Level evidence: site's own title / viewer overlay labels or MSU level id. */
+  /** Level evidence: site's own title / viewer overlay labels. */
   note: string
 }
 
@@ -1044,13 +1030,6 @@ export const REGISTRATION_NO_CROSS_SECTION_EVIDENCE: NonNullable<
 
 /** EXACT credit line (plan §1); verbatim copyright notice, not paraphrased. */
 export const UBC_CREDIT = '© University of British Columbia, CC BY-NC-SA 4.0'
-/** EXACT credit line (plan §1) — verbatim, re-copyrighting not permitted. */
-export const BMM_CREDIT =
-  'University of Wisconsin and Michigan State Comparative Mammalian Brain Collections, and the National Museum of Health and Medicine; preparation funded by the National Science Foundation and the National Institutes of Health'
-
-export const BMM_LICENSE =
-  'Site permission for educational/research use — see docs/IMAGING_SOURCES.md §2'
-
 export const UBC_LICENSE = 'CC BY-NC-SA 4.0'
 export const UBC_LICENSE_URL = 'https://creativecommons.org/licenses/by-nc-sa/4.0/'
 
@@ -1195,7 +1174,6 @@ export const VHP_PLANE_NOTE =
 const UBC_BASE = 'https://www.neuroanatomy.ca/micrographviewer/images/micrographs'
 const UBC_H_BASE = 'https://www.neuroanatomy.ca/horizontalviewer/images/horizontal_slices'
 const UBC_C_BASE = 'https://www.neuroanatomy.ca/coronalviewer/images/coronal_slices'
-const BMM_BASE = 'https://brains.anatomy.msu.edu/brains/human/coronal'
 const COMMONS_BASE = 'https://commons.wikimedia.org/wiki/File:'
 
 function ubcUrl(n: number): string {
@@ -1247,20 +1225,6 @@ const ubcLevels: Record<number, string | null> = {
   15: 'lvl-thalamus-rostral',
   16: 'lvl-thalamus-rostral',
   17: null, // striatum/basal forebrain — beyond the top transverse anchor
-}
-
-/** MSU coronal section number → visual assessment (cell stain montage review). */
-const bmmNotes: Record<number, string> = {
-  2240: 'MSU Human Brain Atlas coronal level 2240, cell stain — anterior diencephalon / basal ganglia, lateral ventricles.',
-  2390: 'MSU Human Brain Atlas coronal level 2390, cell stain — diencephalon (thalamus), basal ganglia.',
-  2500: 'MSU Human Brain Atlas coronal level 2500, cell stain — midbrain (superior colliculus, cerebral peduncles), temporal lobes, cerebellum.',
-  2660: 'MSU Human Brain Atlas coronal level 2660, cell stain — midbrain/diencephalon, temporal lobes, cerebellum.',
-  2800: 'MSU Human Brain Atlas coronal level 2800, cell stain — midbrain, cerebellum, pons emerging.',
-  3270: 'MSU Human Brain Atlas coronal level 3270, cell stain — pons, cerebellum.',
-  3440: 'MSU Human Brain Atlas coronal level 3440, cell stain — pons, cerebellum.',
-  3600: 'MSU Human Brain Atlas coronal level 3600, cell stain — pons–medulla junction, cerebellum.',
-  3710: 'MSU Human Brain Atlas coronal level 3710, cell stain — medulla (lower), cerebellum.',
-  3820: 'MSU Human Brain Atlas coronal level 3820, cell stain — medulla (low), cerebellum.',
 }
 
 /* ------------------------------------------------------------------ v4 data */
@@ -1487,7 +1451,7 @@ const ubcCFiles: Record<number, string> = {
   24: ubcC24,
 }
 
-/** The manifest (order: v3 UBC micrographs, v3 MSU coronals, v4 additions). */
+/** The manifest (order: v3 UBC micrographs, v4 additions). */
 export const sectionImages: SectionImage[] = [
   ...Object.entries(ubcNotes).map(([nStr, note]) => {
     const n = Number(nStr)
@@ -1505,23 +1469,6 @@ export const sectionImages: SectionImage[] = [
       creditUrl: UBC_LICENSE_URL,
       sourceUrl: ubcUrl(n),
       license: UBC_LICENSE,
-      note,
-    }
-  }),
-  ...Object.entries(bmmNotes).map(([lvStr, note]) => {
-    const lv = lvStr
-    const files = [bmm2240, bmm2390, bmm2500, bmm2660, bmm2800, bmm3270, bmm3440, bmm3600, bmm3710, bmm3820]
-    const idx = ['2240', '2390', '2500', '2660', '2800', '3270', '3440', '3600', '3710', '3820'].indexOf(lv)
-    return {
-      id: `bmm-${lv}`,
-      levelId: null, // coronal axis — not mappable to transverse levels.json anchors
-      axis: 'coronal' as const,
-      file: files[idx],
-      source: 'brainmuseum' as const,
-      credit: BMM_CREDIT,
-      creditUrl: 'https://brains.anatomy.msu.edu/copyright.html',
-      sourceUrl: `${BMM_BASE}/${lv}_cell.html`,
-      license: BMM_LICENSE,
       note,
     }
   }),

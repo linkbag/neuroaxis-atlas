@@ -2,6 +2,8 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
+**Use the atlas online:** <https://linkbag.github.io/neuroaxis-atlas/>
+
 **An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum) — with the telencephalon (cerebral hemispheres, basal ganglia, limbic system, ventricles) layered on from v7, the cerebral vasculature (circle of Willis and the major cerebral arteries) plus the deep functional/projection content from v8, and the somatotopic map, the cortical-division section layer, the re-runnable imaging registration and the simulated-section panel from v9, and the v10 display round (full-box plane helpers, division-level visibility with solo, four-corner panel resize, cortical-division quality, and the dropped cortex label)** (with the twelve cranial nerves as records in v13 and as authored traveling courses in v14, and the **granular vasculature** of v17 — 53 vessel records over 40 authored courses, the lenticulostriate blobs replaced by real perforator courses) — selectable 3D nuclei and fiber tracts, labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
 ## Third-party data licences
@@ -15,7 +17,7 @@ The original work in this repository — all code, all authored text, the SVG pl
 | NLM Visible Human Project | the cryosection photographs and the CT volume | NLM Terms and Conditions | acknowledgement, verbatim: *Courtesy of the U.S. National Library of Medicine*; the committed set is a frozen snapshot, not a live mirror |
 | UBC Functional Neuroanatomy | the section micrographs | **CC BY-NC-SA 4.0** | attribution, **non-commercial use only**, and share-alike |
 
-**The UBC micrographs are non-commercial (CC BY-NC-SA 4.0).** If you intend to use this atlas commercially, those images are the part to remove or replace — everything else here is permissive (MIT / CC BY / CC0) or acknowledgement-only. The other sources named in the UI (MSU human brain series, Harvard Whole Brain Atlas, BrainMaps.org, neuroanatomy.ca) are **link-outs only: no data from them is committed**.
+**The UBC micrographs are non-commercial (CC BY-NC-SA 4.0).** If you intend to use this atlas commercially, those images are the part to remove or replace. The ten MSU coronal images previously committed to this repository have been removed pending permission; MSU, Harvard Whole Brain Atlas, and BrainMaps.org are now link-outs only.
 
 Full provenance, per-file source URLs and the licence texts are in [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
@@ -121,7 +123,7 @@ A modality button is disabled — with the reason in its tooltip, e.g. *"no embe
 
 | Modality | Coverage | Source | Licence | Verbatim credit |
 | --- | --- | --- | --- | --- |
-| **Stain / photograph** (76 plates) | per-plane: **22 NLM Visible Human axial cryosections** (y = +34.0 … −52.2 au, densest through medulla/pons/midbrain) + 9 UBC horizontal plates (y = +10 … −44) + 15 UBC coronal plates (z = +26 … −54) + 3 Commons CT plates, all ±1.5 au; plus the 17 UBC level-mapped micrographs on transverse planes (every authored level has one) | **NLM Visible Human Project** cryosections (Brigham and Women's Hospital / Harvard Medical School head); UBC `neuroanatomy.ca` micrograph / horizontal / coronal viewers; MSU Human Brain Atlas coronal cell stains | NLM Terms and Conditions (2019) — redistribution permitted with acknowledgement (cryosections + CT); **CC BY-NC-SA 4.0** (UBC — non-commercial educational use, recorded in ATTRIBUTION); site permission with mandatory credit (brainmuseum.org); CC0 (Commons CT slices) | `Courtesy of the U.S. National Library of Medicine` · `© University of British Columbia, CC BY-NC-SA 4.0` · `University of Wisconsin and Michigan State Comparative Mammalian Brain Collections, and the National Museum of Health and Medicine; preparation funded by the National Science Foundation and the National Institutes of Health` · `CT of a normal brain — Mikael Häggström, M.D., via Wikimedia Commons, CC0 1.0 (public domain dedication)` |
+| **Stain / photograph** (66 plates) | per-plane: **22 NLM Visible Human axial cryosections** (y = +34.0 … −52.2 au, densest through medulla/pons/midbrain) + 9 UBC horizontal plates (y = +10 … −44) + 15 UBC coronal plates (z = +26 … −54) + 3 Commons CT plates, all ±1.5 au; plus the 17 UBC level-mapped micrographs on transverse planes (every authored level has one) | **NLM Visible Human Project** cryosections (Brigham and Women's Hospital / Harvard Medical School head); UBC `neuroanatomy.ca` micrograph / horizontal / coronal viewers; Wikimedia Commons CT slices | NLM Terms and Conditions (2019) — redistribution permitted with acknowledgement (cryosections + CT); **CC BY-NC-SA 4.0** (UBC — non-commercial educational use, recorded in ATTRIBUTION); CC0 (Commons CT slices) | `Courtesy of the U.S. National Library of Medicine` · `© University of British Columbia, CC BY-NC-SA 4.0` · `CT of a normal brain — Mikael Häggström, M.D., via Wikimedia Commons, CC0 1.0 (public domain dedication)` |
 | **MRI** (continuous, all 3 axes) | every plane position on all three axes | OpenNeuro **ds007313** (3 T MPRAGE, head + cervical spine), resampled onto the canonical grid | **CC0** (no attribution required; credited for provenance) | `ds007313 doi:10.18112/openneuro.ds007313.v1.0.0, OpenNeuro CC0` |
 | **CT** (continuous, all 3 axes) | every plane position on all three axes | **NLM Visible Human Project** — "Additional Head Images" head CT (Brigham and Women's Hospital / Harvard Medical School head, 463 axial DICOM slices, 1.5 mm) | NLM Terms and Conditions (2019) — redistribution permitted with acknowledgement; committed grid is a **frozen 2026-09-10 snapshot**, not a live NLM mirror | `Courtesy of the U.S. National Library of Medicine` |
 
@@ -143,20 +145,20 @@ Both grids are `uint8` volumes on the **same canonical box and spacing** (45 × 
 
 - **Photographs are per-plane, not continuous.** Each plate is anchored to one canonical plane value with a ±1.5 au mount tolerance, so moving the slider between two photographs falls back to CT/MRI (Auto) or to the simulated section, and the canvas says which. Photo *sequence* coverage is deliberately denser through the brainstem than through the hemispheres.
 - **Registration is approximate and disclosed.** The photographs are photographs of physical slabs — there is no voxel registration. Their `planeValue` comes from the sources' own labels (UBC viewer landmark labels, the Commons 4 mm slice indices) plus per-image tissue measurements, and their `fit {scale, dx, dy, mirrorX}` is a first-pass affine; absolute plane error is on the order of ±1 step (≈5–6 au) for the photographs. **The 22 Visible Human cryosections are the loosest of the set: their absolute plane carries ±10 au (≈ ±12 mm) of uncertainty** — measured, not assumed; see *Visible Human cryosections* above and `assets-src/imaging3/VHP_ANCHORS.md`. The MRI and CT volumes are registered with measured, re-runnable corrections (midline residual ≤ 1.25 au; CT pons-face residual 2.04 au mean against the stylized atlas envelope) and both manifests report their residuals verbatim.
-- **MRI, CT and the photographs are different individuals.** The OpenNeuro subject, the NLM Visible Human donor and the UBC/MSU specimens are placed in the *same canonical atlas frame*; the atlas geometry is the common frame of reference, and each modality keeps its own documented affine rather than inheriting another subject's fit.
+- **MRI, CT and the photographs are different individuals.** The OpenNeuro subject, the NLM Visible Human donor and the UBC specimens are placed in the *same canonical atlas frame*; the atlas geometry is the common frame of reference, and each modality keeps its own documented affine rather than inheriting another subject's fit.
 - **This is a study aid.** NeuroAxis is not a medical device, and none of this imagery is for diagnosis (see *Educational disclaimer* below).
 
 ### Committed payload & budgets
 
-> **v7 update.** These figures are the **v4/v6 measurements** and are kept verbatim as the
-> record of that bake. For the current, v7 (AMENDMENT B) numbers see
+> **Historical v7 update.** These figures are the **v4/v6 measurements** and are kept verbatim as the
+> record of that bake. For the v7 (AMENDMENT B) numbers see
 > [Telencephalon (v7)](#telencephalon-v7--the-rest-of-the-brain) below: the canonical box grew to
 > x ±48 / y −55…85 / z −75…+55, so **both uint8 grids are now `[81, 113, 107]` = 979,371 B each**
-> and the imaging payload is **8.71 MiB across 80 files** against the **10 MiB** cap that
+> and the imaging payload at v7 was **8.71 MiB across 80 files** against the **10 MiB** cap that
 > `docs/TELENCEPHALON_PLAN.md` §2/§4 sets (the pre-v7 8 MiB limit is superseded; the ≤ 4 MiB
 > v4-added sub-cap is unchanged and still met).
 
-`src/assets/imaging/` holds **7.30 MiB across 80 files** (measured on disk) — **76 committed stain photographs** (6.82 MiB: 22 `vhp-*` cryosections 1.18 MiB, 9 `ubc-h*` + 15 `ubc-c*` 2.73 MiB, 3 `wikict-*` 0.14 MiB, 17 `ubc-m*` + 10 `bmm-*` v3 micrographs 2.77 MiB), `mri-t1.bin` (238 KiB) + `mri-manifest.json`, `ct.bin` (238 KiB) + `ct-manifest.json` — inside the plan §4 budgets: **≤ 8 MiB total imaging payload** (measured 7.30 MiB, 0.70 MiB of headroom) and **≤ 4 MiB of assets added by v4** (measured 3.11 MiB: `ct.bin` + 24 UBC plates + 3 Commons CT plates; the v4b cryosections are 1.18 MiB against their own ≤ 1.75 MB sub-cap and are not counted into that v4 remainder). Raw downloads stay in the gitignored `assets-src/`; every embedded plate is a content-verbatim copy (no crops, no retouching) with only technical modifications (integer 2× downsampling, alpha flatten onto white, lossless filtered-PNG re-encode for the v3/v4 photographs; JPEG q80 re-encode at native size for the v4b cryosections; uint8 resampling for the grids) recorded per file in `assets-src/imaging2/processed-photos.json` and `assets-src/imaging3/analysis/local-files.json`.
+`src/assets/imaging/` now holds **72 files (7.97 MiB)**, including **66 committed stain photographs (5.76 MiB)**: 22 NLM cryosections, 41 UBC images, and 3 Commons CT slices. No `bmm-*` MSU photographs remain. Raw acquisition files stay in gitignored `assets-src/`; older v3/v4 research records below describe the asset set at the time of those runs.
 
 **Re-baking** (deterministic, Node-only, no clock/RNG — the committed artifacts are byte-identical across runs; raw inputs stay in gitignored `assets-src/`):
 
@@ -172,7 +174,7 @@ A missing or failed CT bake is not fatal: `ct-manifest.json` carries `status: 'u
 
 ### Credits and link-outs (v3 behaviour, unchanged)
 
-The live toolbar lists "open source ↗" chips for the section's level: the mapped image's own page plus the UBC, MSU, Harvard Whole Brain Atlas and BrainMaps.org references — the latter two link-out only. License verdicts and fetch evidence: [docs/IMAGING_SOURCES.md](docs/IMAGING_SOURCES.md) (v3 sources) and [docs/IMAGING_SOURCES_V4.md](docs/IMAGING_SOURCES_V4.md) (v4 sources); full provenance and verbatim credit lines: [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
+The live toolbar lists "open source ↗" chips for the section's level: the mapped image's own page plus the UBC, MSU, Harvard Whole Brain Atlas and BrainMaps.org references. MSU, Harvard and BrainMaps are link-outs only. License verdicts and fetch evidence: [docs/IMAGING_SOURCES.md](docs/IMAGING_SOURCES.md) (v3 sources) and [docs/IMAGING_SOURCES_V4.md](docs/IMAGING_SOURCES_V4.md) (v4 sources); full provenance and verbatim credit lines: [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 
 ## Telencephalon (v7) — the rest of the brain
 

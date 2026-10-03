@@ -123,7 +123,7 @@
  * number diverges.
  *
  * Attribution sources (verbatim strings): docs/SECTION_SYNC_PLAN.md §1,
- * src/data/sectionImages.ts (UBC_CREDIT / BMM_CREDIT / COMMONS_CT_CREDIT),
+ * src/data/sectionImages.ts (UBC_CREDIT / COMMONS_CT_CREDIT),
  * mri-manifest.json (`source` / `license`, dataset CC0 — no attribution
  * required, provenance only) and ct-manifest.json (`credit`, NLM Visible Human
  * acknowledgement — the exact string is what CT_CREDIT carries). License
@@ -692,14 +692,13 @@ export function sectionAxisOf(planeAxis: PlaneAxis): SectionImage['axis'] {
 /**
  * Measured pixel area of the committed imaging files, per manifest id prefix.
  * Verified on disk (2026-09 bake, docs/IMAGING_SOURCES_V4.md §4.2):
- *   bmm-*    1050×700   ubc-m*  800×700   ubc-h*  400×350
+ *   ubc-m*   800×700   ubc-h*  400×350
  *   ubc-c*    400×300   wikict-* 323×234
  * Used ONLY as the last tie-break between two plates anchored to the SAME
  * plane, so a stale value can never move a plate to a wrong plane — it can
  * only change which of two same-plane plates is shown.
  */
 const SOURCE_PIXEL_AREA: readonly { prefix: string; area: number }[] = [
-  { prefix: 'bmm-', area: 1050 * 700 },
   { prefix: 'ubc-m', area: 800 * 700 },
   { prefix: 'ubc-h', area: 400 * 350 },
   { prefix: 'ubc-c', area: 400 * 300 },
@@ -759,10 +758,7 @@ export interface StainPick {
  *     with levels.json anchors) the v3 level-mapped micrograph is used, so
  *     every v3 behaviour is preserved.
  *
- * Note on the MSU/Wisconsin coronal series in src/data/sectionImages.ts: those
- * 10 entries carry no `planeValue` (the source publishes no section position),
- * so they are not plane-anchorable and never win here — the anchored coronal
- * coverage comes from the UBC c-series, exactly as the v4 research recorded.
+ * Anchored coronal photographic coverage comes from the UBC c-series.
  */
 export function pickStainForPlane(
   axis: PlaneAxis,
@@ -1799,7 +1795,7 @@ export function getLayerLinks(levelId: string | null, _structureId?: string | nu
   if (levelId !== null) {
     const image = pickStainImage(levelId)
     if (image !== undefined) {
-      const site = image.source === 'ubc' ? 'neuroanatomy.ca' : 'brainmuseum.org'
+      const site = image.source === 'ubc' ? 'neuroanatomy.ca' : image.source === 'vhp-nlm' ? 'nlm.nih.gov' : 'commons.wikimedia.org'
       links.push({ label: `Source image — ${site}`, url: image.sourceUrl })
     }
   }

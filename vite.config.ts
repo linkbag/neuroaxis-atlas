@@ -25,11 +25,7 @@ import react from '@vitejs/plugin-react'
 // VERIFIED IN THIS SANDBOX (npm run build): 3 340.40 kB → 1 973.38 kB raw,
 // 746.82 kB → 517.86 kB gzip for the entry chunk (see the report).
 //
-// DEPENDENCY NOTE: terser is resolved from node_modules but is NOT yet declared
-// in package.json (this task's exclusive write scope is the five performance
-// files, and package.json/package-lock.json are shared integration files).
-// A fresh `npm ci` therefore needs `npm install -D terser@5 --cache .npm-cache`
-// before `npm run build`, otherwise Vite fails loudly with "terser not found".
+// terser is declared in package.json so a clean `npm ci` can build the site.
 // Documented here so the omission is visible rather than implied away.
 //
 // SPLIT: `manualChunks` puts three/@react-three*/postprocessing in ONE vendor
@@ -46,6 +42,7 @@ import react from '@vitejs/plugin-react'
 // per-GLB URL chunks — the 7.57 MB of geometry is fetched on demand, one file
 // at a time, and never enters the JS first-paint path.
 export default defineConfig({
+  base: '/neuroaxis-atlas/',
   plugins: [react()],
   json: {
     namedExports: true,

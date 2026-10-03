@@ -53,6 +53,7 @@
     "@types/three": "^0.169.0",
     "@vitejs/plugin-react": "^4.3.1",
     "esbuild": "file:vendor/esbuild-shim",
+    "terser": "^5.51.2",
     "typescript": "5.6.3",
     "vite": "^5.4.0"
   }

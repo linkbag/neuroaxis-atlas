@@ -789,6 +789,17 @@ export default function PlatesTab() {
               </span>
             )}
 
+            {activeCredit?.credit === GRID_CREDITS.ct.credit && (
+              <span
+                className="section-alignment-note"
+                role="note"
+                style={{ flexBasis: '100%', color: 'var(--text)', fontSize: '0.78rem' }}
+              >
+                NLM-derived imagery is a frozen 2026-09-10 teaching snapshot and may not reflect
+                the most current or accurate data available from NLM.
+              </span>
+            )}
+
             {sectionUnderlay.kind !== 'none' && (
               <span className="section-alignment-note" role="note">
                 {sectionUnderlay.kind === 'auto'

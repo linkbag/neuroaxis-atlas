@@ -365,8 +365,6 @@ const BADGES = { transverse: ['A|P|R|L', 'y'], sagittal: ['S|I|P|A', 'x'], coron
 /* ------------------------------------------------- 5. attribution strings */
 
 const UBC_CREDIT = '© University of British Columbia, CC BY-NC-SA 4.0'
-const BMM_CREDIT =
-  'University of Wisconsin and Michigan State Comparative Mammalian Brain Collections, and the National Museum of Health and Medicine; preparation funded by the National Science Foundation and the National Institutes of Health'
 const CT_PLATE_CREDIT =
   'CT of a normal brain — Mikael Häggström, M.D., via Wikimedia Commons, CC0 1.0 (public domain dedication)'
 const CT_GRID_CREDIT = typeof ctManifest.credit === 'string' ? ctManifest.credit : ''
@@ -387,13 +385,6 @@ for (const [label, credit, ...documents] of [
   [
     'UBC (photographs)',
     UBC_CREDIT,
-    ['src/data/sectionImages.ts', sectionImages],
-    ['docs/ATTRIBUTION.md', attribution],
-    ['README.md', readme],
-  ],
-  [
-    'brainmuseum/MSU (photographs)',
-    BMM_CREDIT,
     ['src/data/sectionImages.ts', sectionImages],
     ['docs/ATTRIBUTION.md', attribution],
     ['README.md', readme],
@@ -602,7 +593,7 @@ for (const plate of anchored) {
     ['NLM Visible Human cryosections (v4b)', (name) => /^vhp-/.test(name)],
     ['UBC photographs (v4)', (name) => /^ubc-[hc]\d/.test(name)],
     ['Commons CC0 CT plates (v4)', (name) => /^wikict-/.test(name)],
-    ['v3 micrographs', (name) => /^ubc-m\d/.test(name) || /^bmm-/.test(name)],
+    ['v3 UBC micrographs', (name) => /^ubc-m\d/.test(name)],
   ]
   for (const [label, match] of byGroup) {
     const group = onDisk.filter(match)
@@ -611,6 +602,13 @@ for (const plate of anchored) {
       `  ${label.padEnd(38)} ${String(group.length).padStart(3)} files ${(bytes / 1024).toFixed(1).padStart(8)} kB  ${(bytes / MIB).toFixed(3)} MiB`,
     )
   }
+}
+const msuFiles = onDisk.filter((name) => /^bmm-/.test(name))
+if (msuFiles.length > 0) {
+  fail('asset policy', `${msuFiles.length} MSU/brainmuseum image file(s) remain in the public source tree`)
+}
+if (/from ['"]\.\.\/assets\/imaging\/stains\/bmm-/.test(sectionImages)) {
+  fail('asset policy', 'sectionImages.ts still imports an MSU/brainmuseum image')
 }
 console.log(
   `  imaging payload           ${(imaging.total / MIB).toFixed(2)} MiB in ${imaging.count} files (cap ${IMAGING_CAP_MIB.toFixed(2)} MiB, AMENDMENT B)`,
