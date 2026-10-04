@@ -39,19 +39,19 @@ interface CoreReference {
 const CORE_REFERENCES: CoreReference[] = [
   {
     title: 'Blumenfeld — Neuroanatomy through Clinical Cases, 2nd ed. (Sinauer)',
-    detail: 'Primary content authority; records cite chapter titles, e.g. Ch. “Diencephalon: Thalamus and Hypothalamus”.',
+    detail: '2010 edition supplied for this audit. Revised records identify printed pages and, where useful, PDF page numbers.',
   },
   {
-    title: 'Blumenfeld — Neuroanatomy through Clinical Cases, 3rd ed. (Oxford University Press)',
-    detail: 'Current edition of the primary text.',
+    title: 'Haines — Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012)',
+    detail: 'Supplied anatomical atlas; sections and pathway figures inform the review. Its copyrighted figures are not reproduced in this app.',
   },
   { title: 'Patten — Neurological Differential Diagnosis, 2nd ed.', detail: 'Brainstem level plates; lesion-localization strategy.' },
   { title: 'Fix — High-Yield Neuroanatomy', detail: 'Concise tract and nucleus review.' },
   { title: 'Snell — Clinical Neuroanatomy', detail: 'Clinical correlations per region.' },
   { title: 'Nolte — The Human Brain: An Introduction to Its Functional Anatomy', detail: 'Functional background.' },
   {
-    title: 'Fiester et al. — “Midbrain, Pons, and Medulla: Anatomy and Syndromes”, RadioGraphics 2019',
-    detail: 'Definitive modern review of the exact cross-section levels and syndromes in this atlas.',
+    title: 'Sciacca et al. — “Midbrain, Pons, and Medulla: Anatomy and Syndromes”, RadioGraphics 2019',
+    detail: 'Clinical imaging review. It does not validate the authored coordinates or shapes in this app.',
     url: 'https://pubs.rsna.org/doi/10.1148/rg.2019180126',
   },
   {
@@ -209,7 +209,7 @@ export default function ReferencesModal() {
 
           <p className="modal-foot">
             Original schematic artwork and text are credited to the NeuroAxis contributors. Some 3D surfaces
-            derive from BodyParts3D, and the imaging views include third-party data and photographs.
+            derive from BodyParts3D, and the public imaging view includes MRI-derived data.
             See Rights &amp; credits for source licenses and reuse terms.
           </p>
         </div>

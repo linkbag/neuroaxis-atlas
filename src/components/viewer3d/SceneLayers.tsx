@@ -632,7 +632,7 @@ export default function SceneLayers() {
   )
 
   const visibleTracts = useMemo(
-    () => tracts.filter((tract) => isTractVisible(tract.id, layerSets)),
+    () => tracts.filter((tract) => tract.meshes !== false && isTractVisible(tract.id, layerSets)),
     [layerSets],
   )
 

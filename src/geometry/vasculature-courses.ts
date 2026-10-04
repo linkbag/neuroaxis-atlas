@@ -142,6 +142,8 @@ export interface VesselCourseHead {
   synonyms?: string[]
   clinical: ClinicalItem[]
   refs: string[]
+  /** False withholds a spatial course while its authored text remains available. */
+  meshes?: boolean
 }
 
 /**
@@ -230,44 +232,15 @@ const LENTICULOSTRIATE_SURFACE_NOTE =
   'envelope.'
 
 /** Shared clinical content of the lenticulostriate group (mirrors the v8 records). */
-const LENTICULOSTRIATE_CLINICAL: ClinicalItem[] = [
-  {
-    syndrome: 'Lacunar infarction of the internal capsule',
-    findings:
-      'The lateral lenticulostriate arteries are the classic site of hypertensive lacunar infarction: a single perforator ' +
-      'occludes and produces a pure motor or pure sensory deficit, or an ataxic hemiparesis, without cortical signs — ' +
-      'because the territory is the internal capsule and the deep grey matter, not the cortex.',
-    vascular: 'Lateral lenticulostriate arteries (MCA M1 perforators)',
-  },
-  {
-    syndrome: 'Striatocapsular infarction',
-    findings:
-      'Occlusion of several lenticulostriate arteries together infarcts the putamen, the caudate head, the internal ' +
-      'capsule and the adjacent corona radiata — a striatocapsular infarct whose size tracks the number of perforators ' +
-      'lost, and which may spare the cortex entirely.',
-    vascular: 'Lenticulostriate arteries (group)',
-  },
-  {
-    syndrome: 'Recurrent artery of Heubner territory infarction',
-    findings:
-      'The recurrent artery of Heubner supplies the caudate head, the anterior putamen and the anterior limb of the ' +
-      'internal capsule; its occlusion causes a contralateral face and arm weakness with dysarthria, and it is at risk ' +
-      'during anterior communicating artery surgery because it runs with the ACA.',
-    vascular: 'Medial lenticulostriate arteries (recurrent artery of Heubner)',
-  },
-]
 
-const LENTICULOSTRIATE_REFS: string[] = [
-  'Rhoton, A. L. (2002). The supratentorial arteries. Neurosurgery, 51(4 Suppl), S53–S120.',
-  'Tatu, L., et al. (2001). Arterial territories of the human brain. In Neuroanatomy (3rd ed.).',
-  'Blumenfeld, H. (2nd ed.). Neuroanatomy through Clinical Cases — cerebrovascular disease.',
-]
+
+
 
 export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
   {
     id: 'vasc-lenticulostriate-arteries',
-    name: 'Lenticulostriate arteries (shared M1 trunk of the lateral group)',
-    region: 'vasculature',
+    name: "Lenticulostriate arteries",
+    region: "vasculature",
     kind: 'vessel',
     laterality: 'paired',
     parent: 'vasc-middle-cerebral-artery',
@@ -276,17 +249,22 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     basis: 'documented-course',
     elementIds: [],
     anchorNote:
-      'AUTHORED PATH (documented-course basis): BP3D carries no lenticulostriate element, so no element id is claimed. ' +
-      'This is the UMBRELLA record of the family, and its body is the shared M1 → anterior-perforated-substance trunk of ' +
-      'the LATERAL group — the segment every lateral perforator traverses — authored from the measured landmarks of ' +
-      'PLAN.md §3.1/§3.2: the M1 superior-wall take-off [15.786, 11.967, 24.92] (a literal committed vertex of ' +
-      'vasc-middle-cerebral-artery-m1-l) → the corridor point [15.2, 15.5, 25.15] → the anterior perforated substance ' +
-      '[14.157, 19.519, 25.214] (0.507 au = 0.61 mm from the committed ctx-hemisphere-l envelope). There is no single ' +
-      'trunk for the whole family — the MEDIAL group (the recurrent artery of Heubner) arises from the anterior cerebral ' +
-      'artery — so the umbrella record draws the lateral trunk and its child courses carry each group’s fan. ' +
-      LENTICULOSTRIATE_SURFACE_NOTE +
-      ' 0.8 mm calibre at 1 au = 1.2 mm gives tubeRadius 0.333 au; the drawn radius is the stated calibre, not a measurement.',
-    territory: ['nuc-putamen', 'nuc-caudate-head', 'ctx-internal-capsule', 'nuc-globus-pallidus-externus'],
+      "Teaching model of Lenticulostriate arteries. The committed mesh or schematic course represents its gross relationship to neighbouring anatomy. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
+    territory: [
+  "nuc-putamen",
+  "nuc-caudate-head",
+  "nuc-caudate-body",
+  "nuc-globus-pallidus-externus",
+  "nuc-globus-pallidus-internus",
+  "nuc-accumbens",
+  "nuc-ventral-pallidum",
+  "nuc-claustrum",
+  "ctx-internal-capsule",
+  "tract-internal-capsule-anterior-limb",
+  "tract-internal-capsule-genu",
+  "tract-internal-capsule-posterior-limb",
+  "tract-corona-radiata"
+],
     // v19 (audit FAC-VN-004) — was ['lacunar-infarction-internal-capsule',
     // 'striatocapsular-infarction']: neither id is a card in
     // `src/data/syndromes/*.json` (all 26 cards are `syn-*`), so the reverse
@@ -299,27 +277,41 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     supply: [],
     direction: 'descending',
     modality: 'Arterial blood (oxygenated) — end-artery perforators of the MCA',
-    origin: 'Superior wall of the M1 segment of the middle cerebral artery, at the anterior perforated substance',
-    target: 'Putamen and the anterior limb of the internal capsule (lateral group of lenticulostriate arteries)',
+    origin: "MCA M1 for the lateral group; ACA branches, including variable-origin Heubner artery, for the medial group",
+    target: "Parts of caudate, putamen, pallidum and internal capsule; distribution overlaps anterior choroidal and other perforators",
     decussation:
-      'No crossing: each lenticulostriate group supplies its own hemisphere. Their parent trunks do cross the midline in the circle of Willis.',
+      "No neural decussation. Arterial communication and collateral flow vary by individual anatomy.",
     function:
-      'The lateral lenticulostriate arteries are the end-artery perforators of the M1 segment: they pierce the anterior ' +
-      'perforated substance and supply the putamen, the lateral globus pallidus, the caudate head and the anterior limb of ' +
-      'the internal capsule. They are the most clinically consequential perforators in the brain — the lenticulostriate ' +
-      'territory is where hypertensive lacunar infarction and striatocapsular infarction occur.',
+      "Umbrella term for striate perforators supplying parts of the basal ganglia and internal capsule. Lateral lenticulostriate branches usually arise from proximal MCA; medial striate branches arise from ACA, with the recurrent artery of Heubner usually near the ACA-ACoA junction or proximal A2. Deep perforator territories have limited collateralization and are vulnerable to small-vessel infarction or haemorrhage. The separate lateral and medial records provide group detail; the model does not encode a universal branch count.",
     waypoints: [M1_TAKEOFF, M1_APS_MID, APS_ENTRY],
     tubeRadius: 0.333,
     calibreMm: 0.8,
     color: '#991b1b',
-    synonyms: ['Lateral lenticulostriate arteries', 'Anterolateral central arteries'],
-    clinical: LENTICULOSTRIATE_CLINICAL,
-    refs: LENTICULOSTRIATE_REFS,
+    synonyms: [
+  "arteriae lenticulostriatae",
+  "lenticulostriate arteries (group)"
+],
+    clinical: [
+  {
+    "syndrome": "Deep perforator infarction",
+    "findings": "A small capsular lesion may cause pure motor or sensorimotor deficits, ataxic hemiparesis or dysarthria-clumsy hand without typical cortical signs. Pure sensory stroke classically localizes to thalamic rather than lenticulostriate territory.",
+    "vascular": "Striate / other deep perforators according to location"
+  },
+  {
+    "syndrome": "Deep intracerebral haemorrhage",
+    "findings": "Hypertension-related small-vessel injury can cause basal ganglia haemorrhage with contralateral weakness or sensory loss; large haemorrhages may extend into ventricles or cause mass effect.",
+    "vascular": "Deep perforating arteries"
+  }
+],
+    refs: [
+  "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
+  "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/"
+],
   },
   {
     id: 'vasc-lateral-lenticulostriate-arteries',
-    name: 'Lateral lenticulostriate arteries',
-    region: 'vasculature',
+    name: "Lateral lenticulostriate arteries",
+    region: "vasculature",
     kind: 'vessel',
     laterality: 'paired',
     parent: 'vasc-middle-cerebral-artery',
@@ -328,38 +320,49 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     basis: 'documented-course',
     elementIds: [],
     anchorNote:
-      'AUTHORED PATH (documented-course basis): BP3D has no lenticulostriate concept of any kind, so no element id is ' +
-      'claimed. The chain is the measured PLAN.md §3.2 arborisation — M1 superior-wall take-off [15.786, 11.967, 24.92] → ' +
-      'anterior perforated substance [14.157, 19.519, 25.214] → the putamen corridor → arborisation target [22.0, 31.5, 13.0] ' +
-      '(0.76 au from the committed ctx-putamen-l mesh), a chord arc of 24.1 au = 28.9 mm inside the documented 25–35 mm ' +
-      'M1→putamen course. ' +
-      LENTICULOSTRIATE_SURFACE_NOTE +
-      ' 0.8 mm calibre at 1 au = 1.2 mm gives tubeRadius 0.333 au.',
-    territory: ['nuc-putamen', 'nuc-globus-pallidus-externus', 'ctx-internal-capsule'],
+      "Illustrative course for Lateral lenticulostriate arteries. The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
+    territory: [
+  "nuc-putamen",
+  "nuc-globus-pallidus-externus",
+  "nuc-caudate-head",
+  "nuc-caudate-body",
+  "ctx-internal-capsule",
+  "tract-internal-capsule-anterior-limb",
+  "tract-internal-capsule-genu",
+  "tract-internal-capsule-posterior-limb",
+  "tract-corona-radiata"
+],
     // v19 (audit FAC-VN-004) — see the umbrella record above: the ids were not
     // syndrome cards. This record is withdrawn from the drawn set by the v18
     // authored replacement of the same id, so the array was dead data as well.
     supply: [],
     direction: 'descending',
     modality: 'Arterial blood (oxygenated) — end-artery perforators of the MCA',
-    origin: 'M1 segment of the middle cerebral artery (superior wall), at the anterior perforated substance',
-    target: 'Putamen, lateral globus pallidus and the anterior limb of the internal capsule',
-    decussation: 'No crossing: the lateral group supplies its own hemisphere only.',
+    origin: "Usually MCA M1",
+    target: "Variable basal ganglia/internal capsule branches",
+    decussation: "No neural decussation. Arterial communication and collateral flow vary by individual anatomy.",
     function:
-      'The lateral lenticulostriate arteries are the larger of the two lenticulostriate groups. They enter the brain ' +
-      'through the anterior perforated substance and fan laterally and superiorly through the putamen to the internal ' +
-      'capsule. Their occlusion is the anatomical basis of the lacunar syndrome and of striatocapsular infarction.',
+      "Variable group of proximal MCA perforators entering the anterior perforated substance to supply portions of caudate, putamen, pallidum and internal capsule/corona radiata. The four child tubes are illustrative routes, not a fixed human branch count or four reproducible subterritories. Limited collaterals make these vessels vulnerable to small-vessel infarction.",
     waypoints: [M1_TAKEOFF, M1_APS_MID, APS_ENTRY, [18.5, 25.5, 19.4], [22.0, 31.5, 13.0]],
     tubeRadius: 0.333,
     calibreMm: 0.8,
     color: '#991b1b',
-    clinical: LENTICULOSTRIATE_CLINICAL,
-    refs: LENTICULOSTRIATE_REFS,
+    clinical: [
+  {
+    "syndrome": "Lenticulostriate infarction or haemorrhage",
+    "findings": "Small capsular infarcts can cause pure motor or sensorimotor deficits without cortical signs. Larger striatocapsular lesions can have more complex findings. Hypertension-related deep small-vessel injury can cause putaminal haemorrhage; the mechanism is not always a proved ruptured microaneurysm.",
+    "vascular": "Lateral lenticulostriate arteries"
+  }
+],
+    refs: [
+  "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
+  "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
+],
   },
   {
     id: 'vasc-medial-lenticulostriate-arteries',
-    name: 'Medial lenticulostriate arteries (recurrent artery of Heubner)',
-    region: 'vasculature',
+    name: "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+    region: "vasculature",
     kind: 'vessel',
     laterality: 'paired',
     parent: 'vasc-anterior-cerebral-artery',
@@ -368,32 +371,47 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     basis: 'documented-course',
     elementIds: [],
     anchorNote:
-      'AUTHORED PATH (documented-course basis): no BP3D element names a medial lenticulostriate or Heubner artery, so no ' +
-      'element id is claimed. The chain is the PLAN.md §3.2 Heubner course — anterior cerebral artery at the internal ' +
-      'carotid terminus [2.83, 15.419, 27.537] → anterior perforated substance → the subcallosal corridor → the caudate ' +
-      'head target [10.5, 38.0, 24.0] (1.17 au from the committed ctx-caudate-l mesh), a chord arc of ≈ 34.8 au = 41.8 mm. ' +
-      LENTICULOSTRIATE_SURFACE_NOTE +
-      ' Heubner is the largest of the group: 1.0 mm calibre at 1 au = 1.2 mm gives tubeRadius 0.417 au.',
-    territory: ['nuc-caudate-head', 'nuc-putamen', 'ctx-internal-capsule'],
+      "Illustrative course for Medial lenticulostriate arteries (recurrent artery of Heubner). The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
+    territory: [
+  "nuc-caudate-head",
+  "nuc-accumbens",
+  "nuc-ventral-pallidum",
+  "nuc-putamen",
+  "tract-internal-capsule-anterior-limb",
+  "ctx-internal-capsule"
+],
     // v19 (audit FAC-VN-004) — see the umbrella record above: this record is
     // withdrawn from the drawn set by the v18 authored replacement.
     supply: [],
     direction: 'descending',
     modality: 'Arterial blood (oxygenated) — the largest medial perforator of the ACA',
-    origin: 'Anterior cerebral artery at the internal carotid terminus, anterior to the anterior communicating artery',
-    target: 'Caudate head, anterior putamen and the anterior limb of the internal capsule',
-    decussation: 'No crossing: the recurrent artery of Heubner supplies its own hemisphere.',
+    origin: "ACA, with variable Heubner origin",
+    target: "Anterior basal ganglia and anterior internal capsule",
+    decussation: "No neural decussation. Arterial communication and collateral flow vary by individual anatomy.",
     function:
-      'The recurrent artery of Heubner is the largest and most constant of the medial lenticulostriate arteries. It ' +
-      'leaves the ACA near the anterior communicating artery, runs anteriorly and laterally into the anterior perforated ' +
-      'substance and supplies the caudate head, the anterior putamen and the anterior limb of the internal capsule.',
+      "Medial striate branches arise from ACA; the recurrent artery of Heubner usually arises near the ACA-ACoA junction or proximal A2, less commonly A1, and returns toward the anterior perforated substance. Supplies variable caudate-head, anterior putaminal/pallidal and anterior capsular territory. Two child tubes illustrate routes and do not assert universal duplicated Heubner arteries.",
     waypoints: [HEUBNER_ORIGIN, [8.3, 17.2, 26.9], [12.3, 19.254, 25.518], [11.8, 25.5, 25.4], [10.5, 38.0, 24.0]],
     tubeRadius: 0.417,
     calibreMm: 1.0,
     color: '#991b1b',
-    synonyms: ['Recurrent artery of Heubner', 'Medial striate artery'],
-    clinical: LENTICULOSTRIATE_CLINICAL,
-    refs: LENTICULOSTRIATE_REFS,
+    synonyms: [
+  "medial striate arteries",
+  "recurrent artery of Heubner",
+  "arteria recurrens Heubneri",
+  "medial group of the lenticulostriate arteries"
+],
+    clinical: [
+  {
+    "syndrome": "Medial striate / Heubner infarction",
+    "findings": "Can cause behavioural or executive dysfunction, abulia, dysarthria or contralateral motor deficits according to actual lesion extent. It is not necessarily a purely behavioural infarct.",
+    "vascular": "Medial lenticulostriate arteries (recurrent artery of Heubner)"
+  }
+],
+    refs: [
+  "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
+  "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
+  "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/"
+],
   },
   {
     /**
@@ -420,8 +438,9 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
      * body" rule, the lenticulostriate family already travels.
      */
     id: 'vasc-posterior-medial-choroidal-artery',
-    name: 'Posterior medial choroidal artery',
-    region: 'vasculature',
+    meshes: false, // Incorrect atrial endpoint; keep text, withhold the spatial route.
+    name: "Medial posterior choroidal artery",
+    region: "vasculature",
     kind: 'vessel',
     laterality: 'paired',
     parent: 'vasc-posterior-cerebral-artery',
@@ -435,46 +454,19 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     basis: 'documented-course',
     elementIds: ['FJ1727', 'FJ1727M'],
     anchorNote:
-      'MEASURED PATH (documented-course basis): the archive element pair `FJ1727`/`FJ1727M` (880 faces each, FMA 50630) ' +
-      'names this artery, but it is neither registered in scripts/lib/register.mjs nor canonically meshed nor baked — ' +
-      'no GLB for it exists in the manifest — so the element ids are named here and NO baked body is claimed. All three ' +
-      'waypoints are instead measured on committed meshes (1 au = 1.2 mm): ' +
-      'ORIGIN [10.363, 13.456, −16.527] is the most posterior committed vertex of `vasc-posterior-cerebral-artery-p2-l` ' +
-      '(the distal, quadrigeminal end of the P2 segment — where this artery leaves the PCA); the nearest committed ' +
-      '`ctx-midbrain-surface` vertex is 6.583 au (7.90 mm) away, the cisternal interval at the take-off. ' +
-      'MIDDLE [5.244, 14.752, −12.595] IS that midbrain vertex — the collicular (tectal) surface the artery runs ' +
-      'medially above, which is the record’s own words. ' +
-      'TERMINAL [18.832, 22.802, −17.664] is the `ctx-choroid-plexus-l` vertex nearest the take-off: the plexus at the ' +
-      'atrium (its glomus), 12.664 au (15.20 mm) from the origin, i.e. a graze — the artery ends ON the plexus. ' +
-      'Chord arc 23.18 au = 27.8 mm, the cisternal + fissure segment. The intraventricular continuation along the ' +
-      'plexus body toward the interventricular foramen, and the medial branch’s velum-interpositum run, are documented ' +
-      'in this record’s own `territory[]` and `function` and are NOT drawn as a second tube: one record, one body. ' +
-      'Calibre stated as 0.8 mm (the small-artery figure this table uses) → tubeRadius 0.333 au (r = d / 2.4).',
+      "Spatial model withheld: the former course ended on the lateral-ventricular atrial plexus and did not establish a medial third-ventricular choroidal course. Corrected text remains available; source-backed placement is needed.",
     territory: [
-      'vent-choroid-plexus-lateral',
-      'vent-lateral-ventricle-atrium',
-      'vent-lateral-ventricle-body',
-      'vent-third-ventricle',
-      'nuc-pulvinar',
-      'nuc-mgn',
-      'nuc-habenula',
-      'tract-fornix',
-      'nuc-thalamic-reticular',
-    ],
+  "nuc-habenula",
+  "nuc-pulvinar"
+],
     supply: [],
     direction: 'descending',
     modality: 'Arterial blood (oxygenated) — choroidal branches of the posterior cerebral artery',
-    origin: 'P2 segment of the posterior cerebral artery, in the ambient and quadrigeminal cistern',
-    target: 'Choroid plexus of the lateral ventricle (body, atrium/glomus and temporal horn) and of the third ventricle',
-    decussation: 'No crossing: each posterior choroidal artery supplies its own hemisphere.',
+    origin: "PCA, with variable P1/P2 origin",
+    target: "Third-ventricular choroid plexus and variable medial thalamic/epithalamic branches; Anastomotic contributions to adjacent choroidal territory; the lateral posterior choroidal arteries are a distinct group",
+    decussation: "No neural decussation. Arterial communication and collateral flow vary by individual anatomy.",
     function:
-      'The choroidal supply of the posterior circulation: the medial posterior choroidal artery arises from the P2 ' +
-      'segment of the posterior cerebral artery and runs medially above the tectum to the third ventricle and the ' +
-      'interventricular foramen region, while the lateral posterior choroidal artery arises more distally and runs ' +
-      'laterally into the lateral ventricle to supply the choroid plexus of the body, the atrium (its glomus) and the ' +
-      'temporal horn. Together they supply the choroid plexus of the lateral and third ventricles, the posterior ' +
-      'thalamus and habenula region, and the adjacent fornix and pulvinar — the territory that makes the plexus a ' +
-      'vascular as well as a CSF structure.',
+      "One or more PCA branches that curve around the midbrain toward the pineal/habenular region and tela choroidea of the third ventricle. Medial posterior choroidal branches supply third-ventricular choroid plexus and variable medial/posterior thalamic and epithalamic tissue. The distinct lateral posterior choroidal group enters the lateral-ventricular choroidal fissure and contributes to body/atrial plexus supply; it is not fully represented by this medial course.",
     waypoints: [
       [10.363, 13.456, -16.527],
       [5.244, 14.752, -12.595],
@@ -483,42 +475,35 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     tubeRadius: 0.333,
     calibreMm: 0.8,
     color: '#991b1b',
-    levels: ['lvl-midbrain-sc', 'lvl-post-comm', 'lvl-thalamus-mid', 'lvl-thalamus-rostral', 'lvl-tel-thalamostriate'],
+    levels: [
+  "lvl-midbrain-sc",
+  "lvl-post-comm",
+  "lvl-thalamus-mid",
+  "lvl-thalamus-rostral",
+  "lvl-tel-thalamostriate"
+],
     synonyms: [
-      'arteria choroidea posterior medialis',
-      'medial posterior choroidal artery',
-      'posterior choroidal arteries (medial and lateral — this record documents both branches)',
-    ],
+  "posterior medial choroidal artery",
+  "MPChA",
+  "arteria choroidea posterior medialis"
+],
     clinical: [
-      {
-        syndrome: 'Choroid plexus tumour supply',
-        findings:
-          'Choroid plexus papillomas and carcinomas, and intraventricular meningiomas of the trigone, are fed by the ' +
-          'posterior choroidal arteries (and the anterior choroidal artery anteriorly); recognizing the pedicle is what ' +
-          'makes embolization and surgical control possible.',
-        vascular: 'Posterior choroidal arteries (with the anterior choroidal artery)',
-      },
-      {
-        syndrome: 'Posterior choroidal territory infarction',
-        findings:
-          'Occlusion produces infarction of the posterior thalamus and the adjacent plexus, adding hemisensory loss, ' +
-          'visual field defects and memory disturbance to the picture of a posterior cerebral artery infarct; isolated ' +
-          'occlusion is uncommon because the artery arises from the PCA itself.',
-        vascular: 'Posterior cerebral artery (posterior choroidal branches)',
-      },
-      {
-        syndrome: 'Intraventricular haemorrhage from the choroidal vessels',
-        findings:
-          'The choroidal arteries are the source of intraventricular haemorrhage in the premature (germinal matrix) and ' +
-          'of blood in the ventricles in adults with hypertension or vascular malformation; blood in the ventricle is ' +
-          'what produces hydrocephalus.',
-        vascular: 'Choroidal arteries (with the germinal matrix in neonates)',
-      },
-    ],
+  {
+    "syndrome": "Posterior choroidal vascular injury",
+    "findings": "Injury may affect thalamic/epithalamic tissue or choroid plexus depending on the branches involved. Exact sensory, visual or memory findings cannot be inferred from this single schematic course.",
+    "vascular": "Medial posterior choroidal branches"
+  },
+  {
+    "syndrome": "Intraventricular tumor feeders",
+    "findings": "Choroidal arteries may feed intraventricular tumors; medial/lateral posterior and anterior choroidal contributions vary with tumor location.",
+    "vascular": "Choroidal arteries"
+  }
+],
     refs: [
-      'Blumenfeld, H. (2nd ed.). Neuroanatomy through Clinical Cases — Brain and Environs: Cranium, Ventricles, and Meninges.',
-      'Blumenfeld, H. (2nd ed.). Neuroanatomy through Clinical Cases — Cerebral Hemispheres and Vascular Supply.',
-    ],
+  "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
+  "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 66-69",
+  "Microsurgical anatomy of the lateral posterior choroidal artery (2021), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/33836500/"
+],
   },
 ]
 
@@ -696,6 +681,7 @@ function readHead(
       readStringArray(sources, ['synonyms']).length > 0 ? readStringArray(sources, ['synonyms']) : undefined,
     clinical: Array.isArray(record.clinical) ? (record.clinical as ClinicalItem[]) : [],
     refs: readStringArray(sources, ['refs']),
+    meshes: record.meshes === false ? false : undefined,
   }
 }
 
@@ -886,8 +872,13 @@ export function mergeVesselCourses(
   const replacedIds: string[] = []
   const groupedIds: string[] = []
   for (const course of builtIn) {
-    const authoredCourse = authoredById.get(course.id)
-    if (authoredCourse !== undefined) {
+    if (course.meshes === false) continue
+      const authoredCourse = authoredById.get(course.id)
+      if (authoredCourse !== undefined) {
+        if (authoredCourse.meshes === false) {
+          authoredById.delete(course.id)
+          continue
+        }
       courses.push(authoredCourse)
       replacedIds.push(course.id)
       authoredById.delete(course.id)
@@ -932,6 +923,7 @@ export function mergeVesselCourses(
   }
   const authoredIds: string[] = []
   for (const [id, course] of authoredById) {
+    if (course.meshes === false) continue
     courses.push(course)
     authoredIds.push(id)
   }

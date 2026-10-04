@@ -241,7 +241,8 @@ const LINKS: Record<string, AnatomyRecordLink> = {
   'tract-corpus-callosum-genu': { body: 'ctx-corpus-callosum', region: 'telencephalon', paired: false, render: 'none' },
   'tract-corpus-callosum-rostrum': { body: 'ctx-corpus-callosum', region: 'telencephalon', paired: false, render: 'none' },
   'tract-corpus-callosum-splenium': { body: 'ctx-corpus-callosum', region: 'telencephalon', paired: false, render: 'none' },
-  'ctx-internal-capsule': { body: 'tel-white-matter-l', region: 'telencephalon', paired: true, render: 'body' },
+  // A whole cerebral white-matter shell is not an isolated internal capsule.
+  'ctx-internal-capsule': { body: null, region: 'telencephalon', paired: true, render: 'none' },
 
   /* --- basal ganglia ---------------------------------------------------- */
   'nuc-caudate-head': { body: 'ctx-caudate-l', region: 'telencephalon', paired: true, render: 'body' },

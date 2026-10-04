@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" font-family="'Segoe UI', Arial, sans-serif">
   <g class="plate-frame">
-    <text class="plate-caption" x="400" y="32" text-anchor="middle" font-size="16" font-weight="600" fill="#334155">Diencephalon - mid-thalamus level, mammillary bodies (y = +28)</text>
+    <text class="plate-caption" x="400" y="32" text-anchor="middle" font-size="16" font-weight="600" fill="#334155">Diencephalon - schematic mid-thalamic level (y = +28)</text>
     <circle cx="400" cy="62" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="400" y="67.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">P</text>
     <circle cx="52" cy="400" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="52" y="405.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">R</text>
     <circle cx="748" cy="400" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="748" y="405.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">L</text>

@@ -1,5 +1,13 @@
 [English](README.md) | **简体中文**
 
+## Scientific review snapshot — 2026-10-04
+
+The `audit/scientific-content-2026-10-04` branch contains an evidence-supported review of all 287 original structure/tract records and all 26 syndrome cards, 23 added cortical concepts, a separate arcuate fasciculus entry, and 19 functional pathway summaries. See [the audit report](docs/audit/2026-10-04/REPORT.md), [record-level before/after index](docs/audit/2026-10-04/review-index.json), and [verification](docs/audit/2026-10-04/VERIFICATION.md). This snapshot is held for owner review before deployment.
+
+Coordinates, shapes, functional boundaries and MRI alignment remain schematic and unvalidated. Eight misleading named spatial routes are withheld, and an internal-capsule mapping to the entire white-matter shell is removed. Clinical patterns are educational examples, not diagnostic rules. Historical implementation documents below do not establish current scientific accuracy or measured anatomical fidelity.
+
+Public build choices are **MRI / Simulated only**. Direct Plates entry defaults to **Live section / y transverse / MRI**; Snap is initially off. CT and photo assets remain historical source material but are excluded from the public build. Use `npm run verify:scientific` and `npm run verify:public-imaging` for current review/build integration checks; the older CT/photo and fixed-count geometry gates describe archived features and are not scientific validation.
+
 # NeuroAxis — 三维脑干图谱
 
 **在线使用：** <https://linkbag.github.io/neuroaxis-atlas/>

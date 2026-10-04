@@ -50,6 +50,7 @@ export interface StructureRecord {
   size3d?: Vec3;                     // ellipsoid radii
   refs?: string[];                   // e.g. "Blumenfeld, 2nd ed., Ch. 'Diencephalon…'"
   contextNote?: string;              // for context records
+  geometryNote?: string;             // evidence/limitations of authored geometry
   /**
    * v8 (docs/NEUROATLAS_V8_PLAN.md §1a) — the cerebral-vasculature fields.
    *
@@ -94,6 +95,20 @@ export interface TractRecord {
   waypoints: Vec3[];                 // Catmull-Rom control points (canonical space)
   tubeRadius: number; color: string;
   levels?: string[]; refs?: string[]; synonyms?: string[];
+  meshes?: boolean;
+  geometryNote?: string;
+}
+
+/** A teaching route: steps may be relays, axon bundles or unmodeled concepts. */
+export interface FunctionalPathway {
+  id: string;
+  name: string;
+  category: 'Motor' | 'Sensory' | 'Cerebellar' | 'Memory and limbic' | 'Autonomic' | 'Association';
+  summary: string;
+  organization: string;
+  steps: { label: string; structureId?: string; note?: string }[];
+  clinical: string;
+  refs: string[];
 }
 
 export interface SyndromeRecord {

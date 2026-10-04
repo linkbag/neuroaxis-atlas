@@ -3,109 +3,129 @@
     "id": "syn-weber",
     "name": "Weber syndrome",
     "eponym": "Weber",
-    "structures": ["nuc-oculomotor", "tract-crus-cerebri", "tract-corticobulbar"],
-    "vascularTerritory": "Paramedian branches of the posterior cerebral artery (posterior thalamoperforating / midbrain perforators)",
-    "presentation": "Ipsilateral pupil-involving CN III palsy — ptosis, mydriasis, and a 'down and out' eye — combined with contralateral hemiplegia of face, arm, and leg and contralateral upper motor neuron facial weakness (crossed findings).",
-    "cause": "Infarction or hemorrhage of the ventral midbrain at the basis pedunculi, damaging the oculomotor fascicles as they traverse the substance of the midbrain and the corticospinal/corticobulbar fibers of the crus cerebri; classically from occlusion of paramedian PCA perforators, also reported with tumors, demyelination, and tuberculoma.",
+    "structures": [
+      "nrv-cn3-oculomotor",
+      "tract-crus-cerebri",
+      "tract-corticobulbar"
+    ],
+    "vascularTerritory": "PCA/proximal basilar perforators to ventral midbrain, with variable territorial overlap.",
+    "presentation": "Ipsilateral oculomotor fascicular palsy with contralateral weakness from neighboring descending motor fibers. Pupil involvement and facial/tongue versus limb weakness depend on lesion extent; a nuclear III lesion may have a more complex bilateral/crossed muscle pattern.",
+    "cause": "Ventral midbrain injury affecting CN III fascicles and cerebral peduncular descending motor pathways, often ischemic but also hemorrhagic or mass-related.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126",
-      "Patten, Neurological Differential Diagnosis — midbrain level plates"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, Table 14.9 midbrain syndromes, printed pp. 660 (PDF pp. 686).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, third nerve nuclear/fascicular patterns, printed pp. 569-574 (PDF pp. 595-600)."
     ]
   },
   {
     "id": "syn-benedikt",
     "name": "Benedikt syndrome",
     "eponym": "Benedikt",
-    "structures": ["nuc-oculomotor", "nuc-edinger-westphal", "nuc-red-nucleus", "tract-medial-lemniscus"],
-    "vascularTerritory": "Paramedian branches of the posterior cerebral artery (posterior thalamoperforating / paramedian midbrain)",
-    "presentation": "Ipsilateral CN III palsy with contralateral involuntary movements — rubral tremor, choreoathetosis, or hemiataxia — plus contralateral impairment of touch, vibration, and position sense when the medial lemniscus is involved.",
-    "cause": "Ventral tegmental lesion involving the CN III fascicles and the red nucleus / dentatorubrothalamic fibers with (variable) medial lemniscus extension; classically paramedian PCA perforator infarction, historically also tuberculosis and tumor.",
+    "structures": [
+      "nrv-cn3-oculomotor",
+      "nuc-red-nucleus",
+      "tract-scp",
+      "tract-crus-cerebri",
+      "nuc-snc"
+    ],
+    "vascularTerritory": "PCA/proximal basilar perforators to midbrain basis and tegmentum.",
+    "presentation": "Ipsilateral third-nerve palsy with contralateral ataxia/tremor or other involuntary movements from crossed cerebellar-output and adjacent tegmental injury. Contralateral weakness may accompany peduncular involvement. These eponymous patterns overlap and exact historical definitions vary.",
+    "cause": "Midbrain basis/tegmentum injury affecting third-nerve fascicles, crossed superior-cerebellar-peduncle output and variable neighboring structures.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, Table 14.9 midbrain syndromes, printed pp. 660 (PDF pp. 686)."
     ]
   },
   {
     "id": "syn-claude",
     "name": "Claude syndrome",
     "eponym": "Claude",
-    "structures": ["nuc-red-nucleus", "nuc-oculomotor", "tract-scp"],
-    "vascularTerritory": "Paramedian branches of the posterior cerebral artery",
-    "presentation": "Ipsilateral CN III palsy with pronounced contralateral cerebellar ataxia — dysmetria, intention tremor, and incoordination — typically out of proportion to any weakness.",
-    "cause": "Dorsal tegmental infarct in the paramedian PCA territory damaging the CN III fascicles together with the red nucleus and the dentatorubrothalamic (superior cerebellar peduncle) outflow; the ataxia reflects interruption of cerebellar output before its decussation.",
+    "structures": [
+      "nrv-cn3-oculomotor",
+      "nuc-red-nucleus",
+      "tract-scp"
+    ],
+    "vascularTerritory": "PCA/proximal basilar perforators supplying midbrain tegmentum.",
+    "presentation": "Ipsilateral third-nerve palsy with contralateral ataxia from injury to cerebellar-output fibers above their caudal-midbrain decussation. Prominent weakness is not a defining component but can appear with lesion extension. Historical eponym boundaries vary.",
+    "cause": "Midbrain tegmental injury involving third-nerve fascicles and post-crossing cerebellar efferents near the red nucleus.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, Table 14.9 midbrain syndromes, printed pp. 660 (PDF pp. 686)."
     ]
   },
   {
     "id": "syn-nothnagel",
     "name": "Nothnagel syndrome",
     "eponym": "Nothnagel",
-    "structures": ["nuc-superior-colliculus", "nuc-oculomotor", "nuc-red-nucleus"],
-    "vascularTerritory": "Superior cerebellar artery and collicular/quadrigeminal branches of the posterior cerebral artery",
-    "presentation": "Ipsilateral CN III palsy with ipsilateral cerebellar ataxia; vertical gaze palsy and other dorsal midbrain (tectal) signs may accompany the syndrome when the superior colliculus and pretectal region are involved.",
-    "cause": "Lesion of the dorsal midbrain tectum and tegmentum — classically a quadrigeminal-plate tumor (pineal region) or an infarct in the SCA/PCA collicular territory — involving the CN III nucleus or fascicles, the superior colliculus, and the red nucleus.",
+    "structures": [
+      "nrv-cn3-oculomotor",
+      "nuc-oculomotor",
+      "tract-scp"
+    ],
+    "vascularTerritory": "A regional dorsal midbrain syndrome, often mass-related; vascular causes have variable PCA/SCA/basilar contributions.",
+    "presentation": "Historical description of oculomotor dysfunction with cerebellar ataxia from dorsal midbrain/superior cerebellar peduncle-region involvement. Ocular and ataxic laterality can vary with the nuclear, fascicular and crossing structures involved. Contralateral hemianesthesia is not a required defining feature.",
+    "cause": "Dorsal midbrain mass or other regional lesion affecting ocular motor and cerebellar-output pathways; clinical anatomy is more informative than the variable historical eponym.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Triarhou and Manto, Nothnagel Syndrome, Cerebellum 2023 (online 2022), https://pubmed.ncbi.nlm.nih.gov/35817948/.",
+      "Midbrain infarction causing oculomotor nerve palsy and ipsilateral cerebellar ataxia, 2014, https://pubmed.ncbi.nlm.nih.gov/25224204/.",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, warning on historically variable midbrain eponyms, printed pp. 660 (PDF pp. 686)."
     ]
   },
   {
     "id": "syn-parinaud",
     "name": "Parinaud syndrome (dorsal midbrain)",
     "eponym": "Parinaud",
-    "structures": ["nuc-pretectal", "nuc-superior-colliculus", "nuc-pineal-gland", "nuc-edinger-westphal"],
-    "vascularTerritory": "Collicular/quadrigeminal branches of the posterior cerebral artery; pineal region masses cause the syndrome by mass effect rather than ischemia",
-    "presentation": "Vertical gaze palsy (upgaze affected first, later downgaze), convergence-retraction nystagmus on attempted upgaze, eyelid retraction (Collier sign), light-near dissociation with large pupils that accommodate but do not react to light, and the setting-sun sign.",
-    "cause": "Compression or destruction of the dorsal midbrain and pretectal region: pineal region tumors, hydrocephalus with dilatation of the suprapineal recess, midbrain infarction (collicular/quadrigeminal branches), demyelination, or upper brainstem hemorrhage.",
+    "structures": [
+      "nuc-pretectal",
+      "tract-posterior-commissure"
+    ],
+    "vascularTerritory": "Dorsal rostral midbrain; often compressive rather than a fixed vascular territory.",
+    "presentation": "Dorsal midbrain syndrome commonly includes impaired upward gaze, convergence-retraction movements on attempted upgaze, light-near dissociation and lid retraction. Not every feature is present; pupil size, downward gaze and other ocular functions vary.",
+    "cause": "Pineal-region compression, hydrocephalus, stroke, inflammation or other dorsal midbrain disease. Aqueduct obstruction and the gaze syndrome can coexist, but one does not require the other.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\" (supranuclear control of eye movements)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, vertical gaze and Parinaud syndrome, printed pp. 587-588 (PDF pp. 613-614)."
     ]
   },
   {
     "id": "syn-ino",
     "name": "Internuclear ophthalmoplegia (MLF)",
-    "structures": ["tract-mlf"],
-    "vascularTerritory": "Paramedian branches of the basilar artery",
-    "presentation": "On attempted lateral gaze: impaired (slow or absent) adduction of the ipsilateral eye with abducting nystagmus of the contralateral eye; convergence is characteristically spared, distinguishing the lesion from a third-nerve palsy; diplopia occurs in lateral gaze.",
-    "cause": "Lesion of the medial longitudinal fasciculus interrupting the abducens internuclear fibers that ascend to the contralateral oculomotor medial rectus subnucleus; in young adults usually demyelination (often bilateral), in the elderly a small paramedian basilar perforator infarct (usually unilateral).",
+    "structures": [
+      "tract-mlf"
+    ],
+    "vascularTerritory": "MLF injury in pons or midbrain; vascular sources differ with level, including basilar or PCA/proximal basilar perforators.",
+    "presentation": "During horizontal gaze, the eye on the side of MLF injury has impaired/slowed adduction while the opposite abducting eye often shows nystagmus. Convergence is frequently relatively preserved but is not invariably intact. Bilateral INO can occur.",
+    "cause": "Disruption of internuclear input from the contralateral abducens nucleus to the ipsilateral medial-rectus oculomotor subnucleus. Causes include demyelination, infarction and other brainstem lesions; age alone does not establish the cause.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126",
-      "Fix, High-Yield Neuroanatomy — brainstem sections"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, INO and horizontal gaze circuitry, printed pp. 585-587 (PDF pp. 611-613)."
     ]
   },
   {
     "id": "syn-parkinson",
     "name": "Parkinson's disease",
     "eponym": "Paralysis agitans",
-    "structures": ["nuc-snc", "nuc-snr"],
-    "vascularTerritory": "None (degenerative alpha-synucleinopathy, not vascular)",
-    "presentation": "Asymmetric resting 'pill-rolling' tremor, cogwheel rigidity, bradykinesia, and postural instability; later autonomic dysfunction, REM-sleep behavior disorder, hyposmia, and cognitive decline. Levodopa-responsive historically.",
-    "cause": "Progressive degeneration of the dopaminergic neurons of the substantia nigra pars compacta with alpha-synuclein (Lewy body) inclusions; striatal dopamine depletion unbalances basal ganglia circuitry — reduced direct-pathway facilitation with relatively increased GABAergic output of the SNr/GPi onto thalamus and superior colliculus.",
+    "structures": [
+      "nuc-snc"
+    ],
+    "vascularTerritory": "Neurodegenerative disease, not a fixed vascular territory; vascular parkinsonism is a distinct differential.",
+    "presentation": "Parkinson disease produces bradykinesia with rigidity and/or rest tremor; tremor is not obligatory. Gait/postural and nonmotor symptoms vary, and some nonmotor features can precede the motor syndrome. Diagnosis and progression cannot be inferred solely from one atlas structure.",
+    "cause": "Progressive neurodegeneration prominently affecting nigrostriatal dopamine neurons, alongside wider neural systems and commonly alpha-synuclein pathology. Parkinsonism has several other degenerative, medication-related and vascular causes.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Basal Ganglia\" (Parkinson's disease and related disorders)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "Snell, Clinical Neuroanatomy — basal ganglia sections"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, dopamine and Parkinson disease, printed pp. 751-758 (PDF pp. 777-784).",
+      "NINDS, Parkinson Disease: Challenges, Progress and Promise, https://www.ninds.nih.gov/current-research/focus-disorders/parkinsons-disease-research/parkinsons-disease-challenges-progress-and-promise."
     ]
   },
   {
     "id": "syn-peduncular-hallucinosis",
     "name": "Peduncular hallucinosis",
     "eponym": "Lhermitte peduncular hallucinosis",
-    "structures": ["tract-crus-cerebri", "nuc-snc", "nuc-red-nucleus", "nuc-md"],
-    "vascularTerritory": "Paramedian branches of the basilar tip / posterior cerebral artery (midbrain perforators and paramedian thalamic perforators, including artery-of-Percheron territory)",
-    "presentation": "Vivid, colorful, complex visual hallucinations — people, animals, and scenes — with preserved insight and otherwise intact mental status, often worse in the evening or low light and frequently accompanied by sleep-wake disturbance; hallucinations are typically welcomed rather than threatening.",
-    "cause": "Lesions of the rostral midbrain (cerebral peduncle, substantia nigra, red nucleus region) or the paramedian thalamus that disconnect ascending reticular and limbic visual circuitry from occipital association cortex; classically paramedian perforator infarcts, described by Lhermitte in 1922.",
+    "structures": [
+      "tract-crus-cerebri",
+      "nuc-snc",
+      "nuc-red-nucleus",
+      "nuc-md"
+    ],
+    "vascularTerritory": "Often rostral brainstem or thalamic lesions; causes include posterior circulation ischemia but are not limited to one artery.",
+    "presentation": "Complex vivid visual hallucinations can accompany midbrain, pontine or thalamic disease, sometimes with sleep disturbance. Insight is often preserved but variable; the content is not necessarily pleasant, and normal cognition/consciousness cannot be assumed in all cases.",
+    "cause": "Disruption of brainstem/thalamic networks involved in arousal, sleep and visual processing. A proposed release mechanism is not a fully established single-nucleus explanation.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126",
-      "Nolte, The Human Brain: An Introduction to Its Functional Anatomy — thalamus and reticular systems"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, peduncular hallucinosis, printed pp. 661 (PDF pp. 687)."
     ]
   }
 ]

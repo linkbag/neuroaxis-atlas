@@ -183,3 +183,12 @@ npm run validate          # = node scripts/validate-data.mjs
   other directory laid out like `src/data/`.
 - Minimum passing state is `taxonomy.json` + `levels.json` alone; groups appear in the summary
   as they are authored.
+
+
+## Scientific review contract (2026-10-04)
+
+`pathways.json` contains sourced, simplified functional connection summaries with optional links to existing authored record IDs. It is not a tractography graph or exhaustive connectome. Cortical gyri and functional areas without validated placement omit quantitative geometry; anatomical, cytoarchitectonic and functional labels are distinct.
+
+`geometryNote` records representation limits. `meshes:false` withholds structure/tract geometry; cranial-nerve and vessel drawing registries additionally filter explicitly withheld courses. A course is not a second clinical authority: its name, function, clinical array and references must agree with its StructureRecord (`verify/review-runtime.mjs`). Territory IDs can denote partly supplied tissue in an encompassing structure, not entire voxel territories or ventricular cavities.
+
+The custom display frame, declared scale, mesh-manifest agreement and synchronized 2D contours do not validate exact anatomy or MRI registration. Author SVG plates are schematic and require separate label review. `verify:scientific` checks audit coverage, semantic consistency and ID wiring only. It must never be described as a scientific certification.

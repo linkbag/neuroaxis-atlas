@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-04",
+  "reviewBranch": "audit/scientific-content-2026-10-04",
+  "liveUpdated": false,
+  "geometryResolutions": {
+    "GEO-001": "Persistent notice and per-record caveats; registration remains unvalidated.",
+    "GEO-002": "Removed whole-white-matter body association for ctx-internal-capsule; text-only context.",
+    "GEO-003": "Per-record geometry notes disclose shared whole-structure meshes and uncertain subdivision boundaries.",
+    "GEO-004": "Medial posterior choroidal course excluded from both 3D and section drawing registries.",
+    "GEO-005": "Both named PCA temporal courses withheld, pending complete landmark review.",
+    "GEO-006": "Both named MCA precentral/central courses withheld, pending complete landmark review.",
+    "GEO-007": "SCA vermian representative route declared paired; pontine group paired anatomically but its single curve withheld.",
+    "GEO-008": "Valid bilateral source mirroring retained; crossing is not a reason to force midline laterality.",
+    "GEO-009": "ASCT mesh withheld; no guessed second crossing. Corrected pathway available as text.",
+    "GEO-010": "CN V curve withheld; CN IV nuclear/peripheral crossing distinguished in text, all skull-base positions remain schematic.",
+    "GEO-011": "All nerve/built-in vessel narrative fields synchronized; runtime gate compares canonical function/clinical/refs.",
+    "GEO-012": "M2 closure and repeated controls removed using existing stored controls.",
+    "GEO-013": "12 vessel metadata origins now match model mesh centroids; this is internal consistency, not anatomical registration.",
+    "GEO-014": "Gross ventricular relationships reviewed; aqueduct moved to midbrain, exact topology/segments unvalidated.",
+    "GEO-015": "Rostral-pontine CN IV shapes/metadata removed; labels corrected without invented replacement.",
+    "GEO-016": "Live/author representations explicitly described as teaching models, not independent validation."
+  },
+  "independentReviewResolutions": {
+    "SLF modality": "Corrected frontoparietal/arcuate distinction",
+    "Clarke extent": "Corrected caudal cervical/thoracic to upper lumbar",
+    "Rubrospinal": "Removed unqualified human flexor/extensor rule",
+    "Reticulospinal": "Somatic motor category clarified",
+    "Entorhinal layers": "Preferential wording and macaque primary evidence added",
+    "Arcuate navigation": "Linked language step to new arcuate record"
+  },
+  "withheld": {
+    "tracts": [
+      "tract-anterior-spinocerebellar"
+    ],
+    "nerves": [
+      "nrv-cn5-trigeminal"
+    ],
+    "vessels": [
+      "vasc-posterior-medial-choroidal-artery",
+      "vasc-pca-anterior-temporal-branches",
+      "vasc-pca-posterior-temporal-branches",
+      "vasc-mca-m4-precentral-branch",
+      "vasc-mca-m4-central-branch",
+      "vasc-pontine-perforating-arteries"
+    ]
+  },
+  "drawingCourseCounts": {
+    "nerves": 11,
+    "vessels": 35
+  }
+}

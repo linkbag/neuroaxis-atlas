@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict'
+import { readFileSync, readdirSync, existsSync } from 'node:fs'
+const catalog = readFileSync('src/data/sectionImages.ts', 'utf8')
+assert.match(catalog, /sectionImages: SectionImage\[\] = \[\]/, 'Photograph catalog must be empty')
+assert.doesNotMatch(catalog, /import.*assets\/imaging\/stains/, 'Photograph import in public module')
+const layers = readFileSync('src/components/section/imageLayers.ts', 'utf8')
+assert.doesNotMatch(layers, /import.*ct\.bin/, 'CT volume import in public module')
+assert.match(layers, /ctLayerStatus\(\).*?return 'unavailable'/s)
+const state = readFileSync('src/state/store.ts', 'utf8')
+assert.ok(/export const SECTION_UNDERLAY_KINDS[^=]*=\s*\[\s*'mri',\s*'none',?\s*\]/.test(state), 'MRI/simulated choices only')
+assert.ok(/platesMode: 'live', sectionAxis: 'y'/.test(state), 'Live transverse Plates default')
+assert.ok(/snapToPlate:\s*false/.test(state), 'Snap default must be off')
+if (process.argv.includes('--dist')) {
+  assert.ok(existsSync('dist/assets'), 'Build required for asset inspection')
+  const assets = readdirSync('dist/assets')
+  const forbidden = assets.filter(name => /^(?:ct-|ubc-|vhp-|msu-|wikict-)/i.test(name))
+  assert.deepEqual(forbidden, [], 'CT/photo assets shipped in dist')
+  assert.ok(assets.some(name => /^mri-t1-.*\.bin$/.test(name)), 'MRI grid missing from dist')
+  console.log(`PASS: ${assets.length} built assets inspected; MRI present, CT/photos absent.`)
+} else console.log('PASS: public imagery is MRI/simulated only; requested defaults preserved.')

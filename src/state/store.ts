@@ -27,7 +27,7 @@ import {
 // defaults are inside every bound" are enforced rather than asserted in prose.
 import { CLIP_BOUNDS } from '../components/viewer3d/clipPlanes'
 
-export type ActiveTab = '3d' | 'plates' | 'syndromes'
+export type ActiveTab = '3d' | 'plates' | 'syndromes' | 'pathways' | 'cortex'
 export type PlatesMode = 'author' | 'live'
 /**
  * View presets (plan §1.1 feature 2 + docs/TELENCEPHALON_PLAN.md §5).

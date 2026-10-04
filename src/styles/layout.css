@@ -311,11 +311,57 @@
      * declaration again, so they cannot drift. */
     --sidebar-w: 264px;
     grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) minmax(160px, 34vh);
+    /* Keep the workspace usable when header controls wrap or the viewport is
+     * short. If these minimum tracks exceed the viewport, the page can scroll
+     * instead of collapsing the workspace beneath the selection rail. */
+    grid-template-rows: auto minmax(360px, 1fr) minmax(160px, 26vh);
     grid-template-areas:
       'header header'
       'sidebar center'
       'info info';
+  }
+
+  /* The desktop sidebar-aligned header columns leave almost no control width
+   * in a narrow panel. Put brand/actions above full-width control groups. */
+  .app-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .brand {
+    grid-column: 1;
+    grid-row: 1;
+    padding-left: 0;
+  }
+
+  .header-actions {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .header-rows {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    /* Header supplies an inline flex layout; CSS owns this narrow layout. */
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .header-rows .btn {
+    padding: 4px 7px;
+  }
+
+  .center-tabs {
+    flex-shrink: 0;
+    overflow-x: auto;
+  }
+
+  .center-tab,
+  .center-tabs-browse {
+    flex-shrink: 0;
   }
 
   /* Sidebar collapsible: the tab-bar Browse button restores it. */
@@ -338,6 +384,7 @@
   /* Bottom band: info panel beside a compact legend column. */
   .right-rail {
     flex-direction: row;
+    overflow: hidden;
     border-left: none;
     border-top: 1px solid var(--border-subtle);
   }
@@ -357,7 +404,7 @@
 @media (max-width: 640px) {
   .app-shell {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(360px, 1fr);
     grid-template-areas:
       'header'
       'center';
@@ -376,6 +423,21 @@
     grid-template-columns: minmax(0, 1fr);
     padding: 8px 10px;
     gap: var(--space-2);
+  }
+
+  .header-actions {
+    grid-column: 1;
+    grid-row: 3;
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+
+  .header-rows {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .header-all-module {
+    justify-self: start;
   }
 
   .header-presets {

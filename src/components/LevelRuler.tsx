@@ -47,7 +47,7 @@ export default function LevelRuler() {
 
   return (
     <div className="level-ruler-wrap">
-      <p className="hint">Rostro-caudal · click a level to cut the 3D plane and open its plate</p>
+      <p className="hint">Teaching levels · +y superior · click a level to cut the 3D plane and open its plate</p>
       <ol className="level-ruler">
         {levels.map((level) => {
           const plate = platesByLevel.get(level.id)

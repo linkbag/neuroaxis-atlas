@@ -75,6 +75,9 @@ import Legend from './components/Legend'
 import InfoPanel from './components/InfoPanel'
 import PlatesTab from './components/PlatesTab'
 import SyndromeBrowser from './components/SyndromeBrowser'
+import PathwayBrowser from './components/PathwayBrowser'
+import CortexAtlas from './components/CortexAtlas'
+import './styles/knowledge.css'
 import ReferencesModal from './components/ReferencesModal'
 import RightsModal, { acknowledgementStored, saveAcknowledgement } from './components/RightsModal'
 import Viewer3D from './components/viewer3d/Viewer3D'
@@ -86,6 +89,8 @@ const TABS: { id: ActiveTab; label: string; title: string }[] = [
   { id: '3d', label: '3D', title: 'Interactive 3D brainstem viewer' },
   { id: 'plates', label: 'Plates', title: '2D cross-section plates (transverse · sagittal · coronal)' },
   { id: 'syndromes', label: 'Syndromes', title: 'Clinical syndrome browser' },
+  { id: 'cortex', label: 'Cortex', title: 'Cortical region atlas' },
+  { id: 'pathways', label: 'Pathways', title: 'Major functional pathways and crossings' },
 ]
 
 /**
@@ -244,7 +249,8 @@ export function AppContent() {
           </button>
         </div>
 
-        <div className="center-body" id="center-body" role="tabpanel" aria-label="Active view">
+        <p className="model-caveat">Teaching atlas: geometry and coordinates are schematic. Clinical patterns vary and do not establish a diagnosis.</p>
+        <div className="center-body" id="center-body" role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
           {/* Each tab owns its own boundary: a failure in the 3D canvas must
               leave the Plates and Syndromes tabs reachable, and vice versa.
               PlatesTab additionally guards its two modes internally
@@ -265,6 +271,8 @@ export function AppContent() {
               <SyndromeBrowser />
             </TransparentBoundary>
           )}
+          {activeTab === 'pathways' && <TransparentBoundary label="Pathway browser"><PathwayBrowser /></TransparentBoundary>}
+          {activeTab === 'cortex' && <TransparentBoundary label="Cortical atlas"><CortexAtlas /></TransparentBoundary>}
         </div>
       </main>
 

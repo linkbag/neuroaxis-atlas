@@ -1,0 +1,374 @@
+{
+  "note": "Parent integrator should add these entries to shared taxonomy. New records intentionally omit quantitative geometry; they provide a cortical breakdown, not a registered parcellation.",
+  "additions": [
+    {
+      "id": "tract-arcuate-fasciculus",
+      "name": "Arcuate fasciculus",
+      "synonyms": [
+        "arcuate bundle",
+        "fasciculus arcuatus",
+        "dorsal language pathway"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Telencephalic white matter",
+      "kind": "tract",
+      "laterality": "paired",
+      "color": "#a78bfa",
+      "contextNote": "Concept record with no dedicated segmented volume or tractography streamlines. No origin3d, size3d or waypoints are assigned; the cortex/tract descriptions are educational, not patient-specific localization."
+    },
+    {
+      "id": "ctx-precentral-gyrus",
+      "name": "Precentral gyrus",
+      "synonyms": [
+        "anterior central gyrus",
+        "motor strip"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-postcentral-gyrus",
+      "name": "Postcentral gyrus",
+      "synonyms": [
+        "posterior central gyrus",
+        "sensory strip"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-paracentral-lobule",
+      "name": "Paracentral lobule",
+      "synonyms": [
+        "medial sensorimotor cortex"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-superior-frontal-gyrus",
+      "name": "Superior frontal gyrus",
+      "synonyms": [
+        "gyrus frontalis superior"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-middle-frontal-gyrus",
+      "name": "Middle frontal gyrus",
+      "synonyms": [
+        "gyrus frontalis medius"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-inferior-frontal-gyrus",
+      "name": "Inferior frontal gyrus",
+      "synonyms": [
+        "pars opercularis",
+        "pars triangularis",
+        "pars orbitalis"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-superior-parietal-lobule",
+      "name": "Superior parietal lobule",
+      "synonyms": [
+        "superior parietal cortex",
+        "approximately Brodmann areas 5 and 7"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-angular-gyrus",
+      "name": "Angular gyrus",
+      "synonyms": [
+        "posterior inferior parietal lobule",
+        "approximately Brodmann area 39"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-supramarginal-gyrus",
+      "name": "Supramarginal gyrus",
+      "synonyms": [
+        "anterior inferior parietal lobule",
+        "approximately Brodmann area 40"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-precuneus",
+      "name": "Precuneus",
+      "synonyms": [
+        "medial parietal cortex"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-superior-temporal-gyrus",
+      "name": "Superior temporal gyrus",
+      "synonyms": [
+        "gyrus temporalis superior",
+        "Heschl transverse gyri on superior plane"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-middle-temporal-gyrus",
+      "name": "Middle temporal gyrus",
+      "synonyms": [
+        "gyrus temporalis medius"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-inferior-temporal-gyrus",
+      "name": "Inferior temporal gyrus",
+      "synonyms": [
+        "gyrus temporalis inferior"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-fusiform-gyrus",
+      "name": "Fusiform (occipitotemporal) gyrus",
+      "synonyms": [
+        "lateral occipitotemporal gyrus",
+        "fusiform cortex"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-cuneus",
+      "name": "Cuneus",
+      "synonyms": [
+        "medial occipital cuneus"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-lingual-gyrus",
+      "name": "Lingual gyrus",
+      "synonyms": [
+        "medial occipitotemporal lingual cortex"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-retrosplenial-cortex",
+      "name": "Retrosplenial cortex",
+      "synonyms": [
+        "approximately Brodmann areas 29 and 30",
+        "retrosplenial region"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Cortical gyri and lobules",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#64748b",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-dl-prefrontal",
+      "name": "Dorsolateral prefrontal cortex",
+      "synonyms": [
+        "DLPFC",
+        "approximately areas 9 and 46"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Functional cortical areas",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#0ea5e9",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-orbitofrontal",
+      "name": "Orbitofrontal cortex",
+      "synonyms": [
+        "OFC",
+        "orbital prefrontal cortex"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Functional cortical areas",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#0ea5e9",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-vm-prefrontal",
+      "name": "Ventromedial prefrontal cortex",
+      "synonyms": [
+        "vmPFC",
+        "medial orbital prefrontal region"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Functional cortical areas",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#0ea5e9",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-s2",
+      "name": "Secondary somatosensory cortex (S2)",
+      "synonyms": [
+        "parietal opercular somatosensory cortex",
+        "SII"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Functional cortical areas",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#0ea5e9",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-gustatory",
+      "name": "Gustatory cortex",
+      "synonyms": [
+        "insular-opercular taste cortex",
+        "primary taste cortex"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Functional cortical areas",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#0ea5e9",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    },
+    {
+      "id": "ctx-primary-olfactory",
+      "name": "Primary olfactory cortex",
+      "synonyms": [
+        "piriform cortex",
+        "periamygdaloid olfactory cortex"
+      ],
+      "region": "telencephalon",
+      "subdivision": "Functional cortical areas",
+      "kind": "context",
+      "laterality": "paired",
+      "color": "#0ea5e9",
+      "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable."
+    }
+  ],
+  "updates": [
+    {
+      "id": "ctx-a2",
+      "name": "Auditory association cortex (A2)",
+      "synonyms": [
+        "nonprimary auditory cortex",
+        "auditory belt and parabelt",
+        "secondary auditory cortex"
+      ]
+    },
+    {
+      "id": "ctx-m1-hand",
+      "name": "Primary motor cortex (M1) — hand representation",
+      "synonyms": [
+        "hand motor area",
+        "M1 hand area"
+      ]
+    },
+    {
+      "id": "ctx-s1-hand",
+      "name": "Primary somatosensory cortex (S1) — hand representation",
+      "synonyms": [
+        "hand sensory area",
+        "S1 hand area",
+        "hand knob region"
+      ]
+    },
+    {
+      "id": "nuc-ca4",
+      "name": "CA4 (hilar field)",
+      "synonyms": [
+        "CA4",
+        "hilar CA4 field",
+        "endfolium",
+        "endblatt",
+        "CA4 field"
+      ]
+    }
+  ]
+}

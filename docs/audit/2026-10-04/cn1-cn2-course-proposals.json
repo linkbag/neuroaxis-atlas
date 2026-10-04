@@ -1,0 +1,29 @@
+{
+  "nrv-cn1-olfactory": {
+    "modality": "Special sensory: olfaction; often classified as special visceral afferent in traditional cranial-nerve schemes",
+    "origin": "Olfactory receptor neurons in superior nasal neuroepithelium",
+    "target": "Olfactory bulb glomeruli: first synapse on mitral/tufted cells; CNS bulb output continues in olfactory tract",
+    "decussation": "Fila project to the ipsilateral bulb without a nerve decussation. Central olfactory pathways have interhemispheric/commissural connections; these do not make CN I itself a crossed tract.",
+    "function": "CN I consists of primary olfactory receptor-neuron axons (olfactory fila) from the superior nasal neuroepithelium to the bulb. Mitral/tufted cells then project in the CNS olfactory tract to primary olfactory regions without a compulsory initial thalamic relay. Olfaction contributes to flavor and emotional/memory networks, but it is distinct from gustatory taste.",
+    "course": "Receptor-neuron axon bundles pass through cribriform foramina to the olfactory bulb in the anterior cranial fossa. The bulb and tract are CNS structures along the orbital frontal surface; their axons continue through olfactory striae to central olfactory targets. The depicted course is schematic and does not resolve individual fila.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 505-506 and 827-828 (PDF pp. 531-532 and 853-854), Figures 18.5-18.6",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "finding": "Remove only primary sensory neuron regeneration superlative. Separate first-order fila from CNS bulb/second-order tract; smell is distinct from gustatory taste. The tube groups multiple fila and is not an independently measured full nerve route."
+  },
+  "nrv-cn2-optic": {
+    "modality": "Special somatic afferent: vision/reflex retinal output from the ipsilateral eye before partial chiasmal crossing",
+    "origin": "Retinal ganglion cells of the ipsilateral eye",
+    "target": "Optic chiasm and central continuation into optic tracts; no synapse within chiasm",
+    "decussation": "No crossing within optic nerve. Nasal retinal fibres cross at the chiasm while temporal retinal fibres stay ipsilateral. Each postchiasmal tract represents the opposite binocular visual hemifield.",
+    "function": "CN II conveys retinal ganglion-cell output from one eye through the optic canal to the chiasm. The optic nerve is a CNS tract by development and myelination, conventionally named a cranial nerve. Its retinal axons contribute to visual, pupillary and circadian pathways after their central continuation.",
+    "course": "From optic disc through intraorbital and canalicular segments, the nerve passes the optic canal with the ophthalmic artery, then continues in the suprasellar region to the chiasm. Posterior nerve is oligodendrocyte-myelinated and surrounded by meninges with a continuous subarachnoid sheath. The displayed course does not establish patient-specific canal or orbital anatomy.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 465-475 and 914-915 (PDF pp. 491-501 and 940-941), Figures 11.8-11.15",
+      "Blumenfeld, 2nd ed., p. 506 (PDF p. 532), cranial nerve II",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "finding": "Remove the one cranial nerve direct brain extension exclusivity (olfactory bulb/tract are also CNS). Nerve is monocular before chiasm; partial crossing is at chiasm. Raised intracranial pressure can produce papilledema but does not invariably damage every optic nerve."
+  }
+}
