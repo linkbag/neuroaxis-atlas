@@ -2,41 +2,39 @@
   {
     "id": "ctx-cerebral-cortex",
     "name": "Cerebral cortex (context envelope)",
-    "synonyms": ["cortical ribbon", "cortex", "cortical gray matter", "gray matter of cerebral hemisphere"],
+    "synonyms": [
+      "cortical ribbon",
+      "cortex",
+      "cortical gray matter",
+      "gray matter of cerebral hemisphere"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "context",
     "laterality": "paired",
     "color": "#94a3b8",
-    "function": "The 2.5–4 mm laminated gray-matter ribbon folded over the cerebral white matter — the substrate of conscious perception, voluntary action, language, memory and social behaviour. Its six layers segregate the input (granular layer IV), the local processing (II/III) and the output (V/VI) of every cortical area. In this atlas the ribbon is a context envelope, not a nucleus: the six lobes and the named gyri carry the functional detail.",
-    "contextNote": "Derived envelope, not a dissectable structure: the BodyParts3D source has no cortical gray-matter surface, so the ribbon is built by dilating the cerebral white-matter surface and subtracting it (docs/TELENCEPHALON_PLAN.md §1). The envelope has no origin3d/size3d because its geometry is the derived ribbon; the lobe, gyrus and planum records inside it are the addressable content.",
+    "function": "The folded gray matter of the cerebral hemispheres supports perception, action, language, cognition and memory in interacting networks. Most is six-layered neocortex; hippocampal and olfactory allocortex have different lamination. Cortical thickness and areal boundaries vary across regions and individuals.",
+    "contextNote": "The hemisphere ribbon is derived by dilation/subtraction of a cerebral white-matter surface, not a measured cortical gray-matter segmentation. It has no independently registered sulci, gyri, cortical thickness or functional parcels. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
     "connections": {
       "afferent": [
-        "Thalamocortical radiations from all relay nuclei (VPL/VPM, LGN, MGN, VA/VL, pulvinar, MD)",
-        "Ascending modulatory systems: cholinergic basal forebrain, noradrenergic locus coeruleus, serotonergic raphe, dopaminergic VTA/SNc",
-        "Corticocortical association and commissural fibres (cingulum, uncinate, superior longitudinal fasciculus, corpus callosum)"
+        "Thalamocortical relays and reciprocal association/commissural connections",
+        "Basal-forebrain cholinergic and brainstem monoaminergic modulation"
       ],
       "efferent": [
-        "Corticospinal, corticobulbar and corticopontine fibres funnelling through the corona radiata and internal capsule",
-        "Corticostriate and corticothalamic feedback; callosal projections to the homotopic contralateral area"
+        "Corticofugal projections to thalamus, striatum, brainstem and spinal cord, depending on cortical area",
+        "Association and callosal projections to other cortical regions"
       ]
     },
-    "bloodSupply": "Three territories meet on the cortex: ACA (medial surface, callosomarginal branch), MCA (lateral convexity and insula) and PCA (medial occipital and inferior temporal). The ACA/MCA border runs along the superior convexity and the MCA/PCA border along the lateral occipital surface — both are watershed strips that infarct with systemic hypotension.",
+    "bloodSupply": "ACA supplies much of medial frontal/anterior parietal cortex, MCA most lateral convexity and insula, and PCA medial occipital/inferomedial temporal cortex. Borders and collateral flow vary.",
     "clinical": [
       {
-        "syndrome": "Cortical watershed (border-zone) infarction",
-        "findings": "Bilateral, roughly symmetric weakness or sensory loss of the proximal limb with relative sparing of the hand and face, after a hypotensive episode; the lesion straddles the ACA/MCA border on the convexity or the MCA/PCA border posteriorly.",
-        "vascular": "ACA/MCA or MCA/PCA border zone (internal watershed along the corona radiata is the deep variant)"
+        "syndrome": "Cortical lesion localization",
+        "findings": "Deficits depend on region and network involvement; aphasia, neglect, field loss, seizures or discriminative sensory deficits may occur."
       },
       {
-        "syndrome": "Cortical laminar necrosis",
-        "findings": "Global hypoxic-ischaemic injury destroys the metabolically most demanding middle cortical layers, giving T1-hyperintense ribbon-like cortical signal with laminar (pseudolaminar) necrosis on MRI.",
-        "note": "Hypoxic-ischaemic (cardiac arrest, prolonged hypotension) rather than territorial infarction"
-      },
-      {
-        "syndrome": "Lobar intracerebral haemorrhage",
-        "findings": "Cortical/subcortical bleeding (cerebral amyloid angiopathy in the elderly, arteriovenous malformation in the young) causes focal cortical deficits with headache and, often, seizure — the counterpart of the deep hypertensive haemorrhage of the basal ganglia.",
-        "note": "Amyloid angiopathy spares the deep perforator territories, which is why lobar bleeds favour the cortex"
+        "syndrome": "Border-zone ischemia",
+        "findings": "ACA-MCA or MCA-PCA border-zone injury can follow impaired perfusion; symptoms vary with location and extent.",
+        "vascular": "ACA/MCA or MCA/PCA border zones"
       }
     ],
     "levels": [
@@ -49,48 +47,49 @@
       "lvl-tel-convexity"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
+      "Glasser et al. (2016), A multi-modal parcellation of human cerebral cortex. https://www.nature.com/articles/nature18933"
     ]
   },
   {
     "id": "surf-frontal-lobe",
     "name": "Frontal lobe",
-    "synonyms": ["lobus frontalis", "frontal cortex"],
+    "synonyms": [
+      "lobus frontalis",
+      "frontal cortex"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The largest lobe, and the one that turns intention into action: the precentral gyrus (primary motor cortex) and the premotor/supplementary motor areas programme movement, the frontal eye fields direct gaze, Broca's area generates speech, and the dorsolateral, orbitofrontal and medial prefrontal cortices hold working memory, inhibit impulses and evaluate reward. It also contains the anterior portion of the lateral ventricle and the frontopontine fibres on their way to the cerebellum.",
+    "function": "The frontal lobe lies anterior to the central sulcus and above the lateral sulcus. Motor/premotor regions support action and gaze, while prefrontal and cingulate networks contribute to executive control, motivation, social judgment and language in the dominant hemisphere.",
     "connections": {
       "afferent": [
-        "VA/VL (motor and premotor loops), MD and anterior thalamic nuclei (executive and limbic loops)",
-        "Posterior association cortex through the superior longitudinal fasciculus and the uncinate fasciculus",
-        "Dopaminergic VTA/SNc and noradrenergic/cholinergic ascending systems"
+        "VA/VL motor and MD association thalamic relays",
+        "Parietal/temporal association and basal-ganglia/cerebellar loops"
       ],
       "efferent": [
-        "Corticospinal and corticobulbar fibres from the precentral gyrus, through the corona radiata, genu and posterior limb of the internal capsule",
-        "Frontopontine fibres of the corticopontine tract (medial third of the crus cerebri)",
-        "Corticostriate fibres to the caudate head and putamen; callosal fibres to the contralateral frontal cortex"
+        "Corticospinal, corticobulbar and corticopontine projections from appropriate motor regions",
+        "Corticostriatal, corticothalamic and association/commissural projections"
       ]
     },
-    "bloodSupply": "MCA (superior division) supplies the lateral convexity, including Broca's area and most of the motor strip; ACA (pericallosal and callosomarginal branches) supplies the medial surface, the supplementary motor area and the leg representation at the vertex; the recurrent artery of Heubner (ACA) and the medial lenticulostriate branches supply the adjoining caudate head and anterior limb of the internal capsule.",
+    "bloodSupply": "MCA supplies most lateral frontal cortex; ACA supplies much of the medial frontal surface and a superior strip. Territories vary.",
     "clinical": [
       {
-        "syndrome": "MCA superior-division infarct",
-        "findings": "Contralateral face-and-arm-predominant weakness with gaze deviation toward the lesion, and (dominant hemisphere) non-fluent Broca aphasia with preserved comprehension; the leg is spared because the ACA territory supplies the medial motor strip.",
-        "vascular": "Middle cerebral artery, superior (frontal) division"
+        "syndrome": "Superior-division MCA infarction",
+        "findings": "May cause contralateral face/arm-predominant weakness and dominant-hemisphere nonfluent aphasia; leg involvement varies with lesion extent.",
+        "vascular": "MCA superior division"
       },
       {
-        "syndrome": "ACA territory infarct",
-        "findings": "Contralateral leg-predominant weakness and sensory loss with abulia, urinary incontinence, grasp reflex and mutism when the supplementary motor area and anterior cingulate are involved.",
-        "vascular": "Anterior cerebral artery (pericallosal branches)"
+        "syndrome": "Medial frontal injury",
+        "findings": "May cause reduced initiation or abulia; involvement of paracentral/SMA regions can add leg-predominant weakness or reduced speech.",
+        "vascular": "ACA territory"
       },
       {
-        "syndrome": "Frontal-lobe behavioural syndrome",
-        "findings": "Dorsolateral lesions cause apathy, abulia and executive failure with perseveration; orbitomedial lesions cause disinhibition, inappropriate jocularity and impaired social judgement.",
-        "note": "Degenerative (frontotemporal dementia), traumatic or tumour-related rather than vascular in most cases"
+        "syndrome": "Prefrontal network dysfunction",
+        "findings": "Executive, motivational or behavioral changes depend on lesion site and interacting networks; no single frontal-lobe syndrome is obligatory."
       }
     ],
     "levels": [
@@ -101,48 +100,51 @@
       "lvl-tel-convexity"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., pp. 224-234 (PDF pp. 250-260), Figures 6.1-6.10",
+      "Blumenfeld, 2nd ed., pp. 906-908 (PDF pp. 932-934), Figure 19.11",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
   },
   {
     "id": "surf-parietal-lobe",
     "name": "Parietal lobe",
-    "synonyms": ["lobus parietalis", "parietal cortex"],
+    "synonyms": [
+      "lobus parietalis",
+      "parietal cortex"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The sensory-associative lobe: the postcentral gyrus (primary somatosensory cortex) maps the contralateral body surface, the superior parietal lobule and precuneus build the body schema and guide visually directed reaching, and the supramarginal and angular gyri at the temporoparietal junction support spatial attention, praxis and (on the left) language comprehension. It is the principal cortical bridge between what is sensed and what is done.",
+    "function": "The parietal lobe lies behind the central sulcus, above the lateral temporal region and anterior to the occipital boundary. Postcentral cortex processes somatic input, while superior/inferior parietal and medial parietal networks contribute to body representation, attention, praxis and language-related functions.",
     "connections": {
       "afferent": [
-        "VPL/VPM thalamocortical radiations to the postcentral gyrus (somatotopic: leg medial over the hemisphere, face lateral)",
-        "Pulvinar and lateral posterior nucleus (visuospatial and associative input)",
-        "Corticocortical input from visual, auditory and premotor areas via the superior longitudinal fasciculus"
+        "VPL/VPM somatosensory thalamocortical input to postcentral cortex",
+        "Visual, auditory, frontal and association thalamic inputs to parietal networks"
       ],
       "efferent": [
-        "Corticospinal and corticopontine fibres from the postcentral and superior parietal cortex through the corona radiata",
-        "Superior longitudinal fasciculus to the frontal lobe; cingulum to the posterior cingulate",
-        "Callosal fibres to the homotopic contralateral parietal cortex"
+        "Reciprocal frontal/temporal/occipital and callosal connections",
+        "Corticofugal projections, including a contribution to corticospinal pathways"
       ]
     },
-    "bloodSupply": "MCA inferior division supplies the angular and supramarginal gyri and the posterior temporal-parietal junction; MCA superior division supplies the postcentral gyrus and superior parietal lobule; PCA (parieto-occipital and splenial branches) supplies the precuneus and the medial parietal surface.",
+    "bloodSupply": "MCA supplies most lateral parietal cortex; ACA supplies anterior medial parietal/paracentral cortex and PCA more posterior medial areas. The precuneus may span ACA/PCA territories.",
     "clinical": [
       {
-        "syndrome": "MCA inferior-division infarct (angular/supramarginal)",
-        "findings": "Fluent (Wernicke-type) aphasia with poor comprehension and repetition, alexia and acalculia on the left; hemispatial neglect, anosognosia and dressing apraxia on the right.",
-        "vascular": "Middle cerebral artery, inferior (parietotemporal) division"
+        "syndrome": "Parietal network injury",
+        "findings": "Right-predominant attention-network injury can produce left neglect; dominant parietal injury can impair praxis, calculation, writing or language, depending on extent.",
+        "vascular": "MCA or relevant medial territory"
       },
       {
-        "syndrome": "Postcentral (S1) lesion",
-        "findings": "Contralateral hemisensory loss with preserved crude touch but lost graphaesthesia, stereognosis and two-point discrimination; sensory ataxia of the hand without weakness.",
-        "vascular": "MCA superior division (or a small cortical branch infarct)"
+        "syndrome": "Postcentral injury",
+        "findings": "Can impair contralateral discriminative touch, proprioception and cortical sensory tasks; crude sensation is not invariably preserved.",
+        "vascular": "MCA lateral or ACA medial sensorimotor branches"
       },
       {
-        "syndrome": "Gerstmann syndrome",
-        "findings": "Dominant angular gyrus lesion: finger agnosia, agraphia, acalculia and right-left disorientation — a disconnection syndrome of the dominant parietal lobe.",
-        "vascular": "MCA inferior division (angular branch)"
+        "syndrome": "Gerstmann pattern",
+        "findings": "Acalculia, agraphia, finger agnosia and left-right disorientation may occur with dominant parietal network injury; an isolated angular-gyrus lesion is not the only explanation."
       }
     ],
     "levels": [
@@ -153,48 +155,51 @@
       "lvl-tel-convexity"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Somatosensory Pathways'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., p. 282 (PDF p. 308), somatosensory cortex and parietal operculum",
+      "Blumenfeld, 2nd ed., pp. 899-905 (PDF pp. 925-931), parietal association and attention networks",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
   },
   {
     "id": "surf-temporal-lobe",
     "name": "Temporal lobe",
-    "synonyms": ["lobus temporalis", "temporal cortex"],
+    "synonyms": [
+      "lobus temporalis",
+      "temporal cortex"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "Hearing, language comprehension, memory and emotion in one lobe: primary auditory cortex on the superior temporal plane (Heschl's gyrus and planum temporale), Wernicke's area posteriorly, the fusiform and inferior temporal cortex for visual object and face recognition, and the medial temporal allocortex (hippocampus, amygdala, parahippocampal gyrus) for memory encoding and threat evaluation. Its white matter carries Meyer's loop of the optic radiation into the temporal pole.",
+    "function": "The temporal lobe lies below the lateral sulcus. Superior temporal cortex participates in hearing and language networks, ventral occipitotemporal cortex in object/face recognition, and medial temporal structures in memory and emotion. Temporal optic-radiation fibres, including Meyer's loop, convey contralateral superior visual-field information.",
     "connections": {
       "afferent": [
-        "MGN via the auditory radiations to Heschl's gyrus",
-        "Perirhinal/entorhinal cortex fed by unimodal and polymodal association areas; amygdala input from the thalamus and brainstem",
-        "LGN via the optic radiation (Meyer loop) to the inferior visual field representation"
+        "MGN auditory radiation to primary auditory cortex",
+        "Association-cortical inputs to temporal visual, language and medial temporal networks"
       ],
       "efferent": [
-        "Hippocampus to the fornix; amygdala to the stria terminalis and ventral amygdalofugal pathway",
-        "Wernicke's area to the inferior frontal lobe via the arcuate/superior longitudinal fasciculus; uncinate fasciculus to the orbitofrontal cortex",
-        "Corticopontine (temporopontine) fibres through the lateral third of the crus cerebri"
+        "Association pathways to frontal/parietal/occipital regions",
+        "Hippocampal outputs through fornix/entorhinal routes and amygdalar outputs to cortical/subcortical targets"
       ]
     },
-    "bloodSupply": "MCA inferior division supplies the lateral temporal convexity (superior and middle temporal gyri); PCA (temporal and hippocampal branches) supplies the medial temporal lobe, inferior temporal gyrus and posterior hippocampus; the anterior choroidal artery (from the internal carotid) supplies the amygdala, hippocampal head and temporal horn choroid plexus.",
+    "bloodSupply": "MCA supplies most lateral temporal cortex; PCA supplies much inferomedial temporal cortex/hippocampal formation. Anterior choroidal contributions to anterior medial structures are variable.",
     "clinical": [
       {
-        "syndrome": "MCA inferior-division infarct with temporal involvement",
-        "findings": "Wernicke aphasia (dominant hemisphere) with contralateral superior quadrantanopia from Meyer-loop damage, plus a dense sensory deficit if the parietal territory is included.",
-        "vascular": "Middle cerebral artery, inferior division"
+        "syndrome": "Dominant lateral temporal infarction",
+        "findings": "May cause fluent aphasia; injury to temporal optic radiations may add contralateral superior quadrantanopia.",
+        "vascular": "MCA inferior division"
       },
       {
-        "syndrome": "PCA territory infarct of the medial temporal lobe",
-        "findings": "Contralateral homonymous hemianopia with memory impairment; bilateral PCA infarcts produce cortical blindness and a severe amnestic state (the hippocampus is in the PCA territory).",
-        "vascular": "Posterior cerebral artery (temporal and hippocampal branches)"
+        "syndrome": "Medial temporal injury",
+        "findings": "Memory impairment depends on laterality, bilaterality and network extent; a visual field defect requires involvement of visual pathways.",
+        "vascular": "PCA/anterior choroidal territories or nonvascular causes"
       },
       {
-        "syndrome": "Mesial temporal lobe epilepsy",
-        "findings": "Hippocampal sclerosis produces stereotyped auras (déjà vu, epigastric rising sensation, fear), automatisms and impaired awareness; the temporal lobe is the commonest site of focal epilepsy in adults.",
-        "note": "Sclerosis rather than stroke — but the same medial temporal structures are involved and the temporal horn dilates"
+        "syndrome": "Mesial temporal epilepsy",
+        "findings": "May produce experiential or autonomic auras, automatisms and impaired awareness; these features are not specific to one nucleus."
       }
     ],
     "levels": [
@@ -205,47 +210,53 @@
       "lvl-thalamus-rostral"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., pp. 519-522 (PDF pp. 545-548), Figures 12.16-12.17",
+      "Blumenfeld, 2nd ed., pp. 465-475 and 914-915 (PDF pp. 491-501 and 940-941), Figures 11.8-11.15",
+      "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
   },
   {
     "id": "surf-occipital-lobe",
     "name": "Occipital lobe",
-    "synonyms": ["lobus occipitalis", "occipital cortex"],
+    "synonyms": [
+      "lobus occipitalis",
+      "occipital cortex"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The visual cortex: primary visual cortex (V1, striate cortex) is wrapped around the calcarine fissure with a precise retinotopic map in which the macula occupies a disproportionate posterior share, and the surrounding extrastriate areas (V2–V5) extract form, colour, motion and depth. It is the cortical terminus of the geniculostriate pathway and the target of the optic radiations.",
+    "function": "The occipital lobe contains primary visual cortex around the calcarine sulcus and multiple extrastriate areas. V1 maps the contralateral visual hemifield; interconnected visual association regions process form, color, motion and spatial relationships.",
     "connections": {
       "afferent": [
-        "LGN via the optic radiations (dorsal bundle through the parietal lobe, Meyer loop through the temporal lobe)",
-        "Pulvinar and lateral posterior nucleus (visual association feedback)",
-        "Callosal fibres connecting the two occipital poles along the vertical meridian representation"
+        "LGN via optic radiation to V1",
+        "Reciprocal extrastriate, pulvinar and callosal connections"
       ],
       "efferent": [
-        "Dorsal stream to the parietal lobe (where/how) and ventral stream to the temporal lobe (what), through the superior and inferior longitudinal fasciculi",
-        "Corticopontine (occipitopontine) fibres; corticothalamic feedback to the LGN and pulvinar"
+        "Interconnected dorsal parietal and ventral temporal visual networks",
+        "Corticothalamic and other descending visual projections"
       ]
     },
-    "bloodSupply": "PCA — calcarine and parieto-occipital branches supply the medial occipital surface and the visual cortex; the occipital pole usually has a dual supply, receiving a variable contribution from the MCA as well, which is why macular vision is often spared in PCA infarction.",
+    "bloodSupply": "Mainly PCA calcarine/parieto-occipital branches, with variable MCA contributions to lateral/polar cortex and collateral flow.",
     "clinical": [
       {
-        "syndrome": "PCA infarct with homonymous hemianopia",
-        "findings": "Contralateral homonymous hemianopia with macular sparing (dual blood supply of the occipital pole); left-sided lesions that also involve the splenium give alexia without agraphia, and involvement of the pulvinar or thalamus adds hemi-sensory loss.",
-        "vascular": "Posterior cerebral artery (calcarine branch)"
+        "syndrome": "Occipital visual-field loss",
+        "findings": "Unilateral visual-cortex injury may cause contralateral homonymous hemianopia or a smaller homonymous defect; macular sparing is possible, not obligatory.",
+        "vascular": "PCA territory"
       },
       {
-        "syndrome": "Cortical blindness with Anton syndrome",
-        "findings": "Bilateral occipital infarction causes blindness that the patient denies, with confabulated visual descriptions — damage to the visual cortex with preserved association cortex.",
-        "vascular": "Bilateral posterior cerebral arteries (or basilar tip embolism)"
+        "syndrome": "Bilateral visual-cortex injury",
+        "findings": "May cause cortical blindness with preserved pupillary light responses. Some patients have denial/confabulation (Anton syndrome), but this is not universal."
       },
       {
-        "syndrome": "Visual field defect from optic-radiation lesions",
-        "findings": "Incongruous quadrantanopia from a retrolenticular/temporal lesion versus a congruent hemianopia from a complete radiation or occipital lesion — a distinction that locates the damage anterior or posterior in the geniculostriate pathway.",
-        "vascular": "Anterior choroidal artery (retrolenticular) or MCA/PCA branches along the radiation"
+        "syndrome": "Alexia without agraphia",
+        "findings": "A classic pattern follows dominant (usually left) occipital plus splenial injury, disconnecting visual input from language networks.",
+        "vascular": "Usually left PCA territory"
       }
     ],
     "levels": [
@@ -257,42 +268,47 @@
       "lvl-tel-thalamostriate"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., pp. 465-475 and 914-915 (PDF pp. 491-501 and 940-941), Figures 11.8-11.15",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
   },
   {
     "id": "surf-insula",
     "name": "Insula",
-    "synonyms": ["insular lobe", "insular cortex", "island of Reil", "lobus insularis"],
+    "synonyms": [
+      "insular lobe",
+      "insular cortex",
+      "island of Reil",
+      "lobus insularis"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The buried fifth lobe in the floor of the sylvian fissure: the posterior granular insula is primary interoceptive cortex (visceral sensation, temperature, pain affect), while the anterior agranular insula is a salience hub linking autonomic state, taste, emotion and decision-making. It sits directly over the putamen and is the surface across which the MCA's insular branches and the lenticulostriate arteries run.",
+    "function": "The insula is buried in the lateral sulcus and covered by frontal, parietal and temporal opercula. Its long/short gyri and anterior-posterior cytoarchitectural gradient participate in taste, somatic/visceral sensation, salience, emotion and autonomic regulation within wider networks.",
     "connections": {
       "afferent": [
-        "Thalamic relay nuclei (VPMpc for taste; VMpo and posterior thalamus for interoception and pain affect)",
-        "Amygdala, orbitofrontal and anterior cingulate cortex (salience and emotional input)",
-        "Brainstem and hypothalamic autonomic afferents via the parabrachial nucleus"
+        "Thalamic somatosensory/gustatory and association inputs",
+        "Reciprocal anterior cingulate, orbitofrontal, temporal and amygdalar connections"
       ],
       "efferent": [
-        "Autonomic effector columns: insular efferents to the lateral hypothalamus, periaqueductal gray, nucleus of the solitary tract and the vagal/dorsal motor nuclei",
-        "Cortical efferents to the anterior cingulate, orbitofrontal cortex and frontal operculum"
+        "Cortical salience/interoceptive networks",
+        "Connections with hypothalamic and brainstem autonomic systems"
       ]
     },
-    "bloodSupply": "MCA — insular (M2) branches of both the superior and inferior divisions course over its surface; the lateral lenticulostriate arteries arise at the level of the insular apex before turning into the basal ganglia, so insular infarction and deep lacunar infarction share a source.",
+    "bloodSupply": "MCA insular (M2) branches. Deep lenticulostriate branches usually arise from proximal MCA and supply different deep territories; insular and basal-ganglia supply should not be equated.",
     "clinical": [
       {
-        "syndrome": "Insular (MCA M2) branch infarction",
-        "findings": "The insula is infarcted in nearly every MCA occlusion because its branches arise first; lesions of the right insula are associated with autonomic instability, arrhythmia and sudden death, and insular strokes impair taste and interoceptive awareness.",
-        "vascular": "Middle cerebral artery, insular (M2) branches"
+        "syndrome": "Insular/opercular injury",
+        "findings": "May affect taste, somatic/visceral awareness, speech or autonomic regulation. Isolated deficits and laterality effects are variable.",
+        "vascular": "MCA insular/opercular branches"
       },
       {
-        "syndrome": "Insular cortex lesion and addiction/awareness",
-        "findings": "Damage to the insula disrupts the conscious urge to smoke and can abolish addiction in some patients; the same region is activated by visceral and emotional stimuli.",
-        "note": "Lesion-observation and functional-imaging literature, not a vascular syndrome"
+        "syndrome": "Insular seizures",
+        "findings": "Can include throat discomfort, somatic sensations or autonomic symptoms; clinical semiology alone does not prove insular onset."
       }
     ],
     "levels": [
@@ -302,46 +318,47 @@
       "lvl-tel-basal-ganglia"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., p. 516 (PDF p. 542), gustatory pathways",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
   },
   {
     "id": "surf-limbic-lobe",
     "name": "Limbic lobe",
-    "synonyms": ["lobus limbicus", "grand lobe of Broca", "fornicate gyrus"],
+    "synonyms": [
+      "lobus limbicus",
+      "grand lobe of Broca",
+      "fornicate gyrus"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "Broca's grand lobe limbique: the ring of allocortical and paralimbic cortex — subcallosal area, cingulate and parahippocampal gyri and the hippocampal formation — that encircles the corpus callosum and the diencephalon. It is defined morphologically as a rim rather than a function, and it is the cortical component of the circuit (Papez) that links emotion, olfaction and memory to the hypothalamus.",
+    "function": "The traditional limbic lobe is a morphological grouping of medial cortical regions including cingulate and parahippocampal cortex. These areas participate in distributed memory, motivational and affective networks; the term does not define a single isolated emotion system.",
     "connections": {
       "afferent": [
-        "Anterior and mediodorsal thalamic nuclei (cingulate cortex); entorhinal cortex from unimodal and polymodal association areas",
-        "Amygdala and septal nuclei via the stria terminalis and ventral amygdalofugal pathway"
+        "Association cortex and anterior/MD thalamic inputs, varying by subregion",
+        "Amygdalar and hippocampal/parahippocampal network connections"
       ],
       "efferent": [
-        "Cingulum and fornix: cingulate/parahippocampal cortex interconnects the septal area, entorhinal cortex and hippocampal formation, and the fornix carries hippocampal output to the mammillary bodies and septal region",
-        "Cingulate projections to the striatum and to the pontine nuclei (limbic-motor interface)"
+        "Cingulum and other association connections between medial cortical regions",
+        "Hippocampal output via fornix and cortical routes; cortical/subcortical motivational connections"
       ]
     },
-    "bloodSupply": "ACA (pericallosal/callosomarginal) supplies the subcallosal and anterior cingulate cortex; PCA (splenial, posterior pericallosal, temporal and hippocampal branches) supplies the posterior cingulate, retrosplenial, parahippocampal and hippocampal cortices; the anterior choroidal artery supplies the uncal and amygdalar end.",
+    "bloodSupply": "ACA supplies much anterior cingulate/subcallosal cortex; PCA contributes posterior cingulate/retrosplenial and inferomedial temporal supply. Anterior medial temporal supply varies.",
     "clinical": [
       {
         "syndrome": "Limbic encephalitis",
-        "findings": "Subacute short-term memory loss, temporal-lobe seizures, behavioural change and medial temporal FLAIR signal — the limbic ring is inflamed, most often autoimmunologically (anti-LGI1, anti-NMDAR) or as a paraneoplastic syndrome.",
-        "note": "Autoimmune/paraneoplastic — the imaging target is the limbic lobe itself"
+        "findings": "Can cause subacute memory disturbance, seizures and behavioral changes, often with medial temporal involvement; MRI findings and antibody associations vary.",
+        "note": "Inflammatory/infectious causes require clinical evaluation."
       },
       {
-        "syndrome": "PCA infarct involving the posterior limbic ring",
-        "findings": "Infarction of the posterior cingulate, retrosplenial and parahippocampal cortex adds memory loss to the hemianopia of PCA occlusion.",
-        "vascular": "Posterior cerebral artery (splenial and temporal branches)"
-      },
-      {
-        "syndrome": "Klüver-Bucy syndrome",
-        "findings": "Bilateral temporal-limbic destruction (herpes encephalitis, trauma, frontotemporal dementia) produces hyperorality, hypersexuality, visual agnosia and emotional blunting — the classic proof that the limbic ring gates affect and object recognition.",
-        "note": "Structural/infectious rather than vascular"
+        "syndrome": "Medial cortical memory-network injury",
+        "findings": "Posterior medial or medial temporal lesions may impair memory or orientation depending on extent.",
+        "vascular": "ACA/PCA or nonvascular causes"
       }
     ],
     "levels": [
@@ -355,47 +372,48 @@
       "lvl-tel-convexity"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
+      "Blumenfeld, 2nd ed., pp. 845-847 (PDF pp. 871-873), Figure 18.17",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
   },
   {
     "id": "surf-cingulate-gyrus",
     "name": "Cingulate gyrus",
-    "synonyms": ["gyrus cinguli", "cingulum (gyrus)", "callosal gyrus"],
+    "synonyms": [
+      "gyrus cinguli",
+      "cingulum (gyrus)",
+      "callosal gyrus"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The arch of cortex above the corpus callosum, divided into an anterior (affective, rostral/ventral) and a mid-posterior (cognitive, dorsal) subdivision: the dorsal midcingulate monitors conflict and errors and drives response selection, while the rostral anterior cingulate regulates emotion, pain affect and autonomic tone. It is the cortical hub of the Papez circuit and carries the cingulum bundle in its white matter.",
+    "function": "The cingulate gyrus arches above the corpus callosum and continues posteriorly toward the parahippocampal region. Anterior/midcingulate regions contribute to motivation, control, pain affect and action; posterior cingulate/retrosplenial regions participate in memory and spatial/contextual processing.",
     "connections": {
       "afferent": [
-        "Anterior thalamic nucleus (mammillothalamic relay) to the anterior cingulate; mediodorsal and midline thalamic nuclei",
-        "Amygdala, orbitofrontal cortex, insula and posterior cingulate via the cingulum"
+        "Anterior and association thalamic inputs",
+        "Frontal, parietal, medial temporal, insular and amygdalar connections"
       ],
       "efferent": [
-        "Cingulum to the hippocampal formation and parahippocampal/entorhinal cortex",
-        "Corticostriate projections to the ventral striatum and caudate; corticospinal-adjacent projections to the pontine nuclei (limbic-motor interface)",
-        "Autonomic projections to the periaqueductal gray, hypothalamus and brainstem nuclei"
+        "Cingulum/association projections to frontal, medial parietal and parahippocampal regions",
+        "Subcortical motivational, motor and autonomic network projections, varying by subregion"
       ]
     },
-    "bloodSupply": "ACA — pericallosal and callosomarginal branches supply the anterior and mid cingulate gyrus; PCA — splenial and posterior pericallosal branches supply the posterior cingulate and retrosplenial cortex. This ACA/PCA junction on the cingulate is a classic watershed zone in the sagittal plane.",
+    "bloodSupply": "ACA branches supply much anterior/midcingulate cortex; PCA supplies posterior cingulate/retrosplenial regions, with variable overlap.",
     "clinical": [
       {
-        "syndrome": "Anterior cingulate infarction (ACA territory)",
-        "findings": "Akinetic mutism or abulia with urinary incontinence, grasp reflex and mutism when the supplementary motor area and anterior cingulate are infarcted bilaterally; unilateral lesions cause contralateral leg weakness with apathy.",
-        "vascular": "Anterior cerebral artery (pericallosal/callosomarginal branches)"
+        "syndrome": "Anterior/medial frontal injury",
+        "findings": "Can contribute to abulia; extensive bilateral damage may produce akinetic mutism. Limb weakness requires involvement of motor pathways.",
+        "vascular": "ACA territory"
       },
       {
-        "syndrome": "Posterior cingulate/retrosplenial lesion",
-        "findings": "Amnesia and topographical disorientation; the retrosplenial cortex is an early metabolic casualty in Alzheimer disease and a target of limbic encephalitis.",
-        "vascular": "Posterior cerebral artery (splenial branches)"
-      },
-      {
-        "syndrome": "Cingulotomy for intractable pain or OCD",
-        "findings": "Stereotactic lesions of the anterior cingulate relieve the affective distress of chronic pain and improve refractory obsessive-compulsive symptoms, with apathy and disinhibition as the main adverse effects.",
-        "note": "Lesion therapy — the clinical proof that the cingulate encodes the suffering component of pain"
+        "syndrome": "Posterior cingulate/retrosplenial injury",
+        "findings": "May impair episodic memory or topographical orientation.",
+        "vascular": "PCA/posterior medial territory"
       }
     ],
     "levels": [
@@ -407,46 +425,47 @@
       "lvl-tel-convexity"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
+      "Blumenfeld, 2nd ed., pp. 919 and 923 (PDF pp. 945 and 949), Figure 19.14",
+      "Blumenfeld, 2nd ed., pp. 906-908 (PDF pp. 932-934), Figure 19.11",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
   },
   {
     "id": "surf-parahippocampal-gyrus",
     "name": "Parahippocampal gyrus",
-    "synonyms": ["gyrus parahippocampalis", "parahippocampus"],
+    "synonyms": [
+      "gyrus parahippocampalis",
+      "parahippocampus"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The medial temporal gateway to the hippocampal formation: its anterior part is the entorhinal cortex (Brodmann 28/34), which receives the convergent output of every association area and funnels it through the perforant path into the dentate gyrus, while the posterior part (with the perirhinal and postrhinal cortex) encodes scenes, contexts and object familiarity. It is the cortical interface between neocortex and hippocampus — and therefore the epicentre of early Alzheimer pathology.",
+    "function": "This medial temporal gyrus lies medial to the collateral/rhinal sulcus and is continuous with the cingulate isthmus posteriorly. Its anterior entorhinal/perirhinal regions and posterior parahippocampal cortex link association cortex with hippocampal memory networks; the boundaries of these cortical areas do not coincide with the whole gyrus.",
     "connections": {
       "afferent": [
-        "Perirhinal and postrhinal cortex from unimodal and polymodal association areas of all four lobes",
-        "Amygdala and orbitofrontal cortex; posterior cingulate and retrosplenial cortex via the cingulum"
+        "Perirhinal and multimodal association-cortical inputs",
+        "Posterior cingulate/retrosplenial, entorhinal and amygdalar connections"
       ],
       "efferent": [
-        "Perforant path from the entorhinal cortex to the dentate gyrus and hippocampal CA fields (the first leg of the trisynaptic circuit)",
-        "Cingulum to the posterior cingulate and retrosplenial cortex; reciprocal projections back to the association cortices"
+        "Entorhinal pathways to hippocampal formation and reciprocal cortical return",
+        "Cingulum/association connections to medial and lateral association cortex"
       ]
     },
-    "bloodSupply": "PCA — hippocampal and temporal branches of the posterior cerebral artery supply the parahippocampal gyrus and the posterior hippocampal formation; the anterior (uncal) end is supplied by the anterior choroidal artery from the internal carotid.",
+    "bloodSupply": "Mainly PCA temporal branches, with variable anterior choroidal and other anterior contributions.",
     "clinical": [
       {
-        "syndrome": "PCA infarct of the medial temporal lobe",
-        "findings": "Amnesia (entorhinal/hippocampal damage) with contralateral homonymous superior quadrantanopia from Meyer-loop involvement; bilateral infarcts cause a persistent amnestic syndrome.",
-        "vascular": "Posterior cerebral artery (hippocampal branches)"
+        "syndrome": "Medial temporal cortical injury",
+        "findings": "May impair memory or scene/context recognition; associated field loss requires visual-pathway involvement.",
+        "vascular": "PCA or nonvascular causes"
       },
       {
-        "syndrome": "Herpes simplex encephalitis",
-        "findings": "Bilateral but asymmetric necrosis of the medial temporal and inferior frontal cortex with fever, headache, seizures and profound amnesia — the classic infectious lesion of the limbic ring.",
-        "note": "Infectious (HSV-1 via the olfactory route); treated with aciclovir"
-      },
-      {
-        "syndrome": "Alzheimer disease (entorhinal origin)",
-        "findings": "Neurofibrillary pathology begins in the entorhinal cortex and spreads through the hippocampal circuit to the posterior cingulate and neocortex — the anatomical reason episodic memory fails first.",
-        "note": "Neurodegenerative staging (Braak), not vascular"
+        "syndrome": "Temporal encephalitis",
+        "findings": "Medial temporal injury can cause memory impairment and seizures; infection and autoimmunity are among the possible causes."
       }
     ],
     "levels": [
@@ -455,55 +474,680 @@
       "lvl-post-comm"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
+      "Blumenfeld, 2nd ed., pp. 465-475 and 914-915 (PDF pp. 491-501 and 940-941), Figures 11.8-11.15",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
   },
   {
     "id": "surf-planum-temporale",
     "name": "Planum temporale",
-    "synonyms": ["temporal plane", "auditory association cortex of the superior temporal plane (host gyrus of A2)"],
+    "synonyms": [
+      "temporal plane",
+      "auditory association cortex of the superior temporal plane (host gyrus of A2)"
+    ],
     "region": "telencephalon",
     "subdivision": "Cerebral cortex",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The triangular expanse of superior temporal plane cortex posterior to Heschl's gyrus — the core auditory association area that computes spectrotemporal patterns and, on the left, the anatomical substrate of Wernicke's area. Its leftward size asymmetry is one of the best-documented structural asymmetries of the human brain and the classic anatomical correlate of language lateralization.",
+    "function": "The planum temporale is the superior temporal surface posterior to Heschl's gyri. It participates in auditory association and auditory-motor/language networks. Population-level asymmetry does not establish an individual's language dominance or diagnose dyslexia.",
     "connections": {
       "afferent": [
-        "Heschl's gyrus and the MGN via the auditory radiations (tonotopic input)",
-        "Corticocortical input from the adjacent superior temporal gyrus and the inferior parietal lobule"
+        "Primary and surrounding auditory cortex",
+        "Temporal/parietal association and interhemispheric connections"
       ],
       "efferent": [
-        "Arcuate/superior longitudinal fasciculus to the inferior frontal gyrus (Broca's area) and to the inferior parietal lobule",
-        "Corticothalamic feedback to the MGN and brachium of the inferior colliculus"
+        "Reciprocal superior temporal/inferior parietal and frontal auditory-language networks",
+        "Descending corticothalamic auditory modulation"
       ]
     },
-    "bloodSupply": "MCA inferior division — the posterior temporal and angular branches supply the superior temporal plane; the posterior extremity borders the PCA territory, and the deep plane territory is reached by the temporo-occipital branches.",
+    "bloodSupply": "Predominantly MCA temporal/insular branches; arterial patterns vary.",
     "clinical": [
       {
-        "syndrome": "Wernicke aphasia",
-        "findings": "Destruction of the posterior superior temporal plane and adjacent superior temporal gyrus produces fluent but empty speech with impaired comprehension and repetition, with anosognosia for the deficit — the classic receptive aphasia.",
-        "vascular": "Middle cerebral artery, inferior (posterior temporal) division"
+        "syndrome": "Auditory association-network injury",
+        "findings": "Can impair recognition or analysis of speech or other sounds; bilateral and dominant-hemisphere lesions may produce different patterns.",
+        "vascular": "MCA temporal branches"
       },
       {
-        "syndrome": "Dyslexia and developmental language disorder",
-        "findings": "Loss or reversal of the normal leftward planum temporale asymmetry has been reported in developmental dyslexia and in some language-impaired populations.",
-        "note": "Developmental structural association — controversial and not a lesion syndrome"
-      },
-      {
-        "syndrome": "Auditory agnosia (pure word deafness)",
-        "findings": "Bilateral planum temporale lesions disconnect Heschl's gyri from Wernicke's area: hearing is intact but spoken words cannot be recognized.",
-        "note": "Disconnection syndrome of the superior temporal plane"
+        "syndrome": "Language-network injury",
+        "findings": "Aphasia depends on dominant temporal/parietal network involvement; the planum temporale is not identical to Wernicke's area."
       }
     ],
     "levels": [
       "lvl-thalamus-mid",
       "lvl-thalamus-rostral"
     ],
-    "origin3d": [35.4, 33.1, 2.2],
-    "size3d": [3, 3.5, 8],
+    "origin3d": [
+      35.4,
+      33.1,
+      2.2
+    ],
+    "size3d": [
+      3,
+      3.5,
+      8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
+      "Blumenfeld, 2nd ed., pp. 519-522 (PDF pp. 545-548), Figures 12.16-12.17",
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+    ],
+    "contextNote": "A broad cortical surface/concept label on the derived hemisphere ribbon; the displayed surface does not independently trace this lobe/gyrus boundary or establish a cytoarchitectural parcel. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
+  },
+  {
+    "id": "ctx-precentral-gyrus",
+    "name": "Precentral gyrus",
+    "synonyms": [
+      "anterior central gyrus",
+      "motor strip"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The frontal gyrus immediately anterior to the central sulcus and posterior to the precentral sulcus. It contains much of M1, including cortex on the anterior bank of the central sulcus; motor-area boundaries do not follow the whole gyrus exactly.",
+    "connections": {
+      "afferent": [
+        "Motor thalamic and sensorimotor/premotor inputs"
+      ],
+      "efferent": [
+        "Corticospinal/corticobulbar and other motor-network outputs"
+      ]
+    },
+    "bloodSupply": "Mainly MCA lateral branches; medial continuation approaches ACA paracentral territory.",
+    "clinical": [
+      {
+        "syndrome": "Precentral injury",
+        "findings": "Can impair contralateral voluntary movement, with distribution depending on the injured cortical/subcortical territory."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 28-32 and 224-234 (PDF pp. 54-58 and 250-260), Figures 2.12-2.15 and 6.1-6.10; pp. 395-402 (PDF pp. 421-428)",
+      "Haines, 8th ed., p. 15 (PDF p. 29), Figure 2-7, visually inspected"
+    ]
+  },
+  {
+    "id": "ctx-postcentral-gyrus",
+    "name": "Postcentral gyrus",
+    "synonyms": [
+      "posterior central gyrus",
+      "sensory strip"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The parietal gyrus immediately posterior to the central sulcus and anterior to the postcentral sulcus. S1 areas occupy its crown/banks and medial continuation, with different cytoarchitectural and somatic representations.",
+    "connections": {
+      "afferent": [
+        "VPL/VPM thalamocortical and somatosensory-network inputs"
+      ],
+      "efferent": [
+        "S2, posterior parietal and motor-network projections; corticothalamic return"
+      ]
+    },
+    "bloodSupply": "Mainly MCA lateral branches; medial paracentral continuation mainly ACA.",
+    "clinical": [
+      {
+        "syndrome": "Postcentral injury",
+        "findings": "May impair contralateral sensory discrimination/proprioception and cortical sensory tasks; interpretation depends on primary sensation and cognition."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 28-32 and 224-234 (PDF pp. 54-58 and 250-260), Figures 2.12-2.15 and 6.1-6.10; pp. 395-402 (PDF pp. 421-428)",
+      "Haines, 8th ed., p. 15 (PDF p. 29), Figure 2-7, visually inspected"
+    ]
+  },
+  {
+    "id": "ctx-paracentral-lobule",
+    "name": "Paracentral lobule",
+    "synonyms": [
+      "medial sensorimotor cortex"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The medial cortical region around the continuation of the precentral/postcentral gyri, bounded by the paracentral and marginal cingulate sulci. Its anterior and posterior parts contain lower-limb motor and somatosensory representations respectively.",
+    "connections": {
+      "afferent": [
+        "Motor/somatosensory thalamic and cortical inputs"
+      ],
+      "efferent": [
+        "Motor descending and sensory-association projections, varying by anterior/posterior part"
+      ]
+    },
+    "bloodSupply": "Predominantly ACA paracentral/pericallosal/callosomarginal branches.",
+    "clinical": [
+      {
+        "syndrome": "Medial sensorimotor injury",
+        "findings": "Often causes contralateral leg-predominant weakness or sensory change. Incontinence/abulia may accompany wider medial frontal injury; they are not intrinsic to every lobular lesion."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 28-32 and 224-234 (PDF pp. 54-58 and 250-260), Figures 2.12-2.15 and 6.1-6.10; pp. 395-402 (PDF pp. 421-428)",
+      "Haines, 8th ed., p. 15 (PDF p. 29), Figure 2-7, visually inspected"
+    ]
+  },
+  {
+    "id": "ctx-superior-frontal-gyrus",
+    "name": "Superior frontal gyrus",
+    "synonyms": [
+      "gyrus frontalis superior"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The superior frontal gyrus lies above the superior frontal sulcus and continues onto the medial frontal surface. It spans several motor-association and prefrontal territories, so it should not be assigned one function.",
+    "connections": {
+      "afferent": [
+        "Frontal/parietal association and motor/association thalamic inputs"
+      ],
+      "efferent": [
+        "Reciprocal cortical and basal-ganglia/thalamic networks; motor outputs in appropriate posterior portions"
+      ]
+    },
+    "bloodSupply": "ACA medially and MCA laterally, with border-zone variation.",
+    "clinical": [
+      {
+        "syndrome": "Superior frontal injury",
+        "findings": "Executive, initiation or motor deficits depend on which posterior/medial/prefrontal portions and connections are involved."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 906-908 (PDF pp. 932-934), Figure 19.11"
+    ]
+  },
+  {
+    "id": "ctx-middle-frontal-gyrus",
+    "name": "Middle frontal gyrus",
+    "synonyms": [
+      "gyrus frontalis medius"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The middle frontal gyrus lies between superior and inferior frontal sulci. It includes portions of lateral prefrontal cortex and posterior frontal eye-field/premotor networks; neither a single Brodmann area nor a single functional system defines the whole gyrus.",
+    "connections": {
+      "afferent": [
+        "Association-cortical and thalamic inputs"
+      ],
+      "efferent": [
+        "Frontoparietal, corticostriatal and thalamocortical networks"
+      ]
+    },
+    "bloodSupply": "Predominantly MCA frontal branches; superior border varies.",
+    "clinical": [
+      {
+        "syndrome": "Middle frontal injury",
+        "findings": "Can affect executive control, attention or eye movements according to network and location."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 906-908 (PDF pp. 932-934), Figure 19.11"
+    ]
+  },
+  {
+    "id": "ctx-inferior-frontal-gyrus",
+    "name": "Inferior frontal gyrus",
+    "synonyms": [
+      "pars opercularis",
+      "pars triangularis",
+      "pars orbitalis"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "This frontal gyrus below the inferior frontal sulcus has opercular, triangular and orbital portions defined by rami of the lateral sulcus. Dominant opercular/triangular cortex overlaps the conventional Broca region, while both hemispheres participate in broader language, control and social/affective networks.",
+    "connections": {
+      "afferent": [
+        "Temporal/parietal and other frontal association inputs"
+      ],
+      "efferent": [
+        "Reciprocal language/control networks and premotor/striatal projections"
+      ]
+    },
+    "bloodSupply": "Mainly MCA frontal/opercular branches, with anterior/orbital variation.",
+    "clinical": [
+      {
+        "syndrome": "Inferior frontal network injury",
+        "findings": "May cause aphasia or motor-speech/control deficits; language dominance and lesion extent matter."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2"
+    ]
+  },
+  {
+    "id": "ctx-superior-parietal-lobule",
+    "name": "Superior parietal lobule",
+    "synonyms": [
+      "superior parietal cortex",
+      "approximately Brodmann areas 5 and 7"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The lateral parietal region above the intraparietal sulcus and behind postcentral gyrus. It integrates somatosensory and visual information for body representation, spatial analysis and visually guided actions within parietofrontal networks.",
+    "connections": {
+      "afferent": [
+        "Somatosensory, visual association and thalamic inputs"
+      ],
+      "efferent": [
+        "Premotor/frontal and parietal association networks"
+      ]
+    },
+    "bloodSupply": "Mainly MCA parietal branches, with variable ACA/PCA border contributions.",
+    "clinical": [
+      {
+        "syndrome": "Superior parietal injury",
+        "findings": "Can impair body/spatial integration or visually guided reaching. Bilateral parieto-occipital network injury can contribute to Balint syndrome; this is not a one-lobule diagnostic rule."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 899-905 (PDF pp. 925-931)"
+    ]
+  },
+  {
+    "id": "ctx-angular-gyrus",
+    "name": "Angular gyrus",
+    "synonyms": [
+      "posterior inferior parietal lobule",
+      "approximately Brodmann area 39"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The posterior inferior parietal gyrus around the end of the superior temporal sulcus, posterior to the supramarginal gyrus. It participates in distributed language, calculation, semantic, attention and multimodal networks; functional subdivisions and laterality vary.",
+    "connections": {
+      "afferent": [
+        "Temporal, visual and parietal association inputs"
+      ],
+      "efferent": [
+        "Frontal/temporal and medial association networks"
+      ]
+    },
+    "bloodSupply": "Predominantly MCA angular/inferior-division branches, with MCA/PCA border variation.",
+    "clinical": [
+      {
+        "syndrome": "Dominant parietal dysfunction",
+        "findings": "May impair reading, writing, calculation or praxis; Gerstmann features can occur, but are not obligatory or confined to angular cortex."
+      },
+      {
+        "syndrome": "Attention-network injury",
+        "findings": "Right-predominant parietal network damage may contribute to left neglect; the network includes other cortical/subcortical sites."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2"
+    ]
+  },
+  {
+    "id": "ctx-supramarginal-gyrus",
+    "name": "Supramarginal gyrus",
+    "synonyms": [
+      "anterior inferior parietal lobule",
+      "approximately Brodmann area 40"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The anterior inferior parietal gyrus wrapping around the posterior end of the lateral sulcus. It contributes to somatosensory integration, praxis, phonological/auditory-motor processing and attention in interacting parietofrontal/temporal networks.",
+    "connections": {
+      "afferent": [
+        "Somatosensory, temporal auditory-language and association inputs"
+      ],
+      "efferent": [
+        "Frontal/premotor and temporal/parietal connections"
+      ]
+    },
+    "bloodSupply": "Mainly MCA parietal/inferior-division branches, with variation.",
+    "clinical": [
+      {
+        "syndrome": "Perisylvian parietal injury",
+        "findings": "Can contribute to apraxia, repetition/phonological impairment or attention deficits depending on hemisphere and network extent."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2"
+    ]
+  },
+  {
+    "id": "ctx-precuneus",
+    "name": "Precuneus",
+    "synonyms": [
+      "medial parietal cortex"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The medial parietal cortex anterior to the parieto-occipital sulcus and behind the marginal branch of the cingulate sulcus, above posterior cingulate cortex. It participates in visuospatial imagery, self-related processing and episodic/contextual networks; it is distinct from cuneus and retrosplenial cortex.",
+    "connections": {
+      "afferent": [
+        "Medial/lateral parietal, visual and memory/association-network inputs"
+      ],
+      "efferent": [
+        "Reciprocal parietal, frontal and medial temporal association connections"
+      ]
+    },
+    "bloodSupply": "Variable ACA and PCA medial parietal contributions.",
+    "clinical": [
+      {
+        "syndrome": "Medial parietal injury",
+        "findings": "May impair spatial orientation, integration or memory-related tasks; no single unique symptom establishes precuneus injury."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 25-27 and 830-837 (PDF pp. 51-53 and 856-863), Figures 2.11 and 18.9; pp. 919 and 923 (PDF pp. 945 and 949), Figure 19.14",
+      "Blumenfeld, 2nd ed., pp. 919 and 923 (PDF pp. 945 and 949), Figure 19.14"
+    ]
+  },
+  {
+    "id": "ctx-superior-temporal-gyrus",
+    "name": "Superior temporal gyrus",
+    "synonyms": [
+      "gyrus temporalis superior",
+      "Heschl transverse gyri on superior plane"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The superior lateral temporal gyrus lies below the lateral sulcus and above the superior temporal sulcus. Its superior plane contains auditory core/association regions; posterior dominant temporal portions participate in language networks, while sulcal and gyral subdivisions support broader auditory/social processing.",
+    "connections": {
+      "afferent": [
+        "Auditory thalamic/cortical and multimodal association inputs"
+      ],
+      "efferent": [
+        "Temporal, parietal and frontal association networks"
+      ]
+    },
+    "bloodSupply": "Predominantly MCA temporal/insular branches.",
+    "clinical": [
+      {
+        "syndrome": "Superior temporal injury",
+        "findings": "Can alter auditory processing or dominant language comprehension; bilateral central auditory injury can cause more severe hearing-recognition deficits."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2",
+      "Blumenfeld, 2nd ed., pp. 519-522 (PDF pp. 545-548)"
+    ]
+  },
+  {
+    "id": "ctx-middle-temporal-gyrus",
+    "name": "Middle temporal gyrus",
+    "synonyms": [
+      "gyrus temporalis medius"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The lateral temporal gyrus between superior and middle temporal sulci. It participates in distributed semantic, multimodal and visual/language association networks; a gyral label does not define one cytoarchitectural field.",
+    "connections": {
+      "afferent": [
+        "Temporal/occipital and other association-cortical inputs"
+      ],
+      "efferent": [
+        "Frontal/parietal and temporal association networks"
+      ]
+    },
+    "bloodSupply": "Mainly MCA temporal branches, with posterior border variation.",
+    "clinical": [
+      {
+        "syndrome": "Middle temporal network injury",
+        "findings": "May affect semantic, language or visual association functions depending on side and extent."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2",
+      "Blumenfeld, 2nd ed., pp. 465-475 and 913-916 (PDF pp. 491-501 and 939-942), Figures 11.8-11.15 and 19.12-19.13"
+    ]
+  },
+  {
+    "id": "ctx-inferior-temporal-gyrus",
+    "name": "Inferior temporal gyrus",
+    "synonyms": [
+      "gyrus temporalis inferior"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The inferior lateral/basal temporal gyrus below the middle temporal sulcus and lateral to the inferior temporal sulcus. It contributes to visual-object and semantic processing within ventral occipitotemporal networks.",
+    "connections": {
+      "afferent": [
+        "Ventral occipital/temporal visual-association inputs"
+      ],
+      "efferent": [
+        "Anterior temporal and frontal association networks; reciprocal ventral-stream projections"
+      ]
+    },
+    "bloodSupply": "Variable MCA lateral and PCA inferior temporal contributions.",
+    "clinical": [
+      {
+        "syndrome": "Ventral temporal injury",
+        "findings": "May impair object/semantic recognition; clinical expression depends on distributed network damage and laterality."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 465-475 and 913-916 (PDF pp. 491-501 and 939-942), Figures 11.8-11.15 and 19.12-19.13"
+    ]
+  },
+  {
+    "id": "ctx-fusiform-gyrus",
+    "name": "Fusiform (occipitotemporal) gyrus",
+    "synonyms": [
+      "lateral occipitotemporal gyrus",
+      "fusiform cortex"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The basal occipitotemporal gyrus lies between inferior temporal sulcus laterally and collateral sulcus medially. Parts support face, object, color and visual-word processing in ventral visual networks; the whole gyrus is not one face area or one word-form area.",
+    "connections": {
+      "afferent": [
+        "Ventral occipital/temporal visual and multimodal association inputs"
+      ],
+      "efferent": [
+        "Reciprocal temporal semantic/recognition and frontal language-related networks"
+      ]
+    },
+    "bloodSupply": "Predominantly PCA inferior temporal/occipital branches with anterior/lateral MCA overlap.",
+    "clinical": [
+      {
+        "syndrome": "Prosopagnosia",
+        "findings": "Face-recognition impairment often follows right or bilateral ventral occipitotemporal network injury; it is not obligatory after every fusiform lesion."
+      },
+      {
+        "syndrome": "Visual-word processing impairment",
+        "findings": "Dominant ventral occipitotemporal and connecting-pathway injury can impair reading; this differs from a single universal word-form coordinate."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 465-475 and 913-916 (PDF pp. 491-501 and 939-942), Figures 11.8-11.15 and 19.12-19.13"
+    ]
+  },
+  {
+    "id": "ctx-cuneus",
+    "name": "Cuneus",
+    "synonyms": [
+      "medial occipital cuneus"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The wedge-shaped medial occipital cortex between the parieto-occipital sulcus and calcarine sulcus. V1 on the upper calcarine bank represents the contralateral lower visual field; other cuneal portions include extrastriate cortex.",
+    "connections": {
+      "afferent": [
+        "LGN input to V1 and visual association inputs"
+      ],
+      "efferent": [
+        "Interconnected visual cortical and thalamic networks"
+      ]
+    },
+    "bloodSupply": "Mainly PCA calcarine/parieto-occipital branches.",
+    "clinical": [
+      {
+        "syndrome": "Upper calcarine injury",
+        "findings": "May cause contralateral inferior visual-field loss; size and retinotopic extent determine the pattern."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 465-475 and 913-916 (PDF pp. 491-501 and 939-942), Figures 11.8-11.15 and 19.12-19.13"
+    ]
+  },
+  {
+    "id": "ctx-lingual-gyrus",
+    "name": "Lingual gyrus",
+    "synonyms": [
+      "medial occipitotemporal lingual cortex"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The medial basal occipital gyrus below the calcarine sulcus and above the collateral sulcus. Lower-bank V1 represents the contralateral upper visual field; adjoining cortex contributes to ventral visual processing.",
+    "connections": {
+      "afferent": [
+        "LGN input to V1 and visual association connections"
+      ],
+      "efferent": [
+        "Interconnected ventral visual and thalamic networks"
+      ]
+    },
+    "bloodSupply": "Predominantly PCA calcarine/temporal-occipital branches.",
+    "clinical": [
+      {
+        "syndrome": "Lower calcarine injury",
+        "findings": "May cause contralateral superior visual-field loss; associated visual-recognition changes require involvement of corresponding networks."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
+      "Blumenfeld, 2nd ed., pp. 465-475 and 913-916 (PDF pp. 491-501 and 939-942), Figures 11.8-11.15 and 19.12-19.13"
+    ]
+  },
+  {
+    "id": "ctx-retrosplenial-cortex",
+    "name": "Retrosplenial cortex",
+    "synonyms": [
+      "approximately Brodmann areas 29 and 30",
+      "retrosplenial region"
+    ],
+    "region": "telencephalon",
+    "subdivision": "Cortical gyri and lobules",
+    "kind": "context",
+    "laterality": "paired",
+    "color": "#64748b",
+    "meshes": false,
+    "function": "The small medial cortical region around/behind the splenium, adjacent to posterior cingulate and the cingulate isthmus. It participates in contextual memory and spatial orientation through medial temporal, thalamic and medial parietal connections. Retrosplenial cortex is not identical to the whole posterior cingulate or precuneus.",
+    "connections": {
+      "afferent": [
+        "Anterior thalamic and hippocampal/parahippocampal/medial cortical inputs"
+      ],
+      "efferent": [
+        "Reciprocal medial temporal, cingulate and parietal association networks"
+      ]
+    },
+    "bloodSupply": "Predominantly PCA splenial/posterior medial branches, with variation.",
+    "clinical": [
+      {
+        "syndrome": "Retrosplenial network injury",
+        "findings": "May cause topographical disorientation or memory difficulties; lesion extent and connecting white matter influence the presentation."
+      }
+    ],
+    "contextNote": "Anatomical/functional concept record. The current derived hemisphere ribbon has no independently validated segmentation for this region. No coordinate, volume or boundary is invented here; this entry adds searchable cortical breakdown and source-based clinical context, not a registered cortical parcellation. Gyral, cytoarchitectural and functional boundaries are not interchangeable.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 25-27 and 830-837 (PDF pp. 51-53 and 856-863), Figures 2.11 and 18.9; pp. 919 and 923 (PDF pp. 945 and 949), Figure 19.14",
+      "Takahashi et al. (1997), Pure topographic disorientation due to right retrosplenial lesion (three human cases, lesions also extend to medial parietal cortex). https://pubmed.ncbi.nlm.nih.gov/9270578/"
     ]
   }
 ]

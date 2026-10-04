@@ -2,25 +2,27 @@
   {
     "id": "nuc-thalamic-anterior",
     "name": "Anterior thalamic nucleus",
-    "synonyms": ["ANT", "anterior nuclear group"],
+    "synonyms": [
+      "ANT",
+      "anterior nuclear group"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Limbic relay of the Papez circuit: it receives hippocampal information via the mammillary bodies (mammillothalamic tract) and projects to the cingulate gyrus, gating episodic memory encoding and spatial navigation. Damage disconnects the Papez loop and reproduces a dense amnestic state.",
+    "function": "Anterior thalamic nuclear group participating in hippocampal-diencephalic memory circuits. It receives mammillary input through the mammillothalamic tract, direct hippocampal/subicular inputs through the fornix, and cortical feedback; outputs reach cingulate/retrosplenial limbic cortex.",
     "connections": {
       "afferent": [
-        "Mammillary bodies via the mammillothalamic tract (tract of Vicq d'Azyr)",
-        "Indirect hippocampal input through the mammillary bodies (mammillothalamic tract); a minor direct subicular projection to the anterior nuclei is described experimentally but is not the defining route",
-        "Prefrontal and retrosplenial cortical feedback"
+        "Mammillary bodies through the mammillothalamic tract",
+        "Hippocampal/subicular pathways through the fornix",
+        "Cingulate/retrosplenial cortical feedback"
       ],
       "efferent": [
-        "Cingulate gyrus (Brodmann areas 23, 24, 32) via the anterior limb of the internal capsule",
-        "Reciprocal projections to the mammillary bodies and prefrontal cortex"
+        "Cingulate and retrosplenial limbic cortex"
       ]
     },
-    "bloodSupply": "PCA — tuberothalamic (anterior thalamoperforating) artery, arising from the P1 segment or the posterior communicating artery.",
+    "bloodSupply": "Tuberothalamic (polar) artery, usually arising from the posterior communicating artery; paramedian PCA supply may substitute when this vessel is absent.",
     "clinical": [
       {
         "syndrome": "Tuberothalamic artery syndrome",
@@ -33,18 +35,32 @@
         "note": "metabolic-toxic (thiamine deficiency), not vascular"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [4, 34, 4],
-    "size3d": [1.8, 2.2, 2.0],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      4,
+      34,
+      4
+    ],
+    "size3d": [
+      1.8,
+      2.2,
+      2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-va",
     "name": "Ventral anterior nucleus (VA)",
-    "synonyms": ["VA", "ventralis anterior"],
+    "synonyms": [
+      "VA",
+      "ventralis anterior"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
@@ -65,34 +81,42 @@
     "bloodSupply": "Tuberothalamic (anterior thalamoperforating) artery rostrally; paramedian (posterior thalamoperforating) branches of the PCA medially.",
     "clinical": [
       {
-        "syndrome": "Tuberothalamic artery syndrome",
-        "findings": "Infarction involving VA disconnects pallidal output from the motor thalamus, adding motor-programming and initiation deficits (abulia, loss of spontaneous action) to the amnestic-apathic syndrome.",
-        "vascular": "PCA — tuberothalamic artery"
-      },
-      {
-        "syndrome": "Thalamic astasia",
-        "findings": "Acute inability to stand after rostral thalamic (VA-involving) lesions, with active pushing and falls but no weakness or cerebellar signs to explain them.",
-        "vascular": "PCA — tuberothalamic or paramedian perforators"
+        "syndrome": "Anterior thalamic motor/executive effects",
+        "findings": "VA-region lesions may contribute to disturbed movement initiation and executive behavior when neighboring thalamofrontal networks are involved. Thalamic astasia and active pusher behavior are different clinical phenomena and do not localize uniquely to VA."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [5.5, 28, 5],
-    "size3d": [2.2, 2.2, 1.8],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      5.5,
+      28,
+      5
+    ],
+    "size3d": [
+      2.2,
+      2.2,
+      1.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-vl",
     "name": "Ventral lateral nucleus (VL)",
-    "synonyms": ["VL", "ventralis lateralis"],
+    "synonyms": [
+      "VL",
+      "ventralis lateralis"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Cerebellar and pallidal relay to the primary motor cortex: the oral posterior (cerebellar) division receives the crossed dentatothalamic fibers of the superior cerebellar peduncle and calibrates the timing and amplitude of voluntary movement. The ventral intermediate (VIM) zone is the stereotactic target for tremor suppression.",
+    "function": "Motor thalamic relay for cerebellar and basal-ganglia inputs. Cerebellar output mainly reaches posterior VL (VLp/VL pars caudalis), while pallidal inputs preferentially reach more anterior motor-thalamic territories; nomenclature differs across atlases. The VIM region is a functional-neurosurgical tremor target.",
     "connections": {
       "afferent": [
         "Contralateral dentate (and interposed) nuclei via the superior cerebellar peduncle and its decussation",
@@ -103,7 +127,7 @@
         "Primary motor cortex (area 4) and premotor/supplementary motor areas via the posterior limb of the internal capsule"
       ]
     },
-    "bloodSupply": "Thalamogeniculate artery (caudal VL) and tuberothalamic artery (rostral VL), branches of the PCA.",
+    "bloodSupply": "Inferolateral (thalamogeniculate) PCA branches and variable tuberothalamic/posterior-communicating contributions rostrally.",
     "clinical": [
       {
         "syndrome": "Contralateral kinetic tremor and ataxia",
@@ -118,24 +142,39 @@
         "note": "Ataxic hemiparesis is a syndrome of site, not of cause: identical presentations arise from lacunes in the internal capsule, basis pontis and thalamus, so imaging decides the level."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [8.5, 26, 2.5],
-    "size3d": [2.4, 2.2, 2.4],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      8.5,
+      26,
+      2.5
+    ],
+    "size3d": [
+      2.4,
+      2.2,
+      2.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-vpl",
     "name": "Ventral posterolateral nucleus (VPL)",
-    "synonyms": ["VPL", "ventralis posterolateralis", "ventrobasal complex"],
+    "synonyms": [
+      "VPL",
+      "ventralis posterolateralis",
+      "ventrobasal complex"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Obligatory thalamic relay of body somatosensation: medial-lemniscal (touch, vibration, joint-position) and spinothalamic (pain, temperature) fibers terminate in a somatotopic map — leg lateral, arm medial — and project to primary somatosensory cortex. Small-hole lesions here cause contralateral hemianesthesia and are the classic substrate of central post-stroke pain.",
+    "function": "Major thalamic relay for contralateral body somatosensation, including medial-lemniscal vibration/position/discriminative-touch inputs and anterolateral inputs. It projects mainly to somatosensory cortex with broad leg-lateral/arm-more-medial topography. Pain processing also uses other thalamic and cortical routes, so VPL is not an obligatory relay for every aspect of body sensation.",
     "connections": {
       "afferent": [
         "Medial lemniscus (contralateral dorsal column-medial lemniscus system: vibration, proprioception, discriminative touch)",
@@ -150,28 +189,39 @@
     "bloodSupply": "PCA — thalamogeniculate artery (branch of the P2 segment).",
     "clinical": [
       {
-        "syndrome": "Déjérine-Roussy thalamic pain syndrome",
-        "findings": "After a thalamogeniculate infarct, initial contralateral hemisensory loss evolves weeks to months later into severe burning pain with allodynia and hyperpathia; see the syndrome browser entry.",
-        "vascular": "PCA — thalamogeniculate artery"
+        "syndrome": "Contralateral somatosensory loss",
+        "findings": "VPL injury can cause contralateral body sensory loss, sometimes with sensory ataxia. VPM extension may add facial involvement."
       },
       {
-        "syndrome": "Pure sensory stroke",
-        "findings": "A lacune confined to VPL/VPM causes contralateral face-arm-leg hemianesthesia without weakness; proprioceptive loss may add sensory ataxia and transient choreoathetosis.",
-        "vascular": "PCA — thalamogeniculate or paramedian perforators"
+        "syndrome": "Central post-stroke pain",
+        "findings": "Some lesions involving somatosensory pathways develop delayed neuropathic pain, allodynia or hyperpathia. This is not the inevitable evolution of a thalamic sensory infarct."
       }
     ],
-    "levels": ["lvl-thalamus-mid"],
-    "origin3d": [10, 24.5, -2],
-    "size3d": [2.2, 2.0, 2.4],
+    "levels": [
+      "lvl-thalamus-mid"
+    ],
+    "origin3d": [
+      10,
+      24.5,
+      -2
+    ],
+    "size3d": [
+      2.2,
+      2,
+      2.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Somatosensory Pathways'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-vpm",
     "name": "Ventral posteromedial nucleus (VPM)",
-    "synonyms": ["VPM", "ventralis posteromedialis"],
+    "synonyms": [
+      "VPM",
+      "ventralis posteromedialis"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
@@ -189,31 +239,37 @@
         "Insular and frontal opercular taste cortex (VPMpc)"
       ]
     },
-    "bloodSupply": "PCA — thalamogeniculate artery; paramedian (artery of Percheron) perforators contribute medially.",
+    "bloodSupply": "Inferolateral (thalamogeniculate) PCA perforators to the ventral posterior complex, with variable overlap from neighboring thalamic territories.",
     "clinical": [
       {
-        "syndrome": "Cheiro-oral syndrome",
-        "findings": "Pain and hypesthesia restricted to the contralateral corner of the mouth and the hand from small VPM/VPL-border infarcts — the somatotopic lips-beside-hand representation of the ventrobasal complex.",
-        "vascular": "PCA — paramedian (Percheron) or thalamogeniculate perforators"
-      },
-      {
-        "syndrome": "Contralateral facial sensory loss",
-        "findings": "VPM lesions give hemifacial loss of touch, pain and temperature with a preserved corneal reflex arc; taste is lost when VPMpc is involved.",
-        "vascular": "PCA — thalamogeniculate artery"
+        "syndrome": "Facial or cheiro-oral sensory deficit",
+        "findings": "VPM injury can impair contralateral facial sensation; small ventral-posterior lesions near the VPM/VPL border may cause contralateral perioral and hand numbness. Corneal blink circuitry lies in the brainstem and can be preserved. Taste dysfunction may occur when gustatory relay regions are involved."
       }
     ],
-    "levels": ["lvl-thalamus-mid"],
-    "origin3d": [7, 24, -3],
-    "size3d": [1.8, 1.8, 2.0],
+    "levels": [
+      "lvl-thalamus-mid"
+    ],
+    "origin3d": [
+      7,
+      24,
+      -3
+    ],
+    "size3d": [
+      1.8,
+      1.8,
+      2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Somatosensory Pathways'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-lateral-dorsal",
     "name": "Lateral dorsal nucleus",
-    "synonyms": ["LD"],
+    "synonyms": [
+      "LD"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
@@ -239,18 +295,31 @@
         "vascular": "PCA — posterior choroidal arteries"
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [5.5, 33, 0.5],
-    "size3d": [1.8, 1.8, 2.2],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      5.5,
+      33,
+      0.5
+    ],
+    "size3d": [
+      1.8,
+      1.8,
+      2.2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-lateral-posterior",
     "name": "Lateral posterior nucleus",
-    "synonyms": ["LP"],
+    "synonyms": [
+      "LP"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
@@ -276,59 +345,78 @@
         "vascular": "PCA — posterior choroidal or thalamogeniculate branches"
       }
     ],
-    "levels": ["lvl-thalamus-mid"],
-    "origin3d": [8.5, 30, -2.5],
-    "size3d": [2.0, 2.0, 2.2],
+    "levels": [
+      "lvl-thalamus-mid"
+    ],
+    "origin3d": [
+      8.5,
+      30,
+      -2.5
+    ],
+    "size3d": [
+      2,
+      2,
+      2.2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-pulvinar",
     "name": "Pulvinar",
-    "synonyms": ["pulvinar nucleus"],
+    "synonyms": [
+      "pulvinar nucleus"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Largest thalamic nucleus and a hub of visual attention: it connects extrastriate, inferotemporal and parietal association cortex with the superior colliculus, assigning behavioral salience to stimuli and coordinating eye-hand orienting; its posterior (limbic) nuclei also forward spinothalamic nociceptive traffic.",
+    "function": "Large posterior thalamic association complex with reciprocal parietal, temporal and occipital cortical connections and tectal input. It participates in visual attention and orienting toward relevant stimuli. It is distinct from the ventral posterior primary somatosensory relay and from smaller posterior nociceptive nuclei.",
     "connections": {
       "afferent": [
-        "Superior colliculus via the brachium of the superior colliculus",
-        "Extrastriate visual association cortex (areas 18/19)",
-        "Spinothalamic nociceptive fibers (posterior nuclear group)"
+        "Superior-collicular/tectal pathways",
+        "Parietotemporo-occipital association cortex"
       ],
       "efferent": [
-        "Extrastriate visual and inferotemporal association cortex",
-        "Superior parietal lobule, prefrontal and cingulate cortex"
+        "Parietotemporo-occipital association cortex and additional association networks"
       ]
     },
-    "bloodSupply": "PCA — thalamogeniculate artery and lateral posterior choroidal artery; the whole pulvinar is PCA territory (the middle cerebral artery never supplies the thalamus; the anterior choroidal artery is the only non-PCA contributor to the thalamus).",
+    "bloodSupply": "Posterior choroidal and variable inferolateral branches of the PCA. Thalamic blood supply also includes the tuberothalamic artery from the posterior communicating artery and anterior choroidal contributions elsewhere; it is not uniformly a PCA-only system.",
     "clinical": [
       {
-        "syndrome": "Déjérine-Roussy thalamic pain syndrome",
-        "findings": "Pulvinar and posterior-group involvement in thalamogeniculate infarcts contributes to central post-stroke pain and proprioceptive ataxia; see the syndrome browser entry.",
-        "vascular": "PCA — thalamogeniculate artery"
-      },
-      {
-        "syndrome": "Homonymous visual attention and field deficits",
-        "findings": "Pulvinar lesions give incongruous homonymous field loss or visual inattention; bilateral damage can produce Balint-like simultanagnosia with preserved acuity.",
-        "vascular": "PCA — posterior choroidal or thalamogeniculate branches"
+        "syndrome": "Visual attention disturbance",
+        "findings": "Pulvinar-region lesions can contribute to contralateral visual inattention or neglect. Visual field loss may reflect adjacent geniculate or visual pathway involvement rather than pulvinar injury alone."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [9, 24, -5.5],
-    "size3d": [3.0, 3.0, 2.2],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      9,
+      24,
+      -5.5
+    ],
+    "size3d": [
+      3,
+      3,
+      2.2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-md",
     "name": "Mediodorsal nucleus (MD)",
-    "synonyms": ["MD", "dorsomedial thalamic nucleus"],
+    "synonyms": [
+      "MD",
+      "dorsomedial thalamic nucleus"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
@@ -349,76 +437,89 @@
     "bloodSupply": "PCA — paramedian (posterior thalamoperforating) branches including the artery of Percheron when present; anterior choroidal contributions rostrolaterally.",
     "clinical": [
       {
-        "syndrome": "Paramedian thalamic amnesia (artery of Percheron)",
-        "findings": "Bilateral MD and midline infarction produces abrupt hypersomnia, vertical gaze palsy, dense anterograde amnesia and apathy; see the syndrome browser entry.",
-        "vascular": "PCA — paramedian thalamic (artery of Percheron)"
-      },
-      {
-        "syndrome": "Korsakoff amnestic syndrome",
-        "findings": "Thiamine-deficiency injury to the mediodorsal nuclei (with the mammillary bodies) underlies the confabulatory amnestic state.",
-        "note": "metabolic-toxic (thiamine deficiency), not vascular"
-      },
-      {
-        "syndrome": "Frontal-lobe-like abulia and disinhibition",
-        "findings": "MD lesions disconnect prefrontal cortex and mimic frontal syndromes: abulia with loss of spontaneous speech (medial/lateral MD) or disinhibition with orbitofrontal-pole involvement.",
-        "vascular": "PCA — paramedian perforators"
+        "syndrome": "Medial/prefrontal thalamic dysfunction",
+        "findings": "MD/associated thalamic injury may affect memory, motivation, executive control and behavior. Bilateral paramedian lesions can also affect arousal or gaze circuitry; the full Percheron triad is not attributable solely to MD. Korsakoff memory impairment reflects a broader diencephalic/frontal network."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [4.2, 31, 3.5],
-    "size3d": [2.2, 2.6, 2.4],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      4.2,
+      31,
+      3.5
+    ],
+    "size3d": [
+      2.2,
+      2.6,
+      2.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-intralaminar",
     "name": "Centromedian-parafascicular nuclei",
-    "synonyms": ["CM-PF", "centromedian nucleus", "parafascicular nucleus", "caudal intralaminar group (CM and PF)"],
+    "synonyms": [
+      "CM-PF",
+      "centromedian nucleus",
+      "parafascicular nucleus",
+      "caudal intralaminar group (CM and PF)"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Intralaminar system embedded in the internal medullary lamina: centromedian closes striatal-motor loops (pallidal input, striatal and motor-cortical output), while parafascicular — with the midline nuclei — forms the thalamic arm of the ascending reticular activating system; the rostral intralaminar group (central lateral, paracentral, central medial) is not covered by this record and relays the medial (arousal-affective) pain system.",
+    "function": "Caudal intralaminar centromedian-parafascicular nuclear complex within the internal medullary lamina. It has major basal-ganglia/striatal connections and receives reticular and sensory inputs. Rostral intralaminar nuclei (central lateral, paracentral, central medial), which are distinct from this CM-PF record, have particularly important ascending-arousal connections.",
     "connections": {
       "afferent": [
-        "Globus pallidus and substantia nigra (centromedian)",
-        "Spinothalamic and spinoreticular nociceptive fibers (parafascicular)",
-        "Brainstem reticular formation: cholinergic (PPT/LDT) and monoaminergic arousal systems"
+        "Basal-ganglia, brainstem reticular and sensory inputs"
       ],
       "efferent": [
-        "Striatum (putamen and caudate) plus motor and premotor cortex (centromedian)",
-        "Widespread cortex, limbic system and brainstem arousal targets (parafascicular and midline projection system)"
+        "Striatum and cortical targets; exact projections differ by subdivision"
       ]
     },
     "bloodSupply": "PCA — paramedian (posterior thalamoperforating) branches, including the artery of Percheron when present.",
     "clinical": [
       {
-        "syndrome": "Paramedian (Percheron) thalamic infarct",
-        "findings": "Bilateral CM-PF and MD injury causes hypersomnia or coma at onset with subsequent inattention, memory disturbance and vertical gaze palsy.",
-        "vascular": "PCA — paramedian thalamic (artery of Percheron)"
+        "syndrome": "Intralaminar and paramedian thalamic dysfunction",
+        "findings": "Bilateral paramedian thalamic injury can affect arousal, attention and memory. Those effects involve a broader rostral intralaminar/midline/mediodorsal network and should not be attributed solely to CM-PF."
       },
       {
-        "syndrome": "Central post-stroke pain",
-        "findings": "Parafascicular and posterior-group involvement contributes to burning dysesthetic pain after deep thalamic strokes.",
-        "vascular": "PCA — paramedian or thalamogeniculate perforators",
-        "note": "centromedian DBS is used experimentally for refractory epilepsy and disorders of consciousness"
+        "syndrome": "Neuromodulation research",
+        "findings": "Intralaminar targets have been studied for epilepsy and disorders of consciousness; such target studies do not establish a specific isolated human lesion syndrome."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [4.5, 27, -0.5],
-    "size3d": [1.2, 1.6, 2.6],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      4.5,
+      27,
+      -0.5
+    ],
+    "size3d": [
+      1.2,
+      1.6,
+      2.6
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Somatosensory Pathways'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-midline-thalamic",
     "name": "Midline (paraventricular) thalamic nuclei",
-    "synonyms": ["midline thalamic nuclei", "paraventricular thalamic nuclei"],
+    "synonyms": [
+      "midline thalamic nuclei",
+      "paraventricular thalamic nuclei"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
@@ -439,35 +540,42 @@
     "bloodSupply": "PCA — paramedian (posterior thalamoperforating) branches; posterior choroidal arteries caudally.",
     "clinical": [
       {
-        "syndrome": "Paramedian thalamic syndrome",
-        "findings": "Midline nuclear involvement in Percheron-territory infarcts contributes to hypersomnia, apathy, memory deficits and autonomic instability.",
-        "vascular": "PCA — paramedian thalamic (artery of Percheron)"
-      },
-      {
-        "syndrome": "Disorders of consciousness from bilateral paramedian thalamic damage",
-        "findings": "The midline and intralaminar nuclei form the thalamic arm of the ascending arousal system, so bilateral injury — Percheron-territory infarction, thalamic haemorrhage or Wernicke encephalopathy — can leave coma, hypersomnia, akinetic mutism or a 'thalamic dementia' with severe anterograde amnesia and apathy, while the EEG shows diffuse slowing and the cortex looks structurally intact on imaging.",
-        "vascular": "PCA — paramedian (posterior thalamoperforating) branches, including a shared artery of Percheron",
-        "note": "One Percheron trunk can supply both medial thalami, so a single small-vessel occlusion produces bilateral disease — the reason the thalamus must be inspected in any undiagnosed coma or hypersomnia."
+        "syndrome": "Bilateral paramedian thalamic dysfunction",
+        "findings": "Midline, rostral intralaminar and mediodorsal network injury can affect arousal, memory and behavior. Severity varies from sleepiness to severe consciousness impairment; a given EEG or structurally normal cortex is not a required signature."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [0, 28, 1],
-    "size3d": [0.8, 3.5, 4.0],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      0,
+      28,
+      1
+    ],
+    "size3d": [
+      0.8,
+      3.5,
+      4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "nuc-thalamic-reticular",
     "name": "Thalamic reticular nucleus",
-    "synonyms": ["TRN", "reticular nucleus of the thalamus"],
+    "synonyms": [
+      "TRN",
+      "reticular nucleus of the thalamus"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "A thin GABAergic shell wrapping the lateral thalamus: the reticular nucleus receives collaterals of every corticothalamic and thalamocortical axon and returns inhibition to the relay nuclei, gating sensory traffic, generating sleep spindles and slow-wave rhythms, and implementing attentional filtering.",
+    "function": "Thin GABAergic sheet between the dorsal thalamus and internal capsule. It receives thalamocortical/corticothalamic collaterals and modulatory inputs and returns inhibition to thalamic nuclei, participating in sensory gating, attention and sleep oscillations. Unlike dorsal-thalamic relay nuclei, it has no direct cortical output.",
     "connections": {
       "afferent": [
         "Topographic collaterals of corticothalamic fibers",
@@ -481,27 +589,37 @@
     "bloodSupply": "Anterior choroidal artery and thalamogeniculate/posterior choroidal branches of the PCA (lateral thalamic rim).",
     "clinical": [
       {
-        "syndrome": "Fatal familial insomnia",
-        "findings": "Prion degeneration targeting the anteroventral and mediodorsal thalamic nuclei (with the inferior olive) abolishes sleep spindles and normal sleep architecture, producing progressive insomnia with dysautonomia.",
-        "note": "neurodegenerative (PRNP) — the canonical human TRN/anterior-thalamus syndrome"
-      },
-      {
-        "syndrome": "Absence (3-Hz spike-and-wave) epilepsy",
-        "findings": "TRN burst firing through T-type calcium channels paces thalamocortical oscillations; ethosuximide blocks these channels and suppresses absence seizures.",
-        "note": "physiological correlate of TRN rhythm generation"
+        "syndrome": "Thalamocortical oscillations",
+        "findings": "Reticular and relay neurons participate in sleep spindles and thalamocortical rhythms, including circuitry relevant to absence epilepsy. These phenomena arise from distributed networks rather than an isolated TRN lesion. Fatal familial insomnia predominantly involves other thalamic nuclei and is not a canonical selective TRN lesion syndrome."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral"],
-    "origin3d": [11.5, 27, 1.5],
-    "size3d": [1.0, 5.0, 4.0],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
+    "origin3d": [
+      11.5,
+      27,
+      1.5
+    ],
+    "size3d": [
+      1,
+      5,
+      4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability).",
+      "Cortelli et al., Fatal familial insomnia: sleep, neuroendocrine and vegetative alterations, 1994, https://pubmed.ncbi.nlm.nih.gov/7795890/ (predominant thalamic degeneration)."
     ]
   },
   {
     "id": "nuc-lgn",
     "name": "Lateral geniculate nucleus (LGN)",
-    "synonyms": ["LGN", "lateral geniculate body"],
+    "synonyms": [
+      "LGN",
+      "lateral geniculate body"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
@@ -521,28 +639,37 @@
     "bloodSupply": "Anterior choroidal artery (anterior and lateral LGN) and lateral posterior choroidal branch of the PCA (posterior and hilar LGN) — a dual supply.",
     "clinical": [
       {
-        "syndrome": "Wedge-shaped sectoranopia",
-        "findings": "Anterior choroidal infarction of the LGN hilum gives a homonymous horizontal wedge sectoranopia; lateral posterior choroidal infarcts give the complementary horizontal sectoranopia — the dual blood supply produces mutually exclusive field patterns.",
-        "vascular": "Anterior choroidal vs lateral posterior choroidal arteries"
-      },
-      {
-        "syndrome": "Incongruous homonymous hemianopia",
-        "findings": "LGN lesions produce incomplete, incongruous contralateral field loss with a spared pupillary light reflex — the hallmark separating LGN from optic-tract lesions.",
-        "vascular": "Anterior choroidal / posterior choroidal (PCA)"
+        "syndrome": "Homonymous visual field deficits",
+        "findings": "LGN lesions can produce contralateral homonymous hemianopia or sector defects. Anterior-choroidal injury may produce upper/lower sector loss sparing the horizontal meridian; lateral-posterior-choroidal injury may produce a horizontal wedge defect. Vascular patterns overlap and are not mutually exclusive rules. Pupillary light pathways can be spared because retinal light-reflex fibers bypass the LGN."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [11, 23, -4.5],
-    "size3d": [1.6, 1.4, 1.4],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      11,
+      23,
+      -4.5
+    ],
+    "size3d": [
+      1.6,
+      1.4,
+      1.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Visual System'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, LGN layers and visual relays, printed pp. 464-466 (PDF pp. 490-492).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, visual pathway vascular supply, printed pp. 476-477 (PDF pp. 502-503).",
+      "Helgason et al., Anterior choroidal artery-territory infarction, Arch Neurol 1986, https://pubmed.ncbi.nlm.nih.gov/3729746/."
     ]
   },
   {
     "id": "nuc-mgn",
     "name": "Medial geniculate nucleus (MGN)",
-    "synonyms": ["MGN", "medial geniculate body"],
+    "synonyms": [
+      "MGN",
+      "medial geniculate body"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "nucleus",
@@ -562,28 +689,41 @@
     "bloodSupply": "PCA — thalamogeniculate branch, with anterior choroidal contributions to the medial pole.",
     "clinical": [
       {
-        "syndrome": "Cortical deafness / pure word deafness",
-        "findings": "Bilateral MGN or auditory-radiation lesions abolish conscious sound perception despite normal cochlear function and intact brainstem reflexes; asymmetric lesions leave pure word deafness or nonverbal-sound agnosia.",
-        "vascular": "PCA — bilateral thalamogeniculate or paramedian perforators"
+        "syndrome": "Auditory relay dysfunction",
+        "findings": "An isolated unilateral MGN lesion usually does not cause complete unilateral deafness because each side receives bilateral auditory information. Bilateral central auditory lesions can severely impair hearing; pure word deafness and cortical deafness refer to broader auditory cortical/connection syndromes and should not be inferred automatically from an MGN label."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-post-comm"],
-    "origin3d": [8, 21, -4.5],
-    "size3d": [1.4, 1.4, 1.4],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      8,
+      21,
+      -4.5
+    ],
+    "size3d": [
+      1.4,
+      1.4,
+      1.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, central auditory pathways, printed pp. 521-523 (PDF pp. 547-549).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic relays, printed pp. 284-285 (PDF pp. 310-311)."
     ]
   },
   {
     "id": "ctx-internal-medullary-lamina",
     "name": "Internal medullary lamina",
-    "synonyms": ["IML"],
+    "synonyms": [
+      "IML"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "context",
     "laterality": "midline",
     "color": "#94a3b8",
-    "function": "Y-shaped sheet of myelinated fibers that partitions the thalamus into anterior, medial and lateral nuclear masses; the centromedian and parafascicular nuclei are embedded within its laminae, and its perforating vessels are a favored site of hypertensive thalamic hemorrhage.",
+    "function": "Y-shaped intrathalamic white-matter sheet partitioning anterior, medial and lateral nuclear groups, with intralaminar nuclei embedded in it. It is an anatomical partition rather than an independent neuronal relay or a uniquely established source of hypertensive hemorrhage.",
     "contextNote": "Context record: white-matter lamina tagged on plate-thalamus-mid and plate-coronal-thalamus; not a functional nucleus — see the individual thalamic nucleus records.",
     "connections": {
       "afferent": [
@@ -597,33 +737,41 @@
     "bloodSupply": "PCA — paramedian and thalamogeniculate perforating branches (intrathalamic perforators).",
     "clinical": [
       {
-        "syndrome": "Hypertensive thalamic hemorrhage",
-        "findings": "Deep thalamic hemorrhages arise from perforators along the lamina and often rupture into the third ventricle; contralateral sensory loss with 'wrong-way' eye deviation is typical.",
-        "vascular": "PCA — paramedian or thalamogeniculate perforators"
-      },
-      {
-        "syndrome": "Multi-group thalamic deficit states",
-        "findings": "Lesions crossing the lamina injure several nuclear groups at once, explaining the combined sensory loss, arousal failure and amnesia of deep thalamic strokes.",
-        "vascular": "PCA — paramedian or thalamogeniculate perforators"
+        "syndrome": "Multi-nuclear thalamic lesions",
+        "findings": "Lesions extending across the internal medullary lamina may affect several thalamic nuclear groups and combine sensory, motor, memory or arousal deficits. Hemorrhage and intraventricular extension depend on the involved vessels and lesion extent."
       }
     ],
-    "levels": ["lvl-thalamus-mid"],
-    "origin3d": [0, 28.5, 0.5],
-    "size3d": [1.2, 4, 4.5],
+    "levels": [
+      "lvl-thalamus-mid"
+    ],
+    "origin3d": [
+      0,
+      28.5,
+      0.5
+    ],
+    "size3d": [
+      1.2,
+      4,
+      4.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   },
   {
     "id": "ctx-thalamus-envelope",
     "name": "Thalamus (context envelope)",
-    "synonyms": ["thalamic mass", "paired thalamic ovoids"],
+    "synonyms": [
+      "thalamic mass",
+      "paired thalamic ovoids"
+    ],
     "region": "diencephalon",
     "subdivision": "Thalamus",
     "kind": "context",
     "laterality": "paired",
     "color": "#94a3b8",
-    "function": "Silhouette envelope of the paired thalamic ovoids — each an egg-shaped mass about 3 cm long flanking the third ventricle, joined to its partner by the interthalamic adhesion in roughly 70% of brains — used for the 3D scene and the sagittal/coronal plate blocks; the individual nuclei are separate records.",
+    "function": "Context representation of paired ovoid thalami flanking the third ventricle. An interthalamic adhesion is present in many people but varies and may be absent; it is not a major functional commissure. The atlas silhouette is schematic and the individual nuclei have separate records.",
     "contextNote": "Envelope/block tag for the thalamus silhouette on sagittal and coronal plates and in the 3D scene; not a nucleus record (see the 14 individual thalamic nucleus records).",
     "connections": {
       "afferent": [
@@ -633,25 +781,35 @@
         "Layered cortical projections through the internal capsule (see individual nuclei)"
       ]
     },
-    "bloodSupply": "PCA perforators — tuberothalamic (anterior), paramedian/Percheron (medial), thalamogeniculate (inferolateral) — plus anterior and posterior choroidal arteries laterally and posteriorly.",
+    "bloodSupply": "Tuberothalamic branches from posterior communicating artery; paramedian, inferolateral/thalamogeniculate and posterior choroidal branches mainly from PCA; variable anterior choroidal contributions.",
     "clinical": [
       {
-        "syndrome": "Artery-of-Percheron infarction",
-        "findings": "Bilateral paramedian thalamic lesions (the envelope highlights both thalami): hypersomnia, vertical gaze palsy and amnesia; see the syndrome browser entry.",
-        "vascular": "PCA — paramedian thalamic (artery of Percheron)"
+        "syndrome": "Bilateral paramedian thalamic injury",
+        "findings": "Bilateral medial thalamic lesions can produce altered arousal, memory dysfunction and vertical gaze abnormalities, sometimes from artery-of-Percheron occlusion."
       },
       {
-        "syndrome": "Thalamic astasia and pusher behavior",
-        "findings": "Acute thalamic lesions (often tuberothalamic territory) cause inability to maintain stance with active pushing toward the affected side, out of proportion to weakness.",
-        "vascular": "PCA — tuberothalamic or paramedian perforators"
+        "syndrome": "Thalamic postural disturbances",
+        "findings": "Astasia is inability to maintain stance disproportionate to weakness. Contraversive pushing is a distinct active postural behavior associated with posterior thalamic and other lesions; it should not be conflated with every thalamic standing deficit."
       }
     ],
-    "levels": ["lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-post-comm"],
-    "origin3d": [7, 29, 0],
-    "size3d": [6.5, 7.0, 8.5],
+    "levels": [
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      7,
+      29,
+      0
+    ],
+    "size3d": [
+      6.5,
+      7,
+      8.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Cerebral Hemispheres and Vascular Supply'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
     ]
   }
 ]

@@ -11,14 +11,13 @@
     "kind": "nucleus",
     "laterality": "midline",
     "color": "#d97706",
-    "function": "Neuroendocrine circumventricular organ converting SCN-driven, sympathetic (superior cervical ganglion) noradrenergic signaling into nightly melatonin secretion — the hormonal signal of darkness that entrains circadian physiology; it calcifies after puberty and serves as the radiographic midline landmark.",
+    "function": "Midline epithalamic endocrine organ secreting melatonin with a daily rhythm under multisynaptic SCN/autonomic control. Sympathetic fibers from the superior cervical ganglion mediate an important neural input. Pineal calcification is variable and can serve as an imaging landmark.",
     "connections": {
       "afferent": [
-        "Suprachiasmatic nucleus, via the paraventricular nucleus, intermediolateral column and superior cervical ganglion (sympathetic fibers)",
-        "Habenula and stria medullaris thalami fibers"
+        "Circadian autonomic pathway: SCN/hypothalamic networks to spinal sympathetic neurons and superior cervical ganglion; postganglionic sympathetic fibers to the pineal gland"
       ],
       "efferent": [
-        "Melatonin released into the systemic circulation and CSF (no blood-brain barrier)"
+        "Melatonin released into circulation and CSF"
       ]
     },
     "bloodSupply": "Medial posterior choroidal arteries (collicular/quadrigeminal region); venous drainage to the internal cerebral veins and great vein of Galen.",
@@ -53,8 +52,10 @@
       1.6
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "RadioGraphics 2019 — 'Midbrain, Pons, and Medulla: Anatomy and Syndromes'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, diencephalon/epithalamus, printed pp. 283-284 (PDF pp. 309-310).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, habenulointerpeduncular fibers, printed pp. 617 (PDF pp. 643).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, circadian/homeostatic pathways, printed pp. 796 (PDF pp. 822).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain and posterior diencephalic sections, printed pp. 136-156 (PDF pp. 150-170)."
     ]
   },
   {
@@ -72,15 +73,29 @@
     "function": "Renderable silhouette of the midline pineal-epithalamic block that sits between the habenular trigones in the posterior wall of the third ventricle, above the superior colliculi and rostral to the quadrigeminal cistern. It exists so the epithalamic dorsal midline is a named, selectable body in the 3D scene; the endocrine organ and its melatonin physiology belong to nuc-pineal-gland, and the habenular complex to nuc-habenula.",
     "contextNote": "Envelope/context-surface record: the GLB silhouette ctx-pineal in src/assets/anatomy/anatomy-manifest.json is its 3D body (SceneLayers envelope slot env-pineal), and its canonical-space extent below is that baked bbox — note that the baked body is markedly larger than the endocrine gland it names, so it reads as an epithalamic block rather than a gland. Distinct from nuc-pineal-gland, which is the endocrine/clinical record; no plate carries this tag.",
     "connections": {
-      "afferent": ["See nuc-pineal-gland and nuc-habenula — the silhouette itself carries no fibers"]
+      "afferent": [
+        "See nuc-pineal-gland and nuc-habenula — the silhouette itself carries no fibers"
+      ]
     },
     "clinical": [],
-    "levels": ["lvl-post-comm"],
-    "origin3d": [0.115, 19.392, -13.866],
-    "size3d": [3.16, 4.89, 6.28],
+    "levels": [
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      0.115,
+      19.392,
+      -13.866
+    ],
+    "size3d": [
+      3.16,
+      4.89,
+      6.28
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, diencephalon/epithalamus, printed pp. 283-284 (PDF pp. 309-310).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, habenulointerpeduncular fibers, printed pp. 617 (PDF pp. 643).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, circadian/homeostatic pathways, printed pp. 796 (PDF pp. 822).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain and posterior diencephalic sections, printed pp. 136-156 (PDF pp. 150-170)."
     ]
   },
   {
@@ -95,30 +110,22 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Limbic 'anti-reward' interface: the lateral habenula integrates stria-medullaris input from septum, hypothalamus and basal ganglia and suppresses dopaminergic (VTA/SNc) and serotonergic (raphe) activity — encoding negative reward prediction, aversion and pain expectation; the medial habenula relays to the interpeduncular nucleus for aversive behavioral control.",
+    "function": "Paired medial and lateral habenular nuclei at the posterior dorsomedial thalamic border. They receive limbic/basal-forebrain inputs through the stria medullaris and project through the fasciculus retroflexus toward interpeduncular and other midbrain targets. Reward/aversion roles are supported particularly by experimental and translational studies; they are not a single anti-reward center.",
     "connections": {
       "afferent": [
-        "Stria medullaris thalami (septal nuclei, preoptic area, lateral hypothalamus)",
-        "Lateral pallidum (pallidohabenular fibers) and basal ganglia",
-        "Bed nucleus of the stria terminalis"
+        "Limbic/basal-forebrain afferents through the stria medullaris thalami",
+        "Hypothalamic and basal-ganglia-related inputs"
       ],
       "efferent": [
-        "Ventral tegmental area and substantia nigra pars compacta (inhibitory, lateral habenula)",
-        "Dorsal and median raphe nuclei",
-        "Interpeduncular nucleus via the fasciculus retroflexus (medial habenula)"
+        "Fasciculus retroflexus toward the interpeduncular nucleus and midbrain circuits",
+        "Lateral habenular outputs influence dopamine/serotonin systems through direct and indirect circuits, rather than being uniformly direct inhibitory projections"
       ]
     },
     "bloodSupply": "Medial posterior choroidal artery (PCA branches) at the epithalamic dorsal midline.",
     "clinical": [
       {
-        "syndrome": "Depression and learned helplessness",
-        "findings": "Lateral habenula hyperactivity is a robust correlate of major depression and helplessness in humans and animal models; habenula/fasciculus-retroflexus stimulation is an experimental treatment for refractory depression.",
-        "note": "translational research syndrome"
-      },
-      {
-        "syndrome": "Pineal/habenular region lesions",
-        "findings": "Tumors or infarcts at the dorsal midline interrupting the habenulo-interpeduncular pathway contribute to reward-processing disturbance and sleep-wake dysregulation.",
-        "vascular": "Posterior choroidal territory"
+        "syndrome": "Reward/aversion network research",
+        "findings": "Habenular circuits are studied in reward prediction, aversion and psychiatric disease. Depression is not a diagnosis of isolated habenular hyperactivity, and stimulation remains a research context rather than an established atlas lesion syndrome."
       }
     ],
     "levels": [
@@ -136,8 +143,10 @@
       1.6
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, diencephalon/epithalamus, printed pp. 283-284 (PDF pp. 309-310).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, habenulointerpeduncular fibers, printed pp. 617 (PDF pp. 643).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, circadian/homeostatic pathways, printed pp. 796 (PDF pp. 822).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain and posterior diencephalic sections, printed pp. 136-156 (PDF pp. 150-170)."
     ]
   },
   {
@@ -154,25 +163,17 @@
     "function": "Myelinated limbic afferent bundle sweeping along the dorsomedial border of the thalamus from the septal/preoptic region to the habenular nuclei — the principal input limb of the epithalamic circuit feeding the anti-reward system.",
     "connections": {
       "afferent": [
-        "Septal nuclei and nucleus accumbens",
-        "Preoptic area and lateral hypothalamus",
-        "Bed nucleus of the stria terminalis and olfactory tubercle"
+        "Septal/basal-forebrain and preoptic/hypothalamic limbic inputs"
       ],
       "efferent": [
-        "Medial and lateral habenular nuclei (the habenular peduncle continues as the fasciculus retroflexus)"
+        "Habenular nuclei; their outputs leave in the distinct fasciculus retroflexus"
       ]
     },
     "bloodSupply": "Medial posterior choroidal branches of the PCA (dorsal thalamic/epithalamic margin).",
     "clinical": [
       {
-        "syndrome": "Refractory OCD (experimental DBS target)",
-        "findings": "The bed-nucleus/stria-medullaris region is a deep-brain-stimulation target for treatment-resistant obsessive-compulsive disorder, reflecting its limbic-to-habenular relay role.",
-        "note": "therapeutic (experimental)"
-      },
-      {
-        "syndrome": "Dorsal thalamic-edge lesions",
-        "findings": "Tumor or infarct along the stria interrupts limbic-to-habenular traffic, contributing to emotional blunting and attention-memory deficits.",
-        "vascular": "Posterior choroidal territory"
+        "syndrome": "Limbic connection disruption",
+        "findings": "This afferent bundle links basal-forebrain/hypothalamic regions with the habenula. A specific isolated human lesion syndrome or routine OCD DBS indication is not established by this anatomy."
       }
     ],
     "levels": [
@@ -190,7 +191,10 @@
       3.5
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, diencephalon/epithalamus, printed pp. 283-284 (PDF pp. 309-310).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, habenulointerpeduncular fibers, printed pp. 617 (PDF pp. 643).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, circadian/homeostatic pathways, printed pp. 796 (PDF pp. 822).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain and posterior diencephalic sections, printed pp. 136-156 (PDF pp. 150-170)."
     ]
   },
   {
@@ -218,14 +222,8 @@
     "bloodSupply": "Collicular/quadrigeminal branches of the PCA (P1/P2) and the medial posterior choroidal artery.",
     "clinical": [
       {
-        "syndrome": "Parinaud (dorsal midbrain) syndrome",
-        "findings": "Compression of the posterior commissure/pretectal region by pineal tumors or hydrocephalus abolishes coordinated upgaze and convergence and yields light-near dissociation; see the syndrome browser entry.",
-        "note": "mass effect or hydrocephalus"
-      },
-      {
-        "syndrome": "Dorsal midbrain infarction",
-        "findings": "PCA-collicular-territory infarcts splitting the commissure produce vertical gaze palsy and skew deviation.",
-        "vascular": "PCA — collicular/quadrigeminal branches"
+        "syndrome": "Dorsal midbrain ocular dysfunction",
+        "findings": "Compression or injury near the posterior commissure/pretectum can impair upward gaze and pupillary light responses, with variable convergence-retraction movements, lid retraction or skew. Convergence is not invariably abolished."
       }
     ],
     "levels": [
@@ -242,8 +240,8 @@
       1
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brainstem II: Eye Movements and Pupillary Control'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, pupillary circuits, printed pp. 576-580 (PDF pp. 602-606).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, vertical gaze and Parinaud syndrome, printed pp. 587-588 (PDF pp. 613-614)."
     ]
   },
   {
@@ -273,14 +271,12 @@
     "bloodSupply": "Small perforating branches of the posterior communicating artery and the anterior choroidal artery (rostral/lateral STN); P1/PCA perforators caudally.",
     "clinical": [
       {
-        "syndrome": "Hemiballismus",
-        "findings": "Contralateral wild, flinging movements of the proximal arm and leg after STN infarction or hemorrhage; typically worst at onset and improving over weeks, with dopamine-receptor blockers or tetrabenazine for severe cases; see the syndrome browser entry.",
-        "vascular": "Posterior communicating/anterior choroidal perforators"
+        "syndrome": "Hemichorea/hemiballismus",
+        "findings": "Contralateral STN-region injury is a classic cause of flinging/choreic movements, but lesions elsewhere in basal-ganglia networks also cause them. Hyperglycemia-associated cases often involve striatum. Evolution and additional signs vary."
       },
       {
-        "syndrome": "STN deep-brain stimulation effects",
-        "findings": "High-frequency STN stimulation is standard therapy for advanced Parkinson motor fluctuations; current spread into limbic/associative STN territory can induce impulsivity, hypomania or dyskinesia.",
-        "note": "therapeutic"
+        "syndrome": "Neuromodulation context",
+        "findings": "STN stimulation is a clinical target for selected patients with Parkinson disease. Benefits and adverse effects depend on patient selection, stimulated circuitry and treatment settings; this schematic is not a targeting guide."
       }
     ],
     "levels": [
@@ -298,8 +294,7 @@
       3.2
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia', section 'Ansa Lenticularis, Lenticular Fasciculus, and the Fields of Forel'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia connections and Forel fields, printed pp. 748-755 (PDF pp. 774-781)."
     ]
   },
   {
@@ -311,7 +306,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "A rostrocaudal GABAergic sheet between the thalamus and the subthalamic nucleus, continuous with the thalamic reticular nucleus: it gates viscerosensory, cerebellar and basal-ganglia traffic — influencing saccades, arousal, blood pressure and tremor networks — and is traversed by the H1/H2 fasciculi.",
+    "function": "Thin subthalamic gray-matter sheet dorsal to the subthalamic nucleus and ventral to thalamus, adjacent to thalamic and lenticular fasciculi. It has broad sensory, motor and brainstem connections; its subregional functions are not fully represented by this atlas. H1 lies mainly dorsal and H2 ventral to the zona incerta, rather than both simply traversing it.",
     "connections": {
       "afferent": [
         "Cerebellar nuclei (fastigial and interposed, via superior cerebellar peduncle collaterals)",
@@ -327,14 +322,12 @@
     "bloodSupply": "Posterior communicating and anterior choroidal perforators; thalamogeniculate/paramedian PCA branches caudally.",
     "clinical": [
       {
-        "syndrome": "Zona-incerta (posterior subthalamic area) tremor control",
-        "findings": "ZI stimulation suppresses tremor comparably to VIM thalamotomy and is used as a DBS target; lesions or current spread can rarely provoke transient hemiballismus-like movements.",
-        "note": "therapeutic"
+        "syndrome": "Posterior subthalamic area neuromodulation",
+        "findings": "The posterior subthalamic area, including caudal ZI and adjacent cerebellothalamic fibers, has been investigated as a tremor-stimulation target. Benefit and adverse effects cannot be attributed to ZI alone or assumed equivalent to another procedure."
       },
       {
-        "syndrome": "Diencephalic sensory-motor syndromes",
-        "findings": "Subthalamic-region infarcts involving the zona incerta combine hemisensory loss, ataxia and involuntary movements (choreoathetosis or ballism).",
-        "vascular": "Posterior communicating/anterior choroidal perforators"
+        "syndrome": "Subthalamic-region injury",
+        "findings": "Larger regional lesions can combine motor, sensory and coordination findings according to adjacent pathways; these are not specific isolated-ZI syndromes."
       }
     ],
     "levels": [
@@ -352,8 +345,7 @@
       3
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia', section 'Ansa Lenticularis, Lenticular Fasciculus, and the Fields of Forel'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia connections and Forel fields, printed pp. 748-755 (PDF pp. 774-781)."
     ]
   },
   {
@@ -362,15 +354,15 @@
     "synonyms": [
       "thalamic fasciculus (H1)",
       "lenticular fasciculus (H2)",
-      "prerubral field (H3 — named here, not drawn in this atlas)"
+      "prerubral field (field H)"
     ],
     "region": "diencephalon",
     "subdivision": "Subthalamus",
     "kind": "context",
     "laterality": "paired",
     "color": "#94a3b8",
-    "function": "Fiber-field complex of the subthalamus: field H2 (lenticular fasciculus) carries pallidal output looping through the internal capsule, and field H1 (thalamic fasciculus) delivers it to the ventral anterior and ventral lateral nuclei — the final common route of basal-ganglia output to the motor thalamus, shared with cerebellothalamic fibers.",
-    "contextNote": "Context record for the H1 (thalamic fasciculus) and H2 (lenticular fasciculus) white-matter zones medial to the zona incerta; the third field of Forel (H3, the prerubral field into which the ansa lenticularis turns before joining H1) is named but not drawn; drawn on plate-thalamus-mid and plate-coronal-midbrain. See also nuc-subthalamic and nuc-zona-incerta.",
+    "function": "Subthalamic white-matter fields associated with pallidal and cerebellar output. H2 (lenticular fasciculus) penetrates the internal capsule and runs dorsal to STN/ventral to ZI. Pallidal fibers from H2 and the ansa lenticularis converge in the prerubral field H, then enter the motor thalamus through H1 (thalamic fasciculus), which also includes cerebellothalamic fibers.",
+    "contextNote": "Schematic context record for the H1/H2 white-matter regions around zona incerta. The source textbook labels the convergence area prerubral field H; numerical variants such as H3 are not used here. This silhouette is not a validated stereotactic target.",
     "connections": {
       "afferent": [
         "Globus pallidus internus via the ansa lenticularis and lenticular fasciculus (H2)",
@@ -383,14 +375,12 @@
     "bloodSupply": "Perforating branches of the posterior communicating and anterior choroidal arteries.",
     "clinical": [
       {
-        "syndrome": "Pallidal-output disconnection (H-field lesions)",
-        "findings": "Hemorrhage or stereotactic lesions across the H fields mimic pallidotomy — reduced contralateral rigidity with a risk of choreoballismic movements.",
-        "vascular": "Posterior communicating/anterior choroidal perforators"
+        "syndrome": "Motor-output pathway injury",
+        "findings": "Damage can interrupt basal-ganglia or cerebellar output toward motor thalamus. Consequences depend on the involved fibers; lesion effects should not be assumed to reproduce pallidotomy or a specific movement disorder."
       },
       {
-        "syndrome": "Campotomy (historical H-field targeting)",
-        "findings": "Targeted H1/H2 interruption was used historically for tremor and rigidity and remains a named landmark concept in functional-neurosurgery planning.",
-        "note": "historic/therapeutic"
+        "syndrome": "Historical surgical context",
+        "findings": "Forel-field procedures have historical use in movement-disorder surgery. The atlas schematic is not a patient-specific target or treatment plan."
       }
     ],
     "levels": [
@@ -408,8 +398,7 @@
       3
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia', section 'Ansa Lenticularis, Lenticular Fasciculus, and the Fields of Forel'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia connections and Forel fields, printed pp. 748-755 (PDF pp. 774-781)."
     ]
   },
   {
@@ -430,7 +419,7 @@
         "Cerebral aqueduct (to the fourth ventricle)"
       ]
     },
-    "bloodSupply": "Medial posterior choroidal artery (choroid plexus); walls supplied by circumferential PCA and anterior choroidal perforators.",
+    "bloodSupply": "The ventricular lumen is a CSF cavity, not perfused tissue. Adjacent hypothalamus receives variable ICA/ACA/posterior communicating contributions; adjacent thalamus receives PCA/posterior communicating contributions. Choroid plexus has its own vascular supply.",
     "clinical": [
       {
         "syndrome": "Colloid cyst of the third ventricle",
@@ -464,8 +453,9 @@
       5
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 5, ventricular system, printed pp. 132-137 (PDF pp. 158-163).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 5, hydrocephalus, printed pp. 155-156 (PDF pp. 181-182).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), ventricular system, printed pp. 66-69 (PDF pp. 80-83)."
     ]
   },
   {
@@ -475,12 +465,12 @@
       "aqueduct of Sylvius",
       "aqueduct of the midbrain"
     ],
-    "region": "diencephalon",
+    "region": "midbrain",
     "subdivision": "Ventricular system",
     "kind": "ventricle",
     "laterality": "midline",
     "color": "#06b6d4",
-    "function": "The roughly 1.5 cm CSF conduit through the midbrain periaqueductal gray linking the third to the fourth ventricle beneath the colliculi; it is the narrowest CSF channel and the classic site of obstruction by tectal tumors, post-hemorrhagic webs or aqueductal stenosis.",
+    "function": "Narrow CSF channel through the midbrain connecting third and fourth ventricles, surrounded by periaqueductal gray and lacking choroid plexus. Stenosis or compression can cause upstream obstructive hydrocephalus.",
     "connections": {
       "afferent": [
         "Third ventricle at the plane of the posterior commissure"
@@ -489,17 +479,11 @@
         "Fourth ventricle at the pontomesencephalic isthmus"
       ]
     },
-    "bloodSupply": "Paramedian and circumferential perforating branches of the PCA/SCA to the surrounding periaqueductal gray (no intrinsic choroid).",
+    "bloodSupply": "The CSF lumen is not perfused tissue. Surrounding midbrain tissue receives variable PCA, SCA and basilar perforator contributions.",
     "clinical": [
       {
-        "syndrome": "Non-communicating hydrocephalus",
-        "findings": "Aqueduct obstruction (tectal glioma, post-hemorrhagic web, congenital stenosis) dilates the third and lateral ventricles with a normal fourth — headache, Parinaud signs and gait ataxia.",
-        "note": "CSF-flow obstruction"
-      },
-      {
-        "syndrome": "Periaqueductal syndrome",
-        "findings": "Lesions of the surrounding PAG (hemorrhage, demyelination) disturb pain modulation and the vertical-gaze centers flanking the duct.",
-        "vascular": "Paramedian perforators of the PCA/SCA"
+        "syndrome": "Obstructive hydrocephalus",
+        "findings": "Aqueductal stenosis or external compression can enlarge the upstream third and lateral ventricles. Headache, vomiting or other raised-pressure signs may occur. Gaze palsy or ataxia depends on associated midbrain/cerebellar involvement and is not an obligatory sign of aqueduct obstruction."
       }
     ],
     "levels": [
@@ -518,8 +502,9 @@
       0.9
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brain and Environs: Cranium, Ventricles, and Meninges'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Brainstem III: Internal Structures and Vascular Supply'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 5, ventricular system, printed pp. 132-137 (PDF pp. 158-163).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 5, hydrocephalus, printed pp. 155-156 (PDF pp. 181-182).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), ventricular system, printed pp. 66-69 (PDF pp. 80-83)."
     ]
   },
   {
@@ -544,14 +529,12 @@
     "bloodSupply": "Anterior cerebral artery (pericallosal branches) and posterior cerebral artery (splenial branches).",
     "clinical": [
       {
-        "syndrome": "Split-brain (callosotomy) syndrome",
-        "findings": "Surgical callosal section isolates the hemispheres — the left hand acts independently and cannot name objects seen by the right hemisphere; callosal thinning also appears in ALS and developmental disorders.",
-        "note": "context syndrome"
+        "syndrome": "Callosal disconnection",
+        "findings": "Callosal injury or surgical section can impair transfer of information between hemispheres. In a typical left-language-dominant patient, an object presented only to the left visual field or explored by the left hand may not be named verbally despite recognition by the right hemisphere. Alien-hand phenomena are possible but not obligatory."
       },
       {
-        "syndrome": "Agenesis of the corpus callosum",
-        "findings": "Congenital absence elevates the third ventricle roof on sagittal imaging and may accompany hypothalamic dysregulation syndromes (e.g., episodic hypothermia).",
-        "note": "developmental"
+        "syndrome": "Callosal development",
+        "findings": "Callosal agenesis has variable clinical expression and may be associated with other malformations. It does not by itself establish hypothalamic dysfunction."
       }
     ],
     "levels": [
@@ -569,7 +552,9 @@
       7.5
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 19, callosal disconnection, printed pp. 969-970 (PDF pp. 995-996).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 5, C-shaped periventricular structures, printed pp. 215-218 (PDF pp. 241-244).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cerebral/ventricular sections, printed pp. 148-170 (PDF pp. 162-184)."
     ]
   },
   {
@@ -584,14 +569,17 @@
     "kind": "context",
     "laterality": "paired",
     "color": "#94a3b8",
-    "function": "The fan-shaped white-matter plane carrying all thalamocortical and corticofugal traffic — anterior limb (frontopontine), genu (corticobulbar), posterior limb (corticospinal and somatosensory thalamocortical), retrolenticular (optic radiations) — framing the thalamus laterally on the thalamic-level plates; the thalamic reticular nucleus hugs its inner surface.",
+    "function": "Compact deep white-matter structure between caudate/thalamus medially and lentiform nucleus laterally. Its anterior limb, genu, posterior limb, retrolenticular and sublenticular parts carry different thalamocortical and descending projections, including motor, sensory, visual and auditory routes. It does not carry every corticofugal or thalamocortical connection.",
     "contextNote": "Context silhouette on plate-thalamus-mid and plate-coronal-thalamus; see also the subthalamus records for the pallidal (H1/H2) fasciculi looping through it.",
     "connections": {
       "afferent": [
-        "Thalamocortical radiations (VPL/VPM to S1; LGN to V1; VL/VA to motor cortex)"
+        "Thalamocortical projections from sensory, motor and association thalamus",
+        "Descending cortical fibers from the corona radiata"
       ],
       "efferent": [
-        "Corticospinal, corticobulbar and corticopontine fibers funnelling from the corona radiata"
+        "Thalamic/cortical connections through anterior and posterior limbs",
+        "Descending corticospinal, corticobulbar and corticopontine projections",
+        "Visual radiations in retrolenticular pathways and auditory radiations in sublenticular pathways"
       ]
     },
     "bloodSupply": "Lenticulostriate branches of the MCA (genu/posterior limb), anterior choroidal artery (retrolenticular and inferior posterior limb), recurrent artery of Heubner (anterior limb).",
@@ -622,9 +610,11 @@
       3.5
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Corticospinal Tract and Other Motor Pathways'",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. 'Diencephalon: Thalamus and Hypothalamus'"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia/internal-capsule anatomy, printed pp. 740-748 (PDF pp. 766-774).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia pathways, printed pp. 748-754 (PDF pp. 774-780)."
+    ],
+    "meshes": false,
+    "geometryNote": "Text-only capsule context: the former display linked the whole cerebral white-matter shell, not an isolated capsule. That association is removed; no validated capsule segmentation is available."
   },
   {
     "id": "ctx-lenticular-nucleus",
@@ -651,14 +641,12 @@
     "bloodSupply": "Lenticulostriate branches of the MCA; anterior choroidal artery supplies the inferior and posterior pallidum.",
     "clinical": [
       {
-        "syndrome": "Lenticulostriate lacunar stroke",
-        "findings": "Small deep infarcts or hemorrhages here produce pure motor or sensorimotor hemiparesis; larger putaminal bleeds cause gaze deviation and reduced consciousness.",
-        "vascular": "Lenticulostriate (MCA) perforators"
+        "syndrome": "Deep basal-ganglia/capsular stroke",
+        "findings": "Putaminal or pallidal hemorrhage/infarction may cause motor or cognitive effects; dense hemiparesis often reflects adjacent internal-capsule injury rather than isolated lentiform injury."
       },
       {
-        "syndrome": "Bilateral pallidal injury (toxic/metabolic)",
-        "findings": "Carbon-monoxide or manganese injury to the globus pallidus causes parkinsonism and dystonia — context for the basal-ganglia-thalamic loop the atlas teaches.",
-        "note": "toxic/metabolic"
+        "syndrome": "Toxic/metabolic basal-ganglia injury",
+        "findings": "Carbon monoxide and other toxic/metabolic exposures can affect basal-ganglia networks and produce movement disorders. Imaging and clinical patterns depend on the exposure and involved structures."
       }
     ],
     "levels": [
@@ -676,7 +664,8 @@
       5
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia/internal-capsule anatomy, printed pp. 740-748 (PDF pp. 766-774).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia pathways, printed pp. 748-754 (PDF pp. 774-780)."
     ]
   },
   {
@@ -695,10 +684,12 @@
     "contextNote": "Context silhouette; see ctx-lenticular-nucleus and ctx-internal-capsule for adjacent context records.",
     "connections": {
       "afferent": [
-        "Corticostriate fibers from prefrontal and associative cortex; nigrostriatal dopamine"
+        "Association/prefrontal corticostriatal input",
+        "Nigrostriatal dopamine and thalamostriatal inputs"
       ],
       "efferent": [
-        "Caudate projections to the globus pallidus externus (GPe) and substantia nigra pars reticulata (indirect pathway entry)"
+        "Direct-pathway striatal output to GPi/SNr",
+        "Indirect-pathway output to GPe"
       ]
     },
     "bloodSupply": "Medial lenticulostriate and anterior cerebral (recurrent artery of Heubner) perforators for the head; lateral lenticulostriate branches for the body.",
@@ -729,7 +720,8 @@
       4.5
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Basal Ganglia'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia/internal-capsule anatomy, printed pp. 740-748 (PDF pp. 766-774).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia pathways, printed pp. 748-754 (PDF pp. 774-780)."
     ]
   }
 ]

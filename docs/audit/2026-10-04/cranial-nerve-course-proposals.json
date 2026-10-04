@@ -1,0 +1,260 @@
+{
+  "scope": "NERVE_COURSES CN III-XII narrative fields only; preserve all waypoints/tubeRadius/calibreMm",
+  "records": {
+    "nrv-cn3-oculomotor": {
+      "origin": "Oculomotor somatic motor and Edinger-Westphal preganglionic neurons, rostral midbrain",
+      "target": "Ipsilateral superior/medial/inferior recti, inferior oblique and levator; ciliary ganglion",
+      "decussation": "The peripheral nerve supplies its ipsilateral orbit. Within the nuclear system, superior-rectus fibers cross and central levator control is bilateral; this differs from the peripheral nerve course.",
+      "foramen": "superior orbital fissure",
+      "modality": "General somatic efferent and preganglionic parasympathetic (general visceral efferent).",
+      "function": "Supplies medial, superior and inferior rectus, inferior oblique and levator palpebrae superioris. Superior/inferior recti are tested for elevation/depression with the eye abducted; inferior oblique elevates the adducted eye. Preganglionic parasympathetic fibers synapse in the ciliary ganglion; short ciliary nerves then supply sphincter pupillae and ciliary muscle. Pupil involvement varies by lesion.",
+      "clinical": [
+        {
+          "syndrome": "Oculomotor palsy",
+          "findings": "Ptosis, diplopia and impaired adduction/elevation/depression may occur, with a down-and-out eye in a complete somatic palsy. Pupil constriction and accommodation may also be impaired. Pupil sparing does not exclude a compressive lesion such as an aneurysm."
+        },
+        {
+          "syndrome": "Midbrain fascicular palsy",
+          "findings": "An ipsilateral third-nerve palsy with contralateral weakness or ataxia suggests accompanying midbrain motor or crossed cerebellar-output involvement. Weber, Claude and Benedikt labels describe overlapping patterns rather than mandatory full syndromes."
+        },
+        {
+          "syndrome": "Cavernous sinus and orbital disease",
+          "findings": "Combined III/IV/VI and trigeminal deficits can arise from cavernous sinus or superior orbital fissure lesions. Pupil involvement is variable and cannot distinguish the site by itself."
+        },
+        {
+          "syndrome": "Herniation or aneurysmal compression",
+          "findings": "Acute third-nerve dysfunction can accompany posterior communicating aneurysm or transtentorial herniation. The clinical sequence is variable; a fixed pupil-first, palsy-second, weakness-third progression is not reliable."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular nerves, actions and pupillary pathways, printed pp. 568-580 (PDF pp. 594-606).",
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, gaze and ocular motor palsies, printed pp. 585-592 (PDF pp. 611-618).",
+        "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression)."
+      ],
+      "anchorNote": "Authored schematic course for CN III Oculomotor nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. This nerve is displayed as an authored course tube, not a segmented specimen. The central nuclear crossing pattern differs from the ipsilateral targets of the peripheral nerve: superior-rectus nuclear fibers cross, and levator control is bilateral. Coordinates, tube thickness and orbital waypoints are conceptual."
+    },
+    "nrv-cn4-trochlear": {
+      "origin": "Trochlear motor nucleus at inferior colliculus level",
+      "target": "Ipsilateral superior oblique relative to the exiting nerve; contralateral to the nucleus",
+      "decussation": "Fibers cross in superior/anterior medullary velum before dorsal emergence. Pre-crossing nuclear/fascicular injury affects the opposite eye; post-crossing nerve injury the same side.",
+      "foramen": "superior orbital fissure",
+      "modality": "General somatic efferent.",
+      "function": "Supplies superior oblique, which intorts the eye and depresses it most effectively when adducted, with an abducting component. The nucleus supplies the contralateral superior oblique because its fibers cross before dorsal emergence.",
+      "clinical": [
+        {
+          "syndrome": "Superior oblique palsy",
+          "findings": "Vertical/torsional diplopia and hypertropia may be more evident looking down with the eye adducted. Head tilt toward the affected side can worsen hypertropia and patients may compensate by tilting away. This pattern is helpful but not uniquely diagnostic; skew deviation and other ocular conditions can mimic it."
+        },
+        {
+          "syndrome": "Nuclear, fascicular and peripheral injury",
+          "findings": "A lesion of the nucleus or fibers before their decussation affects the contralateral superior oblique. A lesion after crossing affects the ipsilateral eye; a midline decussation lesion can affect both. Trauma, congenital disorders, microvascular disease and other causes can produce trochlear palsy."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular nerves, actions and pupillary pathways, printed pp. 568-580 (PDF pp. 594-606).",
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, gaze and ocular motor palsies, printed pp. 585-592 (PDF pp. 611-618).",
+        "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression)."
+      ],
+      "anchorNote": "Authored schematic course for CN IV Trochlear nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. Authored schematic course. Pre-crossing nuclear/fascicular injury and post-crossing nerve injury have different laterality; a single tube cannot certify the intramedullary crossing geometry."
+    },
+    "nrv-cn5-trigeminal": {
+      "origin": "Trigeminal ganglion sensory neurons, mesencephalic proprioceptive neurons and pontine trigeminal motor nucleus",
+      "target": "Principal/spinal sensory nuclei and jaw-proprioceptive circuits; V3 motor muscles",
+      "decussation": "Primary nerve/root fibers do not cross. Many second-order trigeminothalamic projections cross in the brainstem; this is not a second crossing of primary fibers.",
+      "foramen": "V1: superior orbital fissure; V2: foramen rotundum; V3: foramen ovale",
+      "modality": "General somatic afferent and branchial motor (special visceral efferent).",
+      "function": "Carries general sensation from much of the face, cornea, oral/nasal cavities, teeth and cranial dura. V3 motor fibers supply mastication, mylohyoid, anterior digastric, tensor tympani and tensor veli palatini. CN V supplies the afferent limb of the corneal blink reflex; CN VII supplies its motor limb.",
+      "clinical": [
+        {
+          "syndrome": "Trigeminal sensory or motor dysfunction",
+          "findings": "Lesions can impair sensation in one or more divisions and reduce the V1 afferent corneal reflex. Pterygoid weakness can cause the jaw to deviate toward the weak side on opening. Division patterns narrow localization but do not uniquely identify one foramen."
+        },
+        {
+          "syndrome": "Trigeminal neuralgia",
+          "findings": "Brief recurrent shock-like facial pain may be triggered by innocuous stimuli. Neurovascular compression is one recognized mechanism; secondary causes include demyelination or mass lesions. Sensory deficits prompt investigation but no age or examination rule proves a particular cause."
+        },
+        {
+          "syndrome": "Brainstem sensory lesions",
+          "findings": "Spinal trigeminal injury can cause ipsilateral facial pain-temperature loss together with contralateral body pain-temperature loss when adjacent ascending body pathways are involved. Concentric facial loss is possible but not obligatory."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, trigeminal pathways and branches, printed pp. 508-512 (PDF pp. 534-538)."
+      ],
+      "anchorNote": "Authored schematic course for CN V Trigeminal nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. The drawn common-root/V3 course does not depict all V1/V2/V3 branches. No root crossing occurs; many second-order trigeminothalamic fibers cross within the brainstem. This is not a second crossing of primary nerve fibers."
+    },
+    "nrv-cn6-abducens": {
+      "origin": "Caudal pontine abducens motor neurons",
+      "target": "Ipsilateral lateral rectus",
+      "decussation": "The nerve motor fibers are uncrossed. Crossed internuclear axons ascend in contralateral MLF and are separate CNS fibers, not part of CN VI.",
+      "foramen": "superior orbital fissure",
+      "modality": "General somatic efferent.",
+      "function": "Supplies ipsilateral lateral rectus for eye abduction. Abducens internuclear neurons cross and ascend in the opposite MLF to the oculomotor nucleus; those axons are central gaze connections and are not carried in CN VI.",
+      "clinical": [
+        {
+          "syndrome": "Abducens nerve palsy",
+          "findings": "Impaired abduction produces horizontal diplopia, often greater toward the weak side. Nuclear injury instead usually impairs conjugate gaze toward that side because motor and internuclear neurons are affected."
+        },
+        {
+          "syndrome": "Raised intracranial pressure or local injury",
+          "findings": "The long intracranial course can be affected by raised pressure as a false-localizing sign, skull-base disease, cavernous sinus lesions, trauma or microvascular disease. Laterality and recovery are variable."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular nerves, actions and pupillary pathways, printed pp. 568-580 (PDF pp. 594-606).",
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, gaze and ocular motor palsies, printed pp. 585-592 (PDF pp. 611-618).",
+        "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression)."
+      ],
+      "anchorNote": "Authored schematic course for CN VI Abducens nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. Authored schematic course; the nerve and the nuclear internuclear pathway are distinct. Clival/skull-base/orbital relationships have no registered skull model."
+    },
+    "nrv-cn7-facial": {
+      "origin": "Facial motor/superior salivatory nuclei and geniculate sensory ganglion",
+      "target": "Facial-expression/second-arch muscles; pterygopalatine/submandibular ganglia; solitary/spinal trigeminal sensory nuclei",
+      "decussation": "Nerve motor fibers supply the same-side face. Bilateral-upper/contralateral-dominant-lower cortical drive is central input, not a peripheral root crossing.",
+      "foramen": "internal acoustic meatus into facial canal; stylomastoid foramen motor exit",
+      "modality": "Branchial motor, preganglionic parasympathetic, taste (special visceral afferent), and a small general sensory component.",
+      "function": "Supplies facial-expression muscles, stapedius, posterior digastric and stylohyoid; conveys anterior-two-thirds tongue taste; provides parasympathetic supply to lacrimal/nasal/palatal glands through pterygopalatine ganglion and submandibular/sublingual glands through submandibular ganglion. Passing through the parotid does not give it parotid secretomotor function.",
+      "clinical": [
+        {
+          "syndrome": "Lower motor neuron facial weakness",
+          "findings": "Nuclear, fascicular or peripheral motor injury can weaken the entire ipsilateral face, including forehead and eye closure. More proximal lesions may add hyperacusis, taste or secretomotor changes; these are not universal."
+        },
+        {
+          "syndrome": "Supranuclear versus nuclear/peripheral pattern",
+          "findings": "Unilateral supranuclear lesions often predominantly affect the contralateral lower face because upper facial input is more bilateral. Forehead sparing is a useful relative pattern, not an absolute rule. A pontine lesion can produce a peripheral-pattern palsy with other brainstem signs."
+        },
+        {
+          "syndrome": "Facial palsy differential",
+          "findings": "Bell palsy, infection, inflammatory disease, tumor and traumatic injury are among possible peripheral causes. A facial-weakness pattern alone does not establish Bell palsy."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, facial nerve and taste, printed pp. 513-518 (PDF pp. 539-544)."
+      ],
+      "anchorNote": "Authored schematic course for CN VII Facial nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. Authored schematic common course; branch-level facial canal and gland pathways are text only. Lesion position determines whether taste, tear/salivary or stapedius deficits accompany facial weakness."
+    },
+    "nrv-cn8-vestibulocochlear": {
+      "origin": "Spiral and vestibular (Scarpa) ganglion primary sensory neurons",
+      "target": "Cochlear nuclei, vestibular nuclei and direct cerebellar vestibular targets",
+      "decussation": "Peripheral sensory roots remain ipsilateral. Crossings/bilateral representation arise in downstream central auditory/vestibular networks; small brainstem efferents also reach inner ear.",
+      "foramen": "internal acoustic meatus",
+      "modality": "Special somatic afferent; small peripheral auditory/vestibular efferent components also exist.",
+      "function": "Cochlear fibers transmit sound information to cochlear nuclei. Vestibular fibers carry head-motion/position signals to vestibular nuclei and directly to cerebellar circuitry, supporting balance and vestibulo-ocular reflexes. The downstream ocular motor or spinal output of those reflexes is carried by other pathways.",
+      "clinical": [
+        {
+          "syndrome": "Auditory or vestibular dysfunction",
+          "findings": "Peripheral cochlear/nerve injury can cause ipsilateral sensorineural hearing loss, tinnitus or imbalance; vestibular injury can cause vertigo and nystagmus. Central and peripheral patterns overlap and the symptoms do not establish one site on their own."
+        },
+        {
+          "syndrome": "Cerebellopontine angle disease",
+          "findings": "Vestibular schwannoma and other masses may affect hearing/balance and, with extension, adjacent nerves or brainstem. Hearing loss need not be the first or only finding."
+        },
+        {
+          "syndrome": "Vascular and inflammatory differential",
+          "findings": "AICA/labyrinthine ischemia can mimic peripheral vestibular illness, sometimes with hearing loss. Acute vestibular examination requires the appropriate clinical setting and expertise; an atlas pattern is insufficient to exclude stroke."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, auditory and vestibular pathways, printed pp. 518-529 (PDF pp. 544-555).",
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, vertebrobasilar anatomy and lateral pontine syndrome, printed pp. 651-656 (PDF pp. 677-682)."
+      ],
+      "anchorNote": "Authored schematic course for CN VIII Vestibulocochlear nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. Authored schematic course represents the common intracranial path, not each inner-ear branch or a validated labyrinth. Sensory nerve central projections and reflex efferents are distinguished."
+    },
+    "nrv-cn9-glossopharyngeal": {
+      "origin": "Superior/inferior IX sensory ganglia; ambiguus branchiomotor and inferior salivatory parasympathetic neurons",
+      "target": "Stylopharyngeus, otic ganglion/parotid; solitary and spinal trigeminal sensory nuclei",
+      "decussation": "No obligatory crossing of the peripheral nerve; bilateral reflex and supranuclear control occurs centrally.",
+      "foramen": "jugular foramen",
+      "modality": "Branchial motor, preganglionic parasympathetic, taste, visceral afferent and general sensory.",
+      "function": "Supplies stylopharyngeus; conveys posterior-third tongue taste and pharyngeal general sensation; carries carotid sinus/body sensory input. Inferior salivatory axons reach the otic ganglion via tympanic and lesser petrosal routes, then the parotid through auriculotemporal nerve. CN IX commonly supplies a gag-reflex afferent limb, with vagal motor output.",
+      "clinical": [
+        {
+          "syndrome": "Glossopharyngeal dysfunction",
+          "findings": "Posterior tongue/pharyngeal sensory or taste loss and impaired gag afference may occur. Gag responses vary normally and their absence alone does not establish a IX lesion. Combined IX/X lesions can impair swallowing."
+        },
+        {
+          "syndrome": "Glossopharyngeal neuralgia",
+          "findings": "Brief severe pain in throat, posterior tongue or ear may be triggered by swallowing or talking. Occasionally vagal cardioinhibitory reflexes accompany attacks; this is not the expected consequence of simply losing IX sensory input."
+        },
+        {
+          "syndrome": "Jugular foramen lesions",
+          "findings": "Mass, inflammation or vascular injury near the jugular foramen may combine IX/X/XI deficits. The pattern suggests a region but does not establish one cause."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, CN IX-XII, printed pp. 530-535 (PDF pp. 556-561)."
+      ],
+      "anchorNote": "Authored schematic course for CN IX Glossopharyngeal nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. Authored schematic root/jugular course. The principal parasympathetic source is inferior salivatory nucleus; DMV is a vagal nucleus and is not substituted as IX secretomotor origin."
+    },
+    "nrv-cn10-vagus": {
+      "origin": "Superior/inferior vagal sensory ganglia; ambiguus branchiomotor/cardiac neurons and DMV visceral parasympathetic neurons",
+      "target": "Palatal/pharyngeal/laryngeal muscles, thoracoabdominal ganglia and solitary/spinal trigeminal sensory nuclei",
+      "decussation": "Peripheral root axons are not an obligatory crossed pathway; central reflex and motor control is bilateral/distributed.",
+      "foramen": "jugular foramen",
+      "modality": "Branchial motor, preganglionic parasympathetic, visceral afferent, taste and small general sensory components.",
+      "function": "Motor supply to palate except tensor veli palatini, pharynx except stylopharyngeus, and larynx; external superior laryngeal supplies cricothyroid while recurrent laryngeal supplies other intrinsic laryngeal muscles. Visceral afferents reach solitary nucleus and parasympathetic axons regulate thoracoabdominal organs. Cardiac vagal neurons include an important ambiguus source; DMV contributes particularly to abdominal visceral control. The auricular sensory branch is Arnold nerve.",
+      "clinical": [
+        {
+          "syndrome": "Vagal motor dysfunction",
+          "findings": "Unilateral palatal and vocal-fold weakness can cause hoarseness, dysphagia and aspiration; the palate may sag ipsilaterally and uvula deviate away from the weak side. Severity and gag responses vary."
+        },
+        {
+          "syndrome": "Recurrent versus superior laryngeal injury",
+          "findings": "Recurrent laryngeal injury can impair vocal-fold movement. External superior laryngeal/cricothyroid injury particularly impairs pitch modulation. Surgery or lesions along neck/chest courses can affect these branches."
+        },
+        {
+          "syndrome": "Autonomic/reflex dysfunction",
+          "findings": "Vagal network injury can disturb cardiovascular and gastrointestinal regulation. Bradycardia from increased vagal activity is not equivalent to loss of parasympathetic neurons, which should not be presented as causing inevitable bradycardia/asystole."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, CN IX-XII, printed pp. 530-535 (PDF pp. 556-561)."
+      ],
+      "anchorNote": "Authored schematic course for CN X Vagus nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. Authored schematic common nerve; recurrent laryngeal and abdominal branches are not individually reconstructed. The classic cranial-XI root is functionally vagal, separate from spinal XI shoulder fibers."
+    },
+    "nrv-cn11-accessory": {
+      "origin": "Spinal accessory motor neurons approximately C1-C5/6; historical cranial XI is functionally vagal",
+      "target": "Ipsilateral sternocleidomastoid and trapezius",
+      "decussation": "Spinal accessory peripheral motor fibers supply the ipsilateral muscles; cortical control is separate and is not a root decussation.",
+      "foramen": "foramen magnum entry; jugular foramen exit",
+      "modality": "Motor to sternocleidomastoid and trapezius (spinal accessory component).",
+      "function": "Supports head turning through sternocleidomastoid and shoulder elevation/scapular movement through trapezius. The spinal nerve is distinct from vagal branchiomotor supply to palate/pharynx/larynx.",
+      "clinical": [
+        {
+          "syndrome": "Spinal accessory neuropathy",
+          "findings": "Trapezius weakness can cause shoulder droop, impaired shrug and scapular dysfunction; sternocleidomastoid weakness impairs turning the head away from the weak muscle side. Deficits depend on lesion position. Posterior-triangle surgery/trauma is a recognized cause."
+        },
+        {
+          "syndrome": "Jugular foramen versus cervical injury",
+          "findings": "Combined IX/X/XI deficits suggest a skull-base region; isolated trapezius weakness can occur farther along the spinal accessory course. No single vascular cause is implied by the pattern."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, CN IX-XII, printed pp. 530-535 (PDF pp. 556-561)."
+      ],
+      "anchorNote": "Authored schematic course for CN XI Accessory nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. Authored schematic course; a medullary surface waypoint does not represent the true spinal motor origin. Upper cervical rootlets and foramen-magnum entry require separate geometry to be anatomically faithful."
+    },
+    "nrv-cn12-hypoglossal": {
+      "origin": "Hypoglossal motor nucleus, medulla",
+      "target": "Ipsilateral intrinsic/extrinsic tongue muscles except palatoglossus; accompanying C1 fibers have separate spinal targets",
+      "decussation": "Motor root fibers supply the ipsilateral tongue. Contralateral-dominant supranuclear genioglossus control is a central pathway, not crossing within the nerve.",
+      "foramen": "hypoglossal canal",
+      "modality": "General somatic efferent.",
+      "function": "Supplies intrinsic and extrinsic tongue muscles except palatoglossus (vagus). C1 fibers traveling with XII reach geniohyoid and thyrohyoid and contribute to ansa cervicalis; these are spinal fibers, not axons arising from the hypoglossal nucleus.",
+      "clinical": [
+        {
+          "syndrome": "Lower motor neuron tongue weakness",
+          "findings": "Nuclear, fascicular or nerve injury can weaken the ipsilateral tongue, which tends to deviate toward the weak side on protrusion. Atrophy and fasciculations may develop with lower motor neuron disease or chronic denervation."
+        },
+        {
+          "syndrome": "Supranuclear and combined lesions",
+          "findings": "A unilateral supranuclear lesion often weakens the contralateral tongue, with protrusion toward the weak side. Medial medullary lesions can combine ipsilateral XII weakness and contralateral limb weakness/sensory deficits. Neck/skull-base causes require localization along the nerve rather than one assumed artery."
+        }
+      ],
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, CN IX-XII, printed pp. 530-535 (PDF pp. 556-561)."
+      ],
+      "anchorNote": "Authored schematic course for CN XII Hypoglossal nerve; no specimen segmentation or skull-base registration. The selected root landmark and assigned tube thickness/waypoints are display choices, not measured nerve calibre or anatomical coordinate validation. Authored schematic course from medullary exit to canal/tongue; no specimen-segmented canal or tongue reconstruction. Tongue deviation laterality depends on lower versus upper motor neuron injury."
+    }
+  }
+}

@@ -105,6 +105,7 @@ export default function RightsModal({ open, required, onAcknowledge, onClose }: 
             Please recognize the creators and source terms for material in NeuroAxis before using the atlas.
             This is an educational reference, not a clinical diagnostic tool.
           </p>
+          <p className="knowledge-caveat">Anatomical shapes, locations and connections are simplified teaching representations. Coordinates are not patient or registered atlas coordinates. Clinical patterns are illustrative and may vary.</p>
 
           <section>
             <h3>Project and contact</h3>
@@ -114,12 +115,10 @@ export default function RightsModal({ open, required, onAcknowledge, onClose }: 
 
           <section>
             <h3>Third-party credits</h3>
-            <p>The public live section offers MRI and simulated anatomy only. The credits below also document imaging material retained in the repository.</p>
+            <p>The public live section offers MRI and simulated anatomy only. CT, section photographs and MSU brain images are excluded from this build. Historical sources remain documented in the repository's attribution record.</p>
             <ul className="rights-list">
               <li><strong>3D surface anatomy:</strong> BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International. The surfaces were adapted for this atlas. <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html" target="_blank" rel="noreferrer">Source and license</a>.</li>
-              <li><strong>Section photographs:</strong> © University of British Columbia, CC BY-NC-SA 4.0. Copies were resized or re-encoded; reuse requires attribution, noncommercial use, and ShareAlike for adaptations. <a href="https://www.neuroanatomy.ca/" target="_blank" rel="noreferrer">Source</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">License</a>.</li>
-              <li><strong>Visible Human CT and cryosections:</strong> Courtesy of the U.S. National Library of Medicine. These are frozen September 2026 teaching snapshots and may not reflect the most current or accurate data available from NLM. NLM does not endorse NeuroAxis. <a href="https://www.nlm.nih.gov/databases/download/terms_and_conditions.html" target="_blank" rel="noreferrer">NLM terms</a>.</li>
-              <li><strong>MRI and CT imagery:</strong> OpenNeuro ds007313 MRI-derived grid and Mikael Häggström, M.D.'s CT images via Wikimedia Commons, both from CC0 sources. <a href="https://openneuro.org/datasets/ds007313/versions/1.0.0" target="_blank" rel="noreferrer">OpenNeuro</a> · <a href="https://commons.wikimedia.org/wiki/Category:Computed_tomography_of_normal_brain_in_axial_plane_(case_1)" target="_blank" rel="noreferrer">Wikimedia Commons</a>.</li>
+              <li><strong>MRI:</strong> OpenNeuro ds007313 MRI-derived grid, from a CC0 source. Resampling and display alignment are adaptations for this teaching atlas. <a href="https://openneuro.org/datasets/ds007313/versions/1.0.0" target="_blank" rel="noreferrer">Dataset</a>.</li>
             </ul>
           </section>
 

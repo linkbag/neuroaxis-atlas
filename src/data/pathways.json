@@ -1,0 +1,771 @@
+[
+  {
+    "id": "path-visual",
+    "name": "Retina to visual cortex",
+    "steps": [
+      {
+        "label": "Retinal ganglion cells",
+        "note": "Axons carry retinal output; retinal surface is not separately modeled."
+      },
+      {
+        "structureId": "nrv-cn2-optic",
+        "label": "Optic nerve"
+      },
+      {
+        "structureId": "ctx-optic-chiasm",
+        "label": "Optic chiasm",
+        "note": "Nasal retinal fibres cross; temporal retinal fibres remain ipsilateral."
+      },
+      {
+        "structureId": "tract-optic-tract",
+        "label": "Optic tract",
+        "note": "Each tract represents the contralateral visual hemifield from both eyes."
+      },
+      {
+        "structureId": "nuc-lgn",
+        "label": "LGN relay"
+      },
+      {
+        "structureId": "tract-optic-radiation",
+        "label": "Optic radiation",
+        "note": "Temporal Meyer's loop carries superior-field information; parietal route carries inferior-field information."
+      },
+      {
+        "structureId": "ctx-v1",
+        "label": "V1"
+      },
+      {
+        "structureId": "ctx-v2",
+        "label": "Extrastriate processing",
+        "note": "V2 is one of several extrastriate areas; streams are interconnected rather than two isolated pipelines."
+      }
+    ],
+    "clinical": "Unilateral postchiasmal injury may cause contralateral homonymous field loss; pattern depends on lesion extent. Macular sparing can occur in occipital infarction but is not obligatory.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 463-476 (PDF pp. 489-502), Figures 11.6-11.8 and 11.15"
+    ],
+    "category": "Sensory",
+    "summary": "Retina to visual cortex — major connections in a simplified teaching route.",
+    "organization": "Connections may be parallel, reciprocal or recurrent. The numbered sequence is a teaching aid, not an obligatory chain or a traced 3D streamline."
+  },
+  {
+    "id": "path-auditory",
+    "name": "Ascending auditory network",
+    "steps": [
+      {
+        "structureId": "nrv-cn8-vestibulocochlear",
+        "label": "Cochlear division of CN VIII"
+      },
+      {
+        "structureId": "nuc-cochlear-ventral",
+        "label": "Cochlear nuclei",
+        "note": "Dorsal cochlear nucleus also contributes; the diagram is a branched network, not one obligatory serial route."
+      },
+      {
+        "structureId": "nuc-superior-olivary",
+        "label": "Superior olivary complex",
+        "note": "Receives bilateral input via crossing and uncrossed projections; some cochlear projections bypass it."
+      },
+      {
+        "structureId": "tract-lateral-lemniscus",
+        "label": "Lateral lemniscus",
+        "note": "Auditory information ascends bilaterally with contralateral predominance."
+      },
+      {
+        "structureId": "nuc-inferior-colliculus",
+        "label": "Inferior colliculus"
+      },
+      {
+        "structureId": "nuc-mgn",
+        "label": "MGN relay"
+      },
+      {
+        "label": "Auditory radiation",
+        "note": "Separate tract mesh unavailable; passes through sublenticular internal capsule."
+      },
+      {
+        "structureId": "ctx-a1",
+        "label": "Primary auditory cortex"
+      },
+      {
+        "structureId": "ctx-a2",
+        "label": "Auditory association cortex"
+      }
+    ],
+    "clinical": "A unilateral lesion above the cochlear nuclei usually does not cause complete unilateral deafness. Bilateral central injury can impair hearing or auditory recognition.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 519-522 (PDF pp. 545-548), Figures 12.16-12.17"
+    ],
+    "category": "Sensory",
+    "summary": "Ascending auditory network — major connections in a simplified teaching route.",
+    "organization": "Connections may be parallel, reciprocal or recurrent. The numbered sequence is a teaching aid, not an obligatory chain or a traced 3D streamline."
+  },
+  {
+    "id": "path-hippocampal-intrinsic",
+    "name": "Hippocampal intrinsic memory circuit",
+    "steps": [
+      {
+        "structureId": "ctx-entorhinal",
+        "label": "Entorhinal cortex"
+      },
+      {
+        "label": "Perforant pathway",
+        "note": "Input to dentate/CA3 arises predominantly from superficial layer II; a mainly layer III input to CA1 forms a parallel route. Other layer contributions occur. The cited laminar tracing evidence is from macaque, not a measured human atlas connection."
+      },
+      {
+        "structureId": "nuc-dentate-gyrus",
+        "label": "Dentate granule cells"
+      },
+      {
+        "label": "Mossy fibres",
+        "note": "Axons of dentate granule cells."
+      },
+      {
+        "structureId": "nuc-ca2-ca3",
+        "label": "CA3",
+        "note": "Grouped CA2/CA3 atlas record is a display convenience; CA2 is not a compulsory relay of the trisynaptic route."
+      },
+      {
+        "label": "Schaffer collaterals"
+      },
+      {
+        "structureId": "nuc-ca1",
+        "label": "CA1"
+      },
+      {
+        "structureId": "nuc-subiculum",
+        "label": "Subiculum"
+      },
+      {
+        "structureId": "ctx-entorhinal",
+        "label": "Entorhinal/deep cortical return"
+      }
+    ],
+    "clinical": "Medial temporal damage may impair formation of new declarative memories; outcome depends on bilateral extent and wider memory networks.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 834-837 (PDF pp. 860-863), Figures 18.8, 18.11 and 18.13",
+      "Witter MP, Amaral DG (1991). Entorhinal cortex of the monkey: V. Projections to dentate gyrus, hippocampus, and subicular complex. J Comp Neurol 307:437-459. https://pubmed.ncbi.nlm.nih.gov/1713237/ (primary macaque tracing; layer contributions are preferential, not exclusive)"
+    ],
+    "category": "Memory and limbic",
+    "summary": "Hippocampal intrinsic memory circuit — major connections in a simplified teaching route.",
+    "organization": "Connections may be parallel, reciprocal or recurrent. The numbered sequence is a teaching aid, not an obligatory chain or a traced 3D streamline."
+  },
+  {
+    "id": "path-papez",
+    "name": "Papez memory circuit (simplified)",
+    "steps": [
+      {
+        "structureId": "nuc-subiculum",
+        "label": "Hippocampal formation/subiculum"
+      },
+      {
+        "structureId": "tract-fimbria",
+        "label": "Alveus and fimbria"
+      },
+      {
+        "structureId": "tract-fornix",
+        "label": "Postcommissural fornix"
+      },
+      {
+        "structureId": "nuc-mammillary-body",
+        "label": "Mammillary body"
+      },
+      {
+        "label": "Mammillothalamic tract",
+        "note": "Not separately modeled."
+      },
+      {
+        "structureId": "nuc-thalamic-anterior",
+        "label": "Anterior thalamic nuclei"
+      },
+      {
+        "structureId": "surf-cingulate-gyrus",
+        "label": "Cingulate cortex"
+      },
+      {
+        "structureId": "tract-cingulum",
+        "label": "Cingulum"
+      },
+      {
+        "structureId": "surf-parahippocampal-gyrus",
+        "label": "Parahippocampal region"
+      },
+      {
+        "structureId": "ctx-entorhinal",
+        "label": "Entorhinal return to hippocampus"
+      }
+    ],
+    "clinical": "Fornical, mammillary or anterior thalamic injury can disrupt memory. This heuristic omits direct fornix-to-anterior-thalamus and many other reciprocal pathways; it is not an isolated emotion circuit.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 834-837 (PDF pp. 860-863), Figures 18.8, 18.11 and 18.13"
+    ],
+    "category": "Memory and limbic",
+    "summary": "Papez memory circuit (simplified) — major connections in a simplified teaching route.",
+    "organization": "Connections may be parallel, reciprocal or recurrent. The numbered sequence is a teaching aid, not an obligatory chain or a traced 3D streamline."
+  },
+  {
+    "id": "path-basal-direct",
+    "name": "Basal ganglia direct pathway (teaching model)",
+    "steps": [
+      {
+        "structureId": "ctx-m1",
+        "label": "Motor/premotor cortex",
+        "note": "Glutamatergic excitation of striatum."
+      },
+      {
+        "structureId": "nuc-putamen",
+        "label": "Striatal direct-pathway neurons",
+        "note": "GABAergic inhibition of GPi/SNr; dopamine generally facilitates D1-expressing neurons in this model."
+      },
+      {
+        "structureId": "nuc-globus-pallidus-internus",
+        "label": "GPi/SNr output",
+        "note": "Reduced tonic inhibition can disinhibit motor thalamus; SNr is a parallel output nucleus."
+      },
+      {
+        "structureId": "nuc-va",
+        "label": "VA/VL motor thalamus"
+      },
+      {
+        "structureId": "ctx-sma",
+        "label": "Motor/premotor cortical return"
+      }
+    ],
+    "clinical": "The rate model helps explain movement selection but does not account for all firing patterns, tremor, dystonia or DBS effects.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 748-752 (PDF pp. 774-778), Figures 16.5-16.8; textbook explicitly describes direct/indirect model as incomplete"
+    ],
+    "category": "Motor",
+    "summary": "Basal ganglia direct pathway (teaching model) — major connections in a simplified teaching route.",
+    "organization": "Connections may be parallel, reciprocal or recurrent. The numbered sequence is a teaching aid, not an obligatory chain or a traced 3D streamline."
+  },
+  {
+    "id": "path-basal-indirect",
+    "name": "Basal ganglia indirect pathway (teaching model)",
+    "steps": [
+      {
+        "structureId": "ctx-m1",
+        "label": "Motor/premotor cortex",
+        "note": "Excites striatal neurons."
+      },
+      {
+        "structureId": "nuc-putamen",
+        "label": "Striatal indirect-pathway neurons",
+        "note": "GABAergic inhibition of GPe; dopamine generally reduces D2-pathway activity in this model."
+      },
+      {
+        "structureId": "nuc-globus-pallidus-externus",
+        "label": "GPe",
+        "note": "Reduced GPe inhibition disinhibits STN."
+      },
+      {
+        "structureId": "nuc-subthalamic",
+        "label": "STN",
+        "note": "Excites GPi/SNr."
+      },
+      {
+        "structureId": "nuc-globus-pallidus-internus",
+        "label": "GPi/SNr",
+        "note": "Inhibits motor thalamus."
+      },
+      {
+        "structureId": "nuc-va",
+        "label": "VA/VL thalamus"
+      },
+      {
+        "structureId": "ctx-sma",
+        "label": "Cortical return"
+      }
+    ],
+    "clinical": "Classical net effect suppresses competing actions; hyperdirect cortex-to-STN input and recurrent GPe-STN circuitry also contribute and are omitted here.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 748-752 (PDF pp. 774-778), Figures 16.5-16.8; textbook explicitly describes direct/indirect model as incomplete"
+    ],
+    "category": "Motor",
+    "summary": "Basal ganglia indirect pathway (teaching model) — major connections in a simplified teaching route.",
+    "organization": "Connections may be parallel, reciprocal or recurrent. The numbered sequence is a teaching aid, not an obligatory chain or a traced 3D streamline."
+  },
+  {
+    "id": "path-language-network",
+    "name": "Dominant perisylvian language network",
+    "steps": [
+      {
+        "structureId": "ctx-a1",
+        "label": "Auditory cortical input"
+      },
+      {
+        "structureId": "ctx-wernicke",
+        "label": "Posterior temporal language network"
+      },
+      {
+        "label": "Dorsal and ventral language connections",
+        "note": "Arcuate/SLF-related dorsal routes support auditory-motor integration and repetition; additional temporal-frontal routes support comprehension. Arcuate fasciculus is not identical to the entire SLF.",
+        "structureId": "tract-arcuate-fasciculus"
+      },
+      {
+        "structureId": "ctx-broca",
+        "label": "Inferior frontal language network"
+      },
+      {
+        "structureId": "ctx-premotor",
+        "label": "Speech planning network"
+      },
+      {
+        "structureId": "ctx-m1-face",
+        "label": "Orofacial motor output"
+      },
+      {
+        "structureId": "tract-corticobulbar",
+        "label": "Corticobulbar output"
+      }
+    ],
+    "clinical": "Left hemisphere is language dominant in most people, not all. Aphasia patterns depend on distributed cortical/subcortical damage, and the route is reciprocal rather than a single serial chain.",
+    "refs": [
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2; language processing involves distributed reciprocal networks"
+    ],
+    "category": "Association",
+    "summary": "Dominant perisylvian language network — major connections in a simplified teaching route.",
+    "organization": "Connections may be parallel, reciprocal or recurrent. The numbered sequence is a teaching aid, not an obligatory chain or a traced 3D streamline."
+  },
+  {
+    "id": "path-cst",
+    "name": "Voluntary limb motor output",
+    "category": "Motor",
+    "summary": "Cortex to spinal motor circuits for skilled limb movement.",
+    "organization": "Axons descend before synapsing in spinal circuits; most cross in the caudal medulla. The spinal and peripheral portions are not fully modeled.",
+    "steps": [
+      {
+        "label": "Primary/premotor and supplementary motor cortex",
+        "structureId": "ctx-m1"
+      },
+      {
+        "label": "Corona radiata"
+      },
+      {
+        "label": "Posterior limb of internal capsule",
+        "structureId": "tract-internal-capsule-posterior-limb"
+      },
+      {
+        "label": "Basis pedunculi and ventral pontine fascicles"
+      },
+      {
+        "label": "Medullary pyramid",
+        "structureId": "tract-pyramid"
+      },
+      {
+        "label": "Pyramidal decussation",
+        "note": "Most corticospinal axons cross here; crossing proportions vary."
+      },
+      {
+        "label": "Lateral corticospinal tract",
+        "structureId": "tract-corticospinal-lateral"
+      },
+      {
+        "label": "Spinal interneurons and anterior horn motor neurons"
+      },
+      {
+        "label": "Peripheral motor axons and limb muscles"
+      }
+    ],
+    "clinical": "A lesion above pyramidal crossing usually causes contralateral limb weakness; a spinal lesion affects the ipsilateral side below its level. Acute lesions may initially lack spasticity.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6, pp. 231-242, Figures 6.8-6.11"
+    ]
+  },
+  {
+    "id": "path-corticobulbar",
+    "name": "Voluntary orofacial motor output",
+    "category": "Motor",
+    "summary": "Cortical motor networks to cranial motor nuclei and orofacial muscles.",
+    "organization": "Predominantly bilateral projections, with important contralateral lower-face/genioglossus components. Gaze commands use additional supranuclear networks.",
+    "steps": [
+      {
+        "label": "Inferolateral motor cortex",
+        "structureId": "ctx-m1-face"
+      },
+      {
+        "label": "Genu/adjacent internal capsule"
+      },
+      {
+        "label": "Corticobulbar projections",
+        "structureId": "tract-corticobulbar"
+      },
+      {
+        "label": "Trigeminal/facial/ambiguus/hypoglossal motor nuclei"
+      },
+      {
+        "label": "Cranial motor nerves and target muscles"
+      }
+    ],
+    "clinical": "Unilateral supranuclear injury often weakens the opposite lower face; bilateral injury may cause pseudobulbar dysarthria/dysphagia. No single crossing describes all cranial targets.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, pp. 512-514, 535-538, Figure 12.7 and clinical concepts"
+    ]
+  },
+  {
+    "id": "path-dcml",
+    "name": "Body discriminative touch and proprioception",
+    "category": "Sensory",
+    "summary": "Body vibration, position sense and fine touch to somatosensory cortex.",
+    "organization": "First-order fibres ascend on the same side; second-order fibres cross in the caudal medulla. Face information follows a different trigeminal route.",
+    "steps": [
+      {
+        "label": "Mechanoreceptors/proprioceptors and dorsal root ganglia"
+      },
+      {
+        "label": "Ipsilateral gracile/cuneate fasciculi"
+      },
+      {
+        "label": "Gracile/cuneate nuclear relay"
+      },
+      {
+        "label": "Internal arcuate sensory decussation",
+        "note": "Crossing in caudal medulla, distinct from pyramidal motor crossing."
+      },
+      {
+        "label": "Medial lemniscus",
+        "structureId": "tract-dcml"
+      },
+      {
+        "label": "VPL relay",
+        "structureId": "nuc-vpl"
+      },
+      {
+        "label": "Somatosensory radiation"
+      },
+      {
+        "label": "Primary somatosensory cortex",
+        "structureId": "ctx-s1"
+      }
+    ],
+    "clinical": "Spinal posterior-column injury causes ipsilateral sensory loss below the lesion; medial-lemniscal injury causes contralateral body loss.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, pp. 277-280, Figures 7.1 and 7.3"
+    ]
+  },
+  {
+    "id": "path-anterolateral",
+    "name": "Body pain and temperature",
+    "category": "Sensory",
+    "summary": "Ascending nociceptive/thermal information with sensory, affective and arousal branches.",
+    "organization": "Crossing usually occurs within one or a few spinal segments; multiple thalamic/brainstem routes process pain in parallel.",
+    "steps": [
+      {
+        "label": "Nociceptors/thermal receptors and dorsal root ganglia"
+      },
+      {
+        "label": "Dorsal horn relay",
+        "note": "Afferents may ascend/descend briefly in Lissauer tract."
+      },
+      {
+        "label": "Spinal anterior white commissure",
+        "note": "Most second-order fibres cross."
+      },
+      {
+        "label": "Anterolateral/spinothalamic pathway",
+        "structureId": "tract-spinothalamic"
+      },
+      {
+        "label": "VPL and additional medial/intralaminar thalamic relays",
+        "structureId": "nuc-vpl"
+      },
+      {
+        "label": "Somatosensory, insular and cingulate cortical networks"
+      }
+    ],
+    "clinical": "Hemicord injury may cause contralateral pain/temperature loss starting below the lesion; central cord injury can affect crossing fibres bilaterally.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, pp. 278-282, Figures 7.2 and 7.4"
+    ]
+  },
+  {
+    "id": "path-trigeminal",
+    "name": "Facial and oral somatosensation",
+    "category": "Sensory",
+    "summary": "Touch and pain/temperature from trigeminal territories to thalamocortical circuits.",
+    "organization": "Touch relays mainly in principal nucleus; pain/temperature relays in spinal trigeminal nucleus. Most ascending fibres cross, with a smaller uncrossed oral tactile route.",
+    "steps": [
+      {
+        "label": "Facial/oral receptors and trigeminal ganglion"
+      },
+      {
+        "label": "CN V afferents",
+        "structureId": "nrv-cn5-trigeminal"
+      },
+      {
+        "label": "Principal sensory or spinal trigeminal nuclear relay"
+      },
+      {
+        "label": "Crossed ventral trigeminothalamic route",
+        "structureId": "tract-trigeminothalamic-ventral"
+      },
+      {
+        "label": "Parallel uncrossed oral tactile route",
+        "structureId": "tract-trigeminothalamic-dorsal"
+      },
+      {
+        "label": "VPM relay",
+        "structureId": "nuc-vpm"
+      },
+      {
+        "label": "Face somatosensory cortex",
+        "structureId": "ctx-s1-face"
+      }
+    ],
+    "clinical": "Lateral brainstem injury often combines ipsilateral face pain/temperature loss (pre-crossing spinal trigeminal damage) with contralateral body loss. Crossed ascending pathway injury can instead affect the opposite face.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, pp. 509-512, Figure 12.8"
+    ]
+  },
+  {
+    "id": "path-vestibuloocular",
+    "name": "Horizontal vestibulo-ocular reflex",
+    "category": "Sensory",
+    "summary": "Stabilizes gaze during head rotation through vestibular and ocular motor circuits.",
+    "organization": "Example: leftward head rotation activates left horizontal canal circuitry, exciting right abducens/lateral rectus and left medial rectus while inhibiting antagonists. This is one of several VOR circuits.",
+    "steps": [
+      {
+        "label": "Horizontal semicircular canal/vestibular ganglion"
+      },
+      {
+        "label": "Vestibular division of CN VIII",
+        "structureId": "nrv-cn8-vestibulocochlear"
+      },
+      {
+        "label": "Vestibular nuclear relay",
+        "structureId": "nuc-vestibular-medial"
+      },
+      {
+        "label": "Abducens nucleus and lateral rectus"
+      },
+      {
+        "label": "Crossed abducens interneurons in MLF",
+        "structureId": "tract-mlf"
+      },
+      {
+        "label": "Contralateral medial rectus neurons of CN III"
+      },
+      {
+        "label": "Cerebellar calibration",
+        "note": "Floccular circuits modify VOR gain; not an obligatory serial output relay."
+      }
+    ],
+    "clinical": "Peripheral and central vestibular lesions can disturb gaze stability. MLF lesions may cause ipsilateral adduction impairment in INO.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, pp. 523-525, Figure 12.19",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, pp. 584-587, Figure 13.13"
+    ]
+  },
+  {
+    "id": "path-pontocerebellar",
+    "name": "Corticopontocerebellar input",
+    "category": "Cerebellar",
+    "summary": "Cortical information reaches the opposite cerebellar hemisphere through pontine relays.",
+    "organization": "Corticopontine fibres terminate in ipsilateral pons; a different neuron population crosses as pontocerebellar fibres.",
+    "steps": [
+      {
+        "label": "Cerebral cortical networks"
+      },
+      {
+        "label": "Corticopontine tract",
+        "structureId": "tract-corticopontine"
+      },
+      {
+        "label": "Ipsilateral pontine nuclei",
+        "structureId": "ctx-pontine-nuclei"
+      },
+      {
+        "label": "Crossed pontocerebellar fibres"
+      },
+      {
+        "label": "Middle cerebellar peduncle",
+        "structureId": "tract-mcp"
+      },
+      {
+        "label": "Cerebellar granule-cell/mossy-fibre input",
+        "structureId": "ctx-cerebellum"
+      }
+    ],
+    "clinical": "Supratentorial and pontine lesions can produce network ataxia. The expected side differs before versus after the pontocerebellar crossing.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, pp. 704-710, Figures 15.9-15.10"
+    ]
+  },
+  {
+    "id": "path-spinocerebellar",
+    "name": "Spinocerebellar feedback",
+    "category": "Cerebellar",
+    "summary": "Parallel sensory and spinal-interneuronal feedback pathways for coordination.",
+    "organization": "Dorsal/cuneocerebellar routes mainly remain ipsilateral; the ventral route predominantly crosses in cord and recrosses in cerebellum. These are branches, not consecutive relays.",
+    "steps": [
+      {
+        "label": "Proprioceptors/spinal interneuronal circuits"
+      },
+      {
+        "label": "Dorsal spinocerebellar branch via Clarke column",
+        "structureId": "tract-posterior-spinocerebellar"
+      },
+      {
+        "label": "Inferior cerebellar peduncle",
+        "structureId": "tract-icp"
+      },
+      {
+        "label": "Ventral spinocerebellar branch",
+        "structureId": "tract-anterior-spinocerebellar",
+        "note": "Crosses in cord; enters superior peduncle and predominantly recrosses on entering/within cerebellum, not at cerebellar output decussation."
+      },
+      {
+        "label": "Upper-limb cuneocerebellar and rostral spinocerebellar branches",
+        "note": "Separate route geometries not modeled."
+      },
+      {
+        "label": "Ipsilateral cerebellar representation",
+        "structureId": "ctx-cerebellum"
+      }
+    ],
+    "clinical": "Cerebellar and spinocerebellar injury generally produces ipsilateral limb incoordination. Associated conscious sensory loss requires other pathways.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, pp. 708-711, Table 15.3 and Figure 15.11"
+    ]
+  },
+  {
+    "id": "path-cerebellar-output",
+    "name": "Cerebellar motor feedback",
+    "category": "Cerebellar",
+    "summary": "Cerebellar cortex/deep nuclei influence cortical and brainstem motor systems.",
+    "organization": "Purkinje neurons inhibit deep nuclei; excitatory output from dentate/interposed chiefly crosses through superior peduncle. Fastigial/vestibular routes include bilateral outputs.",
+    "steps": [
+      {
+        "label": "Cerebellar cortex/Purkinje cells",
+        "structureId": "ctx-cerebellum"
+      },
+      {
+        "label": "Dentate/interposed nuclei",
+        "structureId": "nuc-dentate"
+      },
+      {
+        "label": "Superior cerebellar peduncle",
+        "structureId": "tract-scp"
+      },
+      {
+        "label": "Superior peduncle decussation",
+        "structureId": "tract-scp-decussation"
+      },
+      {
+        "label": "Contralateral motor thalamus/red-nuclear circuits",
+        "structureId": "nuc-vl"
+      },
+      {
+        "label": "Motor/premotor cortical return",
+        "structureId": "ctx-m1"
+      },
+      {
+        "label": "Descending motor pathways cross again",
+        "note": "Net cerebellar relationship to limb coordination is principally ipsilateral. Parallel fastigial-to-vestibular/reticular outputs are omitted."
+      }
+    ],
+    "clinical": "Lesions before SCP output crossing usually impair the ipsilateral limb; lesions of crossed outputs can cause ataxia contralateral to the brainstem lesion.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, pp. 704-708, Figures 15.9A-C"
+    ]
+  },
+  {
+    "id": "path-basal-hyperdirect",
+    "name": "Basal ganglia hyperdirect route",
+    "category": "Motor",
+    "summary": "Rapid cortex-to-STN input to basal ganglia output networks.",
+    "organization": "Simplified excitatory cortex→STN→GPi/SNr route, converging with direct/indirect circuits; firing dynamics exceed a simple rate model.",
+    "steps": [
+      {
+        "label": "Cortical motor/association networks",
+        "structureId": "ctx-m1"
+      },
+      {
+        "label": "Subthalamic nucleus",
+        "structureId": "nuc-subthalamic",
+        "note": "Excitatory cortical input."
+      },
+      {
+        "label": "GPi/SNr output",
+        "structureId": "nuc-globus-pallidus-internus",
+        "note": "Excitatory STN input; output nuclei inhibit thalamic/brainstem targets."
+      },
+      {
+        "label": "Motor thalamus",
+        "structureId": "nuc-va"
+      },
+      {
+        "label": "Cortical return",
+        "structureId": "ctx-sma"
+      }
+    ],
+    "clinical": "Provides a teaching model of action control; it is not a complete mechanism for tremor, dystonia or deep brain stimulation.",
+    "refs": [
+      "Nambu et al. (2000), Excitatory cortical inputs to pallidal neurons via the subthalamic nucleus in the monkey, J Neurophysiol 84:289-300, https://doi.org/10.1152/jn.2000.84.1.289 (primary primate physiology; not a full model of human behavior)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, pp. 748-752 (context and limitations of direct/indirect model)"
+    ]
+  },
+  {
+    "id": "path-oculosympathetic",
+    "name": "Descending oculosympathetic pathway",
+    "category": "Autonomic",
+    "summary": "Three-neuron sympathetic route to pupillary dilation and eyelid smooth muscle.",
+    "organization": "Central descent is mainly ipsilateral; spinal preganglionic axons relay in superior cervical ganglion before postganglionic fibres reach eye.",
+    "steps": [
+      {
+        "label": "Hypothalamic autonomic regions"
+      },
+      {
+        "label": "Lateral brainstem descent",
+        "structureId": "tract-hypothalamospinal"
+      },
+      {
+        "label": "Upper thoracic intermediolateral neurons (chiefly T1-T2)"
+      },
+      {
+        "label": "Sympathetic chain and superior cervical ganglion"
+      },
+      {
+        "label": "Internal carotid plexus/cavernous sinus/orbit"
+      },
+      {
+        "label": "Iris dilator and eyelid smooth muscle"
+      }
+    ],
+    "clinical": "Interruption at central, preganglionic or postganglionic levels may cause ipsilateral Horner syndrome. The symptom alone does not establish the level or cause.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, pp. 578-581, Figure 13.10"
+    ]
+  },
+  {
+    "id": "path-visceral-reflex",
+    "name": "Visceral sensory and vagal reflex network",
+    "category": "Autonomic",
+    "summary": "Visceral afferents connect medullary autonomic circuits with parasympathetic output.",
+    "organization": "Distributed parallel circuits include NTS, dorsal vagal/ambiguus outputs and respiratory/reticular/hypothalamic networks.",
+    "steps": [
+      {
+        "label": "Visceral/baroreceptor afferents in CN IX/X"
+      },
+      {
+        "label": "Solitary nucleus relay",
+        "note": "Medullary sensory integration; relay not necessarily the same group as taste neurons."
+      },
+      {
+        "label": "Dorsal vagal and cardiac ambiguus output circuits",
+        "structureId": "nuc-dmv"
+      },
+      {
+        "label": "Vagal parasympathetic axons",
+        "structureId": "nrv-cn10-vagus"
+      },
+      {
+        "label": "Peripheral ganglia and visceral targets"
+      }
+    ],
+    "clinical": "Medullary or vagal lesions may affect autonomic function; dysphagia/dysphonia mainly involve branchial motor pathways rather than dorsal vagal motor neurons alone.",
+    "refs": [
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, pp. 530-535, Figures 12.22-12.23"
+    ]
+  }
+]

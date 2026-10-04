@@ -1,7 +1,7 @@
 [
   {
     "id": "plate-thalamus-mid",
-    "title": "Diencephalon - mid-thalamus (mammillary bodies)",
+    "title": "Diencephalon - schematic mid-thalamic level",
     "orientation": "transverse",
     "region": "diencephalon",
     "levelId": "lvl-thalamus-mid",
@@ -631,7 +631,7 @@
   },
   {
     "id": "plate-pons-rostral",
-    "title": "Pons - upper (SCP, CN IV)",
+    "title": "Pons - upper (SCP)",
     "orientation": "transverse",
     "region": "pons",
     "levelId": "lvl-pons-rostral",
@@ -642,14 +642,6 @@
         "label": "Fourth ventricle",
         "labelPos": [
           628,
-          118
-        ]
-      },
-      {
-        "slug": "surf-cn4-exit",
-        "label": "CN IV rootlets",
-        "labelPos": [
-          172,
           118
         ]
       },
@@ -2814,7 +2806,7 @@
         ]
       }
     ]
-  },
+  },
   {
     "id": "plate-tel-coronal-fornix",
     "title": "Coronal - amygdala, hippocampus and basal ganglia (fornix level, z = +12)",

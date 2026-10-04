@@ -2,197 +2,241 @@
   {
     "id": "nuc-subiculum",
     "name": "Subiculum",
-    "synonyms": ["subiculum of the hippocampus", "subiculum hippocampi", "transitional cortex of the hippocampal formation"],
+    "synonyms": [
+      "subiculum of the hippocampus",
+      "subiculum hippocampi",
+      "transitional cortex of the hippocampal formation"
+    ],
     "region": "telencephalon",
     "subdivision": "Limbic system",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
     "meshes": false,
-    "contextNote": "Authored structure — schematic placement: the subiculum is a cytoarchitectural field (the transitional cortex between CA1 and the entorhinal cortex) with no separate baked mesh. The record is anchored on the medial-concave surface of the baked hippocampal cast at x ≈ 20.7, y ≈ 11.8, z ≈ 0.6 (probed from ctx-hippocampus-l by the v8 content-authoring run); the pickable volume stays `nuc-hippocampus`, and the placement is schematic rather than a boundary-accurate subfield reconstruction.",
-    "function": "The principal output structure of the hippocampal formation: a three-layered transitional cortex between CA1 (with which it is cytoarchitecturally continuous) and the entorhinal cortex, whose large pyramidal cells receive the CA1 projection and send the hippocampal output back to the entorhinal cortex, the presubiculum and the septal region. It is the last leg of the intrahippocampal circuit and the anatomical origin of the fornix's postcommissural fibres to the mammillary body, so it converts a stored hippocampal representation into a signal the rest of the brain can read; the dorsal (posterior) subiculum carries spatial and contextual information, the ventral (anterior) part is preferentially connected with the amygdala and the stress axis.",
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "function": "The subiculum is transitional cortex between CA1 and the parahippocampal/entorhinal region. It receives hippocampal input and is a major source of output to entorhinal cortex, fornix and other cortical/subcortical memory networks. It is a laminated cortical field rather than a discrete spherical nucleus.",
     "connections": {
       "afferent": [
-        "CA1 pyramidal cells (nuc-ca1) through the Schaffer collateral-commissural system — the direct intrahippocampal projection",
-        "Entorhinal cortex (ctx-entorhinal) layer III through the temporoammonic (alvear) path, which reaches CA1 and the subiculum directly, bypassing the trisynaptic loop",
-        "Septal (medial septal nucleus and diagonal band) cholinergic and GABAergic input through the fimbria-fornix"
+        "CA1 and entorhinal cortical inputs",
+        "Other medial temporal and septal modulatory inputs"
       ],
       "efferent": [
-        "Entorhinal cortex (ctx-entorhinal) layer V — the return route of the memory trace to the neocortical association areas",
-        "Fornix (tract-fornix) to the mammillary body (nuc-mammillary-body) and the anterior thalamic nucleus for the Papez circuit; precommissural fibres to the septal region",
-        "Presubiculum and parasubiculum, then the retrosplenial and posterior cingulate cortex through the cingulum"
+        "Entorhinal/association cortical return",
+        "Fornix projections to mammillary, septal and anterior thalamic targets; other limbic outputs"
       ]
     },
-    "bloodSupply": "Posterior cerebral artery — the posterior hippocampal and temporal branches supply the subiculum along the hippocampal body; the anterior (uncal) portion, adjacent to the amygdala, is supplied by the anterior choroidal artery from the internal carotid. The transition between the two territories lies near the hippocampal head.",
+    "bloodSupply": "Shares mainly PCA hippocampal/temporal supply with variable anterior choroidal contribution.",
     "clinical": [
       {
-        "syndrome": "Mesial temporal sclerosis",
-        "findings": "The subiculum and CA1 are the fields most consistently atrophic and gliotic in hippocampal sclerosis, and the subiculum also shows the mossy-fibre sprouting and interneuron loss that make the sclerotic hippocampus epileptogenic; it is often the seizure-onset zone, and its resection (with the rest of the mesial temporal block) is the standard surgical treatment of refractory temporal-lobe epilepsy.",
-        "vascular": "Not primarily vascular — sclerosis follows prolonged febrile seizures, hypoxia or repeated seizures"
+        "syndrome": "Memory-network injury",
+        "findings": "Can disrupt hippocampal output and memory, but an isolated subicular clinical syndrome cannot be inferred from a schematic marker."
       },
       {
-        "syndrome": "Alzheimer disease (Braak stages III–IV)",
-        "findings": "Neurofibrillary pathology spreads from the entorhinal cortex into the subiculum and CA1, which is why the subiculum shows atrophy on volumetric MRI before the neocortex does; subicular atrophy correlates with episodic memory failure.",
-        "note": "Neurodegenerative staging (Braak), not vascular"
-      },
-      {
-        "syndrome": "Subicular (PCA territory) infarction",
-        "findings": "Infarction of the posterior hippocampal formation produces anterograde amnesia as part of the PCA syndrome, together with a contralateral homonymous hemianopia and, with thalamic involvement, sensory loss.",
-        "vascular": "Posterior cerebral artery (posterior hippocampal branches)"
+        "syndrome": "Temporal-lobe epilepsy",
+        "findings": "Subicular/hippocampal circuits may participate in epileptic activity; onset must be established clinically and electrophysiologically."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [20.7, 11.8, 0.6],
-    "size3d": [2, 4, 8],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      20.7,
+      11.8,
+      0.6
+    ],
+    "size3d": [
+      2,
+      4,
+      8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
     ]
   },
   {
     "id": "nuc-ca1",
     "name": "CA1 (Sommer sector)",
-    "synonyms": ["CA1", "cornu ammonis 1", "Sommer sector", "CA1 field of the hippocampus"],
+    "synonyms": [
+      "CA1",
+      "cornu ammonis 1",
+      "Sommer sector",
+      "CA1 field of the hippocampus"
+    ],
     "region": "telencephalon",
     "subdivision": "Limbic system",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
     "meshes": false,
-    "contextNote": "Authored structure — schematic placement: CA1 is a cytoarchitectural field (a single pyramidal layer, the Sommer sector, between the subiculum and CA2/CA3) with no separate baked mesh. The record is anchored on the dorsal-lateral surface of the baked hippocampal body at x ≈ 24.8, y ≈ 13.8, z ≈ −0.9 (probed from ctx-hippocampus-l by the v8 content-authoring run); the pickable volume stays `nuc-hippocampus`.",
-    "function": "The largest and best-understood field of the hippocampus proper: a single layer of pyramidal cells that integrates two inputs — the Schaffer collaterals from CA3 (the third leg of the trisynaptic circuit, carrying the pattern-completed memory code) and the direct temporoammonic path from entorhinal layer III (carrying the raw sensory-context signal) — and whose output goes to the subiculum and back to the entorhinal cortex. It performs the comparison between a stored prediction and the current input that underlies novelty detection and memory encoding, and its place fields remap with context; because it sits at a vascular and metabolic watershed it is also the most vulnerable hippocampal field to hypoxia and ischaemia.",
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "function": "CA1 is a pyramidal-cell field between CA2 and subiculum. It receives CA3 Schaffer-collateral input and direct entorhinal input and relays to subiculum/entorhinal output networks. Its neurons are particularly vulnerable in some global ischemic and hippocampal-sclerosis patterns, for reasons not reducible to a fixed arterial watershed.",
     "connections": {
       "afferent": [
-        "CA3 (nuc-ca2-ca3) through the Schaffer collateral-commissural system onto the apical dendrites of the stratum radiatum",
-        "Entorhinal cortex (ctx-entorhinal) layer III through the temporoammonic path onto the distal apical dendrites (the direct, trisynaptic-bypassing input)",
-        "Septal cholinergic and GABAergic input, and local interneuron networks that generate the theta rhythm"
+        "CA3 Schaffer collaterals",
+        "Direct entorhinal and septal/modulatory input"
       ],
       "efferent": [
-        "Subiculum (nuc-subiculum) and, from its dorsal part, direct projections to the entorhinal cortex, retrosplenial cortex and the lateral septal nucleus",
-        "Fornix (tract-fornix) — the caudal CA1/CA3 output field joins the fimbria and carries hippocampal output to the mammillary bodies and septum",
-        "A small projection to the contralateral hippocampus through the ventral hippocampal commissure"
+        "Subiculum and entorhinal cortical return",
+        "Additional hippocampal/fornical output pathways"
       ]
     },
-    "bloodSupply": "Posterior cerebral artery — the posterior hippocampal branches (with the anterior choroidal artery supplying the uncal/head portion from the internal carotid). CA1 lies in the border zone between the hippocampal branches and the adjacent territories, which is why it sustains selective necrosis after global ischaemia.",
+    "bloodSupply": "Hippocampal PCA branches with variable anterior choroidal contribution; selective cellular vulnerability is not proof of a macroscopic border-zone location.",
     "clinical": [
       {
-        "syndrome": "Ischaemic CA1 necrosis (hypoxic-ischaemic encephalopathy)",
-        "findings": "Global cerebral ischaemia from cardiac arrest or profound hypotension selectively destroys the CA1 pyramidal cells (together with the neocortical layers III/V/VI and the Purkinje cells): the patient survives with a dense anterograde amnesia while remote memories are relatively spared. This selective vulnerability is known as the Sommer sector lesion.",
-        "vascular": "Global hypoperfusion/hypoxia rather than a single-territory infarct"
+        "syndrome": "Hypoxic/ischemic hippocampal injury",
+        "findings": "CA1 injury can contribute to new-memory impairment; global injury may also affect other hippocampal fields, cortex and cerebellum."
       },
       {
-        "syndrome": "Mesial temporal sclerosis and CA1 seizure onset",
-        "findings": "CA1 is the hippocampal field with the most severe cell loss in mesial temporal sclerosis, and the CA1/subiculum border is the most common seizure-onset zone recorded with depth electrodes — the rationale for mesial temporal resection in drug-resistant epilepsy.",
-        "note": "Epileptogenic remodelling following early-life insult"
-      },
-      {
-        "syndrome": "Alzheimer disease (CA1 atrophy precedes neocortical involvement)",
-        "findings": "The perforant-path-entorhinal-CA1 axis is the earliest affected circuit; CA1 atrophy on high-resolution MRI predicts progression from mild cognitive impairment to dementia.",
-        "note": "Neurodegenerative, not vascular"
+        "syndrome": "Hippocampal sclerosis",
+        "findings": "CA1 cell loss/gliosis is prominent in common patterns, but sclerosis subtypes differ and MRI does not resolve every histological boundary."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [24.8, 13.8, -0.9],
-    "size3d": [2.5, 4, 8],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      24.8,
+      13.8,
+      -0.9
+    ],
+    "size3d": [
+      2.5,
+      4,
+      8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
+      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf"
     ]
   },
   {
     "id": "nuc-ca2-ca3",
     "name": "CA2 and CA3 fields",
-    "synonyms": ["CA2", "CA3", "cornu ammonis 2 and 3", "CA3 field", "resistant sector (CA2)"],
+    "synonyms": [
+      "CA2",
+      "CA3",
+      "cornu ammonis 2 and 3",
+      "CA3 field",
+      "resistant sector (CA2)"
+    ],
     "region": "telencephalon",
     "subdivision": "Limbic system",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
     "meshes": false,
-    "contextNote": "Authored structure — schematic placement: CA2 and CA3 are cytoarchitectural fields (CA3 bearing the giant thorny excrescences that receive the mossy fibres) with no separate baked meshes, and they are tabulated together because the boundary between them is defined only histologically. The record is anchored at x ≈ 28.1, y ≈ 13, z ≈ −4.1 on the lateral convexity of the baked hippocampal body (probed from ctx-hippocampus-l by the v8 content-authoring run); the pickable volume stays `nuc-hippocampus`.",
-    "function": "CA3 is the auto-associative network of the hippocampus: its pyramidal cells receive the dentate mossy fibres on their proximal dendrites and extensive recurrent collaterals from each other, so they can complete a stored pattern from a partial cue — the cellular basis of memory recall. CA2, a narrow field between CA3 and CA1, is the 'resistant sector' that is relatively spared by ischaemia and by mesial temporal sclerosis; it is marked by a distinct molecular profile and has been linked to social memory and to the hippocampal control of aggression, and it also holds the densest innervation by hypothalamic vasopressin fibres.",
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "function": "This atlas groups two distinct cytoarchitectural fields for display convenience. CA3 receives dentate mossy fibres and has recurrent excitatory circuitry; CA2 lies between CA3 and CA1 with distinct inputs and physiology. Experimental CA2 social-memory findings largely come from animal work and do not define a validated human lesion syndrome.",
     "connections": {
       "afferent": [
-        "Dentate gyrus (nuc-dentate-gyrus) granule cells through the mossy fibres — large, powerful synapses on CA3 proximal dendrites",
-        "Recurrent collaterals of other CA3 pyramidal cells (the auto-associative matrix) and the septal cholinergic/GABAergic input",
-        "Entorhinal cortex layer II perforant-path fibres to the distal dendrites, and hilar mossy cells; CA2 additionally receives dense supramammillary and hypothalamic (vasopressin) input, which is its defining afferent"
+        "CA3: dentate mossy fibres, entorhinal and recurrent CA3 projections",
+        "CA2: entorhinal and other hippocampal/hypothalamic inputs; not equivalent to the CA3 mossy-fibre relay"
       ],
       "efferent": [
-        "CA1 (nuc-ca1) and the subiculum (nuc-subiculum) through the Schaffer collateral-commissural system",
-        "Commissural fibres to the contralateral CA3/CA1 through the ventral hippocampal commissure, and the longitudinal association path within the hippocampus",
-        "Fimbria/fornix output from the caudal fields to the septal area and mammillary bodies"
+        "CA3 Schaffer-collateral projections to CA1 and other hippocampal outputs",
+        "CA2 projections to CA1 and other hippocampal targets"
       ]
     },
-    "bloodSupply": "Posterior cerebral artery — the posterior hippocampal branches, with anterior choroidal supply to the uncal head end. CA2 lies between the ischaemia-vulnerable CA1 and the more resistant CA3, and its relative sparing (the 'resistant sector') is a classic pathological marker of hypoxic injury.",
+    "bloodSupply": "Shared hippocampal arterial territory, mainly PCA with variable anterior contribution.",
     "clinical": [
       {
-        "syndrome": "Selective vulnerability after global ischaemia",
-        "findings": "After cardiac arrest the Sommer sector (CA1) and the hilus are destroyed while CA2 is relatively spared — the 'resistant sector' that makes the pattern of hippocampal damage characteristic rather than uniform, and the reason histological staging of hypoxic injury examines CA1/CA2/CA3 side by side.",
-        "vascular": "Global hypoperfusion/hypoxia"
+        "syndrome": "Hippocampal sclerosis patterns",
+        "findings": "CA2/CA3 involvement varies; relative CA2 sparing is common in some patterns but is not guaranteed."
       },
       {
-        "syndrome": "Mossy-fibre sprouting and temporal-lobe epilepsy",
-        "findings": "In mesial temporal sclerosis the mossy fibres of dentate granule cells sprout back into the dentate inner molecular layer and form recurrent excitatory synapses on granule cells, creating the self-sustaining circuit that generates spontaneous seizures; CA3 is the downstream amplifier of this activity.",
-        "note": "Epileptogenic plasticity, not vascular"
-      },
-      {
-        "syndrome": "CA2 and social memory (rodent and human evidence)",
-        "findings": "Selective manipulation of CA2 impairs social recognition memory and alters aggression in rodents, and CA2 involvement has been proposed in human social-cognitive disorders; it is a striking exception to the idea that the hippocampus is only about episodic memory.",
-        "note": "Preclinical/circuit-level evidence"
+        "syndrome": "CA2 research",
+        "findings": "Selective CA2 manipulations affect social recognition in mice; direct extension to human psychiatric diagnoses remains uncertain.",
+        "note": "Animal circuit evidence."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [28.1, 13, -4.1],
-    "size3d": [2.5, 4, 7],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      28.1,
+      13,
+      -4.1
+    ],
+    "size3d": [
+      2.5,
+      4,
+      7
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
+      "Hitti and Siegelbaum (2014), The hippocampal CA2 region is essential for social memory (mouse experimental evidence). https://www.nature.com/articles/nature13028",
+      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf"
     ]
   },
   {
     "id": "nuc-ca4",
-    "name": "CA4 (hilus of the dentate gyrus)",
-    "synonyms": ["CA4", "hilus of the dentate gyrus", "endfolium", "endblatt", "CA4 field"],
+    "name": "CA4 (hilar field)",
+    "synonyms": [
+      "CA4",
+      "hilar CA4 field",
+      "endfolium",
+      "endblatt",
+      "CA4 field"
+    ],
     "region": "telencephalon",
     "subdivision": "Limbic system",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
     "meshes": false,
-    "contextNote": "Authored structure — schematic placement: CA4 is the polymorphic cell layer in the hilus of the dentate gyrus, wedged between the granule-cell blades, and is not a dissectable volume. The record is anchored in the core of the baked hippocampal body at x ≈ 25.1, y ≈ 12.7, z ≈ −1.2 (probed from ctx-hippocampus-l by the v8 content-authoring run); the pickable volume stays `nuc-hippocampus`.",
-    "function": "The polymorphic layer enclosed by the dentate gyrus blades — the hilus, historically labelled CA4 because the mossy fibres cross it and its cells resemble CA3 pyramids. It contains the hilar mossy cells and a rich population of inhibitory interneurons, and it is the integration and gate-keeping station of the dentate: mossy cells project back to the granule cells of the same and the contralateral dentate (an associational/commissural feedback loop), while the hilar interneurons provide the feed-forward inhibition that keeps granule-cell activity sparse. This excitatory-inhibitory balance is what makes pattern separation reliable, and its failure — hilar cell loss with mossy-fibre sprouting — is the cellular hallmark of temporal-lobe epilepsy.",
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "function": "CA4 is a historical cytoarchitectural label used for cells within the dentate hilus; the hilus also contains mossy cells and inhibitory interneurons, so the terms are not exact synonyms in every nomenclature. Local dentate/hilar circuits regulate excitation and sparse coding. This is a microscopic field, not a validated separate volume in the current atlas.",
     "connections": {
       "afferent": [
-        "Dentate gyrus (nuc-dentate-gyrus) granule cells through the mossy fibres, which traverse the hilus on their way to CA3",
-        "Entorhinal cortex (ctx-entorhinal) through the perforant path, which innervates hilar interneurons directly",
-        "Commissural fibres from the contralateral dentate gyrus and hilar mossy cells"
+        "Dentate granule-cell mossy-fibre collaterals and local hippocampal inputs"
       ],
       "efferent": [
-        "Associational and commissural projections of mossy cells back onto granule-cell dendrites (the dentate feedback loop)",
-        "Local GABAergic inhibition of granule cells and of CA3 pyramidal cells (basket and hilar interneurons)",
-        "Fimbria/fornix output with the rest of the hippocampal formation"
+        "Local hilar/dentate/CA3 circuits, depending on cell type"
       ]
     },
-    "bloodSupply": "Posterior cerebral artery — hippocampal branches; the hilus lies within the dentate/hippocampal territory and shares the anterior choroidal supply at the uncal end. Hilar cells are highly vulnerable to hypoxia, and hilar sclerosis is one of the earliest changes after status epilepticus.",
+    "bloodSupply": "Shared hippocampal arterial supply, mainly PCA branches with variable anterior contribution.",
     "clinical": [
       {
-        "syndrome": "Hilar cell loss and mesial temporal sclerosis",
-        "findings": "Loss of hilar mossy cells and interneurons with subsequent granule-cell dispersion and mossy-fibre sprouting is the core lesion of mesial temporal sclerosis: the dentate gate fails, granule cells become hyperexcitable and the hippocampus generates spontaneous seizures.",
-        "note": "Epileptogenic remodelling following early-life febrile seizures, hypoxia or repeated seizures"
+        "syndrome": "Hippocampal sclerosis",
+        "findings": "Hilar/CA4 cell loss occurs in recognized sclerosis patterns, including CA4-predominant type; severity and clinical consequences vary."
       },
       {
-        "syndrome": "Status epilepticus-induced hilar injury",
-        "findings": "Prolonged seizures cause acute necrosis of hilar and CA1/CA3 neurons, setting up the chronic epileptic state — the reason status epilepticus is treated as a time-critical emergency, and the rationale for the experimental latency period between an initial insult and the emergence of spontaneous seizures.",
-        "note": "Excitotoxic injury, not a vascular territory syndrome"
-      },
-      {
-        "syndrome": "Memory failure from dentate/hilar damage",
-        "findings": "Because the hilus gates the first hippocampal relay, its damage degrades the encoding of new episodic memories while sparing previously consolidated ones.",
-        "vascular": "Posterior cerebral artery (hippocampal branches) or hypoxic-ischaemic injury"
+        "syndrome": "Seizure-associated hippocampal injury",
+        "findings": "Prolonged seizure activity may injure hippocampal cells, but hilar injury/sprouting is not a sufficient explanation for every subsequent epilepsy syndrome."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [25.1, 12.7, -1.2],
-    "size3d": [2.5, 3, 6],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      25.1,
+      12.7,
+      -1.2
+    ],
+    "size3d": [
+      2.5,
+      3,
+      6
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. 'Limbic System: Homeostasis, Olfaction, Memory, and Emotion'"
+      "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
+      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf"
     ]
   }
 ]

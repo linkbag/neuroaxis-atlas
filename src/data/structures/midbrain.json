@@ -2,7 +2,10 @@
   {
     "id": "nuc-superior-colliculus",
     "name": "Superior colliculus",
-    "synonyms": ["SC", "optic tectum (comparative)"],
+    "synonyms": [
+      "SC",
+      "optic tectum (comparative)"
+    ],
     "region": "midbrain",
     "subdivision": "Tectum",
     "kind": "nucleus",
@@ -37,19 +40,32 @@
         "note": "Rarely isolated in humans; derived mainly from lesion and stimulation studies."
       }
     ],
-    "levels": ["lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [3, 14, -8],
-    "size3d": [3.5, 2, 2.5],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      3,
+      14,
+      -8
+    ],
+    "size3d": [
+      3.5,
+      2,
+      2.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\" (supranuclear control of eye movements)",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, geniculate/extrageniculate pathways, printed pp. 464-465 (PDF pp. 490-491).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, pupillary circuits, printed pp. 576-580 (PDF pp. 602-606).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, vertical gaze, printed pp. 587-588 (PDF pp. 613-614)."
     ]
   },
   {
     "id": "nuc-inferior-colliculus",
     "name": "Inferior colliculus",
-    "synonyms": ["IC"],
+    "synonyms": [
+      "IC"
+    ],
     "region": "midbrain",
     "subdivision": "Tectum",
     "kind": "nucleus",
@@ -76,24 +92,38 @@
         "vascular": "Collicular/quadrigeminal branches of the PCA or SCA"
       }
     ],
-    "levels": ["lvl-midbrain-ic"],
-    "origin3d": [3, 8, -8],
-    "size3d": [3, 2, 2.5],
+    "levels": [
+      "lvl-midbrain-ic"
+    ],
+    "origin3d": [
+      3,
+      8,
+      -8
+    ],
+    "size3d": [
+      3,
+      2,
+      2.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, geniculate/extrageniculate pathways, printed pp. 464-465 (PDF pp. 490-491).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, pupillary circuits, printed pp. 576-580 (PDF pp. 602-606).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, vertical gaze, printed pp. 587-588 (PDF pp. 613-614)."
     ]
   },
   {
     "id": "nuc-pretectal",
     "name": "Pretectal area",
-    "synonyms": ["pretectal nuclei", "pretectum"],
+    "synonyms": [
+      "pretectal nuclei",
+      "pretectum"
+    ],
     "region": "midbrain",
     "subdivision": "Tegmentum",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Pretectal interneurons receive retinal input and bilaterally drive the Edinger-Westphal nuclei to constrict both pupils in the light reflex; they coordinate the pupillary component of the near response and interface with the vertical gaze centers of the rostral midbrain.",
+    "function": "Pretectal region rostral to the superior colliculi. The olivary pretectal light-reflex relay receives retinal input and projects bilaterally to preganglionic parasympathetic oculomotor neurons, partly through the posterior commissure. Nearby rostral-midbrain gaze circuitry is distinct from this pupillary relay.",
     "connections": {
       "afferent": [
         "Retina via the optic tract (brachium of the superior colliculus region)",
@@ -108,28 +138,37 @@
     "bloodSupply": "Collicular (quadrigeminal) branches of the posterior cerebral artery",
     "clinical": [
       {
-        "syndrome": "Parinaud syndrome (light-near dissociation)",
-        "findings": "Pretectal destruction abolishes the pupillary light reflex while sparing accommodation, producing large pupils that 'accommodate but do not react' together with vertical gaze palsy and convergence-retraction nystagmus.",
-        "vascular": "Collicular/quadrigeminal branches of the PCA; pineal region mass effect"
-      },
-      {
-        "syndrome": "Argyll Robertson pupil",
-        "findings": "Selective pretectal-to-EW light-reflex interruption (classically neurosyphilis) yields small, irregular pupils that accommodate but do not react to light.",
-        "note": "Contrast with Adie pupil, which is a lesion of the ciliary ganglion beyond the EW neurons."
+        "syndrome": "Light-near dissociation in dorsal midbrain disease",
+        "findings": "Pretectal/posterior-commissural injury can impair the pupillary light response while sparing the near response, often with other dorsal-midbrain findings. The historical Argyll Robertson pupil is a clinical association with neurosyphilis, not a precisely established isolated pretectal lesion locator."
       }
     ],
-    "levels": ["lvl-post-comm", "lvl-midbrain-sc"],
-    "origin3d": [2, 17.5, -7],
-    "size3d": [2, 1.5, 2],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      2,
+      17.5,
+      -7
+    ],
+    "size3d": [
+      2,
+      1.5,
+      2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\" (pupillary abnormalities)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, geniculate/extrageniculate pathways, printed pp. 464-465 (PDF pp. 490-491).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, pupillary circuits, printed pp. 576-580 (PDF pp. 602-606).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, vertical gaze, printed pp. 587-588 (PDF pp. 613-614)."
     ]
   },
   {
     "id": "nuc-pag",
     "name": "Periaqueductal gray",
-    "synonyms": ["PAG", "central gray"],
+    "synonyms": [
+      "PAG",
+      "central gray"
+    ],
     "region": "midbrain",
     "subdivision": "Tegmentum",
     "kind": "nucleus",
@@ -153,36 +192,42 @@
     "bloodSupply": "Paramedian branches of the basilar tip and proximal posterior cerebral artery (posterior thalamoperforating territory); collicular branches dorsally",
     "clinical": [
       {
-        "syndrome": "Central poststroke pain and opioid analgesia",
-        "findings": "PAG involvement in paramedian midbrain infarcts can contribute to central neuropathic pain and blunted endogenous opioid analgesia; conversely, deep-brain stimulation of the PAG is an established therapy for refractory pain.",
-        "vascular": "Paramedian perforators of the basilar tip/PCA",
-        "note": "The PAG is a classic stimulation target for intractable cancer and deafferentation pain."
-      },
-      {
-        "syndrome": "Autonomic stress responses",
-        "findings": "PAG activation coordinates stress hypergravity responses: tachycardia, hypertension, hyperventilation, and defensive freezing or flight behavior.",
-        "note": "Functional-imaging correlate of threat processing; discrete human lesions are rare."
+        "syndrome": "Pain and autonomic modulation",
+        "findings": "PAG circuitry participates in descending pain modulation and defensive/autonomic responses. Effects of focal injury are variable; PAG stimulation has been studied for refractory pain but should not be presented as a broadly established routine therapy."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [2.5, 12, -6],
-    "size3d": [2, 4.5, 2],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      2.5,
+      12,
+      -6
+    ],
+    "size3d": [
+      2,
+      4.5,
+      2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "Nolte, The Human Brain: An Introduction to Its Functional Anatomy — midbrain and pain-modulation sections",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, pain modulation, printed pp. 282-283 (PDF pp. 308-309).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, reticular/autonomic systems, printed pp. 646-648 (PDF pp. 672-674)."
     ]
   },
   {
     "id": "nuc-oculomotor",
     "name": "Oculomotor nucleus (CN III)",
-    "synonyms": ["CN III nucleus"],
+    "synonyms": [
+      "CN III nucleus"
+    ],
     "region": "midbrain",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
     "laterality": "midline",
     "color": "#14b8a6",
-    "function": "Somatic motor complex innervating the medial, superior, and inferior rectus, the inferior oblique, and levator palpebrae superioris via CN III; arranged as paired subnuclei plus a single midline central caudal (levator) column. Each subnucleus supplies contralateral target muscles except the superior rectus, so nuclear lesions can produce bilateral ptosis with asymmetric ophthalmoparesis.",
+    "function": "Somatic motor nuclear complex in the rostral midbrain at the superior-collicular level. Medial rectus, inferior rectus and inferior oblique subnuclei mainly supply ipsilateral muscles; the superior-rectus subnucleus supplies the contralateral muscle, and a midline central caudal subnucleus supplies both levators. Nuclear injury may therefore produce bilateral ptosis or superior-rectus deficits rather than a simple unilateral nerve pattern.",
     "connections": {
       "afferent": [
         "Medial longitudinal fasciculus from contralateral abducens internuclear neurons (conjugate horizontal gaze)",
@@ -198,71 +243,91 @@
     "bloodSupply": "Paramedian branches of the basilar tip / posterior cerebral artery (posterior thalamoperforating); the exiting nerve passes between PCA and SCA",
     "clinical": [
       {
-        "syndrome": "Weber syndrome",
-        "findings": "Fascicular CN III palsy (ipsilateral ptosis, mydriasis, 'down and out' eye) combined with contralateral hemiplegia of face, arm, and leg from crus cerebri involvement.",
-        "vascular": "Paramedian branches of the PCA (posterior thalamoperforating)"
+        "syndrome": "Nuclear or fascicular ophthalmoparesis",
+        "findings": "Nuclear injury can cause bilateral or asymmetric ocular motor deficits. Fascicular injury may give ipsilateral CN III palsy with contralateral weakness or ataxia according to neighboring pathways."
       },
       {
-        "syndrome": "Pupil-involving CN III palsy",
-        "findings": "Compressive lesions (classically posterior communicating artery aneurysm) at the fascicle or nerve produce mydriasis with ptosis and ophthalmoparesis; parasympathetic fibers run peripherally in the nerve, so pupillary involvement signals compression and demands emergency imaging.",
-        "vascular": "Posterior communicating artery aneurysm; PCA/SCA interval infarct (pupil-sparing, microvascular)"
+        "syndrome": "Acute third-nerve palsy",
+        "findings": "A new CN III palsy can reflect compressive, ischemic or other disease. Pupil involvement raises concern for aneurysmal compression, but pupil sparing does not exclude a dangerous compressive cause."
       }
     ],
-    "levels": ["lvl-midbrain-sc"],
-    "origin3d": [0, 14, -4],
-    "size3d": [1.5, 1.5, 2],
+    "levels": [
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      0,
+      14,
+      -4
+    ],
+    "size3d": [
+      1.5,
+      1.5,
+      2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\" (extraocular muscles, nerves, and nuclei)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular motor nuclei and pupils, printed pp. 568-580 (PDF pp. 594-606).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158).",
+      "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), preface on Edinger-Westphal terminology, preface p. vi (PDF p. 8)."
     ]
   },
   {
     "id": "nuc-edinger-westphal",
-    "name": "Edinger-Westphal nucleus",
-    "synonyms": ["EW", "visceral oculomotor nucleus"],
+    "name": "Edinger-Westphal preganglionic neurons",
+    "synonyms": [
+      "Edinger-Westphal nucleus",
+      "EWpg",
+      "preganglionic parasympathetic oculomotor neurons"
+    ],
     "region": "midbrain",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
     "laterality": "midline",
     "color": "#14b8a6",
-    "function": "Parasympathetic preganglionic (visceral oculomotor) nucleus dorsal to the oculomotor complex: its preganglionic fibers travel with CN III to the ciliary ganglion, where postganglionic fibers excite the sphincter pupillae (miosis) and the ciliary muscle (accommodation).",
+    "function": "Preganglionic parasympathetic neurons associated with the oculomotor complex whose axons travel in CN III to the ciliary ganglion. Postganglionic neurons then supply sphincter pupillae and ciliary muscle. These EWpg neurons must be distinguished from centrally projecting Edinger-Westphal (EWcp) neurons, which have different functions and are not the pupillary motor relay.",
     "connections": {
       "afferent": [
-        "Pretectal area (bilateral light-reflex interneurons, partly via the posterior commissure)",
-        "Medial rectus subnucleus / supranuclear near-response input",
-        "Hypothalamus and reticular formation"
+        "Bilateral pretectal inputs for the light reflex",
+        "Supranuclear near-response circuitry"
       ],
       "efferent": [
-        "Preganglionic parasympathetic fibers in CN III to the ciliary ganglion",
-        "Postganglionic short ciliary nerves to sphincter pupillae and ciliary muscle"
+        "Preganglionic parasympathetic axons in CN III to the ciliary ganglion; postganglionic short ciliary nerves supply the pupil sphincter and ciliary muscle"
       ]
     },
     "bloodSupply": "Paramedian branches of the basilar tip / posterior cerebral artery",
     "clinical": [
       {
-        "syndrome": "Light-near dissociation",
-        "findings": "Dorsal midbrain (Parinaud) and severe diabetic/autonomic lesions interrupt the pretectal input to the EW nucleus so the pupil accommodates but does not constrict to light.",
-        "vascular": "Paramedian PCA perforators; also seen with large-fiber diabetic autonomic neuropathy (afferent/efferent pupillary fibers)"
-      },
-      {
-        "syndrome": "CN III palsy with mydriasis",
-        "findings": "Fascicular or peripheral CN III lesions that sweep the EW-derived parasympathetic fibers produce a dilated, poorly reactive pupil with ptosis and diplopia.",
-        "vascular": "Paramedian perforators (fascicular); PCoA aneurysm compression (peripheral)"
+        "syndrome": "Pupillary and accommodation dysfunction",
+        "findings": "EWpg or outgoing parasympathetic-fiber injury can impair pupil constriction and accommodation. Light-near dissociation reflects differential pathway disruption; a peripheral autonomic lesion does not automatically establish pretectal-to-EW interruption."
       }
     ],
-    "levels": ["lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [0, 15.5, -4.5],
-    "size3d": [0.8, 1, 1.2],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      0,
+      15.5,
+      -4.5
+    ],
+    "size3d": [
+      0.8,
+      1,
+      1.2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\" (the pupils and other ocular autonomic pathways)",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular motor nuclei and pupils, printed pp. 568-580 (PDF pp. 594-606).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158).",
+      "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), preface on Edinger-Westphal terminology, preface p. vi (PDF p. 8)."
     ]
   },
   {
     "id": "nuc-trochlear",
     "name": "Trochlear nucleus (CN IV)",
-    "synonyms": ["CN IV nucleus"],
+    "synonyms": [
+      "CN IV nucleus"
+    ],
     "region": "midbrain",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
@@ -283,29 +348,41 @@
     "bloodSupply": "Paramedian branches of the basilar tip / posterior cerebral artery",
     "clinical": [
       {
-        "syndrome": "Trochlear (CN IV) palsy",
-        "findings": "Vertical diplopia worst on contralateral gaze and ipsilateral head tilt (Bielschowsky head-tilt test); patients tilt the head away from the paretic side. Common causes: closed head trauma at the dorsal exit/decussation and microvascular ischemia.",
-        "vascular": "Paramedian perforators; long subarachnoid course makes the nerve vulnerable to tentorial-edge trauma"
+        "syndrome": "Nuclear versus nerve trochlear palsy",
+        "findings": "A trochlear nuclear or pre-crossing fascicular lesion affects the contralateral superior oblique; a post-crossing nerve lesion affects the ipsilateral muscle. Superior-oblique weakness causes vertical/torsional diplopia, often worse in downgaze and contralateral gaze relative to the weak eye, with hypertropia increased by head tilt toward that eye."
       },
       {
-        "syndrome": "Bilateral trochlear palsy after trauma",
-        "findings": "Bilateral dorsal exit/decussation injury produces a 'V-pattern' esotropia with large excyclotorsion — a classic sequela of severe closed head injury.",
-        "vascular": "Collicular/SCA branches at the dorsal midbrain"
+        "syndrome": "Bilateral traumatic trochlear palsy",
+        "findings": "Dorsal crossing or nerve injury may affect both superior obliques after trauma. Bilateral findings are variable and do not prove the precise exit-zone site."
       }
     ],
-    "levels": ["lvl-midbrain-ic"],
-    "origin3d": [0, 8, -5],
-    "size3d": [0.8, 1.2, 1.5],
+    "levels": [
+      "lvl-midbrain-ic"
+    ],
+    "origin3d": [
+      0,
+      8,
+      -5
+    ],
+    "size3d": [
+      0.8,
+      1.2,
+      1.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cranial Nerves\" (CN IV course)",
-      "Patten, Neurological Differential Diagnosis — midbrain level plates"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular motor nuclei and pupils, printed pp. 568-580 (PDF pp. 594-606).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158).",
+      "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), preface on Edinger-Westphal terminology, preface p. vi (PDF p. 8)."
     ]
   },
   {
     "id": "nuc-mesencephalic-v",
     "name": "Mesencephalic trigeminal nucleus",
-    "synonyms": ["mesencephalic nucleus of CN V", "proprioceptive V nucleus"],
+    "synonyms": [
+      "mesencephalic nucleus of CN V",
+      "proprioceptive V nucleus"
+    ],
     "region": "midbrain",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
@@ -324,24 +401,37 @@
     "bloodSupply": "Branches of the superior cerebellar artery (dorsolateral tegmentum); paramedian perforators medially",
     "clinical": [
       {
-        "syndrome": "Exaggerated jaw jerk",
-        "findings": "Because the mesencephalic nucleus provides the afferent limb, bilateral corticobulbar (pseudobulbar) disease releases the jaw-jerk reflex, which becomes brisk — a sign of upper motor neuron involvement above the trigeminal motor nucleus.",
-        "vascular": "Not applicable (reflex sign)",
-        "note": "Isolated lesions of the nucleus are clinically silent; assessed as part of the CN V examination."
+        "syndrome": "Jaw proprioception and jaw-jerk arc",
+        "findings": "The mesencephalic trigeminal system supplies proprioceptive input to jaw motor reflexes. Damage may reduce this arc; an exaggerated jaw jerk usually indicates bilateral supranuclear corticobulbar disease, not damage to this sensory nucleus."
       }
     ],
-    "levels": ["lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc"],
-    "origin3d": [4.5, 8, -5],
-    "size3d": [1, 6, 1],
+    "levels": [
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      4.5,
+      8,
+      -5
+    ],
+    "size3d": [
+      1,
+      6,
+      1
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\" (cranial nerve nuclei and related structures)",
-      "Snell, Clinical Neuroanatomy — brainstem sections (trigeminal system)"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, mesencephalic trigeminal system, printed pp. 510-512 (PDF pp. 536-538).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pons/midbrain sections, printed pp. 128-144 (PDF pp. 142-158)."
     ]
   },
   {
     "id": "tract-mesencephalic-v",
     "name": "Mesencephalic trigeminal tract",
-    "synonyms": ["mesencephalic tract of CN V"],
+    "synonyms": [
+      "mesencephalic tract of CN V"
+    ],
     "region": "midbrain",
     "subdivision": "Cranial nerve nuclei",
     "kind": "tract",
@@ -360,22 +450,37 @@
     "bloodSupply": "Superior cerebellar artery branches (dorsolateral tegmentum)",
     "clinical": [
       {
-        "syndrome": "Jaw proprioceptive loss",
-        "findings": "Isolated involvement is asymptomatic; damage together with the mesencephalic nucleus blunts jaw position sense and alters the jaw-jerk reflex.",
-        "vascular": "SCA branches"
+        "syndrome": "Jaw proprioceptive/reflex dysfunction",
+        "findings": "Injury may disturb jaw proprioceptive information or the jaw-jerk reflex. Isolated human tract syndromes are uncommon, so neither a guaranteed deficit nor complete asymptomaticity can be inferred from this schematic."
       }
     ],
-    "levels": ["lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-pons-middle"],
-    "origin3d": [4.5, 8, -4.2],
-    "size3d": [0.6, 6, 0.6],
+    "levels": [
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-pons-middle"
+    ],
+    "origin3d": [
+      4.5,
+      8,
+      -4.2
+    ],
+    "size3d": [
+      0.6,
+      6,
+      0.6
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, mesencephalic trigeminal system, printed pp. 510-512 (PDF pp. 536-538).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pons/midbrain sections, printed pp. 128-144 (PDF pp. 142-158)."
     ]
   },
   {
     "id": "nuc-red-nucleus",
     "name": "Red nucleus",
-    "synonyms": ["nucleus ruber"],
+    "synonyms": [
+      "nucleus ruber"
+    ],
     "region": "midbrain",
     "subdivision": "Tegmentum",
     "kind": "nucleus",
@@ -384,92 +489,104 @@
     "function": "Relay of the lateral (cerebellar) motor system in the rostral midbrain tegmentum. The caudal magnocellular part is the origin of the rubrospinal tract, which crosses immediately in the ventral tegmentum and facilitates flexor tone of the contralateral limbs; the rostral parvocellular part links the cerebellum with the inferior olive through the central tegmental tract (rubro-olivary, Guillain-Mollaret loop) and subserves motor learning. In humans the rubrospinal system is vestigial relative to the corticospinal tract, but the nucleus remains a major dentatorubrothalamic relay.",
     "connections": {
       "afferent": [
-        "Contralateral dentate and interposed nuclei (via the superior cerebellar peduncle decussation)",
-        "Motor and premotor cortex (corticorubral fibers)",
-        "Globus pallidus"
+        "Contralateral deep cerebellar nuclei through the crossed superior cerebellar peduncle",
+        "Motor/premotor cortical inputs"
       ],
       "efferent": [
-        "Rubrospinal tract (decussates ventromedially at this level)",
-        "Central tegmental tract to the ipsilateral inferior olivary nucleus",
-        "Contralateral VL/VA thalamus (dentatorubrothalamic continuation)"
+        "Magnocellular rubrospinal fibers cross in the ventral tegmental decussation",
+        "Parvocellular rubro-olivary fibers descend toward the ipsilateral inferior olive through the central tegmental tract",
+        "Cerebellothalamic axons pass through/around the red-nuclear region toward thalamus; this is not a red-nucleus-to-contralateral-thalamus relay"
       ]
     },
     "bloodSupply": "Paramedian perforators of the basilar tip / PCA (medial red nucleus); branches of the superior cerebellar artery (lateral)",
     "clinical": [
       {
-        "syndrome": "Benedikt syndrome",
-        "findings": "Ventral tegmental lesion of CN III fascicles plus the red nucleus: ipsilateral CN III palsy with contralateral tremor, choreoathetosis, or ataxia.",
-        "vascular": "Paramedian branches of the PCA"
+        "syndrome": "Midbrain tegmental syndromes",
+        "findings": "CN III fascicular injury with neighboring cerebellothalamic pathway injury can combine ipsilateral ophthalmoparesis with contralateral ataxia or tremor (Claude/Benedikt patterns). Historical eponym boundaries vary."
       },
       {
-        "syndrome": "Claude syndrome",
-        "findings": "More dorsal tegmental lesion combining CN III palsy with contralateral ataxia from red nucleus and dentatorubrothalamic (SCP) fiber involvement.",
-        "vascular": "PCA paramedian perforators"
-      },
-      {
-        "syndrome": "Rubral (Holmes) tremor",
-        "findings": "Lesions of the red nucleus or its dentatorubral input produce a low-frequency (2-4.5 Hz) rest-and-postural tremor, sometimes appearing weeks to months after the injury.",
-        "vascular": "PCA perforators / SCA branches"
+        "syndrome": "Holmes tremor",
+        "findings": "Delayed low-frequency rest, postural and action tremor can follow lesions of distributed cerebellothalamic and nigrostriatal networks. It should not be localized exclusively to the red nucleus."
       }
     ],
-    "levels": ["lvl-midbrain-sc"],
-    "origin3d": [4, 11, 0],
-    "size3d": [2.5, 2, 2.5],
+    "levels": [
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      4,
+      11,
+      0
+    ],
+    "size3d": [
+      2.5,
+      2,
+      2.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\" (rubrospinal tract)",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar output/input pathways, printed pp. 705-710 (PDF pp. 731-736).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections and SCP crossing, printed pp. 136-144 (PDF pp. 150-158)."
     ]
   },
   {
     "id": "nuc-snc",
     "name": "Substantia nigra, pars compacta",
-    "synonyms": ["SNc", "dopamine compacta"],
+    "synonyms": [
+      "SNc",
+      "dopamine compacta"
+    ],
     "region": "midbrain",
     "subdivision": "Tegmentum",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#1f2937",
-    "function": "Melanin-pigmented dopaminergic nucleus forming the dorsal band of the substantia nigra: its nigrostriatal projection to the caudate and putamen facilitates the direct (movement-facilitating) basal ganglia pathway, while mesocortical and mesolimbic projections modulate cognition and reward. Progressive degeneration of SNc neurons with alpha-synuclein Lewy bodies, depleting striatal dopamine, produces Parkinson's disease.",
+    "function": "Neuromelanin-containing dopaminergic neurons of the substantia nigra pars compacta. Nigrostriatal projections to caudate and putamen modulate direct and indirect basal-ganglia pathways. Mesolimbic and mesocortical dopamine projections arise mainly from the neighboring ventral tegmental area, rather than being defining SNc outputs.",
     "connections": {
       "afferent": [
-        "Striatum (GABAergic striatonigral fibers)",
-        "Subthalamic nucleus (glutamatergic)",
-        "Pedunculopontine nucleus",
-        "Dorsal raphe"
+        "Striatal GABAergic inputs",
+        "Subthalamic and brainstem inputs, including pedunculopontine and raphe systems"
       ],
       "efferent": [
-        "Nigrostriatal dopaminergic fibers to the caudate/putamen",
-        "Mesocortical fibers to prefrontal cortex",
-        "Mesolimbic fibers to the nucleus accumbens"
+        "Nigrostriatal dopaminergic projections to caudate and putamen"
       ]
     },
     "bloodSupply": "Paramedian perforators of the posterior cerebral artery; anterior choroidal artery branches (lateral/caudal portions)",
     "clinical": [
       {
-        "syndrome": "Parkinson's disease",
-        "findings": "Loss of more than half of SNc dopaminergic neurons with striatal dopamine depletion produces the cardinal tetrad: resting tremor, rigidity, bradykinesia, and postural instability.",
-        "vascular": "None (degenerative alpha-synucleinopathy)"
+        "syndrome": "Parkinson disease",
+        "findings": "Degeneration of SNc dopaminergic neurons contributes to bradykinesia, rigidity and often rest tremor. Nonmotor symptoms may precede motor diagnosis; postural instability is often later. A fixed cell-loss threshold or mandatory symptom tetrad should not be used as a diagnostic rule."
       },
       {
-        "syndrome": "Vascular parkinsonism and nigral infarction",
-        "findings": "Infarcts or hemorrhages involving the substantia nigra cause contralateral parkinsonism or hemiparkinsonism, and acute nigral lesions may add hemiballistic or dystonic movements.",
-        "vascular": "PCA paramedian perforators; anterior choroidal artery"
+        "syndrome": "Focal nigral injury",
+        "findings": "Rare focal nigral lesions can produce parkinsonism. More typical vascular parkinsonism involves broader subcortical vascular disease, and the phenotype depends on affected networks."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc"],
-    "origin3d": [6.5, 10.5, 8.5],
-    "size3d": [4.5, 1.2, 3.5],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      6.5,
+      10.5,
+      8.5
+    ],
+    "size3d": [
+      4.5,
+      1.2,
+      3.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Basal Ganglia\" (Parkinson's disease and related disorders)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "Fix, High-Yield Neuroanatomy — basal ganglia and brainstem sections"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia circuits, printed pp. 748-754 (PDF pp. 774-780).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, Parkinson disease and related disorders, printed pp. 762-768 (PDF pp. 788-794).",
+      "NINDS, Parkinson Disease, https://www.ninds.nih.gov/current-research/focus-disorders/parkinsons-disease-research/parkinsons-disease-challenges-progress-and-promise."
     ]
   },
   {
     "id": "nuc-snr",
     "name": "Substantia nigra, pars reticulata",
-    "synonyms": ["SNr", "GABAergic reticulata"],
+    "synonyms": [
+      "SNr",
+      "GABAergic reticulata"
+    ],
     "region": "midbrain",
     "subdivision": "Tegmentum",
     "kind": "nucleus",
@@ -491,35 +608,44 @@
     "bloodSupply": "Paramedian perforators of the PCA; anterior choroidal artery branches laterally",
     "clinical": [
       {
-        "syndrome": "Basal ganglia output lesions",
-        "findings": "SNr infarcts or hemorrhages disinhibit thalamic and collicular targets, producing contralateral dystonia, chorea, or hemiballism-like involuntary movements.",
-        "vascular": "PCA paramedian perforators; anterior choroidal artery"
-      },
-      {
-        "syndrome": "Saccadic distractibility from collicular disinhibition",
-        "findings": "SNr neurons fire tonically and hold the superior colliculus under GABAergic inhibition, so loss of nigral output removes the brake on reflexive visually guided saccades: patients make unwanted, short-latency saccades towards novel stimuli and are visually distractible, a pattern also described in progressive supranuclear palsy, in which SNr cell loss is a pathological hallmark.",
-        "vascular": "PCA paramedian perforators; anterior choroidal artery",
-        "note": "The mirror image of Parkinson's disease: here the dopaminergic pars compacta is spared while the GABAergic output nucleus fails, so the picture is hyperkinetic and saccade-happy rather than bradykinetic."
+        "syndrome": "Basal-ganglia motor and oculomotor dysfunction",
+        "findings": "SNr is a tonic inhibitory basal-ganglia output nucleus with thalamic, collicular and brainstem targets. Injury or network dysfunction can disturb movement and eye-movement control, but an isolated human lesion does not define a predictable hyperkinetic or visually distractible syndrome."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc"],
-    "origin3d": [6.5, 9.5, 9],
-    "size3d": [4.5, 1.2, 3.5],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      6.5,
+      9.5,
+      9
+    ],
+    "size3d": [
+      4.5,
+      1.2,
+      3.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Basal Ganglia\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia circuits, printed pp. 748-754 (PDF pp. 774-780).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, Parkinson disease and related disorders, printed pp. 762-768 (PDF pp. 788-794).",
+      "NINDS, Parkinson Disease, https://www.ninds.nih.gov/current-research/focus-disorders/parkinsons-disease-research/parkinsons-disease-challenges-progress-and-promise."
     ]
   },
   {
     "id": "tract-crus-cerebri",
     "name": "Crus cerebri",
-    "synonyms": ["basis pedunculi", "cerebral peduncle", "pes pedunculi"],
+    "synonyms": [
+      "basis pedunculi",
+      "cerebral peduncle",
+      "pes pedunculi"
+    ],
     "region": "midbrain",
     "subdivision": "Basis pedunculi",
     "kind": "tract",
     "laterality": "paired",
     "color": "#8b5cf6",
-    "function": "Ventral midbrain fiber bundle (basis pedunculi) carrying all descending corticofugal fibers with strict medial-to-lateral somatotopy: frontopontine fibers most medial, then corticobulbar fibers, then corticospinal fibers, and temporoparietooccipitopontine fibers most lateral. Rostrally continuous with the internal capsule; caudally it disperses into the longitudinal fasciculi of the basis pontis and re-forms as the medullary pyramids.",
+    "function": "Ventral midbrain descending fiber compartment (basis pedunculi). Medial fibers are predominantly frontopontine, the middle part carries corticospinal/corticobulbar fibers, and lateral fibers include temporoparieto-occipitopontine projections. This is a broad topographic scheme, not a strictly separated fiber map. Corticospinal fibers continue through the pons to the medullary pyramids.",
     "connections": {
       "afferent": [
         "Internal capsule (genu and posterior limb): corticobulbar, corticospinal, and corticopontine fibers"
@@ -542,25 +668,37 @@
         "vascular": "PCA perforators"
       }
     ],
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic"],
-    "origin3d": [7, 10, 9],
-    "size3d": [2.5, 6, 2],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic"
+    ],
+    "origin3d": [
+      7,
+      10,
+      9
+    ],
+    "size3d": [
+      2.5,
+      6,
+      2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\" (long tracts)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, midbrain sections, printed pp. 615-617 (PDF pp. 641-643).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158)."
     ]
   },
   {
     "id": "tract-scp-decussation",
     "name": "Superior cerebellar peduncle decussation",
-    "synonyms": ["decussation of the superior cerebellar peduncles"],
+    "synonyms": [
+      "decussation of the superior cerebellar peduncles"
+    ],
     "region": "midbrain",
     "subdivision": "Tegmentum",
     "kind": "tract",
     "laterality": "midline",
     "color": "#a78bfa",
-    "function": "Ventral midline crossing of the superior cerebellar peduncles in the caudal midbrain tegmentum: virtually all dentatothalamocortical cerebellar output decussates here, so each cerebellar hemisphere ultimately coordinates the contralateral body through the red nucleus, VL/VA thalamus, and motor cortex.",
+    "function": "Crossing of the major dentate/interposed cerebellar efferents in the caudal midbrain near the inferior-collicular level. Crossed fibers reach contralateral red-nuclear and thalamic targets; after the additional crossing in descending motor pathways, each cerebellar hemisphere has a net influence on the ipsilateral body.",
     "connections": {
       "afferent": [
         "Both superior cerebellar peduncles (dentate and interposed nucleus outflow)"
@@ -574,76 +712,95 @@
     "bloodSupply": "Paramedian perforators of the basilar tip / posterior cerebral artery",
     "clinical": [
       {
-        "syndrome": "Caudal midbrain tegmental infarct",
-        "findings": "Paramedian lesions of the decussation interrupt cerebellar outflow producing limb ataxia and intention tremor; involvement of the adjacent oculomotor complex and MLF adds diplopia and gaze palsies.",
-        "vascular": "PCA paramedian perforators"
+        "syndrome": "Crossing cerebellar outflow injury",
+        "findings": "A lesion centered on the SCP crossing can interrupt output from both cerebellar hemispheres and cause bilateral ataxia. Deficits above or below the crossing depend on which fibers are affected; nearby trochlear/MLF involvement may add ocular motor findings."
       }
     ],
-    "levels": ["lvl-midbrain-ic"],
-    "origin3d": [0, 7, 2],
-    "size3d": [3.5, 1.2, 2.5],
+    "levels": [
+      "lvl-midbrain-ic"
+    ],
+    "origin3d": [
+      0,
+      7,
+      2
+    ],
+    "size3d": [
+      3.5,
+      1.2,
+      2.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar output/input pathways, printed pp. 705-710 (PDF pp. 731-736).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections and SCP crossing, printed pp. 136-144 (PDF pp. 150-158)."
     ]
   },
   {
     "id": "tract-scp",
     "name": "Superior cerebellar peduncle",
-    "synonyms": ["SCP", "brachium conjunctivum"],
+    "synonyms": [
+      "SCP",
+      "brachium conjunctivum"
+    ],
     "region": "midbrain",
     "subdivision": "Cerebellar connections",
     "kind": "tract",
     "laterality": "paired",
     "color": "#a78bfa",
-    "function": "Principal efferent peduncle of the cerebellum: dentate and interposed nucleus fibers sweep rostrally through the dorsolateral pons and caudal midbrain, decussate completely in the ventral midbrain tegmentum, and reach the contralateral red nucleus and VL/VA thalamus (dentatorubrothalamic system). Because cerebellar output double-crosses, lesions here cause ipsilateral limb ataxia; chronic lesions may add contralateral dystonia.",
+    "function": "Major cerebellar output route from dentate and interposed nuclei through the rostral pons to the caudal-midbrain decussation, then toward contralateral thalamus and red nucleus. It also carries anterior spinocerebellar afferents. Pre-crossing output injury causes mainly ipsilateral limb ataxia; post-crossing cerebellothalamic injury causes contralateral ataxia.",
     "connections": {
       "afferent": [
-        "Dentate nucleus",
-        "Interposed nuclei (emboliform and globose)",
-        "Anterior (ventral) spinocerebellar tract (tract-anterior-spinocerebellar) — the cerebellar afferent that enters through this peduncle"
+        "Dentate and interposed nuclear efferents",
+        "Anterior spinocerebellar tract (tract-anterior-spinocerebellar) afferents"
       ],
       "efferent": [
-        "Contralateral red nucleus",
-        "Contralateral VL/VA thalamus",
-        "Oculomotor/trochlear nuclear collaterals"
+        "After decussation: contralateral VL and related motor thalamic targets",
+        "After decussation: contralateral red nucleus"
       ]
     },
     "bloodSupply": "Superior cerebellar artery (pontine portion); paramedian perforators of the basilar tip (midbrain portion)",
     "clinical": [
       {
         "syndrome": "Cerebellar outflow ataxia",
-        "findings": "SCP or dentate outflow lesions produce ipsilateral dysmetria, intention tremor, and limb ataxia; SCA-territory infarcts classically combine these with vertigo and nystagmus.",
-        "vascular": "Superior cerebellar artery",
-        "note": "Adult-onset lesions may later develop contralateral (double-crossed) dystonia or choreoathetosis."
+        "findings": "The side of ataxia depends on crossing: ipsilateral below the caudal-midbrain SCP decussation, contralateral above it, and potentially bilateral at the crossing."
       },
       {
-        "syndrome": "Holmes (rubral) tremor after peduncular injury",
-        "findings": "Damage to the dentato-rubro-thalamic route at or above the peduncular decussation — the midbrain tegmentum, the red nucleus or the thalamic VL — leaves a coarse, slow (2-5 Hz) tremor of the contralateral limbs that is present at rest, worsens with posture and explodes on goal-directed movement, often with mild accompanying ataxia.",
-        "vascular": "Superior cerebellar artery / paramedian basilar tip perforators",
-        "note": "The delay of weeks to months between the stroke and the tremor, its contralateral side, and its partial response to levodopa or to VIM/subthalamic deep-brain stimulation separate it from acute cerebellar ataxia."
+        "syndrome": "Delayed tremor after outflow injury",
+        "findings": "Delayed Holmes-type tremor can follow cerebellothalamic network injury, often with additional nigrostriatal dysfunction. Side, latency and treatment response vary."
       }
     ],
-    "levels": ["lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc"],
-    "origin3d": [6, 2, -3],
-    "size3d": [1.8, 9, 1.5],
+    "levels": [
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      6,
+      2,
+      -3
+    ],
+    "size3d": [
+      1.8,
+      9,
+      1.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Cerebellum\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar output/input pathways, printed pp. 705-710 (PDF pp. 731-736).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections and SCP crossing, printed pp. 136-144 (PDF pp. 150-158)."
     ]
   },
   {
     "id": "nuc-dorsal-raphe",
     "name": "Dorsal raphe nucleus",
-    "synonyms": ["raphe dorsalis", "serotonergic raphe (rostral)"],
+    "synonyms": [
+      "raphe dorsalis",
+      "serotonergic raphe (rostral)"
+    ],
     "region": "midbrain",
     "subdivision": "Reticular formation",
     "kind": "nucleus",
     "laterality": "midline",
     "color": "#d97706",
-    "function": "Largest of the rostral serotonergic (5-HT) raphe nuclei, lying midline between the MLFs ventral to the periaqueductal gray: it projects diffusely to the forebrain, diencephalon, and spinal cord, modulating sleep-wake cycling, mood, and nociception, and partners with the PAG in descending antinociception.",
+    "function": "Predominantly serotonergic cell group in the midline periaqueductal region of the midbrain and rostral pons, with major ascending projections to forebrain structures. It modulates arousal, affect and other behaviors. Caudal medullary raphe groups provide important descending spinal serotonergic pain modulation; they should not be conflated with the dorsal raphe.",
     "connections": {
       "afferent": [
         "Periaqueductal gray",
@@ -659,30 +816,43 @@
     "bloodSupply": "Paramedian branches of the basilar tip / posterior cerebral artery",
     "clinical": [
       {
-        "syndrome": "Serotonergic dysregulation",
-        "findings": "Dorsal raphe serotonergic neurons are the principal pharmacological target of SSRIs; midbrain raphe involvement is associated with mood disturbance, sleep-wake disruption, and altered pain thresholds in brainstem disease.",
-        "vascular": "Paramedian perforators",
-        "note": "Serotonergic dysfunction is documented pharmacologically and functionally rather than as a focal stroke syndrome."
+        "syndrome": "Serotonergic network dysfunction",
+        "findings": "Dorsal raphe neurons participate in distributed serotonergic circuits influencing sleep and affect. SSRIs act on serotonin transporters throughout serotonergic projections, not exclusively on this nucleus; a focal dorsal-raphe lesion is not a specific diagnostic mood syndrome."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc"],
-    "origin3d": [0, 11, -4],
-    "size3d": [0.8, 4, 1],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      0,
+      11,
+      -4
+    ],
+    "size3d": [
+      0.8,
+      4,
+      1
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\" (other functions of the brainstem: neurotransmitter modulation)",
-      "Nolte, The Human Brain: An Introduction to Its Functional Anatomy — reticular formation and monoaminergic systems"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, projection systems and sleep, printed pp. 630-639 (PDF pp. 656-665).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, motor/autonomic reticular networks, printed pp. 646-648 (PDF pp. 672-674).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158)."
     ]
   },
   {
     "id": "nuc-cuneiform",
     "name": "Cuneiform nucleus",
-    "synonyms": ["mesencephalic reticular formation", "pedunculopontine region (adjacent)"],
+    "synonyms": [
+      "mesencephalic reticular formation",
+      "pedunculopontine region (adjacent)"
+    ],
     "region": "midbrain",
     "subdivision": "Reticular formation",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Mesencephalic reticular formation of the dorsolateral tegmentum (with the adjacent pedunculopontine region forming the mesencephalic locomotor region): initiates and modulates gait and postural tone through descending reticulospinal systems, contributes to arousal via ascending projections to the intralaminar thalamus, and participates in pain modulation and startle.",
+    "function": "Dorsolateral mesencephalic reticular nucleus included with neighboring pedunculopontine circuitry in descriptions of the mesencephalic locomotor region. Experimental and translational studies link this region to locomotion and arousal; precise selective human nuclear lesion functions are not established by this atlas.",
     "connections": {
       "afferent": [
         "Periaqueductal gray",
@@ -699,17 +869,28 @@
     "bloodSupply": "Branches of the superior cerebellar artery and collicular branches of the posterior cerebral artery (dorsolateral tegmentum)",
     "clinical": [
       {
-        "syndrome": "Gait ignition failure / freezing of gait",
-        "findings": "The cuneiform-pedunculopontine mesencephalic locomotor region drives gait initiation; its degeneration or disconnection in parkinsonism contributes to freezing of gait and akinesia, and it is an investigational deep-brain-stimulation target.",
-        "vascular": "SCA / PCA collicular branches"
+        "syndrome": "Locomotor-network research",
+        "findings": "Mesencephalic locomotor circuitry is studied in gait initiation/freezing and neuromodulation. Freezing of gait has distributed mechanisms and does not uniquely diagnose cuneiform nuclear degeneration."
       }
     ],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc"],
-    "origin3d": [7, 11, -4],
-    "size3d": [2, 4, 1.5],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      7,
+      11,
+      -4
+    ],
+    "size3d": [
+      2,
+      4,
+      1.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem III: Internal Structures and Vascular Supply\" (reticular formation)",
-      "Snell, Clinical Neuroanatomy — reticular formation sections"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, projection systems and sleep, printed pp. 630-639 (PDF pp. 656-665).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, motor/autonomic reticular networks, printed pp. 646-648 (PDF pp. 672-674).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158)."
     ]
   },
   {
@@ -725,23 +906,35 @@
     "bloodSupply": "Basilar apex (P1 segments and posterior thalamoperforators); posterior communicating artery branches",
     "clinical": [
       {
-        "syndrome": "Basilar tip aneurysm",
-        "findings": "Saccular aneurysms of the basilar apex within the interpeduncular cistern compress the CN III roots or midbrain, causing pupil-involving third-nerve palsy, altered consciousness, or top-of-the-basilar syndromes.",
-        "vascular": "Basilar apex / posterior communicating artery"
+        "syndrome": "Interpeduncular cisternal disease",
+        "findings": "Basilar-apex aneurysm or other cisternal/midbrain disease may affect CN III or nearby pathways. Pupil dysfunction and altered consciousness depend on involvement; top-of-basilar ischemia is distinct from compression by an unruptured aneurysm."
       }
     ],
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic"],
-    "origin3d": [0, 9, 9],
-    "size3d": [2.5, 3, 1.5],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic"
+    ],
+    "origin3d": [
+      0,
+      9,
+      9
+    ],
+    "size3d": [
+      2.5,
+      3,
+      1.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cranial Nerves\" (surface features of the brainstem)",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, midbrain sections, printed pp. 615-617 (PDF pp. 641-643).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158)."
     ]
   },
   {
     "id": "surf-cn3-exit",
     "name": "Oculomotor nerve (CN III) exit",
-    "synonyms": ["CN III rootlets in interpeduncular fossa"],
+    "synonyms": [
+      "CN III rootlets in interpeduncular fossa"
+    ],
     "region": "midbrain",
     "subdivision": "Surface landmarks",
     "kind": "surface",
@@ -751,29 +944,38 @@
     "bloodSupply": "PCA/SCA interval perforators; recurrent branches of the posterior communicating artery to the nerve",
     "clinical": [
       {
-        "syndrome": "Weber syndrome",
-        "findings": "Ventral midbrain lesion at the exit zone: ipsilateral CN III palsy (ptosis, mydriasis, down-and-out eye) with contralateral hemiplegia.",
-        "vascular": "Paramedian branches of the PCA"
-      },
-      {
-        "syndrome": "Posterior communicating artery aneurysm",
-        "findings": "Aneurysm at the PCoA origin compresses the emerging nerve: acute painful pupil-involving third-nerve palsy — a neurosurgical emergency.",
-        "vascular": "Posterior communicating artery"
+        "syndrome": "Oculomotor root-region dysfunction",
+        "findings": "CN III palsy may involve ptosis, extraocular weakness and variable pupil dysfunction. Midbrain fascicular extension can add contralateral weakness/ataxia. Acute aneurysmal or herniation-related compression is possible; pupil sparing does not exclude compression."
       }
     ],
-    "levels": ["lvl-midbrain-sc"],
-    "origin3d": [2, 9.5, 8.5],
-    "size3d": [0.8, 2, 0.8],
+    "levels": [
+      "lvl-midbrain-sc"
+    ],
+    "origin3d": [
+      2,
+      9.5,
+      8.5
+    ],
+    "size3d": [
+      0.8,
+      2,
+      0.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cranial Nerves\" (skull foramina and cranial nerve exit points)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
-      "RadioGraphics 2019, \"Midbrain, Pons, and Medulla: Anatomy and Syndromes\", doi:10.1148/rg.2019180126"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular motor nuclei and pupils, printed pp. 568-580 (PDF pp. 594-606).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158).",
+      "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), preface on Edinger-Westphal terminology, preface p. vi (PDF p. 8).",
+      "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye 2022, https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/."
     ]
   },
   {
     "id": "surf-cn4-exit",
     "name": "Trochlear nerve (CN IV) exit",
-    "synonyms": ["CN IV dorsal exit below inferior colliculus", "superior medullary velum decussation"],
+    "synonyms": [
+      "CN IV dorsal exit below inferior colliculus",
+      "superior medullary velum decussation"
+    ],
     "region": "midbrain",
     "subdivision": "Surface landmarks",
     "kind": "surface",
@@ -783,24 +985,38 @@
     "bloodSupply": "Collicular (quadrigeminal) branches of the PCA; distal superior cerebellar artery branches",
     "clinical": [
       {
-        "syndrome": "Trochlear palsy after closed head trauma",
-        "findings": "The long thin dorsal roots are stretched against the tentorial edge; bilateral trochlear palsies after trauma indicate exit/decussation-zone injury, with vertical diplopia worst on descending stairs or reading.",
-        "vascular": "Collicular/SCA branches; mechanical stretch"
+        "syndrome": "Traumatic trochlear dysfunction",
+        "findings": "Trochlear palsy can follow head trauma and may be unilateral or bilateral. Bilateral palsy does not uniquely prove an exit/decussation lesion because peripheral courses can also be injured."
       }
     ],
-    "levels": ["lvl-pons-rostral", "lvl-midbrain-ic"],
-    "origin3d": [1.5, 7.5, -8],
-    "size3d": [0.8, 1.5, 0.8],
+    "levels": [
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic"
+    ],
+    "origin3d": [
+      1.5,
+      7.5,
+      -8
+    ],
+    "size3d": [
+      0.8,
+      1.5,
+      0.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cranial Nerves\" (CN IV course and exit)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Eye Movements and Pupillary Control\"",
-      "Patten, Neurological Differential Diagnosis — midbrain/upper pons level plates"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular motor nuclei and pupils, printed pp. 568-580 (PDF pp. 594-606).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158).",
+      "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), preface on Edinger-Westphal terminology, preface p. vi (PDF p. 8)."
     ]
   },
   {
     "id": "ctx-midbrain-surface",
     "name": "Mesencephalon (context surface)",
-    "synonyms": ["midbrain envelope", "mesencephalic block"],
+    "synonyms": [
+      "midbrain envelope",
+      "mesencephalic block"
+    ],
     "region": "midbrain",
     "subdivision": "Surface landmarks",
     "kind": "context",
@@ -809,15 +1025,29 @@
     "function": "Renderable silhouette of the whole mesencephalon as one block: the dorsal tectal plate with its superior and inferior colliculi, the surrounding tegmentum with the cerebral aqueduct, periaqueductal gray, red nuclei and substantia nigra, and the ventral crus cerebri with the interpeduncular fossa between the peduncles. It exists so the midbrain is a single named, selectable body in the 3D scene, not because it is a nucleus; its internal content belongs to the collicular, tegmental and peduncular records.",
     "contextNote": "Envelope/context-surface record: the GLB silhouette ctx-midbrain-surface in src/assets/anatomy/anatomy-manifest.json is its 3D body (SceneLayers envelope slot env-midbrain), and its canonical-space extent below is that baked bbox. Not a nucleus — see the collicular, tegmental, peduncular and cranial-nerve records; no plate carries this tag.",
     "connections": {
-      "afferent": ["See the individual midbrain records — the envelope itself carries no fibers"]
+      "afferent": [
+        "See the individual midbrain records — the envelope itself carries no fibers"
+      ]
     },
     "clinical": [],
-    "levels": ["lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-post-comm"],
-    "origin3d": [0.026, 11.453, -0.946],
-    "size3d": [12.1, 8.92, 13.01],
+    "levels": [
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-post-comm"
+    ],
+    "origin3d": [
+      0.026,
+      11.453,
+      -0.946
+    ],
+    "size3d": [
+      12.1,
+      8.92,
+      13.01
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\"",
-      "RadioGraphics 2019 — 'Midbrain, Pons, and Medulla: Anatomy and Syndromes'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, midbrain sections, printed pp. 615-617 (PDF pp. 641-643).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158)."
     ]
   }
 ]

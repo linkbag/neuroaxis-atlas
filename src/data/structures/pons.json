@@ -2,7 +2,10 @@
   {
     "id": "ctx-pontine-nuclei",
     "name": "Pontine nuclei",
-    "synonyms": ["pontine gray", "ventral pontine nuclei"],
+    "synonyms": [
+      "pontine gray",
+      "ventral pontine nuclei"
+    ],
     "region": "pons",
     "subdivision": "Basis pontis",
     "kind": "context",
@@ -10,36 +13,53 @@
     "color": "#94a3b8",
     "function": "Relay station of the cortico-ponto-cerebellar system: cortical association and motor fibers synapse on pontine gray neurons, whose axons cross the midline as transverse pontocerebellar fibers and reach the contralateral cerebellar hemisphere through the middle cerebellar peduncle. This massive relay lets the cerebral cortex enlist the cerebellum in the planning and coordination of skilled movement.",
     "connections": {
-      "afferent": ["Corticopontine fibers (frontopontine and temporoparietooccipitopontine bundles, tract-corticopontine)"],
-      "efferent": ["Pontocerebellar fibers crossing to the contralateral cerebellum via the middle cerebellar peduncle (tract-mcp)"]
+      "afferent": [
+        "Corticopontine fibers (frontopontine and temporoparietooccipitopontine bundles, tract-corticopontine)"
+      ],
+      "efferent": [
+        "Pontocerebellar fibers crossing to the contralateral cerebellum via the middle cerebellar peduncle (tract-mcp)"
+      ]
     },
     "bloodSupply": "Basilar artery paramedian and short circumferential perforators",
     "clinical": [
       {
-        "syndrome": "Locked-in syndrome",
-        "findings": "Basis pontis infarction (including the pontine relay gray) abolishes nearly all voluntary movement except vertical eye movements and blinking, while the dorsal tegmentum and consciousness are spared.",
-        "vascular": "Basilar artery occlusion"
+        "syndrome": "Ventral pontine lesions",
+        "findings": "Pontine nuclei relay cortical information to the contralateral cerebellum; their injury may contribute to ataxia. Locked-in syndrome results from bilateral corticospinal/corticobulbar disconnection with preserved consciousness, rather than isolated pontine gray injury."
       },
       {
-        "syndrome": "Central pontine myelinolysis",
-        "findings": "Osmotic stress demyelinates the central basis pontis, damaging the pontine gray and the fiber systems threading through it, and producing spastic quadriparesis with pseudobulbar palsy.",
-        "note": "Classically follows over-rapid correction of chronic hyponatremia."
+        "syndrome": "Osmotic demyelination",
+        "findings": "Central pontine myelinolysis primarily affects myelin in the central pons, often after osmotic stress associated with correction of chronic hyponatremia. It may cause dysarthria, dysphagia and quadriparesis; it is not primarily destruction of pontine neuronal gray matter."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [6, -11, 9],
-    "size3d": [5.5, 12, 3],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      6,
+      -11,
+      9
+    ],
+    "size3d": [
+      5.5,
+      12,
+      3
+    ],
     "contextNote": "Context silhouette of the basis-pontis relay gray for the 3D envelope and sagittal/coronal plates; the individual longitudinal tracts threading through the basis are separate records (tract-corticospinal-lateral, tract-corticobulbar, tract-corticopontine in tracts.json).",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, pontine sections, printed pp. 618-619 (PDF pp. 644-645).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar input pathways, printed pp. 708-710 (PDF pp. 734-736)."
     ]
   },
   {
     "id": "ctx-pontine-fibers",
     "name": "Longitudinal and transverse pontine fibers",
-    "synonyms": ["longitudinal fasciculi of the pons", "transverse pontocerebellar fibers"],
+    "synonyms": [
+      "longitudinal fasciculi of the pons",
+      "transverse pontocerebellar fibers"
+    ],
     "region": "pons",
     "subdivision": "Basis pontis",
     "kind": "context",
@@ -47,35 +67,49 @@
     "color": "#94a3b8",
     "function": "Composite fiber systems of the basis pontis: the longitudinal fasciculi carry corticospinal, corticobulbar and corticopontine axons from the crus cerebri down to the medulla, while the transverse fibers arise from the pontine nuclei, decussate, and collect laterally as the middle cerebellar peduncle.",
     "connections": {
-      "afferent": ["Corticofugal bundles from the crus cerebri (tract-corticospinal-lateral, tract-corticobulbar, tract-corticopontine)"],
-      "efferent": ["Pontocerebellar fibers forming the middle cerebellar peduncle (tract-mcp)"]
+      "afferent": [
+        "Corticofugal bundles from the crus cerebri (tract-corticospinal-lateral, tract-corticobulbar, tract-corticopontine)"
+      ],
+      "efferent": [
+        "Pontocerebellar fibers forming the middle cerebellar peduncle (tract-mcp)"
+      ]
     },
     "bloodSupply": "Basilar artery paramedian perforators",
     "clinical": [
       {
-        "syndrome": "Locked-in syndrome",
-        "findings": "Interruption of the longitudinal fibers in the ventral pons disconnects the motor cortex from all spinal and cranial motor nuclei below, sparing only the oculomotor pathways in the tegmentum.",
-        "vascular": "Basilar artery occlusion"
-      },
-      {
-        "syndrome": "Dysarthria-clumsy hand syndrome (small basis-pontis lacune)",
-        "findings": "A small paramedian lacunar infarct confined to the basis pontis destroys descending corticospinal and corticobulbar fibres together with the transverse pontocerebellar fibres, so the patient shows a clumsy, slow hand with mild weakness of the same limbs and dysarthria — plus gait ataxia disproportionate to the weakness. Larger lesions produce the full locked-in picture.",
-        "vascular": "Basilar paramedian perforators",
-        "note": "The transverse fibres decussate here and gather as the middle cerebellar peduncle, so a unilateral basis lesion also de-afferents the contralateral cerebellar hemisphere and can add crossed cerebellar ataxia."
+        "syndrome": "Ventral pontine motor disconnection",
+        "findings": "Bilateral corticospinal and corticobulbar injury in the basis pontis can produce locked-in syndrome when arousal systems remain intact. Small unilateral lesions may cause contralateral weakness, dysarthria and clumsy-hand or ataxic-hemiparesis patterns; not every larger pontine lesion produces locked-in syndrome."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [6, -11, 9.5],
-    "size3d": [6.2, 12.5, 3.2],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      6,
+      -11,
+      9.5
+    ],
+    "size3d": [
+      6.2,
+      12.5,
+      3.2
+    ],
     "contextNote": "Context record for the basis-pontis fiber feltwork; the named descending pathways are tracked individually in tracts.json and are tagged separately on transverse plates.",
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, pontine sections, printed pp. 618-619 (PDF pp. 644-645).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar input pathways, printed pp. 708-710 (PDF pp. 734-736)."
     ]
   },
   {
     "id": "nuc-trigeminal-motor",
     "name": "Trigeminal motor nucleus (CN V)",
-    "synonyms": ["motor nucleus of CN V", "masticatory nucleus"],
+    "synonyms": [
+      "motor nucleus of CN V",
+      "masticatory nucleus"
+    ],
     "region": "pons",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
@@ -83,31 +117,48 @@
     "color": "#14b8a6",
     "function": "Lower motor neurons innervating the muscles of mastication (masseter, temporalis, medial and lateral pterygoids) plus tensor tympani, tensor veli palatini, mylohyoid and the anterior belly of digastric through the motor root of CN V (portio minor). It executes the jaw-jerk (masseteric) reflex and receives predominantly bilateral corticobulbar input, so supranuclear lesions cause only mild contralateral jaw weakness.",
     "connections": {
-      "afferent": ["Mesencephalic trigeminal nucleus and tract (jaw-closure proprioception for the jaw-jerk reflex)", "Corticobulbar fibers (bilateral)", "Reticular formation pattern generators for chewing"],
-      "efferent": ["Motor root of CN V (portio minor) to the muscles of mastication and tensor muscles"]
+      "afferent": [
+        "Mesencephalic trigeminal nucleus and tract (jaw-closure proprioception for the jaw-jerk reflex)",
+        "Corticobulbar fibers (bilateral)",
+        "Reticular formation pattern generators for chewing"
+      ],
+      "efferent": [
+        "Motor root of CN V (portio minor) to the muscles of mastication and tensor muscles"
+      ]
     },
     "bloodSupply": "Basilar paramedian perforators; superior cerebellar artery branches at the rostral pole",
     "clinical": [
       {
-        "syndrome": "Ipsilateral masticatory (LMN) weakness",
-        "findings": "Wasting and weakness of the ipsilateral masticatory muscles; on opening, the jaw deviates toward the weak side (unopposed lateral pterygoid of the normal side), and the jaw jerk is abolished.",
-        "vascular": "Short circumferential branches of the basilar artery (superior cerebellar artery branches at the rostral pole)",
-        "note": "In striking contrast, UMN (corticobulbar) lesions weaken the jaw only slightly because the nucleus is bilaterally innervated."
+        "syndrome": "Masticatory weakness",
+        "findings": "Lower motor neuron injury can weaken ipsilateral mastication and produce jaw deviation toward the weak side on opening. Atrophy or reduced jaw reflex depends on extent and chronicity. Bilateral cortical input often limits weakness after unilateral supranuclear injury."
       }
     ],
-    "levels": ["lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [4, -8, 4],
-    "size3d": [2, 2.5, 1.8],
+    "levels": [
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      4,
+      -8,
+      4
+    ],
+    "size3d": [
+      2,
+      2.5,
+      1.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Patten, Neurological Differential Diagnosis, 2nd ed., brainstem level plates"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, trigeminal sensory and motor pathways, printed pp. 508-512 (PDF pp. 534-538).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), mid/rostral pontine sections, printed pp. 128-132 (PDF pp. 142-146)."
     ]
   },
   {
     "id": "nuc-principal-sensory-v",
     "name": "Principal sensory trigeminal nucleus",
-    "synonyms": ["main sensory trigeminal nucleus", "principal nucleus of CN V"],
+    "synonyms": [
+      "main sensory trigeminal nucleus",
+      "principal nucleus of CN V"
+    ],
     "region": "pons",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
@@ -115,8 +166,13 @@
     "color": "#14b8a6",
     "function": "Second-order relay of the trigeminal system for large-fiber discriminative touch, pressure and periodontal mechanoreception: entering portio-major afferents of CN V terminate here, and the neurons project chiefly through the decussating ventral trigeminothalamic (trigeminal lemniscus) tract to the contralateral ventral posteromedial nucleus (VPM), with a smaller ipsilateral dorsal trigeminothalamic stream.",
     "connections": {
-      "afferent": ["Mechanoreceptive afferents of the CN V sensory root (portio major) from face, oral cavity and tooth pulp"],
-      "efferent": ["Ventral trigeminothalamic tract (tract-trigeminothalamic-ventral) to contralateral VPM", "Dorsal trigeminothalamic tract (tract-trigeminothalamic-dorsal), ipsilateral"]
+      "afferent": [
+        "Large-fiber touch and dental-pressure afferents of CN V from the trigeminal ganglion"
+      ],
+      "efferent": [
+        "Predominantly crossed ventral trigeminothalamic fibers (tract-trigeminothalamic-ventral) to VPM",
+        "Smaller uncrossed dorsal trigeminothalamic projection (tract-trigeminothalamic-dorsal), particularly for oral touch and pressure"
+      ]
     },
     "bloodSupply": "Short circumferential branches of the basilar artery; AICA territory caudally, SCA rostrally",
     "clinical": [
@@ -126,18 +182,32 @@
         "vascular": "AICA"
       }
     ],
-    "levels": ["lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [5, -8, 5],
-    "size3d": [2.2, 2.5, 1.8],
+    "levels": [
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      5,
+      -8,
+      5
+    ],
+    "size3d": [
+      2.2,
+      2.5,
+      1.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Snell, Clinical Neuroanatomy, brainstem and cranial nerves chapters"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, trigeminal sensory and motor pathways, printed pp. 508-512 (PDF pp. 534-538).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), mid/rostral pontine sections, printed pp. 128-132 (PDF pp. 142-146)."
     ]
   },
   {
     "id": "nuc-abducens",
     "name": "Abducens nucleus (CN VI)",
-    "synonyms": ["CN VI nucleus", "lateral rectus motor nucleus"],
+    "synonyms": [
+      "CN VI nucleus",
+      "lateral rectus motor nucleus"
+    ],
     "region": "pons",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
@@ -145,8 +215,15 @@
     "color": "#14b8a6",
     "function": "Contains two populations: lower motor neurons driving the ipsilateral lateral rectus (abduction of that eye), and internuclear neurons whose axons cross immediately, ascend in the contralateral medial longitudinal fasciculus, and excite medial-rectus motoneurons of the oculomotor complex — yoking both eyes into conjugate horizontal gaze. The nucleus therefore functions as the final common command for looking toward its own side.",
     "connections": {
-      "afferent": ["Excitatory burst neurons of the ipsilateral PPRF (nuc-pprf)", "Vestibular nuclei via the MLF (vestibulo-ocular reflex)", "Corticobulbar gaze fibers"],
-      "efferent": ["CN VI fibers to the ipsilateral lateral rectus", "Internuclear axons crossing to ascend in the contralateral MLF toward nuc-oculomotor"]
+      "afferent": [
+        "Excitatory burst neurons of the ipsilateral PPRF (nuc-pprf)",
+        "Vestibular nuclei via the MLF (vestibulo-ocular reflex)",
+        "Corticobulbar gaze fibers"
+      ],
+      "efferent": [
+        "CN VI fibers to the ipsilateral lateral rectus",
+        "Internuclear axons crossing to ascend in the contralateral MLF toward nuc-oculomotor"
+      ]
     },
     "bloodSupply": "Basilar artery paramedian perforators at the pontomedullary junction",
     "clinical": [
@@ -162,18 +239,31 @@
         "vascular": "AICA / basilar perforators"
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [1.5, -18, -4],
-    "size3d": [1.6, 1.8, 1.6],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      1.5,
+      -18,
+      -4
+    ],
+    "size3d": [
+      1.6,
+      1.8,
+      1.6
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, extraocular nerves and nuclei, printed pp. 568-575 (PDF pp. 594-601).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, horizontal gaze circuitry, printed pp. 585-587 (PDF pp. 611-613)."
     ]
   },
   {
     "id": "nuc-facial",
     "name": "Facial nucleus (CN VII)",
-    "synonyms": ["CN VII motor nucleus"],
+    "synonyms": [
+      "CN VII motor nucleus"
+    ],
     "region": "pons",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
@@ -181,34 +271,51 @@
     "color": "#14b8a6",
     "function": "Lower motor neurons for all muscles of facial expression plus stapedius, stylohyoid and the posterior belly of digastric. Axons arc dorsomedially around the abducens nucleus (the internal genu, producing the facial colliculus) before turning ventrolaterally to exit. Corticobulbar input to the upper-face division is bilateral, whereas the lower-face division is driven mainly by the contralateral cortex — the anatomical basis of the central versus peripheral facial palsy patterns.",
     "connections": {
-      "afferent": ["Corticobulbar fibers (bilateral for the upper face, contralateral-dominant for the lower face)", "Reflex afferents from the spinal trigeminal complex (corneal blink) and from the superior olivary complex (stapedial reflex)"],
-      "efferent": ["CN VII motor root to the muscles of facial expression and stapedius"]
+      "afferent": [
+        "Corticobulbar fibers (bilateral for the upper face, contralateral-dominant for the lower face)",
+        "Reflex afferents from the spinal trigeminal complex (corneal blink) and from the superior olivary complex (stapedial reflex)"
+      ],
+      "efferent": [
+        "CN VII motor root to the muscles of facial expression and stapedius"
+      ]
     },
     "bloodSupply": "AICA and basilar paramedian perforators",
     "clinical": [
       {
-        "syndrome": "Peripheral (LMN) facial palsy",
-        "findings": "Paralysis of the entire ipsilateral hemiface including the forehead: the eye will not close, tears pool, food collects in the buccal vestibule and the smile flattens; hyperacusis may appear if stapedius fibers are involved. Nuclear or fascicular lesions combine this with other pontine deficits (Millard-Gubler).",
-        "vascular": "AICA / basilar paramedian perforators"
+        "syndrome": "Lower motor neuron facial weakness",
+        "findings": "Nuclear/fascicular injury may weaken the entire ipsilateral face, including forehead and eye closure. Other pontine findings depend on lesion extent."
       },
       {
-        "syndrome": "Central (UMN) facial palsy",
-        "findings": "Contralateral weakness confined to the lower face with forehead sparing, produced by lesions of the corticobulbar fibers above the nucleus (cortex, internal capsule, cerebral peduncle).",
-        "note": "Forehead sparing reflects the bilateral cortical innervation of the upper-division motoneurons."
+        "syndrome": "Supranuclear facial weakness",
+        "findings": "Unilateral cortical/corticobulbar injury often predominantly weakens contralateral lower face with relative upper-face preservation. Forehead sparing is a useful pattern rather than an absolute rule."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [4, -19, -2],
-    "size3d": [2.2, 2, 1.8],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      4,
+      -19,
+      -2
+    ],
+    "size3d": [
+      2.2,
+      2,
+      1.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Patten, Neurological Differential Diagnosis, 2nd ed., facial palsy localization sections"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, facial nerve and reflexes, printed pp. 513-518 (PDF pp. 539-544).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), caudal pontine sections, printed pp. 122-126 (PDF pp. 136-140)."
     ]
   },
   {
     "id": "nuc-superior-salivatory",
     "name": "Superior salivatory nucleus",
-    "synonyms": ["superior salivary nucleus", "lacrimal nucleus"],
+    "synonyms": [
+      "superior salivary nucleus",
+      "lacrimal nucleus"
+    ],
     "region": "pons",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
@@ -216,57 +323,93 @@
     "color": "#14b8a6",
     "function": "Parasympathetic preganglionic column of CN VII: its fibers travel with the nervus intermedius, then via the greater petrosal nerve to the pterygopalatine ganglion (lacrimal gland and nasal-palatal mucosa) and via the chorda tympani to the submandibular ganglion (submandibular and sublingual glands), driving tear production and salivation.",
     "connections": {
-      "afferent": ["Hypothalamic and olfactory (visceral emotional) inputs modulating lacrimation and salivation"],
-      "efferent": ["Nervus intermedius — greater petrosal nerve to the pterygopalatine ganglion; chorda tympani to the submandibular ganglion"]
+      "afferent": [
+        "Hypothalamic and olfactory (visceral emotional) inputs modulating lacrimation and salivation"
+      ],
+      "efferent": [
+        "Nervus intermedius — greater petrosal nerve to the pterygopalatine ganglion; chorda tympani to the submandibular ganglion"
+      ]
     },
     "bloodSupply": "AICA and basilar paramedian perforators",
     "clinical": [
       {
-        "syndrome": "Ipsilateral dry eye and reduced salivation",
-        "findings": "Pontine or proximal CN VII lesions involving the nucleus or nervus intermedius reduce lacrimation and submandibular-sublingual salivation; the same fibers are affected in Bell palsy, explaining dry eye and altered taste together.",
-        "vascular": "AICA"
+        "syndrome": "Facial parasympathetic dysfunction",
+        "findings": "Injury can reduce lacrimal or submandibular/sublingual secretion according to which fibers are involved. Taste uses a separate sensory component; proximal VII disorders may combine deficits but Bell palsy does not invariably affect every function."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [3.2, -20, -2.5],
-    "size3d": [1.2, 1.2, 1.2],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      3.2,
+      -20,
+      -2.5
+    ],
+    "size3d": [
+      1.2,
+      1.2,
+      1.2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, facial nerve and reflexes, printed pp. 513-518 (PDF pp. 539-544).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), caudal pontine sections, printed pp. 122-126 (PDF pp. 136-140)."
     ]
   },
   {
     "id": "nuc-solitarius-rostral",
     "name": "Nucleus solitarius (rostral gustatory part)",
-    "synonyms": ["gustatory nucleus", "rostral solitary nucleus"],
-    "region": "pons",
+    "synonyms": [
+      "gustatory nucleus",
+      "rostral solitary nucleus"
+    ],
+    "region": "medulla",
     "subdivision": "Cranial nerve nuclei",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#14b8a6",
-    "function": "Rostral (gustatory) pole of the solitary nuclear complex reaching the caudal pons: the first central synapse for taste afferents of CN VII (chorda tympani, greater petrosal), CN IX and CN X. Output rises in the central tegmental tract to the parabrachial nuclei and, via thalamic relay in VPM, to the insular gustatory cortex.",
+    "function": "Rostral gustatory part of the solitary nucleus in the rostral medulla. It receives taste afferents from CN VII, IX and X; in humans the ascending gustatory pathway reaches VPM and then insular/frontal-opercular cortex. Rodent parabrachial-relay organization should not be imposed as an obligatory human relay.",
     "connections": {
-      "afferent": ["Taste-bud primary afferents via CN VII, CN IX and CN X"],
-      "efferent": ["Central tegmental tract (tract-central-tegmental) to parabrachial nuclei and VPM", "Hypothalamic and amygdaloid viscerosensory projections"]
+      "afferent": [
+        "Taste primary afferents through CN VII, IX and X"
+      ],
+      "efferent": [
+        "Ascending gustatory fibers toward VPM through the central tegmental region",
+        "Connections with hypothalamic, amygdaloid and brainstem visceral networks"
+      ]
     },
-    "bloodSupply": "Basilar short circumferential branches; AICA at the pontomedullary junction",
+    "bloodSupply": "Vertebral/PICA regional medullary branches, with variable overlap near the pontomedullary junction; precise gustatory subnuclear perfusion is not independently mapped.",
     "clinical": [
       {
-        "syndrome": "Ipsilateral ageusia",
-        "findings": "Rare in isolated form; loss of taste on the ipsilateral anterior two-thirds of the tongue accompanies pontine lesions of the solitary complex or its central tegmental output.",
-        "vascular": "AICA / basilar circumferential"
+        "syndrome": "Central taste dysfunction",
+        "findings": "Solitary-nucleus or ascending gustatory injury can impair taste. Side and distribution vary with lesion extent; central loss is not limited to the anterior two-thirds of the tongue."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [2.5, -22, -5],
-    "size3d": [1.4, 1.6, 1.4],
+    "levels": [
+      "lvl-pontomedullary"
+    ],
+    "origin3d": [
+      2.5,
+      -22,
+      -5
+    ],
+    "size3d": [
+      1.4,
+      1.6,
+      1.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, central taste pathways, printed pp. 514-515 (PDF pp. 540-541).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), solitary nucleus in rostral medulla, printed pp. 116-118 (PDF pp. 130-132)."
+    ],
+    "geometryNote": "Rostral gustatory NTS is in rostral medulla. Legacy numeric placement is conceptual and not registered to serial sections; exact coordinates and boundary remain unvalidated."
   },
   {
     "id": "nuc-vestibular-superior",
     "name": "Superior vestibular nucleus",
-    "synonyms": ["nucleus of Bechterew"],
+    "synonyms": [
+      "nucleus of Bechterew"
+    ],
     "region": "pons",
     "subdivision": "Vestibular nuclei",
     "kind": "nucleus",
@@ -274,35 +417,47 @@
     "color": "#14b8a6",
     "function": "Rostral-most vestibular nucleus, lying at the lateral angle of the fourth-ventricle floor near the cerebellar peduncles: integrates semicircular-canal signals and feeds vestibulo-ocular reflex pathways through the MLF to the oculomotor, trochlear and abducens nuclei, and exchanges fibers with the vestibulocerebellum.",
     "connections": {
-      "afferent": ["Superior and lateral semicircular canal afferents of CN VIII", "Flocculonodular (vestibulocerebellar) Purkinje fibers"],
-      "efferent": ["Ascending MLF fibers to the oculomotor nuclei (VOR)", "Vestibulocerebellar fibers via the inferior cerebellar peduncle (tract-icp)"]
+      "afferent": [
+        "Superior and lateral semicircular canal afferents of CN VIII",
+        "Flocculonodular (vestibulocerebellar) Purkinje fibers"
+      ],
+      "efferent": [
+        "Ascending MLF fibers to the oculomotor nuclei (VOR)",
+        "Vestibulocerebellar fibers via the inferior cerebellar peduncle (tract-icp)"
+      ]
     },
     "bloodSupply": "AICA and SCA circumferential branches",
     "clinical": [
       {
-        "syndrome": "Vestibular (vertigo-nystagmus) deficit",
-        "findings": "Unilateral involvement produces vertigo with nystagmus and past-pointing as part of AICA or lateral pontine syndromes.",
-        "vascular": "AICA"
-      },
-      {
-        "syndrome": "Skew deviation and the ocular tilt reaction (otolith pathway)",
-        "findings": "Utricular signals relayed through the superior vestibular nucleus are distributed by the MLF to the ocular motor nuclei and to the interstitial nucleus of Cajal; when they become asymmetric — a superior vestibular nerve or nucleus lesion, or a brainstem tegmental lesion — the brain misjudges 'down' and produces an ocular tilt reaction of head tilt, skew deviation (one eye higher than the other) and conjugate ocular torsion. The direction of the tilt indicates the side of the imbalanced utricular input.",
-        "vascular": "AICA and SCA circumferential branches",
-        "note": "Skew deviation is a graviceptive (otolith) sign, not a nerve palsy: ductions and versions are full, and the vertical diplopia is commonly dissociated from the degree of vertigo."
+        "syndrome": "Vestibulo-ocular imbalance",
+        "findings": "Injury in the superior vestibular region can cause vertigo, nystagmus and abnormalities of vestibulo-ocular control. Skew deviation and ocular tilt reaction reflect imbalance of distributed otolith pathways and are not specific to this nucleus."
       }
     ],
-    "levels": ["lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [4.5, -6, -5.5],
-    "size3d": [2, 1.8, 1.8],
+    "levels": [
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      4.5,
+      -6,
+      -5.5
+    ],
+    "size3d": [
+      2,
+      1.8,
+      1.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Fix, High-Yield Neuroanatomy, vestibular system section"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, vestibular pathways, printed pp. 523-527 (PDF pp. 549-553).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), vestibular nuclei across medullary and pontine levels, printed pp. 114-128 (PDF pp. 128-142)."
     ]
   },
   {
     "id": "nuc-vestibular-medial",
     "name": "Medial vestibular nucleus",
-    "synonyms": ["Schwalbe nucleus"],
+    "synonyms": [
+      "Schwalbe nucleus"
+    ],
     "region": "pons",
     "subdivision": "Vestibular nuclei",
     "kind": "nucleus",
@@ -310,94 +465,148 @@
     "color": "#14b8a6",
     "function": "The longest vestibular nucleus, extending from the open medulla into the mid-pons: principal source of the medial vestibulospinal tract and of the MLF vestibulo-ocular fibers that stabilize gaze during head movement; also relays to the reticular formation (motion-sickness pathways) and the cerebellum.",
     "connections": {
-      "afferent": ["CN VIII canal and macular afferents", "Vestibulocerebellar Purkinje fibers"],
-      "efferent": ["Medial vestibulospinal tract (tract-medial-vestibulospinal)", "Bilateral MLF projections to the extraocular motor nuclei", "Reticular formation and tract-icp projections"]
+      "afferent": [
+        "CN VIII canal and macular afferents",
+        "Vestibulocerebellar Purkinje fibers"
+      ],
+      "efferent": [
+        "Medial vestibulospinal tract (tract-medial-vestibulospinal)",
+        "Bilateral MLF projections to the extraocular motor nuclei",
+        "Reticular formation and tract-icp projections"
+      ]
     },
     "bloodSupply": "AICA / vertebral circumferential branches",
     "clinical": [
       {
-        "syndrome": "Gaze-holding failure and nystagmus",
-        "findings": "Lesions impair the vestibulo-ocular reflex, producing oscillopsia, gaze-evoked nystagmus and impaired smooth pursuit-vestibular cooperation in lateral pontomedullary strokes.",
-        "vascular": "AICA / vertebral"
-      },
-      {
-        "syndrome": "Lateropulsion (ipsilateral trunk push) in lateral medullary and vestibular lesions",
-        "findings": "The medial vestibular nucleus is the source of the medial vestibulospinal tract and of the MLF vestibulo-ocular fibres, so its involvement — classically in a Wallenberg infarct — produces lateropulsion: the patient actively pushes the trunk and falls toward the side of the lesion, with the head and eyes deviated the same way, and the symptom may outlast the vertigo and nystagmus by weeks.",
-        "vascular": "PICA / vertebral (dorsolateral medulla); AICA at the pontine level",
-        "note": "Distinguishing lateropulsion (vestibulospinal, toward the lesion) from cerebellar past-pointing (limb, ipsilateral, with dysmetria) is a classic bedside discriminator."
+        "syndrome": "Vestibulo-ocular and postural dysfunction",
+        "findings": "Medial vestibular injury can disturb the VOR, gaze stability and head-neck posture. Lateropulsion may accompany lateral medullary injury but involves distributed vestibular and spinocerebellar pathways; it is not proof of isolated medial vestibular nuclear injury or synonymous with active pusher behavior."
       }
     ],
-    "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle"],
-    "origin3d": [3.5, -14, -5.5],
-    "size3d": [2, 4.5, 1.8],
+    "levels": [
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle"
+    ],
+    "origin3d": [
+      3.5,
+      -14,
+      -5.5
+    ],
+    "size3d": [
+      2,
+      4.5,
+      1.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, vestibular pathways, printed pp. 523-527 (PDF pp. 549-553).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), vestibular nuclei across medullary and pontine levels, printed pp. 114-128 (PDF pp. 128-142)."
     ]
   },
   {
     "id": "nuc-vestibular-lateral",
     "name": "Lateral vestibular nucleus",
-    "synonyms": ["Deiters nucleus"],
+    "synonyms": [
+      "Deiters nucleus"
+    ],
     "region": "pons",
     "subdivision": "Vestibular nuclei",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#14b8a6",
-    "function": "Deiters nucleus: gives origin to the ipsilateral lateral vestibulospinal tract, which facilitates extensor (antigravity) muscle tone of the limbs and trunk for postural support; governed by inhibitory Purkinje input from the vestibulocerebellar vermis, so loss of cerebellar restraint yields excessive extensor tone.",
+    "function": "Lateral (Deiters) vestibular nucleus contributes importantly to the predominantly uncrossed lateral vestibulospinal tract, influencing extensor tone and posture. It integrates vestibular, cerebellar and other inputs. Postural effects reflect a network rather than one cerebellar-release mechanism.",
     "connections": {
-      "afferent": ["CN VIII otolith (utricular) afferents", "Inhibitory Purkinje fibers of the vestibulocerebellum"],
-      "efferent": ["Lateral vestibulospinal tract (tract-lateral-vestibulospinal)", "Ascending vestibular projections for eye-head coordination"]
+      "afferent": [
+        "CN VIII otolith (utricular) afferents",
+        "Inhibitory Purkinje fibers of the vestibulocerebellum"
+      ],
+      "efferent": [
+        "Lateral vestibulospinal tract (tract-lateral-vestibulospinal)",
+        "Ascending vestibular projections for eye-head coordination"
+      ]
     },
     "bloodSupply": "AICA / vertebral circumferential branches",
     "clinical": [
       {
-        "syndrome": "Postural tone disturbance",
-        "findings": "Acute unilateral involvement contributes to ipsilateral past-pointing and postural instability (falling toward the lesion); decerebrate extensor rigidity reflects release of the lateral vestibulospinal system from cerebellar control.",
-        "vascular": "AICA / vertebral"
+        "syndrome": "Postural imbalance",
+        "findings": "Injury can disturb vestibulospinal regulation and balance. Direction/severity of falling and limb signs depend on the wider vestibular/cerebellar lesion; decerebrate posturing involves distributed brainstem motor-control imbalance."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [4.5, -17, -4.5],
-    "size3d": [2, 2.2, 1.8],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      4.5,
+      -17,
+      -4.5
+    ],
+    "size3d": [
+      2,
+      2.2,
+      1.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Fix, High-Yield Neuroanatomy, vestibular system section"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, vestibular pathways, printed pp. 523-527 (PDF pp. 549-553).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), vestibular nuclei across medullary and pontine levels, printed pp. 114-128 (PDF pp. 128-142)."
     ]
   },
   {
     "id": "nuc-vestibular-inferior",
     "name": "Inferior vestibular nucleus",
-    "synonyms": ["descending vestibular nucleus", "spinal vestibular nucleus"],
+    "synonyms": [
+      "descending vestibular nucleus",
+      "spinal vestibular nucleus"
+    ],
     "region": "pons",
     "subdivision": "Vestibular nuclei",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#14b8a6",
-    "function": "Caudalmost, longitudinally oriented vestibular nucleus descending toward the upper cervical cord: integrates vestibular input with spinocerebellar afferents and projects through the inferior cerebellar peduncle to the vestibulocerebellum and to the reticular formation for vestibulo-spinal tuning.",
+    "function": "Caudal/descending vestibular nucleus in the dorsolateral medulla, integrating vestibular signals with cerebellar and spinal inputs. It connects to the cerebellum, other vestibular nuclei and reticular systems involved in posture. It is not a nucleus extending into the upper cervical cord.",
     "connections": {
-      "afferent": ["CN VIII vestibular afferents", "Spinocerebellar and spinal collaterals"],
-      "efferent": ["Vestibulocerebellar fibers via tract-icp", "Descending vestibulospinal and reticular connections"]
+      "afferent": [
+        "CN VIII vestibular afferents",
+        "Spinocerebellar and spinal collaterals"
+      ],
+      "efferent": [
+        "Vestibulocerebellar fibers via tract-icp",
+        "Descending vestibulospinal and reticular connections"
+      ]
     },
     "bloodSupply": "PICA / vertebral circumferential branches",
     "clinical": [
       {
-        "syndrome": "Vertical (downbeat) nystagmus and dysequilibrium",
-        "findings": "The inferior (descending) vestibular nucleus processes vertical-canal and otolith signals and is the caudalmost link between the vestibular nerve and the vestibulocerebellum; lesions at the caudal medulla or craniocervical junction — a dorsal PICA-territory infarct, a small cerebellar haemorrhage or a Chiari malformation — are associated with vertical (typically downbeat) or direction-changing positional nystagmus, postural instability with falls, and dysequilibrium that outlasts the acute vertigo.",
-        "vascular": "PICA / vertebral circumferential branches",
-        "note": "Hearing is usually preserved: the cochlear nuclei and nerve root lie rostral to this nucleus, which is why a 'vestibular' medullary infarct can present exactly like vestibular neuritis."
+        "syndrome": "Vestibular imbalance",
+        "findings": "Injury can contribute to vertigo, nystagmus and disequilibrium in medullary or cerebellar disease. Downbeat nystagmus has multiple cerebellar and brainstem substrates and should not be presented as the defining isolated syndrome of this nucleus."
       }
     ],
-    "levels": ["lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [3.5, -24, -5.5],
-    "size3d": [1.8, 3.5, 1.8],
+    "levels": [
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      3.5,
+      -24,
+      -5.5
+    ],
+    "size3d": [
+      1.8,
+      3.5,
+      1.8
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, vestibular pathways, printed pp. 523-527 (PDF pp. 549-553).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), vestibular nuclei across medullary and pontine levels, printed pp. 114-128 (PDF pp. 128-142)."
     ]
   },
   {
     "id": "nuc-cochlear-ventral",
     "name": "Ventral cochlear nucleus",
-    "synonyms": ["anterior cochlear nucleus"],
+    "synonyms": [
+      "anterior cochlear nucleus"
+    ],
     "region": "pons",
     "subdivision": "Auditory pathway",
     "kind": "nucleus",
@@ -405,30 +614,48 @@
     "color": "#14b8a6",
     "function": "First central relay of hearing: spiral-ganglion axons of the cochlear division of CN VIII terminate on its bushy and multipolar cells, which preserve timing and intensity coding and launch the binaural pathway by sending axons through the trapezoid body to the contralateral superior olivary complex and into the lateral lemniscus of both sides.",
     "connections": {
-      "afferent": ["Auditory (cochlear) nerve fibers from the spiral ganglion, tonotopically arranged"],
-      "efferent": ["Trapezoid body (tract-trapezoid-body)", "Superior olivary complex (nuc-superior-olivary)", "Contralateral lateral lemniscus (tract-lateral-lemniscus)"]
+      "afferent": [
+        "Auditory (cochlear) nerve fibers from the spiral ganglion, tonotopically arranged"
+      ],
+      "efferent": [
+        "Trapezoid body (tract-trapezoid-body)",
+        "Superior olivary complex (nuc-superior-olivary)",
+        "Contralateral lateral lemniscus (tract-lateral-lemniscus)"
+      ]
     },
-    "bloodSupply": "AICA (labyrinthine/internal auditory arcade branches)",
+    "bloodSupply": "AICA and nearby vertebrobasilar branches to the pontomedullary cochlear nuclear region; the labyrinthine artery supplies the inner ear and intrameatal CN VIII rather than being synonymous with the cochlear nuclear arterial supply.",
     "clinical": [
       {
-        "syndrome": "Ipsilateral sensorineural hearing loss",
-        "findings": "Destruction of the cochlear nuclei or the entering CN VIII fibers abolishes ipsilateral hearing (there is no bilateral backup at this first relay); classically produced by AICA infarction or cerebellopontine-angle tumors.",
-        "vascular": "Short circumferential branches of the basilar artery (AICA territory for the caudal part of the nucleus)",
-        "note": "Beyond the cochlear nuclei, auditory information is bilaterally represented, so central lesions cause only subtle hearing loss."
+        "syndrome": "Ipsilateral auditory dysfunction",
+        "findings": "Damage to the entering cochlear nerve or sufficiently extensive cochlear nuclear complex can cause ipsilateral sensorineural hearing loss. Auditory signals become bilaterally represented above the cochlear nuclei; complete deafness cannot be inferred from a small lesion of this one subdivision."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [6, -19, -4.5],
-    "size3d": [1.8, 1.5, 1.5],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      6,
+      -19,
+      -4.5
+    ],
+    "size3d": [
+      1.8,
+      1.5,
+      1.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Nolte, The Human Brain, auditory system chapter"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, auditory pathways, printed pp. 518-525 (PDF pp. 544-551).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cochlear nuclei and auditory fibers, printed pp. 120-124 (PDF pp. 134-138)."
     ]
   },
   {
     "id": "nuc-cochlear-dorsal",
     "name": "Dorsal cochlear nucleus",
-    "synonyms": ["posterior cochlear nucleus", "acoustic tubercle"],
+    "synonyms": [
+      "posterior cochlear nucleus",
+      "acoustic tubercle"
+    ],
     "region": "pons",
     "subdivision": "Auditory pathway",
     "kind": "nucleus",
@@ -436,30 +663,47 @@
     "color": "#14b8a6",
     "function": "Laminated nucleus forming the acoustic tubercle on the dorsolateral brainstem surface over the inferior cerebellar peduncle: its principal (fusiform) cells integrate auditory input with somatosensory and vestibular modulation and project directly into the contralateral lateral lemniscus, contributing to spectral-shape cues used for vertical-plane sound localization.",
     "connections": {
-      "afferent": ["Auditory nerve afferents across the tonotopic range (the nucleus maps high frequencies dorsally)", "Somatosensory and vestibular modulatory inputs"],
-      "efferent": ["Contralateral lateral lemniscus (tract-lateral-lemniscus) via the acoustic striae"]
+      "afferent": [
+        "Auditory nerve afferents across the tonotopic range (the nucleus maps high frequencies dorsally)",
+        "Somatosensory and vestibular modulatory inputs"
+      ],
+      "efferent": [
+        "Contralateral lateral lemniscus (tract-lateral-lemniscus) via the acoustic striae"
+      ]
     },
     "bloodSupply": "AICA branches",
     "clinical": [
       {
-        "syndrome": "Ipsilateral sensorineural deafness with tinnitus (cerebellopontine angle lesion)",
-        "findings": "Compression or infarction of the dorsal cochlear nucleus at the cerebellopontine angle — the usual site of a vestibular schwannoma, an AICA-territory infarct or an epidermoid — removes hearing and adds tinnitus on that side, usually with vertigo and facial numbness from the neighbouring structures. Because the auditory pathway decussates at the trapezoid body and is bilateral from the cochlear nuclei onwards, lesions above this level never cause unilateral deafness.",
-        "vascular": "AICA branches (labyrinthine segment)",
-        "note": "Its surface bulge is the acoustic tubercle over the inferior cerebellar peduncle; the nucleus is also a site of somatosensory-auditory convergence implicated in tinnitus generation."
+        "syndrome": "Auditory processing and tinnitus",
+        "findings": "The dorsal cochlear nucleus contributes to auditory processing; cochlear-complex or CN VIII injury at the pontomedullary junction can impair ipsilateral hearing. Complete ipsilateral deafness is not an obligatory consequence of an isolated dorsal subdivision lesion. Tinnitus has multiple peripheral and central substrates."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [6, -20, -6],
-    "size3d": [1.6, 1.2, 1.2],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      6,
+      -20,
+      -6
+    ],
+    "size3d": [
+      1.6,
+      1.2,
+      1.2
+    ],
     "refs": [
-      "Nolte, The Human Brain, auditory system chapter",
-      "Duke Neurobiology, Brainstem Sectional Anatomy Lab (brain.oit.duke.edu/lab03)"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, auditory pathways, printed pp. 518-525 (PDF pp. 544-551).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cochlear nuclei and auditory fibers, printed pp. 120-124 (PDF pp. 134-138)."
     ]
   },
   {
     "id": "nuc-superior-olivary",
     "name": "Superior olivary complex",
-    "synonyms": ["superior olive", "LSO/MSO complex"],
+    "synonyms": [
+      "superior olive",
+      "LSO/MSO complex"
+    ],
     "region": "pons",
     "subdivision": "Auditory pathway",
     "kind": "nucleus",
@@ -467,30 +711,45 @@
     "color": "#14b8a6",
     "function": "First site of binaural convergence in the auditory pathway: the medial superior olive computes interaural time differences and the lateral superior olive interaural intensity differences, providing the neural map of horizontal sound direction; the complex also houses medial olivocochlear neurons whose efferent fibers tune the organ of Corti via the vestibulocochlear anastomosis.",
     "connections": {
-      "afferent": ["Ventral cochlear nucleus neurons via the trapezoid body (tract-trapezoid-body) and medial nucleus of the trapezoid body"],
-      "efferent": ["Lateral lemniscus (tract-lateral-lemniscus) to the inferior colliculus", "Olivocochlear efferent bundle back to the cochlea"]
+      "afferent": [
+        "Ventral cochlear nucleus neurons via the trapezoid body (tract-trapezoid-body) and medial nucleus of the trapezoid body"
+      ],
+      "efferent": [
+        "Lateral lemniscus (tract-lateral-lemniscus) to the inferior colliculus",
+        "Olivocochlear efferent bundle back to the cochlea"
+      ]
     },
     "bloodSupply": "Basilar short circumferential branches / AICA",
     "clinical": [
       {
-        "syndrome": "Loss of binaural sound localization (impaired interaural processing)",
-        "findings": "The complex is the brain's first binaural comparator, so a lesion that removes it — typically a small basilar or AICA-territory pontine infarct — leaves pure-tone thresholds relatively preserved while destroying the ability to judge which side a sound comes from and degrading speech understanding against background noise; the deficit is easily missed because routine audiometry is normal.",
-        "vascular": "Basilar short circumferential branches / AICA",
-        "note": "The same complex gives rise to the medial olivocochlear bundle, so its damage also removes efferent control of the cochlea (protection from loud sound and the 'anti-masking' reflex)."
+        "syndrome": "Binaural processing difficulty",
+        "findings": "Superior olivary circuitry compares timing and level signals from both ears. Lesions can impair sound localization and hearing in noise despite relatively preserved pure-tone thresholds; the degree is variable and is not a unique diagnostic pattern."
       }
     ],
-    "levels": ["lvl-pons-caudal"],
-    "origin3d": [3.5, -17, 0],
-    "size3d": [1.5, 1.5, 1.2],
+    "levels": [
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      3.5,
+      -17,
+      0
+    ],
+    "size3d": [
+      1.5,
+      1.5,
+      1.2
+    ],
     "refs": [
-      "Nolte, The Human Brain, auditory system chapter",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, auditory pathways, printed pp. 518-525 (PDF pp. 544-551).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cochlear nuclei and auditory fibers, printed pp. 120-124 (PDF pp. 134-138)."
     ]
   },
   {
     "id": "tract-trapezoid-body",
     "name": "Trapezoid body",
-    "synonyms": ["auditory decussation of the caudal pons"],
+    "synonyms": [
+      "auditory decussation of the caudal pons"
+    ],
     "region": "pons",
     "subdivision": "Auditory pathway",
     "kind": "tract",
@@ -498,30 +757,44 @@
     "color": "#3b82f6",
     "function": "Horizontal band of decussating auditory fibers sweeping across the ventral tegmentum of the caudal pons: axons of ventral cochlear nucleus neurons cross here to reach the contralateral superior olivary complex and lateral lemniscus, guaranteeing that both inferior colliculi (and both auditory cortices) respond to either ear.",
     "connections": {
-      "afferent": ["Ventral cochlear nucleus (nuc-cochlear-ventral) axons"],
-      "efferent": ["Superior olivary complex (nuc-superior-olivary) and lateral lemniscus (tract-lateral-lemniscus), contralateral"]
+      "afferent": [
+        "Ventral cochlear nucleus (nuc-cochlear-ventral) axons"
+      ],
+      "efferent": [
+        "Superior olivary complex (nuc-superior-olivary) and lateral lemniscus (tract-lateral-lemniscus), contralateral"
+      ]
     },
     "bloodSupply": "Basilar paramedian and short circumferential perforators",
     "clinical": [
       {
-        "syndrome": "Bilateral representation of each ear (auditory decussation)",
-        "findings": "The trapezoid body is the first decussation of the auditory system: section of it, or of the ventral cochlear nucleus output that feeds it, removes the crossed contribution of one ear to the opposite lateral lemniscus. Clinically this is expressed as part of a ventral caudal pontine infarct, where the auditory finding is muffled hearing and impaired sound localization rather than an isolated deafness, because the uncrossed projection from each cochlear nucleus survives.",
-        "vascular": "Basilar paramedian and short circumferential perforators",
-        "note": "This decussation is why each inferior colliculus and each auditory cortex is driven by both ears — and why a brainstem lesion almost never causes unilateral deafness."
+        "syndrome": "Auditory-pathway disruption",
+        "findings": "Crossed cochlear output contributes to bilateral auditory representation. Injury may impair binaural processing, but the clinical effects vary with extent and adjacent auditory structures. Unilateral hearing loss remains possible with more peripheral or cochlear-complex involvement."
       }
     ],
-    "levels": ["lvl-pons-caudal"],
-    "origin3d": [4, -17, 2],
-    "size3d": [5, 1, 1.4],
+    "levels": [
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      4,
+      -17,
+      2
+    ],
+    "size3d": [
+      5,
+      1,
+      1.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Nolte, The Human Brain, auditory system chapter"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, auditory pathways, printed pp. 518-525 (PDF pp. 544-551).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cochlear nuclei and auditory fibers, printed pp. 120-124 (PDF pp. 134-138)."
     ]
   },
   {
     "id": "tract-lateral-lemniscus",
     "name": "Lateral lemniscus",
-    "synonyms": ["auditory lemniscus"],
+    "synonyms": [
+      "auditory lemniscus"
+    ],
     "region": "pons",
     "subdivision": "Auditory pathway",
     "kind": "tract",
@@ -529,30 +802,48 @@
     "color": "#3b82f6",
     "function": "Tonotopically organized ascending auditory bundle running in the subpial lateral tegmentum beside the middle cerebellar peduncle: it carries binaural information from the cochlear nuclei and superior olivary complex (via its interspersed lemniscal nuclei) rostrally to terminate in the inferior colliculus of the midbrain.",
     "connections": {
-      "afferent": ["Cochlear nuclei (nuc-cochlear-ventral, nuc-cochlear-dorsal) and superior olivary complex (nuc-superior-olivary)"],
-      "efferent": ["Inferior colliculus (nuc-inferior-colliculus), thence the brachium of the inferior colliculus to the medial geniculate nucleus"]
+      "afferent": [
+        "Cochlear nuclei (nuc-cochlear-ventral, nuc-cochlear-dorsal) and superior olivary complex (nuc-superior-olivary)"
+      ],
+      "efferent": [
+        "Inferior colliculus (nuc-inferior-colliculus), thence the brachium of the inferior colliculus to the medial geniculate nucleus"
+      ]
     },
     "bloodSupply": "Short circumferential branches of the basilar artery; SCA rostrally",
     "clinical": [
       {
-        "syndrome": "Auditory component of the lateral pontine (AICA) syndrome",
-        "findings": "The lateral lemniscus lies in the subpial lateral tegmentum beside the middle cerebellar peduncle, exactly where an AICA infarct lands: patients then report tinnitus and reduced hearing on that side, although the damage that produces the deafness is at the cochlear nuclei and nerve root rather than in the lemniscus itself. An isolated lemniscal lesion barely changes pure-tone thresholds because each lemniscus already carries information from both ears (the ventral cochlear nuclei project bilaterally through the trapezoid body); the typical residual is difficulty localizing sound and understanding speech in noise.",
-        "vascular": "AICA / basilar short circumferential branches",
-        "note": "Teaching point for localization: unilateral deafness is never central — it points to the cochlea, the auditory nerve or the cochlear nuclei, not to this bundle."
+        "syndrome": "Central auditory processing difficulty",
+        "findings": "An isolated unilateral lateral lemniscus lesion usually causes subtler auditory-processing or localization deficits because inputs represent both ears. Hearing loss in a lateral pontine stroke can reflect additional cochlear nucleus, CN VIII or labyrinthine injury."
       }
     ],
-    "levels": ["lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic"],
-    "origin3d": [5.5, -6, -2],
-    "size3d": [1.2, 7, 1.2],
+    "levels": [
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic"
+    ],
+    "origin3d": [
+      5.5,
+      -6,
+      -2
+    ],
+    "size3d": [
+      1.2,
+      7,
+      1.2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Nolte, The Human Brain, auditory system chapter"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, auditory pathways, printed pp. 518-525 (PDF pp. 544-551).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cochlear nuclei and auditory fibers, printed pp. 120-124 (PDF pp. 134-138)."
     ]
   },
   {
     "id": "tract-mcp",
     "name": "Middle cerebellar peduncle",
-    "synonyms": ["MCP", "brachium pontis"],
+    "synonyms": [
+      "MCP",
+      "brachium pontis"
+    ],
     "region": "pons",
     "subdivision": "Cerebellar connections",
     "kind": "tract",
@@ -560,43 +851,69 @@
     "color": "#a78bfa",
     "function": "The largest fiber system of the brainstem: the lateral continuation of the transverse pontocerebellar fibers, carrying crossed cortico-ponto-cerebellar information from each pontine gray into the contralateral cerebellar hemisphere; it is strictly an afferent peduncle of the cerebellum and dominates the lateral aspect of every mid- and upper-pontine section.",
     "connections": {
-      "afferent": ["Pontine nuclei (ctx-pontine-nuclei) after hemidecussation of pontocerebellar fibers"],
-      "efferent": ["Contralateral cerebellar hemisphere cortex (ctx-cerebellum)"]
+      "afferent": [
+        "Crossed pontocerebellar fibers from the contralateral pontine nuclei (ctx-pontine-nuclei)"
+      ],
+      "efferent": [
+        "Cerebellar cortex on the same side as the peduncle (ctx-cerebellum)"
+      ]
     },
     "bloodSupply": "AICA (caudal) and SCA (rostral) short circumferential branches of the basilar artery",
     "clinical": [
       {
         "syndrome": "Ipsilateral cerebellar ataxia",
-        "findings": "Unilateral MCP damage (infarct, demyelination, pontine tumors) produces severe ipsilateral limb and gait ataxia with dysmetria, because the peduncle feeds the ipsilateral (already double-crossed) cerebellar hemisphere.",
-        "vascular": "AICA / SCA"
+        "findings": "MCP injury can cause ipsilateral limb and gait ataxia by disrupting input to the cerebellum on the same side."
       },
       {
-        "syndrome": "MCP hyperintensity",
-        "findings": "T2 hyperintensity and atrophy of the MCP is a classic MRI sign in spinocerebellar ataxias, fragile-X tremor-ataxia syndrome and Wilson disease.",
-        "note": "The sign localizes to degeneration of pontocerebellar fibers rather than to a vascular event."
+        "syndrome": "MCP MRI signal abnormality",
+        "findings": "MCP T2 signal abnormality is seen in several conditions, including fragile X-associated tremor/ataxia syndrome and pontocerebellar degeneration. It is nonspecific and may also occur after ischemic or other injury."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [9, -12, -1],
-    "size3d": [3.2, 9, 5.5],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      9,
+      -12,
+      -1
+    ],
+    "size3d": [
+      3.2,
+      9,
+      5.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, pontine sections, printed pp. 618-619 (PDF pp. 644-645).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar input pathways, printed pp. 708-710 (PDF pp. 734-736)."
     ]
   },
   {
     "id": "nuc-locus-coeruleus",
     "name": "Locus coeruleus",
-    "synonyms": ["LC", "locus ceruleus", "noradrenergic nucleus"],
+    "synonyms": [
+      "LC",
+      "locus ceruleus",
+      "noradrenergic nucleus"
+    ],
     "region": "pons",
     "subdivision": "Tegmentum",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#1d4ed8",
-    "function": "The principal noradrenergic nucleus of the brain: about half of all brain norepinephrine arises here, and its axons ramify through virtually the entire neuraxis (neocortex, hippocampus, thalamus, cerebellum and spinal cord). Phasic LC firing sharpens attention to salient stimuli and gates cortical plasticity; tonic firing sets global arousal and helps orchestrate the sleep-wake cycle, stress responses and descending pain modulation. Neuromelanin pigment gives the fresh nucleus its characteristic blue-black color.",
+    "function": "Paired noradrenergic cell groups in the dorsolateral rostral pons near the fourth ventricle. Their widespread ascending and descending projections modulate arousal, attention, stress responsiveness, learning and pain processing. Neuromelanin gives the adult human nucleus its characteristic dark pigmentation.",
     "connections": {
-      "afferent": ["Nucleus paragigantocellularis of the medullary reticular formation (autonomic drive)", "Periaqueductal gray (pain/stress)", "Hypothalamus (paraventricular nucleus)", "Prepositus hypoglossi and solitary nucleus"],
-      "efferent": ["Diffuse noradrenergic projections to neocortex, hippocampus, thalamus, hypothalamus, cerebellum and spinal cord (ascending dorsal noradrenergic bundle)"]
+      "afferent": [
+        "Nucleus paragigantocellularis of the medullary reticular formation (autonomic drive)",
+        "Periaqueductal gray (pain/stress)",
+        "Hypothalamus (paraventricular nucleus)",
+        "Prepositus hypoglossi and solitary nucleus"
+      ],
+      "efferent": [
+        "Diffuse noradrenergic projections to neocortex, hippocampus, thalamus, hypothalamus, cerebellum and spinal cord (ascending dorsal noradrenergic bundle)"
+      ]
     },
     "bloodSupply": "Basilar (rostral pontine) paramedian and short circumferential perforators, at the SCA/AICA boundary",
     "clinical": [
@@ -606,18 +923,32 @@
         "note": "Because the LC is tiny and tightly paired to the fourth-ventricle floor, focal symptomatic infarcts are rare; dysfunction is mostly degenerative or pharmacologic."
       }
     ],
-    "levels": ["lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [2, -4, -4],
-    "size3d": [1, 1.4, 1],
+    "levels": [
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      2,
+      -4,
+      -4
+    ],
+    "size3d": [
+      1,
+      1.4,
+      1
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Fix, High-Yield Neuroanatomy, reticular formation and monoamines section"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, widespread projection systems and sleep-wake cycle, printed pp. 630-639 (PDF pp. 656-665).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, motor/autonomic reticular systems, printed pp. 646-648 (PDF pp. 672-674)."
     ]
   },
   {
     "id": "nuc-pontine-reticular",
     "name": "Pontine reticular formation (oral and caudal nuclei)",
-    "synonyms": ["oral pontine reticular nucleus", "caudal pontine reticular nucleus"],
+    "synonyms": [
+      "oral pontine reticular nucleus",
+      "caudal pontine reticular nucleus"
+    ],
     "region": "pons",
     "subdivision": "Reticular formation",
     "kind": "nucleus",
@@ -625,119 +956,176 @@
     "color": "#d97706",
     "function": "Core of the pontine tegmentum spanning the oral and caudal pontine reticular nuclei: contributes to ascending reticular activating (arousal) systems through the intralaminar thalamic nuclei, houses pontine generators of postural tone and of REM sleep, and gives origin to the pontine (medial) reticulospinal tract that facilitates antigravity extensor tone and gait-related posture.",
     "connections": {
-      "afferent": ["Spinoreticular tract (tract-spinoreticular)", "Sensorimotor cortex (corticoreticular fibers)", "Cerebellar fastigial output", "Collaterals of ascending sensory lemnisci"],
-      "efferent": ["Pontine reticulospinal tract (tract-reticulospinal)", "Intralaminar and midline thalamic nuclei (ascending arousal)", "Central tegmental tract projections", "Cranial nerve motor pattern-generator circuits"]
+      "afferent": [
+        "Spinoreticular tract (tract-spinoreticular)",
+        "Sensorimotor cortex (corticoreticular fibers)",
+        "Cerebellar fastigial output",
+        "Collaterals of ascending sensory lemnisci"
+      ],
+      "efferent": [
+        "Pontine reticulospinal tract (tract-reticulospinal)",
+        "Intralaminar and midline thalamic nuclei (ascending arousal)",
+        "Central tegmental tract projections",
+        "Cranial nerve motor pattern-generator circuits"
+      ]
     },
     "bloodSupply": "Basilar paramedian perforators (tegmental branches); SCA branches rostrally",
     "clinical": [
       {
-        "syndrome": "Coma and arousal failure",
-        "findings": "Bilateral paramedian damage of the upper brainstem reticular core (basilar tip occlusion) abolishes arousal while the cortex itself is structurally spared — the classic brainstem (ascending reticular activating system) basis of coma.",
-        "vascular": "Basilar artery paramedian perforators"
-      },
-      {
-        "syndrome": "Postural and gait dysregulation",
-        "findings": "Lesions of the pontine reticulospinal output bias antigravity tone; combined with PPRF damage this underlies the gaze-posture findings of dorsal pontine syndromes (Foville).",
-        "vascular": "Basilar perforators"
+        "syndrome": "Arousal and motor-network disturbance",
+        "findings": "Extensive bilateral upper brainstem reticular injury may impair consciousness; a broad pontine record does not establish coma from every bilateral lesion. Reticulospinal/postural effects depend on the affected networks and are not a defining mechanism of every Foville pattern."
       }
     ],
-    "levels": ["lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [3, -8, -1],
-    "size3d": [2.5, 8, 2.5],
+    "levels": [
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      3,
+      -8,
+      -1
+    ],
+    "size3d": [
+      2.5,
+      8,
+      2.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Fix, High-Yield Neuroanatomy, reticular formation section"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, widespread projection systems and sleep-wake cycle, printed pp. 630-639 (PDF pp. 656-665).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, motor/autonomic reticular systems, printed pp. 646-648 (PDF pp. 672-674)."
     ]
   },
   {
     "id": "nuc-pprf",
     "name": "Paramedian pontine reticular formation (PPRF)",
-    "synonyms": ["PPRF", "horizontal gaze center"],
+    "synonyms": [
+      "PPRF",
+      "horizontal gaze center"
+    ],
     "region": "pons",
     "subdivision": "Reticular formation",
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "The horizontal conjugate gaze center: excitatory burst neurons here command ipsilateral saccades by driving the immediately adjacent abducens nucleus, whose motor neurons turn the ipsilateral eye out and whose internuclear neurons (crossing via the MLF) turn the contralateral eye in. Omnipause neurons within the PPRF gate burst onset; the frontal eye field and superior colliculus trigger it.",
+    "function": "Pontine premotor region containing burst neurons important for horizontal saccades toward the ipsilateral side. It drives the ipsilateral abducens nucleus, whose internuclear neurons cross into the opposite MLF to activate medial-rectus motoneurons. Nearby omnipause neurons regulate saccades; the PPRF is not the final common pathway for every horizontal eye movement.",
     "connections": {
-      "afferent": ["Frontal eye field (corticoreticular saccade command)", "Superior colliculus (nuc-superior-colliculus)", "Cerebellar vermis and fastigial calibration", "Vestibular nuclei (slow-phase VOR drive)"],
-      "efferent": ["Ipsilateral abducens nucleus (nuc-abducens) — motor and internuclear arms of the conjugate command", "Inhibitory burst projections to the contralateral PPRF"]
+      "afferent": [
+        "Cortical and superior-collicular saccade commands",
+        "Cerebellar calibration and reticular inputs"
+      ],
+      "efferent": [
+        "Ipsilateral abducens nucleus (nuc-abducens) for horizontal saccades",
+        "Coordinated inhibitory and excitatory reticular circuits"
+      ]
     },
     "bloodSupply": "Basilar artery paramedian perforators",
     "clinical": [
       {
-        "syndrome": "Ipsilateral horizontal gaze palsy",
-        "findings": "A unilateral PPRF lesion abolishes rapid conjugate gaze toward the lesion; the eyes rest deviated away, and the intact contralateral PPRF drives gaze in the opposite direction. Conjugacy is preserved, so diplopia is absent.",
-        "vascular": "Basilar paramedian perforators",
-        "note": "Doll's-eye (oculocephalic) or cold-caloric testing may still move the eyes because the vestibulo-ocular reflex reaches the abducens nucleus directly, bypassing the PPRF."
+        "syndrome": "Impaired ipsilateral horizontal saccades",
+        "findings": "PPRF injury can impair conjugate saccades toward the lesion. With a sufficiently isolated PPRF lesion the VOR may be preserved because vestibular inputs also reach the abducens nucleus directly. Resting eye deviation and absence of diplopia are not obligatory."
       },
       {
-        "syndrome": "One-and-a-half syndrome (with MLF involvement)",
-        "findings": "Combined PPRF/abducens and ipsilateral MLF lesions leave only one residual eye movement — contralateral abduction — producing the one-and-a-half syndrome of the dorsal pons.",
-        "vascular": "Basilar perforators"
+        "syndrome": "One-and-a-half syndrome",
+        "findings": "Combined ipsilateral PPRF or abducens nuclear injury and ipsilateral MLF injury can leave contralateral abduction as the only horizontal version movement."
       }
     ],
-    "levels": ["lvl-pons-caudal"],
-    "origin3d": [2, -18, -2],
-    "size3d": [1.4, 2, 1.4],
+    "levels": [
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      2,
+      -18,
+      -2
+    ],
+    "size3d": [
+      1.4,
+      2,
+      1.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Structures and Vascular Supply\"",
-      "Midbrain, Pons, and Medulla: Anatomy and Syndromes, RadioGraphics 2019 (doi 10.1148/rg.2019180126)"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, extraocular nerves and nuclei, printed pp. 568-575 (PDF pp. 594-601).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, horizontal gaze circuitry, printed pp. 585-587 (PDF pp. 611-613)."
     ]
   },
   {
     "id": "surf-cn5-exit",
     "name": "Trigeminal nerve (CN V) exit",
-    "synonyms": ["CN V root, mid-lateral pons"],
+    "synonyms": [
+      "CN V root, mid-lateral pons"
+    ],
     "region": "pons",
     "subdivision": "Surface landmarks",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The large sensory root (portio major) and the smaller medial motor root of CN V emerge together from the mid-lateral pons, crossing the prepontine cistern to the trigeminal (gasserian) ganglion in Meckel cave; the root carries all facial and cranial somatosensory afferents and, in its motor root, the fibers to the muscles of mastication.",
+    "function": "Large sensory and smaller motor CN V roots attach at the mid-lateral pons. The sensory root connects to trigeminal ganglion in Meckel cave; motor fibers bypass the ganglion to join V3. Much facial/cranial general sensation uses V, with additional small contributions from other cranial nerves.",
     "clinical": [
       {
-        "syndrome": "Trigeminal root syndrome",
-        "findings": "Root-zone lesions (CPA tumors, AICA aneurysms, demyelination) combine ipsilateral facial sensory loss with masseter weakness; vascular root compression at the entry zone underlies classic trigeminal neuralgia.",
-        "vascular": "AICA territory",
-        "note": "The root entry zone is the lateral benchmark of the midpontine level (lvl-pons-middle)."
+        "syndrome": "Trigeminal root-region dysfunction",
+        "findings": "A root-region lesion may impair ipsilateral facial sensation and/or mastication. Neurovascular compression can contribute to classical trigeminal neuralgia, but root dysfunction is not a fixed AICA infarct territory and examination patterns do not prove a single cause."
       }
     ],
-    "levels": ["lvl-pons-middle"],
-    "origin3d": [17.1, -4.8, -3.5],
-    "size3d": [1.5, 2, 1.5],
+    "levels": [
+      "lvl-pons-middle"
+    ],
+    "origin3d": [
+      17.1,
+      -4.8,
+      -3.5
+    ],
+    "size3d": [
+      1.5,
+      2,
+      1.5
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, trigeminal sensory and motor pathways, printed pp. 508-512 (PDF pp. 534-538).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), mid/rostral pontine sections, printed pp. 128-132 (PDF pp. 142-146)."
     ]
   },
   {
     "id": "surf-cn6-exit",
     "name": "Abducens nerve (CN VI) exit",
-    "synonyms": ["CN VI root at pontomedullary junction"],
+    "synonyms": [
+      "CN VI root at pontomedullary junction"
+    ],
     "region": "pons",
     "subdivision": "Surface landmarks",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "CN VI rootlets emerge ventromedially at the pontomedullary junction, between the pyramid and the middle cerebellar peduncle, then run the longest cisternal subarachnoid course in the posterior fossa, up the clival dura to Dorello's canal before entering the cavernous sinus and orbit.",
+    "function": "CN VI rootlets emerge near the midline at the pontomedullary junction and ascend along the clivus toward Dorello canal, cavernous sinus and superior orbital fissure.",
     "clinical": [
       {
-        "syndrome": "Ipsilateral abducens palsy",
-        "findings": "Horizontal diplopia worst at distance with failure of ipsilateral abduction; because of the long cisternal course, CN VI palsy is the classic false-localizing sign of raised intracranial pressure (stretching against the petrous ridge).",
-        "vascular": "Basilar paramedian perforators"
+        "syndrome": "Abducens fascicular/nerve dysfunction",
+        "findings": "Impaired ipsilateral abduction can cause horizontal diplopia. Raised intracranial pressure may affect the long intracranial nerve course as a false-localizing sign; other causes occur, and neighboring nucleus/PPRF injury instead affects conjugate gaze."
       }
     ],
-    "levels": ["lvl-pontomedullary"],
-    "origin3d": [2.5, -24, 7.5],
-    "size3d": [1.2, 1.2, 1.2],
+    "levels": [
+      "lvl-pontomedullary"
+    ],
+    "origin3d": [
+      2.5,
+      -24,
+      7.5
+    ],
+    "size3d": [
+      1.2,
+      1.2,
+      1.2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, extraocular nerves and nuclei, printed pp. 568-575 (PDF pp. 594-601).",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, horizontal gaze circuitry, printed pp. 585-587 (PDF pp. 611-613)."
     ]
   },
   {
     "id": "surf-cn7-exit",
     "name": "Facial nerve (CN VII) exit",
-    "synonyms": ["CN VII/VIII root at cerebellopontine angle"],
+    "synonyms": [
+      "CN VII/VIII root at cerebellopontine angle"
+    ],
     "region": "pons",
     "subdivision": "Surface landmarks",
     "kind": "surface",
@@ -746,22 +1134,34 @@
     "function": "The facial nerve (motor root plus the nervus intermedius carrying taste and parasympathetic fibers) leaves the pontomedullary junction at the cerebellopontine angle, crosses the CPA cistern and enters the internal acoustic meatus alongside CN VIII.",
     "clinical": [
       {
-        "syndrome": "Cerebellopontine-angle facial palsy",
-        "findings": "CPA masses (vestibular schwannoma, meningioma) or AICA infarcts compress/infarct CN VII at the exit zone, producing complete ipsilateral LMN facial weakness often with hearing loss and diminished corneal reflex.",
-        "vascular": "AICA"
+        "syndrome": "Cerebellopontine angle facial dysfunction",
+        "findings": "Mass, vascular or other regional disease may affect VII motor fibers and produce ipsilateral facial weakness. Hearing/balance changes or impaired blink can accompany neighboring nerve/brainstem involvement; the full combination and complete facial paralysis are not required."
       }
     ],
-    "levels": ["lvl-pontomedullary"],
-    "origin3d": [6.5, -23, -3],
-    "size3d": [1.4, 1.4, 1.4],
+    "levels": [
+      "lvl-pontomedullary"
+    ],
+    "origin3d": [
+      6.5,
+      -23,
+      -3
+    ],
+    "size3d": [
+      1.4,
+      1.4,
+      1.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, facial nerve and reflexes, printed pp. 513-518 (PDF pp. 539-544).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), caudal pontine sections, printed pp. 122-126 (PDF pp. 136-140)."
     ]
   },
   {
     "id": "surf-cn8-exit",
     "name": "Vestibulocochlear nerve (CN VIII) exit",
-    "synonyms": ["CN VIII root, cerebellopontine angle"],
+    "synonyms": [
+      "CN VIII root, cerebellopontine angle"
+    ],
     "region": "pons",
     "subdivision": "Surface landmarks",
     "kind": "surface",
@@ -770,28 +1170,41 @@
     "function": "The vestibulocochlear nerve crosses the cerebellopontine angle just behind the facial nerve and enters the internal acoustic meatus, carrying auditory afferents from the spiral ganglion and vestibular afferents from the vestibular (Scarpa) ganglion to the cochlear and vestibular nuclei at the pontomedullary junction.",
     "clinical": [
       {
-        "syndrome": "CPA vestibulocochlear syndrome",
-        "findings": "Progressive unilateral tinnitus and sensorineural hearing loss with vertigo and imbalance — the hallmark of vestibular schwannoma; sudden equivalents occur with AICA infarction.",
-        "vascular": "AICA (labyrinthine branches)"
+        "syndrome": "Cerebellopontine angle auditory/vestibular dysfunction",
+        "findings": "Regional VIII disease may cause sensorineural hearing loss, tinnitus or imbalance. Vestibular schwannoma is one cause; vascular and other diseases can also produce these symptoms. Neither a progressive nor acute pattern alone establishes a cause."
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [6.8, -22, -4.5],
-    "size3d": [1.4, 1.4, 1.4],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      6.8,
+      -22,
+      -4.5
+    ],
+    "size3d": [
+      1.4,
+      1.4,
+      1.4
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, auditory pathways, printed pp. 518-525 (PDF pp. 544-551).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cochlear nuclei and auditory fibers, printed pp. 120-124 (PDF pp. 134-138)."
     ]
   },
   {
     "id": "surf-facial-colliculus",
     "name": "Facial colliculus",
-    "synonyms": ["dorsal pontine bulge over abducens nucleus"],
+    "synonyms": [
+      "dorsal pontine bulge over abducens nucleus"
+    ],
     "region": "pons",
     "subdivision": "Surface landmarks",
     "kind": "surface",
     "laterality": "paired",
     "color": "#64748b",
-    "function": "The rounded bulge in the floor of the fourth ventricle over the abducens nucleus, produced by the internal genu of CN VII fibers sweeping dorsomedially around the nucleus before turning ventrally to exit; a landmark of the caudal pontine floor together with the neighboring median eminence and striae medullares.",
+    "function": "Rounded elevation in the caudal fourth-ventricle floor formed by the abducens nucleus and the internal genu of facial fibers looping around it. It lies in the medial eminence; the facial motor nucleus itself is situated farther ventrolaterally.",
     "clinical": [
       {
         "syndrome": "Dorsal pontine VI-VII combination (Foville territory)",
@@ -799,17 +1212,32 @@
         "vascular": "Basilar paramedian perforators"
       }
     ],
-    "levels": ["lvl-pontomedullary", "lvl-pons-caudal"],
-    "origin3d": [1.8, -18, -6],
-    "size3d": [1.5, 1.8, 1.2],
+    "levels": [
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
+    "origin3d": [
+      1.8,
+      -18,
+      -6
+    ],
+    "size3d": [
+      1.5,
+      1.8,
+      1.2
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\""
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, facial nerve and reflexes, printed pp. 513-518 (PDF pp. 539-544).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), caudal pontine sections, printed pp. 122-126 (PDF pp. 136-140)."
     ]
   },
   {
     "id": "ctx-pons-surface",
     "name": "Pons (context surface)",
-    "synonyms": ["pontine envelope", "pontine block"],
+    "synonyms": [
+      "pontine envelope",
+      "pontine block"
+    ],
     "region": "pons",
     "subdivision": "Surface landmarks",
     "kind": "context",
@@ -818,15 +1246,29 @@
     "function": "Renderable silhouette of the whole pons as one block: the massively expanded basis pontis coursing ventrally to the middle cerebellar peduncles laterally, the pontine tegmentum dorsally with the fourth-ventricle floor, the facial colliculus and the trigeminal, facial and vestibulocochlear root exits on its surface. It exists so the pons is a single named, selectable body in the 3D scene, not because it is a nucleus; its internal content belongs to the pontine nucleus, tract and surface records.",
     "contextNote": "Envelope/context-surface record: the GLB silhouette ctx-pons-surface in src/assets/anatomy/anatomy-manifest.json is its 3D body (SceneLayers envelope slot env-pons), and its canonical-space extent below is that baked bbox. ctx-pontine-nuclei and ctx-pontine-fibers are the plate-2D sub-tags of its ventral part and stay 2D-only; no plate carries this tag.",
     "connections": {
-      "afferent": ["See the individual pontine records — the envelope itself carries no fibers"]
+      "afferent": [
+        "See the individual pontine records — the envelope itself carries no fibers"
+      ]
     },
     "clinical": [],
-    "levels": ["lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral"],
-    "origin3d": [0.079, -9.322, 1.861],
-    "size3d": [18.19, 15.18, 14.09],
+    "levels": [
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral"
+    ],
+    "origin3d": [
+      0.079,
+      -9.322,
+      1.861
+    ],
+    "size3d": [
+      18.19,
+      15.18,
+      14.09
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem I: Surface Anatomy and Cross-Sectional Anatomy\"",
-      "RadioGraphics 2019 — 'Midbrain, Pons, and Medulla: Anatomy and Syndromes'"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, brainstem surfaces, printed pp. 495-497 (PDF pp. 521-523).",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pontine sections, printed pp. 122-132 (PDF pp. 136-146)."
     ]
   }
 ]

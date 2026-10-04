@@ -361,15 +361,18 @@ function EmptyState() {
           click a contour to select it, drag its four corner handles to resize, <em>▴/▾</em> cycles
           the preset size.</li>
         <li><strong>Syndromes tab</strong> — clinical cards that highlight the structures they involve.</li>
+        <li><strong>Cortex tab</strong> — anatomical regions and functional areas with sources and clinical context.</li>
+        <li><strong>Pathways tab</strong> — major connections, crossings and linked relays.</li>
       </ul>
       <p className="muted">
-        Atlas units: <strong>1 au = 1.2 mm</strong> — every “au” readout (level ruler, clip sliders,
-        PiP plane) is in millimetres divided by 1.2. The y axis is rostro-caudal (+ = rostral).
+        Display scale: <strong>1 au = 1.2 mm</strong> by convention. These custom coordinates are
+        not MNI, Talairach or patient coordinates. +x is patient left, +y superior, +z anterior.
+        A listed teaching level does not prove that a structure's true anatomical boundary intersects that slice.
       </p>
       <p className="muted">
         Loaded: {dataStatus.structures} structure records · {dataStatus.tracts} tracts ·{' '}
         {dataStatus.syndromes} syndromes · {dataStatus.plates} plates · {dataStatus.registry} registry
-        entries. Groups still being authored light up automatically as their data files land.
+        entries.
       </p>
     </div>
   )
@@ -482,6 +485,7 @@ export default function InfoPanel() {
             {record !== undefined && (isTractRecord(record)
               ? <TractDetails record={record} />
               : <StructureDetails record={record} />)}
+            {record && <section className="info-section"><h3>Representation and limits</h3><p className="knowledge-caveat">{record.geometryNote ?? ('meshes' in record && record.meshes === false ? 'This record has no dedicated anatomical mesh. Its description and connections are teaching summaries; exact borders and coordinates are not modeled.' : 'Authored geometry is schematic. Positions, sizes, boundaries and courses have not been validated against a registered reference atlas or individual anatomy. MRI display alignment does not validate each structure.')}</p></section>}
           </>
         )}
       </div>

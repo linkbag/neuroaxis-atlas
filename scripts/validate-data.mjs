@@ -764,7 +764,8 @@ function main() {
   const structureFiles = jsonFiles.filter((f) => f.startsWith('structures/'));
   const syndromeFiles = jsonFiles.filter((f) => f.startsWith('syndromes/'));
   const plateManifestFiles = jsonFiles.filter((f) => !f.includes('/') && /^plates(-[a-z0-9-]+)*\.json$/.test(f));
-  const claimed = new Set(['taxonomy.json', 'levels.json', 'tracts.json', ...structureFiles, ...syndromeFiles, ...plateManifestFiles]);
+  // Pathway schema/cross-references are checked by verify:scientific.
+  const claimed = new Set(['taxonomy.json', 'levels.json', 'tracts.json', 'pathways.json', ...structureFiles, ...syndromeFiles, ...plateManifestFiles]);
   for (const f of jsonFiles) {
     if (!claimed.has(f)) {
       loadJsonArray(f); // still must parse

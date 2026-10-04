@@ -34,10 +34,12 @@ jobs:
         run: |
           npm run check
           npm run validate
-          node scripts/verify-imaging-v4.mjs
-          node scripts/verify-imaging-v4b.mjs
+          npm run verify:scientific
+          node scripts/verify/public-imaging.mjs
       - name: Build static site
         run: npm run build
+      - name: Verify public artifact
+        run: node scripts/verify/public-imaging.mjs --dist
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload static site

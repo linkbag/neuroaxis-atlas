@@ -157,7 +157,6 @@ import { useAtlasStore } from '../../state/store'
 import mriManifestJson from '../../assets/imaging/mri-manifest.json'
 import mriT1Url from '../../assets/imaging/mri-t1.bin?url'
 import ctManifestJson from '../../assets/imaging/ct-manifest.json'
-import ctGridUrl from '../../assets/imaging/ct.bin?url'
 
 /* ------------------------------------------------------------- manifest */
 
@@ -228,7 +227,6 @@ const CT_MANIFEST_WINDOW: [number, number] = (() => {
 
 /** Static-import asset URLs for the two baked uint8 grids. */
 const MRI_BIN_URL = mriT1Url
-const CT_BIN_URL = ctGridUrl
 
 /** The measured display corrections, resolved ONCE at module load from the
  *  committed manifests (see gridDisplayCorrection). Identity unless the
@@ -488,12 +486,7 @@ function windowForPreset(preset: string): [number, number] | null {
 export type CtLayerStatus = 'available' | 'unavailable'
 
 export function ctLayerStatus(): CtLayerStatus {
-  const declared = ctManifest.status
-  if (typeof declared === 'string') return declared === 'available' ? 'available' : 'unavailable'
-  const dims = ctManifest.dims
-  const wellFormed =
-    Array.isArray(dims) && dims.length === 3 && dims.every((n) => typeof n === 'number' && n > 0)
-  return wellFormed ? 'available' : 'unavailable'
+  return 'unavailable' // Excluded from the public MRI/simulated build.
 }
 
 /* ------------------------------------------------- CT source coverage (v7) */
@@ -1150,10 +1143,11 @@ function nudgeRedraw(): void {
  * declaration — see the ordering note on loadGrid.
  */
 export function retryGridLoad(id: 'mri' | 'ct', onReady?: () => void): boolean {
+  if (id === 'ct') return false
   const entry = id === 'mri' ? mriEntry : ctEntry
   const manifest =
     id === 'mri' ? (mriManifest as unknown as GridManifest) : (ctManifest as unknown as GridManifest)
-  const url = id === 'mri' ? MRI_BIN_URL : CT_BIN_URL
+  const url = MRI_BIN_URL
   if (entry.status === 'loading' && !entry.timedOut) return false
   entry.controller?.abort()
   entry.controller = null
@@ -1279,7 +1273,7 @@ function loadMriGrid(): void {
 
 /** CT: same pipeline against ct-manifest.json + ct.bin. */
 function loadCtGrid(onReady?: () => void): void {
-  void loadGrid(ctEntry, 'ct', ctManifest as unknown as GridManifest, CT_BIN_URL, onReady)
+  void onReady // Archived compatibility API; no CT request is made.
 }
 
 /* --------------------------------------------------------- grid sampling */

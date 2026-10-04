@@ -2,828 +2,1799 @@
   {
     "id": "tract-corticospinal-lateral",
     "name": "Corticospinal tract (lateral)",
-    "synonyms": ["CST", "pyramidal tract", "lateral corticospinal tract"],
+    "synonyms": [
+      "CST",
+      "pyramidal tract",
+      "lateral corticospinal tract"
+    ],
     "direction": "descending",
     "modality": "Somatic motor — voluntary skilled movement, especially fine fractionated control of distal limbs",
-    "origin": "Primary motor (M1), premotor and supplementary motor cortex → posterior limb of the internal capsule",
-    "target": "Contralateral lateral column of the spinal cord (interneurons and alpha motor neurons of the anterior horn)",
-    "decussation": "Pyramidal decussation at lvl-pyramid-decuss (cervicomedullary junction): ~85–90% of fibers cross to form the lateral CST; ~10% continue uncrossed as the anterior corticospinal tract and cross segmentally in the anterior white commissure",
-    "somatotopy": "Crus cerebri medial→lateral: frontopontine, corticobulbar, corticospinal (central three-fifths), temporoparietooccipitopontine. In the pyramid the bundle converges paramedially; after the decussation the laminar order of the lateral column is cervical (arm) most medial → sacral (leg) most lateral",
-    "function": "Carries the commands for voluntary, fractionated movement from the motor cortex to the contralateral spinal cord; fibers descend as a continuous bundle through the posterior limb of the internal capsule, the middle three-fifths of the crus cerebri, the basis pontis, and the pyramid, then decussate. Lesions above the pyramidal decussation cause contralateral upper-motor-neuron signs; lesions below cause ipsilateral signs.",
+    "origin": "Layer V neurons of primary motor, premotor, supplementary motor and somatosensory/parietal cortex; fibres descend through corona radiata, posterior limb of internal capsule, basis pedunculi, ventral pons and medullary pyramids.",
+    "target": "Contralateral spinal interneurons and anterior horn motor neurons after pyramidal crossing, with a major role in distal limb and skilled hand movement.",
+    "decussation": "Most fibres (approximately 85-90%, with individual variation) cross at the caudal medullary pyramidal decussation to form the lateral tract. Anterior corticospinal fibres are a separate, mainly axial pathway with bilateral/segmental projections.",
+    "somatotopy": "Cortical and supraspinal motor organization is topographic. The atlas has no validated human spinal lamination: a fixed cervical-medial/sacral-lateral map should not be inferred from its schematic tube or used as a localization rule.",
+    "function": "Major descending pathway for voluntary limb movement, especially fractionated distal movements. Injury may produce weakness and upper motor neuron signs; acute lesions can initially cause reduced tone and reflexes.",
     "clinical": [
       {
-        "syndrome": "Pure motor hemiparesis (lacunar infarct of the posterior limb)",
-        "findings": "Contralateral face-arm-leg weakness without cortical sensory or visual signs; UMN pattern (spasticity, hyperreflexia, Babinski sign)",
-        "vascular": "Lenticulostriate branches of the middle cerebral artery"
+        "syndrome": "Corticospinal lesion above the pyramidal decussation",
+        "findings": "Contralateral limb weakness; associated face weakness requires corticobulbar involvement. Capsular injury can produce a pure motor syndrome, but the pattern depends on lesion extent."
       },
       {
-        "syndrome": "Medial medullary syndrome",
-        "findings": "Contralateral hemiparesis (pyramid), with ipsilateral hypoglossal palsy and contralateral loss of vibration/proprioception from the adjacent medial lemniscus",
-        "vascular": "Anterior spinal artery (paramedian medullary branches)"
-      },
-      {
-        "syndrome": "Locked-in (ventral pons)",
-        "findings": "Quadriparesis/quadriplegia with preserved vertical eye movements and blinking — bilateral corticospinal and corticobulbar fibers destroyed while the tegmentum is spared",
-        "vascular": "Basilar artery occlusion"
-      },
-      {
-        "syndrome": "Brown-Séquard (cord hemisection)",
-        "findings": "Ipsilateral UMN weakness below the lesion (lateral column crossed at the decussation above), with ipsilateral DCML and contralateral spinothalamic sensory loss"
+        "syndrome": "Spinal corticospinal lesion",
+        "findings": "Ipsilateral upper motor neuron weakness below the lesion; a hemicord lesion also affects other sensory and motor pathways."
       }
     ],
-    "waypoints": [[5, 40, 5], [6.5, 14, 8], [4.5, -8, 8], [3, -22, 8], [2.5, -36, 8], [1.5, -45, 5], [0, -47, 1], [-3, -52, -2]],
+    "waypoints": [
+      [
+        5,
+        40,
+        5
+      ],
+      [
+        6.5,
+        14,
+        8
+      ],
+      [
+        4.5,
+        -8,
+        8
+      ],
+      [
+        3,
+        -22,
+        8
+      ],
+      [
+        2.5,
+        -36,
+        8
+      ],
+      [
+        1.5,
+        -45,
+        5
+      ],
+      [
+        0,
+        -47,
+        1
+      ],
+      [
+        -3,
+        -52,
+        -2
+      ]
+    ],
     "tubeRadius": 0.9,
     "color": "#8b5cf6",
-    "levels": ["lvl-thalamus-rostral", "lvl-thalamus-mid", "lvl-post-comm", "lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-thalamus-mid",
+      "lvl-post-comm",
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic",
+      "lvl-pons-rostral",
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary",
+      "lvl-sensory-decuss",
+      "lvl-pyramid-decuss",
+      "lvl-spinal-medulla"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "Patten, Neurological Differential Diagnosis, 2nd ed. — brainstem level plates",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)",
+      "Nathan PW, Smith MC, Deacon P (1990). The corticospinal tracts in man: course and location of fibres at different segmental levels. Brain 113:303-324. https://pubmed.ncbi.nlm.nih.gov/2328407/ (primary human anatomy; does not validate this atlas)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-corticobulbar",
     "name": "Corticobulbar tract",
-    "synonyms": ["corticonuclear tract"],
+    "synonyms": [
+      "corticonuclear tract"
+    ],
     "direction": "descending",
     "modality": "Somatic/branchiomotor — voluntary control of cranial-nerve motor nuclei (facial expression, mastication, tongue, palate, larynx)",
     "origin": "Lower lateral precentral gyrus (face/tongue area) and adjacent frontal operculum → genu of the internal capsule → medial crus cerebri",
-    "target": "Cranial-nerve motor nuclei: trigeminal motor (V), facial (VII), nucleus ambiguus (IX/X), hypoglossal (XII), and via interneurons the oculomotor/trochlear/abducens and spinal accessory nuclei",
-    "decussation": "No tract-level decussation — individual fibers project bilaterally to most cranial motor nuclei; exceptions dominated by contralateral innervation: the lower facial division (facial nucleus) and hypoglossal nucleus (partial)",
-    "somatotopy": "Medial to the corticospinal bundle in the crus cerebri (between frontopontine and corticospinal fibers); face representation adjacent to the genu of the internal capsule",
-    "function": "Delivers cortical commands to brainstem motor nuclei. Because most nuclei receive bilateral input, unilateral lesions cause little deficit; the exceptions produce the classic signs: contralateral lower facial weakness with forehead sparing (upper face is bilaterally innervated) and tongue deviation away from the cortical lesion (genioglossus is predominantly contralaterally innervated).",
+    "target": "Brainstem motor nuclei controlling jaw, face, pharynx, larynx and tongue, directly or via interneurons. Cortical control of ocular movements uses additional supranuclear gaze networks.",
+    "decussation": "Projections cross at several brainstem levels and are predominantly bilateral. Lower facial motor neurons and genioglossus receive important contralateral input; this is not a single compact decussation.",
+    "somatotopy": "Orofacial representation lies mainly in inferolateral motor cortex; descending fibres pass through the genu/adjacent internal capsule. Brainstem projections are distributed rather than a precisely mapped single tube.",
+    "function": "Contributes to voluntary orofacial, swallowing and speech movements through cranial motor networks. Bilateral innervation gives partial redundancy, with clinically important exceptions.",
     "clinical": [
       {
-        "syndrome": "Unilateral cortical/capsular lesion (e.g. middle cerebral artery infarct)",
-        "findings": "Contralateral lower facial weakness with forehead sparing (bilateral upper-facial innervation); tongue deviates toward the weak side on protrusion",
-        "vascular": "Middle cerebral artery, lenticulostriate branches"
+        "syndrome": "Supranuclear facial weakness",
+        "findings": "Often contralateral lower facial weakness with relative forehead sparing; forehead sparing is a useful pattern, not an absolute diagnostic rule."
       },
       {
-        "syndrome": "Pseudobulbar palsy",
-        "findings": "Bilateral corticobulbar damage → dysarthria, dysphagia, emotional incontinence, hyperreflexic jaw jerk with a spastic tongue",
-        "note": "Classically after bilateral strokes, motor neuron disease, or multiple sclerosis"
+        "syndrome": "Bilateral corticobulbar injury",
+        "findings": "May cause pseudobulbar dysarthria, dysphagia, brisk jaw reflex and emotional lability."
       },
       {
-        "syndrome": "Weber syndrome",
-        "findings": "Ipsilateral CN III palsy with contralateral lower facial/tongue weakness — corticobulbar and corticospinal fibers in the crus damaged beside the exiting third nerve",
-        "vascular": "Posterior cerebral artery paramedian branches"
+        "syndrome": "Supranuclear tongue weakness",
+        "findings": "May impair contralateral genioglossus; protruded tongue can deviate toward the weak side, away from a unilateral cortical lesion. Bilateral innervation can limit the deficit."
       }
     ],
-    "waypoints": [[3, 40, 6], [5, 14, 8], [4, -8, 7], [3, -18, 6], [2.5, -24, 2], [2, -28, -1], [2.5, -34, -1]],
+    "waypoints": [
+      [
+        3,
+        40,
+        6
+      ],
+      [
+        5,
+        14,
+        8
+      ],
+      [
+        4,
+        -8,
+        7
+      ],
+      [
+        3,
+        -18,
+        6
+      ],
+      [
+        2.5,
+        -24,
+        2
+      ],
+      [
+        2,
+        -28,
+        -1
+      ],
+      [
+        2.5,
+        -34,
+        -1
+      ]
+    ],
     "tubeRadius": 0.5,
     "color": "#8b5cf6",
-    "levels": ["lvl-thalamus-rostral", "lvl-thalamus-mid", "lvl-post-comm", "lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary"],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-thalamus-mid",
+      "lvl-post-comm",
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic",
+      "lvl-pons-rostral",
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 509-514 (PDF pp. 535-540)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 535-538 (PDF pp. 561-564)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-corticopontine",
     "name": "Corticopontine tract",
-    "synonyms": ["frontopontine fibers", "temporoparietooccipitopontine fibers"],
+    "synonyms": [
+      "frontopontine fibers",
+      "temporoparietooccipitopontine fibers"
+    ],
     "direction": "descending",
     "modality": "Corticocerebellar relay — conveys cortical motor planning and associative signals to the pontine nuclei",
     "origin": "Widespread neocortex: frontopontine fibers from frontal lobe (medial crus), temporoparietooccipitopontine fibers from posterior cortex (lateral crus)",
-    "target": "Ipsilateral pontine nuclei → transverse pontocerebellar fibers → contralateral middle cerebellar peduncle → cerebellar hemisphere (granular layer)",
-    "decussation": "Pontocerebellar fibers cross in the basis pontis to reach the contralateral middle cerebellar peduncle",
+    "target": "Ipsilateral pontine nuclei. Their separate pontocerebellar axons cross in the pons and enter the opposite cerebellum via the middle cerebellar peduncle.",
+    "decussation": "Corticopontine fibres themselves principally terminate ipsilaterally. Crossing belongs to the downstream pontocerebellar projection, not to this tract.",
     "somatotopy": "In the crus cerebri the frontopontine component is most medial and the temporoparietooccipitopontine component most lateral, flanking the corticobulbar and corticospinal bundles",
-    "function": "The largest corticofugal projection: it funnels cortical intent into the pontine relay and onward through the middle cerebellar peduncle, giving the cerebellum a precisely timed copy of the movement plan for coordination and error correction. Damage disrupts cerebellar modulation of voluntary movement on the contralateral side (double-crossed cerebellar output restores contralaterality clinically).",
+    "function": "Relays widespread cortical information to pontine nuclei, forming the input limb of corticopontocerebellar circuits involved in coordination and motor learning.",
     "clinical": [
       {
-        "syndrome": "Locked-in (ventral pons)",
-        "findings": "With corticospinal/corticobulbar fibers, the corticopontine bundles are destroyed by ventral pontine infarction; cerebellar modulation of the limbs is lost bilaterally",
-        "vascular": "Basilar artery occlusion"
-      },
-      {
-        "syndrome": "Central pontine myelinolysis (osmotic demyelination)",
-        "findings": "Symmetric demyelination of the basis pontis (corticopontine + corticospinal + pontine nuclei) → spastic quadriparesis, pseudobulbar palsy, fluctuating consciousness after rapid correction of hyponatremia",
-        "note": "Classically 2–6 days after over-rapid sodium correction"
+        "syndrome": "Corticopontocerebellar network injury",
+        "findings": "Supratentorial or pontine injury can contribute to ataxia, often together with weakness or other deficits. Side depends on the site relative to the crossed pontocerebellar projection; an isolated tract syndrome is difficult to establish."
       }
     ],
-    "waypoints": [[4, 38, 6], [6, 14, 8], [5, -4, 8], [3.5, -14, 7], [1, -20, 3], [-5.5, -24, -2], [-6.5, -26, -3], [-5.5, -32, -4]],
+    "waypoints": [
+      [
+        4,
+        38,
+        6
+      ],
+      [
+        6,
+        14,
+        8
+      ],
+      [
+        5,
+        -4,
+        8
+      ],
+      [
+        3.5,
+        -14,
+        7
+      ],
+      [
+        5,
+        -14,
+        3
+      ]
+    ],
     "tubeRadius": 0.6,
     "color": "#8b5cf6",
-    "levels": ["lvl-thalamus-rostral", "lvl-thalamus-mid", "lvl-post-comm", "lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary"],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-thalamus-mid",
+      "lvl-post-comm",
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic",
+      "lvl-pons-rostral",
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "Snell, Clinical Neuroanatomy, Ch. \"The Cerebellum\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15: Cerebellum, pp. 704-711 (PDF pp. 730-737)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-rubrospinal",
     "name": "Rubrospinal tract",
     "direction": "descending",
-    "modality": "Somatic motor — excitatory facilitation of contralateral upper-limb flexors (and inhibition of extensors)",
-    "origin": "Magnocellular red nucleus (rostral midbrain tegmentum); driven by cerebellar (dentate/interposed via SCP) and cortical input",
-    "target": "Contralateral cervical cord anterior horn (mainly C4–T1 interneurons), lateral funiculus",
-    "decussation": "Ventral tegmental decussation (of Forel) immediately caudal to the red nucleus — fibers cross ventromedially and descend contralaterally",
-    "somatotopy": "Descends in the lateral brainstem tegmentum dorsal/medial to the spinothalamic tract; terminates predominantly on cervical (upper-limb) motor neurons",
-    "function": "Facilitates flexor tone of the contralateral upper limb as an alternative descending motor route; in humans it is modest in size but clinically important because it explains postures after brainstem lesions. Its preservation above a midbrain lesion produces flexed upper limbs in decorticate posturing.",
+    "modality": "Descending somatic motor pathway; human functional contribution is limited and uncertain, and animal flexor-control mechanisms do not establish a human rule.",
+    "origin": "Magnocellular (caudal) division of the red nucleus in the midbrain.",
+    "target": "Mainly cervical spinal interneurons in humans; the pathway is much smaller than in many experimental animals.",
+    "decussation": "Crosses soon after leaving the red nucleus at the ventral tegmental decussation (Forel) in the midbrain.",
+    "somatotopy": "No precise human somatotopic map is represented here.",
+    "function": "A descending lateral motor pathway with an uncertain and relatively limited role in humans. Animal flexor-control mechanisms should not be treated as a complete explanation of human movement or posturing.",
     "clinical": [
       {
-        "syndrome": "Decorticate (flexor) posturing",
-        "findings": "With corticospinal interruption above the red nucleus, an intact rubrospinal pathway drives upper-limb flexion and lower-limb extension; loss of rubrospinal influence (lesion below the red nucleus) yields extensor (decerebrate) posturing",
-        "note": "Rubrospinal sparing explains why decorticate rigidity carries a better prognosis than decerebrate rigidity"
-      },
-      {
-        "syndrome": "Corticospinal lesions with relative flexor sparing",
-        "findings": "In chronic hemiparesis the flexor synergy of the arm (and spastic dystonia) reflects residual rubrospinal and reticulospinal drive acting without corticospinal control"
-      },
-      {
-        "syndrome": "Claude syndrome",
-        "findings": "Red-nucleus infarction with CN III palsy → ipsilateral third-nerve palsy plus contralateral ataxia/tremor; the rubrospinal exit path is damaged with the nucleus",
-        "vascular": "Posterior cerebral artery paramedian branches"
+        "syndrome": "Abnormal flexor/extensor posturing",
+        "findings": "Posturing can occur with severe hemispheric or brainstem injury. Classical rubrospinal explanations are teaching models and do not establish the exact lesion level or prognosis in an individual."
       }
     ],
-    "waypoints": [[3, 14, 2], [1.5, 10, 3], [0, 7, 3.5], [-1.5, 3, 1], [-2.5, -8, 0], [-3, -24, -1], [-3.5, -40, -1], [-3.5, -50, -2]],
+    "waypoints": [
+      [
+        3,
+        14,
+        2
+      ],
+      [
+        1.5,
+        10,
+        3
+      ],
+      [
+        0,
+        7,
+        3.5
+      ],
+      [
+        -1.5,
+        3,
+        1
+      ],
+      [
+        -2.5,
+        -8,
+        0
+      ],
+      [
+        -3,
+        -24,
+        -1
+      ],
+      [
+        -3.5,
+        -40,
+        -1
+      ],
+      [
+        -3.5,
+        -50,
+        -2
+      ]
+    ],
     "tubeRadius": 0.45,
     "color": "#8b5cf6",
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic",
+      "lvl-pons-rostral",
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary",
+      "lvl-sensory-decuss",
+      "lvl-pyramid-decuss",
+      "lvl-spinal-medulla"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15: Cerebellum, pp. 704-711 (PDF pp. 730-737)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-tectospinal",
     "name": "Tectospinal tract",
     "direction": "descending",
     "modality": "Reflex somatic motor — orienting reflexes of head and neck toward visual (and multimodal) stimuli",
-    "origin": "Deep layers of the superior colliculus (midbrain tectum)",
-    "target": "Contralateral medial anterior (ventral) funiculus of the cervical cord, C1–C4 medial anterior horn interneurons (reflex head turning)",
-    "decussation": "Dorsal tegmental decussation (of Meynert) in the caudal midbrain, dorsal to the medial lemniscus",
-    "somatotopy": "Descends in the medial longitudinal fiber system close to the MLF (as part of the paramedian dorsal tegmentum), terminating only in cervical segments",
-    "function": "Mediates automatic head turning and postural adjustments of the neck toward sudden peripheral visual, auditory, or somatosensory stimuli, cooperating with tectobulbar fibers to the ocular motor nuclei for coordinated gaze-and-head orienting.",
+    "origin": "Deep layers of the superior colliculus, integrating sensory signals relevant to orienting.",
+    "target": "Mainly cervical spinal interneurons involved in head and neck orientation.",
+    "decussation": "Crosses in the dorsal tegmental decussation (Meynert) in the midbrain, then descends near the medial longitudinal fasciculus.",
+    "somatotopy": "This illustration does not resolve a human somatotopic map.",
+    "function": "Participates in orienting head/neck movements toward sensory stimuli. Its isolated clinical contribution in humans is uncertain.",
     "clinical": [
       {
-        "syndrome": "Dorsal midbrain lesions (e.g. pineal region tumor)",
-        "findings": "Loss of reflexive head orienting toward peripheral stimuli accompanies the gaze palsies of Parinaud syndrome; isolated tectospinal deficits are not clinically testable in isolation",
-        "note": "Of the paired descending midbrain tracts, tectospinal lesions are the least clinically evident — noted for completeness"
-      },
-      {
-        "syndrome": "Cervical cord anterior funiculus lesions",
-        "findings": "Diminished quick head-turning reflexes; overshadowed by corticospinal deficits in the same territory"
+        "syndrome": "Orienting network injury",
+        "findings": "Head/eye orienting abnormalities may accompany collicular or brainstem network lesions; a characteristic isolated human tectospinal syndrome is not established."
       }
     ],
-    "waypoints": [[2, 16, -5], [1.5, 12, -4], [0.5, 7, -1], [-1, 4, -2], [-1.5, -8, -3], [-1.5, -24, -3], [-1.5, -44, -3], [-1.5, -50, 1]],
+    "waypoints": [
+      [
+        2,
+        16,
+        -5
+      ],
+      [
+        1.5,
+        12,
+        -4
+      ],
+      [
+        0.5,
+        7,
+        -1
+      ],
+      [
+        -1,
+        4,
+        -2
+      ],
+      [
+        -1.5,
+        -8,
+        -3
+      ],
+      [
+        -1.5,
+        -24,
+        -3
+      ],
+      [
+        -1.5,
+        -44,
+        -3
+      ],
+      [
+        -1.5,
+        -50,
+        1
+      ]
+    ],
     "tubeRadius": 0.4,
     "color": "#8b5cf6",
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic",
+      "lvl-pons-rostral",
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary",
+      "lvl-sensory-decuss",
+      "lvl-pyramid-decuss",
+      "lvl-spinal-medulla"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-lateral-vestibulospinal",
     "name": "Lateral vestibulospinal tract",
-    "synonyms": ["LVST"],
+    "synonyms": [
+      "LVST"
+    ],
     "direction": "descending",
     "modality": "Postural somatic motor — antigravity extensor facilitation driven by the otolith organs",
-    "origin": "Lateral vestibular (Deiters') nucleus at the lateral angle of the fourth-ventricle floor, caudal pons",
-    "target": "Ipsilateral anterior horn at all spinal levels (facilitates extensor/antigravity motor neurons, axially dominant)",
-    "decussation": "None — uncrossed; descends ipsilaterally in the ventral funiculus, anterior to the rubrospinal and spinocerebellar fibers",
+    "origin": "Lateral vestibular nucleus (Deiters) near the pontomedullary region.",
+    "target": "Ipsilateral spinal interneurons throughout the cord, influencing axial/proximal and antigravity muscles.",
+    "decussation": "Predominantly uncrossed descent; downstream spinal networks have broader bilateral interactions.",
     "somatotopy": "Runs in the ventral funiculus of the cord; lamination axial-proximal, influencing extensor tone from cervical to sacral levels",
-    "function": "Translates otolith (gravito-inertial) signals into increases in ipsilateral antigravity extensor tone, correcting posture when the body tilts. Hyperactivity of Deiters' nucleus and its tract underlies the extensor hypertonus of decerebrate rigidity.",
+    "function": "Uses vestibular information to help maintain posture and balance, including facilitation of extensor/antigravity activity.",
     "clinical": [
       {
-        "syndrome": "Decerebrate (extensor) rigidity",
-        "findings": "Loss of cortical/red-nucleus influence releases the lateral vestibulospinal system → powerful ipsilateral extensor tone in all four limbs",
-        "note": "Experimental dorsomedial medulla transection between the red nucleus and Deiters' nucleus reproduces this"
+        "syndrome": "Central vestibular network injury",
+        "findings": "Brainstem injury involving vestibular nuclei and descending pathways may contribute to imbalance and falling; vertigo and nystagmus involve additional vestibular circuits."
       },
       {
-        "syndrome": "Vestibular nuclear lesions (lateral)",
-        "findings": "Ipsilateral loss of extensor postural tone with falling toward the lesion (as in acute vestibular neuritis involving Deiters' nucleus); combined lateral medullary lesions add ataxia",
-        "vascular": "Vertebral / posterior inferior cerebellar artery territory (caudal extent)"
+        "syndrome": "Peripheral vestibular neuritis",
+        "findings": "A peripheral vestibular nerve disorder can alter vestibulospinal drive secondarily; it does not imply a lesion of the Deiters nucleus."
       }
     ],
-    "waypoints": [[4.5, -18, -4], [4.5, -24, -2], [4.5, -34, 0], [4, -44, 1], [3.5, -52, 2]],
+    "waypoints": [
+      [
+        4.5,
+        -18,
+        -4
+      ],
+      [
+        4.5,
+        -24,
+        -2
+      ],
+      [
+        4.5,
+        -34,
+        0
+      ],
+      [
+        4,
+        -44,
+        1
+      ],
+      [
+        3.5,
+        -52,
+        2
+      ]
+    ],
     "tubeRadius": 0.45,
     "color": "#8b5cf6",
-    "levels": ["lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": [
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary",
+      "lvl-sensory-decuss",
+      "lvl-pyramid-decuss",
+      "lvl-spinal-medulla"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 523-525 (PDF pp. 549-551)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-medial-vestibulospinal",
     "name": "Medial vestibulospinal tract",
-    "synonyms": ["MVST"],
+    "synonyms": [
+      "MVST"
+    ],
     "direction": "descending",
     "modality": "Head/neck postural reflex motor — semicircular-canal-driven stabilization of head position",
-    "origin": "Medial and lateral vestibular nuclei (medulla and caudal pons)",
-    "target": "Cervical and upper thoracic medial anterior horn (bilateral, neck/upper-limb axial muscles) via the medial longitudinal fasciculus of the cord",
-    "decussation": "Predominantly uncrossed — descends bilaterally in the medial longitudinal fasciculus with a small decussating contingent",
-    "somatotopy": "Confined to the medial longitudinal fasciculus/interfascicular bundle of the ventral funiculus; rostrally continuous with the MLF of the brainstem",
-    "function": "Couples canal signals to neck (and upper limb) motor neurons so the head is stabilized in space during body and eye movements — the spinal limb of the vestibulocollic reflex. It is the downward continuation of the MLF fiber system.",
+    "origin": "Mainly medial vestibular nucleus, with contributions from the inferior vestibular nucleus.",
+    "target": "Bilateral cervical and upper thoracic spinal interneurons controlling head and neck muscles.",
+    "decussation": "Contains crossed and uncrossed projections, descending bilaterally in association with the medial longitudinal fasciculus (descending MLF).",
+    "somatotopy": "Predominantly head/neck control, without a validated fine somatotopic map in this illustration.",
+    "function": "Supports vestibulocollic reflexes and stabilization of head position. Ascending vestibulo-ocular fibres are related but have different targets.",
     "clinical": [
       {
-        "syndrome": "Acute vestibular syndrome (nuclear/tract level)",
-        "findings": "Ocular tilt reaction and head-tilt with impaired vestibulocollic reflexes; ipsiversive lateropulsion when the medial vestibulospinal/MLF complex is infarcted",
-        "vascular": "Vertebral and posterior inferior cerebellar artery branches"
-      },
-      {
-        "syndrome": "High cervical cord lesions",
-        "findings": "Loss of head-stabilizing reflexes contributing to truncal/head instability after anterior-funciculus damage"
+        "syndrome": "Vestibular/postural network injury",
+        "findings": "May impair head stabilization and postural responses. Clinical vestibular signs cannot usually be assigned to this tract alone."
       }
     ],
-    "waypoints": [[2.5, -20, -4], [1.8, -24, -3.5], [1.5, -34, -2], [1.2, -44, 0], [1, -50, 1]],
+    "waypoints": [
+      [
+        2.5,
+        -20,
+        -4
+      ],
+      [
+        1.8,
+        -24,
+        -3.5
+      ],
+      [
+        1.5,
+        -34,
+        -2
+      ],
+      [
+        1.2,
+        -44,
+        0
+      ],
+      [
+        1,
+        -50,
+        1
+      ]
+    ],
     "tubeRadius": 0.4,
     "color": "#8b5cf6",
-    "levels": ["lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": [
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary",
+      "lvl-sensory-decuss",
+      "lvl-pyramid-decuss",
+      "lvl-spinal-medulla"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 523-525 (PDF pp. 549-551)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-reticulospinal",
     "name": "Reticulospinal tract (pontine and medullary)",
-    "synonyms": ["pontine reticulospinal", "medullary reticulospinal"],
+    "synonyms": [
+      "pontine reticulospinal",
+      "medullary reticulospinal"
+    ],
     "direction": "descending",
-    "modality": "Postural and autonomic somatic motor — the medial descending (parapyramidal) system setting muscle tone, posture, and autonomic outflow",
-    "origin": "Pontine reticular formation (oral/caudal pontine nuclei) and medullary reticular formation (gigantocellular/medial nuclei)",
-    "target": "Bilateral ventromedial anterior horn at all levels (pontine: ventromedial, extensor-facilitating; medullary: ventrolateral, flexor-facilitating/antigravity-suppressing) plus preganglionic autonomic neurons",
-    "decussation": "None — predominantly ipsilateral descent with bilateral terminal arborization through commissural reticular neurons",
-    "somatotopy": "Pontine fibers descend ventromedially (medial longitudinal bundle territory); medullary fibers descend ventrolaterally, deep to the spinothalamic tract",
-    "function": "Provides the tonically active postural and muscle-tone background on which corticospinal movements ride: pontine output facilitates antigravity extensors, medullary output suppresses them; both adjust axial posture during voluntary movement and carry descending autonomic (vasomotor, sphincter) control. After corticospinal injury, reticulospinal hyperexcitability is a main driver of post-stroke spasticity.",
+    "modality": "Descending somatic motor/postural networks; contributions to muscle tone, locomotion and coordinated movement.",
+    "origin": "Pontine and medullary reticular formation, containing heterogeneous descending neuronal populations.",
+    "target": "Spinal interneurons and motor neurons across multiple segments, with substantial bilateral influence.",
+    "decussation": "Distributed crossed and uncrossed projections; no single obligatory decussation.",
+    "somatotopy": "Broad medial motor-system influence on axial/proximal muscles; no precise human map is modeled.",
+    "function": "Contributes to posture, gait, anticipatory adjustments and voluntary movements. A simple pontine-excitatory/medullary-inhibitory split does not capture the full system.",
     "clinical": [
       {
-        "syndrome": "Post-stroke spasticity",
-        "findings": "Loss of cortical control unmasks exaggerated reticulospinal drive → velocity-dependent hypertonus, clonus, and synergies in the contralateral limbs",
-        "note": "The spasticity of upper-motor-neuron lesions is largely reticulospinal (not corticospinal) in mechanism"
+        "syndrome": "Motor recovery and spasticity",
+        "findings": "Reticulospinal circuits may contribute to residual movement and abnormal synergies after corticospinal injury; these outcomes involve multiple descending and spinal mechanisms."
       },
       {
-        "syndrome": "Autonomic dysreflexia / neurogenic shock (cord or brainstem lesions)",
-        "findings": "Interruption of descending reticulospinal (autonomic) fibers abolishes supraspinal vasomotor control — hypotension with high cord lesions, or dysreflexic hypertension below",
-        "note": "Medullary reticulospinal fibers also carry respiratory and cardiovascular modulation"
-      },
-      {
-        "syndrome": "Lateral medullary (Wallenberg) syndrome",
-        "findings": "Involvement of the medullary reticular formation disturbs ipsilateral autonomic (hypo/anidrosis, cardiovascular lability) and postural control alongside the classic sensory findings",
-        "vascular": "Posterior inferior cerebellar artery / vertebral"
+        "syndrome": "Brainstem motor-system injury",
+        "findings": "Often causes mixed motor/postural deficits; isolated reticulospinal lesions are difficult to identify clinically."
       }
     ],
-    "waypoints": [[3, -6, -1], [3.5, -18, 0], [4, -30, 0], [3.5, -42, 1], [3, -50, 2]],
+    "waypoints": [
+      [
+        3,
+        -6,
+        -1
+      ],
+      [
+        3.5,
+        -18,
+        0
+      ],
+      [
+        4,
+        -30,
+        0
+      ],
+      [
+        3.5,
+        -42,
+        1
+      ],
+      [
+        3,
+        -50,
+        2
+      ]
+    ],
     "tubeRadius": 0.5,
     "color": "#8b5cf6",
-    "levels": ["lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": [
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary",
+      "lvl-sensory-decuss",
+      "lvl-pyramid-decuss",
+      "lvl-spinal-medulla"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Corticospinal Tract and Other Motor Pathways\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-mlf",
     "name": "Medial longitudinal fasciculus (MLF)",
-    "synonyms": ["MLF"],
+    "synonyms": [
+      "MLF",
+      "fasciculus longitudinalis medialis"
+    ],
     "direction": "mixed",
     "modality": "Internuclear oculomotor and vestibular — conjugate gaze coordination and vestibulo-ocular/vestibulocollic integration",
-    "origin": "Vestibular nuclei (medial/superior) and abducens internuclear neurons; receives tectobulbar contributions from the superior colliculus and a caudal continuation of the medial vestibulospinal fibers",
-    "target": "Oculomotor (medial rectus subnuclei), trochlear and abducens nuclei, spinal accessory/anterior horn of the cervical cord",
-    "decussation": "Internuclear fibers decussate within the oculomotor/trochlear complexes for yoking of the contralateral medial rectus; no tract-level decussation — the bundle itself is paramedian and paired",
+    "origin": "Vestibular nuclei and brainstem ocular motor internuclear neurons; horizontal gaze interneurons arise in the abducens nucleus.",
+    "target": "Oculomotor, trochlear and abducens nuclei, linking conjugate eye movements and vestibulo-ocular responses.",
+    "decussation": "Abducens internuclear axons cross in the pons soon after leaving the abducens nucleus, then ascend in the opposite MLF to medial-rectus neurons of CN III. Other MLF components include crossed and uncrossed vestibular projections.",
     "somatotopy": "Paired paramedian bundle in the dorsal tegmentum: floor of the fourth ventricle through the pons, just ventral to the periaqueductal gray in the midbrain, continuing caudally into the cervical medial longitudinal bundle",
-    "function": "The wiring harness of conjugate gaze: abducens internuclear neurons carry the command for ipsilateral lateral rectus contraction up the MLF to the contralateral medial-rectus (CN III) neurons, and vestibular nuclei use the same bundle to drive vestibulo-ocular reflexes in all planes. Tectobulbar fibers add saccadic head-orienting commands.",
+    "function": "Coordinates ocular motor nuclei with one another and with vestibular inputs. It is a mixed internuclear bundle rather than a single sensory or motor tract.",
     "clinical": [
       {
         "syndrome": "Internuclear ophthalmoplegia (INO)",
-        "findings": "Unilateral MLF lesion: on attempted lateral gaze away from the lesion, the ipsilateral (adducting) eye fails or lags with preserved convergence; abducting nystagmus in the contralateral eye; skew deviation may accompany",
-        "vascular": "Basilar paramedian perforators",
-        "note": "Classic demyelinating lesion in young adults (multiple sclerosis); small-vessel stroke in older patients"
+        "findings": "Impaired adduction of the eye ipsilateral to the MLF lesion during horizontal gaze, often with contralateral abducting nystagmus. Convergence is frequently preserved, but not always."
       },
       {
         "syndrome": "One-and-a-half syndrome",
-        "findings": "Combined PPRF/abducens plus ipsilateral MLF lesion → the only surviving horizontal movement is abduction of the contralateral eye",
-        "vascular": "Basilar paramedian perforators"
-      },
-      {
-        "syndrome": "Wall-eyed bilateral INO (WEBINO)",
-        "findings": "Bilateral MLF lesions → bilateral adduction failure with exotropia and abduction nystagmus"
+        "findings": "An ipsilateral MLF lesion plus abducens-nucleus or PPRF damage causes ipsilateral horizontal gaze palsy and INO; only contralateral eye abduction remains horizontally."
       }
     ],
-    "waypoints": [[1.5, 14, -3.5], [1.5, 8, -3.5], [1.5, -8, -4], [1.5, -18, -4], [1.2, -30, -3.5], [1, -44, -2], [1, -50, 0]],
+    "waypoints": [
+      [
+        1.5,
+        14,
+        -3.5
+      ],
+      [
+        1.5,
+        8,
+        -3.5
+      ],
+      [
+        1.5,
+        -8,
+        -4
+      ],
+      [
+        1.5,
+        -18,
+        -4
+      ],
+      [
+        1.2,
+        -30,
+        -3.5
+      ],
+      [
+        1,
+        -44,
+        -2
+      ],
+      [
+        1,
+        -50,
+        0
+      ]
+    ],
     "tubeRadius": 0.3,
     "color": "#a78bfa",
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic",
+      "lvl-pons-rostral",
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary",
+      "lvl-sensory-decuss",
+      "lvl-pyramid-decuss",
+      "lvl-spinal-medulla"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)",
-      "Patten, Neurological Differential Diagnosis, 2nd ed. — brainstem level plates"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 523-525 (PDF pp. 549-551)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13: Brainstem II: Eye Movements and Pupillary Control, pp. 584-587 (PDF pp. 610-613)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-central-tegmental",
     "name": "Central tegmental tract",
-    "synonyms": ["CTT"],
+    "synonyms": [
+      "CTT"
+    ],
     "direction": "descending",
     "modality": "Motor-coordination loop (rubro-olivary fibers of the Guillain–Mollaret triangle) plus ascending/descending reticular fibers",
-    "origin": "Red nucleus (parvocellular, ipsilateral) and midbrain reticular formation",
-    "target": "Principal inferior olivary nucleus (ipsilateral) — closing the dentatorubro-olivary (Guillain–Mollaret) triangle: dentate → contralateral red nucleus (via SCP) → ipsilateral inferior olive (via CTT) → contralateral dentate (via olivocerebellar fibers)",
-    "decussation": "No intrinsic decussation — the tract is an ipsilateral tegmental conduit within the Mollaret triangle",
-    "somatotopy": "Runs in the lateral paramedian tegmentum, dorsolateral to the MLF throughout the pons, converging on the principal olive at the mid-medulla",
-    "function": "Links the red nucleus to the inferior olive as the central leg of the dentatorubro-olivary loop that calibrates cerebellar motor learning; it also carries reticular fibers between the midbrain and lower brainstem. Lesions produce hypertrophic olivary degeneration with palatal/tremor myorhythmia.",
+    "origin": "Includes descending fibres from the parvocellular (rostral) red nucleus; other ascending/reticular fibres occupy the central tegmental region.",
+    "target": "Ipsilateral inferior olivary nucleus for the descending rubro-olivary component.",
+    "decussation": "The rubro-olivary component is principally uncrossed. Dentatorubral input crosses via the superior cerebellar peduncle; olivocerebellar output crosses to the opposite cerebellar cortex via the inferior peduncle.",
+    "somatotopy": "No fine somatotopic representation is provided.",
+    "function": "The rubro-olivary component forms part of the dentato-rubro-olivary circuit. The return route involves olivary climbing fibres to cerebellar cortex and deep-nuclear circuitry, not a simple direct olive-to-dentate synapse.",
     "clinical": [
       {
         "syndrome": "Hypertrophic olivary degeneration",
-        "findings": "Trans-synaptic degeneration of the inferior olive after CTT (or red nucleus/dentate) injury → palatal myoclonus, pendular nystagmus, ocular myorhythmia months after the initial lesion",
-        "note": "Classic delayed complication of pontine or tegmental hemorrhage/infarct"
-      },
-      {
-        "syndrome": "Guillain–Mollaret triangle lesions",
-        "findings": "Myoclonus syndromes (palatal, ocular, skeletal) from disruption of the dentate–red nucleus–olive circuit at any leg, including the central tegmental tract",
-        "vascular": "Basilar paramedian perforators"
+        "findings": "Interruption of afferent connections to the olive can cause delayed ipsilateral olivary degeneration after central tegmental injury, sometimes with palatal/oculopalatal tremor. Not every affected patient has tremor; isolated olivocerebellar output injury does not produce the same deafferentation pattern."
       }
     ],
-    "waypoints": [[2.5, 12, -0.5], [2, 4, -1.5], [1.8, -8, -2], [1.8, -18, -2], [2.5, -28, -1], [3.5, -33, 2], [4.5, -35, 3]],
+    "waypoints": [
+      [
+        2.5,
+        12,
+        -0.5
+      ],
+      [
+        2,
+        4,
+        -1.5
+      ],
+      [
+        1.8,
+        -8,
+        -2
+      ],
+      [
+        1.8,
+        -18,
+        -2
+      ],
+      [
+        2.5,
+        -28,
+        -1
+      ],
+      [
+        3.5,
+        -33,
+        2
+      ],
+      [
+        4.5,
+        -35,
+        3
+      ]
+    ],
     "tubeRadius": 0.45,
     "color": "#8b5cf6",
-    "levels": ["lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary"],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic",
+      "lvl-pons-rostral",
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15: Cerebellum, pp. 704-711 (PDF pp. 730-737)",
+      "Kitajima et al. (1994), Radiology 192:539-543, https://doi.org/10.1148/radiology.192.2.8029428"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-hypothalamospinal",
     "name": "Hypothalamospinal (sympathetic) tract",
-    "synonyms": ["descending sympathetic tract", "central sympathetic pathway"],
+    "synonyms": [
+      "descending sympathetic tract",
+      "central sympathetic pathway"
+    ],
     "direction": "descending",
     "modality": "Visceromotor — descending sympathetic (and hypothalamic autonomic) control of preganglionic sympathetic neurons",
-    "origin": "Posterolateral hypothalamus (paraventricular and lateral hypothalamic area)",
-    "target": "Descends through the lateral brainstem tegmentum to the cervical cord, where the pathway continues to the intermediolateral cell column of the spinal cord (T1–L2) and its ciliospinal centre of Budge (C8–T2) for the oculosympathetics — drawn in this atlas only to the cervicomedullary junction, because no spinal-cord geometry is committed",
-    "decussation": "None — uncrossed; descends ipsilaterally through the lateral brainstem tegmentum",
-    "somatotopy": "Runs in the lateral tegmentum dorsolateral to the medial lemniscus and spinothalamic fibers — the reason lateral brainstem lesions produce ipsilateral Horner syndrome",
-    "function": "Carries hypothalamic sympathetic commands to the spinal preganglionic neurons that drive pupil dilation, lid elevation (Müller muscle), facial sweating, and vasomotor tone. Interruption anywhere along its course produces ipsilateral central Horner syndrome — ptosis, miosis, and anhidrosis without extraocular or visual loss.",
+    "origin": "Hypothalamic autonomic regions, including pathways descending through the lateral brainstem.",
+    "target": "Spinal sympathetic preganglionic neurons. The oculosympathetic component reaches upper thoracic intermediolateral neurons (chiefly T1-T2), then sympathetic chain and superior cervical ganglion.",
+    "decussation": "The clinically localized descending oculosympathetic pathway is mainly ipsilateral; broader hypothalamic autonomic projections are distributed.",
+    "somatotopy": "Lateral brainstem descent is a teaching localization, not a precisely delimited fibre bundle or fine map.",
+    "function": "Descending autonomic control includes sympathetic drive to the pupil, eyelid smooth muscle and sweating through a three-neuron oculosympathetic chain.",
     "clinical": [
       {
         "syndrome": "Central Horner syndrome",
-        "findings": "Ipsilateral miosis, mild ptosis, facial anhidrosis; pupil dilates poorly to hydroxyamphetamine (central lesion) and the anhidrosis involves face/arm/ trunk depending on level",
-        "vascular": "Vertebral / posterior inferior cerebellar artery",
-        "note": "Distinguish from preganglionic (second-order) and postganglionic (third-order) Horner by pharmacologic testing and anhidrosis distribution"
+        "findings": "Ipsilateral miosis, mild ptosis and variable anhidrosis can accompany lateral brainstem or spinal injury. Horner syndrome also has peripheral preganglionic/postganglionic causes."
       },
       {
-        "syndrome": "Lateral medullary (Wallenberg) syndrome",
-        "findings": "Ipsilateral Horner syndrome accompanies facial pain/temperature loss, dysphagia, dysphonia, and ataxia when the lateral tegmental sympathetic fibers are infarcted",
-        "vascular": "Posterior inferior cerebellar artery / vertebral"
+        "syndrome": "Pharmacologic localization principle",
+        "findings": "With intact postganglionic terminals, hydroxyamphetamine can dilate a central or preganglionic Horner pupil; dilation is reduced in a postganglionic lesion. Timing and other limitations prevent this from being an absolute rule.",
+        "note": "Educational mechanism, not a recommendation for self-testing or a substitute for clinical assessment."
       }
     ],
-    "waypoints": [[2.5, 32, 4], [3, 26, 2], [3.5, 14, -1], [4, 2, -1.5], [4.5, -14, -1], [4.5, -34, 0], [4, -48, 1], [4, -52, 0]],
+    "waypoints": [
+      [
+        2.5,
+        32,
+        4
+      ],
+      [
+        3,
+        26,
+        2
+      ],
+      [
+        3.5,
+        14,
+        -1
+      ],
+      [
+        4,
+        2,
+        -1.5
+      ],
+      [
+        4.5,
+        -14,
+        -1
+      ],
+      [
+        4.5,
+        -34,
+        0
+      ],
+      [
+        4,
+        -48,
+        1
+      ],
+      [
+        4,
+        -52,
+        0
+      ]
+    ],
     "tubeRadius": 0.4,
     "color": "#8b5cf6",
-    "levels": ["lvl-thalamus-rostral", "lvl-thalamus-mid", "lvl-post-comm", "lvl-midbrain-sc", "lvl-midbrain-ic", "lvl-pons-rostral", "lvl-pons-middle", "lvl-pons-caudal", "lvl-pontomedullary", "lvl-olivary", "lvl-sensory-decuss", "lvl-pyramid-decuss", "lvl-spinal-medulla"],
+    "levels": [
+      "lvl-thalamus-rostral",
+      "lvl-thalamus-mid",
+      "lvl-post-comm",
+      "lvl-midbrain-sc",
+      "lvl-midbrain-ic",
+      "lvl-pons-rostral",
+      "lvl-pons-middle",
+      "lvl-pons-caudal",
+      "lvl-pontomedullary",
+      "lvl-olivary",
+      "lvl-sensory-decuss",
+      "lvl-pyramid-decuss",
+      "lvl-spinal-medulla"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Diencephalon: Thalamus and Hypothalamus\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13: Brainstem II: Eye Movements and Pupillary Control, pp. 578-581 (PDF pp. 604-607)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)",
+      "Cremer SA et al. (1990). Hydroxyamphetamine mydriasis in Horner syndrome. Am J Ophthalmol 110:71-76. https://pubmed.ncbi.nlm.nih.gov/2368824/ (primary clinical series)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-dcml",
     "name": "Dorsal column-medial lemniscus pathway",
-    "synonyms": ["DCML", "posterior column pathway", "dorsal columns"],
+    "synonyms": [
+      "DCML",
+      "posterior column pathway",
+      "dorsal columns"
+    ],
     "direction": "ascending",
     "modality": "Somatic sensory — discriminative (fine) touch, vibration, conscious proprioception, two-point discrimination",
-    "origin": "Large-diameter (Aβ) mechanoreceptive afferents entering the cord → ipsilateral dorsal column: fasciculus gracilis (leg, T6 and below, medial) and fasciculus cuneatus (arm/trunk above T6, lateral) → nucleus gracilis/cuneatus",
-    "target": "Contralateral ventral posterolateral nucleus (VPL) of the thalamus (third order to primary somatosensory cortex S1, postcentral gyrus)",
-    "decussation": "Internal arcuate fibers — sensory decussation at lvl-sensory-decuss: second-order axons from the dorsal column nuclei arch ventromedially and cross completely, forming the contralateral medial lemniscus",
-    "somatotopy": "Dorsal columns: gracile (leg) medial, cuneate (arm) lateral. After the sensory decussation the medial lemniscus inverts its lamination through the brainstem — leg fibers ventral (and lateral) in the medulla, rotating through the pons so that leg is medial/dorsal in the midbrain, with the face appended at the VPL border (face at VPM)",
-    "function": "The lemniscal channel for high-fidelity mechanosensation: first-order fibers ascend uncrossed in the dorsal columns to the caudal medulla, synapse in nucleus gracilis/cuneatus, and the decussating internal arcuate fibers rebuild the body map in the contralateral medial lemniscus, which climbs adjacent to the midline to the VPL. Composite record — the fasciculi, nuclei, internal arcuate fibers, and medial lemniscus are drawn as separate structures on the plates.",
+    "origin": "Large-fibre dorsal-root ganglion neurons ascend ipsilaterally in gracile/cuneate fasciculi and relay in the corresponding caudal medullary nuclei.",
+    "target": "Contralateral VPL thalamus via medial lemniscus, then primary somatosensory cortex. Facial sensory relays use separate trigeminal pathways and VPM.",
+    "decussation": "Second-order axons cross in the caudal medulla as internal arcuate fibres (sensory decussation).",
+    "somatotopy": "Dorsal columns: lower body medial (gracile), upper body lateral (cuneate). Medial lemniscus: feet more ventral in medulla; arms more medial and legs more lateral in pons/midbrain as the ribbon rotates. These are broad teaching relationships.",
+    "function": "Conveys vibration, conscious proprioception and discriminative touch from the body.",
     "clinical": [
       {
-        "syndrome": "Medial lemniscus lesion (medial medullary / paramedian pontine)",
-        "findings": "Contralateral loss of vibration, joint-position sense, and discriminative touch with intact pain/temperature (spinothalamic spared) — sensory ataxia with positive Romberg",
-        "vascular": "Anterior spinal artery (medulla) / basilar paramedian perforators (pons)"
+        "syndrome": "Dorsal-column injury",
+        "findings": "Ipsilateral vibration/proprioception loss below a spinal lesion; sensory ataxia may worsen without visual guidance."
       },
       {
-        "syndrome": "Tabes dorsalis (dorsal column degeneration)",
-        "findings": "Loss of proprioception/vibration with sensory ataxia, lancinating pains, and Argyll Robertson pupils",
-        "note": "Classic dorsal-root/dorsal-column disease; also seen as large-fiber neuropathy (B12 deficiency, diabetes)"
+        "syndrome": "Medial lemniscus injury",
+        "findings": "Contralateral body vibration/proprioception loss above the sensory crossing, such as in medial medullary infarction."
       },
       {
-        "syndrome": "Brown-Séquard (cord hemisection)",
-        "findings": "Ipsilateral loss of vibration/proprioception/discriminative touch below the lesion (dorsal columns uncrossed below the sensory decussation), with contralateral pain/temperature loss",
-        "note": "The DCML/spinothalamic laterality split is the exam-defining feature of cord hemisection"
+        "syndrome": "Tabes dorsalis and other large-fibre disorders",
+        "findings": "Tabes dorsalis is neurosyphilitic disease of dorsal roots/columns. B12 deficiency and peripheral large-fibre neuropathies can also impair these modalities but are separate diagnoses."
       }
     ],
-    "waypoints": [[1.5, -50, -5], [2, -44, -5], [1, -42, 0], [-0.5, -41, 2], [-2.5, -32, 1.5], [-3.5, -8, 0], [-4.5, 12, -1], [-6, 28, -3]],
+    "waypoints": [
+      [
+        1.5,
+        -50,
+        -5
+      ],
+      [
+        2,
+        -44,
+        -5
+      ],
+      [
+        1,
+        -42,
+        0
+      ],
+      [
+        -0.5,
+        -41,
+        2
+      ],
+      [
+        -2.5,
+        -32,
+        1.5
+      ],
+      [
+        -3.5,
+        -8,
+        0
+      ],
+      [
+        -4.5,
+        12,
+        -1
+      ],
+      [
+        -6,
+        28,
+        -3
+      ]
+    ],
     "tubeRadius": 0.7,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": [
+      "lvl-spinal-medulla",
+      "lvl-pyramid-decuss",
+      "lvl-sensory-decuss",
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-thalamus-mid"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Spinal Cord\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7: Somatosensory Pathways, pp. 277-282 (PDF pp. 303-308)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-spinothalamic",
     "name": "Spinothalamic tract (anterolateral system)",
-    "synonyms": ["ALS", "lateral spinothalamic tract", "ventral spinothalamic tract"],
+    "synonyms": [
+      "ALS",
+      "lateral spinothalamic tract",
+      "ventral spinothalamic tract"
+    ],
     "direction": "ascending",
     "modality": "Somatic sensory — sharp/fast pain, thermal sense, crude (non-discriminative) touch and pressure; salient affective pain components",
-    "origin": "Small-diameter nociceptive/thermal afferents → lamina I and V → second-order neurons crossing in the anterior white commissure within 1–2 spinal segments",
-    "target": "Contralateral ventral posterolateral nucleus (VPL) of the thalamus, with collateral projections to the reticular formation and intralaminar nuclei",
-    "decussation": "Anterior white commissure of the spinal cord within 1–2 segments of entry; no further crossing in the brainstem (tract ascends contralateral to the body side represented)",
-    "somatotopy": "Preserved lamination along the whole ascent: sacral fibers most dorsal/lateral (superficial), cervical fibers most ventral/medial — hence centrally placed intramedullary lesions spare sacral pain/temperature (sacral sparing); in VPL the leg is lateral, arm medial",
-    "function": "The anterolateral (neospinothalamic) channel carrying contralateral sharp pain, temperature, and crude touch from the cord to the VPL; fibers enter, cross within one to two segments, and ascend as a compact band just dorsal to the olivary complex and behind the spinothalamic surface position, lying lateral to the medial lemniscus throughout the brainstem.",
+    "origin": "Spinal dorsal horn projection neurons, particularly laminae I and V, after primary afferents enter and may travel briefly in Lissauer tract.",
+    "target": "Contralateral thalamus, including VPL and additional medial/intralaminar targets; cortical processing is distributed.",
+    "decussation": "Most second-order axons cross through the spinal anterior white commissure, often within one or a few segments of entry. Ascending brainstem fibres already represent the opposite body side.",
+    "somatotopy": "Classical spinal teaching map places sacral fibres relatively lateral and cervical fibres relatively medial; do not treat this as an exact, invariant lamination throughout the brainstem.",
+    "function": "Major component of the anterolateral system conveying body pain and temperature; related pathways also contribute to crude touch, affective and arousal components.",
     "clinical": [
       {
-        "syndrome": "Lateral medullary (Wallenberg) syndrome",
-        "findings": "Contralateral loss of pain/temperature on the trunk and limbs (spinothalamic fibers) with ipsilateral facial pain/temperature loss (spinal trigeminal tract) — the crossed sensory pattern",
-        "vascular": "Posterior inferior cerebellar artery / vertebral"
+        "syndrome": "Spinal hemicord lesion",
+        "findings": "Contralateral pain/temperature loss often begins below the injured segment because afferents travel and cross over several segments."
       },
       {
-        "syndrome": "Syringomyelia (central cord)",
-        "findings": "Bilateral segmental loss of pain/temperature at the level of the cavity (crossing fibers destroyed) with preserved touch/proprioception — 'cape-like' distribution",
-        "note": "This tract's intramedullary decussation is why central lesions dissociate pain/temperature from vibration/position"
+        "syndrome": "Central cord cavity",
+        "findings": "Early syringomyelia can interrupt crossing pain/temperature fibres, causing bilateral segmental sensory loss with relative preservation of posterior-column modalities; larger lesions affect other functions."
       },
       {
-        "syndrome": "Anterior cord syndrome",
-        "findings": "Bilateral loss of pain/temperature below the lesion with preserved vibration/proprioception (anterior spinal artery infarct spares the dorsal columns)",
-        "vascular": "Anterior spinal artery"
-      },
-      {
-        "syndrome": "Déjérine-Roussy thalamic pain",
-        "findings": "After VPL/thalamogeniculate infarction, burning allodynic pain on the contralateral body as the spinothalamic relay is damaged",
-        "vascular": "Posterior cerebral artery — thalamogeniculate branches"
+        "syndrome": "Lateral brainstem lesion",
+        "findings": "Contralateral body pain/temperature loss may accompany ipsilateral face sensory loss from spinal trigeminal involvement."
       }
     ],
-    "waypoints": [[3, -52, 3], [3.5, -40, 2], [4, -30, 1.5], [4.5, -16, 1], [5, -4, 0], [5, 8, -1], [5.5, 18, -1.5], [6, 28, -3]],
+    "waypoints": [
+      [
+        3,
+        -52,
+        3
+      ],
+      [
+        3.5,
+        -40,
+        2
+      ],
+      [
+        4,
+        -30,
+        1.5
+      ],
+      [
+        4.5,
+        -16,
+        1
+      ],
+      [
+        5,
+        -4,
+        0
+      ],
+      [
+        5,
+        8,
+        -1
+      ],
+      [
+        5.5,
+        18,
+        -1.5
+      ],
+      [
+        6,
+        28,
+        -3
+      ]
+    ],
     "tubeRadius": 0.6,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": [
+      "lvl-spinal-medulla",
+      "lvl-pyramid-decuss",
+      "lvl-sensory-decuss",
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-thalamus-mid"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Spinal Cord\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7: Somatosensory Pathways, pp. 277-282 (PDF pp. 303-308)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 509-514 (PDF pp. 535-540)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-trigeminothalamic-ventral",
     "name": "Ventral trigeminothalamic tract",
-    "synonyms": ["trigeminal lemniscus"],
+    "synonyms": [
+      "trigeminal lemniscus"
+    ],
     "direction": "ascending",
     "modality": "Somatic sensory — face/head touch, pain, temperature, and orofacial proprioceptive relay",
-    "origin": "Principal sensory trigeminal nucleus (mid-pons) and the spinal trigeminal nucleus (medulla and caudal pons)",
-    "target": "Contralateral ventral posteromedial nucleus (VPM) of the thalamus, adjacent to the VPL face border",
-    "decussation": "Second-order fibers cross at or shortly above their level of origin in the dorsal pons/rostral medulla, then ascend as the trigeminal lemniscus adjacent to (dorsolateral of) the medial lemniscus",
-    "somatotopy": "Within the tract, fibers from the spinal trigeminal nucleus (ophthalmic-to-mandibular 'onion-skin' order) lie medial to principal-nucleus fibers at brainstem levels; VPM ends medial to VPL",
-    "function": "The facial counterpart of the spinothalamic/lemniscal systems: it collects all contralateral facial and intraoral sensation (including pain from the spinal V distribution of V/IX/X) and delivers it to VPM, preserving the onion-skin somatotopy established in the spinal trigeminal nucleus.",
+    "origin": "Second-order neurons in principal sensory and spinal trigeminal nuclei, receiving predominantly ipsilateral facial/oral afferents.",
+    "target": "Mainly contralateral VPM thalamus, followed by the face region of somatosensory cortex.",
+    "decussation": "Fibres cross within the brainstem after their trigeminal nuclear relay; principal and spinal nuclear contributions cross at different levels. Oral touch also has an uncrossed dorsal pathway.",
+    "somatotopy": "Facial sensory organization varies across nuclei and levels; an exact onion-skin map is not established for this whole ascending bundle.",
+    "function": "Conveys facial/oral somatosensation, including touch and pain/temperature through different trigeminal nuclear contributions.",
     "clinical": [
       {
-        "syndrome": "Lateral pontine syndrome (e.g. AICA infarct)",
-        "findings": "Contralateral loss of facial and body pain/temperature (trigeminal + spinothalamic lemnisci) with ipsilateral facial paralysis, hearing loss, and ataxia",
-        "vascular": "Anterior inferior cerebellar artery"
-      },
-      {
-        "syndrome": "Upper brainstem/rostroventral trigeminal lemniscus lesion",
-        "findings": "Contralateral hemifacial sensory loss including the mouth — the 'cheek adjacent to hand' pattern when the adjacent medial lemniscus arm fibers are involved",
-        "vascular": "Basilar paramedian perforators"
-      },
-      {
-        "syndrome": "Déjérine-Roussy (thalamic) involvement",
-        "findings": "Contralateral facial pain and dysesthesia when VPM is damaged with VPL in thalamic infarction",
-        "vascular": "Posterior cerebral artery — thalamogeniculate branches"
+        "syndrome": "Crossed ascending trigeminal pathway lesion",
+        "findings": "May reduce contralateral facial sensation. In a typical lateral medullary/pontine lesion, ipsilateral facial pain/temperature loss instead reflects spinal trigeminal nucleus/tract involvement before crossing."
       }
     ],
-    "waypoints": [[5.5, -8, -3], [5, -14, -3], [3, -20, -1], [0.5, -24, 0], [-2, -28, -1], [-3, -8, -0.5], [-3.8, 8, -1], [-3, 28, -2.5]],
+    "waypoints": [
+      [
+        5.5,
+        -8,
+        -3
+      ],
+      [
+        5,
+        -14,
+        -3
+      ],
+      [
+        3,
+        -20,
+        -1
+      ],
+      [
+        0.5,
+        -24,
+        0
+      ],
+      [
+        -2,
+        -28,
+        -1
+      ],
+      [
+        -3,
+        -8,
+        -0.5
+      ],
+      [
+        -3.8,
+        8,
+        -1
+      ],
+      [
+        -3,
+        28,
+        -2.5
+      ]
+    ],
     "tubeRadius": 0.5,
     "color": "#3b82f6",
-    "levels": ["lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": [
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-thalamus-mid"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 509-514 (PDF pp. 535-540)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-trigeminothalamic-dorsal",
     "name": "Dorsal trigeminothalamic tract",
-    "synonyms": ["ipsilateral oral-facial mechanosensory tract"],
+    "synonyms": [
+      "ipsilateral oral-facial mechanosensory tract"
+    ],
     "direction": "ascending",
     "modality": "Somatic sensory — ipsilateral oral-facial mechanoreception (fine touch/pressure of mouth and teeth)",
-    "origin": "Principal sensory trigeminal nucleus (dorsal/rostral part) with contributions from the rostral spinal trigeminal nucleus",
-    "target": "Ipsilateral ventral posteromedial nucleus (VPM) of the thalamus",
-    "decussation": "None — uncrossed, ipsilateral ascent in the dorsolateral pontine tegmentum near the mesencephalic trigeminal tract/central gray region",
-    "somatotopy": "Retains ipsilateral perioral representation; occupies a dorsal position relative to the crossed ventral trigeminothalamic fibers",
-    "function": "A small uncrossed complement of the trigeminal sensory system, conveying fine mechanoreceptive information from the oral cavity to the ipsilateral VPM. Its existence and size are debated: the modern reading is that nearly all second-order trigeminal axons cross, and that ipsilateral oral touch is partly preserved after a lateral pontine lesion because the brainstem trigeminal complex itself projects bilaterally — the disputed route should not be taught as settled.",
+    "origin": "A smaller population of principal (chief) trigeminal sensory nucleus neurons in the pons.",
+    "target": "Ipsilateral VPM thalamus, particularly for oral tactile/pressure information.",
+    "decussation": "Uncrossed projection, accompanying the larger crossed ventral trigeminal route.",
+    "somatotopy": "No validated fine map is represented; the textbook describes oral-cavity touch and dental pressure contributions.",
+    "function": "A smaller ipsilateral route contributing to bilateral representation of oral somatosensation.",
     "clinical": [
       {
-        "syndrome": "Isolated unilateral lesions (rare, clinically silent)",
-        "findings": "No detectable deficit in isolation; partial sparing of ipsilateral perioral touch after lateral pontine lesions that destroy the ventral trigeminothalamic tract",
-        "note": "Recorded for completeness — the pathway matters for interpreting partial facial sensory sparing"
-      },
-      {
-        "syndrome": "Dorsolateral pontine lesions",
-        "findings": "When involved with the mesencephalic trigeminal tract territory, subtle ipsilateral oral mechanosensory blunting accompanies jaw-proprioception deficits",
-        "vascular": "Superior cerebellar artery branches"
+        "syndrome": "Trigeminal sensory network injury",
+        "findings": "Bilateral/parallel projections can limit deficits. A reproducible isolated dorsal trigeminothalamic clinical syndrome is not established."
       }
     ],
-    "waypoints": [[5.5, -8, -3.5], [5, 0, -3], [4, 8, -2.5], [3.5, 18, -2.5], [3, 28, -2.5]],
+    "waypoints": [
+      [
+        5.5,
+        -8,
+        -3.5
+      ],
+      [
+        5,
+        0,
+        -3
+      ],
+      [
+        4,
+        8,
+        -2.5
+      ],
+      [
+        3.5,
+        18,
+        -2.5
+      ],
+      [
+        3,
+        28,
+        -2.5
+      ]
+    ],
     "tubeRadius": 0.4,
     "color": "#3b82f6",
-    "levels": ["lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": [
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-thalamus-mid"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
-      "Fix, High-Yield Neuroanatomy, Ch. \"Brainstem and Cranial Nerves\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 509-514 (PDF pp. 535-540)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-posterior-spinocerebellar",
     "name": "Posterior spinocerebellar tract",
-    "synonyms": ["dorsal spinocerebellar tract", "lateral spinocerebellar tract", "Flechsig tract"],
+    "synonyms": [
+      "dorsal spinocerebellar tract",
+      "lateral spinocerebellar tract",
+      "Flechsig tract"
+    ],
     "direction": "ascending",
     "modality": "Unconscious proprioception — lower trunk/lower limb muscle-spindle and Golgi-tendon-organ signals to the cerebellum",
-    "origin": "Ipsilateral nucleus dorsalis (Clarke's column, T1–L2) fed by group I afferents from the lower limb and lower trunk",
-    "target": "Ipsilateral cerebellar cortex (vermis and intermediate hemisphere of the anterior/superior vermis) via the inferior cerebellar peduncle",
-    "decussation": "None — entirely uncrossed; fibers ascend ipsilaterally in the periphery of the lateral funiculus and join the inferior cerebellar peduncle in the upper medulla",
+    "origin": "Clarke column neurons in caudal cervical/thoracic to upper lumbar cord (commonly described approximately C8/T1-L2/L3), receiving lower-body proprioceptive and other sensory inputs.",
+    "target": "Ipsilateral cerebellar vermis/intermediate cortex through the inferior cerebellar peduncle, ending as mossy fibres.",
+    "decussation": "Principally uncrossed throughout the classic dorsal spinocerebellar route.",
     "somatotopy": "Occupies the dorsal periphery of the lateral funiculus, superficial to the corticospinal fibers and dorsal to the spinothalamic/anterior spinocerebellar bundles",
-    "function": "Provides the cerebellum with an uninterrupted, side-matched report of lower-limb muscle length and tension for the online correction of posture and gait. Because it is ipsilateral throughout, cord lesions below the medulla disturb ipsilateral (not contralateral) unconscious proprioception.",
+    "function": "Provides cerebellar feedback about lower-limb/trunk movement and proprioceptive state; does not mediate conscious position sense.",
     "clinical": [
       {
-        "syndrome": "Isolated PSCT lesions (clinically silent alone)",
-        "findings": "Unconscious proprioception loss is not consciously perceived; deficits surface as ipsilateral limb clumsiness/ataxia when tested indirectly",
-        "note": "Usually damaged together with the lateral corticospinal tract (e.g. Friedreich ataxia — degeneration of both plus the dorsal columns)"
+        "syndrome": "Spinocerebellar/infra-peduncular injury",
+        "findings": "Can contribute to ipsilateral limb/gait ataxia, typically with other cerebellar pathway injury. Conscious sensory loss depends on involvement of additional pathways."
       },
       {
-        "syndrome": "Lateral medullary (Wallenberg) syndrome",
-        "findings": "Ipsilateral limb ataxia when the tract merges with and travels alongside the inferior cerebellar peduncle",
-        "vascular": "Posterior inferior cerebellar artery / vertebral"
+        "syndrome": "Lateral medullary syndrome",
+        "findings": "Ipsilateral ataxia commonly reflects inferior cerebellar peduncle/spinocerebellar involvement."
       }
     ],
-    "waypoints": [[3.5, -50, 1], [4, -40, 0], [4.5, -33, -1.5], [5.5, -28, -3.5], [6.5, -22, -5], [5.5, -20, -6.5], [4.5, -19, -7.5]],
+    "waypoints": [
+      [
+        3.5,
+        -50,
+        1
+      ],
+      [
+        4,
+        -40,
+        0
+      ],
+      [
+        4.5,
+        -33,
+        -1.5
+      ],
+      [
+        5.5,
+        -28,
+        -3.5
+      ],
+      [
+        6.5,
+        -22,
+        -5
+      ],
+      [
+        5.5,
+        -20,
+        -6.5
+      ],
+      [
+        4.5,
+        -19,
+        -7.5
+      ]
+    ],
     "tubeRadius": 0.45,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal"],
+    "levels": [
+      "lvl-spinal-medulla",
+      "lvl-pyramid-decuss",
+      "lvl-sensory-decuss",
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
-      "Snell, Clinical Neuroanatomy, Ch. \"The Cerebellum\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15: Cerebellum, pp. 704-711 (PDF pp. 730-737)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-anterior-spinocerebellar",
     "name": "Anterior spinocerebellar tract",
-    "synonyms": ["ventral spinocerebellar tract", "Gowers tract"],
+    "synonyms": [
+      "ventral spinocerebellar tract",
+      "Gowers tract"
+    ],
     "direction": "ascending",
     "modality": "Unconscious proprioception — lower-limb locomotor integration (spinal interneuronal state) to the cerebellum",
-    "origin": "Spinal border cells and interneurons of the lumbar enlargement (L3–L5), reflecting convergent group I/II and spinal locomotor-circuit activity",
-    "target": "Cerebellar cortex (intermediate hemisphere/vermis) via the superior cerebellar peduncle, ending ipsilateral to the side of the body represented",
-    "decussation": "Double crossing: first in the spinal cord (anterior white commissure at the segment of origin), then recrossing within the superior cerebellar peduncle decussation at the caudal midbrain — net ipsilateral representation",
-    "somatotopy": "Most superficial bundle of the anterolateral medulla/pons surface; swings dorsally over the inferior cerebellar peduncle region into the SCP",
-    "function": "Reports the summed activity of spinal locomotor interneuronal circuits (rather than individual muscles) to the cerebellum, enabling gait-cycle timing corrections. Its double decussation (cord + superior cerebellar peduncle) restores ipsilaterality, so it complements the uncrossed posterior spinocerebellar tract.",
+    "origin": "Spinal border and intermediate-zone neurons, especially in lumbosacral cord, integrating spinal interneuronal activity.",
+    "target": "Predominantly ipsilateral cerebellar representation relative to the side of origin, through a largely double-crossed route entering the superior cerebellar peduncle.",
+    "decussation": "First crosses in the spinal ventral/anterior white commissure. Many fibres recross on entering/within the cerebellum after traversing the superior cerebellar peduncle; this is not the caudal-midbrain decussation of cerebellar output fibres.",
+    "somatotopy": "Ascends near the peripheral anterolateral cord/brainstem before joining the superior peduncle; exact fibre ordering is not represented.",
+    "function": "Reports integrated spinal motor/interneuronal activity to the cerebellum, complementing dorsal spinocerebellar sensory feedback.",
     "clinical": [
       {
-        "syndrome": "Combined spinal lesions (e.g. Friedreich ataxia, cord trauma)",
-        "findings": "Contributes to ipsilateral limb ataxia together with the posterior spinocerebellar tract; clinically inseparable from PSCT damage",
-        "note": "Both spinocerebellar tracts degenerate in hereditary ataxias"
-      },
-      {
-        "syndrome": "Lateral medullary (Wallenberg) syndrome",
-        "findings": "Ipsilateral ataxia — the tract runs at the lateral medullary surface in the PICA/vertebral territory",
-        "vascular": "Posterior inferior cerebellar artery / vertebral"
+        "syndrome": "Combined spinocerebellar pathway injury",
+        "findings": "May contribute to ipsilateral ataxia. Clinical lesions usually involve multiple pathways, so this tract is not reliably isolated by examination."
       }
     ],
-    "waypoints": [[4, -50, 2], [4.5, -34, 2.5], [5.5, -20, 2.5], [6.5, -6, 1.5], [5.5, 5, -1.5], [1.5, 8.5, -2.5], [-4, 4, -3.5], [-5, -16, -5.5]],
+    "waypoints": [
+      [
+        4,
+        -50,
+        2
+      ],
+      [
+        4.5,
+        -34,
+        2.5
+      ],
+      [
+        5.5,
+        -20,
+        2.5
+      ],
+      [
+        6.5,
+        -6,
+        1.5
+      ],
+      [
+        5.5,
+        5,
+        -1.5
+      ],
+      [
+        1.5,
+        8.5,
+        -2.5
+      ],
+      [
+        -4,
+        4,
+        -3.5
+      ],
+      [
+        -5,
+        -16,
+        -5.5
+      ]
+    ],
     "tubeRadius": 0.45,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic"],
+    "levels": [
+      "lvl-spinal-medulla",
+      "lvl-pyramid-decuss",
+      "lvl-sensory-decuss",
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
-      "Snell, Clinical Neuroanatomy, Ch. \"The Cerebellum\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15: Cerebellum, pp. 704-711 (PDF pp. 730-737)",
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cerebellar connections, Figure 7-17"
+    ],
+    "meshes": false,
+    "geometryNote": "3D tube withheld: the former curve falsely recrossed at the caudal midbrain. The route is available in the Pathways browser; a validated replacement course is still needed."
   },
   {
     "id": "tract-auditory-pathway",
     "name": "Auditory pathway (cochlear nuclei to MGN)",
-    "synonyms": ["central auditory pathway", "cochlear-lemniscal auditory route"],
+    "synonyms": [
+      "central auditory pathway",
+      "cochlear-lemniscal auditory route"
+    ],
     "direction": "ascending",
     "modality": "Special sensory — audition, tonotopically organized at every relay",
-    "origin": "Spiral-ganglion afferents of CN VIII → ventral and dorsal cochlear nuclei at the cerebellopontine angle",
-    "target": "Medial geniculate nucleus (MGN) of the thalamus → auditory radiations → primary auditory cortex (Heschl's gyrus)",
-    "decussation": "Trapezoid body — the auditory decussation of the caudal pons (ventral cochlear nuclei → contralateral superior olivary complex/lateral lemniscus); representation is bilateral at every level above the cochlear nuclei",
-    "somatotopy": "Tonotopy preserved at each stage: low frequencies ventral/lateral in the cochlear nuclei and dorsal in the inferior colliculus/MGN laminar maps",
-    "function": "Composite record of the central auditory route: cochlear nuclei → (bilateral via trapezoid body and superior olivary complex, extracting interaural time and level differences) → lateral lemniscus → inferior colliculus (integrative map) → brachium of the inferior colliculus → medial geniculate nucleus. Bilaterality above the cochlear nuclei is why unilateral central lesions spare pure-tone hearing.",
+    "origin": "Cochlear nuclei receiving spiral-ganglion afferents through the cochlear division of CN VIII.",
+    "target": "Bilateral brainstem auditory relays and inferior colliculi, then MGN and auditory cortex through auditory radiations.",
+    "decussation": "Multiple crossing and uncrossed projections, including trapezoid-body routes in caudal pons. Connections above the cochlear nuclei are bilateral, often with contralateral predominance.",
+    "somatotopy": "Tonotopic organization occurs at several relays; the exact frequency gradients differ between subnuclei and are not represented by this single curve.",
+    "function": "Composite teaching route through cochlear nuclei, superior olivary complex/lateral lemniscus, inferior colliculus and MGN. It is a branched network: not every fibre obligatorily passes through every depicted relay.",
     "clinical": [
       {
-        "syndrome": "Cerebellopontine-angle mass (vestibular schwannoma)",
-        "findings": "Unilateral sensorineural hearing loss (cochlear nerve/nuclei), tinnitus, with ipsilateral facial weakness and cerebellar signs when large",
-        "note": "The only lesion site producing unilateral pure-tone hearing loss — central lesions do not"
+        "syndrome": "Peripheral or cochlear nuclear injury",
+        "findings": "Can cause ipsilateral sensorineural hearing loss. Vestibular schwannoma is one cause, alongside many cochlear, nerve and brainstem conditions."
       },
       {
-        "syndrome": "Lateral pontine (AICA) infarct",
-        "findings": "Ipsilateral sudden hearing loss and tinnitus (labyrinthine/cochlear nuclear territory) with vertigo, facial palsy, and ataxia",
-        "vascular": "Anterior inferior cerebellar artery"
+        "syndrome": "AICA-territory injury",
+        "findings": "May cause acute ipsilateral hearing loss with vestibular or lateral pontine signs, depending on labyrinthine/cochlear pathway involvement."
       },
       {
-        "syndrome": "Brainstem central lesions (trapezoid body/LL/IC)",
-        "findings": "Diminished sound localization and temporal processing with preserved pure-tone thresholds (bilateral representation); large bilateral lesions may blunt auditory comprehension of nonverbal sound",
-        "vascular": "Basilar perforators"
+        "syndrome": "Central auditory injury",
+        "findings": "A unilateral lesion above cochlear nuclei rarely causes complete unilateral deafness; sound localization and temporal processing may be impaired. Bilateral injury can cause severe central hearing impairment."
       }
     ],
-    "waypoints": [[6.5, -18, -3], [3, -20, 0], [-3, -18, -1], [-4.5, -10, -3], [-4.5, 2, -4], [-3.5, 9, -4.5], [-4.2, 18, -5], [-4.5, 27, -4.5]],
+    "waypoints": [
+      [
+        6.5,
+        -18,
+        -3
+      ],
+      [
+        3,
+        -20,
+        0
+      ],
+      [
+        -3,
+        -18,
+        -1
+      ],
+      [
+        -4.5,
+        -10,
+        -3
+      ],
+      [
+        -4.5,
+        2,
+        -4
+      ],
+      [
+        -3.5,
+        9,
+        -4.5
+      ],
+      [
+        -4.2,
+        18,
+        -5
+      ],
+      [
+        -4.5,
+        27,
+        -4.5
+      ]
+    ],
     "tubeRadius": 0.5,
     "color": "#3b82f6",
-    "levels": ["lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": [
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-thalamus-mid"
+    ],
     "refs": [
-      "Fix, High-Yield Neuroanatomy, Ch. \"Auditory and Vestibular Systems\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Brainstem II: Internal Organization of the Brainstem\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 519-526 (PDF pp. 545-552)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-spinoreticular",
     "name": "Spinoreticular tract",
-    "synonyms": ["RAS arousal afferents", "spinoreticulothalamic fibers"],
+    "synonyms": [
+      "spinoreticular pathway",
+      "spinoreticulothalamic pathway"
+    ],
     "direction": "ascending",
     "modality": "Nociceptive/visceroceptive arousal — slow dull-aching pain and interoceptive drive to the reticular activating system",
-    "origin": "Lamina VII/VIII interneurons of the spinal cord (polysynaptic relay of lamina I/V nociceptive input), ascending bilaterally in the anterolateral quadrant",
-    "target": "Brainstem reticular formation (medullary and pontomedullary) → midbrain reticular formation/cuneiform nucleus → intralaminar thalamic nuclei (centromedian–parafascicular) and medial thalamus",
-    "decussation": "Polysynaptic and predominantly bilateral — projections cross and recross diffusely within the reticular core rather than in a single commissure",
-    "somatotopy": "No strict somatotopy (polysynaptic convergence); occupies the anterolateral quadrant deep to the spinothalamic tract",
-    "function": "The paleospinothalamic arousal leg of the pain system: diffuse, slow-conducting fibers recruit the reticular formation and intralaminar thalamus, producing the vigilance and autonomic components of pain and contributing to consciousness-level regulation. This pathway explains why surgical anterolateral cordotomy blunts sharp localized pain yet dull aching pain may persist.",
+    "origin": "Projection neurons distributed in spinal intermediate-zone/ventral-horn laminae VI-VIII, within the broader anterolateral system.",
+    "target": "Medullary/pontine reticular formation, with onward projections to intralaminar/medial thalamus and distributed forebrain networks.",
+    "decussation": "Crossed and uncrossed spinal projections give bilateral influence; no single obligatory crossing applies to the composite route.",
+    "somatotopy": "Diffuse convergence rather than a precise somatotopic map in this illustration.",
+    "function": "Contributes to affective, autonomic and arousal components of nociception. It is one input to broader arousal networks, not the sole pathway maintaining consciousness.",
     "clinical": [
       {
-        "syndrome": "Post-cordotomy dull pain persistence",
-        "findings": "Anterolateral cordotomy relieves sharp localized pain, but deep, aching, distressing pain often persists because polysynaptic spinoreticular fibers (and contralateral duplicates) survive",
-        "note": "Clinically justifies adjunctive midline thalamotomy/targeting the intralaminar nuclei"
-      },
-      {
-        "syndrome": "Coma / disorders of consciousness",
-        "findings": "Damage to the spinoreticular-RAS input (or its reticular relay) depresses arousal — the sensory drive keeping the thalamocortical system 'on line'",
-        "note": "Central to Blumenfeld's consciousness discussion of the ascending reticular activating system"
-      },
-      {
-        "syndrome": "Central post-stroke pain (reticulothalamic)",
-        "findings": "Lesions of the reticulothalamic leg (brainstem or intralaminar thalamus) produce diffuse burning dysesthesia distinct from VPL thalamic pain",
-        "vascular": "Basilar perforators / posterior cerebral artery perforators"
+        "syndrome": "Distributed pain/arousal network injury",
+        "findings": "Pain experience and alertness involve multiple pathways. An isolated spinoreticular lesion is not an established cause of coma or a distinct reliably localized post-stroke pain syndrome."
       }
     ],
-    "waypoints": [[3.5, -50, 2], [3.5, -38, 1], [3, -26, 0.5], [3, -12, 0], [3, 2, 0], [3.5, 10, -1], [2.5, 22, -1], [1.8, 28, 0]],
+    "waypoints": [
+      [
+        3.5,
+        -50,
+        2
+      ],
+      [
+        3.5,
+        -38,
+        1
+      ],
+      [
+        3,
+        -26,
+        0.5
+      ],
+      [
+        3,
+        -12,
+        0
+      ],
+      [
+        3,
+        2,
+        0
+      ],
+      [
+        3.5,
+        10,
+        -1
+      ],
+      [
+        2.5,
+        22,
+        -1
+      ],
+      [
+        1.8,
+        28,
+        0
+      ]
+    ],
     "tubeRadius": 0.45,
     "color": "#3b82f6",
-    "levels": ["lvl-spinal-medulla", "lvl-pyramid-decuss", "lvl-sensory-decuss", "lvl-olivary", "lvl-pontomedullary", "lvl-pons-caudal", "lvl-pons-middle", "lvl-pons-rostral", "lvl-midbrain-ic", "lvl-midbrain-sc", "lvl-thalamus-mid"],
+    "levels": [
+      "lvl-spinal-medulla",
+      "lvl-pyramid-decuss",
+      "lvl-sensory-decuss",
+      "lvl-olivary",
+      "lvl-pontomedullary",
+      "lvl-pons-caudal",
+      "lvl-pons-middle",
+      "lvl-pons-rostral",
+      "lvl-midbrain-ic",
+      "lvl-midbrain-sc",
+      "lvl-thalamus-mid"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Somatosensory Pathways\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed., Ch. \"Spinal Cord\"",
-      "Fiester et al., \"Midbrain, Pons, and Medulla: Anatomy and Syndromes,\" RadioGraphics 2019 (RSNA brainstem review)"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7: Somatosensory Pathways, pp. 277-282 (PDF pp. 303-308)",
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-optic-radiation",
     "name": "Optic radiation",
-    "synonyms": ["geniculocalcarine tract", "geniculostriate pathway", "radiatio optica", "Meyer loop (temporal part)"],
+    "synonyms": [
+      "geniculocalcarine tract",
+      "geniculostriate pathway",
+      "radiatio optica",
+      "Meyer loop (temporal part)"
+    ],
     "direction": "ascending",
     "modality": "Special sensory — vision, retinotopically organized for the contralateral half-field",
     "origin": "Lateral geniculate nucleus (LGN) of the thalamus: parvocellular and magnocellular relay layers (plus koniocellular layers) receiving crossed nasal and uncrossed temporal retinal fibres",
     "target": "Primary visual cortex (V1, striate cortex) around the calcarine fissure — lower-field (superior retinal) fibres to the cuneus above the fissure, upper-field (inferior retinal) fibres to the lingual gyrus below it",
-    "decussation": "None within the radiation: the crossing occurred at the optic chiasm (nasal retina) and again at the LGN relay, so each radiation carries the contralateral visual half-field. Fibres for the superior field loop forward into the temporal lobe (Meyer loop) while fibres for the inferior field sweep posteriorly through the parietal lobe (dorsal bundle).",
-    "somatotopy": "Retinotopy with macular magnification: macular fibres occupy the posterior third of the radiation and the occipital pole (which represents the central ~10 degrees of vision and receives a dual blood supply), while peripheral fibres lie more anteriorly in the temporal and parietal lobes. This is why small lesions cause quadrantic and often incongruous defects, and why macular sparing occurs in PCA infarction.",
-    "function": "The thalamocortical leg of the visual pathway: it leaves the LGN through the retrolenticular part of the internal capsule, fans through the deep white matter of the temporal lobe (Meyer loop) and parietal lobe (dorsal bundle), and converges on the striate cortex. Because its fibres are spread across two lobes before concentrating at the occipital pole, field defects from incomplete lesions are incongruous and those from complete lesions are congruent — a distinction that localizes the damage along the tract.",
+    "decussation": "No additional crossing in LGN or optic radiation. Nasal retinal fibres crossed at the optic chiasm; each radiation carries the contralateral visual hemifield.",
+    "somatotopy": "Temporal Meyer loop carries superior-field information to the inferior bank of calcarine cortex; parietal fibres carry inferior-field information to the superior bank. Central vision has a large posterior cortical representation. Neither this schematic tube nor field congruity establishes a precise individual fibre map.",
+    "function": "Geniculocalcarine fibres link LGN to striate cortex through retrolenticular internal capsule and temporal/parietal white matter. The displayed curve summarizes a fan-shaped system with distinct branches.",
     "clinical": [
       {
-        "syndrome": "Meyer loop (temporal) lesion",
-        "findings": "Contralateral homonymous superior quadrantanopia ('pie in the sky'), typically after temporal-lobe resection that extends more than 3.5–4 cm behind the temporal pole, or after temporal-lobe infarction.",
-        "vascular": "Middle cerebral artery (inferior division) or anterior choroidal artery"
+        "syndrome": "Temporal Meyer loop injury",
+        "findings": "May cause contralateral superior homonymous quadrantanopia. Anterior extent varies between individuals; there is no universal safe resection distance from the temporal pole."
       },
       {
-        "syndrome": "Dorsal bundle (parietal) lesion",
-        "findings": "Contralateral homonymous inferior quadrantanopia ('pie on the floor') with preserved reading, often accompanied by hemispatial neglect when the parietal lesion is extensive.",
-        "vascular": "Middle cerebral artery (superior division, parietal branches)"
+        "syndrome": "Parietal optic-radiation injury",
+        "findings": "May cause contralateral inferior homonymous quadrantanopia; additional reading, sensory or attentional problems depend on associated cortical injury."
       },
       {
-        "syndrome": "Retrolenticular (anterior choroidal) infarction",
-        "findings": "Complete interruption of the radiation gives a dense congruent contralateral homonymous hemianopia; in anterior choroidal artery infarction it is part of the triad with hemiplegia and hemianaesthesia.",
-        "vascular": "Anterior choroidal artery"
-      },
-      {
-        "syndrome": "Congruity rule for field defects",
-        "findings": "Incongruous defects point to a partial anterior radiation lesion (temporal or parietal), congruent defects to a complete radiation lesion or occipital cortical damage — the single most useful localizing rule for retrochiasmatic visual loss.",
-        "note": "Clinical localizing principle rather than a distinct lesion"
+        "syndrome": "Extensive radiation injury",
+        "findings": "May cause contralateral homonymous hemianopia. Field congruity tends to increase posteriorly but is not a definitive lesion-localization rule."
       }
     ],
-    "waypoints": [[18, 16, -6], [23, 20, 6], [27, 15, 12], [28, 14, -14], [24, 20, -34], [20, 27, -52], [13, 30, -66]],
+    "waypoints": [
+      [
+        18,
+        16,
+        -6
+      ],
+      [
+        23,
+        20,
+        6
+      ],
+      [
+        27,
+        15,
+        12
+      ],
+      [
+        28,
+        14,
+        -14
+      ],
+      [
+        24,
+        20,
+        -34
+      ],
+      [
+        20,
+        27,
+        -52
+      ],
+      [
+        13,
+        30,
+        -66
+      ]
+    ],
     "tubeRadius": 0.7,
     "color": "#a78bfa",
-    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Visual System\"",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Cerebral Hemispheres and Vascular Supply\""
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11: Visual System, pp. 463-476 (PDF pp. 489-502)",
+      "Yogarajah et al. (2009), Brain 132:1656-1668, https://pubmed.ncbi.nlm.nih.gov/19460796/ (individual Meyer-loop variability)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-cingulum",
     "name": "Cingulum",
-    "synonyms": ["cingulum bundle", "cingulate bundle"],
+    "synonyms": [
+      "cingulum bundle",
+      "cingulate bundle"
+    ],
     "direction": "mixed",
     "modality": "Association (limbic) — bidirectional cortical-cortical fibres of the cingulate and parahippocampal circuit",
-    "origin": "Subcallosal (parolfactory) area and rostral anterior cingulate cortex, in front of and below the genu of the corpus callosum",
-    "target": "Posterior cingulate and retrosplenial cortex along the dorsal arc, then the entorhinal and parahippocampal cortex at the ventral (temporal) end; the circuit closes through the entorhinal cortex and the hippocampal formation",
-    "decussation": "None — the cingulum is entirely intrahemispheric, which is why unilateral cingulate or parahippocampal lesions produce lateralized limbic and memory deficits",
-    "somatotopy": "Topographic rather than somatotopic: the dorsal (supracallosal) fibres run in the white matter of the cingulate gyrus, the ventral (parahippocampal) fibres in the parahippocampal gyrus, and the two limbs join at the isthmus behind the splenium of the corpus callosum",
-    "function": "The long association bundle of the limbic lobe: it links the subcallosal, anterior cingulate, posterior cingulate/retrosplenial and parahippocampal/entorhinal cortices, giving the cingulate cortex direct access to the hippocampal input stage. It is the cortical limb of the Papez circuit and one of the most consistently reconstructed tracts in the human connectome.",
+    "origin": "Distributed cingulate, retrosplenial and adjacent medial cortical regions; association fibres enter and leave along the bundle.",
+    "target": "Other medial cortical areas and parahippocampal/entorhinal regions through supracallosal and temporal portions.",
+    "decussation": "No obligatory midline crossing: principally an intrahemispheric association bundle. Interhemispheric communication uses additional commissural pathways.",
+    "somatotopy": "Topographic association bundle curving around the corpus callosum and continuing toward parahippocampal white matter; not all axons traverse its entire length.",
+    "function": "Connects medial association and limbic cortices, contributing to attention, memory and affective networks. Its parahippocampal connections form part of the classical Papez teaching circuit.",
     "clinical": [
       {
-        "syndrome": "Cingulum damage and limbic dysfunction",
-        "findings": "Interruption of the cingulum (tumour, surgery, small-vessel disease, diffuse axonal injury) is associated with episodic memory impairment, apathy and blunted emotional modulation, with the deficit depending on which limb is involved.",
-        "vascular": "Anterior cerebral (pericallosal) or posterior cerebral (splenial) branches"
-      },
-      {
-        "syndrome": "Cingulotomy / cingulumotomy",
-        "findings": "Stereotactic section of the anterior cingulum relieves the affective component of intractable pain and improves refractory obsessive-compulsive symptoms — direct evidence that the bundle carries the emotional-evaluative signal.",
-        "note": "Therapeutic lesion rather than a spontaneous syndrome"
-      },
-      {
-        "syndrome": "Cingulum degeneration in Alzheimer disease",
-        "findings": "Posterior cingulate and cingulum degeneration correlates with episodic memory decline and is detectable with diffusion MRI before atrophy is visible, following the spread of pathology from the entorhinal cortex.",
-        "note": "Neurodegenerative (Braak staging)"
+        "syndrome": "Cingulate/cingulum network injury",
+        "findings": "May contribute to memory, attention or motivational impairment. These deficits depend on wider network damage and are not uniquely diagnostic of cingulum interruption."
       }
     ],
-    "waypoints": [[4, 29, 42], [5, 52, 36], [6, 68.5, 14], [7, 66, -6], [8, 58, -22], [10, 40, -34], [12, 24, -38], [14, 14, -30]],
+    "waypoints": [
+      [
+        4,
+        29,
+        42
+      ],
+      [
+        5,
+        52,
+        36
+      ],
+      [
+        6,
+        68.5,
+        14
+      ],
+      [
+        7,
+        66,
+        -6
+      ],
+      [
+        8,
+        58,
+        -22
+      ],
+      [
+        10,
+        40,
+        -34
+      ],
+      [
+        12,
+        24,
+        -38
+      ],
+      [
+        14,
+        14,
+        -30
+      ]
+    ],
     "tubeRadius": 0.55,
     "color": "#a78bfa",
-    "levels": ["lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate", "lvl-tel-basal-ganglia", "lvl-tel-centrum-semiovale"],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia",
+      "lvl-tel-centrum-semiovale"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Limbic System: Homeostasis, Olfaction, Memory, and Emotion\"",
-      "Catani & ffytche, \"The rises and falls of disconnection syndromes,\" Brain 2005;128:2224-2239"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 18: Limbic System: Homeostasis, Olfaction, Memory, and Emotion, pp. 827, 837, 845-846 (PDF pp. 853, 863, 871-872)",
+      "Catani & Thiebaut de Schotten (2008), Cortex 44:1105-1132, https://doi.org/10.1016/j.cortex.2008.05.004 (association-tract reconstruction; not validation of this atlas geometry)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-uncinate-fasciculus",
     "name": "Uncinate fasciculus",
-    "synonyms": ["uncinate bundle", "hook bundle", "fasciculus uncinatus"],
+    "synonyms": [
+      "uncinate bundle",
+      "hook bundle",
+      "fasciculus uncinatus"
+    ],
     "direction": "mixed",
     "modality": "Association — bidirectional fibres linking the anterior temporal lobe with the orbitofrontal and ventrolateral frontal cortex (ventral semantic and social-emotional stream)",
     "origin": "Temporal pole, anterior superior and middle temporal gyrus, and the uncinate/amygdalar region at the anterior temporal stem",
     "target": "Orbital and inferior (ventrolateral) frontal cortex, including the lateral orbitofrontal and inferior frontal gyri, hooking around the limen insulae at the anterior inferior insula",
-    "decussation": "None — intrahemispheric throughout. The hook at the limen insulae is its defining feature (uncinate = hooked), and it is the ventral counterpart of the dorsal arcuate/superior longitudinal system.",
-    "somatotopy": "A single compact hook rather than a somatotopic map: fibres traverse the anterior temporal stem, curve around the limen insulae and fan out into the orbital frontal cortex. The left uncinate is generally more extensive than the right, consistent with its role in semantic and naming networks.",
-    "function": "Carries the ventral route between the anterior temporal lobe and the frontal lobe, supporting semantic memory, naming and the integration of emotional value with social decision-making. Its protracted myelination in childhood and its early degeneration in frontotemporal dementia track the development and loss of social-emotional behaviour and semantic knowledge.",
+    "decussation": "Principally intrahemispheric; curves around the limen insulae between anterior temporal and orbitofrontal regions.",
+    "somatotopy": "Hook-shaped association bundle; no simple body map. Group-level asymmetry depends on the measurement method and should not be taught as invariably larger on the left.",
+    "function": "Connects anterior temporal and inferior/orbital frontal regions, contributing to memory, semantic and social-affective processing within broader networks.",
     "clinical": [
       {
-        "syndrome": "Uncinate disconnection (semantic/naming deficit)",
-        "findings": "Damage to the left uncinate (infarction, tumour, epilepsy surgery) impairs confrontation naming and semantic access with relatively preserved repetition, while right-sided damage disturbs emotion recognition and behavioural regulation.",
-        "vascular": "Middle cerebral artery (anterior temporal and orbital branches); anterior choroidal artery for the temporal end"
+        "syndrome": "Anterior temporal-frontal disconnection",
+        "findings": "Can contribute to naming, semantic or social-affective impairment. Effects vary with dominance, lesion extent and associated cortical/network injury; a fixed left/right syndrome is not established."
       },
       {
-        "syndrome": "Epilepsy surgery and naming decline",
-        "findings": "Anterior temporal resection that interrupts the uncinate in the language-dominant hemisphere is a recognized cause of post-operative naming decline, and tractography of the fasciculus is now used to plan the resection.",
-        "note": "Surgical rather than spontaneous"
-      },
-      {
-        "syndrome": "Frontotemporal dementia",
-        "findings": "Selective early degeneration of the uncinate follows the temporal pole-to-orbitofrontal axis and correlates with the behavioural variant of the disease: disinhibition, apathy and loss of empathy.",
-        "note": "Neurodegenerative"
+        "syndrome": "Neurodegenerative network involvement",
+        "findings": "Uncinate abnormalities can occur in frontotemporal and other disorders, but are not selective or diagnostic of one clinical phenotype."
       }
     ],
-    "waypoints": [[32, 12, 30], [35, 16, 26], [29, 23, 28], [26, 25, 28], [22, 28, 36], [18, 32, 45], [14, 36, 52]],
+    "waypoints": [
+      [
+        32,
+        12,
+        30
+      ],
+      [
+        35,
+        16,
+        26
+      ],
+      [
+        29,
+        23,
+        28
+      ],
+      [
+        26,
+        25,
+        28
+      ],
+      [
+        22,
+        28,
+        36
+      ],
+      [
+        18,
+        32,
+        45
+      ],
+      [
+        14,
+        36,
+        52
+      ]
+    ],
     "tubeRadius": 0.5,
     "color": "#a78bfa",
-    "levels": ["lvl-midbrain-sc", "lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral"],
+    "levels": [
+      "lvl-midbrain-sc",
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Cerebral Hemispheres and Vascular Supply\"",
-      "Catani & Thiebaut de Schotten, \"A diffusion tensor imaging tractography atlas for virtual in vivo dissections,\" Cortex 2008;44:1105-1132"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 18: Limbic System: Homeostasis, Olfaction, Memory, and Emotion, pp. 827, 837, 845-846 (PDF pp. 853, 863, 871-872)",
+      "Catani & Thiebaut de Schotten (2008), Cortex 44:1105-1132, https://doi.org/10.1016/j.cortex.2008.05.004 (association-tract reconstruction; not validation of this atlas geometry)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
   {
     "id": "tract-superior-longitudinal-fasciculus",
     "name": "Superior longitudinal fasciculus",
-    "synonyms": ["SLF", "arcuate fasciculus (dorsal component)"],
+    "synonyms": [
+      "SLF",
+      "arcuate fasciculus (dorsal component)"
+    ],
     "direction": "mixed",
-    "modality": "Association — bidirectional dorsal stream linking frontal, parietal and temporal association cortex; the arcuate component is the phonological-language loop",
-    "origin": "Inferior frontal gyrus (Broca region) and the adjacent frontal operculum for the arcuate component; dorsolateral prefrontal and premotor cortex for the SLF I/II components",
-    "target": "Inferior parietal lobule (supramarginal and angular gyri) and, through the arcuate component, the posterior superior and middle temporal gyrus — arching over the insula and beneath the perisylvian cortex",
-    "decussation": "None — the SLF/arcuate system is entirely intrahemispheric; together with the uncinate it forms the dorsal-ventral pair of the perisylvian language network",
-    "somatotopy": "Four components with progressive arcs around the sylvian fissure: SLF I (premotor/supplementary motor to superior parietal), SLF II (dorsolateral prefrontal to angular gyrus), SLF III (inferior frontal to supramarginal gyrus) and the arcuate component (inferior frontal to posterior temporal), the last with the lowest and most lateral arc.",
-    "function": "The dorsal language and attention stream: the arcuate component carries the phonological loop that lets speech be repeated and articulated accurately, while SLF II/III support spatial attention, working memory and the top-down control of goal-directed action. Because its fibres arch immediately above the insula and below the cortex, it is the association tract most often destroyed by middle cerebral artery infarction and most often encountered during glioma surgery.",
+    "modality": "Association — bidirectional frontoparietal pathways for attention, working memory and sensorimotor integration; relationships to the arcuate depend on anatomical naming convention.",
+    "origin": "Frontal association/premotor regions linked with parietal cortex by frontoparietal SLF branches.",
+    "target": "Superior/inferior parietal association regions; nearby arcuate frontotemporal fibres are related but distinguished in many modern anatomical classifications.",
+    "decussation": "Principally intrahemispheric association connections; reciprocal network traffic has no obligatory midline crossing.",
+    "somatotopy": "Common classifications distinguish SLF I, II and III. The arcuate fasciculus is sometimes grouped with the SLF system and sometimes treated separately; one curve does not resolve these branches.",
+    "function": "Frontoparietal association pathways support attention, working memory and sensorimotor integration. Related arcuate/dorsal language connections contribute to speech repetition and auditory-motor mapping.",
     "clinical": [
       {
-        "syndrome": "Conduction aphasia (arcuate disconnection)",
-        "findings": "Fluent speech with intact comprehension but markedly impaired repetition and frequent phonemic paraphasias, from interruption of the arcuate segment between Wernicke's and Broca's areas — the classic disconnection syndrome of the dorsal language stream.",
-        "vascular": "Middle cerebral artery (perisylvian/insular branches)"
+        "syndrome": "Conduction aphasia and dorsal language injury",
+        "findings": "Dominant perisylvian cortical/subcortical damage can produce fluent paraphasic speech and impaired repetition with relatively preserved comprehension; this is not invariably an isolated arcuate lesion."
       },
       {
-        "syndrome": "Aphasia outcome and tractography",
-        "findings": "Preserved left arcuate/SLF integrity predicts better recovery of repetition and naming after stroke, and its preservation is a goal of glioma resection in the dominant hemisphere.",
-        "note": "Prognostic/imaging principle rather than a distinct syndrome"
-      },
-      {
-        "syndrome": "Hemispheric neglect (dorsal attention stream)",
-        "findings": "Right-hemisphere SLF II/III damage contributes to hemispatial neglect, ipsilesional deviation and impaired disengagement of attention together with the inferior parietal lesion.",
-        "vascular": "Right middle cerebral artery (parietal branches)"
+        "syndrome": "Spatial neglect",
+        "findings": "Right frontoparietal network disconnection can contribute to left hemispatial neglect; cortical and other white matter lesions also contribute."
       }
     ],
-    "waypoints": [[24, 40, 44], [32, 56, 18], [36, 62, -6], [34, 58, -24], [32, 40, -28], [31, 26, -34], [30, 18, -30]],
+    "waypoints": [
+      [
+        24,
+        40,
+        44
+      ],
+      [
+        32,
+        56,
+        18
+      ],
+      [
+        36,
+        62,
+        -6
+      ],
+      [
+        34,
+        58,
+        -24
+      ],
+      [
+        32,
+        40,
+        -28
+      ],
+      [
+        31,
+        26,
+        -34
+      ],
+      [
+        30,
+        18,
+        -30
+      ]
+    ],
     "tubeRadius": 0.6,
     "color": "#a78bfa",
-    "levels": ["lvl-post-comm", "lvl-thalamus-mid", "lvl-thalamus-rostral", "lvl-tel-thalamostriate", "lvl-tel-basal-ganglia"],
+    "levels": [
+      "lvl-post-comm",
+      "lvl-thalamus-mid",
+      "lvl-thalamus-rostral",
+      "lvl-tel-thalamostriate",
+      "lvl-tel-basal-ganglia"
+    ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 3rd ed., Ch. \"Cerebral Hemispheres and Vascular Supply\"",
-      "Catani & Thiebaut de Schotten, \"A diffusion tensor imaging tractography atlas for virtual in vivo dissections,\" Cortex 2008;44:1105-1132",
-      "Catani & ffytche, \"The rises and falls of disconnection syndromes,\" Brain 2005;128:2224-2239"
-    ]
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 19: Higher-Order Cerebral Function, pp. 885-893 (PDF pp. 911-919)",
+      "Catani & Thiebaut de Schotten (2008), Cortex 44:1105-1132, https://doi.org/10.1016/j.cortex.2008.05.004 (association-tract reconstruction; not validation of this atlas geometry)"
+    ],
+    "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   }
 ]

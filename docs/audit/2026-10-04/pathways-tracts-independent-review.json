@@ -1,0 +1,283 @@
+{
+  "date": "2026-10-04",
+  "scope": "Independent read-only review of root integration snapshot: all19 pathways and23 root tract records. Findings sent to root for correction; source files not edited by this agent.",
+  "findings": [
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-superior-longitudinal-fasciculus",
+      "field": "modality",
+      "severity": "substantive residual wording inconsistency",
+      "finding": "Read snapshot retained whole-frontal/parietal/temporal and arcuate-is-component claim while corrected origin/target separates frontoparietal SLF from related arcuate. Naming conventions vary; one fixed synonym is too strong.",
+      "proposed": "Association: bidirectional frontoparietal pathways for attention, working memory and sensorimotor integration; relationships to arcuate depend on anatomical naming convention."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-posterior-spinocerebellar",
+      "field": "origin",
+      "severity": "anatomical extent wording",
+      "finding": "Read snapshot begins lower thoracic/upper lumbar, then gives C8/T1-L2/L3 range, internally omitting caudal cervical/upper thoracic extent.",
+      "proposed": "Clarke column neurons in caudal cervical/thoracic to upper lumbar cord (approximately C8/T1-L2/L3), receiving lower-body sensory inputs."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-rubrospinal",
+      "field": "modality",
+      "severity": "animal-to-human overgeneralization",
+      "finding": "Unqualified flexor facilitation/extensor inhibition remains in modality despite function explicitly limiting human evidence.",
+      "proposed": "Descending somatic motor pathway; flexor-related roles are well described in experimental animals, while the smaller human pathway has an uncertain isolated contribution."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-reticulospinal",
+      "field": "modality",
+      "severity": "category conflation",
+      "finding": "Autonomic somatic motor conflates separately classified autonomic and somatic motor systems. Reticular autonomic networks exist, but this spinal motor bundle should not label them one modality.",
+      "proposed": "Descending somatic motor: posture, gait, muscle tone and voluntary-movement networks with bilateral influences."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-hippocampal-intrinsic",
+      "field": "steps[1].note and refs",
+      "severity": "precision and source support",
+      "finding": "Layer-II/III preferential projections are standard but the supplied Blumenfeld p834 describes layers2/3 generally. Primary monkey tracing provides the more precise preferential rule including deep-layer contributions.",
+      "proposed": "Predominantly entorhinal layer-II input to dentate/CA3 and mainly layer-III direct input to CA1, with other-layer contributions and parallel routes.",
+      "source": "Witter & Amaral (1991), monkey tracer anatomy, https://pubmed.ncbi.nlm.nih.gov/1713237/"
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-language-network",
+      "field": "dorsal/ventral step link",
+      "severity": "optional navigation improvement",
+      "finding": "New separate arcuate concept can supply an actual record link for dorsal connection; one link should not purport to model all dorsal/ventral routes.",
+      "proposed": "Link a separate dorsal arcuate step to tract-arcuate-fasciculus and retain unmodeled ventral routes explicitly."
+    }
+  ],
+  "reviewed_records": [
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-visual",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-auditory",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-hippocampal-intrinsic",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-papez",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-basal-direct",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-basal-indirect",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-language-network",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-cst",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-corticobulbar",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-dcml",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-anterolateral",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-trigeminal",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-vestibuloocular",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-pontocerebellar",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-spinocerebellar",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-cerebellar-output",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-basal-hyperdirect",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-oculosympathetic",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/pathways.json",
+      "id": "path-visceral-reflex",
+      "review": "Read complete route, organization, clinical, links and references. Major sidedness/decussation summarized consistently with source-based teaching routes; numbered branch/recurrent routes explicitly caveated. This is no streamline/shape validation."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-corticospinal-lateral",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-corticobulbar",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-corticopontine",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-rubrospinal",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-tectospinal",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-lateral-vestibulospinal",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-medial-vestibulospinal",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-reticulospinal",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-mlf",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-central-tegmental",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-hypothalamospinal",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-dcml",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-spinothalamic",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-trigeminothalamic-ventral",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-trigeminothalamic-dorsal",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-posterior-spinocerebellar",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-anterior-spinocerebellar",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-auditory-pathway",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-spinoreticular",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-optic-radiation",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-cingulum",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-uncinate-fasciculus",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    },
+    {
+      "file": "src/data/tracts.json",
+      "id": "tract-superior-longitudinal-fasciculus",
+      "review": "Read complete origin/target/decussation/function/modality/ref prose. Most substantive crossing and relay distinctions corrected in root snapshot. Residual wording findings listed separately. Quantitative curves not validated."
+    }
+  ],
+  "explicit_positive_checks": [
+    "VOR example leftward head rotation -> right lateral rectus and left medial rectus is correct.",
+    "CST crossing in caudal medulla differs from DCML internal arcuate sensory crossing.",
+    "Spinothalamic fibres cross near entry in spinal anterior white commissure.",
+    "Ventral spinocerebellar second crossing is not the caudal-midbrain SCP output decussation.",
+    "Corticopontine neurons terminate mainly ipsilateral; separate pontocerebellar neurons cross.",
+    "Papez text explicitly notes omitted direct fornix-to-anterior-thalamus route.",
+    "The Nambu2000 hyperdirect source is an actual primary monkey physiology paper and matches cortex-STN-pallidal excitation.",
+    "Descending oculosympathetic route is mainly ipsilateral and pre/postganglionic relays are distinguished."
+  ],
+  "source_checks": [
+    "Blumenfeld 2nd ed. pp465-475,519-522,584-587,708-711,834-837 (printed pages; PDF +26).",
+    "Witter & Amaral1991, https://pubmed.ncbi.nlm.nih.gov/1713237/",
+    "Nambu etal2000, https://journals.physiology.org/doi/abs/10.1152/jn.2000.84.1.289"
+  ],
+  "limits": "Independent review catches substantive residual inconsistencies; it is not a claim that every low-level physiological claim or every source range was independently replicated. Does not quantify tract dimensions or validate anatomy against registered patient imaging."
+}
