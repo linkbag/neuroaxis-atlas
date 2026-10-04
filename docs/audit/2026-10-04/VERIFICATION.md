@@ -18,6 +18,8 @@ This verifies code/data integration and rendering behavior. It does not certify 
 
 The package manager reported existing dependency deprecations and audit advisories. These are not addressed by this scientific-content audit. Historical fixed-count/CT/photo gates are not part of this MRI-only review contract.
 
+The independent GitHub Linux review build also passed at code commit `393fd45`: [review-build run 37243950243](https://github.com/linkbag/neuroaxis-atlas/actions/runs/37243950243). It installed dependencies, checked types/data/coverage/runtime consistency, built the site, and inspected MRI-only assets. This workflow has no deployment step.
+
 ## Browser observations
 
 Production preview: `http://127.0.0.1:5175/neuroaxis-atlas/` (local to this computer). The browser was returned to its normal viewport after responsive testing.

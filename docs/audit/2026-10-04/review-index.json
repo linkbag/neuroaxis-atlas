@@ -399,7 +399,8 @@
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
       "remaining": [
-        "Course, modality, motor/sensory origins, major targets, foramen and clinical laterality were compared with the cited nerve chapter; precise vasa nervorum are not independently mapped. NERVE_COURSES contains duplicate prose requiring coordinated replacement. Authored course shape remains unvalidated."
+        "Course, modality, motor/sensory origins, major targets, foramen and clinical laterality were compared with the cited nerve chapter; precise vasa nervorum are not independently mapped. NERVE_COURSES contains duplicate prose requiring coordinated replacement. Authored course shape remains unvalidated.",
+        "Spatial course withheld: the former root-to-ganglion route headed posteriorly toward an unvalidated target. Corrected CN V root, divisions, foramina and clinical descriptions remain available as text."
       ]
     },
     {
@@ -1988,7 +1989,8 @@
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
       "remaining": [
-        "Fine-grained subnuclear connectivity and individual vascular territory boundaries were not independently validated; textbook core does not certify every mesh or patient-specific lesion pattern."
+        "Fine-grained subnuclear connectivity and individual vascular territory boundaries were not independently validated; textbook core does not certify every mesh or patient-specific lesion pattern.",
+        "Text-only capsule context: the former display linked the whole cerebral white-matter shell, not an isolated capsule. That association is removed; no validated capsule segmentation is available."
       ]
     },
     {
@@ -7229,7 +7231,8 @@
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
       "remaining": [
-        "Exact legacy numeric placement still needs registered spatial review; regional taxonomy must be synchronized with medulla."
+        "Exact legacy numeric placement still needs registered spatial review; regional taxonomy must be synchronized with medulla.",
+        "Rostral gustatory NTS is in rostral medulla. Legacy numeric placement is conceptual and not registered to serial sections; exact coordinates and boundary remain unvalidated."
       ]
     },
     {
@@ -17617,7 +17620,9 @@
         "Kerkeni et al., Central neurocytoma: Study of 32 cases (2010) — https://pubmed.ncbi.nlm.nih.gov/20692674/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vent-lateral-ventricle",
@@ -17724,7 +17729,9 @@
         "Nakajima et al., Guidelines for Management of Idiopathic Normal Pressure Hydrocephalus, 3rd ed. (2021), Japanese Society of Normal Pressure Hydrocephalus — https://pmc.ncbi.nlm.nih.gov/articles/PMC7905302/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vent-lateral-ventricle-frontal-horn",
@@ -17825,7 +17832,9 @@
         "Nakajima et al., Guidelines for Management of Idiopathic Normal Pressure Hydrocephalus, 3rd ed. (2021), Japanese Society of Normal Pressure Hydrocephalus — https://pmc.ncbi.nlm.nih.gov/articles/PMC7905302/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vent-lateral-ventricle-temporal-horn",
@@ -17928,7 +17937,9 @@
         "Meiners et al., Temporal lobe epilepsy: the various MR appearances of histologically proven mesial temporal sclerosis (1994), original MRI-pathology study — https://pubmed.ncbi.nlm.nih.gov/7985576/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vent-lateral-ventricle-occipital-horn",
@@ -18022,7 +18033,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 66-69"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vent-lateral-ventricle-atrium",
@@ -18132,7 +18145,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 66-69"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vent-choroid-plexus-lateral",
@@ -18235,7 +18250,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 66-69"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vent-interventricular-foramen",
@@ -18335,7 +18352,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 66-69"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "tract-corpus-callosum-rostrum",
@@ -19459,7 +19478,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-lateral-lenticulostriate-arteries-2",
@@ -19684,7 +19705,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-lateral-lenticulostriate-arteries-3",
@@ -19909,7 +19932,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-lateral-lenticulostriate-arteries-4",
@@ -20134,7 +20159,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-medial-lenticulostriate-arteries-1",
@@ -20355,7 +20382,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-medial-lenticulostriate-arteries-2",
@@ -20576,7 +20605,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-insular-segment",
@@ -20815,7 +20846,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-superior-terminal-branch",
@@ -21167,7 +21200,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-inferior-terminal-branch",
@@ -21535,7 +21570,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-angular-branch",
@@ -21817,7 +21854,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 894-896"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-middle-temporal-branch",
@@ -22083,7 +22122,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-posterior-temporal-branch",
@@ -22350,7 +22391,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-temporo-occipital-branch",
@@ -22628,7 +22671,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-m4-prefrontal-branch",
@@ -22907,7 +22952,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-mca-m4-precentral-branch",
@@ -23164,7 +23211,8 @@
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
       "remaining": [
-        "Unresolved: terminal z is substantially anterior to the authored motor-strip landmarks. Source-backed surface landmarks are needed before moving the course."
+        "Unresolved: terminal z is substantially anterior to the authored motor-strip landmarks. Source-backed surface landmarks are needed before moving the course.",
+        "Spatial course withheld: Existing course endpoint does not match the model sensorimotor strip; complete source-backed precentral placement is needed."
       ]
     },
     {
@@ -23467,7 +23515,8 @@
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
       "remaining": [
-        "Unresolved: terminal z is substantially anterior to the authored sensorimotor-strip landmarks. Course endpoint must not be used as an exact cortex localization."
+        "Unresolved: terminal z is substantially anterior to the authored sensorimotor-strip landmarks. Course endpoint must not be used as an exact cortex localization.",
+        "Spatial course withheld: Existing course endpoint does not match the model sensorimotor strip; complete source-backed central-sulcal placement is needed."
       ]
     },
     {
@@ -23758,7 +23807,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-aca-pericallosal-artery",
@@ -24135,7 +24186,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-aca-callosomarginal-artery",
@@ -24506,7 +24559,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-aca-frontopolar-artery",
@@ -24794,7 +24849,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-aca-orbitofrontal-artery",
@@ -25058,7 +25115,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pca-parieto-occipital-artery",
@@ -25353,7 +25412,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 474-475"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pca-calcarine-artery",
@@ -25635,7 +25696,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 474-475"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pca-posterior-temporal-branches",
@@ -25927,7 +25990,8 @@
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
       "remaining": [
-        "Unresolved relative to anterior-temporal branch: branch terminal order is inverted in the model; named tissue territory does not validate stored controls."
+        "Unresolved relative to anterior-temporal branch: branch terminal order is inverted in the model; named tissue territory does not validate stored controls.",
+        "Spatial course withheld: Existing anterior/posterior temporal routes conflict with their own +z anterior endpoint ordering; landmarks and complete courses need review."
       ]
     },
     {
@@ -26173,7 +26237,8 @@
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
       "remaining": [
-        "Unresolved: terminal z=-44.242 is posterior to posterior-temporal branch terminal z=-40.318; this contradicts ordinal branch naming in this model. Requires source-landmark placement review. No new coordinates invented."
+        "Unresolved: terminal z=-44.242 is posterior to posterior-temporal branch terminal z=-40.318; this contradicts ordinal branch naming in this model. Requires source-landmark placement review. No new coordinates invented.",
+        "Spatial course withheld: Existing anterior/posterior temporal routes conflict with their own +z anterior endpoint ordering; landmarks and complete courses need review."
       ]
     },
     {
@@ -26382,7 +26447,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pca-splenial-artery",
@@ -26664,7 +26731,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 894-896"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pca-thalamogeniculate-arteries",
@@ -26853,7 +26922,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pca-posteromedial-central-branches",
@@ -27056,7 +27127,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pontine-perforating-arteries",
@@ -27418,7 +27491,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial course withheld: A near-midline single tube cannot establish the variable bilateral paramedian perforator group. Source-backed ipsilateral representative courses are needed."
+      ]
     },
     {
       "id": "vasc-sca-lateral-branch",
@@ -27683,7 +27758,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-sca-medial-branch",
@@ -27987,7 +28064,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-sca-vermian-branches",
@@ -28200,7 +28279,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-aica-labyrinthine-artery",
@@ -28487,7 +28568,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pica-tonsillomedullary-segment",
@@ -28769,7 +28852,9 @@
         "Lister et al., Microsurgical anatomy of the posterior inferior cerebellar artery (1982), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/7070615/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-pica-telovelotonsillar-segment",
@@ -29089,7 +29174,9 @@
         "Lister et al., Microsurgical anatomy of the posterior inferior cerebellar artery (1982), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/7070615/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-anterior-spinal-artery",
@@ -29428,7 +29515,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-lateral-lenticulostriate-arteries",
@@ -29730,7 +29819,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-medial-lenticulostriate-arteries",
@@ -30002,7 +30093,9 @@
         "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-internal-carotid-artery",
@@ -30130,7 +30223,9 @@
         "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-vertebral-artery",
@@ -30260,7 +30355,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 393-394"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-basilar-artery",
@@ -30361,7 +30458,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-anterior-cerebral-artery",
@@ -30486,7 +30585,9 @@
         "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-anterior-communicating-artery",
@@ -30612,7 +30713,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-middle-cerebral-artery",
@@ -30715,7 +30818,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-posterior-communicating-artery",
@@ -30868,7 +30973,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-posterior-cerebral-artery",
@@ -31018,7 +31125,9 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 474-475"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-superior-cerebellar-artery",
@@ -31163,7 +31272,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-anterior-inferior-cerebellar-artery",
@@ -31304,7 +31415,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-posterior-inferior-cerebellar-artery",
@@ -31463,7 +31576,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-lenticulostriate-arteries",
@@ -31567,7 +31682,9 @@
         "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-anterior-choroidal-artery",
@@ -31688,7 +31805,9 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Spatial fidelity is unvalidated; see the domain ledger and geometry report."
+      ]
     },
     {
       "id": "vasc-posterior-medial-choroidal-artery",
@@ -31834,7 +31953,8 @@
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
       "remaining": [
-        "Unresolved duplicated runtime course currently follows a lateral atrial plexus route while this record now distinguishes medial third-ventricular from lateral posterior choroidal supply. Root notified to relabel/split/suppress conflicting route."
+        "Unresolved duplicated runtime course currently follows a lateral atrial plexus route while this record now distinguishes medial third-ventricular from lateral posterior choroidal supply. Root notified to relabel/split/suppress conflicting route.",
+        "Spatial model withheld: the former course ended on the lateral-ventricular atrial plexus and did not establish a medial third-ventricular choroidal course. Corrected text remains available; source-backed placement is needed."
       ]
     },
     {
@@ -31929,7 +32049,10 @@
         "Nathan PW, Smith MC, Deacon P (1990). The corticospinal tracts in man: course and location of fibres at different segmental levels. Brain 113:303-324. https://pubmed.ncbi.nlm.nih.gov/2328407/ (primary human anatomy; does not validate this atlas)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-corticobulbar",
@@ -32020,7 +32143,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 535-538 (PDF pp. 561-564)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-corticopontine",
@@ -32163,7 +32289,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15: Cerebellum, pp. 704-711 (PDF pp. 730-737)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-rubrospinal",
@@ -32253,7 +32382,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15: Cerebellum, pp. 704-711 (PDF pp. 730-737)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-tectospinal",
@@ -32330,7 +32462,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6: Corticospinal Tract and Other Motor Pathways, pp. 231-242 (PDF pp. 257-268)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-lateral-vestibulospinal",
@@ -32409,7 +32544,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 523-525 (PDF pp. 549-551)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-medial-vestibulospinal",
@@ -32488,7 +32626,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 523-525 (PDF pp. 549-551)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-reticulospinal",
@@ -32582,7 +32723,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-mlf",
@@ -32677,7 +32821,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13: Brainstem II: Eye Movements and Pupillary Control, pp. 584-587 (PDF pp. 610-613)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-central-tegmental",
@@ -32759,7 +32906,10 @@
         "Kitajima et al. (1994), Radiology 192:539-543, https://doi.org/10.1148/radiology.192.2.8029428"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-hypothalamospinal",
@@ -32847,7 +32997,10 @@
         "Cremer SA et al. (1990). Hydroxyamphetamine mydriasis in Horner syndrome. Am J Ophthalmol 110:71-76. https://pubmed.ncbi.nlm.nih.gov/2368824/ (primary clinical series)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-dcml",
@@ -32941,7 +33094,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-spinothalamic",
@@ -33042,7 +33198,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-trigeminothalamic-ventral",
@@ -33128,7 +33287,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-trigeminothalamic-dorsal",
@@ -33206,7 +33368,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 509-514 (PDF pp. 535-540)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-posterior-spinocerebellar",
@@ -33285,7 +33450,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-anterior-spinocerebellar",
@@ -33370,7 +33538,10 @@
         "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), cerebellar connections, Figure 7-17"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "3D tube withheld: the former curve falsely recrossed at the caudal midbrain. The route is available in the Pathways browser; a validated replacement course is still needed."
+      ]
     },
     {
       "id": "tract-auditory-pathway",
@@ -33462,7 +33633,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 519-526 (PDF pp. 545-552)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-spinoreticular",
@@ -33559,7 +33733,10 @@
         "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-optic-radiation",
@@ -33647,7 +33824,10 @@
         "Yogarajah et al. (2009), Brain 132:1656-1668, https://pubmed.ncbi.nlm.nih.gov/19460796/ (individual Meyer-loop variability)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-cingulum",
@@ -33732,7 +33912,10 @@
         "Catani & Thiebaut de Schotten (2008), Cortex 44:1105-1132, https://doi.org/10.1016/j.cortex.2008.05.004 (association-tract reconstruction; not validation of this atlas geometry)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-uncinate-fasciculus",
@@ -33811,7 +33994,10 @@
         "Catani & Thiebaut de Schotten (2008), Cortex 44:1105-1132, https://doi.org/10.1016/j.cortex.2008.05.004 (association-tract reconstruction; not validation of this atlas geometry)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "tract-superior-longitudinal-fasciculus",
@@ -33906,7 +34092,10 @@
         "Catani & Thiebaut de Schotten (2008), Cortex 44:1105-1132, https://doi.org/10.1016/j.cortex.2008.05.004 (association-tract reconstruction; not validation of this atlas geometry)"
       ],
       "geometry": "Schematic; anatomical spatial fidelity not validated",
-      "remaining": []
+      "remaining": [
+        "Exact waypoint positions, tube radii and level-to-slice registration remain unvalidated; paired curves are schematic routes rather than individual fascicles.",
+        "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
+      ]
     },
     {
       "id": "syn-dejerine-roussy",
