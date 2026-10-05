@@ -1,0 +1,8 @@
+# Dependencies used for the independent, read-only registration audit.
+# These are optional audit tools, not web app or deployment dependencies.
+numpy==2.5.3
+scipy==1.18.1
+matplotlib==3.11.2
+nibabel==5.4.2
+pydicom==3.0.2
+trimesh==5.1.1
