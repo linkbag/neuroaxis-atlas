@@ -65,7 +65,7 @@
     "kind": "context",
     "laterality": "paired",
     "color": "#94a3b8",
-    "function": "Composite fiber systems of the basis pontis: the longitudinal fasciculi carry corticospinal, corticobulbar and corticopontine axons from the crus cerebri down to the medulla, while the transverse fibers arise from the pontine nuclei, decussate, and collect laterally as the middle cerebellar peduncle.",
+    "function": "Composite fiber systems of the basis pontis: longitudinal fasciculi contain corticospinal axons continuing toward the medulla, corticobulbar axons reaching their brainstem targets, and corticopontine axons terminating in the pontine nuclei. Transverse pontocerebellar fibers arise from pontine neurons, cross the midline, and collect laterally as the middle cerebellar peduncle.",
     "connections": {
       "afferent": [
         "Corticofugal bundles from the crus cerebri (tract-corticospinal-lateral, tract-corticobulbar, tract-corticopontine)"
@@ -100,7 +100,8 @@
     "contextNote": "Context record for the basis-pontis fiber feltwork; the named descending pathways are tracked individually in tracts.json and are tagged separately on transverse plates.",
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, pontine sections, printed pp. 618-619 (PDF pp. 644-645).",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar input pathways, printed pp. 708-710 (PDF pp. 734-736)."
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar input pathways, printed pp. 708-710 (PDF pp. 734-736).",
+      "https://pubmed.ncbi.nlm.nih.gov/2368586/"
     ]
   },
   {
@@ -858,7 +859,7 @@
         "Cerebellar cortex on the same side as the peduncle (ctx-cerebellum)"
       ]
     },
-    "bloodSupply": "AICA (caudal) and SCA (rostral) short circumferential branches of the basilar artery",
+    "bloodSupply": "Predominantly AICA branches, with SCA contributions and variable territorial overlap or anastomoses.",
     "clinical": [
       {
         "syndrome": "Ipsilateral cerebellar ataxia",
@@ -887,7 +888,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, pontine sections, printed pp. 618-619 (PDF pp. 644-645).",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar input pathways, printed pp. 708-710 (PDF pp. 734-736)."
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar input pathways, printed pp. 708-710 (PDF pp. 734-736).",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC5726839/"
     ]
   },
   {
@@ -1208,7 +1210,7 @@
     "clinical": [
       {
         "syndrome": "Dorsal pontine VI-VII combination (Foville territory)",
-        "findings": "A lesion at the facial colliculus damages the abducens nucleus and the looping facial fibers together — ipsilateral conjugate gaze palsy plus complete LMN facial paralysis (Foville syndrome), with loss of the ipsilateral blink.",
+        "findings": "A focal lesion involving the abducens nucleus and looping facial fibers can cause ipsilateral horizontal conjugate gaze palsy and lower motor neuron facial weakness, including impaired eyelid closure. The full classic Foville pattern adds contralateral body weakness when descending motor pathways are also involved; focal dorsal lesions need not include that component.",
         "vascular": "Basilar paramedian perforators"
       }
     ],
@@ -1228,7 +1230,9 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, facial nerve and reflexes, printed pp. 513-518 (PDF pp. 539-544).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), caudal pontine sections, printed pp. 122-126 (PDF pp. 136-140)."
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), caudal pontine sections, printed pp. 122-126 (PDF pp. 136-140).",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC8686214/",
+      "https://www.ncbi.nlm.nih.gov/books/NBK544268/"
     ]
   },
   {

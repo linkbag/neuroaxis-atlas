@@ -845,7 +845,7 @@
     "synonyms": [
       "hand sensory area",
       "S1 hand area",
-      "hand knob region"
+      "postcentral hand representation"
     ],
     "region": "telencephalon",
     "subdivision": "Functional cortical areas",
@@ -856,7 +856,7 @@
     "rampT": 0.2,
     "function": "Teaching marker for the hand component of the somatosensory homunculus in postcentral/posterior paracentral cortex, broadly associated with the lateral sensorimotor cortex. Somatic representation is broadly contralateral, with overlapping and multiple maps; oral/pharyngeal processing additionally involves bilateral opercular/insular networks. This patch is a schematic teaching aid, not a measured functional boundary.",
     "anchors": {
-      "gyrus": "lateral convexity of the postcentral gyrus at the hand-knob (the \"omega\" of the central sulcus)",
+      "gyrus": "lateral convexity of the postcentral gyrus opposite the precentral motor hand knob; a schematic sensory-hand location",
       "mesh": "ctx-hemisphere-l",
       "strip": "S1 (postcentral)",
       "somatotopicOrder": "order 4 of 8, arc s = 37.29 au from the toe",
@@ -906,7 +906,8 @@
     "refs": [
       "Blumenfeld, 2nd ed., pp. 28-32 and 224-234 (PDF pp. 54-58 and 250-260), Figures 2.13 and 6.1-6.10",
       "Haines, 8th ed., p. 15 (PDF p. 29), Figure 2-7, visually inspected",
-      "Gordon et al. (2023), A somato-cognitive action network alternates with effector regions in motor cortex. https://doi.org/10.1038/s41586-023-05964-2"
+      "Gordon et al. (2023), A somato-cognitive action network alternates with effector regions in motor cortex. https://doi.org/10.1038/s41586-023-05964-2",
+      "https://pubmed.ncbi.nlm.nih.gov/9055804/"
     ]
   },
   {

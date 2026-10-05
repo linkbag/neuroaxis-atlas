@@ -25,6 +25,17 @@ This page condenses what content authors need. The machine that enforces all of 
 
 ## 2. Interfaces (`src/types.ts`)
 
+The examples below describe the original contract. `src/types.ts` is authoritative
+for current fields and enum values. Structure and taxonomy records may also carry
+`anatomicalClass?: string` and `anatomicalLaterality?: Laterality` for the anatomical
+labels shown to learners. `kind` remains the rendering/filter category; hippocampal
+cortex may share the nuclei colour without being classified as a nucleus. The
+construction field `laterality` still controls mirroring. A paired anatomical
+structure represented by one central schematic proxy must declare
+`anatomicalLaterality: 'paired'` and explain that compression in `geometryNote`.
+These labels do not validate coordinates, dimensions or shape. Canonical and
+taxonomy anatomical labels must agree.
+
 ```ts
 export type Region = 'diencephalon' | 'midbrain' | 'pons' | 'medulla' | 'cerebellum';
 export type Kind = 'nucleus' | 'tract' | 'ventricle' | 'surface' | 'vessel' | 'context';

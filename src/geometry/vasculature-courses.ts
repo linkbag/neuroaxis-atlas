@@ -361,7 +361,7 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
   },
   {
     id: 'vasc-medial-lenticulostriate-arteries',
-    name: "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+    name: "Medial striate arteries (including recurrent artery of Heubner)",
     region: "vasculature",
     kind: 'vessel',
     laterality: 'paired',
@@ -371,7 +371,7 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     basis: 'documented-course',
     elementIds: [],
     anchorNote:
-      "Illustrative course for Medial lenticulostriate arteries (recurrent artery of Heubner). The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
+      "Illustrative course for Medial striate arteries (including recurrent artery of Heubner). The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
     territory: [
   "nuc-caudate-head",
   "nuc-accumbens",
@@ -384,7 +384,7 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     // withdrawn from the drawn set by the v18 authored replacement.
     supply: [],
     direction: 'descending',
-    modality: 'Arterial blood (oxygenated) — the largest medial perforator of the ACA',
+    modality: 'Arterial blood (oxygenated) — medial ACA striate perforators, including Heubner',
     origin: "ACA, with variable Heubner origin",
     target: "Anterior basal ganglia and anterior internal capsule",
     decussation: "No neural decussation. Arterial communication and collateral flow vary by individual anatomy.",
@@ -394,17 +394,12 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     tubeRadius: 0.417,
     calibreMm: 1.0,
     color: '#991b1b',
-    synonyms: [
-  "medial striate arteries",
-  "recurrent artery of Heubner",
-  "arteria recurrens Heubneri",
-  "medial group of the lenticulostriate arteries"
-],
+    synonyms: ["medial lenticulostriate arteries", "medial striate arteries", "medial group of the lenticulostriate arteries"],
     clinical: [
   {
     "syndrome": "Medial striate / Heubner infarction",
     "findings": "Can cause behavioural or executive dysfunction, abulia, dysarthria or contralateral motor deficits according to actual lesion extent. It is not necessarily a purely behavioural infarct.",
-    "vascular": "Medial lenticulostriate arteries (recurrent artery of Heubner)"
+    "vascular": "ACA medial striate branches, including the recurrent artery of Heubner"
   }
 ],
     refs: [
@@ -445,12 +440,7 @@ export const BUILT_IN_VESSEL_COURSES: readonly VesselCourseRecord[] = [
     laterality: 'paired',
     parent: 'vasc-posterior-cerebral-artery',
     surface: 'ctx-midbrain-surface',
-    surfaceNote:
-      'The cisternal segment hugs the committed `ctx-midbrain-surface` envelope (the same surface the three SCA courses ' +
-      'declare): its middle waypoint is a literal vertex of it, 0.000 au from the surface. The TERMINAL is the opposite ' +
-      'relation — a choroidal artery ends ON the plexus — so it is a deliberate graze on the committed ' +
-      '`ctx-choroid-plexus-l` mesh (a literal plexus vertex), 12.664 au (15.20 mm) from the P2 take-off, which is the ' +
-      'cisternal + choroidal-fissure interval the path crosses.',
+    surfaceNote: "Spatial route withheld. The former lateral-ventricular plexus endpoint does not establish a medial posterior choroidal course to the third-ventricular tela choroidea. Source-backed placement is required; the retained waypoints and construction distances do not validate arterial anatomy.",
     basis: 'documented-course',
     elementIds: ['FJ1727', 'FJ1727M'],
     anchorNote:

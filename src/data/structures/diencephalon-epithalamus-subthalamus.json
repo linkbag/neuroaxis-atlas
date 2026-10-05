@@ -24,7 +24,7 @@
     "clinical": [
       {
         "syndrome": "Pineal region tumor with gaze palsy",
-        "findings": "Germinomas and pineal parenchymal tumors compress the pretectal plate and aqueduct — upgaze palsy, light-near dissociation, lid retraction, convergence-retraction nystagmus (Parinaud syndrome) with hydrocephalus; see the syndrome browser entry.",
+        "findings": "Germinomas and pineal parenchymal tumors may compress dorsal midbrain and/or cerebral aqueduct. Dorsal involvement can produce some combination of upgaze paresis, light-near dissociation, lid retraction, and convergence-retraction nystagmus (Parinaud pattern); aqueduct obstruction can cause hydrocephalus. Findings depend on tumor extent.",
         "note": "mass effect, not a primary vascular syndrome"
       },
       {
@@ -34,7 +34,7 @@
       },
       {
         "syndrome": "Obstructive hydrocephalus from aqueductal compression",
-        "findings": "Masses at the posterior third ventricle obstruct the cerebral aqueduct, causing headache, papilledema and gait failure before focal signs.",
+        "findings": "A mass near the posterior third ventricle may obstruct the cerebral aqueduct, causing hydrocephalus with headache, nausea/vomiting, papilledema, or other raised-pressure findings. Ocular motor or other focal signs may coexist; no fixed symptom order is established.",
         "note": "CSF-flow obstruction"
       }
     ],
@@ -55,7 +55,8 @@
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, diencephalon/epithalamus, printed pp. 283-284 (PDF pp. 309-310).",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, habenulointerpeduncular fibers, printed pp. 617 (PDF pp. 643).",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, circadian/homeostatic pathways, printed pp. 796 (PDF pp. 822).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain and posterior diencephalic sections, printed pp. 136-156 (PDF pp. 150-170)."
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain and posterior diencephalic sections, printed pp. 136-156 (PDF pp. 150-170).",
+      "https://pubmed.ncbi.nlm.nih.gov/24439798/"
     ]
   },
   {
@@ -160,7 +161,7 @@
     "kind": "tract",
     "laterality": "paired",
     "color": "#a78bfa",
-    "function": "Myelinated limbic afferent bundle sweeping along the dorsomedial border of the thalamus from the septal/preoptic region to the habenular nuclei — the principal input limb of the epithalamic circuit feeding the anti-reward system.",
+    "function": "Limbic afferent bundle running along the dorsomedial thalamic border from septal, preoptic, basal-forebrain, and hypothalamic regions to the habenular complex. Medial and lateral habenular circuits have distinct inputs and outputs; the entire bundle is not a single anti-reward pathway.",
     "connections": {
       "afferent": [
         "Septal/basal-forebrain and preoptic/hypothalamic limbic inputs"
@@ -194,7 +195,9 @@
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, diencephalon/epithalamus, printed pp. 283-284 (PDF pp. 309-310).",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, habenulointerpeduncular fibers, printed pp. 617 (PDF pp. 643).",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, circadian/homeostatic pathways, printed pp. 796 (PDF pp. 822).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain and posterior diencephalic sections, printed pp. 136-156 (PDF pp. 150-170)."
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain and posterior diencephalic sections, printed pp. 136-156 (PDF pp. 150-170).",
+      "https://pubmed.ncbi.nlm.nih.gov/7470948/",
+      "https://pubmed.ncbi.nlm.nih.gov/19005047/"
     ]
   },
   {
@@ -586,12 +589,12 @@
     "clinical": [
       {
         "syndrome": "Pure motor hemiplegia (capsular lacune)",
-        "findings": "Small posterior-limb/genu infarcts give contralateral face-arm-leg weakness without cortical signs; larger capsular strokes add dense hemisensory loss and dysarthria-clumsy-hand syndrome.",
+        "findings": "Small posterior-limb or genu infarcts can cause contralateral weakness or dysarthria without cortical signs. Sensory loss, ataxic hemiparesis, or dysarthria-clumsy hand depend on involved pathways; dysarthria-clumsy hand itself can be a lacunar capsular syndrome.",
         "vascular": "Lenticulostriate or anterior choroidal arteries"
       },
       {
         "syndrome": "Retrolenticular optic-radiations lesion",
-        "findings": "Contralateral incongruous homonymous hemianopia from anterior-choroidal-territory infarction of the optic radiations.",
+        "findings": "Retrolenticular optic-radiation injury can cause contralateral homonymous visual-field loss. Completeness and congruity depend on affected fibers and lesion extent; incongruity is not obligatory. Vascular supply is variable.",
         "vascular": "Anterior choroidal artery"
       }
     ],
@@ -611,7 +614,9 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia/internal-capsule anatomy, printed pp. 740-748 (PDF pp. 766-774).",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia pathways, printed pp. 748-754 (PDF pp. 774-780)."
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia pathways, printed pp. 748-754 (PDF pp. 774-780).",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC1738934/",
+      "https://pubmed.ncbi.nlm.nih.gov/17362865/"
     ],
     "meshes": false,
     "geometryNote": "Text-only capsule context: the former display linked the whole cerebral white-matter shell, not an isolated capsule. That association is removed; no validated capsule segmentation is available."
@@ -701,7 +706,7 @@
       },
       {
         "syndrome": "Huntington disease (caudate atrophy)",
-        "findings": "Progressive caudate volume loss underlies chorea and frontal-executive decline — visible on the coronal context silhouettes.",
+        "findings": "Huntington disease involves progressive striatal degeneration, including caudate and putamen, with motor, cognitive, and behavioral manifestations and additional brain involvement. Caudate atrophy may be evident on patient CT or MRI; the invariant atlas silhouette does not demonstrate disease-related volume loss.",
         "note": "degenerative"
       }
     ],
@@ -721,7 +726,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia/internal-capsule anatomy, printed pp. 740-748 (PDF pp. 766-774).",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia pathways, printed pp. 748-754 (PDF pp. 774-780)."
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, basal-ganglia pathways, printed pp. 748-754 (PDF pp. 774-780).",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC4458347/"
     ]
   }
 ]

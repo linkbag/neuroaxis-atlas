@@ -68,7 +68,7 @@
   <path d="M 582 430 C 595 470 592 515 572 550" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 4"/>
   <path d="M 262 208 C 250 196 236 190 222 190" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 4"/>
   <path d="M 538 208 C 550 196 564 190 578 190" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 4"/>
-  <text x="400" y="770" text-anchor="middle" font-size="11" font-style="italic" fill="#64748b">Dashed gray strokes are untagged context: lateral ventricle and uncus/hippocampal edge (no registry records).</text>
+  <text x="400" y="770" text-anchor="middle" font-size="11" font-style="italic" fill="#64748b">Dashed gray strokes show ventricular and medial temporal context; their contours are schematic.</text>
   <g class="plate-labels" font-family="'Segoe UI', Arial, sans-serif">
     <g class="plate-label" data-for="ctx-caudate-nucleus"><line x1="183" y1="114" x2="238" y2="174" stroke="#475569" stroke-width="1"/><circle cx="238" cy="174" r="2.5" fill="#475569"/><text x="175" y="118" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Caudate nucleus</tspan></text></g>
     <g class="plate-label" data-for="ctx-thalamus-envelope"><line x1="183" y1="162" x2="292" y2="200" stroke="#475569" stroke-width="1"/><circle cx="292" cy="200" r="2.5" fill="#475569"/><text x="175" y="166" text-anchor="end" font-size="12" fill="#1e293b"><tspan x="175" dy="0">Thalamus (cut edge)</tspan></text></g>

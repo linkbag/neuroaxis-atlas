@@ -117,7 +117,8 @@ const KIND_LABELS: Record<Kind, string> = {
 
 /** One system's accessible name: the visible label first, then what it switches. */
 function kindAccessibleName(kind: Kind): string {
-  return `${KIND_LABELS[kind]} — show/hide the ${kind} system (${kind})`
+  const note = kind === 'nucleus' ? '; includes hippocampal cortical structures' : ''
+  return `${KIND_LABELS[kind]} — show/hide the ${kind} system (${kind})${note}`
 }
 
 /** One area's accessible name: the visible label first, then what it switches. */

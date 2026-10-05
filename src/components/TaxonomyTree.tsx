@@ -59,7 +59,7 @@ function LeafRow({ leaf, selectedId, hoveredId, layers, syndromeSet }: {
          * too (SC 1.4.1 / 4.1.2). */
         aria-current={selected ? 'true' : undefined}
       >
-        <KindGlyph kind={entry.kind} color={entry.color} title={entry.kind} />
+        <KindGlyph kind={entry.kind} color={entry.color} title={entry.anatomicalClass ?? entry.kind} />
         <span className="tree-leaf-name">{entry.name}</span>
         {inSyndrome && <span className="chip chip--syndrome" title="Involved in the open syndrome">syn</span>}
         {!leaf.record && <span className="chip chip--pending">pending</span>}

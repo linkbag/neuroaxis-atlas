@@ -298,8 +298,8 @@
         "label": "Posterior temporal language network"
       },
       {
-        "label": "Dorsal and ventral language connections",
-        "note": "Arcuate/SLF-related dorsal routes support auditory-motor integration and repetition; additional temporal-frontal routes support comprehension. Arcuate fasciculus is not identical to the entire SLF.",
+        "label": "Dorsal language connections (arcuate-related)",
+        "note": "Arcuate/SLF-related dorsal routes contribute to auditory-motor integration and repetition. Parallel ventral temporal-frontal connections also contribute to comprehension and are not represented by the arcuate link. Naming conventions vary; the arcuate is not the entire SLF.",
         "structureId": "tract-arcuate-fasciculus"
       },
       {
@@ -321,7 +321,8 @@
     ],
     "clinical": "Left hemisphere is language dominant in most people, not all. Aphasia patterns depend on distributed cortical/subcortical damage, and the route is reciprocal rather than a single serial chain.",
     "refs": [
-      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2; language processing involves distributed reciprocal networks"
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2; language processing involves distributed reciprocal networks",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC2584675/"
     ],
     "category": "Association",
     "summary": "Dominant perisylvian language network — major connections in a simplified teaching route.",

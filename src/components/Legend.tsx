@@ -101,6 +101,7 @@ export default function Legend() {
             <span>{swatch.label}</span>
           </span>
         ))}
+        <p className="muted">The nuclei colour also marks hippocampal cortical structures. Selection details identify their anatomical class.</p>
       </div>
 
       <div className="legend-group">
