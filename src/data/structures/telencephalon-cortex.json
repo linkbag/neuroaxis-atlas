@@ -716,9 +716,11 @@
     "id": "ctx-inferior-frontal-gyrus",
     "name": "Inferior frontal gyrus",
     "synonyms": [
-      "pars opercularis",
-      "pars triangularis",
-      "pars orbitalis"
+      "gyrus frontalis inferior",
+      "IFG",
+      "pars opercularis (part of inferior frontal gyrus)",
+      "pars triangularis (part of inferior frontal gyrus)",
+      "pars orbitalis (part of inferior frontal gyrus)"
     ],
     "region": "telencephalon",
     "subdivision": "Cortical gyri and lobules",
@@ -746,7 +748,9 @@
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 24-32 (PDF pp. 50-58), Figures 2.10-2.15; pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9",
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 13-19 (PDF pp. 27-33), Figures 2-5 to 2-13",
-      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2"
+      "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2",
+      "https://ifaa.unifr.ch/Public/EntryPage/TA98%20Tree/Entity%20TA98%20EN/14.1.09.113%20Entity%20TA98%20EN.htm",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC6252390/"
     ]
   },
   {

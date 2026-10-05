@@ -786,11 +786,12 @@
     ],
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC9388914/"
     ],
     "vesselCourse": {
       "surface": "ctx-hemisphere-l",
-      "surfaceNote": "The insular (M2) segment runs in the Sylvian fissure over the insula, i.e. in the subarachnoid space on the opercular surface of the committed hemisphere envelope. Its distal (opercular) end is projected onto that envelope; the proximal two waypoints are literal vertices of the committed M2 mesh.",
+      "surfaceNote": "The M2 segment courses in the Sylvian fissure over the insular surface. At the peri-insular sulci it continues into M3 branches over the opercula. The committed hemisphere envelope is a schematic display constraint and does not independently validate these local surfaces or the segment transition.",
       "basis": "bp3d-element",
       "elementIds": [
         "FJ1660",
@@ -3343,8 +3344,7 @@
     "name": "Posterior temporal branches of the PCA",
     "synonyms": [
       "posterior temporal arteries (PCA)",
-      "PCA temporo-occipital branches",
-      "hippocampal and posterior temporal branches"
+      "PCA temporo-occipital branches"
     ],
     "region": "vasculature",
     "subdivision": "Posterior cerebral artery branches",
@@ -3390,11 +3390,14 @@
     ],
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
+      "https://pubmed.ncbi.nlm.nih.gov/21492726/",
+      "https://pubmed.ncbi.nlm.nih.gov/22194087/",
+      "https://pubmed.ncbi.nlm.nih.gov/307260/"
     ],
     "vesselCourse": {
       "surface": "ctx-hemisphere-l",
-      "surfaceNote": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+      "surfaceNote": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory.",
       "basis": "documented-course",
       "elementIds": [],
       "anchorNote": "Schematic authored course in the committed model frame. Mesh vertices, projections and terminal anchors establish internal display consistency only; course, dimensions and calibre are not validated for an individual or population. Original construction measurements are recorded in the audit ledger.",
@@ -3540,11 +3543,14 @@
     ],
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
+      "https://pubmed.ncbi.nlm.nih.gov/21492726/",
+      "https://pubmed.ncbi.nlm.nih.gov/22194087/",
+      "https://pubmed.ncbi.nlm.nih.gov/307260/"
     ],
     "vesselCourse": {
       "surface": "ctx-hemisphere-l",
-      "surfaceNote": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+      "surfaceNote": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory.",
       "basis": "documented-course",
       "elementIds": [],
       "anchorNote": "Schematic authored course in the committed model frame. Mesh vertices, projections and terminal anchors establish internal display consistency only; course, dimensions and calibre are not validated for an individual or population. Original construction measurements are recorded in the audit ledger.",
@@ -3668,11 +3674,14 @@
     ],
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
+      "https://pubmed.ncbi.nlm.nih.gov/21492726/",
+      "https://pubmed.ncbi.nlm.nih.gov/22194087/",
+      "https://pubmed.ncbi.nlm.nih.gov/307260/"
     ],
     "vesselCourse": {
       "surface": "ctx-hemisphere-l",
-      "surfaceNote": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+      "surfaceNote": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory.",
       "basis": "documented-course",
       "elementIds": [],
       "anchorNote": "Schematic authored course in the committed model frame. Mesh vertices, projections and terminal anchors establish internal display consistency only; course, dimensions and calibre are not validated for an individual or population. Original construction measurements are recorded in the audit ledger.",
@@ -3936,11 +3945,12 @@
     ],
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
+      "https://pubmed.ncbi.nlm.nih.gov/2034346/"
     ],
     "vesselCourse": {
       "surface": null,
-      "surfaceNote": "Intraparenchymal perforators: they arise from the P2 segment in the ambient cistern, pierce the posterior perforated substance and the lateral surface of the thalamus, and run inside the diencephalon. No envelope is declared because projecting them onto one would be anatomically wrong; their cisternal origin is the committed P2 vertex.",
+      "surfaceNote": "Thalamogeniculate perforators usually arise from PCA P2 in the crural or ambient region and penetrate the geniculate/pulvinar region to reach inferolateral thalamic tissue. They are distinct from the paramedian P1 thalamoperforators entering the posterior perforated substance. The stored intraparenchymal route is schematic and does not validate individual entry sites or branching.",
       "basis": "bp3d-element",
       "elementIds": [
         "FJ1675",
@@ -4296,8 +4306,7 @@
       "tract-scp"
     ],
     "supply": [
-      "syn-cerebellar",
-      "syn-nothnagel"
+      "syn-cerebellar"
     ],
     "contextNote": "Illustrative course for Lateral branch of the superior cerebellar artery. The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
     "connections": {
@@ -4332,7 +4341,8 @@
     ],
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660",
+      "https://pubmed.ncbi.nlm.nih.gov/34512277/"
     ],
     "vesselCourse": {
       "surface": "ctx-midbrain-surface",
@@ -5002,7 +5012,6 @@
       "surf-vermis"
     ],
     "supply": [
-      "syn-lateral-medullary",
       "syn-cerebellar"
     ],
     "contextNote": "Illustrative course for PICA telovelotonsillar segment. The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
@@ -5039,7 +5048,8 @@
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660",
-      "Lister et al., Microsurgical anatomy of the posterior inferior cerebellar artery (1982), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/7070615/"
+      "Lister et al., Microsurgical anatomy of the posterior inferior cerebellar artery (1982), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/7070615/",
+      "https://svn.bmj.com/content/7/4/337"
     ],
     "vesselCourse": {
       "surface": "ctx-cerebellum-l",
@@ -5388,11 +5398,12 @@
     ],
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC9388914/"
     ],
     "vesselCourse": {
       "surface": null,
-      "surfaceNote": "Intraparenchymal perforators: the group pierces the anterior perforated substance and runs INSIDE the brain, so no cortical envelope is declared. The single projected constraint is the entry point (0.018 au = 0.61 mm from ctx-hemisphere-l); the arborisation apex deliberately grazes the putamen surface, because a perforator ends in the structure it supplies.",
+      "surfaceNote": "Lateral striate perforators pierce the anterior perforated substance and run within deep cerebral tissue. The stored entry projection and terminal anchors are construction choices in the atlas frame; they do not establish vessel termination, individual branching, or measured anatomical accuracy.",
       "basis": "documented-course",
       "elementIds": [
         "FJ1662",
@@ -5485,11 +5496,10 @@
   },
   {
     "id": "vasc-medial-lenticulostriate-arteries",
-    "name": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+    "name": "Medial striate arteries (including recurrent artery of Heubner)",
     "synonyms": [
+      "medial lenticulostriate arteries",
       "medial striate arteries",
-      "recurrent artery of Heubner",
-      "arteria recurrens Heubneri",
       "medial group of the lenticulostriate arteries"
     ],
     "region": "vasculature",
@@ -5508,7 +5518,7 @@
       "ctx-internal-capsule"
     ],
     "supply": [],
-    "contextNote": "Illustrative course for Medial lenticulostriate arteries (recurrent artery of Heubner). The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
+    "contextNote": "Illustrative course for Medial striate arteries (including recurrent artery of Heubner). The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
     "connections": {
       "afferent": [
         "ACA, with variable Heubner origin"
@@ -5522,7 +5532,7 @@
       {
         "syndrome": "Medial striate / Heubner infarction",
         "findings": "Can cause behavioural or executive dysfunction, abulia, dysarthria or contralateral motor deficits according to actual lesion extent. It is not necessarily a purely behavioural infarct.",
-        "vascular": "Medial lenticulostriate arteries (recurrent artery of Heubner)"
+        "vascular": "ACA medial striate branches, including the recurrent artery of Heubner"
       }
     ],
     "levels": [
@@ -5542,7 +5552,8 @@
     "refs": [
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
-      "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/"
+      "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC3722790/"
     ],
     "vesselCourse": {
       "surface": null,

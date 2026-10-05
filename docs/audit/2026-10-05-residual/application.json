@@ -1,0 +1,1029 @@
+{
+  "fieldApplications": [
+    {
+      "findingId": "VASC-R-001",
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-anterior-cerebral-artery",
+      "field": "synonyms",
+      "original": [
+        "ACA",
+        "arteria cerebri anterior",
+        "A1/A2/A3 segments of the anterior cerebral artery",
+        "pericallosal artery (A2/A3)"
+      ],
+      "proposed": [
+        "ACA",
+        "arteria cerebri anterior",
+        "A1/A2/A3 segments of the anterior cerebral artery"
+      ],
+      "applied": [
+        "ACA",
+        "arteria cerebri anterior",
+        "A1/A2/A3 segments of the anterior cerebral artery"
+      ]
+    },
+    {
+      "findingId": "VASC-R-001",
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-posterior-cerebral-artery",
+      "field": "synonyms",
+      "original": [
+        "PCA",
+        "arteria cerebri posterior",
+        "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)",
+        "calcarine artery (a P4 cortical branch)"
+      ],
+      "proposed": [
+        "PCA",
+        "arteria cerebri posterior",
+        "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)"
+      ],
+      "applied": [
+        "PCA",
+        "arteria cerebri posterior",
+        "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)"
+      ]
+    },
+    {
+      "findingId": "VASC-R-002",
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-middle-cerebral-artery",
+      "field": "connections.afferent.0",
+      "original": "Internal carotid artery (vasc-internal-carotid-artery) at the carotid bifurcation",
+      "proposed": "Internal carotid artery (vasc-internal-carotid-artery) at its intracranial terminal bifurcation",
+      "applied": "Internal carotid artery (vasc-internal-carotid-artery) at its intracranial terminal bifurcation"
+    },
+    {
+      "findingId": "VASC-R-002",
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-middle-cerebral-artery",
+      "field": "connections.efferent",
+      "original": [
+        "Lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) from M1 — the deep supply to the putamen, caudate and internal capsule",
+        "Orbitofrontal and temporopolar branches, anterior temporal branches, insular (M2) branches, and the superior and inferior division trunks that fan out over the convexity",
+        "The anterior choroidal artery (vasc-anterior-choroidal-artery) arises nearby from the internal carotid and shares the deep territory"
+      ],
+      "proposed": [
+        "Lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) from M1 — the deep supply to the putamen, caudate and internal capsule",
+        "Orbitofrontal and temporopolar branches, anterior temporal branches, insular (M2) branches, and the superior and inferior division trunks that fan out over the convexity"
+      ],
+      "applied": [
+        "Lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) from M1 — the deep supply to the putamen, caudate and internal capsule",
+        "Orbitofrontal and temporopolar branches, anterior temporal branches, insular (M2) branches, and the superior and inferior division trunks that fan out over the convexity"
+      ]
+    },
+    {
+      "findingId": "VASC-R-003",
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-vertebral-artery",
+      "field": "connections.afferent",
+      "original": [
+        "Subclavian artery (the first branch of the subclavian on each side) — the inflow of the posterior circulation",
+        "Muscular and radicular branches along the cervical course"
+      ],
+      "proposed": [
+        "Usually the proximal subclavian artery; vertebral origin variants occur"
+      ],
+      "applied": [
+        "Usually the proximal subclavian artery; vertebral origin variants occur"
+      ]
+    },
+    {
+      "findingId": "VASC-R-003",
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-vertebral-artery",
+      "field": "connections.efferent",
+      "original": [
+        "Posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) — the largest branch, supplying the lateral medulla and inferior cerebellum",
+        "Anterior spinal artery (the paired ventral branches that join in the midline) and small posterior spinal/paramedian medullary perforators",
+        "Basilar artery (vasc-basilar-artery) — formed by the union of the two vertebral arteries at the pontomedullary junction"
+      ],
+      "proposed": [
+        "Posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) — the largest branch, supplying the lateral medulla and inferior cerebellum",
+        "Anterior spinal artery (the paired ventral branches that join in the midline) and small posterior spinal/paramedian medullary perforators",
+        "Basilar artery (vasc-basilar-artery) — formed by the union of the two vertebral arteries at the pontomedullary junction",
+        "Variable muscular, osseous and radicular branches arise along the cervical course; these are branches of the vertebral artery, with potential cervical anastomoses"
+      ],
+      "applied": [
+        "Posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) — the largest branch, supplying the lateral medulla and inferior cerebellum",
+        "Anterior spinal artery (the paired ventral branches that join in the midline) and small posterior spinal/paramedian medullary perforators",
+        "Basilar artery (vasc-basilar-artery) — formed by the union of the two vertebral arteries at the pontomedullary junction",
+        "Variable muscular, osseous and radicular branches arise along the cervical course; these are branches of the vertebral artery, with potential cervical anastomoses"
+      ]
+    },
+    {
+      "findingId": "VASC-R-004",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-insular-segment",
+      "field": "vesselCourse.surfaceNote",
+      "original": "The insular (M2) segment runs in the Sylvian fissure over the insula, i.e. in the subarachnoid space on the opercular surface of the committed hemisphere envelope. Its distal (opercular) end is projected onto that envelope; the proximal two waypoints are literal vertices of the committed M2 mesh.",
+      "proposed": "The M2 segment courses in the Sylvian fissure over the insular surface. At the peri-insular sulci it continues into M3 branches over the opercula. The committed hemisphere envelope is a schematic display constraint and does not independently validate these local surfaces or the segment transition.",
+      "applied": "The M2 segment courses in the Sylvian fissure over the insular surface. At the peri-insular sulci it continues into M3 branches over the opercula. The committed hemisphere envelope is a schematic display constraint and does not independently validate these local surfaces or the segment transition."
+    },
+    {
+      "findingId": "VASC-R-005",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-thalamogeniculate-arteries",
+      "field": "vesselCourse.surfaceNote",
+      "original": "Intraparenchymal perforators: they arise from the P2 segment in the ambient cistern, pierce the posterior perforated substance and the lateral surface of the thalamus, and run inside the diencephalon. No envelope is declared because projecting them onto one would be anatomically wrong; their cisternal origin is the committed P2 vertex.",
+      "proposed": "Thalamogeniculate perforators usually arise from PCA P2 in the crural or ambient region and penetrate the geniculate/pulvinar region to reach inferolateral thalamic tissue. They are distinct from the paramedian P1 thalamoperforators entering the posterior perforated substance. The stored intraparenchymal route is schematic and does not validate individual entry sites or branching.",
+      "applied": "Thalamogeniculate perforators usually arise from PCA P2 in the crural or ambient region and penetrate the geniculate/pulvinar region to reach inferolateral thalamic tissue. They are distinct from the paramedian P1 thalamoperforators entering the posterior perforated substance. The stored intraparenchymal route is schematic and does not validate individual entry sites or branching."
+    },
+    {
+      "findingId": "VASC-R-006",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-anterior-temporal-branches",
+      "field": "vesselCourse.surfaceNote",
+      "original": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+      "proposed": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory.",
+      "applied": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory."
+    },
+    {
+      "findingId": "VASC-R-006",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-middle-temporal-branches",
+      "field": "vesselCourse.surfaceNote",
+      "original": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+      "proposed": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory.",
+      "applied": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory."
+    },
+    {
+      "findingId": "VASC-R-006",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-posterior-temporal-branches",
+      "field": "vesselCourse.surfaceNote",
+      "original": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+      "proposed": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory.",
+      "applied": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory."
+    },
+    {
+      "findingId": "VASC-R-006",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-posterior-temporal-branches",
+      "field": "synonyms",
+      "original": [
+        "posterior temporal arteries (PCA)",
+        "PCA temporo-occipital branches",
+        "hippocampal and posterior temporal branches"
+      ],
+      "proposed": [
+        "posterior temporal arteries (PCA)",
+        "PCA temporo-occipital branches"
+      ],
+      "applied": [
+        "posterior temporal arteries (PCA)",
+        "PCA temporo-occipital branches"
+      ]
+    },
+    {
+      "findingId": "VASC-R-007",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-medial-lenticulostriate-arteries",
+      "field": "name",
+      "original": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+      "proposed": "Medial striate arteries (including recurrent artery of Heubner)",
+      "applied": "Medial striate arteries (including recurrent artery of Heubner)"
+    },
+    {
+      "findingId": "VASC-R-007",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-medial-lenticulostriate-arteries",
+      "field": "synonyms",
+      "original": [
+        "medial striate arteries",
+        "recurrent artery of Heubner",
+        "arteria recurrens Heubneri",
+        "medial group of the lenticulostriate arteries"
+      ],
+      "proposed": [
+        "medial lenticulostriate arteries",
+        "medial striate arteries",
+        "medial group of the lenticulostriate arteries"
+      ],
+      "applied": [
+        "medial lenticulostriate arteries",
+        "medial striate arteries",
+        "medial group of the lenticulostriate arteries"
+      ]
+    },
+    {
+      "findingId": "VASC-R-007",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-medial-lenticulostriate-arteries",
+      "field": "clinical.0.vascular",
+      "original": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+      "proposed": "ACA medial striate branches, including the recurrent artery of Heubner",
+      "applied": "ACA medial striate branches, including the recurrent artery of Heubner"
+    },
+    {
+      "findingId": "VASC-R-008",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-sca-lateral-branch",
+      "field": "supply",
+      "original": [
+        "syn-cerebellar",
+        "syn-nothnagel"
+      ],
+      "proposed": [
+        "syn-cerebellar"
+      ],
+      "applied": [
+        "syn-cerebellar"
+      ]
+    },
+    {
+      "findingId": "VASC-R-008",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pica-telovelotonsillar-segment",
+      "field": "supply",
+      "original": [
+        "syn-lateral-medullary",
+        "syn-cerebellar"
+      ],
+      "proposed": [
+        "syn-cerebellar"
+      ],
+      "applied": [
+        "syn-cerebellar"
+      ]
+    },
+    {
+      "findingId": "VASC-R-009",
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-lateral-lenticulostriate-arteries",
+      "field": "vesselCourse.surfaceNote",
+      "original": "Intraparenchymal perforators: the group pierces the anterior perforated substance and runs INSIDE the brain, so no cortical envelope is declared. The single projected constraint is the entry point (0.018 au = 0.61 mm from ctx-hemisphere-l); the arborisation apex deliberately grazes the putamen surface, because a perforator ends in the structure it supplies.",
+      "proposed": "Lateral striate perforators pierce the anterior perforated substance and run within deep cerebral tissue. The stored entry projection and terminal anchors are construction choices in the atlas frame; they do not establish vessel termination, individual branching, or measured anatomical accuracy.",
+      "applied": "Lateral striate perforators pierce the anterior perforated substance and run within deep cerebral tissue. The stored entry projection and terminal anchors are construction choices in the atlas frame; they do not establish vessel termination, individual branching, or measured anatomical accuracy."
+    },
+    {
+      "findingId": "TEL-001",
+      "issueGroup": "dentate-CA5",
+      "priority": "P2",
+      "file": "src/data/structures/telencephalon-limbic.json",
+      "id": "nuc-dentate-gyrus",
+      "field": "synonyms",
+      "original": [
+        "gyrus dentatus",
+        "fascia dentata",
+        "dentate gyrus of the hippocampal formation (CA5)"
+      ],
+      "proposedReplacement": [
+        "gyrus dentatus",
+        "fascia dentata",
+        "dentate gyrus of the hippocampal formation"
+      ],
+      "reason": "The dentate gyrus is separate from hippocampus proper CA fields; CA5 is not an accepted dentate synonym in the supplied second edition or official FIPAT terminology.",
+      "confidence": "high",
+      "textbookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            [
+              830,
+              838
+            ],
+            [
+              842,
+              842
+            ]
+          ],
+          "physicalPdfPages": [
+            [
+              856,
+              864
+            ],
+            [
+              868,
+              868
+            ]
+          ],
+          "figures": [
+            "18.8-18.13"
+          ],
+          "supportSummary": "Hippocampus proper, dentate and subiculum as laminated cortex, CA fields and intrinsic/output pathways, memory impairment and clinical limitations.",
+          "pageLabelsVerified": true,
+          "wholeRelevantPagesRead": true
+        }
+      ],
+      "publicEvidence": [
+        {
+          "url": "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TNA/FIPAT-TNA-Ch1.pdf",
+          "title": "FIPAT Terminologia Neuroanatomica, Chapter 1",
+          "type": "official international anatomical terminology",
+          "humanOrAnimal": "human anatomical nomenclature",
+          "supportSummary": "Official hierarchy separates CA fields, dentate gyrus and subicular structures within archicortex. Dentate is not labeled CA5. Entries 2339-2342 identify CA fields; entry 2370 identifies dentate gyrus.",
+          "publicPdfPhysicalPages": [
+            61,
+            62
+          ]
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6252390/",
+          "title": "Ten Donkelaar et al. (2018), Toward a Common Terminology for the Gyri and Sulci of the Human Cerebral Cortex",
+          "type": "peer-reviewed human anatomical terminology",
+          "humanOrAnimal": "human anatomy",
+          "supportSummary": "Distinguishes dentate gyrus, hippocampus proper and subiculum within hippocampal formation, and relates cortical gyral terminology to standardized nomenclature."
+        }
+      ],
+      "decision": "supported correction",
+      "scopeLimit": "Text/label correction; no numerical coordinates, field boundaries or renderer geometry are validated or replaced.",
+      "applied": [
+        "gyrus dentatus",
+        "fascia dentata",
+        "dentate gyrus of the hippocampal formation"
+      ]
+    },
+    {
+      "findingId": "TEL-002",
+      "issueGroup": "sensory-hand-knob",
+      "priority": "P2",
+      "file": "src/data/structures/telencephalon-somatotopy.json",
+      "id": "ctx-s1-hand",
+      "field": "synonyms",
+      "original": [
+        "hand sensory area",
+        "S1 hand area",
+        "hand knob region"
+      ],
+      "proposedReplacement": [
+        "hand sensory area",
+        "S1 hand area",
+        "postcentral hand representation"
+      ],
+      "reason": "Hand knob denotes the precentral motor landmark. Calling S1 itself the hand-knob region conflates cortex on opposite sides of the central sulcus.",
+      "confidence": "high",
+      "textbookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            [
+              224,
+              234
+            ]
+          ],
+          "physicalPdfPages": [
+            [
+              250,
+              260
+            ]
+          ],
+          "figures": [
+            "6.1-6.10"
+          ],
+          "supportSummary": "Precentral M1 and postcentral S1; broad homunculus, association motor areas, internal capsule/corona radiata and descending motor pathways.",
+          "pageLabelsVerified": true,
+          "wholeRelevantPagesRead": true
+        },
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            [
+              261,
+              262
+            ]
+          ],
+          "physicalPdfPages": [
+            [
+              287,
+              288
+            ]
+          ],
+          "figures": [],
+          "supportSummary": "Clinical and axial-imaging localization of a precentral motor hand region with the omega landmark.",
+          "pageLabelsVerified": true,
+          "wholeRelevantPagesRead": true
+        }
+      ],
+      "publicEvidence": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9055804/",
+          "title": "Yousry et al. (1997), Localization of the motor hand area to a knob on the precentral gyrus",
+          "doi": "10.1093/brain/120.1.141",
+          "type": "primary human fMRI and cadaver anatomy",
+          "humanOrAnimal": "human",
+          "supportSummary": "The motor-hand landmark is the precentral knob. Its relationship to the central sulcus can help localize nearby sensory hand cortex, but it is not a synonym for postcentral S1."
+        }
+      ],
+      "decision": "supported correction",
+      "scopeLimit": "Text/label correction; no numerical coordinates, field boundaries or renderer geometry are validated or replaced.",
+      "applied": [
+        "hand sensory area",
+        "S1 hand area",
+        "postcentral hand representation"
+      ]
+    },
+    {
+      "findingId": "TEL-003",
+      "issueGroup": "sensory-hand-knob",
+      "priority": "P2",
+      "file": "src/data/structures/telencephalon-somatotopy.json",
+      "id": "ctx-s1-hand",
+      "field": "anchors.gyrus",
+      "original": "lateral convexity of the postcentral gyrus at the hand-knob (the \"omega\" of the central sulcus)",
+      "proposedReplacement": "lateral convexity of the postcentral gyrus opposite the precentral motor hand knob; a schematic sensory-hand location",
+      "reason": "The landmark can be used as a relation to nearby postcentral sensory cortex, but should not be described as a postcentral knob. This qualification makes the retained anchor consistent with the record function and the primary human study.",
+      "confidence": "high",
+      "textbookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            [
+              224,
+              234
+            ]
+          ],
+          "physicalPdfPages": [
+            [
+              250,
+              260
+            ]
+          ],
+          "figures": [
+            "6.1-6.10"
+          ],
+          "supportSummary": "Precentral M1 and postcentral S1; broad homunculus, association motor areas, internal capsule/corona radiata and descending motor pathways.",
+          "pageLabelsVerified": true,
+          "wholeRelevantPagesRead": true
+        },
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            [
+              261,
+              262
+            ]
+          ],
+          "physicalPdfPages": [
+            [
+              287,
+              288
+            ]
+          ],
+          "figures": [],
+          "supportSummary": "Clinical and axial-imaging localization of a precentral motor hand region with the omega landmark.",
+          "pageLabelsVerified": true,
+          "wholeRelevantPagesRead": true
+        }
+      ],
+      "publicEvidence": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9055804/",
+          "title": "Yousry et al. (1997), Localization of the motor hand area to a knob on the precentral gyrus",
+          "doi": "10.1093/brain/120.1.141",
+          "type": "primary human fMRI and cadaver anatomy",
+          "humanOrAnimal": "human",
+          "supportSummary": "The motor-hand landmark is the precentral knob. Its relationship to the central sulcus can help localize nearby sensory hand cortex, but it is not a synonym for postcentral S1."
+        }
+      ],
+      "decision": "supported correction",
+      "scopeLimit": "Text/label correction; no numerical coordinates, field boundaries or renderer geometry are validated or replaced.",
+      "applied": "lateral convexity of the postcentral gyrus opposite the precentral motor hand knob; a schematic sensory-hand location"
+    },
+    {
+      "findingId": "TEL-004",
+      "issueGroup": "IFG-parts",
+      "priority": "P3",
+      "file": "src/data/structures/telencephalon-cortex.json",
+      "id": "ctx-inferior-frontal-gyrus",
+      "field": "synonyms",
+      "original": [
+        "pars opercularis",
+        "pars triangularis",
+        "pars orbitalis"
+      ],
+      "proposedReplacement": [
+        "gyrus frontalis inferior",
+        "IFG",
+        "pars opercularis (part of inferior frontal gyrus)",
+        "pars triangularis (part of inferior frontal gyrus)",
+        "pars orbitalis (part of inferior frontal gyrus)"
+      ],
+      "reason": "Three named parts of the inferior frontal gyrus are currently presented as unqualified whole-gyrus synonyms. Qualify part-of relationships while preserving searchability and adding the Latin name/abbreviation.",
+      "confidence": "high",
+      "textbookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            [
+              24,
+              32
+            ]
+          ],
+          "physicalPdfPages": [
+            [
+              50,
+              58
+            ]
+          ],
+          "figures": [
+            "2.10-2.15"
+          ],
+          "supportSummary": "Gross cortical lobes, gyri, sulci and medial/lateral relations; gyral, Brodmann and functional subdivisions differ.",
+          "pageLabelsVerified": true,
+          "wholeRelevantPagesRead": true
+        }
+      ],
+      "publicEvidence": [
+        {
+          "url": "https://ifaa.unifr.ch/Public/EntryPage/TA98%20Tree/Entity%20TA98%20EN/14.1.09.113%20Entity%20TA98%20EN.htm",
+          "title": "IFAA TA98 inferior frontal gyrus entity A14.1.09.113",
+          "type": "official anatomical terminology",
+          "humanOrAnimal": "human anatomical nomenclature",
+          "supportSummary": "Gyrus frontalis inferior is the whole gyrus. Pars orbitalis, triangularis and opercularis are subordinate parts, not three interchangeable names for the entire gyrus."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6252390/",
+          "title": "Ten Donkelaar et al. (2018), Toward a Common Terminology for the Gyri and Sulci of the Human Cerebral Cortex",
+          "type": "peer-reviewed human anatomical terminology",
+          "humanOrAnimal": "human anatomy",
+          "supportSummary": "Distinguishes dentate gyrus, hippocampus proper and subiculum within hippocampal formation, and relates cortical gyral terminology to standardized nomenclature."
+        }
+      ],
+      "decision": "supported correction",
+      "scopeLimit": "Text/label correction; no numerical coordinates, field boundaries or renderer geometry are validated or replaced.",
+      "applied": [
+        "gyrus frontalis inferior",
+        "IFG",
+        "pars opercularis (part of inferior frontal gyrus)",
+        "pars triangularis (part of inferior frontal gyrus)",
+        "pars orbitalis (part of inferior frontal gyrus)"
+      ]
+    },
+    {
+      "findingId": "TEL-005",
+      "issueGroup": "FEF-reference",
+      "priority": "P3",
+      "file": "src/data/structures/telencephalon-cortical-areas.json",
+      "id": "ctx-frontal-eye-fields",
+      "field": "refs[0]",
+      "original": "Blumenfeld, 2nd ed., pp. 588-589 (PDF pp. 614-615), Figure 13.21",
+      "proposedReplacement": "Blumenfeld, 2nd ed., pp. 588-589 (PDF pp. 614-615), Figure 13.14",
+      "reason": "The figure on original printed p.589 is Figure13.14, Cortical Regions Important in Eye Movement Control; Figure13.21 is not the cited figure on these pages. The prose is otherwise supported.",
+      "confidence": "high",
+      "textbookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            [
+              588,
+              589
+            ]
+          ],
+          "physicalPdfPages": [
+            [
+              614,
+              615
+            ]
+          ],
+          "figures": [
+            "13.14"
+          ],
+          "supportSummary": "Human FEF around superior frontal/precentral sulcal junction, often area 6 rather than a fixed area 8 parcel; contralateral saccades and qualified lesion/seizure gaze signs.",
+          "pageLabelsVerified": true,
+          "wholeRelevantPagesRead": true
+        }
+      ],
+      "publicEvidence": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11702871/",
+          "title": "Lobel et al. (2001), Localization of human frontal eye fields",
+          "doi": "10.3171/jns.2001.95.5.0804",
+          "type": "primary human fMRI and intracerebral stimulation",
+          "humanOrAnimal": "human",
+          "supportSummary": "Fourteen healthy volunteers and 38 epilepsy patients supported an oculomotor area at the superior frontal/precentral sulcal junction and another more lateral area. This supports approximate sulcal localization and opposes a rigid area-8 identity."
+        }
+      ],
+      "decision": "supported correction",
+      "scopeLimit": "Text/label correction; no numerical coordinates, field boundaries or renderer geometry are validated or replaced.",
+      "applied": "Blumenfeld, 2nd ed., pp. 588-589 (PDF pp. 614-615), Figure 13.14"
+    },
+    {
+      "findingId": "TEL-006",
+      "issueGroup": "FEF-anchor",
+      "priority": "P3",
+      "file": "src/data/structures/telencephalon-cortical-areas.json",
+      "id": "ctx-frontal-eye-fields",
+      "field": "anchors.gyrus",
+      "original": "posterior part of the middle frontal gyrus at the junction of the precentral and superior frontal sulci (area 8)",
+      "proposedReplacement": "posterior frontal cortex around the junction of the precentral and superior frontal sulci (often overlapping area 6; historical area 8 label is approximate)",
+      "reason": "The supplied book explicitly places human FEF at the sulcal junction in area6 and distinguishes historical area8 attribution. The current function is correct but the unqualified anchor remains inconsistent with it.",
+      "confidence": "high",
+      "textbookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            [
+              588,
+              589
+            ]
+          ],
+          "physicalPdfPages": [
+            [
+              614,
+              615
+            ]
+          ],
+          "figures": [
+            "13.14"
+          ],
+          "supportSummary": "Human FEF around superior frontal/precentral sulcal junction, often area 6 rather than a fixed area 8 parcel; contralateral saccades and qualified lesion/seizure gaze signs.",
+          "pageLabelsVerified": true,
+          "wholeRelevantPagesRead": true
+        }
+      ],
+      "publicEvidence": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11702871/",
+          "title": "Lobel et al. (2001), Localization of human frontal eye fields",
+          "doi": "10.3171/jns.2001.95.5.0804",
+          "type": "primary human fMRI and intracerebral stimulation",
+          "humanOrAnimal": "human",
+          "supportSummary": "Fourteen healthy volunteers and 38 epilepsy patients supported an oculomotor area at the superior frontal/precentral sulcal junction and another more lateral area. This supports approximate sulcal localization and opposes a rigid area-8 identity."
+        }
+      ],
+      "decision": "supported correction",
+      "scopeLimit": "Text/label correction; no numerical coordinates, field boundaries or renderer geometry are validated or replaced.",
+      "applied": "posterior frontal cortex around the junction of the precentral and superior frontal sulci (often overlapping area 6; historical area 8 label is approximate)"
+    },
+    {
+      "findingId": "TEL-007",
+      "file": "src/data/structures/telencephalon-limbic.json",
+      "id": "nuc-hippocampus",
+      "field": "anatomicalClass",
+      "original": null,
+      "originalFieldPresent": false,
+      "originalVisibleClass": "nucleus",
+      "proposedReplacement": "hippocampal cortical formation",
+      "applied": "hippocampal cortical formation"
+    },
+    {
+      "findingId": "TEL-007",
+      "file": "src/data/structures/telencephalon-limbic.json",
+      "id": "nuc-dentate-gyrus",
+      "field": "anatomicalClass",
+      "original": null,
+      "originalFieldPresent": false,
+      "originalVisibleClass": "nucleus",
+      "proposedReplacement": "hippocampal cortex",
+      "applied": "hippocampal cortex"
+    },
+    {
+      "findingId": "TEL-007",
+      "file": "src/data/structures/telencephalon-hippocampal-subfields.json",
+      "id": "nuc-subiculum",
+      "field": "anatomicalClass",
+      "original": null,
+      "originalFieldPresent": false,
+      "originalVisibleClass": "nucleus",
+      "proposedReplacement": "transitional hippocampal cortex",
+      "applied": "transitional hippocampal cortex"
+    },
+    {
+      "findingId": "TEL-007",
+      "file": "src/data/structures/telencephalon-hippocampal-subfields.json",
+      "id": "nuc-ca1",
+      "field": "anatomicalClass",
+      "original": null,
+      "originalFieldPresent": false,
+      "originalVisibleClass": "nucleus",
+      "proposedReplacement": "hippocampal cortical field",
+      "applied": "hippocampal cortical field"
+    },
+    {
+      "findingId": "TEL-007",
+      "file": "src/data/structures/telencephalon-hippocampal-subfields.json",
+      "id": "nuc-ca2-ca3",
+      "field": "anatomicalClass",
+      "original": null,
+      "originalFieldPresent": false,
+      "originalVisibleClass": "nucleus",
+      "proposedReplacement": "hippocampal cortical fields",
+      "applied": "hippocampal cortical fields"
+    },
+    {
+      "findingId": "TEL-007",
+      "file": "src/data/structures/telencephalon-hippocampal-subfields.json",
+      "id": "nuc-ca4",
+      "field": "anatomicalClass",
+      "original": null,
+      "originalFieldPresent": false,
+      "originalVisibleClass": "nucleus",
+      "proposedReplacement": "hippocampal hilar field",
+      "applied": "hippocampal hilar field"
+    },
+    {
+      "findingId": "ROOT-R-001",
+      "file": "src/data/tracts.json",
+      "id": "tract-superior-longitudinal-fasciculus",
+      "field": "synonyms",
+      "original": [
+        "SLF",
+        "arcuate fasciculus (dorsal component)"
+      ],
+      "proposed": [
+        "SLF",
+        "superior longitudinal fascicle"
+      ],
+      "applied": [
+        "SLF",
+        "superior longitudinal fascicle"
+      ]
+    },
+    {
+      "findingId": "ROOT-R-002",
+      "file": "src/data/pathways.json",
+      "id": "path-language-network",
+      "field": "steps.2.label",
+      "original": "Dorsal and ventral language connections",
+      "proposed": "Dorsal language connections (arcuate-related)",
+      "applied": "Dorsal language connections (arcuate-related)"
+    },
+    {
+      "findingId": "ROOT-R-002",
+      "file": "src/data/pathways.json",
+      "id": "path-language-network",
+      "field": "steps.2.note",
+      "original": "Arcuate/SLF-related dorsal routes support auditory-motor integration and repetition; additional temporal-frontal routes support comprehension. Arcuate fasciculus is not identical to the entire SLF.",
+      "proposed": "Arcuate/SLF-related dorsal routes contribute to auditory-motor integration and repetition. Parallel ventral temporal-frontal connections also contribute to comprehension and are not represented by the arcuate link. Naming conventions vary; the arcuate is not the entire SLF.",
+      "applied": "Arcuate/SLF-related dorsal routes contribute to auditory-motor integration and repetition. Parallel ventral temporal-frontal connections also contribute to comprehension and are not represented by the arcuate link. Naming conventions vary; the arcuate is not the entire SLF."
+    },
+    {
+      "findingId": "ROOT-R-003",
+      "file": "src/data/tracts.json",
+      "id": "tract-auditory-pathway",
+      "field": "modality",
+      "original": "Special sensory — audition, tonotopically organized at every relay",
+      "proposed": "Special sensory — audition, with tonotopic organization at major relays; frequency gradients vary between subnuclei",
+      "applied": "Special sensory — audition, with tonotopic organization at major relays; frequency gradients vary between subnuclei"
+    },
+    {
+      "findingId": "ROOT-R-004",
+      "file": "src/data/tracts.json",
+      "id": "tract-spinoreticular",
+      "field": "origin",
+      "original": "Projection neurons distributed in spinal intermediate-zone/ventral-horn laminae VI-VIII, within the broader anterolateral system.",
+      "proposed": "Spinal projection neurons in dorsal-horn, intermediate-zone and ventral-horn regions. Primate tracing identifies prominent lamina VII-VIII contributions and additional dorsal-horn neurons; a fixed human laminar census is not implied.",
+      "applied": "Spinal projection neurons in dorsal-horn, intermediate-zone and ventral-horn regions. Primate tracing identifies prominent lamina VII-VIII contributions and additional dorsal-horn neurons; a fixed human laminar census is not implied."
+    },
+    {
+      "findingId": "VASC-R-010",
+      "file": "src/geometry/vasculature-courses.ts",
+      "id": "vasc-medial-lenticulostriate-arteries",
+      "field": "name",
+      "original": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+      "proposed": "Medial striate arteries (including recurrent artery of Heubner)",
+      "applied": "Medial striate arteries (including recurrent artery of Heubner)"
+    },
+    {
+      "findingId": "VASC-R-010",
+      "file": "src/geometry/vasculature-courses.ts",
+      "id": "vasc-medial-lenticulostriate-arteries",
+      "field": "synonyms",
+      "original": [
+        "medial striate arteries",
+        "recurrent artery of Heubner",
+        "arteria recurrens Heubneri",
+        "medial group of the lenticulostriate arteries"
+      ],
+      "proposed": [
+        "medial lenticulostriate arteries",
+        "medial striate arteries",
+        "medial group of the lenticulostriate arteries"
+      ],
+      "applied": [
+        "medial lenticulostriate arteries",
+        "medial striate arteries",
+        "medial group of the lenticulostriate arteries"
+      ]
+    },
+    {
+      "findingId": "VASC-R-010",
+      "file": "src/geometry/vasculature-courses.ts",
+      "id": "vasc-medial-lenticulostriate-arteries",
+      "field": "modality",
+      "original": "Arterial blood (oxygenated) — the largest medial perforator of the ACA",
+      "proposed": "Arterial blood (oxygenated) — medial ACA striate perforators, including Heubner",
+      "applied": "Arterial blood (oxygenated) — medial ACA striate perforators, including Heubner"
+    },
+    {
+      "findingId": "VASC-R-010",
+      "file": "src/geometry/vasculature-courses.ts",
+      "id": "vasc-medial-lenticulostriate-arteries",
+      "field": "clinical.0.vascular",
+      "original": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+      "proposed": "ACA medial striate branches, including the recurrent artery of Heubner",
+      "applied": "ACA medial striate branches, including the recurrent artery of Heubner"
+    },
+    {
+      "findingId": "VASC-R-010",
+      "file": "src/geometry/vasculature-courses.ts",
+      "id": "vasc-posterior-medial-choroidal-artery",
+      "field": "surfaceNote",
+      "original": "The cisternal segment hugs the committed `ctx-midbrain-surface` envelope (the same surface the three SCA courses declare): its middle waypoint is a literal vertex of it, 0.000 au from the surface. The TERMINAL is the opposite relation — a choroidal artery ends ON the plexus — so it is a deliberate graze on the committed `ctx-choroid-plexus-l` mesh (a literal plexus vertex), 12.664 au (15.20 mm) from the P2 take-off, which is the cisternal + choroidal-fissure interval the path crosses.",
+      "proposed": "Spatial route withheld. The former lateral-ventricular plexus endpoint does not establish a medial posterior choroidal course to the third-ventricular tela choroidea. Source-backed placement is required; the retained waypoints and construction distances do not validate arterial anatomy.",
+      "applied": "Spatial route withheld. The former lateral-ventricular plexus endpoint does not establish a medial posterior choroidal course to the third-ventricular tela choroidea. Source-backed placement is required; the retained waypoints and construction distances do not validate arterial anatomy."
+    },
+    {
+      "findingId": "BRAIN-001",
+      "file": "src/data/structures/midbrain.json",
+      "id": "nuc-mesencephalic-v",
+      "field": "connections.afferent.0",
+      "original": "Ia muscle-spindle and periodontal afferents of CN V that bypass the trigeminal ganglion and descend via the mesencephalic tract",
+      "applied": "Peripheral processes of mesencephalic trigeminal primary sensory neurons carry jaw-muscle-spindle and periodontal input through CN V; their cell bodies lie in the CNS rather than the trigeminal ganglion."
+    },
+    {
+      "findingId": "BRAIN-002",
+      "file": "src/data/structures/midbrain.json",
+      "id": "nuc-red-nucleus",
+      "field": "function",
+      "original": "Relay of the lateral (cerebellar) motor system in the rostral midbrain tegmentum. The caudal magnocellular part is the origin of the rubrospinal tract, which crosses immediately in the ventral tegmentum and facilitates flexor tone of the contralateral limbs; the rostral parvocellular part links the cerebellum with the inferior olive through the central tegmental tract (rubro-olivary, Guillain-Mollaret loop) and subserves motor learning. In humans the rubrospinal system is vestigial relative to the corticospinal tract, but the nucleus remains a major dentatorubrothalamic relay.",
+      "applied": "Motor-related nucleus of the rostral midbrain tegmentum. Its caudal magnocellular division gives rise to the crossed rubrospinal pathway, much less developed in humans than in many other mammals. Its rostral parvocellular division receives cerebellar and cortical inputs and projects to the ipsilateral inferior olive through the central tegmental tract. Cerebellothalamic fibers also pass through or around the red-nucleus region en route to the thalamus; these differ from fibers terminating in the red nucleus."
+    },
+    {
+      "findingId": "BRAIN-003",
+      "file": "src/data/structures/pons.json",
+      "id": "ctx-pontine-fibers",
+      "field": "function",
+      "original": "Composite fiber systems of the basis pontis: the longitudinal fasciculi carry corticospinal, corticobulbar and corticopontine axons from the crus cerebri down to the medulla, while the transverse fibers arise from the pontine nuclei, decussate, and collect laterally as the middle cerebellar peduncle.",
+      "applied": "Composite fiber systems of the basis pontis: longitudinal fasciculi contain corticospinal axons continuing toward the medulla, corticobulbar axons reaching their brainstem targets, and corticopontine axons terminating in the pontine nuclei. Transverse pontocerebellar fibers arise from pontine neurons, cross the midline, and collect laterally as the middle cerebellar peduncle."
+    },
+    {
+      "findingId": "BRAIN-004",
+      "file": "src/data/structures/midbrain.json",
+      "id": "tract-crus-cerebri",
+      "field": "clinical.0.findings",
+      "original": "Medial crus infarction with CN III fascicles: ipsilateral pupil-involving CN III palsy plus contralateral face-arm-leg hemiplegia.",
+      "applied": "A medial cerebral-peduncle lesion involving CN III fascicles can cause ipsilateral third-nerve palsy with contralateral motor weakness (Weber pattern); completeness, pupil involvement, and weakness distribution or severity depend on lesion extent."
+    },
+    {
+      "findingId": "BRAIN-005",
+      "file": "src/data/structures/pons.json",
+      "id": "surf-facial-colliculus",
+      "field": "clinical.0.findings",
+      "original": "A lesion at the facial colliculus damages the abducens nucleus and the looping facial fibers together — ipsilateral conjugate gaze palsy plus complete LMN facial paralysis (Foville syndrome), with loss of the ipsilateral blink.",
+      "applied": "A focal lesion involving the abducens nucleus and looping facial fibers can cause ipsilateral horizontal conjugate gaze palsy and lower motor neuron facial weakness, including impaired eyelid closure. The full classic Foville pattern adds contralateral body weakness when descending motor pathways are also involved; focal dorsal lesions need not include that component."
+    },
+    {
+      "findingId": "BRAIN-006",
+      "file": "src/data/structures/pons.json",
+      "id": "tract-mcp",
+      "field": "bloodSupply",
+      "original": "AICA (caudal) and SCA (rostral) short circumferential branches of the basilar artery",
+      "applied": "Predominantly AICA branches, with SCA contributions and variable territorial overlap or anastomoses."
+    },
+    {
+      "findingId": "BRAIN-007",
+      "file": "src/data/structures/medulla.json",
+      "id": "nuc-inferior-olive-principal",
+      "field": "clinical.0.findings",
+      "original": "Transsynaptic degeneration of the olive after a lesion of the Guillain-Mollaret triangle (dentate nucleus, superior cerebellar peduncle, or central tegmental tract), producing palatal (palatopharyngeal) myoclonus/tremor months after the index lesion.",
+      "applied": "Disruption of afferent dentato-olivary pathways, such as dentate/superior cerebellar peduncle or central tegmental tract injury, can cause transsynaptic olivary degeneration. Delayed palatal or oculopalatal tremor may develop, but is not present in every case."
+    },
+    {
+      "findingId": "BRAIN-008",
+      "file": "src/data/structures/medulla.json",
+      "id": "nuc-inferior-olive-principal",
+      "field": "clinical.0.note",
+      "original": "MRI shows T2 hyperintensity with enlargement of the olive (hypertrophic degeneration, not atrophy).",
+      "applied": "MRI findings evolve with time: T2 hyperintensity may precede visible olivary enlargement, enlargement may develop later and then resolve, and signal abnormality may persist. Olivary size is not enlarged at every stage."
+    },
+    {
+      "findingId": "BRAIN-009",
+      "file": "src/data/structures/diencephalon-thalamus.json",
+      "id": "nuc-thalamic-anterior",
+      "field": "clinical.0.vascular",
+      "original": "PCA — tuberothalamic artery",
+      "applied": "Tuberothalamic (polar) artery, usually from the posterior communicating artery; paramedian PCA supply may substitute when the polar artery is absent."
+    },
+    {
+      "findingId": "BRAIN-010",
+      "file": "src/data/structures/diencephalon-thalamus.json",
+      "id": "nuc-thalamic-anterior",
+      "field": "clinical.0.findings",
+      "original": "Acute anterograde amnesia, apathy, abulia and executive dysfunction; left-sided lesions add an 'aphasia-plus' state and right-sided lesions neglect, because the Papez circuit is interrupted at the anterior nucleus.",
+      "applied": "Anterior/tuberothalamic territory infarction can cause impaired new learning, apathy or abulia, and executive or orientation difficulties. Dominant-side lesions may affect language and nondominant-side lesions visuospatial attention; these depend on the nuclei and pathways involved and are not attributable to the anterior nucleus alone."
+    },
+    {
+      "findingId": "BRAIN-011",
+      "file": "src/data/structures/diencephalon-thalamus.json",
+      "id": "nuc-thalamic-anterior",
+      "field": "clinical.1.findings",
+      "original": "Thiamine deficiency damages the anterior thalamic nuclei together with the mammillary bodies, producing dense anterograde amnesia with confabulation.",
+      "applied": "Thiamine-deficiency injury can involve mammillary bodies and thalamic/periventricular memory networks, including anterior and medial thalamus. Persistent Korsakoff amnesia may severely impair new learning; confabulation can occur and is variable."
+    },
+    {
+      "findingId": "BRAIN-012",
+      "file": "src/data/structures/diencephalon-thalamus.json",
+      "id": "nuc-lgn",
+      "field": "function",
+      "original": "Obligatory relay of retinal vision to cortex: six layers receive a strictly retinotopic, eye-segregated map (ipsilateral eye 2/3/5, contralateral 1/4/6), with magnocellular layers serving motion and parvocellular layers form and color, forwarded to V1 via the retrolenticular internal capsule. Pupil-light-reflex fibers leave the optic tract before the LGN, so LGN lesions spare the light reflex.",
+      "applied": "Principal relay of the geniculostriate visual pathway to primary visual cortex: six layers receive a strictly retinotopic, eye-segregated map (ipsilateral eye 2/3/5, contralateral 1/4/6), with magnocellular layers serving motion and parvocellular layers form and color, forwarded to V1 via the retrolenticular internal capsule. Pupil-light-reflex fibers leave the optic tract before the LGN, so an isolated LGN lesion can spare the light reflex. Other retinal projections, including superior-collicular/pulvinar pathways, do not require the LGN as their relay."
+    },
+    {
+      "findingId": "BRAIN-013",
+      "file": "src/data/structures/diencephalon-hypothalamus.json",
+      "id": "nuc-dorsomedial",
+      "field": "function",
+      "original": "Rhythm and stress-coordination nucleus linking the suprachiasmatic clock to feeding and sleep-wake cycles: DMH neurons generate anticipatory locomotor and feeding rhythms and recruit endocrine (paraventricular) and autonomic outputs during stress.",
+      "applied": "Hypothalamic nucleus participating in circadian, feeding, stress, endocrine, and autonomic networks. Animal studies implicate DMH circuits in coordinating sleep-wake/physiological outputs and modulating meal anticipation; they do not establish a necessary food-anticipatory rhythm generator in humans."
+    },
+    {
+      "findingId": "BRAIN-014",
+      "file": "src/data/structures/diencephalon-epithalamus-subthalamus.json",
+      "id": "tract-stria-medullaris",
+      "field": "function",
+      "original": "Myelinated limbic afferent bundle sweeping along the dorsomedial border of the thalamus from the septal/preoptic region to the habenular nuclei — the principal input limb of the epithalamic circuit feeding the anti-reward system.",
+      "applied": "Limbic afferent bundle running along the dorsomedial thalamic border from septal, preoptic, basal-forebrain, and hypothalamic regions to the habenular complex. Medial and lateral habenular circuits have distinct inputs and outputs; the entire bundle is not a single anti-reward pathway."
+    },
+    {
+      "findingId": "BRAIN-015",
+      "file": "src/data/structures/diencephalon-hypothalamus.json",
+      "id": "surf-optic-chiasm",
+      "field": "bloodSupply",
+      "original": "Superior hypophyseal and anterior communicating branches superiorly; internal carotid and posterior communicating branches inferiorly (segmental supply underlies chiasmal infarction).",
+      "applied": "Variable contributions from superior hypophyseal, posterior communicating, anterior cerebral, and anterior communicating branches. Human dissections show important inferior pial supply from superior hypophyseal and posterior communicating arteries, with superior pial contributions and territorial overlap."
+    },
+    {
+      "findingId": "BRAIN-016",
+      "file": "src/data/structures/diencephalon-epithalamus-subthalamus.json",
+      "id": "nuc-pineal-gland",
+      "field": "clinical.0.findings",
+      "original": "Germinomas and pineal parenchymal tumors compress the pretectal plate and aqueduct — upgaze palsy, light-near dissociation, lid retraction, convergence-retraction nystagmus (Parinaud syndrome) with hydrocephalus; see the syndrome browser entry.",
+      "applied": "Germinomas and pineal parenchymal tumors may compress dorsal midbrain and/or cerebral aqueduct. Dorsal involvement can produce some combination of upgaze paresis, light-near dissociation, lid retraction, and convergence-retraction nystagmus (Parinaud pattern); aqueduct obstruction can cause hydrocephalus. Findings depend on tumor extent."
+    },
+    {
+      "findingId": "BRAIN-017",
+      "file": "src/data/structures/diencephalon-epithalamus-subthalamus.json",
+      "id": "nuc-pineal-gland",
+      "field": "clinical.2.findings",
+      "original": "Masses at the posterior third ventricle obstruct the cerebral aqueduct, causing headache, papilledema and gait failure before focal signs.",
+      "applied": "A mass near the posterior third ventricle may obstruct the cerebral aqueduct, causing hydrocephalus with headache, nausea/vomiting, papilledema, or other raised-pressure findings. Ocular motor or other focal signs may coexist; no fixed symptom order is established."
+    },
+    {
+      "findingId": "BRAIN-018",
+      "file": "src/data/structures/medulla.json",
+      "id": "nuc-fastigial",
+      "field": "clinical.0.findings",
+      "original": "Fastigial or vermal lesions give a wide-based staggering gait with truncal instability and nystagmus while limb coordination on the bed may be preserved; bilateral posterior fossa lesions therefore present predominantly as gait ataxia.",
+      "applied": "Medial cerebellar/fastigial and vestibular circuit lesions can cause truncal or gait instability and ocular motor abnormalities, with limb coordination relatively spared when hemispheric pathways are preserved. Intermediate/lateral circuit extension can add limb ataxia; bilateral posterior-fossa location alone does not define a predominantly gait syndrome."
+    },
+    {
+      "findingId": "BRAIN-019",
+      "file": "src/data/structures/diencephalon-epithalamus-subthalamus.json",
+      "id": "ctx-internal-capsule",
+      "field": "clinical.0.findings",
+      "original": "Small posterior-limb/genu infarcts give contralateral face-arm-leg weakness without cortical signs; larger capsular strokes add dense hemisensory loss and dysarthria-clumsy-hand syndrome.",
+      "applied": "Small posterior-limb or genu infarcts can cause contralateral weakness or dysarthria without cortical signs. Sensory loss, ataxic hemiparesis, or dysarthria-clumsy hand depend on involved pathways; dysarthria-clumsy hand itself can be a lacunar capsular syndrome."
+    },
+    {
+      "findingId": "BRAIN-020",
+      "file": "src/data/structures/diencephalon-epithalamus-subthalamus.json",
+      "id": "ctx-internal-capsule",
+      "field": "clinical.1.findings",
+      "original": "Contralateral incongruous homonymous hemianopia from anterior-choroidal-territory infarction of the optic radiations.",
+      "applied": "Retrolenticular optic-radiation injury can cause contralateral homonymous visual-field loss. Completeness and congruity depend on affected fibers and lesion extent; incongruity is not obligatory. Vascular supply is variable."
+    },
+    {
+      "findingId": "BRAIN-021",
+      "file": "src/data/structures/diencephalon-epithalamus-subthalamus.json",
+      "id": "ctx-caudate-nucleus",
+      "field": "clinical.1.findings",
+      "original": "Progressive caudate volume loss underlies chorea and frontal-executive decline — visible on the coronal context silhouettes.",
+      "applied": "Huntington disease involves progressive striatal degeneration, including caudate and putamen, with motor, cognitive, and behavioral manifestations and additional brain involvement. Caudate atrophy may be evident on patient CT or MRI; the invariant atlas silhouette does not demonstrate disease-related volume loss."
+    },
+    {
+      "findingId": "BRAIN-022",
+      "file": "src/data/structures/midbrain.json",
+      "id": "nuc-trochlear",
+      "field": "anatomicalLaterality",
+      "original": null,
+      "applied": "paired"
+    },
+    {
+      "findingId": "BRAIN-023",
+      "file": "src/data/structures/medulla.json",
+      "id": "nuc-hypoglossal",
+      "field": "anatomicalLaterality",
+      "original": null,
+      "applied": "paired"
+    },
+    {
+      "findingId": "BRAIN-024",
+      "file": "src/data/structures/diencephalon-thalamus.json",
+      "id": "ctx-internal-medullary-lamina",
+      "field": "anatomicalLaterality",
+      "original": null,
+      "applied": "paired"
+    }
+  ],
+  "additionalActions": [
+    "Six hippocampal anatomicalClass labels mirrored in taxonomy.",
+    "Three paired anatomicalLaterality labels and schematic-proxy geometryNotes mirrored in taxonomy.",
+    "Eight authored plate orientation frames corrected; two misleading crossing overlays removed from SVG and manifests.",
+    "Two stale authored-plate context captions clarified and a composite-section notice added.",
+    "Cross-vessel evidence citations pruned, medial-striate contextNote synchronized.",
+    "Anatomical labels propagated to selection details and tooltips; shared nuclei palette explained.",
+    "Regression guards check current coverage, anatomical relationships and plate orientation markers."
+  ]
+}

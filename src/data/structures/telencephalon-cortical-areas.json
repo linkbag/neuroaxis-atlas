@@ -700,7 +700,7 @@
     "color": "#0ea5e9",
     "function": "Human frontal eye fields lie around the junction of the precentral and superior frontal sulci, often overlapping area 6; the historical area 8 label is approximate. They contribute to voluntary saccades and attention through superior-collicular, brainstem, thalamic and cortical networks, with a strong contralateral saccadic bias.",
     "anchors": {
-      "gyrus": "posterior part of the middle frontal gyrus at the junction of the precentral and superior frontal sulci (area 8)",
+      "gyrus": "posterior frontal cortex around the junction of the precentral and superior frontal sulci (often overlapping area 6; historical area 8 label is approximate)",
       "mesh": "ctx-hemisphere-l"
     },
     "contextNote": "A schematic functional-area marker over a host hemisphere/gyrus. The origin, size and anchor name are renderer metadata; they are not independently validated fMRI, cytoarchitecture or a registered functional boundary. Gyral/Brodmann/functional boundaries do not coincide exactly. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
@@ -741,9 +741,10 @@
       4
     ],
     "refs": [
-      "Blumenfeld, 2nd ed., pp. 588-589 (PDF pp. 614-615), Figure 13.21",
+      "Blumenfeld, 2nd ed., pp. 588-589 (PDF pp. 614-615), Figure 13.14",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 25-31 (PDF pp. 51-57), Figures 2.11-2.14 and Table 2.4",
-      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
+      "https://pubmed.ncbi.nlm.nih.gov/11702871/"
     ]
   },
   {

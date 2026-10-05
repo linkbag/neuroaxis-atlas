@@ -26,12 +26,12 @@
     "clinical": [
       {
         "syndrome": "Tuberothalamic artery syndrome",
-        "findings": "Acute anterograde amnesia, apathy, abulia and executive dysfunction; left-sided lesions add an 'aphasia-plus' state and right-sided lesions neglect, because the Papez circuit is interrupted at the anterior nucleus.",
-        "vascular": "PCA — tuberothalamic artery"
+        "findings": "Anterior/tuberothalamic territory infarction can cause impaired new learning, apathy or abulia, and executive or orientation difficulties. Dominant-side lesions may affect language and nondominant-side lesions visuospatial attention; these depend on the nuclei and pathways involved and are not attributable to the anterior nucleus alone.",
+        "vascular": "Tuberothalamic (polar) artery, usually from the posterior communicating artery; paramedian PCA supply may substitute when the polar artery is absent."
       },
       {
         "syndrome": "Korsakoff amnestic syndrome",
-        "findings": "Thiamine deficiency damages the anterior thalamic nuclei together with the mammillary bodies, producing dense anterograde amnesia with confabulation.",
+        "findings": "Thiamine-deficiency injury can involve mammillary bodies and thalamic/periventricular memory networks, including anterior and medial thalamus. Persistent Korsakoff amnesia may severely impair new learning; confabulation can occur and is variable.",
         "note": "metabolic-toxic (thiamine deficiency), not vascular"
       }
     ],
@@ -51,7 +51,11 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
-      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability).",
+      "https://pubmed.ncbi.nlm.nih.gov/959701/",
+      "https://pubmed.ncbi.nlm.nih.gov/12933968/",
+      "https://research.manchester.ac.uk/en/publications/degeneration-of-anterior-thalamic-nuclei-differentiates-alcoholic",
+      "https://pubmed.ncbi.nlm.nih.gov/18412846/"
     ]
   },
   {
@@ -625,7 +629,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Obligatory relay of retinal vision to cortex: six layers receive a strictly retinotopic, eye-segregated map (ipsilateral eye 2/3/5, contralateral 1/4/6), with magnocellular layers serving motion and parvocellular layers form and color, forwarded to V1 via the retrolenticular internal capsule. Pupil-light-reflex fibers leave the optic tract before the LGN, so LGN lesions spare the light reflex.",
+    "function": "Principal relay of the geniculostriate visual pathway to primary visual cortex: six layers receive a strictly retinotopic, eye-segregated map (ipsilateral eye 2/3/5, contralateral 1/4/6), with magnocellular layers serving motion and parvocellular layers form and color, forwarded to V1 via the retrolenticular internal capsule. Pupil-light-reflex fibers leave the optic tract before the LGN, so an isolated LGN lesion can spare the light reflex. Other retinal projections, including superior-collicular/pulvinar pathways, do not require the LGN as their relay.",
     "connections": {
       "afferent": [
         "Retinal ganglion cells via the optic tract (M-layers: motion; P-layers: form/color; koniocellular layers: blue-yellow)",
@@ -660,7 +664,8 @@
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, LGN layers and visual relays, printed pp. 464-466 (PDF pp. 490-492).",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, visual pathway vascular supply, printed pp. 476-477 (PDF pp. 502-503).",
-      "Helgason et al., Anterior choroidal artery-territory infarction, Arch Neurol 1986, https://pubmed.ncbi.nlm.nih.gov/3729746/."
+      "Helgason et al., Anterior choroidal artery-territory infarction, Arch Neurol 1986, https://pubmed.ncbi.nlm.nih.gov/3729746/.",
+      "https://pubmed.ncbi.nlm.nih.gov/20445060/"
     ]
   },
   {
@@ -756,8 +761,11 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, thalamic nuclei, Table 7.3 and Figs. 7.6-7.8, printed pp. 283-287 (PDF pp. 309-313).",
-      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability)."
-    ]
+      "Schmahmann, Vascular Syndromes of the Thalamus, Stroke 2003;34:2264-2278, https://doi.org/10.1161/01.STR.0000087786.38997.9E (arterial origin and territorial variability).",
+      "https://www.ncbi.nlm.nih.gov/books/NBK542184/?report=printable"
+    ],
+    "anatomicalLaterality": "paired",
+    "geometryNote": "Anatomically paired. The current drawing compresses the two sides into a central schematic proxy; bilateral coordinates and dimensions have not been validated."
   },
   {
     "id": "ctx-thalamus-envelope",

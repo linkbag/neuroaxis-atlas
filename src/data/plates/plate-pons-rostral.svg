@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" font-family="'Segoe UI', Arial, sans-serif">
   <g class="plate-frame">
     <text class="plate-caption" x="400" y="32" text-anchor="middle" font-size="16" font-weight="600" fill="#334155">Pons - upper pons level, superior cerebellar peduncle (y = +2)</text>
-    <circle cx="52" cy="52" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="52" y="57.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">R</text>
-    <circle cx="748" cy="52" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="748" y="57.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">L</text>
-    <circle cx="52" cy="748" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="52" y="753.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">P</text>
-    <circle cx="748" cy="748" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="748" y="753.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">A</text>
+    <circle cx="52" cy="400" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="52" y="405.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">R</text>
+    <circle cx="748" cy="400" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="748" y="405.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">L</text>
+    <circle cx="400" cy="62" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="400" y="67.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">P</text>
+    <circle cx="400" cy="738" r="17" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/><text x="400" y="743.5" text-anchor="middle" font-size="15" font-weight="700" fill="#475569">A</text>
   </g>
   <path data-role="outline" d="M 400 256 C 452 258 520 268 566 284 C 590 296 604 316 608 344 C 614 400 616 470 610 500 C 604 560 580 606 546 630 C 512 652 470 660 400 660 C 330 660 288 652 254 630 C 220 606 196 560 190 500 C 184 470 186 400 192 344 C 196 316 210 296 234 284 C 280 268 348 258 400 256 Z" fill="none" stroke="#0f172a" stroke-width="1.5"/>
   <g class="plate-midline"><line x1="400" y1="262" x2="400" y2="656" stroke="#0f172a" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="4 5"/></g>

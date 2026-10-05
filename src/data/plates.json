@@ -1534,14 +1534,6 @@
         ]
       },
       {
-        "slug": "tract-corticospinal-lateral",
-        "label": "Corticospinal tract (lateral)",
-        "labelPos": [
-          238,
-          551
-        ]
-      },
-      {
         "slug": "tract-anterior-spinocerebellar",
         "label": "Anterior spinocerebellar tract",
         "labelPos": [
@@ -1637,14 +1629,6 @@
         "labelPos": [
           560,
           250
-        ]
-      },
-      {
-        "slug": "tract-internal-arcuate",
-        "label": "Internal arcuate fibers",
-        "labelPos": [
-          240,
-          267
         ]
       },
       {

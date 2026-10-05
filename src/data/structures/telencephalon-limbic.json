@@ -48,9 +48,12 @@
       "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
       "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
-      "Weon et al. (2008), Optimal diffusion-weighted imaging protocol for lesion detection in transient global amnesia (16-patient imaging study, timing-dependent visibility). https://pubmed.ncbi.nlm.nih.gov/18451087/"
+      "Weon et al. (2008), Optimal diffusion-weighted imaging protocol for lesion detection in transient global amnesia (16-patient imaging study, timing-dependent visibility). https://pubmed.ncbi.nlm.nih.gov/18451087/",
+      "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TNA/FIPAT-TNA-Ch1.pdf",
+      "https://nba.uth.tmc.edu/neuroscience/m/s4/chapter05.html"
     ],
-    "contextNote": "Gross structure/pathway teaching representation. Retained coordinates, dimensions, subdivisions and waypoints are custom renderer metadata; no independently registered patient/standard-atlas comparison validates their numerical extent here. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
+    "contextNote": "Gross structure/pathway teaching representation. Retained coordinates, dimensions, subdivisions and waypoints are custom renderer metadata; no independently registered patient/standard-atlas comparison validates their numerical extent here. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "anatomicalClass": "hippocampal cortical formation"
   },
   {
     "id": "nuc-dentate-gyrus",
@@ -58,7 +61,7 @@
     "synonyms": [
       "gyrus dentatus",
       "fascia dentata",
-      "dentate gyrus of the hippocampal formation (CA5)"
+      "dentate gyrus of the hippocampal formation"
     ],
     "region": "telencephalon",
     "subdivision": "Limbic system",
@@ -111,8 +114,12 @@
       "Moreno-Jimenez et al. (2019), Adult hippocampal neurogenesis is abundant in neurologically healthy subjects and drops sharply in patients with Alzheimer disease. https://www.nature.com/articles/s41591-019-0375-9",
       "Disouky et al. (2026), Human hippocampal neurogenesis in adulthood, ageing and Alzheimer disease (molecular-trajectory evidence; quantitative rate/function remains method-dependent). https://www.nature.com/articles/s41586-026-10169-4",
       "Witter and Amaral (1991), Entorhinal cortex of the monkey: V. Projections to the dentate gyrus, hippocampus, and subicular complex (primary monkey tracer study). https://pubmed.ncbi.nlm.nih.gov/1713237/",
-      "Strong Evidence for Pattern Separation in Human Dentate Gyrus (primary human 7-T fMRI evidence; functional result does not validate this atlas geometry). https://pmc.ncbi.nlm.nih.gov/articles/PMC6705559/"
-    ]
+      "Strong Evidence for Pattern Separation in Human Dentate Gyrus (primary human 7-T fMRI evidence; functional result does not validate this atlas geometry). https://pmc.ncbi.nlm.nih.gov/articles/PMC6705559/",
+      "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TNA/FIPAT-TNA-Ch1.pdf",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC6252390/",
+      "https://nba.uth.tmc.edu/neuroscience/m/s4/chapter05.html"
+    ],
+    "anatomicalClass": "hippocampal cortex"
   },
   {
     "id": "nuc-amygdala",

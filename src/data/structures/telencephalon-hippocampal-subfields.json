@@ -54,8 +54,11 @@
     "refs": [
       "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
-      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary"
-    ]
+      "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
+      "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TNA/FIPAT-TNA-Ch1.pdf",
+      "https://nba.uth.tmc.edu/neuroscience/m/s4/chapter05.html"
+    ],
+    "anatomicalClass": "transitional hippocampal cortex"
   },
   {
     "id": "nuc-ca1",
@@ -114,8 +117,11 @@
       "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
       "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
-      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf"
-    ]
+      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf",
+      "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TNA/FIPAT-TNA-Ch1.pdf",
+      "https://nba.uth.tmc.edu/neuroscience/m/s4/chapter05.html"
+    ],
+    "anatomicalClass": "hippocampal cortical field"
   },
   {
     "id": "nuc-ca2-ca3",
@@ -177,8 +183,11 @@
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
       "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
       "Hitti and Siegelbaum (2014), The hippocampal CA2 region is essential for social memory (mouse experimental evidence). https://www.nature.com/articles/nature13028",
-      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf"
-    ]
+      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf",
+      "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TNA/FIPAT-TNA-Ch1.pdf",
+      "https://nba.uth.tmc.edu/neuroscience/m/s4/chapter05.html"
+    ],
+    "anatomicalClass": "hippocampal cortical fields"
   },
   {
     "id": "nuc-ca4",
@@ -236,7 +245,10 @@
       "Blumenfeld, 2nd ed., pp. 830-838 and 842 (PDF pp. 856-864 and 868), Figures 18.8-18.13",
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pp. 74-79 (PDF pp. 88-93), Figures 5-1 to 5-6, coronal forebrain sections",
       "Blumenfeld, 2nd ed., pp. 395-402 (PDF pp. 421-428), Figures 10.4-10.9; territories and collaterals vary",
-      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf"
-    ]
+      "Blumcke et al. (2013), International consensus classification of hippocampal sclerosis in temporal lobe epilepsy. https://www.ilae.org/files/dmfile/International-consensus-classification-hippocampal-sclerosisBlumcke-2013-Epilepsia.pdf",
+      "https://cdn.dal.ca/content/dam/dalhousie/pdf/library/FIPAT/TNA/FIPAT-TNA-Ch1.pdf",
+      "https://nba.uth.tmc.edu/neuroscience/m/s4/chapter05.html"
+    ],
+    "anatomicalClass": "hippocampal hilar field"
   }
 ]

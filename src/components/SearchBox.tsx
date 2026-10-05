@@ -121,7 +121,7 @@ export default function SearchBox() {
               onPointerEnter={() => useAtlasStore.getState().setHovered(hit.id)}
               onPointerLeave={() => useAtlasStore.getState().setHovered(null)}
             >
-              <KindGlyph kind={hit.kind} color={hit.color} title={hit.kind} />
+              <KindGlyph kind={hit.kind} color={hit.color} title={hit.anatomicalClass ?? hit.kind} />
               <span className="searchbox-name">{hit.name}</span>
               {!hit.authored && <span className="chip chip--pending">pending</span>}
               {hit.matchedVia === 'synonym' && (

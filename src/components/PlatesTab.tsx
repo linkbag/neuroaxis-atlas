@@ -532,6 +532,11 @@ export default function PlatesTab() {
                   {REGION_LABELS[plate.region]} · {plate.orientation}
                   {level !== undefined ? ` · ${level.name}` : ''} · {rostroCaudalNote(plate)}
                 </p>
+                <p className="knowledge-caveat" role="note">
+                  Authored teaching schematic: nearby anatomical levels may be combined.
+                  Shapes, boundaries and marker positions are approximate; this is not a
+                  validated single anatomical section.
+                </p>
               </div>
               <div className="plate-stage">
                 {/* P0 (QUALITY_PLAN §1 item 2): the AUTHOR mode is a major

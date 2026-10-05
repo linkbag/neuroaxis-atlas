@@ -356,6 +356,8 @@ function validateTaxonomy(list, file) {
     checkEnum(file, `${at}.laterality`, e.laterality, LATERALITIES);
     checkHex(file, `${at}.color`, e.color);
     checkStringArray(file, `${at}.synonyms`, e.synonyms, false, true);
+    if (e.anatomicalClass !== undefined) checkString(file, `${at}.anatomicalClass`, e.anatomicalClass, false);
+    if (e.anatomicalLaterality !== undefined) checkEnum(file, `${at}.anatomicalLaterality`, e.anatomicalLaterality, LATERALITIES);
     if (e.parent !== undefined) {
       if (checkString(file, `${at}.parent`, e.parent, false)) {
         parentRefs.push({ at, parentId: e.parent, selfId: e.id });
@@ -471,6 +473,8 @@ function validateStructure(rec, file, at, levelIds) {
   claimIdentity(file, at, rec, 'structure');
   checkString(file, `${at}.name`, rec.name, true);
   checkStringArray(file, `${at}.synonyms`, rec.synonyms, false, true);
+  if (rec.anatomicalClass !== undefined) checkString(file, `${at}.anatomicalClass`, rec.anatomicalClass, false);
+  if (rec.anatomicalLaterality !== undefined) checkEnum(file, `${at}.anatomicalLaterality`, rec.anatomicalLaterality, LATERALITIES);
   checkEnum(file, `${at}.region`, rec.region, REGIONS);
   checkString(file, `${at}.subdivision`, rec.subdivision, true);
   checkEnum(file, `${at}.kind`, rec.kind, KINDS);

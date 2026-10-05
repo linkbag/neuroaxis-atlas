@@ -123,13 +123,13 @@
     "contextNote": "Teaching model of Vertebral artery. The committed mesh or schematic course represents its gross relationship to neighbouring anatomy. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
     "connections": {
       "afferent": [
-        "Subclavian artery (the first branch of the subclavian on each side) — the inflow of the posterior circulation",
-        "Muscular and radicular branches along the cervical course"
+        "Usually the proximal subclavian artery; vertebral origin variants occur"
       ],
       "efferent": [
         "Posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) — the largest branch, supplying the lateral medulla and inferior cerebellum",
         "Anterior spinal artery (the paired ventral branches that join in the midline) and small posterior spinal/paramedian medullary perforators",
-        "Basilar artery (vasc-basilar-artery) — formed by the union of the two vertebral arteries at the pontomedullary junction"
+        "Basilar artery (vasc-basilar-artery) — formed by the union of the two vertebral arteries at the pontomedullary junction",
+        "Variable muscular, osseous and radicular branches arise along the cervical course; these are branches of the vertebral artery, with potential cervical anastomoses"
       ]
     },
     "bloodSupply": "Inflow from the subclavian artery; distal branches include medullary perforators, anterior/posterior spinal branches and usually PICA.",
@@ -169,7 +169,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 393-394"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 393-394",
+      "https://pubmed.ncbi.nlm.nih.gov/19569947/"
     ]
   },
   {
@@ -275,8 +276,7 @@
     "synonyms": [
       "ACA",
       "arteria cerebri anterior",
-      "A1/A2/A3 segments of the anterior cerebral artery",
-      "pericallosal artery (A2/A3)"
+      "A1/A2/A3 segments of the anterior cerebral artery"
     ],
     "region": "vasculature",
     "subdivision": "Anterior circulation",
@@ -350,7 +350,8 @@
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
-      "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/"
+      "Gomes et al., Microsurgical anatomy of the recurrent artery of Heubner (1984), original cadaveric study — https://pubmed.ncbi.nlm.nih.gov/6689705/",
+      "https://pubmed.ncbi.nlm.nih.gov/26924965/"
     ]
   },
   {
@@ -454,13 +455,12 @@
     "contextNote": "Teaching model of Middle cerebral artery. The committed mesh or schematic course represents its gross relationship to neighbouring anatomy. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements.",
     "connections": {
       "afferent": [
-        "Internal carotid artery (vasc-internal-carotid-artery) at the carotid bifurcation",
+        "Internal carotid artery (vasc-internal-carotid-artery) at its intracranial terminal bifurcation",
         "Collateral flow through the circle of Willis (anterior communicating and posterior communicating arteries) and, in the acute setting, through leptomeningeal anastomoses from the ACA and PCA on the convexity"
       ],
       "efferent": [
         "Lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) from M1 — the deep supply to the putamen, caudate and internal capsule",
-        "Orbitofrontal and temporopolar branches, anterior temporal branches, insular (M2) branches, and the superior and inferior division trunks that fan out over the convexity",
-        "The anterior choroidal artery (vasc-anterior-choroidal-artery) arises nearby from the internal carotid and shares the deep territory"
+        "Orbitofrontal and temporopolar branches, anterior temporal branches, insular (M2) branches, and the superior and inferior division trunks that fan out over the convexity"
       ]
     },
     "bloodSupply": "Inflow from the ICA. Lenticulostriate branches supply parts of the basal ganglia and internal capsule; surface branches supply lateral cortex and subcortical white matter, with variable leptomeningeal collateral connections.",
@@ -505,7 +505,9 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35"
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012) — pp. 17, 19, 23-25, 27, 29, 33, 35",
+      "https://pubmed.ncbi.nlm.nih.gov/11156774/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC9388914/"
     ]
   },
   {
@@ -599,8 +601,7 @@
     "synonyms": [
       "PCA",
       "arteria cerebri posterior",
-      "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)",
-      "calcarine artery (a P4 cortical branch)"
+      "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)"
     ],
     "region": "vasculature",
     "subdivision": "Posterior circulation",
@@ -697,7 +698,8 @@
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 395-402, 406",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 648-653, 656-660",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 474-475"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010) — pp. 474-475",
+      "https://pubmed.ncbi.nlm.nih.gov/21492726/"
     ]
   },
   {

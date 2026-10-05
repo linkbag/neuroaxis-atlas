@@ -367,8 +367,8 @@
     "clinical": [
       {
         "syndrome": "Hypertrophic olivary degeneration",
-        "findings": "Transsynaptic degeneration of the olive after a lesion of the Guillain-Mollaret triangle (dentate nucleus, superior cerebellar peduncle, or central tegmental tract), producing palatal (palatopharyngeal) myoclonus/tremor months after the index lesion.",
-        "note": "MRI shows T2 hyperintensity with enlargement of the olive (hypertrophic degeneration, not atrophy)."
+        "findings": "Disruption of afferent dentato-olivary pathways, such as dentate/superior cerebellar peduncle or central tegmental tract injury, can cause transsynaptic olivary degeneration. Delayed palatal or oculopalatal tremor may develop, but is not present in every case.",
+        "note": "MRI findings evolve with time: T2 hyperintensity may precede visible olivary enlargement, enlargement may develop later and then resolve, and signal abnormality may persist. Olivary size is not enlarged at every stage."
       }
     ],
     "levels": [
@@ -387,7 +387,9 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar nuclei and connections, printed pp. 698-710 (PDF pp. 724-736).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), medulla and inferior olive, printed pp. 112-121 (PDF pp. 126-135)."
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), medulla and inferior olive, printed pp. 112-121 (PDF pp. 126-135).",
+      "https://pubmed.ncbi.nlm.nih.gov/12023323/",
+      "https://pubmed.ncbi.nlm.nih.gov/10871017/"
     ]
   },
   {
@@ -800,8 +802,11 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, CN IX-XII, printed pp. 530-535 (PDF pp. 556-561).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), open medulla and cranial nerve nuclei, printed pp. 112-118 (PDF pp. 126-132)."
-    ]
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), open medulla and cranial nerve nuclei, printed pp. 112-118 (PDF pp. 126-132).",
+      "https://www.ncbi.nlm.nih.gov/books/NBK388/"
+    ],
+    "anatomicalLaterality": "paired",
+    "geometryNote": "Anatomically paired. The current drawing compresses the two sides into a central schematic proxy; bilateral coordinates and dimensions have not been validated."
   },
   {
     "id": "nuc-area-postrema",
@@ -1418,7 +1423,7 @@
     "clinical": [
       {
         "syndrome": "Truncal and axial ataxia",
-        "findings": "Fastigial or vermal lesions give a wide-based staggering gait with truncal instability and nystagmus while limb coordination on the bed may be preserved; bilateral posterior fossa lesions therefore present predominantly as gait ataxia.",
+        "findings": "Medial cerebellar/fastigial and vestibular circuit lesions can cause truncal or gait instability and ocular motor abnormalities, with limb coordination relatively spared when hemispheric pathways are preserved. Intermediate/lateral circuit extension can add limb ataxia; bilateral posterior-fossa location alone does not define a predominantly gait syndrome.",
         "vascular": "PICA / SCA"
       }
     ],
@@ -1439,7 +1444,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar nuclei and connections, printed pp. 698-710 (PDF pp. 724-736).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), medulla and inferior olive, printed pp. 112-121 (PDF pp. 126-135)."
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), medulla and inferior olive, printed pp. 112-121 (PDF pp. 126-135).",
+      "https://pubmed.ncbi.nlm.nih.gov/18835866/"
     ]
   },
   {

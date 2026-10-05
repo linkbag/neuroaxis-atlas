@@ -373,8 +373,12 @@
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, ocular motor nuclei and pupils, printed pp. 568-580 (PDF pp. 594-606).",
       "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158).",
       "Patel and Burdon, Isolated third cranial nerve palsies: modern management principles, Eye (2022), https://pmc.ncbi.nlm.nih.gov/articles/PMC8727561/ (pupil sparing does not exclude compression).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), preface on Edinger-Westphal terminology, preface p. vi (PDF p. 8)."
-    ]
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), preface on Edinger-Westphal terminology, preface p. vi (PDF p. 8).",
+      "https://nba.uth.tmc.edu/neuroanatomy/L9/Lab09p28_index.html",
+      "https://www.ncbi.nlm.nih.gov/books/NBK406/?report=classic"
+    ],
+    "anatomicalLaterality": "paired",
+    "geometryNote": "Anatomically paired. The current drawing compresses the two sides into a central schematic proxy; bilateral coordinates and dimensions have not been validated."
   },
   {
     "id": "nuc-mesencephalic-v",
@@ -391,7 +395,7 @@
     "function": "A column of pseudounipolar primary sensory neurons embedded within the CNS — the only such group in the brain: these cells are the proprioceptive ganglion for the masticatory muscles and periodontal ligament, conveying jaw position and bite-force information and serving as the afferent limb of the monosynaptic jaw-jerk reflex. Extends from the rostral pons through the midbrain.",
     "connections": {
       "afferent": [
-        "Ia muscle-spindle and periodontal afferents of CN V that bypass the trigeminal ganglion and descend via the mesencephalic tract"
+        "Peripheral processes of mesencephalic trigeminal primary sensory neurons carry jaw-muscle-spindle and periodontal input through CN V; their cell bodies lie in the CNS rather than the trigeminal ganglion."
       ],
       "efferent": [
         "Monosynaptic collateral to the trigeminal motor nucleus (jaw-jerk reflex arc)",
@@ -423,7 +427,9 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, mesencephalic trigeminal system, printed pp. 510-512 (PDF pp. 536-538).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pons/midbrain sections, printed pp. 128-144 (PDF pp. 142-158)."
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), pons/midbrain sections, printed pp. 128-144 (PDF pp. 142-158).",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC2859174/",
+      "https://www.ncbi.nlm.nih.gov/books/NBK384/"
     ]
   },
   {
@@ -486,7 +492,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#b91c1c",
-    "function": "Relay of the lateral (cerebellar) motor system in the rostral midbrain tegmentum. The caudal magnocellular part is the origin of the rubrospinal tract, which crosses immediately in the ventral tegmentum and facilitates flexor tone of the contralateral limbs; the rostral parvocellular part links the cerebellum with the inferior olive through the central tegmental tract (rubro-olivary, Guillain-Mollaret loop) and subserves motor learning. In humans the rubrospinal system is vestigial relative to the corticospinal tract, but the nucleus remains a major dentatorubrothalamic relay.",
+    "function": "Motor-related nucleus of the rostral midbrain tegmentum. Its caudal magnocellular division gives rise to the crossed rubrospinal pathway, much less developed in humans than in many other mammals. Its rostral parvocellular division receives cerebellar and cortical inputs and projects to the ipsilateral inferior olive through the central tegmental tract. Cerebellothalamic fibers also pass through or around the red-nucleus region en route to the thalamus; these differ from fibers terminating in the red nucleus.",
     "connections": {
       "afferent": [
         "Contralateral deep cerebellar nuclei through the crossed superior cerebellar peduncle",
@@ -524,7 +530,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, cerebellar output/input pathways, printed pp. 705-710 (PDF pp. 731-736).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections and SCP crossing, printed pp. 136-144 (PDF pp. 150-158)."
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections and SCP crossing, printed pp. 136-144 (PDF pp. 150-158).",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC2494572/"
     ]
   },
   {
@@ -659,7 +666,7 @@
     "clinical": [
       {
         "syndrome": "Weber syndrome",
-        "findings": "Medial crus infarction with CN III fascicles: ipsilateral pupil-involving CN III palsy plus contralateral face-arm-leg hemiplegia.",
+        "findings": "A medial cerebral-peduncle lesion involving CN III fascicles can cause ipsilateral third-nerve palsy with contralateral motor weakness (Weber pattern); completeness, pupil involvement, and weakness distribution or severity depend on lesion extent.",
         "vascular": "Paramedian branches of the PCA/PCoA"
       },
       {
@@ -684,7 +691,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14, midbrain sections, printed pp. 615-617 (PDF pp. 641-643).",
-      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158)."
+      "Haines, Neuroanatomy: An Atlas of Structures, Sections, and Systems, 8th ed. (2012), midbrain sections, printed pp. 136-144 (PDF pp. 150-158).",
+      "https://www.ncbi.nlm.nih.gov/books/NBK406/?report=classic"
     ]
   },
   {

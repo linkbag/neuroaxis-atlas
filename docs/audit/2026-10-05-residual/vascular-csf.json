@@ -1,0 +1,4258 @@
+{
+  "audit": "Residual vascular and CSF audit",
+  "createdAt": "2026-10-05T07:01:03.207400+00:00",
+  "baselineCommit": "7baa2d63d2e01dc0f36bd94a49abfa2812287d0b",
+  "branch": "audit/blumenfeld-residual-2026-10-04",
+  "sourceFingerprint": {
+    "path": "Neuroanatomy through Clinical Cases, Second Edition.pdf",
+    "sha256": "0df361fd2ce46e6253a98d03f059b80acb6f27057370ecbff32d55a61e9a8d1c",
+    "physicalPages": 1033,
+    "edition": "Second",
+    "copyrightYear": 2010,
+    "pageMapping": "Printed body page N = physical PDF page N+26. Relevant page labels were checked against extraction headers and index; original figure renders inspected."
+  },
+  "recordFileSha256": {
+    "vasculature.json": "e88188ffb61197a03d615a093b37d6fbca624a29e21f4628b44857a52472afc0",
+    "vasculature-courses.json": "37a2f3409efd987cd22dbcf79a6e5b6b70689d4c62bd01142f76914e17ce5289",
+    "telencephalon-ventricles.json": "0e3591fe0e5ba293b3a99a44c2b73100a8b233b761892b0b3d15b1fc262cdb7f",
+    "telencephalon-ventricle-segments.json": "fe45fd6da6d921956a865d57ba56c3a38164ba6571aa47d034746be1065b7147"
+  },
+  "reviewedIds": [
+    "vasc-internal-carotid-artery",
+    "vasc-vertebral-artery",
+    "vasc-basilar-artery",
+    "vasc-anterior-cerebral-artery",
+    "vasc-anterior-communicating-artery",
+    "vasc-middle-cerebral-artery",
+    "vasc-posterior-communicating-artery",
+    "vasc-posterior-cerebral-artery",
+    "vasc-superior-cerebellar-artery",
+    "vasc-anterior-inferior-cerebellar-artery",
+    "vasc-posterior-inferior-cerebellar-artery",
+    "vasc-lenticulostriate-arteries",
+    "vasc-anterior-choroidal-artery",
+    "vasc-posterior-medial-choroidal-artery",
+    "vasc-lateral-lenticulostriate-arteries-1",
+    "vasc-lateral-lenticulostriate-arteries-2",
+    "vasc-lateral-lenticulostriate-arteries-3",
+    "vasc-lateral-lenticulostriate-arteries-4",
+    "vasc-medial-lenticulostriate-arteries-1",
+    "vasc-medial-lenticulostriate-arteries-2",
+    "vasc-mca-insular-segment",
+    "vasc-mca-superior-terminal-branch",
+    "vasc-mca-inferior-terminal-branch",
+    "vasc-mca-angular-branch",
+    "vasc-mca-middle-temporal-branch",
+    "vasc-mca-posterior-temporal-branch",
+    "vasc-mca-temporo-occipital-branch",
+    "vasc-mca-m4-prefrontal-branch",
+    "vasc-mca-m4-precentral-branch",
+    "vasc-mca-m4-central-branch",
+    "vasc-mca-m4-anterior-parietal-branch",
+    "vasc-aca-pericallosal-artery",
+    "vasc-aca-callosomarginal-artery",
+    "vasc-aca-frontopolar-artery",
+    "vasc-aca-orbitofrontal-artery",
+    "vasc-pca-parieto-occipital-artery",
+    "vasc-pca-calcarine-artery",
+    "vasc-pca-posterior-temporal-branches",
+    "vasc-pca-anterior-temporal-branches",
+    "vasc-pca-middle-temporal-branches",
+    "vasc-pca-splenial-artery",
+    "vasc-pca-thalamogeniculate-arteries",
+    "vasc-pca-posteromedial-central-branches",
+    "vasc-pontine-perforating-arteries",
+    "vasc-sca-lateral-branch",
+    "vasc-sca-medial-branch",
+    "vasc-sca-vermian-branches",
+    "vasc-aica-labyrinthine-artery",
+    "vasc-pica-tonsillomedullary-segment",
+    "vasc-pica-telovelotonsillar-segment",
+    "vasc-anterior-spinal-artery",
+    "vasc-lateral-lenticulostriate-arteries",
+    "vasc-medial-lenticulostriate-arteries",
+    "vent-lateral-ventricle",
+    "vent-lateral-ventricle-frontal-horn",
+    "vent-lateral-ventricle-temporal-horn",
+    "vent-lateral-ventricle-occipital-horn",
+    "vent-lateral-ventricle-atrium",
+    "vent-choroid-plexus-lateral",
+    "vent-interventricular-foramen",
+    "vent-lateral-ventricle-body"
+  ],
+  "counts": {
+    "records": 61,
+    "vascular": 53,
+    "CSF": 8,
+    "findingGroups": 10,
+    "exactTargets": 23,
+    "recordsWithRecommendations": 14,
+    "noChangeRecords": 47
+  },
+  "method": "Read every assigned record including clinical and nested route notes against the original-book extraction, verified printed/PDF labels, visually inspected original Figures 5.11, 10.8 and 14.21, and cross-validated each correction with public primary anatomy or clinical research. Report text paraphrases source evidence; no textbook text/figure is copied into the repository.",
+  "perRecordAssessments": [
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-internal-carotid-artery",
+      "name": "Internal carotid artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain the cavernous cranial-nerve relationships, segment simplification, independent AChA origin, and collateral/fetal-PCA qualifications. The range of cortical and retinal ischaemic outcomes is appropriately conditional.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-vertebral-artery",
+      "name": "Vertebral artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-003"
+      ],
+      "reason": "Retain V1-V4 gross course, C6-C2 usual foraminal ascent, ventral medullary relationship and variable vertebral/PICA/ASA medullary supply. Correct the cervical branches in the afferent list.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-basilar-artery",
+      "name": "Basilar artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain prepontine/ventral pontine course and variable pontine/apical territories; locked-in and tegmental outcomes are conditional. The corticospinal linked record includes the supraspinal pathway, so its historical lateral-tract ID is not evidence that the basilar artery perfuses spinal cord. Interpeduncular-fossa link is a coarse regional landmark, not a perfused CSF compartment.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-anterior-cerebral-artery",
+      "name": "Anterior cerebral artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-001"
+      ],
+      "reason": "Retain medial frontal/anterior medial parietal and paracentral leg-predominant territory with deep-branch variation, callosal overlap, and non-universal clinical patterns. Distal pericallosal is a related branch/course rather than a whole-ACA synonym.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-anterior-communicating-artery",
+      "name": "Anterior communicating artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain pressure-dependent ACA cross-flow and limited chiasmatic/hypothalamic/basal-forebrain perforator territory. Aneurysm and memory/endocrine effects are conditional rather than guaranteed.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-middle-cerebral-artery",
+      "name": "Middle cerebral artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-002"
+      ],
+      "reason": "Retain M1 perforators, M2 insula, M3 opercula, M4 cortical territory and variable superior/inferior divisions. Correct intracranial origin wording and remove the independent ICA AChA from MCA efferents.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-posterior-communicating-artery",
+      "name": "Posterior communicating artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain ICA-to-PCA junction, variable tuberothalamic territory, fetal-PCA inflow, and compressive III-palsy wording. The tuberothalamic branch is distinct from P1 paramedian thalamoperforators.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-posterior-cerebral-artery",
+      "name": "Posterior cerebral artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-001"
+      ],
+      "reason": "Retain cortical versus deep-branch separation, medial/inferior temporal-occipital supply, conditional macular sparing, and bilateral-thalamic Percheron variant. Calcarine is one cortical branch, not an alias for the whole PCA. Tuberothalamic syndrome linkage can reflect replacement of absent polar supply by paramedian branches, so no universal exclusive mapping is claimed.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-superior-cerebellar-artery",
+      "name": "Superior cerebellar artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain usual distal-basilar origin, CN III above it, superior cerebellar/deep-nuclear/SCP territory and small overlapping brainstem contribution. Avoid broad assignment of entire tectum/red nucleus; current text already does so.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-anterior-inferior-cerebellar-artery",
+      "name": "Anterior inferior cerebellar artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain variable lateral caudal pontine/MCP/floccular supply and labyrinthine origin exceptions. Complete hearing/facial/sensory syndromes are not required. VII/VIII exit landmarks represent a coarse adjacent perfused nerve/root region, not the entire course or a CSF territory.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-posterior-inferior-cerebellar-artery",
+      "name": "Posterior inferior cerebellar artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain variable vertebral origin, five-segment terminology, inferior cerebellar/fourth-plexus supply and shared lateral-medullary contribution with vertebral branches. Card prose correctly allows incomplete Wallenberg patterns and distal cerebellar-only injury.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-lenticulostriate-arteries",
+      "name": "Lenticulostriate arteries",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain umbrella grouping, ACA/MCA separation, limited-collateral wording and variable deep targets. Claustral supply is coarse and may overlap insular/M1 perforator distributions; no complete or single-branch claustral territory is asserted.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-anterior-choroidal-artery",
+      "name": "Anterior choroidal artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain independent supraclinoid ICA origin, cisternal versus plexal course, posterior-capsular/visual/medial-temporal overlap and incomplete clinical triad. No cavity infarction is claimed.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature.json",
+      "id": "vasc-posterior-medial-choroidal-artery",
+      "name": "Medial posterior choroidal artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-010"
+      ],
+      "reason": "Retain medial third-ventricular versus lateral-ventricular choroidal distinction and withheld mesh. Direct medial supply is supported by the contemporary cadaveric study; lateral-posterior-choroidal citation is correctly identified and supports the comparison, not exact medial geometry.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-lateral-lenticulostriate-arteries-1",
+      "name": "Lateral lenticulostriate artery — illustrative route 1",
+      "fieldsReviewed": [
+        "name",
+        "function",
+        "territory",
+        "supply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain illustrative MCA perforator route 1 and partial deep-tissue links. The number is a display identifier, not a fixed human branch or reproducible putaminal/capsular subterritory; no unique clinical syndrome is assigned.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-lateral-lenticulostriate-arteries-2",
+      "name": "Lateral lenticulostriate artery — illustrative route 2",
+      "fieldsReviewed": [
+        "name",
+        "function",
+        "territory",
+        "supply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain illustrative MCA perforator route 2 and partial deep-tissue links. The number is a display identifier, not a fixed human branch or reproducible putaminal/capsular subterritory; no unique clinical syndrome is assigned.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-lateral-lenticulostriate-arteries-3",
+      "name": "Lateral lenticulostriate artery — illustrative route 3",
+      "fieldsReviewed": [
+        "name",
+        "function",
+        "territory",
+        "supply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain illustrative MCA perforator route 3 and partial deep-tissue links. The number is a display identifier, not a fixed human branch or reproducible putaminal/capsular subterritory; no unique clinical syndrome is assigned.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-lateral-lenticulostriate-arteries-4",
+      "name": "Lateral lenticulostriate artery — illustrative route 4",
+      "fieldsReviewed": [
+        "name",
+        "function",
+        "territory",
+        "supply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain illustrative MCA perforator route 4 and partial deep-tissue links. The number is a display identifier, not a fixed human branch or reproducible putaminal/capsular subterritory; no unique clinical syndrome is assigned.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-medial-lenticulostriate-arteries-1",
+      "name": "Medial striate/Heubner-like artery — illustrative route 1",
+      "fieldsReviewed": [
+        "name",
+        "function",
+        "territory",
+        "supply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain illustrative ACA medial-striate/Heubner-like route 1, recurrent entry concept and partial anterior basal-ganglia/capsular targets. The number does not assert duplicated arteries or a fixed exclusive motor/behavioural territory.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-medial-lenticulostriate-arteries-2",
+      "name": "Medial striate/Heubner-like artery — illustrative route 2",
+      "fieldsReviewed": [
+        "name",
+        "function",
+        "territory",
+        "supply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain illustrative ACA medial-striate/Heubner-like route 2, recurrent entry concept and partial anterior basal-ganglia/capsular targets. The number does not assert duplicated arteries or a fixed exclusive motor/behavioural territory.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-insular-segment",
+      "name": "MCA insular segment (M2)",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-004"
+      ],
+      "reason": "Retain insular/claustral partial supply and distinction from major M1 lenticulostriates. Correct nested surface note that labels M2 opercular.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-superior-terminal-branch",
+      "name": "MCA superior (cortical) terminal branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain superior-division lateral frontal/peri-Rolandic and dominant inferior-frontal language association. It represents a group by one model route, not a universal superior trunk or exclusive Broca/FEF perfusion.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-inferior-terminal-branch",
+      "name": "MCA inferior (cortical) terminal branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain temporal/posterior parietal variation and superior-versus-inferior optic-radiation field relationship. Fluent aphasia, neglect and quadrantanopia are appropriately dependent on the actual lesion.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-angular-branch",
+      "name": "MCA branch to the angular gyrus",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain angular/inferior-parietal reading-writing/calculation association and the distinction of alexia with agraphia from classic occipital-splenial alexia without agraphia. The Wernicke link is to a distributed network envelope, not exclusive posterior-superior-temporal tissue.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        },
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            894,
+            895,
+            896
+          ],
+          "pdfPhysicalPages": [
+            920,
+            921,
+            922
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-middle-temporal-branch",
+      "name": "MCA middle temporal branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain variable lateral temporal/semantic-language supply and qualified optic-radiation involvement; no mandatory quadrant or single vessel-language function.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-posterior-temporal-branch",
+      "name": "MCA posterior temporal branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain posterior lateral temporal network and underlying-radiation qualification; do not assign pure alexia or one obligatory visual quadrant.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-temporo-occipital-branch",
+      "name": "MCA temporo-occipital branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain lateral MCA-PCA border-zone territory and variable collateral/embolism/hypoperfusion mechanisms; no simultaneous dual occlusion requirement.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-m4-prefrontal-branch",
+      "name": "MCA M4 prefrontal branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain variable lateral prefrontal/executive and dominant frontal language association. Broca/FEF borders are explicitly not universal.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-m4-precentral-branch",
+      "name": "MCA M4 precentral branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain precentral/premotor relations and face/hand deficit variability, including pseudo-peripheral hand-knob presentations; no vessel-name prognosis ranking.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-m4-central-branch",
+      "name": "MCA M4 central (rolandic) branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain motor-anterior and sensory-posterior relationship to the central sulcus and variable shared pre/postcentral supply.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-mca-m4-anterior-parietal-branch",
+      "name": "MCA M4 anterior parietal branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain postcentral/anterior-parietal cortical sensory association and distinction from an obligatory Gerstmann territory.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-aca-pericallosal-artery",
+      "name": "Pericallosal artery (A2–A3)",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain distal-ACA course around/above callosal genu, callosal/medial cortical supply and PCA splenial overlap. A2-A3 in the title is a represented course subset, not a complete standard segment definition; conventions differ. No unsupported universal territory or recovery claim remains.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-aca-callosomarginal-artery",
+      "name": "Callosomarginal artery (A3)",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain cingulate-sulcus relationship, cortex superior to the sulcus and explicitly variable origin/absence. A3 is a common illustrative origin label rather than a universal biological origin; individual variability is retained.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-aca-frontopolar-artery",
+      "name": "Frontopolar artery (A2)",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain early distal-ACA medial frontal-pole supply with variable origin and overlapping frontal branches. A2 is a typical illustrative label; no clinically silent guarantee.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-aca-orbitofrontal-artery",
+      "name": "ACA orbitofrontal branch",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain medial orbitofrontal/gyrus-rectus supply, lateral FEF distinction, and non-obligatory anosmia.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-parieto-occipital-artery",
+      "name": "Parieto-occipital artery (P4)",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain cuneus/medial parieto-occipital cortical relations and upper calcarine bank mapping to the contralateral lower visual field. Macular sparing and association deficits are qualified.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        },
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            474,
+            475
+          ],
+          "pdfPhysicalPages": [
+            500,
+            501
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-calcarine-artery",
+      "name": "Calcarine artery (P4)",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain both striate banks and adjacent visual association supply, visual field variability and preserved pupillary responses after bilateral cortical injury. Posterior cingulate is correctly excluded as its core territory.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        },
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            474,
+            475
+          ],
+          "pdfPhysicalPages": [
+            500,
+            501
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-posterior-temporal-branches",
+      "name": "Posterior temporal branches of the PCA",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-006"
+      ],
+      "reason": "Retain inferior/posterior temporal surface territory and non-obligatory memory deficits. Correct shared P3-P4 note and remove hippocampal-plus-temporal synonym contradicted by the function.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-anterior-temporal-branches",
+      "name": "Anterior temporal branches of the PCA",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-006"
+      ],
+      "reason": "Retain variable anterior inferior/medial temporal supply and overlapping temporal pole/amygdalar inflow; no obligatory olfactory/gustatory syndrome. Correct shared P3-P4 surface label. Temporal-polar alias is treated as a possible variant term, not proof that the whole pole is supplied by PCA.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-middle-temporal-branches",
+      "name": "Middle temporal branches of the PCA",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-006"
+      ],
+      "reason": "Retain distinct PCA inferior/medial temporal group, overlap and lack of obligatory Meyer-loop quadrantanopia; correct shared P3-P4 surface label.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-splenial-artery",
+      "name": "Splenial artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain variable splenial/posterior-pericallosal branch pattern, ACA anastomoses and classic combined occipital-splenial disconnection requirement. No isolated-splenial pure-alexia guarantee.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        },
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            894,
+            895,
+            896
+          ],
+          "pdfPhysicalPages": [
+            920,
+            921,
+            922
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-thalamogeniculate-arteries",
+      "name": "Thalamogeniculate arteries",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-005"
+      ],
+      "reason": "Retain usual P2 inferolateral thalamic/geniculate supply and distinction from polar/paramedian groups. Correct nested posterior-perforated-substance entry claim; individual branches, entry sites and clinical deficits vary.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pca-posteromedial-central-branches",
+      "name": "Posteromedial central (thalamoperforating) branches",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain P1 paramedian thalamic/rostral-midbrain group, posterior perforated substance entry and qualified Percheron bilateral variant. The variant is explicitly named as a variant, not a universal artery.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pontine-perforating-arteries",
+      "name": "Pontine perforating arteries",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain bilateral branch sets, variable dorsal penetration, midline respect and conditional locked-in syndrome. One midline model tube is explicitly schematic/mesh-withheld; no real single unpaired artery is claimed.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-sca-lateral-branch",
+      "name": "Lateral branch of the superior cerebellar artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-008"
+      ],
+      "reason": "Retain superior hemispheric/deep cerebellar targets and conditional ataxia. Remove specific Nothnagel link because a cerebellar terminal-branch record does not establish ocular-motor dorsal-midbrain perfusion.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-sca-medial-branch",
+      "name": "Medial branch of the superior cerebellar artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain medial superior vermian/paravermian targets and explicit distinction from PCA collicular/pretectal/red-nucleus territory.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-sca-vermian-branches",
+      "name": "Vermian branches of the superior cerebellar artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain contributions from either SCA, superior vermian/deep targets and explicit warning that the model is not a universal unpaired midline trunk.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-aica-labyrinthine-artery",
+      "name": "Labyrinthine (internal auditory) artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain usual AICA/occasional basilar origin, internal acoustic meatus course, inner-ear/associated-nerve targets and absence of brainstem-nuclear territory. Inner-ear symptoms alone do not establish full AICA syndrome.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pica-tonsillomedullary-segment",
+      "name": "PICA tonsillomedullary segment",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain third segment/caudal-loop relationship and variable medullary/tonsillar/plexal branches. Lateral-medullary syndrome remains possible for proximal medullary branches at this segment; no universal full syndrome.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-pica-telovelotonsillar-segment",
+      "name": "PICA telovelotonsillar segment",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-008"
+      ],
+      "reason": "Retain fourth segment/cranial loop, fourth-plexus and cerebellar targets and non-specific postoperative mutism wording. Remove direct lateral-medullary syndrome mapping for this distal segment.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-anterior-spinal-artery",
+      "name": "Anterior spinal artery",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain paired vertebral contribution merging onto ventral midline, caudal-medullary overlap and spinal radiculomedullary reinforcement. Anterior-cord dorsal-column relative sparing is appropriately conditional.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            658,
+            659,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            684,
+            685,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-lateral-lenticulostriate-arteries",
+      "name": "Lateral lenticulostriate arteries",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-009"
+      ],
+      "reason": "Retain usual proximal MCA origin, deep variable targets and illustrative four-route grouping. Remove inconsistent conversion and mesh-touching-as-vessel-termination wording in nested surfaceNote.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/vasculature-courses.json",
+      "id": "vasc-medial-lenticulostriate-arteries",
+      "name": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "territory",
+        "supply",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote",
+        "vesselCourse.surfaceNote",
+        "vesselCourse.anchorNote"
+      ],
+      "assessment": "proposed correction or clarification",
+      "findingIds": [
+        "VASC-R-007",
+        "VASC-R-010"
+      ],
+      "reason": "Retain variable ACA/Heubner origin and recurrent course, anterior basal-ganglia/capsular targets and variable executive/motor deficits. Clarify that Heubner is included within a group rather than an exact group synonym.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            406
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            432
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/telencephalon-ventricles.json",
+      "id": "vent-lateral-ventricle",
+      "name": "Lateral ventricle",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain paired C-shaped cavities, Monro-to-third/aqueduct/fourth/outlet flow, horn convergence, absence of frontal/occipital plexus, and distinction of fluid space from arterial wall/plexus tissue. Hydrocephalus/NPH/haemorrhage/asymmetry claims are appropriately conditional.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            132,
+            134,
+            135,
+            136,
+            137,
+            155,
+            156,
+            157,
+            215,
+            216
+          ],
+          "pdfPhysicalPages": [
+            158,
+            160,
+            161,
+            162,
+            163,
+            181,
+            182,
+            183,
+            241,
+            242
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/telencephalon-ventricles.json",
+      "id": "vent-lateral-ventricle-frontal-horn",
+      "name": "Frontal horn of the lateral ventricle",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain anterior-to-Monro position, callosal/septal/caudate relationships, no plexus, and return to body/Monro. Evans index is a screening metric rather than diagnosis; periventricular haemorrhagic infarction is not simply IVH extension.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            132,
+            134,
+            135,
+            136,
+            137,
+            155,
+            156,
+            157,
+            215,
+            216
+          ],
+          "pdfPhysicalPages": [
+            158,
+            160,
+            161,
+            162,
+            163,
+            181,
+            182,
+            183,
+            241,
+            242
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/telencephalon-ventricles.json",
+      "id": "vent-lateral-ventricle-temporal-horn",
+      "name": "Temporal horn of the lateral ventricle",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain inferior-then-anterior extension, hippocampus/collateral-eminence floor and tapetum/caudate-tail roof relations. Enlargement with hippocampal sclerosis is directly supported by MRI-pathology research; cavity is not said to infarct.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            132,
+            134,
+            135,
+            136,
+            137,
+            155,
+            156,
+            157,
+            215,
+            216
+          ],
+          "pdfPhysicalPages": [
+            158,
+            160,
+            161,
+            162,
+            163,
+            181,
+            182,
+            183,
+            241,
+            242
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/7985576/",
+        "https://pubmed.ncbi.nlm.nih.gov/307260/"
+      ],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/telencephalon-ventricles.json",
+      "id": "vent-lateral-ventricle-occipital-horn",
+      "name": "Occipital horn of the lateral ventricle",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain variable posterior recess with tapetum, forceps-major bulb and calcar-avis relations, no intrinsic plexus and no fixed side preference. Colpocephaly is not uniquely PVL.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            132,
+            134,
+            135,
+            136,
+            137,
+            155,
+            156,
+            157,
+            215,
+            216
+          ],
+          "pdfPhysicalPages": [
+            158,
+            160,
+            161,
+            162,
+            163,
+            181,
+            182,
+            183,
+            241,
+            242
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/telencephalon-ventricles.json",
+      "id": "vent-lateral-ventricle-atrium",
+      "name": "Atrium of the lateral ventricle",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain body/occipital/temporal confluence and glomus, choroidal vascular-tissue distinction, conditional tumour/optic-radiation injury and no invented universal enlargement sequence.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            132,
+            134,
+            135,
+            136,
+            137,
+            155,
+            156,
+            157,
+            215,
+            216
+          ],
+          "pdfPhysicalPages": [
+            158,
+            160,
+            161,
+            162,
+            163,
+            181,
+            182,
+            183,
+            241,
+            242
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/33836500/"
+      ],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/telencephalon-ventricles.json",
+      "id": "vent-choroid-plexus-lateral",
+      "name": "Choroid plexus of the lateral ventricle",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain vascular tissue in body/atrium/temporal horn, epithelial blood-CSF barrier versus fenestrated capillaries, anterior/lateral posterior choroidal supply, deep venous drainage and multiple tumour hydrocephalus mechanisms. Its ventricular grouping is a taxonomy choice, not a claim that plexus is fluid.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            132,
+            134,
+            135,
+            136,
+            137,
+            155,
+            156,
+            157,
+            215,
+            216
+          ],
+          "pdfPhysicalPages": [
+            158,
+            160,
+            161,
+            162,
+            163,
+            181,
+            182,
+            183,
+            241,
+            242
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/33836500/"
+      ],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/telencephalon-ventricles.json",
+      "id": "vent-interventricular-foramen",
+      "name": "Interventricular foramen",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain paired openings between lateral and third ventricles, anterior/superior fornix and posterior thalamic relations, and tissue-versus-opening distinction. Colloid cyst/SEGA and unilateral/bilateral obstruction wording is conditional.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            132,
+            134,
+            135,
+            136,
+            137,
+            155,
+            156,
+            157,
+            215,
+            216
+          ],
+          "pdfPhysicalPages": [
+            158,
+            160,
+            161,
+            162,
+            163,
+            181,
+            182,
+            183,
+            241,
+            242
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    },
+    {
+      "file": "src/data/structures/telencephalon-ventricle-segments.json",
+      "id": "vent-lateral-ventricle-body",
+      "name": "Body of the lateral ventricle",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "function",
+        "connections",
+        "bloodSupply",
+        "clinical",
+        "levels",
+        "contextNote"
+      ],
+      "assessment": "retain with documented limitations",
+      "findingIds": [],
+      "reason": "Retain posterior-to-Monro/anterior-to-atrium boundaries, callosal roof, caudate/thalamic floor and medial septum/fornix relationships, plexus/choroidal-fissure attachment and absence of intrinsic cavity blood supply. Neurocytoma relationship is externally cross-validated; shape alone is not diagnosis.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            132,
+            134,
+            135,
+            136,
+            137,
+            155,
+            156,
+            157,
+            215,
+            216
+          ],
+          "pdfPhysicalPages": [
+            158,
+            160,
+            161,
+            162,
+            163,
+            181,
+            182,
+            183,
+            241,
+            242
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/20692674/",
+        "https://pubmed.ncbi.nlm.nih.gov/33836500/"
+      ],
+      "spatialAssessment": "Reviewed stated relative relationships and route-note consistency only. Authored coordinates, branch counts, vessel calibre and complete vascular territories are not certified."
+    }
+  ],
+  "findings": [
+    {
+      "findingId": "VASC-R-001",
+      "title": "Parent artery synonyms include separately named distal branches",
+      "priority": "P2",
+      "confidence": "high",
+      "recommendationType": "nomenclature clarification",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature.json",
+          "id": "vasc-anterior-cerebral-artery",
+          "field": "synonyms",
+          "original": [
+            "ACA",
+            "arteria cerebri anterior",
+            "A1/A2/A3 segments of the anterior cerebral artery",
+            "pericallosal artery (A2/A3)"
+          ],
+          "proposed": [
+            "ACA",
+            "arteria cerebri anterior",
+            "A1/A2/A3 segments of the anterior cerebral artery"
+          ]
+        },
+        {
+          "file": "src/data/structures/vasculature.json",
+          "id": "vasc-posterior-cerebral-artery",
+          "field": "synonyms",
+          "original": [
+            "PCA",
+            "arteria cerebri posterior",
+            "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)",
+            "calcarine artery (a P4 cortical branch)"
+          ],
+          "proposed": [
+            "PCA",
+            "arteria cerebri posterior",
+            "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)"
+          ]
+        }
+      ],
+      "explanation": "The ACA includes its proximal circulation and several distal branches/continuations; pericallosal nomenclature specifically describes its distal course and differs among schemes. The calcarine artery is a named PCA cortical branch. Retain these as related branch concepts and their own records, rather than presenting them as interchangeable aliases for the complete parent vessel.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            395,
+            396
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            421,
+            422
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/26924965/",
+        "https://pubmed.ncbi.nlm.nih.gov/21492726/"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-002",
+      "title": "MCA connection list mixes its origin, own branches, and an ICA sibling",
+      "priority": "P2",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature.json",
+          "id": "vasc-middle-cerebral-artery",
+          "field": "connections.afferent.0",
+          "original": "Internal carotid artery (vasc-internal-carotid-artery) at the carotid bifurcation",
+          "proposed": "Internal carotid artery (vasc-internal-carotid-artery) at its intracranial terminal bifurcation"
+        },
+        {
+          "file": "src/data/structures/vasculature.json",
+          "id": "vasc-middle-cerebral-artery",
+          "field": "connections.efferent",
+          "original": [
+            "Lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) from M1 — the deep supply to the putamen, caudate and internal capsule",
+            "Orbitofrontal and temporopolar branches, anterior temporal branches, insular (M2) branches, and the superior and inferior division trunks that fan out over the convexity",
+            "The anterior choroidal artery (vasc-anterior-choroidal-artery) arises nearby from the internal carotid and shares the deep territory"
+          ],
+          "proposed": [
+            "Lateral lenticulostriate perforators (vasc-lenticulostriate-arteries) from M1 — the deep supply to the putamen, caudate and internal capsule",
+            "Orbitofrontal and temporopolar branches, anterior temporal branches, insular (M2) branches, and the superior and inferior division trunks that fan out over the convexity"
+          ]
+        }
+      ],
+      "explanation": "Carotid bifurcation alone conventionally denotes the cervical common-carotid split and can misplace the MCA origin. The usual anterior choroidal artery arises independently from the supraclinoid ICA; it is not a downstream MCA branch. Its neighbouring and overlapping territory can be described separately without listing it as an MCA efferent.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            394,
+            397,
+            398
+          ],
+          "pdfPhysicalPages": [
+            419,
+            420,
+            423,
+            424
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/11156774/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9388914/"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-003",
+      "title": "Vertebral artery muscular/radicular branches are listed as inflow",
+      "priority": "P2",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature.json",
+          "id": "vasc-vertebral-artery",
+          "field": "connections.afferent",
+          "original": [
+            "Subclavian artery (the first branch of the subclavian on each side) — the inflow of the posterior circulation",
+            "Muscular and radicular branches along the cervical course"
+          ],
+          "proposed": [
+            "Usually the proximal subclavian artery; vertebral origin variants occur"
+          ]
+        },
+        {
+          "file": "src/data/structures/vasculature.json",
+          "id": "vasc-vertebral-artery",
+          "field": "connections.efferent",
+          "original": [
+            "Posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) — the largest branch, supplying the lateral medulla and inferior cerebellum",
+            "Anterior spinal artery (the paired ventral branches that join in the midline) and small posterior spinal/paramedian medullary perforators",
+            "Basilar artery (vasc-basilar-artery) — formed by the union of the two vertebral arteries at the pontomedullary junction"
+          ],
+          "proposed": [
+            "Posterior inferior cerebellar artery (vasc-posterior-inferior-cerebellar-artery) — the largest branch, supplying the lateral medulla and inferior cerebellum",
+            "Anterior spinal artery (the paired ventral branches that join in the midline) and small posterior spinal/paramedian medullary perforators",
+            "Basilar artery (vasc-basilar-artery) — formed by the union of the two vertebral arteries at the pontomedullary junction",
+            "Variable muscular, osseous and radicular branches arise along the cervical course; these are branches of the vertebral artery, with potential cervical anastomoses"
+          ]
+        }
+      ],
+      "explanation": "The ordinary direction is from the vertebral artery into its cervical branches. The original afferent entry lists these outflow branches without an anastomotic-flow qualification. The unconditional first-branch language also obscures origin variation. A primary dissection series directly characterizes the V2/V3 branches and their target tissues.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            393,
+            648
+          ],
+          "pdfPhysicalPages": [
+            419,
+            674
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/19569947/"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-004",
+      "title": "Nested M2 note confuses the insular and opercular surfaces",
+      "priority": "P2",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-mca-insular-segment",
+          "field": "vesselCourse.surfaceNote",
+          "original": "The insular (M2) segment runs in the Sylvian fissure over the insula, i.e. in the subarachnoid space on the opercular surface of the committed hemisphere envelope. Its distal (opercular) end is projected onto that envelope; the proximal two waypoints are literal vertices of the committed M2 mesh.",
+          "proposed": "The M2 segment courses in the Sylvian fissure over the insular surface. At the peri-insular sulci it continues into M3 branches over the opercula. The committed hemisphere envelope is a schematic display constraint and does not independently validate these local surfaces or the segment transition."
+        }
+      ],
+      "explanation": "The card function correctly distinguishes M2 and M3, but the nested course note calls the M2 route an opercular-surface course. Microscopic dissection distinguishes M2 on the insula from M3 along the medial opercular surfaces.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            395,
+            396
+          ],
+          "pdfPhysicalPages": [
+            421,
+            422
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9388914/"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-005",
+      "title": "Nested thalamogeniculate note borrows the paramedian entry route",
+      "priority": "P2",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-pca-thalamogeniculate-arteries",
+          "field": "vesselCourse.surfaceNote",
+          "original": "Intraparenchymal perforators: they arise from the P2 segment in the ambient cistern, pierce the posterior perforated substance and the lateral surface of the thalamus, and run inside the diencephalon. No envelope is declared because projecting them onto one would be anatomically wrong; their cisternal origin is the committed P2 vertex.",
+          "proposed": "Thalamogeniculate perforators usually arise from PCA P2 in the crural or ambient region and penetrate the geniculate/pulvinar region to reach inferolateral thalamic tissue. They are distinct from the paramedian P1 thalamoperforators entering the posterior perforated substance. The stored intraparenchymal route is schematic and does not validate individual entry sites or branching."
+        }
+      ],
+      "explanation": "The current note combines P2 origin with the posterior-perforated-substance entry of the medial P1 group. The primary study of 30 hemispheres describes variable P2/P3 origins and penetration of the geniculate bodies and pulvinar, rather than a universal medial entry through the posterior perforated substance.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            397,
+            398,
+            650,
+            651
+          ],
+          "pdfPhysicalPages": [
+            423,
+            424,
+            676,
+            677
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/2034346/"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-006",
+      "title": "Temporal PCA course notes and alias drift from corrected prose",
+      "priority": "P2",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-pca-anterior-temporal-branches",
+          "field": "vesselCourse.surfaceNote",
+          "original": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+          "proposed": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory."
+        },
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-pca-middle-temporal-branches",
+          "field": "vesselCourse.surfaceNote",
+          "original": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+          "proposed": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory."
+        },
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-pca-posterior-temporal-branches",
+          "field": "vesselCourse.surfaceNote",
+          "original": "A cortical (P3â€“P4) branch of the posterior cerebral artery running on the medial occipital or medial temporal surface: measured against `ctx-hemisphere-l`, whose medial wall includes those surfaces, and offset outward by tubeRadius + 0.15 au.",
+          "proposed": "PCA temporal cortical branches run over the inferior and medial temporal surfaces, with variable origins and branching patterns. P2 origins are common, while the precise naming and proximal-to-distal pattern vary. The hemisphere-envelope projection is a display constraint, not proof of the biological course or territory."
+        },
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-pca-posterior-temporal-branches",
+          "field": "synonyms",
+          "original": [
+            "posterior temporal arteries (PCA)",
+            "PCA temporo-occipital branches",
+            "hippocampal and posterior temporal branches"
+          ],
+          "proposed": [
+            "posterior temporal arteries (PCA)",
+            "PCA temporo-occipital branches"
+          ]
+        }
+      ],
+      "explanation": "The shared nested note calls all temporal branches P3-P4, while their card connections correctly permit P2 origin. P4 is a distal occipital cortical designation in the common surgical classification. Hippocampal and temporal arteries have variable relationships and separate named branches; the posterior-temporal record itself already states that they are not synonyms. Remove the contradictory alias and the fixed P3-P4 label.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            396,
+            397,
+            398
+          ],
+          "pdfPhysicalPages": [
+            422,
+            423,
+            424
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/21492726/",
+        "https://pubmed.ncbi.nlm.nih.gov/22194087/",
+        "https://pubmed.ncbi.nlm.nih.gov/307260/"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-007",
+      "title": "Medial striate group label equates a group with its largest recurrent branch",
+      "priority": "P2",
+      "confidence": "high",
+      "recommendationType": "nomenclature clarification",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-medial-lenticulostriate-arteries",
+          "field": "name",
+          "original": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+          "proposed": "Medial striate arteries (including recurrent artery of Heubner)"
+        },
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-medial-lenticulostriate-arteries",
+          "field": "synonyms",
+          "original": [
+            "medial striate arteries",
+            "recurrent artery of Heubner",
+            "arteria recurrens Heubneri",
+            "medial group of the lenticulostriate arteries"
+          ],
+          "proposed": [
+            "medial lenticulostriate arteries",
+            "medial striate arteries",
+            "medial group of the lenticulostriate arteries"
+          ]
+        },
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-medial-lenticulostriate-arteries",
+          "field": "clinical.0.vascular",
+          "original": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+          "proposed": "ACA medial striate branches, including the recurrent artery of Heubner"
+        }
+      ],
+      "explanation": "The corrected function describes medial ACA striate branches and then Heubner as a particular variable artery, but the title and synonym list collapse the group into that one branch. Standard nomenclature varies and Heubner is also called the distal medial striate artery; the plural parent group should explicitly include it. Keep the existing variable-origin wording and illustrative child routes.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            397,
+            398
+          ],
+          "pdfPhysicalPages": [
+            423,
+            424
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC3722790/",
+        "https://pubmed.ncbi.nlm.nih.gov/6689705/"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-008",
+      "title": "Distal cerebellar branch links imply unsupported brainstem syndromes",
+      "priority": "P2",
+      "confidence": "high for separating distal targets; vascular variants retained",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-sca-lateral-branch",
+          "field": "supply",
+          "original": [
+            "syn-cerebellar",
+            "syn-nothnagel"
+          ],
+          "proposed": [
+            "syn-cerebellar"
+          ]
+        },
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-pica-telovelotonsillar-segment",
+          "field": "supply",
+          "original": [
+            "syn-lateral-medullary",
+            "syn-cerebellar"
+          ],
+          "proposed": [
+            "syn-cerebellar"
+          ]
+        }
+      ],
+      "explanation": "The lateral/hemispheric SCA record describes a distal cerebellar branch, while Nothnagel requires dorsal midbrain ocular-motor/cerebellar-output involvement. SCA trunk perforators can reach the midbrain, but this does not establish that this distal model branch supplies that syndrome. The telovelotonsillar PICA record describes cerebellar and fourth-plexus branches; it should not directly identify lateral-medullary supply normally dependent on proximal medullary perforators. Remove these specific reverse mappings while retaining general cerebellar syndromes and the parent artery records.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            650,
+            651,
+            652,
+            653,
+            656,
+            657,
+            660,
+            711,
+            712
+          ],
+          "pdfPhysicalPages": [
+            676,
+            677,
+            678,
+            679,
+            682,
+            683,
+            686,
+            737,
+            738
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/34512277/",
+        "https://pubmed.ncbi.nlm.nih.gov/7070615/",
+        "https://svn.bmj.com/content/7/4/337"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-009",
+      "title": "Nested lateral-striate note contains an inconsistent unit conversion",
+      "priority": "P3",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/structures/vasculature-courses.json",
+          "id": "vasc-lateral-lenticulostriate-arteries",
+          "field": "vesselCourse.surfaceNote",
+          "original": "Intraparenchymal perforators: the group pierces the anterior perforated substance and runs INSIDE the brain, so no cortical envelope is declared. The single projected constraint is the entry point (0.018 au = 0.61 mm from ctx-hemisphere-l); the arborisation apex deliberately grazes the putamen surface, because a perforator ends in the structure it supplies.",
+          "proposed": "Lateral striate perforators pierce the anterior perforated substance and run within deep cerebral tissue. The stored entry projection and terminal anchors are construction choices in the atlas frame; they do not establish vessel termination, individual branching, or measured anatomical accuracy."
+        }
+      ],
+      "explanation": "The note reports 0.018 atlas units as 0.61 mm, inconsistent with the nearby 1.2 mm-per-unit examples (0.018 x 1.2 is 0.0216 mm). It also treats touching the putaminal surface as evidence of biological perforator termination, although perforators enter and arborize within tissue. Remove that numerical claim and preserve a plain schematic limitation rather than fabricating corrected anatomical measurements.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            395,
+            397,
+            398
+          ],
+          "pdfPhysicalPages": [
+            421,
+            423,
+            424
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9388914/"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    },
+    {
+      "findingId": "VASC-R-010",
+      "title": "Built-in vessel-course fallback retains stale group and choroidal text",
+      "priority": "P2",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/geometry/vasculature-courses.ts",
+          "id": "vasc-medial-lenticulostriate-arteries",
+          "field": "name",
+          "original": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+          "proposed": "Medial striate arteries (including recurrent artery of Heubner)"
+        },
+        {
+          "file": "src/geometry/vasculature-courses.ts",
+          "id": "vasc-medial-lenticulostriate-arteries",
+          "field": "synonyms",
+          "original": [
+            "medial striate arteries",
+            "recurrent artery of Heubner",
+            "arteria recurrens Heubneri",
+            "medial group of the lenticulostriate arteries"
+          ],
+          "proposed": [
+            "medial lenticulostriate arteries",
+            "medial striate arteries",
+            "medial group of the lenticulostriate arteries"
+          ]
+        },
+        {
+          "file": "src/geometry/vasculature-courses.ts",
+          "id": "vasc-medial-lenticulostriate-arteries",
+          "field": "modality",
+          "original": "Arterial blood (oxygenated) — the largest medial perforator of the ACA",
+          "proposed": "Arterial blood (oxygenated) — medial ACA striate perforators, including Heubner"
+        },
+        {
+          "file": "src/geometry/vasculature-courses.ts",
+          "id": "vasc-medial-lenticulostriate-arteries",
+          "field": "clinical.0.vascular",
+          "original": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+          "proposed": "ACA medial striate branches, including the recurrent artery of Heubner"
+        },
+        {
+          "file": "src/geometry/vasculature-courses.ts",
+          "id": "vasc-posterior-medial-choroidal-artery",
+          "field": "surfaceNote",
+          "original": "The cisternal segment hugs the committed `ctx-midbrain-surface` envelope (the same surface the three SCA courses declare): its middle waypoint is a literal vertex of it, 0.000 au from the surface. The TERMINAL is the opposite relation — a choroidal artery ends ON the plexus — so it is a deliberate graze on the committed `ctx-choroid-plexus-l` mesh (a literal plexus vertex), 12.664 au (15.20 mm) from the P2 take-off, which is the cisternal + choroidal-fissure interval the path crosses.",
+          "proposed": "Spatial route withheld. The former lateral-ventricular plexus endpoint does not establish a medial posterior choroidal course to the third-ventricular tela choroidea. Source-backed placement is required; the retained waypoints and construction distances do not validate arterial anatomy."
+        }
+      ],
+      "explanation": "The built-in fallback duplicates medial-group prose and still calls its modality one largest vessel, even though the record represents the group. Its medial-posterior-choroidal surface note certifies the old lateral-plexus terminal despite meshes:false and an anchor note already acknowledging the invalid course. Synchronize the group text and withheld-route limitation. Do not re-enable that mesh or adjust its coordinates.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            397,
+            398
+          ],
+          "pdfPhysicalPages": [
+            423,
+            424
+          ],
+          "verification": "Verified extracted page headers and original-PDF page-label offset; original figures 5.11, 10.8, and 14.21 were also rendered and visually read where relevant.",
+          "scope": "Gross anatomical or clinical support; no metric atlas or patient anatomy validation."
+        }
+      ],
+      "publicUrls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC3722790/",
+        "https://pubmed.ncbi.nlm.nih.gov/33836500/",
+        "https://link.springer.com/article/10.1186/s41984-025-00512-8"
+      ],
+      "evidenceLimit": "The cited studies establish anatomical relationships and variability, not the fidelity of the authored mesh, course, calibre, or individual territories."
+    }
+  ],
+  "duplicateAuthoredTablesReviewed": [
+    {
+      "file": "src/geometry/vasculature-courses.ts",
+      "ids": [
+        "vasc-lenticulostriate-arteries",
+        "vasc-lateral-lenticulostriate-arteries",
+        "vasc-medial-lenticulostriate-arteries",
+        "vasc-posterior-medial-choroidal-artery"
+      ],
+      "assessment": "Fallback card functions, targets, territory links and clinical paragraphs generally match JSON; residual label/modality/choroidal surface note differences are VASC-R-010. No waypoint changes or anatomy certification recommended."
+    }
+  ],
+  "retainedLimitations": [
+    "Textbook diagrams and public cadaveric samples support relative anatomy, not stereotaxic validation of this atlas, a universal vascular map, or patient stroke prediction.",
+    "Major cortical/deep arteries have overlapping and variable territories. Links indicate partial regional supply. Child vessel numbers, calibre and geometric endpoint contacts do not establish branch identity or an anatomical distribution.",
+    "Card clinical patterns are conditional; eponym boundaries vary and complete named syndromes are neither necessary nor guaranteed. SCA perforators may supply some dorsal/lateral midbrain tissue, and this does not validate the distal lateral-branch Nothnagel link.",
+    "Eight ventricular records correctly distinguish CSF spaces/openings from surrounding neural tissue and choroid plexus. Their arterial/venous descriptions refer to wall or plexal tissue, not a cavity that can infarct.",
+    "Medial posterior choroidal, pontine-perforator and certain other withheld meshes remain withheld. No invented replacement routes, coordinates, voxel territories or meshes are proposed.",
+    "Haines citation page ranges were not independently certified in this assignment because the assigned source was Blumenfeld. Existing PubMed links 6689705, 7070615, 33836500, 7985576 and 20692674 match their named research. Broad textbook references support gross concepts but do not validate every small branch statement.",
+    "Pericallosal/ACA and segment nomenclature varies. A2/A3/A4/A5 labels cannot be treated as a universal branch-name equivalence. Current callosomarginal/frontopolar function text explicitly preserves variable origins; no rigid segment-remapping is proposed.",
+    "No app files, git state, deployments, medical-result files, or memories were modified by this audit. Private figure renders and this report are outside the Git repository."
+  ],
+  "noChangeDecisions": [
+    {
+      "decision": "Retain ventricular flow and neighbouring anatomy",
+      "ids": [
+        "vent-lateral-ventricle",
+        "vent-lateral-ventricle-frontal-horn",
+        "vent-lateral-ventricle-temporal-horn",
+        "vent-lateral-ventricle-occipital-horn",
+        "vent-lateral-ventricle-atrium",
+        "vent-choroid-plexus-lateral",
+        "vent-interventricular-foramen",
+        "vent-lateral-ventricle-body"
+      ],
+      "reason": "Book pp.132-137 and 215-216 support the cavity arrangement and flow; pp.155-157 support variable hydrocephalus mechanisms. Additional direct MRI-pathology/clinical series validate the current temporal-horn and neurocytoma corrections."
+    },
+    {
+      "decision": "Retain cortical visual field and alexia distinctions",
+      "ids": [
+        "vasc-pca-parieto-occipital-artery",
+        "vasc-pca-calcarine-artery",
+        "vasc-pca-splenial-artery",
+        "vasc-mca-angular-branch",
+        "vasc-mca-inferior-terminal-branch"
+      ],
+      "reason": "Book pp.474-475 and 894-896 support upper-bank lower-field loss, temporal Meyer-loop upper-field loss, dominant angular alexia-with-agraphia, and combined occipital-splenial pure alexia. Current wording is qualified."
+    },
+    {
+      "decision": "Retain variable major-artery stroke patterns",
+      "ids": [
+        "vasc-internal-carotid-artery",
+        "vasc-basilar-artery",
+        "vasc-posterior-communicating-artery",
+        "vasc-anterior-choroidal-artery",
+        "vasc-posterior-inferior-cerebellar-artery"
+      ],
+      "reason": "Current prose avoids obligatory complete syndrome, fixed universal collateral adequacy and fixed branch counts. Exact biological supply cannot be inferred from a model tube."
+    },
+    {
+      "decision": "Retain coarse surface-landmark and corticospinal links with limits",
+      "ids": [
+        "vasc-basilar-artery",
+        "vasc-anterior-inferior-cerebellar-artery",
+        "vasc-pontine-perforating-arteries"
+      ],
+      "reason": "The current linked CST card includes its supraspinal course, so lateral-CST ID is not evidence of spinal perfusion by basilar. Surface-root/fossa links are coarse relations to nearby supplied tissue, not full CSF or nerve territories; no metric certification is made."
+    }
+  ]
+}

@@ -40,6 +40,9 @@ export interface ClinicalItem { syndrome: string; findings: string; vascular?: s
 export interface StructureRecord {
   id: string; name: string; synonyms?: string[];
   region: Region; subdivision: string; kind: Kind; laterality: Laterality;
+  /** Anatomical labels when a rendering category/marker simplifies the tissue or laterality. */
+  anatomicalClass?: string;
+  anatomicalLaterality?: Laterality;
   color: string;                     // hex
   function: string;                  // neurophysiology, 1–3 sentences
   connections?: { afferent?: string[]; efferent?: string[] };
@@ -140,6 +143,8 @@ export interface TaxonomyEntry {
   subdivision: string;
   kind: Kind;
   laterality: Laterality;
+  anatomicalClass?: string;
+  anatomicalLaterality?: Laterality;
   color: string;
   synonyms?: string[];
   parent?: string;                   // id of another TaxonomyEntry (tree nesting)

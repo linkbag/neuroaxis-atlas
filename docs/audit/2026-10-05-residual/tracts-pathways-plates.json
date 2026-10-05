@@ -1,0 +1,2084 @@
+{
+  "audit": "Residual tract, pathway and authored-plate review",
+  "baselineCommit": "7baa2d63d2e01dc0f36bd94a49abfa2812287d0b",
+  "sourceFingerprint": {
+    "edition": "Second edition (2010)",
+    "sha256": "0df361fd2ce46e6253a98d03f059b80acb6f27057370ecbff32d55a61e9a8d1c",
+    "physicalPages": 1033,
+    "bodyPrintedToPhysicalOffset": 26
+  },
+  "counts": {
+    "tracts": 23,
+    "pathways": 19,
+    "plates": 15,
+    "findingGroups": 9
+  },
+  "reviewedIds": [
+    "tract-corticospinal-lateral",
+    "tract-corticobulbar",
+    "tract-corticopontine",
+    "tract-rubrospinal",
+    "tract-tectospinal",
+    "tract-lateral-vestibulospinal",
+    "tract-medial-vestibulospinal",
+    "tract-reticulospinal",
+    "tract-mlf",
+    "tract-central-tegmental",
+    "tract-hypothalamospinal",
+    "tract-dcml",
+    "tract-spinothalamic",
+    "tract-trigeminothalamic-ventral",
+    "tract-trigeminothalamic-dorsal",
+    "tract-posterior-spinocerebellar",
+    "tract-anterior-spinocerebellar",
+    "tract-auditory-pathway",
+    "tract-spinoreticular",
+    "tract-optic-radiation",
+    "tract-cingulum",
+    "tract-uncinate-fasciculus",
+    "tract-superior-longitudinal-fasciculus"
+  ],
+  "perRecordAssessments": [
+    {
+      "id": "tract-corticospinal-lateral",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain predominantly contralateral distal-limb control below pyramidal crossing; composite cortex-to-spinal course and incomplete anterior component remain explicit.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242
+          ],
+          "pdfPhysicalPages": [
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-corticobulbar",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain bilateral input with contralateral lower-face/genioglossus emphasis and variable clinical expression; no all-cranial-nuclei rule.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            512,
+            513,
+            514,
+            535,
+            536,
+            537,
+            538
+          ],
+          "pdfPhysicalPages": [
+            538,
+            539,
+            540,
+            561,
+            562,
+            563,
+            564
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-corticopontine",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Ipsilateral pontine termination and crossed pontocerebellar continuation agree with book; distinguish corticopontine from downstream fibers.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            704,
+            705,
+            706,
+            708,
+            709
+          ],
+          "pdfPhysicalPages": [
+            730,
+            731,
+            732,
+            734,
+            735
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-rubrospinal",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain magnocellular origin/crossing and limited human importance; no animal flexor rule asserted as a validated human mechanism.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            231,
+            625
+          ],
+          "pdfPhysicalPages": [
+            257,
+            651
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-tectospinal",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain superior-collicular orienting route and cervical emphasis; illustration is not a complete multimodal circuit.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            231,
+            232,
+            625
+          ],
+          "pdfPhysicalPages": [
+            257,
+            258,
+            651
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-lateral-vestibulospinal",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain mainly uncrossed whole-cord antigravity/postural influence; otolith emphasis is not stated as exclusive sensory input.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            231,
+            232,
+            523,
+            524,
+            525
+          ],
+          "pdfPhysicalPages": [
+            257,
+            258,
+            549,
+            550,
+            551
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-medial-vestibulospinal",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain bilateral cervical/upper-thoracic head-neck pathway in descending MLF; canal emphasis is a teaching simplification.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            231,
+            232,
+            523,
+            524,
+            525
+          ],
+          "pdfPhysicalPages": [
+            257,
+            258,
+            549,
+            550,
+            551
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-reticulospinal",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain broad pontomedullary motor/postural network with mixed projections; simple pontine-excitatory/medullary-inhibitory human dichotomy remains avoided.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            231,
+            232,
+            625,
+            626
+          ],
+          "pdfPhysicalPages": [
+            257,
+            258,
+            651,
+            652
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-mlf",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain VI internuclear crossing to contralateral III medial rectus and vestibular integration; side-specific INO statement is appropriate.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            523,
+            524,
+            525,
+            584,
+            585,
+            586,
+            587,
+            624
+          ],
+          "pdfPhysicalPages": [
+            549,
+            550,
+            551,
+            610,
+            611,
+            612,
+            613,
+            650
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-central-tegmental",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain ipsilateral rubro-olivary component and conditional HOD, with other tegmental fibers acknowledged.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            626,
+            627,
+            711
+          ],
+          "pdfPhysicalPages": [
+            652,
+            653,
+            737
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-hypothalamospinal",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain descending ipsilateral sympathetic route and central Horner pattern; not all sympathetic pathways are a single isolated tract.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            578,
+            579,
+            580,
+            581
+          ],
+          "pdfPhysicalPages": [
+            604,
+            605,
+            606,
+            607
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-dcml",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain ipsilateral columns to gracile/cuneate relays, internal-arcuate crossing and contralateral VPL; medial-lemniscal rotation is qualified.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            277,
+            279,
+            280
+          ],
+          "pdfPhysicalPages": [
+            303,
+            305,
+            306
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-spinothalamic",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain anterior-white-commissure crossing near spinal entry, VPL/cortical relay and small lesion level-offset caveat; composite ALS is not one isolated pain pathway.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            278,
+            280,
+            281,
+            282
+          ],
+          "pdfPhysicalPages": [
+            304,
+            306,
+            307,
+            308
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-trigeminothalamic-ventral",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain principally crossed trigeminal relay to VPM; broad facial modalities require several source nuclei.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            509,
+            510,
+            511,
+            512
+          ],
+          "pdfPhysicalPages": [
+            535,
+            536,
+            537,
+            538
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-trigeminothalamic-dorsal",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain smaller uncrossed mechanoreceptive contribution and limited isolated clinical localization.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            509,
+            510,
+            511,
+            512
+          ],
+          "pdfPhysicalPages": [
+            535,
+            536,
+            537,
+            538
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-posterior-spinocerebellar",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain ipsilateral Clarke input and inferior-peduncular mossy route; upper-limb cuneocerebellar analog distinguished.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            708,
+            709,
+            710,
+            711
+          ],
+          "pdfPhysicalPages": [
+            734,
+            735,
+            736,
+            737
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-anterior-spinocerebellar",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain spinal and cerebellar double crossing, spinal-interneuron state emphasis, and inferior-collicular mesh withheld.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            708,
+            709,
+            710,
+            711
+          ],
+          "pdfPhysicalPages": [
+            734,
+            735,
+            736,
+            737
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-auditory-pathway",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Principal route is bilateral, branched and tonotopic; qualify the short modality label to match its existing subdivision caveat.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            519,
+            520,
+            521,
+            522
+          ],
+          "pdfPhysicalPages": [
+            545,
+            546,
+            547,
+            548
+          ]
+        }
+      ],
+      "findingIds": [
+        "ROOT-R-003"
+      ],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-spinoreticular",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain bilateral reticular/medial-thalamic arousal-nociception contribution and no-coma-cause assertion; broaden overly narrow origin label.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            278,
+            281,
+            282,
+            628,
+            629,
+            630
+          ],
+          "pdfPhysicalPages": [
+            304,
+            307,
+            308,
+            654,
+            655,
+            656
+          ]
+        }
+      ],
+      "findingIds": [
+        "ROOT-R-004"
+      ],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-optic-radiation",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain LGN-to-V1 retinotopy, inferior temporal Meyer loop/superior field and parietal lower-field projection; no obligatory macular sparing.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            463,
+            464,
+            465,
+            466,
+            467,
+            472,
+            473,
+            474,
+            475,
+            476
+          ],
+          "pdfPhysicalPages": [
+            489,
+            490,
+            491,
+            492,
+            493,
+            498,
+            499,
+            500,
+            501,
+            502
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-cingulum",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain bidirectional association segments and conditional network effects; one drawn curve is not one end-to-end axon or isolated emotion circuit.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            830,
+            831,
+            832,
+            833,
+            834,
+            835,
+            836,
+            837
+          ],
+          "pdfPhysicalPages": [
+            856,
+            857,
+            858,
+            859,
+            860,
+            861,
+            862,
+            863
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-uncinate-fasciculus",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain anterior-temporal to orbital/ventrolateral-frontal reciprocal association; clinical effects depend on wider network/hemisphere.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            885,
+            886,
+            887,
+            894,
+            895,
+            896,
+            897
+          ],
+          "pdfPhysicalPages": [
+            911,
+            912,
+            913,
+            920,
+            921,
+            922,
+            923
+          ]
+        }
+      ],
+      "findingIds": [],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    },
+    {
+      "id": "tract-superior-longitudinal-fasciculus",
+      "file": "src/data/tracts.json",
+      "fieldsReviewed": [
+        "name",
+        "synonyms",
+        "modality",
+        "origin",
+        "target",
+        "decussation",
+        "somatotopy",
+        "function",
+        "clinical",
+        "levels",
+        "refs",
+        "geometryNote"
+      ],
+      "assessment": "Retain frontoparietal branches and arcuate naming variation; remove entire-SLF equivalence in the search alias.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            885,
+            886,
+            887,
+            891,
+            892,
+            893
+          ],
+          "pdfPhysicalPages": [
+            911,
+            912,
+            913,
+            917,
+            918,
+            919
+          ]
+        }
+      ],
+      "findingIds": [
+        "ROOT-R-001"
+      ],
+      "spatialAssessment": "Custom-frame waypoints are schematic and unvalidated; no metric or complete tract-boundary claim."
+    }
+  ],
+  "pathwayAssessments": [
+    {
+      "id": "path-visual",
+      "assessment": "Retain nasal retinal crossing, LGN/optic-radiation/V1 route and retinotopy; parallel pretectal/collicular routes and variable field defects remain qualified.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), pp. 463-476 (PDF pp. 489-502), Figures 11.6-11.8 and 11.15"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-auditory",
+      "assessment": "Retain cochlear relays through SOC/lateral lemniscus/IC/MGN to auditory cortex. Bilateral projections and non-obligatory SOC passage are explicit; this is a composite route.",
+      "refs": [
+        "Blumenfeld, 2nd ed., pp. 519-522 (PDF pp. 545-548), Figures 12.16-12.17"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-hippocampal-intrinsic",
+      "assessment": "Retain preferential entorhinal layer II to dentate/CA3 and layer III to CA1/subiculum, mossy fibres and Schaffer collaterals. The trisynaptic teaching loop is not the whole recurrent network.",
+      "refs": [
+        "Blumenfeld, 2nd ed., pp. 834-837 (PDF pp. 860-863), Figures 18.8, 18.11 and 18.13",
+        "Witter MP, Amaral DG (1991). Entorhinal cortex of the monkey: V. Projections to dentate gyrus, hippocampus, and subicular complex. J Comp Neurol 307:437-459. https://pubmed.ncbi.nlm.nih.gov/1713237/ (primary macaque tracing; layer contributions are preferential, not exclusive)"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-papez",
+      "assessment": "Retain hippocampal/subicular output through fornix, mammillary bodies, mammillothalamic tract, anterior thalamus and cingulate/entorhinal return. The loop is not a complete memory or emotion system.",
+      "refs": [
+        "Blumenfeld, 2nd ed., pp. 834-837 (PDF pp. 860-863), Figures 18.8, 18.11 and 18.13"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-basal-direct",
+      "assessment": "Retain net disinhibition via striatum to GPi/SNr and thalamocortical output in the simplified direct model; inhibitory signs and dopamine qualifications agree with the textbook.",
+      "refs": [
+        "Blumenfeld, 2nd ed., pp. 748-752 (PDF pp. 774-778), Figures 16.5-16.8; textbook explicitly describes direct/indirect model as incomplete"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-basal-indirect",
+      "assessment": "Retain striatum-GPe-STN-GPi/SNr sign relationships and simplified net inhibition of thalamic output. Parallel, recurrent and cell-population limitations remain explicit.",
+      "refs": [
+        "Blumenfeld, 2nd ed., pp. 748-752 (PDF pp. 774-778), Figures 16.5-16.8; textbook explicitly describes direct/indirect model as incomplete"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-language-network",
+      "assessment": "Correct the linked arcuate step to dorsal connections only; retain distributed reciprocal language networks and the separate, unmodeled ventral contribution.",
+      "refs": [
+        "Blumenfeld, 2nd ed., pp. 885-887 and 894-897 (PDF pp. 911-913 and 920-923), Figure 19.2; language processing involves distributed reciprocal networks"
+      ],
+      "findingIds": [
+        "ROOT-R-002"
+      ]
+    },
+    {
+      "id": "path-cst",
+      "assessment": "Retain cortex/capsule/crus/pontine/pyramid route and predominantly crossed lateral CST. The anterior CST and fine somatotopy are not represented as complete geometry.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 6, pp. 231-242, Figures 6.8-6.11"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-corticobulbar",
+      "assessment": "Retain predominantly bilateral inputs with contralateral lower-facial and tongue emphasis; motor-nucleus specificity and distinction from the travelling corticospinal fibres are qualified.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, pp. 512-514, 535-538, Figure 12.7 and clinical concepts"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-dcml",
+      "assessment": "Retain ipsilateral dorsal-column ascent to gracile/cuneate nuclei, caudal-medullary sensory crossing, medial lemniscus, VPL and somatosensory cortex.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, pp. 277-280, Figures 7.1 and 7.3"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-anterolateral",
+      "assessment": "Retain dorsal-horn relay, short segmental crossing and contralateral ascending pain/temperature route. Bilateral and additional anterolateral projections remain qualified.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7, pp. 278-282, Figures 7.2 and 7.4"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-trigeminal",
+      "assessment": "Retain distinct principal and spinal trigeminal sensory relays, predominantly crossed VPM projection and bilateral components; a single curve does not represent every modality branch.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, pp. 509-512, Figure 12.8"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-vestibuloocular",
+      "assessment": "Retain vestibular-to-abducens and crossed internuclear MLF-to-oculomotor relationships for conjugate horizontal gaze; vestibular and vertical pathways extend beyond this example.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, pp. 523-525, Figure 12.19",
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, pp. 584-587, Figure 13.13"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-pontocerebellar",
+      "assessment": "Retain ipsilateral cortical input to pontine nuclei and crossed pontocerebellar input via the MCP; cerebellar cortex/deep output relations remain schematic.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, pp. 704-710, Figures 15.9-15.10"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-spinocerebellar",
+      "assessment": "Retain dorsal/cuneocerebellar mainly ipsilateral inputs and the ventral route double-crossing qualification. The known incorrect anterior tract geometry remains withheld.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, pp. 708-711, Table 15.3 and Figure 15.11"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-cerebellar-output",
+      "assessment": "Retain major deep-nuclear output through crossed SCP to thalamic/red-nuclear targets, with fastigial/vestibular exceptions. Not every cerebellothalamic fibre relays in the red nucleus.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 15, pp. 704-708, Figures 15.9A-C"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-basal-hyperdirect",
+      "assessment": "Retain cortical-STN-GPi/SNr fast excitatory route as a teaching example grounded in primary primate physiology. Species and incomplete human behavioural-model limits remain explicit.",
+      "refs": [
+        "Nambu et al. (2000), Excitatory cortical inputs to pallidal neurons via the subthalamic nucleus in the monkey, J Neurophysiol 84:289-300, https://doi.org/10.1152/jn.2000.84.1.289 (primary primate physiology; not a full model of human behavior)",
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 16, pp. 748-752 (context and limitations of direct/indirect model)"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-oculosympathetic",
+      "assessment": "Retain three-neuron hypothalamic/spinal/SCG route with carotid-associated ocular fibres; Horner signs and sweat distribution depend on lesion level.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 13, pp. 578-581, Figure 13.10"
+      ],
+      "findingIds": []
+    },
+    {
+      "id": "path-visceral-reflex",
+      "assessment": "Retain IX/X visceral afferents to NTS and parasympathetic motor relays; baroreflex and organ-specific outputs are examples of a larger distributed autonomic network.",
+      "refs": [
+        "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12, pp. 530-535, Figures 12.22-12.23"
+      ],
+      "findingIds": []
+    }
+  ],
+  "plateAssessments": [
+    {
+      "id": "plate-thalamus-mid",
+      "file": "src/data/plates/plate-thalamus-mid.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-009"
+      ],
+      "assessment": "Retain broad schematic relationships. Exact dimensions, segmentation and coplanarity are not established by this review.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-midbrain-sc",
+      "file": "src/data/plates/plate-midbrain-sc.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-009"
+      ],
+      "assessment": "Retain broad schematic relationships. Exact dimensions, segmentation and coplanarity are not established by this review.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-midbrain-ic",
+      "file": "src/data/plates/plate-midbrain-ic.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-009"
+      ],
+      "assessment": "Retain broad schematic relationships. Exact dimensions, segmentation and coplanarity are not established by this review.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-pons-rostral",
+      "file": "src/data/plates/plate-pons-rostral.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-006",
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-pons-middle",
+      "file": "src/data/plates/plate-pons-middle.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-006",
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-pons-caudal",
+      "file": "src/data/plates/plate-pons-caudal.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-006",
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-olivary",
+      "file": "src/data/plates/plate-olivary.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-006",
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-sensory-decuss",
+      "file": "src/data/plates/plate-sensory-decuss.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-006",
+        "ROOT-R-007",
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-pyramid-decuss",
+      "file": "src/data/plates/plate-pyramid-decuss.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-006",
+        "ROOT-R-008",
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-sagittal-midline",
+      "file": "src/data/plates/plate-sagittal-midline.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-005",
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-coronal-midbrain",
+      "file": "src/data/plates/plate-coronal-midbrain.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-coronal-thalamus",
+      "file": "src/data/plates/plate-coronal-thalamus.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-tel-axial-58",
+      "file": "src/data/plates/plate-tel-axial-58.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-009"
+      ],
+      "assessment": "Retain broad schematic relationships. Exact dimensions, segmentation and coplanarity are not established by this review.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            830,
+            831,
+            832,
+            833,
+            834
+          ],
+          "pdfPhysicalPages": [
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            856,
+            857,
+            858,
+            859,
+            860
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-tel-sagittal-hemisphere",
+      "file": "src/data/plates/plate-tel-sagittal-hemisphere.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-005",
+        "ROOT-R-009"
+      ],
+      "assessment": "Apply indicated marker/overlay/caption corrections. Boundaries, marker placement, relative scale and exact coplanarity remain unvalidated.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            830,
+            831,
+            832,
+            833,
+            834
+          ],
+          "pdfPhysicalPages": [
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            856,
+            857,
+            858,
+            859,
+            860
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plate-tel-coronal-fornix",
+      "file": "src/data/plates/plate-tel-coronal-fornix.svg",
+      "reviewed": "SVG labels, clickable IDs, orientation frame, gross arrangement and composite-level interpretation; all fifteen diagrams visually inspected in private contact sheets.",
+      "findingIds": [
+        "ROOT-R-009"
+      ],
+      "assessment": "Retain broad schematic relationships. Exact dimensions, segmentation and coplanarity are not established by this review.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            830,
+            831,
+            832,
+            833,
+            834
+          ],
+          "pdfPhysicalPages": [
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            856,
+            857,
+            858,
+            859,
+            860
+          ]
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "findingId": "ROOT-R-001",
+      "title": "SLF search alias equates a related component with the entire system",
+      "confidence": "high",
+      "recommendationType": "nomenclature clarification",
+      "targets": [
+        {
+          "file": "src/data/tracts.json",
+          "id": "tract-superior-longitudinal-fasciculus",
+          "field": "synonyms",
+          "original": [
+            "SLF",
+            "arcuate fasciculus (dorsal component)"
+          ],
+          "proposed": [
+            "SLF",
+            "superior longitudinal fascicle"
+          ]
+        }
+      ],
+      "explanation": "Arcuate naming varies among classifications, but even a scheme grouping it within the SLF distinguishes it as one component. The atlas has a separate arcuate record; remove the whole-system identity alias while preserving the naming-convention caveat.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            885,
+            886,
+            887
+          ],
+          "pdfPhysicalPages": [
+            911,
+            912,
+            913
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/15590909/"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    },
+    {
+      "findingId": "ROOT-R-002",
+      "title": "Language route labels both dorsal and ventral connections as arcuate",
+      "confidence": "high",
+      "recommendationType": "clarification",
+      "targets": [
+        {
+          "file": "src/data/pathways.json",
+          "id": "path-language-network",
+          "field": "steps.2.label",
+          "original": "Dorsal and ventral language connections",
+          "proposed": "Dorsal language connections (arcuate-related)"
+        },
+        {
+          "file": "src/data/pathways.json",
+          "id": "path-language-network",
+          "field": "steps.2.note",
+          "original": "Arcuate/SLF-related dorsal routes support auditory-motor integration and repetition; additional temporal-frontal routes support comprehension. Arcuate fasciculus is not identical to the entire SLF.",
+          "proposed": "Arcuate/SLF-related dorsal routes contribute to auditory-motor integration and repetition. Parallel ventral temporal-frontal connections also contribute to comprehension and are not represented by the arcuate link. Naming conventions vary; the arcuate is not the entire SLF."
+        }
+      ],
+      "explanation": "The clickable relay is the arcuate fasciculus. A dual-stream title implied it represented ventral connections too. Narrow the title and retain the distributed network and unmodeled ventral route.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            885,
+            886,
+            887
+          ],
+          "pdfPhysicalPages": [
+            911,
+            912,
+            913
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC2584675/"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    },
+    {
+      "findingId": "ROOT-R-003",
+      "title": "Auditory tonotopy claim is more absolute than the detailed card",
+      "confidence": "high",
+      "recommendationType": "precision clarification",
+      "targets": [
+        {
+          "file": "src/data/tracts.json",
+          "id": "tract-auditory-pathway",
+          "field": "modality",
+          "original": "Special sensory — audition, tonotopically organized at every relay",
+          "proposed": "Special sensory — audition, with tonotopic organization at major relays; frequency gradients vary between subnuclei"
+        }
+      ],
+      "explanation": "The textbook teaches tonotopy throughout the principal auditory route. Human high-field fMRI identifies subdivision-dependent gradients; the existing somatotopy paragraph already qualifies the composite curve. Harmonize the short modality label without asserting loss of principal-pathway tonotopy.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            521,
+            522
+          ],
+          "pdfPhysicalPages": [
+            547,
+            548
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC4657019/"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    },
+    {
+      "findingId": "ROOT-R-004",
+      "title": "Spinoreticular origin excludes experimentally demonstrated dorsal-horn contributions",
+      "confidence": "high",
+      "recommendationType": "precision clarification",
+      "targets": [
+        {
+          "file": "src/data/tracts.json",
+          "id": "tract-spinoreticular",
+          "field": "origin",
+          "original": "Projection neurons distributed in spinal intermediate-zone/ventral-horn laminae VI-VIII, within the broader anterolateral system.",
+          "proposed": "Spinal projection neurons in dorsal-horn, intermediate-zone and ventral-horn regions. Primate tracing identifies prominent lamina VII-VIII contributions and additional dorsal-horn neurons; a fixed human laminar census is not implied."
+        }
+      ],
+      "explanation": "Figure 7.2 places the composite input in spinal sensory circuitry. Primary monkey tracing found prominent VII-VIII neurons and dorsal-horn contributions, especially V. Retain the broad nociception/arousal circuit but remove the VI-VIII-only distribution.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            278,
+            281,
+            282
+          ],
+          "pdfPhysicalPages": [
+            304,
+            307,
+            308
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://pubmed.ncbi.nlm.nih.gov/7096639/"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    },
+    {
+      "findingId": "ROOT-R-005",
+      "title": "Sagittal anterior/posterior markers contradict the drawn structures",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/plates/plate-sagittal-midline.svg",
+          "id": "plate-sagittal-midline",
+          "field": "orientation markers",
+          "original": "P on image-left, A on image-right",
+          "proposed": "A on image-left, P on image-right"
+        },
+        {
+          "file": "src/data/plates/plate-tel-sagittal-hemisphere.svg",
+          "id": "plate-tel-sagittal-hemisphere",
+          "field": "orientation markers",
+          "original": "P on image-left, A on image-right",
+          "proposed": "A on image-left, P on image-right"
+        }
+      ],
+      "explanation": "Both diagrams draw frontal/pontine anatomy left of the posterior cerebellum. Their A/P frame letters were reversed. Swap letters only; no coordinate or tissue reshaping.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            35,
+            36,
+            37,
+            618,
+            619,
+            620
+          ],
+          "pdfPhysicalPages": [
+            61,
+            62,
+            63,
+            644,
+            645,
+            646
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://nba.uth.tmc.edu/neuroscience/m/s2/chapter01.html"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    },
+    {
+      "findingId": "ROOT-R-006",
+      "title": "Six transverse brainstem frames put P and A in bottom corners",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/plates/plate-pons-rostral.svg",
+          "id": "plate-pons-rostral",
+          "field": "orientation marker positions",
+          "original": "R/L at upper corners; P/A at lower corners",
+          "proposed": "P above dorsal surface; A below ventral surface; R/L on respective image sides"
+        },
+        {
+          "file": "src/data/plates/plate-pons-middle.svg",
+          "id": "plate-pons-middle",
+          "field": "orientation marker positions",
+          "original": "R/L at upper corners; P/A at lower corners",
+          "proposed": "P above dorsal surface; A below ventral surface; R/L on respective image sides"
+        },
+        {
+          "file": "src/data/plates/plate-pons-caudal.svg",
+          "id": "plate-pons-caudal",
+          "field": "orientation marker positions",
+          "original": "R/L at upper corners; P/A at lower corners",
+          "proposed": "P above dorsal surface; A below ventral surface; R/L on respective image sides"
+        },
+        {
+          "file": "src/data/plates/plate-olivary.svg",
+          "id": "plate-olivary",
+          "field": "orientation marker positions",
+          "original": "R/L at upper corners; P/A at lower corners",
+          "proposed": "P above dorsal surface; A below ventral surface; R/L on respective image sides"
+        },
+        {
+          "file": "src/data/plates/plate-sensory-decuss.svg",
+          "id": "plate-sensory-decuss",
+          "field": "orientation marker positions",
+          "original": "R/L at upper corners; P/A at lower corners",
+          "proposed": "P above dorsal surface; A below ventral surface; R/L on respective image sides"
+        },
+        {
+          "file": "src/data/plates/plate-pyramid-decuss.svg",
+          "id": "plate-pyramid-decuss",
+          "field": "orientation marker positions",
+          "original": "R/L at upper corners; P/A at lower corners",
+          "proposed": "P above dorsal surface; A below ventral surface; R/L on respective image sides"
+        }
+      ],
+      "explanation": "Posterior/dorsal ventricular or dorsal-column structures are at diagram-top and the ventral pons/pyramids at bottom. Place the direction badges accordingly. This corrects orientation cues, without claiming exact contour accuracy.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://nba.uth.tmc.edu/neuroscience/m/s2/chapter01.html"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    },
+    {
+      "findingId": "ROOT-R-007",
+      "title": "Sensory-decusssation plate draws a pre-crossing lateral corticospinal bundle",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/plates/plate-sensory-decuss.svg",
+          "id": "plate-sensory-decuss",
+          "field": "tract-corticospinal-lateral shapes and label",
+          "original": "Two lateral ellipses and a lateral corticospinal label in the sensory-decusssation section",
+          "proposed": "Remove these ellipses/label; retain the ventral pyramid representing pre-crossing corticospinal fibers"
+        },
+        {
+          "file": "src/data/plates.json",
+          "id": "plate-sensory-decuss",
+          "field": "regions",
+          "original": "Includes tract-corticospinal-lateral",
+          "proposed": "Remove tract-corticospinal-lateral from this plate manifest"
+        }
+      ],
+      "explanation": "The sensory crossing is rostral to the pyramidal decussation. At the illustrated caudal-medullary sensory level, corticospinal fibers remain in ventral pyramids; a separate already-crossed lateral bundle is misleading.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            277,
+            279,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            303,
+            305,
+            646,
+            647
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://nba.uth.tmc.edu/neuroscience/m/s2/chapter01.html"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    },
+    {
+      "findingId": "ROOT-R-008",
+      "title": "Pyramidal-decusssation plate combines the separate sensory crossing",
+      "confidence": "high",
+      "recommendationType": "correction",
+      "targets": [
+        {
+          "file": "src/data/plates/plate-pyramid-decuss.svg",
+          "id": "plate-pyramid-decuss",
+          "field": "tract-internal-arcuate shapes and label",
+          "original": "Two internal-arcuate crossing paths and label in the motor-decusssation section",
+          "proposed": "Remove the sensory crossing paths and label from this motor crossing plate"
+        },
+        {
+          "file": "src/data/plates.json",
+          "id": "plate-pyramid-decuss",
+          "field": "regions",
+          "original": "Includes tract-internal-arcuate",
+          "proposed": "Remove tract-internal-arcuate from this plate manifest"
+        }
+      ],
+      "explanation": "The textbook explicitly illustrates these crossings at different rostrocaudal levels. Removing the sensory crossing from the motor-crossing plate preserves the teaching distinction; nearby dorsal nuclei remain approximate schematic context.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            277,
+            279,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            303,
+            305,
+            646,
+            647
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://nba.uth.tmc.edu/neuroscience/m/s2/chapter01.html"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    },
+    {
+      "findingId": "ROOT-R-009",
+      "title": "Authored sections combine levels and contain stale context captions",
+      "confidence": "high",
+      "recommendationType": "representation clarification",
+      "targets": [
+        {
+          "file": "src/components/PlatesTab.tsx",
+          "id": "all-authored-plates",
+          "field": "authored schematic notice",
+          "original": "No specific composite-section notice next to author plate",
+          "proposed": "Authored teaching schematic: nearby anatomical levels may be combined. Shapes, boundaries and marker positions are approximate; this is not a validated single anatomical section."
+        },
+        {
+          "file": "src/data/plates/plate-coronal-midbrain.svg",
+          "id": "plate-coronal-midbrain",
+          "field": "context caption",
+          "original": "Dashed gray strokes are untagged context: lateral ventricle and uncus/hippocampal edge (no registry records).",
+          "proposed": "Dashed gray strokes show ventricular and medial temporal context; their contours are schematic."
+        },
+        {
+          "file": "src/data/plates/plate-coronal-thalamus.svg",
+          "id": "plate-coronal-thalamus",
+          "field": "context caption",
+          "original": "Dashed gray strokes are untagged context: optic tract toward the LGN (no registry record for the optic tract).",
+          "proposed": "Dashed gray strokes show optic-pathway context toward the LGN; no additional selectable contour is defined here."
+        }
+      ],
+      "explanation": "Diencephalic and coronal diagrams combine structures distributed across serial levels. Book sections support their broad relationships, not strict coplanarity. A specific in-view notice prevents this implication; old no-registry-record captions no longer match the current dataset.",
+      "bookEvidence": [
+        {
+          "source": "Blumenfeld, Neuroanatomy through Clinical Cases, Second Edition (2010)",
+          "printedPages": [
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            616,
+            617,
+            618,
+            619,
+            620,
+            621
+          ],
+          "pdfPhysicalPages": [
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      ],
+      "publicUrls": [
+        "https://nba.uth.tmc.edu/neuroscience/m/s2/chapter01.html"
+      ],
+      "evidenceLimit": "Teaching relationships only; neither book diagrams nor these publications validate this atlas geometry."
+    }
+  ],
+  "privateVisualInspection": {
+    "bookPhysicalPages": [
+      304,
+      644,
+      645,
+      646,
+      647,
+      736,
+      860,
+      913,
+      128,
+      129,
+      130
+    ],
+    "plateContactSheets": 3,
+    "retention": "Textbook pixels/text remain outside Git; no copyrighted figures redistributed."
+  },
+  "limitations": [
+    "Review is source-supported software content review, not independent clinician sign-off or clinical validation.",
+    "No metric geometry, functional parcel boundary or subject-specific CT/MRI registration certification.",
+    "All previous withheld geometry and CT/MRI limitations remain in effect."
+  ]
+}

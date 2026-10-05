@@ -314,7 +314,7 @@
     "kind": "nucleus",
     "laterality": "paired",
     "color": "#d97706",
-    "function": "Rhythm and stress-coordination nucleus linking the suprachiasmatic clock to feeding and sleep-wake cycles: DMH neurons generate anticipatory locomotor and feeding rhythms and recruit endocrine (paraventricular) and autonomic outputs during stress.",
+    "function": "Hypothalamic nucleus participating in circadian, feeding, stress, endocrine, and autonomic networks. Animal studies implicate DMH circuits in coordinating sleep-wake/physiological outputs and modulating meal anticipation; they do not establish a necessary food-anticipatory rhythm generator in humans.",
     "connections": {
       "afferent": [
         "Suprachiasmatic nucleus (daily timing signal)",
@@ -350,7 +350,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, hypothalamic nuclei and regional functions, printed pp. 792-797 (PDF pp. 818-823).",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, water balance and hormone deficiency, printed pp. 803-804 (PDF pp. 829-830)."
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, water balance and hormone deficiency, printed pp. 803-804 (PDF pp. 829-830).",
+      "https://pubmed.ncbi.nlm.nih.gov/21912674/"
     ]
   },
   {
@@ -524,7 +525,7 @@
         "Retinohypothalamic fibers to the suprachiasmatic nuclei"
       ]
     },
-    "bloodSupply": "Superior hypophyseal and anterior communicating branches superiorly; internal carotid and posterior communicating branches inferiorly (segmental supply underlies chiasmal infarction).",
+    "bloodSupply": "Variable contributions from superior hypophyseal, posterior communicating, anterior cerebral, and anterior communicating branches. Human dissections show important inferior pial supply from superior hypophyseal and posterior communicating arteries, with superior pial contributions and territorial overlap.",
     "clinical": [
       {
         "syndrome": "Bitemporal hemianopia (chiasmal syndrome)",
@@ -554,7 +555,8 @@
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, optic chiasm and tracts, printed pp. 463-464 (PDF pp. 489-490).",
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 11, visual fields and blood supply, printed pp. 472-477 (PDF pp. 498-503).",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, hypothalamic relationships, printed pp. 792-795 (PDF pp. 818-821)."
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 17, hypothalamic relationships, printed pp. 792-795 (PDF pp. 818-821).",
+      "https://pubmed.ncbi.nlm.nih.gov/29243332/"
     ]
   },
   {

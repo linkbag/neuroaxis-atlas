@@ -408,6 +408,7 @@ export interface SearchHit {
   region: Region
   subdivision: string
   kind: Kind
+  anatomicalClass?: string
   color: string
   /** false = registry-only entry, authored record has not landed yet */
   authored: boolean
@@ -450,6 +451,7 @@ export function searchAll(query: string): SearchHit[] {
       region: entry.region,
       subdivision: entry.subdivision,
       kind: entry.kind,
+      anatomicalClass: entry.anatomicalClass,
       color: entry.color,
       authored: recordById.has(entry.id),
       matchedVia,

@@ -1326,7 +1326,7 @@
       "cochlear-lemniscal auditory route"
     ],
     "direction": "ascending",
-    "modality": "Special sensory — audition, tonotopically organized at every relay",
+    "modality": "Special sensory — audition, with tonotopic organization at major relays; frequency gradients vary between subnuclei",
     "origin": "Cochlear nuclei receiving spiral-ganglion afferents through the cochlear division of CN VIII.",
     "target": "Bilateral brainstem auditory relays and inferior colliculi, then MGN and auditory cortex through auditory radiations.",
     "decussation": "Multiple crossing and uncrossed projections, including trapezoid-body routes in caudal pons. Connections above the cochlear nuclei are bilateral, often with contralateral predominance.",
@@ -1399,7 +1399,8 @@
       "lvl-thalamus-mid"
     ],
     "refs": [
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 519-526 (PDF pp. 545-552)"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 12: Brainstem I: Surface Anatomy and Cranial Nerves, pp. 519-526 (PDF pp. 545-552)",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC4657019/"
     ],
     "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
@@ -1412,7 +1413,7 @@
     ],
     "direction": "ascending",
     "modality": "Nociceptive/visceroceptive arousal — slow dull-aching pain and interoceptive drive to the reticular activating system",
-    "origin": "Projection neurons distributed in spinal intermediate-zone/ventral-horn laminae VI-VIII, within the broader anterolateral system.",
+    "origin": "Spinal projection neurons in dorsal-horn, intermediate-zone and ventral-horn regions. Primate tracing identifies prominent lamina VII-VIII contributions and additional dorsal-horn neurons; a fixed human laminar census is not implied.",
     "target": "Medullary/pontine reticular formation, with onward projections to intralaminar/medial thalamus and distributed forebrain networks.",
     "decussation": "Crossed and uncrossed spinal projections give bilateral influence; no single obligatory crossing applies to the composite route.",
     "somatotopy": "Diffuse convergence rather than a precise somatotopic map in this illustration.",
@@ -1482,7 +1483,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 7: Somatosensory Pathways, pp. 277-282 (PDF pp. 303-308)",
-      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)"
+      "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 14: Brainstem III: Internal Structures and Vascular Supply, pp. 616-630, 656-659 (PDF pp. 642-656, 682-685)",
+      "https://pubmed.ncbi.nlm.nih.gov/7096639/"
     ],
     "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   },
@@ -1726,7 +1728,7 @@
     "name": "Superior longitudinal fasciculus",
     "synonyms": [
       "SLF",
-      "arcuate fasciculus (dorsal component)"
+      "superior longitudinal fascicle"
     ],
     "direction": "mixed",
     "modality": "Association — bidirectional frontoparietal pathways for attention, working memory and sensorimotor integration; relationships to the arcuate depend on anatomical naming convention.",
@@ -1793,7 +1795,8 @@
     ],
     "refs": [
       "Blumenfeld, Neuroanatomy through Clinical Cases, 2nd ed. (2010), Ch. 19: Higher-Order Cerebral Function, pp. 885-893 (PDF pp. 911-919)",
-      "Catani & Thiebaut de Schotten (2008), Cortex 44:1105-1132, https://doi.org/10.1016/j.cortex.2008.05.004 (association-tract reconstruction; not validation of this atlas geometry)"
+      "Catani & Thiebaut de Schotten (2008), Cortex 44:1105-1132, https://doi.org/10.1016/j.cortex.2008.05.004 (association-tract reconstruction; not validation of this atlas geometry)",
+      "https://pubmed.ncbi.nlm.nih.gov/15590909/"
     ],
     "geometryNote": "Authored teaching geometry in custom atlas units; not patient coordinates, tractography, validated fibre boundaries, or a complete connection graph. The curve depicts selected course segments only."
   }

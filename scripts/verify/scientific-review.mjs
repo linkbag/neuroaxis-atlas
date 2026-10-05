@@ -15,6 +15,7 @@ for (const r of structures) {
   const entry = registry.get(r.id)
   assert.ok(entry, `${r.id}: missing taxonomy`)
   for (const field of ['name', 'region', 'subdivision', 'kind', 'laterality']) assert.equal(entry[field], r[field], `${r.id}: registry drift in ${field}`)
+  for (const field of ['anatomicalClass', 'anatomicalLaterality']) assert.equal(entry[field], r[field], `${r.id}: registry drift in ${field}`)
 }
 for (const r of records) {
   assert.ok(r.refs?.length, `${r.id}: no evidence reference`)

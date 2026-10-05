@@ -206,7 +206,8 @@
     "synonyms": [
       "IML"
     ],
-    "contextNote": "Context record: white-matter lamina tagged on plate-thalamus-mid and plate-coronal-thalamus; not a functional nucleus — see the individual thalamic nucleus records."
+    "contextNote": "Context record: white-matter lamina tagged on plate-thalamus-mid and plate-coronal-thalamus; not a functional nucleus — see the individual thalamic nucleus records.",
+    "anatomicalLaterality": "paired"
   },
   {
     "id": "nuc-preoptic",
@@ -627,7 +628,8 @@
     "color": "#14b8a6",
     "synonyms": [
       "CN IV nucleus"
-    ]
+    ],
+    "anatomicalLaterality": "paired"
   },
   {
     "id": "nuc-mesencephalic-v",
@@ -1377,7 +1379,8 @@
     "synonyms": [
       "CN XII nucleus",
       "tongue motor nucleus"
-    ]
+    ],
+    "anatomicalLaterality": "paired"
   },
   {
     "id": "nuc-area-postrema",
@@ -2046,7 +2049,8 @@
       "Ammon horn",
       "hippocampal formation"
     ],
-    "contextNote": "Gross structure/pathway teaching representation. Retained coordinates, dimensions, subdivisions and waypoints are custom renderer metadata; no independently registered patient/standard-atlas comparison validates their numerical extent here. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
+    "contextNote": "Gross structure/pathway teaching representation. Retained coordinates, dimensions, subdivisions and waypoints are custom renderer metadata; no independently registered patient/standard-atlas comparison validates their numerical extent here. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "anatomicalClass": "hippocampal cortical formation"
   },
   {
     "id": "nuc-dentate-gyrus",
@@ -2059,9 +2063,10 @@
     "synonyms": [
       "gyrus dentatus",
       "fascia dentata",
-      "dentate gyrus of the hippocampal formation (CA5)"
+      "dentate gyrus of the hippocampal formation"
     ],
-    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "anatomicalClass": "hippocampal cortex"
   },
   {
     "id": "nuc-amygdala",
@@ -2383,7 +2388,7 @@
     "color": "#a78bfa",
     "synonyms": [
       "SLF",
-      "arcuate fasciculus (dorsal component)"
+      "superior longitudinal fascicle"
     ]
   },
   {
@@ -2641,7 +2646,8 @@
       "subiculum hippocampi",
       "transitional cortex of the hippocampal formation"
     ],
-    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "anatomicalClass": "transitional hippocampal cortex"
   },
   {
     "id": "nuc-ca1",
@@ -2657,7 +2663,8 @@
       "Sommer sector",
       "CA1 field of the hippocampus"
     ],
-    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "anatomicalClass": "hippocampal cortical field"
   },
   {
     "id": "nuc-ca2-ca3",
@@ -2674,7 +2681,8 @@
       "CA3 field",
       "resistant sector (CA2)"
     ],
-    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "anatomicalClass": "hippocampal cortical fields"
   },
   {
     "id": "nuc-ca4",
@@ -2691,7 +2699,8 @@
       "endblatt",
       "CA4 field"
     ],
-    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules."
+    "contextNote": "A microscopic laminated hippocampal-field concept represented by an authored marker. The shape/coordinate does not establish CA/dentate/subicular boundaries; a host hippocampal mesh cannot independently validate a subfield segmentation. Named level membership is teaching/navigation metadata and has not been validated as a literal intersection of every displayed transverse section. The clinical text describes possible associations, not diagnostic rules.",
+    "anatomicalClass": "hippocampal hilar field"
   },
   {
     "id": "tract-optic-nerve",
@@ -2807,8 +2816,7 @@
     "synonyms": [
       "ACA",
       "arteria cerebri anterior",
-      "A1/A2/A3 segments of the anterior cerebral artery",
-      "pericallosal artery (A2/A3)"
+      "A1/A2/A3 segments of the anterior cerebral artery"
     ],
     "contextNote": "Teaching model of Anterior cerebral artery. The committed mesh or schematic course represents its gross relationship to neighbouring anatomy. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements."
   },
@@ -2870,8 +2878,7 @@
     "synonyms": [
       "PCA",
       "arteria cerebri posterior",
-      "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)",
-      "calcarine artery (a P4 cortical branch)"
+      "P1/P2/P3/P4 segments of the posterior cerebral artery (precommunicating, ambient, quadrigeminal, cortical)"
     ],
     "contextNote": "Teaching model of Posterior cerebral artery. The committed mesh or schematic course represents its gross relationship to neighbouring anatomy. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements."
   },
@@ -3039,20 +3046,19 @@
   },
   {
     "id": "vasc-medial-lenticulostriate-arteries",
-    "name": "Medial lenticulostriate arteries (recurrent artery of Heubner)",
+    "name": "Medial striate arteries (including recurrent artery of Heubner)",
     "region": "vasculature",
     "subdivision": "Deep perforators",
     "kind": "vessel",
     "laterality": "paired",
     "color": "#991b1b",
     "synonyms": [
+      "medial lenticulostriate arteries",
       "medial striate arteries",
-      "recurrent artery of Heubner",
-      "arteria recurrens Heubneri",
       "medial group of the lenticulostriate arteries"
     ],
     "parent": "vasc-anterior-cerebral-artery",
-    "contextNote": "Illustrative course for Medial lenticulostriate arteries (recurrent artery of Heubner). The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements."
+    "contextNote": "Illustrative course for Medial striate arteries (including recurrent artery of Heubner). The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements."
   },
   {
     "id": "vasc-medial-lenticulostriate-arteries-1",
@@ -3396,8 +3402,7 @@
     "color": "#dc2626",
     "synonyms": [
       "posterior temporal arteries (PCA)",
-      "PCA temporo-occipital branches",
-      "hippocampal and posterior temporal branches"
+      "PCA temporo-occipital branches"
     ],
     "parent": "vasc-posterior-cerebral-artery",
     "contextNote": "Illustrative course for Posterior temporal branches of the PCA. The stored waypoints are authored against the committed model; touching a target mesh is a rendering constraint, not evidence of the biological arterial course. Territory links identify structures containing some supplied tissue, not complete voxel territories. Geometry, vessel calibre and branch counts are illustrative and are not a patient angiogram or validated stereotaxic measurements."
@@ -3787,7 +3792,7 @@
     "synonyms": [
       "hand sensory area",
       "S1 hand area",
-      "hand knob region"
+      "postcentral hand representation"
     ],
     "parent": "ctx-s1",
     "contextNote": "Schematic hand teaching patch on a derived hemisphere ribbon. The authored coordinate, patch size, surface normal and displayed order are renderer metadata, not subject-specific fMRI, a traced central sulcus, or a cytoarchitectural segmentation. A small distance to the host mesh does not validate functional location. Bilateral mirrored display does not imply identical functional maps. The eight-segment homunculus simplifies overlapping/interleaved motor and sensory representations; laryngeal/orofacial placements are especially uncertain."
@@ -4130,9 +4135,11 @@
     "id": "ctx-inferior-frontal-gyrus",
     "name": "Inferior frontal gyrus",
     "synonyms": [
-      "pars opercularis",
-      "pars triangularis",
-      "pars orbitalis"
+      "gyrus frontalis inferior",
+      "IFG",
+      "pars opercularis (part of inferior frontal gyrus)",
+      "pars triangularis (part of inferior frontal gyrus)",
+      "pars orbitalis (part of inferior frontal gyrus)"
     ],
     "region": "telencephalon",
     "subdivision": "Cortical gyri and lobules",

@@ -32,14 +32,16 @@ function MetaChips({ record, entry }: { record?: AtlasRecord; entry?: TaxonomyEn
   const region = record && 'region' in record ? record.region : entry?.region
   const subdivision = record && 'subdivision' in record ? record.subdivision : entry?.subdivision
   const kind = record && 'kind' in record ? record.kind : entry?.kind
-  const laterality = record && 'laterality' in record ? record.laterality : entry?.laterality
+  const anatomicalClass = record && 'anatomicalClass' in record ? record.anatomicalClass : entry?.anatomicalClass
+  const kindLabel = anatomicalClass ?? kind
+  const laterality = record && 'laterality' in record ? record.anatomicalLaterality ?? record.laterality : entry?.anatomicalLaterality ?? entry?.laterality
   return (
     <div className="info-chips">
       {region && <span className="chip">{REGION_LABELS[region]}</span>}
       {subdivision && <span className="chip">{subdivision}</span>}
       {kind && (
         <span className="chip">
-          <KindGlyph kind={kind} title={kind} /> {kind}
+          <KindGlyph kind={kind} title={kindLabel} /> {kindLabel}
         </span>
       )}
       {laterality && <span className="chip">{laterality}</span>}
