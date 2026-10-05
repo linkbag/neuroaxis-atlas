@@ -569,6 +569,25 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
   const planeValue = useAtlasStore((s) => s.clip[s.sectionAxis])
   const size = useAtlasStore((s) => s.sectionPipSize)
   const setSectionPipSize = useAtlasStore((s) => s.setSectionPipSize)
+  const autoSize = useAtlasStore((s) => s.sectionPipAutoSize)
+  const fitSectionPipSize = useAtlasStore((s) => s.fitSectionPipSize)
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  // A third of each dimension gives the section window about 1/9 of the
+  // viewer's area. Manual resizing stops the fit and keeps the saved choice.
+  useEffect(() => {
+    const viewer = panelRef.current?.parentElement
+    if (!visible || !autoSize || !viewer) return undefined
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width <= 0 || entry.contentRect.height <= 0) return
+      fitSectionPipSize({
+        width: entry.contentRect.width / 3,
+        height: entry.contentRect.height / 3,
+      })
+    })
+    observer.observe(viewer)
+    return () => observer.disconnect()
+  }, [autoSize, fitSectionPipSize, visible])
   /**
    * The imagery REQUEST the line below describes. `sectionUnderlay.kind` is
    * subscribed (not read imperatively) because the images-off scope and the
@@ -749,6 +768,7 @@ export function SectionPiPPanel({ visible, onVisibleChange, windowRef }: Section
   return (
     <div
       className={`pip-panel pip-${preset}${size.width < PIP_COMPACT_WIDTH ? ' pip-compact' : ''}`}
+      ref={panelRef}
       role="group"
       aria-label="Simulated section panel — the 2D section synced to the clip sliders"
     >

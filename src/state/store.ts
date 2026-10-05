@@ -61,29 +61,7 @@ export const RENDER_QUALITY_STORAGE_KEY = 'neuroaxis.quality'
  */
 export const VIEW_PRESET_STORAGE_KEY = 'neuroaxis.viewPreset'
 
-/**
- * Balanced fallback for weak setups (post-fx guard): no WebGL2 (the post
- * composer requires it), or a >2.5 devicePixelRatio phone-class screen.
- */
-function detectDefaultQuality(): RenderQuality {
-  try {
-    if (typeof window === 'undefined' || typeof document === 'undefined') return 'high'
-    const probe = document.createElement('canvas')
-    const gl2 = probe.getContext('webgl2')
-    if (gl2 === null) return 'balanced'
-    // Release the probe context immediately; it was only a capability check.
-    const lose = gl2.getExtension('WEBGL_lose_context')
-    if (lose) lose.loseContext()
-    const dpr = window.devicePixelRatio || 1
-    const smallScreen = Math.min(window.innerWidth, window.innerHeight) <= 640
-    if (smallScreen && dpr > 2.5) return 'balanced'
-  } catch {
-    return 'balanced'
-  }
-  return 'high'
-}
-
-/** Persisted value wins; otherwise detect a device-appropriate default. */
+/** Balanced by default; an explicitly saved rendering choice wins. */
 function initialQuality(): RenderQuality {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -91,9 +69,9 @@ function initialQuality(): RenderQuality {
       if (stored === 'high' || stored === 'balanced') return stored
     }
   } catch {
-    /* private-mode / storage disabled — fall through to detection */
+    /* private-mode / storage disabled — use the public default */
   }
-  return detectDefaultQuality()
+  return 'balanced'
 }
 
 export interface ClipState {
@@ -280,7 +258,8 @@ export interface SectionPipSize {
  */
 export const SECTION_PIP_SIZE_MIN: SectionPipSize = { width: 224, height: 170 }
 export const SECTION_PIP_SIZE_MAX: SectionPipSize = { width: 880, height: 640 }
-export const DEFAULT_SECTION_PIP_SIZE: SectionPipSize = { ...SECTION_PIP_SIZE_MIN }
+/** Initial fallback until the panel measures one third of each viewer dimension. */
+export const DEFAULT_SECTION_PIP_SIZE: SectionPipSize = { width: 348, height: 262 }
 
 /** The two named stops the `▴/▾` button cycles through (the older CSS presets). */
 export const SECTION_PIP_SIZE_PRESETS: Record<'small' | 'large', SectionPipSize> = {
@@ -490,21 +469,24 @@ function persistSectionLobes(on: boolean): void {
  * user-writable: a missing field, a string, NaN, a 10 000 px box or malformed
  * JSON must all resolve to a usable size rather than to a broken panel).
  */
-function initialSectionPipSize(): SectionPipSize {
+function initialSectionPipSize(): Pick<AtlasState, 'sectionPipSize' | 'sectionPipAutoSize'> {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       const raw = window.localStorage.getItem(SECTION_PIP_SIZE_STORAGE_KEY)
       if (raw !== null) {
         const parsed: unknown = JSON.parse(raw)
         if (parsed !== null && typeof parsed === 'object') {
-          return clampSectionPipSize(parsed as Partial<SectionPipSize>)
+          const stored = parsed as Partial<SectionPipSize>
+          if (isFiniteNumber(stored.width) && isFiniteNumber(stored.height)) {
+            return { sectionPipSize: clampSectionPipSize(stored), sectionPipAutoSize: false }
+          }
         }
       }
     }
   } catch {
     /* private mode / malformed JSON — fall through to the default */
   }
-  return { ...DEFAULT_SECTION_PIP_SIZE }
+  return { sectionPipSize: { ...DEFAULT_SECTION_PIP_SIZE }, sectionPipAutoSize: true }
 }
 
 /** Persist the panel size (same best-effort contract as the other keys). */
@@ -570,6 +552,8 @@ export interface AtlasState {
   sectionLobes: boolean
   /** v9 §5 (plan §6): the simulated-section panel's window size, in CSS px. */
   sectionPipSize: SectionPipSize
+  /** Fit the default panel to its viewer until the user chooses a size. */
+  sectionPipAutoSize: boolean
 }
 
 export interface AtlasActions {
@@ -626,6 +610,8 @@ export interface AtlasActions {
    * `[224, 880] × [170, 640]` and persisted (`neuroaxis.sectionPipSize`).
    */
   setSectionPipSize: (size: Partial<SectionPipSize>) => void
+  /** Update the responsive default without saving it as a manual preference. */
+  fitSectionPipSize: (size: SectionPipSize) => void
   /** Level-ruler / level-chip navigation: cut the plane + open the level's plate. */
   gotoLevel: (levelId: string) => void
 }
@@ -1443,7 +1429,7 @@ const DEFAULT_CLIP: ClipState = {
   y: DEFAULT_LEVEL ? DEFAULT_LEVEL.y : -34,
   z: 0,
   enabled: false,
-  showHelper: false,
+  showHelper: true,
 }
 
 {
@@ -1486,7 +1472,7 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
   sectionAxis: 'y',
   sectionUnderlay: initialSectionUnderlay(),
   sectionLobes: initialSectionLobes(),
-  sectionPipSize: initialSectionPipSize(),
+  ...initialSectionPipSize(),
 
   selectStructure: (id, opts) =>
     set((s) => ({
@@ -1653,7 +1639,15 @@ export const useAtlasStore = create<AtlasStore>()((set) => ({
         height: isFiniteNumber(size.height) ? size.height : s.sectionPipSize.height,
       })
       persistSectionPipSize(merged)
-      return { sectionPipSize: merged }
+      return { sectionPipSize: merged, sectionPipAutoSize: false }
+    }),
+
+  fitSectionPipSize: (size) =>
+    set((s) => {
+      if (!s.sectionPipAutoSize) return s
+      const fitted = clampSectionPipSize(size)
+      if (fitted.width === s.sectionPipSize.width && fitted.height === s.sectionPipSize.height) return s
+      return { sectionPipSize: fitted }
     }),
 
   gotoLevel: (levelId) =>
