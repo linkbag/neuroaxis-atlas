@@ -797,10 +797,17 @@ export default function PlatesTab() {
             )}
 
             {sectionUnderlay.kind === 'mri' && (
-              <span className="section-alignment-note" role="note">
-                MRI alignment is approximate: the volume is placed by a documented affine, not
-                registered to every simulated contour.
-              </span>
+              <details className="section-alignment-note section-mri-alignment">
+                <summary>MRI overlay: approximate teaching alignment · details</summary>
+                <p>
+                  This single-participant MRI is aligned to the atlas as a whole. Cortical folds,
+                  the callosum, ventricular horns and cerebellum differ from the simulated model;
+                  each contour is not an exact tissue boundary. Alignment of the inferior
+                  cerebellum and callosal splenium remains limited. Fine nuclei, nerves and tracts
+                  cannot all be verified on this scan. Beyond MRI coverage, only simulated
+                  contours are shown. Use the overlay for orientation, not clinical measurement.
+                </p>
+              </details>
             )}
 
             {/* v7 CT coverage honesty (docs/TELENCEPHALON_PLAN.md §2/§9, plan

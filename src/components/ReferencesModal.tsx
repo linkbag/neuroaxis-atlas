@@ -172,6 +172,18 @@ export default function ReferencesModal() {
         </div>
 
         <div className="modal-body">
+          <section>
+            <h3>MRI alignment and coverage</h3>
+            <p>
+              MRI and simulated anatomy are different subjects and representations. A global
+              three-dimensional affine gives approximate teaching alignment; the simulated
+              contours are not a segmentation of this MRI. Cortical folds, the callosal
+              splenium, ventricular horns and the inferior cerebellum remain imperfectly matched.
+              Fine nuclei and tracts cannot all be identified or validated on the downsampled T1.
+              Image data is never extrapolated beyond the acquisition field; simulated anatomy
+              can remain visible there. CT and photographs are unavailable in the public app.
+            </p>
+          </section>
           <p className="hint">
             Select any nucleus, tract, or region in the app and the <strong>Learn more</strong> section shows
             curated external links (Wikipedia + journal) specific to that structure — in addition to the

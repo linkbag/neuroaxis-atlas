@@ -1,4 +1,8 @@
 /**
+ * HISTORICAL HEAD-MASK DIAGNOSTIC (retired 2026-10-04).
+ * Whole-head thresholds do not define homologous brain tissue. This script
+ * is not the current fitter or anatomical acceptance gate. Current method:
+ * scripts/audit/fit_landmarks.py and npm run verify:imaging-fit.
  * scripts/fit-imaging-affine.mjs — the re-runnable registration fitter for the
  * real-image layers (docs/SWARM_V9_PLAN.md §3, PLAN.md §5.3, task
  * `imaging-registration`).
@@ -138,6 +142,9 @@ let planeTransform
  * ====================================================================== */
 
 const WRITE = process.argv.includes('--report') && !process.argv.includes('--no-write')
+if (JSON.parse(readFileSync(resolve('src/assets/imaging/mri-manifest.json'), 'utf8')).schemaVersion >= 2) {
+  throw new Error('Retired head-mask fitter does not apply to schema-v2 images. Use scripts/audit/fit_landmarks.py and npm run verify:imaging-fit.')
+}
 /** `--json`: print the machine-readable record on stdout INSTEAD of the table,
  *  so `scripts/verify/imaging-fit.mjs` can recompute with this same script (not
  *  a copy of its maths) and diff the result against the committed numbers. */

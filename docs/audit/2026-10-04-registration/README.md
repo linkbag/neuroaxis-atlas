@@ -86,6 +86,11 @@ The measurements file records source and baked-volume hashes, complete CT geomet
 
 ### Re-run without changing app assets
 
+This is the historical audit of published revision `89e5f65`. The script reads
+its image assets from that Git revision even after candidate changes exist.
+For the new implementation and current source resampling checks, use
+`../2026-10-04-registration-candidate/README.md` and `registration_candidate.py`.
+
 Install the optional Python requirements in an isolated environment, then run from the repository root:
 
 ```powershell

@@ -157,6 +157,8 @@ import { useAtlasStore } from '../../state/store'
 import mriManifestJson from '../../assets/imaging/mri-manifest.json'
 import mriT1Url from '../../assets/imaging/mri-t1.bin?url'
 import ctManifestJson from '../../assets/imaging/ct-manifest.json'
+import { readSourceField, sourceFieldContains } from './sourceField'
+import type { SourceField } from './sourceField'
 
 /* ------------------------------------------------------------- manifest */
 
@@ -1049,6 +1051,7 @@ interface SliceGrid {
   dims: [number, number, number]
   origin: [number, number, number]
   spacing: [number, number, number]
+  sourceField?: SourceField
 }
 
 /** The manifest fields a grid loader needs (mri + ct manifests agree on these). */
@@ -1062,6 +1065,7 @@ interface GridManifest {
   license?: string
   credit?: string
   attribution?: string
+  sourceField?: unknown
   /** v9: the measured display-registration block (see gridRegistrationDisplay). */
   registration?: { display?: ManifestFitDisplay }
 }
@@ -1234,6 +1238,7 @@ function loadGrid(
         dims: [dims[0], dims[1], dims[2]],
         origin: [origin[0], origin[1], origin[2]],
         spacing: [spacing[0], spacing[1], spacing[2]],
+        sourceField: readSourceField(manifest.sourceField),
       }
       entry.status = 'ready'
       entry.timedOut = false
@@ -1330,6 +1335,7 @@ function sampleGrid(
   spacing: readonly number[],
 ): number {
   void _axisIdx
+  if (!sourceFieldContains(grid.sourceField, coords[0], coords[1], coords[2])) return -1
   // Out-of-extent is a property of the position alone, so all three axes are
   // checked before any table lookup (pixel centers are never exactly at the
   // grid maximum for the in-plane axes, but the slice axis can be).
@@ -1499,11 +1505,12 @@ function renderGridSlice(
       coords[vIdx] = vOrigin + (h - 1 - py + 0.5) * vStep
       for (let px = 0; px < w; px++) {
         coords[uIdx] = uOrigin + (px + 0.5) * uStep
-        const gray = windowMap(Math.max(0, sampleGrid(grid, coords, aIdx, sliceBase, sliceFrac, origin, spacing)), wMin, wMax)
+        const sample = sampleGrid(grid, coords, aIdx, sliceBase, sliceFrac, origin, spacing)
+        const gray = windowMap(Math.max(0, sample), wMin, wMax)
         pixels[p] = gray
         pixels[p + 1] = gray
         pixels[p + 2] = gray
-        pixels[p + 3] = 255
+        pixels[p + 3] = sample < 0 ? 0 : 255
         p += 4
       }
     }
@@ -1513,12 +1520,12 @@ function renderGridSlice(
       coords[vIdx] = vOrigin + (h - 1 - py + 0.5) * vStep
       for (let px = 0; px < w; px++) {
         coords[uIdx] = uOrigin + (px + 0.5) * uStep
-        const sample = Math.max(0, sampleGrid(grid, coords, aIdx, sliceBase, sliceFrac, origin, spacing))
-        colorize(sample, rgb)
+        const sample = sampleGrid(grid, coords, aIdx, sliceBase, sliceFrac, origin, spacing)
+        colorize(Math.max(0, sample), rgb)
         pixels[p] = rgb[0]
         pixels[p + 1] = rgb[1]
         pixels[p + 2] = rgb[2]
-        pixels[p + 3] = 255
+        pixels[p + 3] = sample < 0 ? 0 : 255
         p += 4
       }
     }

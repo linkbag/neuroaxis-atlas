@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 2,
+  "reviewStatus": "candidate-awaiting-owner-review",
+  "mri": {
+    "baseline": {
+      "scale": [
+        1,
+        1.25,
+        1.6
+      ],
+      "rotDeg": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "translateAu": [
+        2.9,
+        -88.4,
+        -7.8
+      ]
+    },
+    "candidate": {
+      "scale": [
+        1.09225421,
+        1.40659771,
+        1.12669561
+      ],
+      "rotDeg": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "translateAu": [
+        2.88530385,
+        -98.11234642,
+        -3.73944334
+      ]
+    },
+    "evidence": "docs/audit/2026-10-04-registration-candidate/mri-landmarks.json",
+    "limitations": [
+      "A constrained global affine improves macroscopic placement, not every contour.",
+      "The callosal splenium and inferior cerebellum have larger residuals than before.",
+      "Cortical folds, ventricular shape, fine nuclei and tracts are schematic, not subject-specific segmentation.",
+      "Manual observations and reserved checks are from one review, not independent clinical validation."
+    ],
+    "sourceSha256": "209edd45ee17494a193268d89496147fb1fef5d87a256d82b5ff8548b4c3cfe9"
+  },
+  "ct": {
+    "candidate": {
+      "scale": [
+        0.90483782,
+        1.31265907,
+        1.01719431
+      ],
+      "rotDeg": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "translateAu": [
+        4.00013224,
+        128.81879348,
+        79.16649652
+      ]
+    },
+    "evidence": "docs/audit/2026-10-04-registration-candidate/ct-landmarks.json",
+    "limitations": [
+      "CT is excluded from the public app.",
+      "Orientation and physical slice interpolation are corrected. Gross atlas placement is provisional.",
+      "Artifacts and limited soft-tissue definition prevent reliable fine structure validation. No clinical accuracy claim."
+    ],
+    "sourceSha256": "1178448df50484bf493aabec1164a01f4351af363957ab460f9255fdd4191be0"
+  }
+}

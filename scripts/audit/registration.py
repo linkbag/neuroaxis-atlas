@@ -21,12 +21,14 @@ parser.add_argument('--repo',type=pathlib.Path,required=True)
 parser.add_argument('--sources',type=pathlib.Path,required=True)
 parser.add_argument('--out',type=pathlib.Path,required=True)
 parser.add_argument('--cache-dir',type=pathlib.Path,required=True)
+parser.add_argument('--imaging-revision',default='89e5f655043817a328915adfad0c8bd3a10485e1',help='Historical published revision audited by this report; use registration_candidate.py for schema-v2.')
 a=parser.parse_args(); R=a.repo.resolve(); S=a.sources.resolve(); O=a.out.resolve(); C=a.cache_dir.resolve()
 if C.is_relative_to(R):raise ValueError('Raw CT cache must be outside the repository.')
 O.mkdir(parents=True,exist_ok=True);C.mkdir(parents=True,exist_ok=True)
 plt.rcParams.update({'figure.facecolor':'#101b2a','axes.facecolor':'#040b13','text.color':'#e2eaf4','axes.labelcolor':'#c3d1df','xtick.color':'#a3b4c9','ytick.color':'#a3b4c9','axes.edgecolor':'#476078','font.size':10,'savefig.facecolor':'#101b2a'})
 
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def baseline_bytes(path):return subprocess.check_output(['git','-C',str(R),'show',a.imaging_revision+':'+path])
 def put(name,obj): (O/name).write_text(json.dumps(obj,indent=2,allow_nan=False)+'\n',encoding='utf-8')
 def affine(P,scale,T,base):
     M=np.eye(4);M[:3,:3]=np.diag(scale)@P/1.2;M[:3,3]=T
@@ -60,13 +62,13 @@ L=np.eye(4);L[:3,0]=iop[:3]*first['spacing'][1];L[:3,1]=iop[3:]*first['spacing']
 P_ct_bad=np.array([[1,0,0],[0,0,1],[0,1,0]])
 P_ct_correct=np.array([[1,0,0],[0,0,1],[0,-1,0]])
 P_mri=np.array([[-1,0,0],[0,0,1],[0,1,0]])
-ct_m=json.loads((R/'src/assets/imaging/ct-manifest.json').read_text());mr_m=json.loads((R/'src/assets/imaging/mri-manifest.json').read_text())
+ct_m=json.loads(baseline_bytes('src/assets/imaging/ct-manifest.json'));mr_m=json.loads(baseline_bytes('src/assets/imaging/mri-manifest.json'))
 ctA=affine(P_ct_bad,ct_m['registration']['constants']['scale'],ct_m['registration']['constants']['translateAu'],L)
 mr_path=S/'assets-src/imaging/mri/sub-A006_T1w.nii.gz';nif=nib.load(mr_path);mr=np.asarray(nif.dataobj,dtype=np.float32)
 mrA=affine(P_mri,mr_m['registration']['constants']['scale'],mr_m['registration']['constants']['translateAu'],nif.affine)
 origin=np.array(mr_m['originAu']);spacing=np.array([54/44,100/80,82/66]);dims=np.array(mr_m['dims']);grid_high=origin+(dims-1)*spacing
-grids={'MRI':np.fromfile(R/'src/assets/imaging/mri-t1.bin',dtype=np.uint8).reshape(tuple(dims[::-1])),
-       'CT':np.fromfile(R/'src/assets/imaging/ct.bin',dtype=np.uint8).reshape(tuple(dims[::-1]))}
+grids={'MRI':np.frombuffer(baseline_bytes('src/assets/imaging/mri-t1.bin'),dtype=np.uint8).reshape(tuple(dims[::-1])),
+       'CT':np.frombuffer(baseline_bytes('src/assets/imaging/ct.bin'),dtype=np.uint8).reshape(tuple(dims[::-1]))}
 
 def sample_native(which,points,actual_positions=False):
     M=mrA if which=='MRI' else ctA;data=mr if which=='MRI' else ct
@@ -100,9 +102,9 @@ for which in ['CT','MRI']:
 
 # Native GLB node transforms are honored via trimesh; contours are computed with
 # independent triangle/plane intersections, not the app's contour extractor.
-manifest=json.loads((R/'src/assets/anatomy/anatomy-manifest.json').read_text());meshes={};coverage=[]
+manifest=json.loads(baseline_bytes('src/assets/anatomy/anatomy-manifest.json'));meshes={};coverage=[]
 for part in manifest['parts']:
-    scene=trimesh.load(R/'src/assets/anatomy'/part['file'],force='scene',process=False)
+    scene=trimesh.load(io.BytesIO(baseline_bytes('src/assets/anatomy/'+part['file'])),file_type='glb',force='scene',process=False)
     vs=[];fs=[];offset=0
     for node in scene.graph.nodes_geometry:
         T,gname=scene.graph[node];g=scene.geometry[gname];v=xform(T,g.vertices);vs.append(v);fs.append(np.asarray(g.faces)+offset);offset+=len(v)
@@ -206,11 +208,11 @@ def bounds(A,shape):
 steps=np.diff(projections);linear_pred=projections[0]+np.arange(len(projections))*step
 revision=subprocess.run(['git','-C',str(R),'rev-parse','HEAD'],capture_output=True,text=True,check=True).stdout.strip()
 lps_example=np.array([12,24,36]);expected=P_ct_correct@lps_example/1.2;legacy=P_ct_bad@lps_example/1.2;mri_equiv=P_mri@np.array([-12,-24,36])/1.2
-results={'generatedAtUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repositoryRevisionAtRun':revision,'purpose':'Registration review only. No live assets rewritten.','canonicalFrame':{'x':'+patient left','y':'+superior','z':'+anterior','declaredMmPerAu':1.2,'note':'Teaching coordinates, not MNI, Talairach or a verified patient reference.'},
+results={'generatedAtUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repositoryRevisionAtRun':revision,'imagingRevision':a.imaging_revision,'purpose':'Historical registration review only. No live assets rewritten.','canonicalFrame':{'x':'+patient left','y':'+superior','z':'+anterior','declaredMmPerAu':1.2,'note':'Teaching coordinates, not MNI, Talairach or a verified patient reference.'},
  'orientationUnitCheck':{'patientLpsMm':lps_example.tolist(),'expectedCanonicalAu':expected.tolist(),'legacyCTCanonicalAu':legacy.tolist(),'MRIEquivalentRasCanonicalAu':mri_equiv.tolist(),'legacyCTPass':bool(np.allclose(expected,legacy)),'MRIEquivalentPass':bool(np.allclose(expected,mri_equiv))},
  'CT':{'sliceCount':len(geom),'dimensionsVoxelXYZ':list(ct.shape[::-1]),'patientPosition':str(header.get('PatientPosition','not recorded')),'anatomicalOrientationType':str(header.get('AnatomicalOrientationType','absent; DICOM specifies BIPED convention')),'iop':iop.tolist(),'pixelSpacingMm':first['spacing'],'firstIppMm':first['ipp'],'lastIppMm':last['ipp'],'sliceThicknessMm':first['thickness'],'uniqueAdjacentStepsMm':np.unique(np.round(steps,6)).tolist(),'averagedSliceStepMm':float(step),'maxAveragedPositionErrorMm':float(np.max(np.abs(projections-linear_pred))),'nonuniformStepCount':int(np.sum(abs(steps-step)>.01)),'duplicatePositionCount':int(np.sum(steps==0)),'consistentIop':all(np.allclose(g['iop'],iop) for g in geom),'consistentPixelSpacing':all(np.allclose(g['spacing'],first['spacing']) for g in geom),'legacyVoxToCanonical':ctA.tolist(),'legacyNativeFieldBoundsAu':bounds(ctA,ct.shape[::-1]),'aggregateGzipSha256':ct_info['aggregateGzipSha256'],'source':'https://data.lhncbc.nlm.nih.gov/public/Visible-Human/Additional-Head-Images/MR_CT_DICOM/CAT/','credit':'Courtesy of the U.S. National Library of Medicine','warning':'Archived CT affine reverses AP. Full CT source superior extent ending at y=36.667 under this translation is NOT proof the scan omits the upper head.'},
  'MRI':{'dimensionsVoxelXYZ':list(mr.shape),'niftiAxisCodes':list(nib.aff2axcodes(nif.affine)),'qformCode':int(nif.header['qform_code']),'sformCode':int(nif.header['sform_code']),'nativeVoxToRasMm':nif.affine.tolist(),'nativeVoxToCanonical':mrA.tolist(),'nativeFieldBoundsAu':bounds(mrA,mr.shape),'sourceFileSha256':sha(mr_path),'source':'https://openneuro.org/datasets/ds007313/versions/1.0.0','license':'CC0','subjectRelationToCT':'Different source/subject; not paired acquisitions.','affineCaution':'Unequal scales [1,1.25,1.6] preserve axes but deform anatomy, tuned to stylized brainstem, not independently validated globally.'},
- 'bakedGrid':{'dimensionsVoxelXYZ':dims.tolist(),'originAu':origin.tolist(),'exactBakerSpacingAu':spacing.tolist(),'consumerManifestSpacingAu':mr_m['spacingAu'],'boundsAu':{'min':origin.tolist(),'max':grid_high.tolist()},'maxEndStationRoundingDisplacementAu':float(np.max(abs((np.array(mr_m['spacingAu'])-spacing)*(dims-1)))),'ctSha256':sha(R/'src/assets/imaging/ct.bin'),'mriSha256':sha(R/'src/assets/imaging/mri-t1.bin')},
+ 'bakedGrid':{'dimensionsVoxelXYZ':dims.tolist(),'originAu':origin.tolist(),'exactBakerSpacingAu':spacing.tolist(),'consumerManifestSpacingAu':mr_m['spacingAu'],'boundsAu':{'min':origin.tolist(),'max':grid_high.tolist()},'maxEndStationRoundingDisplacementAu':float(np.max(abs((np.array(mr_m['spacingAu'])-spacing)*(dims-1)))),'ctSha256':hashlib.sha256(baseline_bytes('src/assets/imaging/ct.bin')).hexdigest(),'mriSha256':hashlib.sha256(baseline_bytes('src/assets/imaging/mri-t1.bin')).hexdigest()},
  'independentBakeChecks':bake_checks,'ctNonuniformSliceComparison':ct_slice_check,'meshFieldChecks':coverage,'allTeachingLevelCoverage':section_metrics,
  'limits':['CT windowed grayscale threshold is not a brain segmentation.','No Dice/IoU is reported as anatomical accuracy.','Nuclei, tracts and small nerves cannot be established from these CT overlays.','MRI and CT are different subjects; correspondence must use homologous macro landmarks.','Overlay inspection is not clinical validation or population morphometry.']}
 put('measurements.json',results)

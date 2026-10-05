@@ -402,13 +402,22 @@
   color: var(--accent);
 }
 
-/* Plan §6 risk mitigation: the real-image underlays ship without per-image
-   registration constants — say so in the toolbar while one is visible. */
+/* Approximate teaching registration and acquisition limitations. */
 .section-alignment-note {
   flex-basis: 100%;
   color: var(--text-muted);
   font-size: 0.7rem;
   line-height: 1.35;
+}
+
+.section-mri-alignment summary {
+  cursor: pointer;
+}
+
+.section-mri-alignment p {
+  max-width: 90ch;
+  margin: 0.45rem 0 0;
+  line-height: 1.5;
 }
 
 .section-live-stage {

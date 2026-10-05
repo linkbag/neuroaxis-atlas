@@ -1,0 +1,3 @@
+# Preserve baked image bytes even when a volume contains no NUL characters.
+*.bin binary
+*.glb binary
