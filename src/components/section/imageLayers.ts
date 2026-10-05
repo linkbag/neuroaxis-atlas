@@ -1074,11 +1074,11 @@ export type MriDataStatus = 'idle' | 'loading' | 'ready' | 'failed' | 'timeout'
 /**
  * Upper bound (ms) on one baked-grid fetch + decode before it settles to the
  * visible 'timeout'/'failed' state (exported for UI + QA so the number is
- * stated once). 15 s matches ANATOMY_LOAD_TIMEOUT_MS in anatomyAssets.ts — the
- * volume payload is ~0.5 MB, so anything slower than that is a stall, not a
- * slow link.
+ * stated once). The expanded grids are about 1.6 MB each. A cold public load
+ * shares bandwidth with anatomy assets and can take more than 15 s on a slow
+ * connection; keep the request bounded while allowing it time to finish.
  */
-export const GRID_LOAD_TIMEOUT_MS = 15_000
+export const GRID_LOAD_TIMEOUT_MS = 120_000
 
 /** Resize/decode state of ONE grid; null until loadGrid() runs. */
 interface GridEntry {
