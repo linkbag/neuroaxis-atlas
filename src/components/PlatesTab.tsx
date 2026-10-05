@@ -20,7 +20,7 @@
  * The imagery group is now the REAL-FIRST MODALITY SWITCHER, driven by the
  * store's single `sectionUnderlay` request:
  *
- *   • `SECTION_UNDERLAY_KINDS` (MRI / Simulated only in the public build) — the
+ *   • `SECTION_UNDERLAY_KINDS` (MRI / CT / Simulated only) — the
  *     option list and labels come from the store, so the toolbar can never
  *     drift from what the layers actually implement. There is no separate
  *     "real-first" mode: **Auto IS the real-first default** (kind 'auto' = pick
@@ -29,10 +29,8 @@
  *     option was renamed from "No imagery" to its v4 label.
  *   • opacity slider — always shown (the real image is the section's BASE plate
  *     in real-first mode, so its alpha matters in every mode).
- *   • CT window preset select (brain / bone) — rendered from the manifest's own
- *     `windows` keys (imageLayers.ctWindowPresets()), and only while CT is the
- *     request; the CT grid is baked in HU, so the MRI uint8 window sliders are
- *     meaningless for it (see imageLayers.ctWindowForDraw).
+ *   • CT brain-window readout — the current grid is already encoded in this
+ *     fixed window. It is not raw HU, and MRI window sliders do not apply.
  *   • the real-first compositing note + the always-visible credit + the
  *     "open source ↗" chips, which now also include the ACTIVE modality's own
  *     source page first (mri → OpenNeuro dataset, ct → NLM VHP landing page,
@@ -159,7 +157,7 @@ const MODALITY_TITLES: Record<SectionUnderlayKind, string> = {
     'an anchored photograph (±1.5 au) → else CT → else MRI — and fall back to the simulated ' +
     'section, with an honest hint, when nothing covers it',
   mri: 'Real T1w MRI (OpenNeuro ds007313, CC0) at every plane position on all three axes',
-  ct: 'Real head CT volume (NLM Visible Human Project) at every plane position, with brain / bone window presets',
+  ct: 'Historical head CT (NLM Visible Human Project), fixed brain window; provisional atlas alignment',
   stain:
     'Real photographs only: plane-anchored UBC plates (±1.5 au) and the v3 level-mapped micrographs on transverse planes',
   none: 'Simulated only — no real imagery is drawn, at any plane',
@@ -214,7 +212,7 @@ export function modalityUnavailableReason(
       if (ctLayerStatus() === 'available') {
         return 'unavailable right now — the CT grid is still loading or its fetch failed; the section canvas reports the live state'
       }
-      return 'no embeddable CT grid in this build — re-bake with: node scripts/build-ct-grid.mjs (or choose MRI / Photo)'
+      return 'CT imagery is unavailable in this build — choose MRI or Simulated only'
     }
     // Grid present: on the transverse axis the series may still be exhausted
     // over the whole slider range (AMENDMENT B reaches y = +85, the CT source
@@ -402,11 +400,11 @@ export default function PlatesTab() {
                   ? GRID_CREDITS.mri
                   : null
             : null
-  // The public live section exposes only MRI and simulation. Keep its source
-  // links aligned with those two choices instead of listing unused photo atlases.
+  // Source links follow the selected real modality. Photographs remain excluded.
   const sourceChips =
-    sectionUnderlay.kind === 'mri' && activeCredit?.sourceUrl !== undefined
-      ? [{ label: 'OpenNeuro MRI', url: activeCredit.sourceUrl }]
+    activeCredit?.sourceUrl !== undefined && (sectionUnderlay.kind === 'mri' || sectionUnderlay.kind === 'ct')
+      ? [{ label: sectionUnderlay.kind === 'ct' ? 'NLM Visible Human CT' : 'OpenNeuro MRI', url: activeCredit.sourceUrl },
+          ...(sectionUnderlay.kind === 'ct' ? [{ label: 'NLM source terms', url: 'https://www.nlm.nih.gov/databases/download/terms_and_conditions.html' }] : [])]
       : []
 
   /**
@@ -631,7 +629,7 @@ export default function PlatesTab() {
                   step={0.05}
                   value={sectionUnderlay.opacity}
                   onChange={(event) => setSectionUnderlay({ opacity: Number(event.target.value) })}
-                  title="Opacity of the MRI image beneath the simulated contours"
+                  title="Opacity of the selected image beneath the simulated contours"
                   /* v19 (audit ux-014) — this `<input>` is inside a `<label>` that
                    * also wraps the `<output>` showing the live value, and
                    * name-from-content walks the WHOLE label: the computed name was
@@ -647,18 +645,20 @@ export default function PlatesTab() {
             {(sectionUnderlay.kind === 'ct' || sectionUnderlay.kind === 'auto') && (
               <div className="section-toolbar-group" role="group" aria-label="CT window preset">
                 <span className="section-toolbar-label">CT window</span>
-                {ctPresets.length > 0 ? (
+                {ctPresets.length === 1 ? (
+                  <span className="hint">Brain (soft tissue) · {ctManifestJson.windows.brain[0]} to {ctManifestJson.windows.brain[1]} HU · fixed</span>
+                ) : ctPresets.length > 1 ? (
                   <select
                     className="section-select"
                     value={sectionUnderlay.ctWindowPreset}
-                    disabled={!ctInstalled}
+                    disabled={!ctInstalled || ctPresets.length === 1}
                     /* v19 (audit ux-013) — the control had no programmatic label:
                      * its only name source was `title`, which does not contain
                      * the visible "CT window" string (WCAG 2.5.3). */
                     aria-label="CT window"
                     title={
                       ctInstalled
-                        ? 'Display window for the CT modality (Hounsfield units, from ct-manifest.json) — ignored while MRI or a photograph is drawn'
+                        ? 'Fixed brain window: −20 to 100 HU. This CT image does not supply a true bone window.'
                         : 'CT window presets need the CT grid: no embeddable CT volume in this build'
                     }
                     onChange={(event) =>
@@ -791,16 +791,39 @@ export default function PlatesTab() {
                 role="note"
                 style={{ flexBasis: '100%', color: 'var(--text)', fontSize: '0.78rem' }}
               >
-                NLM-derived imagery is a frozen 2026-09-10 teaching snapshot and may not reflect
-                the most current or accurate data available from NLM.
+                Historical NLM data; not NLM’s most current or most accurate dataset. No NLM endorsement.
               </span>
             )}
 
             {sectionUnderlay.kind === 'mri' && (
-              <span className="section-alignment-note" role="note">
-                MRI alignment is approximate: the volume is placed by a documented affine, not
-                registered to every simulated contour.
-              </span>
+              <details className="section-alignment-note section-mri-alignment">
+                <summary>MRI overlay: approximate teaching alignment · details</summary>
+                <p>
+                  This single-participant MRI is aligned to the atlas as a whole. Cortical folds,
+                  the callosum, ventricular horns and cerebellum differ from the simulated model;
+                  each contour is not an exact tissue boundary. Alignment of the inferior
+                  cerebellum and callosal splenium remains limited. Fine nuclei, nerves and tracts
+                  cannot all be verified on this scan. Beyond MRI coverage, only simulated
+                  contours are shown. Use the overlay for orientation, not clinical measurement.
+                </p>
+              </details>
+            )}
+
+            {sectionUnderlay.kind === 'ct' && (
+              <>
+                <details className="section-alignment-note section-mri-alignment">
+                  <summary>CT overlay: provisional teaching alignment · details</summary>
+                  <p>
+                    Physical orientation and slice positions are corrected. Alignment to the
+                    simulated atlas is approximate; image artifacts and limited soft-tissue
+                    contrast prevent reliable confirmation of fine nuclei, tracts and boundaries.
+                    CT and MRI are from different people, so switching between them is not a
+                    paired scan comparison. The CT uses a fixed brain window (−20 to 100 HU);
+                    a true bone window is unavailable. Missing image data stays transparent.
+                    Use this view for teaching orientation, not clinical measurement.
+                  </p>
+                </details>
+              </>
             )}
 
             {/* v7 CT coverage honesty (docs/TELENCEPHALON_PLAN.md §2/§9, plan

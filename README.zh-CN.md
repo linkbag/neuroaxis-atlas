@@ -2,17 +2,17 @@
 
 ## Scientific review snapshot — 2026-10-04
 
-The `audit/scientific-content-2026-10-04` branch contains an evidence-supported review of all 287 original structure/tract records and all 26 syndrome cards, 23 added cortical concepts, a separate arcuate fasciculus entry, and 19 functional pathway summaries. See [the audit report](docs/audit/2026-10-04/REPORT.md), [record-level before/after index](docs/audit/2026-10-04/review-index.json), and [verification](docs/audit/2026-10-04/VERIFICATION.md). This snapshot is held for owner review before deployment.
+科学内容审查已整合至 `master`：覆盖原有 287 条结构与纤维束记录、26 张综合征卡片，新增 23 个皮层概念、独立的弓状束条目与 19 条功能通路概述。详见[审查报告](docs/audit/2026-10-04/REPORT.md)、[逐条对照](docs/audit/2026-10-04/review-index.json)与[验证记录](docs/audit/2026-10-04/VERIFICATION.md)。
 
 Coordinates, shapes, functional boundaries and MRI alignment remain schematic and unvalidated. Eight misleading named spatial routes are withheld, and an internal-capsule mapping to the entire white-matter shell is removed. Clinical patterns are educational examples, not diagnostic rules. Historical implementation documents below do not establish current scientific accuracy or measured anatomical fidelity.
 
-Public build choices are **MRI / Simulated only**. Direct Plates entry defaults to **Live section / y transverse / MRI**; Snap is initially off. CT and photo assets remain historical source material but are excluded from the public build. Use `npm run verify:scientific` and `npm run verify:public-imaging` for current review/build integration checks; the older CT/photo and fixed-count geometry gates describe archived features and are not scientific validation.
+**2026-10-04 已获项目所有者审核并批准发布：** 公开版本提供 **MRI / CT / Simulated only（仅模拟）**。直接进入 Plates 时默认选择 **Live section / y 横断面 / MRI**，Snap 初始关闭。CT 已修正物理采样与方向，但图谱配准仍为暂定教学对齐；使用固定脑窗（−20 至 100 HU），不提供真正的骨窗。照片影像继续排除。MRI 和 CT 来自不同个体，仍存在区域性偏差，不能用于临床测量或诊断。详见[配准方法与局限](docs/audit/2026-10-04-registration-candidate/README.md)。当前集成检查为 `npm run verify:scientific`、`npm run verify:imaging-fit` 与 `npm run verify:public-imaging`；旧版本的影像和固定几何数量检查不代表科学准确性验证。
 
 # NeuroAxis — 三维脑干图谱
 
 **在线使用：** <https://linkbag.github.io/neuroaxis-atlas/>
 
-**公开版本说明：** 原先提交的 10 张 MSU 冠状切片图片已移除，等待取得使用许可后再考虑恢复；界面中的 MSU 资料仅作为外部链接提供。
+**公开版本说明：** Plates → Live section 提供 MRI、CT 和仅模拟切面，默认使用 MRI 横断面。原先提交的 10 张 MSU 冠状切片图片已移除，等待取得使用许可后再考虑恢复；照片影像不在部署包中。下方历史版本功能说明以本段当前设置与局限为准。
 
 **一个交互式、写实的 Web 图谱，涵盖间脑、中脑（mesencephalon）与菱脑（脑桥、延髓、小脑）—— 自 v7 起叠加端脑（大脑半球、基底节、边缘系统、脑室），自 v8 起加入脑血管（Willis 环与主要脑动脉）以及深部功能/投射内容，自 v9 起加入躯体定位图、皮层分区切面图层、可重跑的影像配准与模拟切面面板，v10 的显示轮次（整框平面辅助器、分区级可见性与 solo、四角面板缩放、皮层分区质量，以及被移除的皮层标签），以及自 v13/v14 起作为第七个系统、以作者撰写走行几何呈现的十二对脑神经（CN I Olfactory → CN XII Hypoglossal），以及 v17 的**细粒度血管层**（53 条血管记录、40 条作者撰写走行，豆纹动脉的两个红色椭球被真实穿通支走行取代）** —— 可点选的 3D 核团与纤维束、与 3D 裁剪平面双向同步的带标注 2D 断面图版、以真实 MRI / CT / 冷冻切片影像作为断面底图的断面视图（Plates 标签页画布与 3D 主切面）、临床综合征浏览器，以及每个结构各自的神经生理、连接、血供与参考文献。使用 Vite、React 18、TypeScript、three.js（`@react-three/fiber`）与 zustand 构建。交互模型受 [ashemag/human-atlas](https://github.com/ashemag/human-atlas) 启发；**所有解剖内容与图版插图都是为本项目创作的原创示意图作品，并且自 v2 写实化升级起，外廓曲面派生自 [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/)（CC BY 4.0）** —— 见 [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)。
 

@@ -18,15 +18,14 @@
  * Orientation conventions (the flips — documented once, used everywhere):
  *   - NIfTI qform/sform express voxel → patient-mm in the **RAS+** convention
  *     (x = patient right, y = anterior, z = superior; NIfTI-1 spec §4, codes
- *     1/2/4; ds007313 uses code 1 for both qform and sform).  Code 3
- *     (Talairach) is treated as LPI− (left/posterior/inferior) with an
- *     explicit warning.
+ *     1/2/4; ds007313 uses code 1 for both qform and sform). The coordinate
+ *     convention remains RAS for a Talairach transform (code 3).
  *   - **RAS → canonical**:  canonical = ( −x_RAS, z_RAS, y_RAS ), i.e. negate
  *     the x (patient-right) axis, and swap anterior (y_RAS) / superior
  *     (z_RAS) into canonical z / y.  Written as the permutation matrix
  *     P_ras2canon below, applied on the left of the RAS affine.
- *   - (For reference, RAS → LPS is (−x, −y, +z); canonical = LPS with y/z
- *     swapped: (−x, +z, −y) — same P as above.  Provided to make cross-checks
+ *   - RAS → LPS is (−x, −y, +z); LPS → canonical is (+x, +z, −y).
+ *     Their composition is the RAS → canonical matrix above. This permits checks
  *     against FSL/ITK printouts easy.)
  *
  * Trilinear resampling: `sampleVoxelTrilinear(vol, x, y, z)` takes voxel
@@ -299,12 +298,22 @@ export const P_RAS_TO_LPS = (() => {
   return m;
 })();
 
+/** DICOM BIPED LPS → canonical L/S/A: anterior is NEGATIVE LPS y. */
+export const P_LPS_TO_CANON = (() => {
+  const m = new Float64Array(16);
+  m[0] = 1;
+  m[6] = 1;
+  m[9] = -1;
+  m[15] = 1;
+  return m;
+})();
+
 /**
  * Voxel → canonical-mm-affine: apply the RAS→canonical frame change to a
  * voxel→RAS-mm affine.
  */
 export function toCanonicalMmAffine(rasAffine, opts = {}) {
-  const mul = opts.fromLps ? P_RAS_TO_LPS : P_RAS_TO_CANON;
+  const mul = opts.fromLps ? P_LPS_TO_CANON : P_RAS_TO_CANON;
   return mul4(mul, rasAffine);
 }
 

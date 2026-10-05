@@ -35,6 +35,7 @@ jobs:
           npm run check
           npm run validate
           npm run verify:scientific
+          npm run verify:imaging-fit
           node scripts/verify/public-imaging.mjs
       - name: Build static site
         run: npm run build

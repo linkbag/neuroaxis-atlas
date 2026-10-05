@@ -172,6 +172,33 @@ export default function ReferencesModal() {
         </div>
 
         <div className="modal-body">
+          <section>
+            <h3>MRI alignment and coverage</h3>
+            <p>
+              MRI and simulated anatomy are different subjects and representations. A global
+              three-dimensional affine gives approximate teaching alignment; the simulated
+              contours are not a segmentation of this MRI. Cortical folds, the callosal
+              splenium, ventricular horns and the inferior cerebellum remain imperfectly matched.
+              Fine nuclei and tracts cannot all be identified or validated on the downsampled T1.
+              Image data is never extrapolated beyond the acquisition field; simulated anatomy
+              can remain visible there. Section photographs remain unavailable.
+            </p>
+          </section>
+          <section>
+            <h3>CT alignment and source</h3>
+            <p>
+              CT physical orientation and slice positions are corrected, but its alignment to
+              simulated anatomy remains provisional. Artifacts limit fine structure comparison.
+              MRI and CT are from different people. This CT is shown in a fixed brain window
+              (−20 to 100 HU); it does not supply a true bone window.
+            </p>
+            <p>
+              Courtesy of the U.S. National Library of Medicine. Historical NLM data; not NLM’s
+              most current or most accurate dataset. NLM does not endorse NeuroAxis.
+              {' '}<a href="https://www.nlm.nih.gov/research/visible/getting_data.html" target="_blank" rel="noreferrer">Source</a>
+              {' · '}<a href="https://www.nlm.nih.gov/databases/download/terms_and_conditions.html" target="_blank" rel="noreferrer">NLM terms</a>.
+            </p>
+          </section>
           <p className="hint">
             Select any nucleus, tract, or region in the app and the <strong>Learn more</strong> section shows
             curated external links (Wikipedia + journal) specific to that structure — in addition to the

@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "sourceFrame": "LPS",
+  "method": "Provisional gross-envelope affine; CT source artifacts prevent reliable fine brainstem, callosal and ventricular matching. Not accepted for a public CT overlay.",
+  "pickMethod": "Coarse visual observations in the original, physically sampled CT. Brainstem points have low confidence; held-out checks are arithmetic and visual sanity checks, not independent expert validation.",
+  "baseline": {
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "rotDeg": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "translateAu": [
+      7,
+      35,
+      -30
+    ],
+    "orientation": "Legacy AP reflection: canonical z = +LPS y / 1.2, rather than -LPS y / 1.2"
+  },
+  "fitReference": {
+    "scale": [
+      1,
+      1.25,
+      1
+    ],
+    "rotDeg": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "translateAu": [
+      7,
+      127,
+      76
+    ]
+  },
+  "boundsRelativeToBaseline": {
+    "scale": [
+      [
+        0.8,
+        1.2
+      ],
+      [
+        0.9,
+        1.2
+      ],
+      [
+        0.8,
+        1.2
+      ]
+    ],
+    "translationAu": [
+      [
+        -10,
+        10
+      ],
+      [
+        -15,
+        15
+      ],
+      [
+        -15,
+        15
+      ]
+    ]
+  },
+  "regularization": {
+    "scaleSigma": 0.5,
+    "translationSigmaAu": 20
+  },
+  "observations": [
+    {
+      "id": "approximate-pontomedullary-junction",
+      "region": "brainstem",
+      "sourcePointMm": [
+        -8.4,
+        92,
+        -141
+      ],
+      "targetAu": [
+        0,
+        -24,
+        11
+      ],
+      "componentMask": [
+        true,
+        true,
+        true
+      ],
+      "uncertaintyAu": 6,
+      "split": "fit",
+      "baselineResidualAu": 68.51540783729679,
+      "candidateResidualAu": 10.191165491548587
+    },
+    {
+      "id": "approximate-pontine-ventral-face",
+      "region": "brainstem",
+      "sourcePointMm": [
+        -8.4,
+        78,
+        -125
+      ],
+      "targetAu": [
+        0,
+        -10,
+        15.5
+      ],
+      "componentMask": [
+        false,
+        true,
+        true
+      ],
+      "uncertaintyAu": 6,
+      "split": "fit",
+      "baselineResidualAu": 62.29722661920388,
+      "candidateResidualAu": 3.2169731156041297
+    },
+    {
+      "id": "cortical-vertex",
+      "region": "cortex",
+      "sourcePointMm": [
+        0,
+        85,
+        -14
+      ],
+      "targetAu": [
+        0,
+        113.76,
+        0
+      ],
+      "componentMask": [
+        false,
+        true,
+        false
+      ],
+      "uncertaintyAu": 6,
+      "split": "fit",
+      "baselineResidualAu": 90.42666666666668,
+      "candidateResidualAu": 0.2555623858204541
+    },
+    {
+      "id": "cortical-frontal-bound",
+      "region": "cortex",
+      "sourcePointMm": [
+        0,
+        3,
+        -50
+      ],
+      "targetAu": [
+        0,
+        0,
+        70.71
+      ],
+      "componentMask": [
+        false,
+        false,
+        true
+      ],
+      "uncertaintyAu": 6,
+      "split": "fit",
+      "baselineResidualAu": 98.21,
+      "candidateResidualAu": 5.91351075435189
+    },
+    {
+      "id": "cortical-occipital-bound",
+      "region": "cortex",
+      "sourcePointMm": [
+        0,
+        172,
+        -70
+      ],
+      "targetAu": [
+        0,
+        0,
+        -72.82
+      ],
+      "componentMask": [
+        false,
+        false,
+        true
+      ],
+      "uncertaintyAu": 6,
+      "split": "fit",
+      "baselineResidualAu": 186.15333333333334,
+      "candidateResidualAu": 6.188645863286652
+    },
+    {
+      "id": "cortical-left-bound",
+      "region": "cortex",
+      "sourcePointMm": [
+        70,
+        90,
+        -65
+      ],
+      "targetAu": [
+        55.47497177,
+        0,
+        0
+      ],
+      "componentMask": [
+        true,
+        false,
+        false
+      ],
+      "uncertaintyAu": 6,
+      "split": "fit",
+      "baselineResidualAu": 9.85836156333334,
+      "candidateResidualAu": 1.3073669183319652
+    },
+    {
+      "id": "cortical-right-bound",
+      "region": "cortex",
+      "sourcePointMm": [
+        -78,
+        90,
+        -65
+      ],
+      "targetAu": [
+        -56.05072784,
+        0,
+        0
+      ],
+      "componentMask": [
+        true,
+        false,
+        false
+      ],
+      "uncertaintyAu": 6,
+      "split": "fit",
+      "baselineResidualAu": 1.9492721599999996,
+      "candidateResidualAu": 1.2364014761522242
+    },
+    {
+      "id": "approximate-rostral-pons-transition",
+      "region": "brainstem",
+      "sourcePointMm": [
+        -8.4,
+        78,
+        -115
+      ],
+      "targetAu": [
+        0,
+        4,
+        10
+      ],
+      "componentMask": [
+        false,
+        true,
+        true
+      ],
+      "uncertaintyAu": 6,
+      "split": "holdout",
+      "baselineResidualAu": 69.48640954252214,
+      "candidateResidualAu": 3.201794310613776
+    },
+    {
+      "id": "cerebellar-inferior-bound",
+      "region": "cerebellum",
+      "sourcePointMm": [
+        -8.4,
+        122,
+        -148
+      ],
+      "targetAu": [
+        0,
+        -34,
+        -40
+      ],
+      "componentMask": [
+        false,
+        true,
+        false
+      ],
+      "uncertaintyAu": 6,
+      "split": "holdout",
+      "baselineResidualAu": 54.33333333333334,
+      "candidateResidualAu": 0.9241743742880146
+    }
+  ],
+  "candidate": {
+    "scale": [
+      0.90483782,
+      1.31265907,
+      1.01719431
+    ],
+    "rotDeg": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "translateAu": [
+      4.00013224,
+      128.81879348,
+      79.16649652
+    ]
+  }
+}

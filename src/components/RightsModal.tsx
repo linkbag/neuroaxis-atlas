@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
 
-const ACKNOWLEDGEMENT_KEY = 'neuroaxis.rights.v1'
+const ACKNOWLEDGEMENT_KEY = 'neuroaxis.rights.v2'
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 export function acknowledgementStored(): boolean {
@@ -115,10 +115,11 @@ export default function RightsModal({ open, required, onAcknowledge, onClose }: 
 
           <section>
             <h3>Third-party credits</h3>
-            <p>The public live section offers MRI and simulated anatomy only. CT, section photographs and MSU brain images are excluded from this build. Historical sources remain documented in the repository's attribution record.</p>
+            <p>The live section offers MRI, CT and simulated anatomy. Section photographs and MSU brain images remain excluded. Source credits and alignment limits are available in the imagery controls and References panel.</p>
             <ul className="rights-list">
               <li><strong>3D surface anatomy:</strong> BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International. The surfaces were adapted for this atlas. <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html" target="_blank" rel="noreferrer">Source and license</a>.</li>
               <li><strong>MRI:</strong> OpenNeuro ds007313 MRI-derived grid, from a CC0 source. Resampling and display alignment are adaptations for this teaching atlas. <a href="https://openneuro.org/datasets/ds007313/versions/1.0.0" target="_blank" rel="noreferrer">Dataset</a>.</li>
+              <li><strong>CT:</strong> Courtesy of the U.S. National Library of Medicine. The Visible Human head CT was resampled for this teaching atlas. Historical NLM data; not NLM’s most current or most accurate dataset. NLM does not endorse NeuroAxis. <a href="https://www.nlm.nih.gov/research/visible/getting_data.html" target="_blank" rel="noreferrer">Source</a> · <a href="https://www.nlm.nih.gov/databases/download/terms_and_conditions.html" target="_blank" rel="noreferrer">NLM terms</a>.</li>
             </ul>
           </section>
 

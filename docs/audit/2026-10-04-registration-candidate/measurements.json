@@ -1,0 +1,2832 @@
+{
+  "schemaVersion": 1,
+  "baselineRevision": "89e5f655043817a328915adfad0c8bd3a10485e1",
+  "candidateBaseRevision": "392fb8486d50366207ca3dfb6d5728b88342f816",
+  "sourceHashes": {
+    "MRI": "209edd45ee17494a193268d89496147fb1fef5d87a256d82b5ff8548b4c3cfe9",
+    "CT": "1178448df50484bf493aabec1164a01f4351af363957ab460f9255fdd4191be0"
+  },
+  "bakedHashes": {
+    "MRI": "7e5d78d41d8d957197b18da69d9b5c750151e53a5704fc9e2e362fd596e8f003",
+    "CT": "a2c90aa3d5b860877b09c98c5df333c68e21c656b39559d4404a3c1723345f1b"
+  },
+  "independentBakeChecks": {
+    "MRI": {
+      "stationsCompared": 206241,
+      "fractionExact": 1.0,
+      "fractionWithinOneGrayLevel": 1.0,
+      "maximumGrayDifference": 0.0
+    },
+    "CT": {
+      "stationsCompared": 206241,
+      "fractionExact": 1.0,
+      "fractionWithinOneGrayLevel": 1.0,
+      "maximumGrayDifference": 0.0
+    }
+  },
+  "cropOnlyExtension": {
+    "stationsCompared": 979371,
+    "changedStations": 0,
+    "maximumGrayDifference": 0
+  },
+  "meshFieldChecks": [
+    {
+      "slug": "ctx-amygdala-l",
+      "vertices": 594,
+      "minAu": [
+        14.435819625854492,
+        6.6081953048706055,
+        5.872614860534668
+      ],
+      "maxAu": [
+        28.490249633789062,
+        19.35808563232422,
+        20.776288986206055
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-amygdala-r",
+      "vertices": 586,
+      "minAu": [
+        -28.01170539855957,
+        6.551970481872559,
+        5.833934783935547
+      ],
+      "maxAu": [
+        -14.057598114013672,
+        19.32213020324707,
+        20.523590087890625
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-caudate-l",
+      "vertices": 1580,
+      "minAu": [
+        2.0028390884399414,
+        16.1068172454834,
+        -17.367084503173828
+      ],
+      "maxAu": [
+        25.809322357177734,
+        57.19194793701172,
+        35.20442199707031
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-caudate-r",
+      "vertices": 1609,
+      "minAu": [
+        -25.9240779876709,
+        16.123170852661133,
+        -17.340797424316406
+      ],
+      "maxAu": [
+        -2.4443814754486084,
+        57.17182540893555,
+        35.2459602355957
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-cerebellar-vermis",
+      "vertices": 8395,
+      "minAu": [
+        -3.9527790546417236,
+        -31.037200927734375,
+        -51.615318298339844
+      ],
+      "maxAu": [
+        3.950523614883423,
+        16.23775291442871,
+        -5.985610485076904
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-cerebellum-l",
+      "vertices": 11566,
+      "minAu": [
+        0.30182409286499023,
+        -34.10843276977539,
+        -53.01671600341797
+      ],
+      "maxAu": [
+        44.88499069213867,
+        14.880952835083008,
+        1.4549800157546997
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-cerebellum-r",
+      "vertices": 11797,
+      "minAu": [
+        -44.3252067565918,
+        -34.05299758911133,
+        -52.9967041015625
+      ],
+      "maxAu": [
+        -0.15869998931884766,
+        14.829046249389648,
+        1.4587393999099731
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-choroid-plexus-l",
+      "vertices": 755,
+      "minAu": [
+        1.9885637760162354,
+        10.385791778564453,
+        -20.61233139038086
+      ],
+      "maxAu": [
+        30.527496337890625,
+        46.953956604003906,
+        11.329883575439453
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-choroid-plexus-r",
+      "vertices": 754,
+      "minAu": [
+        -30.2724666595459,
+        10.3862886428833,
+        -20.55855369567871
+      ],
+      "maxAu": [
+        -2.5505282878875732,
+        46.889286041259766,
+        11.361178398132324
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-corpus-callosum",
+      "vertices": 8242,
+      "minAu": [
+        -21.080425262451172,
+        19.394786834716797,
+        -34.84989547729492
+      ],
+      "maxAu": [
+        20.592082977294922,
+        63.94550323486328,
+        41.08308410644531
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-fornix-commissure",
+      "vertices": 691,
+      "minAu": [
+        -19.615814208984375,
+        22.507863998413086,
+        -19.922561645507812
+      ],
+      "maxAu": [
+        18.613481521606445,
+        43.85771560668945,
+        1.8780792951583862
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-fornix-l",
+      "vertices": 1071,
+      "minAu": [
+        -0.22215093672275543,
+        10.54786205291748,
+        -18.76373863220215
+      ],
+      "maxAu": [
+        25.453800201416016,
+        45.60441970825195,
+        17.167831420898438
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-fornix-r",
+      "vertices": 1085,
+      "minAu": [
+        -25.46429443359375,
+        10.508769035339355,
+        -18.743730545043945
+      ],
+      "maxAu": [
+        -0.2659524977207184,
+        45.58509063720703,
+        17.174264907836914
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-globus-pallidus-l",
+      "vertices": 740,
+      "minAu": [
+        10.874357223510742,
+        22.134138107299805,
+        -0.19734340906143188
+      ],
+      "maxAu": [
+        24.412736892700195,
+        40.7606201171875,
+        22.833234786987305
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-globus-pallidus-r",
+      "vertices": 727,
+      "minAu": [
+        -24.861801147460938,
+        22.067975997924805,
+        -0.182026207447052
+      ],
+      "maxAu": [
+        -11.330485343933105,
+        40.74042892456055,
+        22.866872787475586
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-hemisphere-l",
+      "vertices": 40388,
+      "minAu": [
+        0.9966976046562195,
+        -6.803338050842285,
+        -72.8160629272461
+      ],
+      "maxAu": [
+        55.474971771240234,
+        113.7007827758789,
+        70.59213256835938
+      ],
+      "publishedOutsideGridVertexFraction": 0.2327671585619491,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.003094978706546499,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-hemisphere-r",
+      "vertices": 40546,
+      "minAu": [
+        -56.05072784423828,
+        -6.901812553405762,
+        -72.49639129638672
+      ],
+      "maxAu": [
+        -0.24885588884353638,
+        113.75735473632812,
+        70.70890808105469
+      ],
+      "publishedOutsideGridVertexFraction": 0.23637350170177082,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0030829181670201746,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-hippocampus-l",
+      "vertices": 1012,
+      "minAu": [
+        15.043535232543945,
+        3.9314987659454346,
+        -18.1322078704834
+      ],
+      "maxAu": [
+        31.002784729003906,
+        25.262039184570312,
+        16.253414154052734
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-hippocampus-r",
+      "vertices": 1013,
+      "minAu": [
+        -30.363256454467773,
+        3.878570795059204,
+        -18.012088775634766
+      ],
+      "maxAu": [
+        -15.35379409790039,
+        25.32546043395996,
+        16.2188777923584
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-hypothalamus-surface",
+      "vertices": 8584,
+      "minAu": [
+        -6.8043341636657715,
+        6.747856616973877,
+        -4.038677215576172
+      ],
+      "maxAu": [
+        6.643650054931641,
+        37.88578796386719,
+        24.152677536010742
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-medulla-surface",
+      "vertices": 9278,
+      "minAu": [
+        -11.107993125915527,
+        -50.794921875,
+        -8.518885612487793
+      ],
+      "maxAu": [
+        11.118949890136719,
+        -18.72043228149414,
+        13.012984275817871
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-midbrain-surface",
+      "vertices": 7378,
+      "minAu": [
+        -12.126433372497559,
+        2.430665969848633,
+        -14.44225788116455
+      ],
+      "maxAu": [
+        12.073990821838379,
+        20.26253890991211,
+        11.582427978515625
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-optic-chiasm-l",
+      "vertices": 782,
+      "minAu": [
+        0.024215975776314735,
+        10.39959716796875,
+        14.270013809204102
+      ],
+      "maxAu": [
+        6.251894950866699,
+        18.623441696166992,
+        23.465864181518555
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-optic-chiasm-r",
+      "vertices": 798,
+      "minAu": [
+        -6.062605381011963,
+        10.409164428710938,
+        14.256901741027832
+      ],
+      "maxAu": [
+        0.218626007437706,
+        18.622516632080078,
+        23.457944869995117
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-pineal",
+      "vertices": 2994,
+      "minAu": [
+        -3.3276333808898926,
+        14.295419692993164,
+        -20.435928344726562
+      ],
+      "maxAu": [
+        2.9851739406585693,
+        24.067853927612305,
+        -7.8814802169799805
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-pons-surface",
+      "vertices": 11852,
+      "minAu": [
+        -18.130870819091797,
+        -24.519363403320312,
+        -11.506199836730957
+      ],
+      "maxAu": [
+        18.239198684692383,
+        5.849102973937988,
+        16.678890228271484
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-putamen-l",
+      "vertices": 1171,
+      "minAu": [
+        14.600053787231445,
+        20.736583709716797,
+        -4.331841468811035
+      ],
+      "maxAu": [
+        28.972673416137695,
+        50.166587829589844,
+        30.435869216918945
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-putamen-r",
+      "vertices": 1158,
+      "minAu": [
+        -29.440448760986328,
+        20.64002227783203,
+        -4.343031883239746
+      ],
+      "maxAu": [
+        -15.024214744567871,
+        50.12082290649414,
+        30.415103912353516
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-thalamus-l",
+      "vertices": 8754,
+      "minAu": [
+        1.2000000476837158,
+        10.869871139526367,
+        -16.363170623779297
+      ],
+      "maxAu": [
+        21.564876556396484,
+        39.65542221069336,
+        14.177986145019531
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "ctx-thalamus-r",
+      "vertices": 8623,
+      "minAu": [
+        -20.07610511779785,
+        10.840988159179688,
+        -16.342227935791016
+      ],
+      "maxAu": [
+        -1.2000000476837158,
+        39.65961456298828,
+        14.081314086914062
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-abducens",
+      "vertices": 604,
+      "minAu": [
+        -3.0353856086730957,
+        -19.368507385253906,
+        -5.094477653503418
+      ],
+      "maxAu": [
+        3.04227614402771,
+        -16.393760681152344,
+        -2.5238566398620605
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-ambiguus",
+      "vertices": 664,
+      "minAu": [
+        -4.707919597625732,
+        -37.8184700012207,
+        -5.165575981140137
+      ],
+      "maxAu": [
+        4.708171844482422,
+        -23.533525466918945,
+        -2.4573004245758057
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-arcuate-hypothalamic",
+      "vertices": 282,
+      "minAu": [
+        -3.4697556495666504,
+        28.18431282043457,
+        4.746004581451416
+      ],
+      "maxAu": [
+        3.4605798721313477,
+        29.499311447143555,
+        6.603750228881836
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-arcuate-medullary",
+      "vertices": 815,
+      "minAu": [
+        -3.5895557403564453,
+        -46.53757095336914,
+        6.470696926116943
+      ],
+      "maxAu": [
+        3.5203137397766113,
+        -39.914024353027344,
+        7.619248390197754
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-area-postrema",
+      "vertices": 224,
+      "minAu": [
+        -2.2756459712982178,
+        -32.81894302368164,
+        -6.878718852996826
+      ],
+      "maxAu": [
+        2.2545721530914307,
+        -30.321027755737305,
+        -6.040885925292969
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-cochlear-dorsal",
+      "vertices": 397,
+      "minAu": [
+        -8.083008766174316,
+        -21.72218132019043,
+        -6.464475631713867
+      ],
+      "maxAu": [
+        8.088788986206055,
+        -19.778778076171875,
+        -4.371853828430176
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-cochlear-ventral",
+      "vertices": 653,
+      "minAu": [
+        -7.84645938873291,
+        -20.202116012573242,
+        -5.241323947906494
+      ],
+      "maxAu": [
+        7.837778568267822,
+        -17.513429641723633,
+        -2.830024242401123
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-cuneiform",
+      "vertices": 668,
+      "minAu": [
+        -8.840357780456543,
+        7.41930627822876,
+        -5.444478988647461
+      ],
+      "maxAu": [
+        8.834607124328613,
+        14.771986961364746,
+        -2.5695526599884033
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-dentate",
+      "vertices": 1107,
+      "minAu": [
+        -8.123732566833496,
+        -24.687864303588867,
+        -12.963685035705566
+      ],
+      "maxAu": [
+        8.084794044494629,
+        -19.288227081298828,
+        -9.118934631347656
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-dmv",
+      "vertices": 663,
+      "minAu": [
+        -3.096346139907837,
+        -33.3618049621582,
+        -7.409273624420166
+      ],
+      "maxAu": [
+        3.103135824203491,
+        -26.36064910888672,
+        -5.268547058105469
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-dorsal-raphe",
+      "vertices": 350,
+      "minAu": [
+        -1.3444790840148926,
+        7.263242244720459,
+        -5.09938907623291
+      ],
+      "maxAu": [
+        -0.18547366559505463,
+        14.409017562866211,
+        -3.258298873901367
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-dorsomedial",
+      "vertices": 220,
+      "minAu": [
+        -2.4473142623901367,
+        33.78030776977539,
+        4.6391706466674805
+      ],
+      "maxAu": [
+        -0.869280993938446,
+        36.252044677734375,
+        7.130175590515137
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-edinger-westphal",
+      "vertices": 332,
+      "minAu": [
+        -1.5023016929626465,
+        14.032411575317383,
+        -4.584917068481445
+      ],
+      "maxAu": [
+        -0.31169119477272034,
+        15.841642379760742,
+        -2.6036102771759033
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-facial",
+      "vertices": 668,
+      "minAu": [
+        -6.046392917633057,
+        -20.708126068115234,
+        -3.6617023944854736
+      ],
+      "maxAu": [
+        6.0448317527771,
+        -17.115713119506836,
+        -0.28367844223976135
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-fastigial",
+      "vertices": 579,
+      "minAu": [
+        -2.890216827392578,
+        -23.513221740722656,
+        -12.70824146270752
+      ],
+      "maxAu": [
+        2.9180009365081787,
+        -20.46999740600586,
+        -10.273332595825195
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-habenula",
+      "vertices": 412,
+      "minAu": [
+        -3.6327288150787354,
+        25.895784378051758,
+        -5.3724822998046875
+      ],
+      "maxAu": [
+        3.630587339401245,
+        28.172239303588867,
+        -2.489300012588501
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-hypoglossal",
+      "vertices": 570,
+      "minAu": [
+        -1.1372584104537964,
+        -37.377174377441406,
+        -5.273439407348633
+      ],
+      "maxAu": [
+        0.9925261735916138,
+        -30.90178871154785,
+        -3.4149277210235596
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-inferior-colliculus",
+      "vertices": 662,
+      "minAu": [
+        -5.827778339385986,
+        6.203659534454346,
+        -10.377264976501465
+      ],
+      "maxAu": [
+        5.813108921051025,
+        9.839665412902832,
+        -5.543691635131836
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-inferior-olive-medial",
+      "vertices": 626,
+      "minAu": [
+        -3.1679739952087402,
+        -36.95159912109375,
+        -0.23389007151126862
+      ],
+      "maxAu": [
+        3.1656429767608643,
+        -30.668487548828125,
+        2.0195844173431396
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-inferior-olive-principal",
+      "vertices": 1088,
+      "minAu": [
+        -7.039120674133301,
+        -37.87971115112305,
+        0.9687482714653015
+      ],
+      "maxAu": [
+        7.039057731628418,
+        -29.931011199951172,
+        4.999824047088623
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-interposed",
+      "vertices": 734,
+      "minAu": [
+        -5.334824085235596,
+        -23.64743423461914,
+        -12.418366432189941
+      ],
+      "maxAu": [
+        5.395287036895752,
+        -20.29581642150879,
+        -9.634018898010254
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-intralaminar",
+      "vertices": 646,
+      "minAu": [
+        -7.635063171386719,
+        21.68309783935547,
+        -7.119603157043457
+      ],
+      "maxAu": [
+        7.5605621337890625,
+        31.1616153717041,
+        3.325427770614624
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-lateral-dorsal",
+      "vertices": 1131,
+      "minAu": [
+        -15.295467376708984,
+        30.01793670654297,
+        -7.031107425689697
+      ],
+      "maxAu": [
+        15.617183685302734,
+        39.480003356933594,
+        5.401834487915039
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-lateral-posterior",
+      "vertices": 1090,
+      "minAu": [
+        -18.7783145904541,
+        27.09234046936035,
+        -13.464683532714844
+      ],
+      "maxAu": [
+        18.769269943237305,
+        39.25519561767578,
+        1.1341967582702637
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-lgn",
+      "vertices": 1097,
+      "minAu": [
+        -20.530437469482422,
+        11.735236167907715,
+        -16.602821350097656
+      ],
+      "maxAu": [
+        21.541120529174805,
+        31.101911544799805,
+        -1.5374139547348022
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-locus-coeruleus",
+      "vertices": 244,
+      "minAu": [
+        -1.5716220140457153,
+        -5.170908451080322,
+        -4.122076511383057
+      ],
+      "maxAu": [
+        1.567765235900879,
+        -2.724287986755371,
+        -3.0364365577697754
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-mammillary-body",
+      "vertices": 466,
+      "minAu": [
+        -3.8725030422210693,
+        26.771286010742188,
+        3.201601028442383
+      ],
+      "maxAu": [
+        3.835252523422241,
+        29.1126651763916,
+        5.633460998535156
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-md",
+      "vertices": 589,
+      "minAu": [
+        -9.89927864074707,
+        28.26250457763672,
+        0.43036603927612305
+      ],
+      "maxAu": [
+        9.836081504821777,
+        32.62257385253906,
+        9.197919845581055
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-medullary-reticular",
+      "vertices": 675,
+      "minAu": [
+        -6.44816255569458,
+        -48.49924850463867,
+        -3.4148447513580322
+      ],
+      "maxAu": [
+        6.456107139587402,
+        -26.800077438354492,
+        1.426674485206604
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-mesencephalic-v",
+      "vertices": 594,
+      "minAu": [
+        -5.479544639587402,
+        1.9296015501022339,
+        -5.88777494430542
+      ],
+      "maxAu": [
+        5.478374481201172,
+        14.281756401062012,
+        -3.9966347217559814
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-mgn",
+      "vertices": 663,
+      "minAu": [
+        -9.630373001098633,
+        20.663639068603516,
+        -9.45998764038086
+      ],
+      "maxAu": [
+        9.625434875488281,
+        24.483142852783203,
+        -0.8694133758544922
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-midline-thalamic",
+      "vertices": 520,
+      "minAu": [
+        -2.99405574798584,
+        23.47835350036621,
+        -3.3642098903656006
+      ],
+      "maxAu": [
+        2.8844330310821533,
+        31.219024658203125,
+        4.27125883102417
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-nucleus-cuneatus",
+      "vertices": 646,
+      "minAu": [
+        -4.3075175285339355,
+        -46.35913848876953,
+        -4.1987152099609375
+      ],
+      "maxAu": [
+        4.299471855163574,
+        -40.78350067138672,
+        -1.5435771942138672
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-nucleus-gracilis",
+      "vertices": 644,
+      "minAu": [
+        -2.4939346313476562,
+        -46.809104919433594,
+        -4.998188018798828
+      ],
+      "maxAu": [
+        2.4200544357299805,
+        -41.41463851928711,
+        -2.6002790927886963
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-oculomotor",
+      "vertices": 531,
+      "minAu": [
+        -2.065859317779541,
+        12.60083293914795,
+        -5.387705326080322
+      ],
+      "maxAu": [
+        0.730712890625,
+        15.372220993041992,
+        -2.154172658920288
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-pag",
+      "vertices": 613,
+      "minAu": [
+        -4.359506607055664,
+        7.97133207321167,
+        -7.851531505584717
+      ],
+      "maxAu": [
+        4.365332126617432,
+        16.127378463745117,
+        -4.083381652832031
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-paraventricular",
+      "vertices": 298,
+      "minAu": [
+        -2.4636385440826416,
+        33.686546325683594,
+        4.6693315505981445
+      ],
+      "maxAu": [
+        -0.8731319308280945,
+        36.981685638427734,
+        7.596581935882568
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-pineal-gland",
+      "vertices": 180,
+      "minAu": [
+        -0.7422005534172058,
+        21.355314254760742,
+        -9.87981128692627
+      ],
+      "maxAu": [
+        0.1919001191854477,
+        22.859027862548828,
+        -8.160741806030273
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-pontine-reticular",
+      "vertices": 610,
+      "minAu": [
+        -5.494250297546387,
+        -16.89264678955078,
+        -3.4556307792663574
+      ],
+      "maxAu": [
+        5.525309085845947,
+        1.5011212825775146,
+        1.4403096437454224
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-posterior-hypothalamus",
+      "vertices": 164,
+      "minAu": [
+        -2.441049098968506,
+        31.671749114990234,
+        3.2503349781036377
+      ],
+      "maxAu": [
+        -1.4914896488189697,
+        34.575748443603516,
+        5.361569404602051
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-pprf",
+      "vertices": 774,
+      "minAu": [
+        -3.3778178691864014,
+        -19.831031799316406,
+        -3.2711081504821777
+      ],
+      "maxAu": [
+        3.3750603199005127,
+        -16.128925323486328,
+        -0.6771268248558044
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-preoptic",
+      "vertices": 429,
+      "minAu": [
+        -2.3313822746276855,
+        30.63243293762207,
+        6.950117588043213
+      ],
+      "maxAu": [
+        0.5306693911552429,
+        34.8040657043457,
+        9.724586486816406
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-pretectal",
+      "vertices": 636,
+      "minAu": [
+        -3.927515983581543,
+        16.013933181762695,
+        -8.794768333435059
+      ],
+      "maxAu": [
+        3.8934929370880127,
+        18.46233558654785,
+        -5.138614177703857
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-principal-sensory-v",
+      "vertices": 678,
+      "minAu": [
+        -7.049198150634766,
+        -10.27735710144043,
+        3.334688425064087
+      ],
+      "maxAu": [
+        7.04189920425415,
+        -5.667901992797852,
+        6.657759189605713
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-pulvinar",
+      "vertices": 1092,
+      "minAu": [
+        -16.703510284423828,
+        18.367908477783203,
+        -16.196453094482422
+      ],
+      "maxAu": [
+        16.7072811126709,
+        32.167903900146484,
+        -3.9052557945251465
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-red-nucleus",
+      "vertices": 1084,
+      "minAu": [
+        -6.425818920135498,
+        9.082720756530762,
+        -2.342146158218384
+      ],
+      "maxAu": [
+        6.437575340270996,
+        12.8759126663208,
+        2.425888776779175
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-snc",
+      "vertices": 1150,
+      "minAu": [
+        -9.148530960083008,
+        9.855839729309082,
+        7.420294284820557
+      ],
+      "maxAu": [
+        9.047826766967773,
+        11.154911994934082,
+        9.417831420898438
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-snr",
+      "vertices": 1123,
+      "minAu": [
+        -9.097546577453613,
+        8.735969543457031,
+        7.894192218780518
+      ],
+      "maxAu": [
+        9.134778022766113,
+        10.24256420135498,
+        9.716287612915039
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-solitarius-caudal",
+      "vertices": 581,
+      "minAu": [
+        -2.839052677154541,
+        -38.096458435058594,
+        -7.199181079864502
+      ],
+      "maxAu": [
+        2.7640106678009033,
+        -25.9465389251709,
+        -4.828019618988037
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-solitarius-rostral",
+      "vertices": 438,
+      "minAu": [
+        -4.504317283630371,
+        -23.661970138549805,
+        -4.297276496887207
+      ],
+      "maxAu": [
+        4.502317428588867,
+        -20.776525497436523,
+        -2.2693896293640137
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-spinal-trigeminal",
+      "vertices": 606,
+      "minAu": [
+        -6.484873294830322,
+        -49.425018310546875,
+        -4.056672096252441
+      ],
+      "maxAu": [
+        6.350165367126465,
+        -20.775745391845703,
+        -0.9811505675315857
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-subthalamic",
+      "vertices": 672,
+      "minAu": [
+        -9.55716323852539,
+        21.001178741455078,
+        0.807321310043335
+      ],
+      "maxAu": [
+        9.492230415344238,
+        23.141803741455078,
+        6.442739963531494
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-superior-colliculus",
+      "vertices": 624,
+      "minAu": [
+        -6.436359405517578,
+        11.982141494750977,
+        -10.357857704162598
+      ],
+      "maxAu": [
+        6.31406307220459,
+        15.905232429504395,
+        -5.607304573059082
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-superior-olivary",
+      "vertices": 582,
+      "minAu": [
+        -4.912308692932129,
+        -18.405397415161133,
+        -1.1569231748580933
+      ],
+      "maxAu": [
+        4.913295745849609,
+        -15.615384101867676,
+        1.1213196516036987
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-superior-salivatory",
+      "vertices": 358,
+      "minAu": [
+        -4.280245304107666,
+        -20.63442039489746,
+        -3.5936195850372314
+      ],
+      "maxAu": [
+        4.28060245513916,
+        -18.91122817993164,
+        -1.3748174905776978
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-suprachiasmatic",
+      "vertices": 270,
+      "minAu": [
+        -3.7507128715515137,
+        27.750774383544922,
+        5.348273754119873
+      ],
+      "maxAu": [
+        3.768298387527466,
+        29.352394104003906,
+        6.922489166259766
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-supraoptic",
+      "vertices": 338,
+      "minAu": [
+        -3.9582602977752686,
+        27.803483963012695,
+        4.879551410675049
+      ],
+      "maxAu": [
+        4.007009983062744,
+        29.351945877075195,
+        6.921746253967285
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-thalamic-anterior",
+      "vertices": 1110,
+      "minAu": [
+        -14.50048828125,
+        31.642141342163086,
+        0.524412214756012
+      ],
+      "maxAu": [
+        14.073862075805664,
+        39.386837005615234,
+        13.384100914001465
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-thalamic-reticular",
+      "vertices": 1175,
+      "minAu": [
+        -18.715723037719727,
+        21.87282943725586,
+        -5.048842906951904
+      ],
+      "maxAu": [
+        18.326309204101562,
+        37.28314971923828,
+        8.515588760375977
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-trigeminal-motor",
+      "vertices": 670,
+      "minAu": [
+        -5.836877346038818,
+        -10.322840690612793,
+        2.287010431289673
+      ],
+      "maxAu": [
+        5.855560302734375,
+        -5.6874542236328125,
+        5.6524176597595215
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-trochlear",
+      "vertices": 400,
+      "minAu": [
+        -1.1367281675338745,
+        6.879761695861816,
+        -6.416659832000732
+      ],
+      "maxAu": [
+        -0.02104988694190979,
+        9.003971099853516,
+        -3.652249574661255
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-va",
+      "vertices": 1103,
+      "minAu": [
+        -12.044929504394531,
+        21.769367218017578,
+        2.0637941360473633
+      ],
+      "maxAu": [
+        12.204033851623535,
+        33.27592468261719,
+        13.918548583984375
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-ventromedial",
+      "vertices": 386,
+      "minAu": [
+        -3.9669182300567627,
+        27.77956199645996,
+        4.489443302154541
+      ],
+      "maxAu": [
+        3.9944915771484375,
+        29.509428024291992,
+        6.742730140686035
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-vestibular-inferior",
+      "vertices": 660,
+      "minAu": [
+        -5.865819931030273,
+        -28.19487762451172,
+        -6.538142204284668
+      ],
+      "maxAu": [
+        5.86690092086792,
+        -22.363000869750977,
+        -3.238234519958496
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-vestibular-lateral",
+      "vertices": 664,
+      "minAu": [
+        -6.332993507385254,
+        -18.917394638061523,
+        -5.719632148742676
+      ],
+      "maxAu": [
+        6.337066650390625,
+        -15.009424209594727,
+        -2.63627028465271
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-vestibular-medial",
+      "vertices": 649,
+      "minAu": [
+        -5.304651260375977,
+        -18.122005462646484,
+        -6.1308488845825195
+      ],
+      "maxAu": [
+        5.338692665100098,
+        -9.969008445739746,
+        -3.4470458030700684
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-vestibular-superior",
+      "vertices": 634,
+      "minAu": [
+        -6.3636369705200195,
+        -7.649837493896484,
+        -7.235266208648682
+      ],
+      "maxAu": [
+        6.370720863342285,
+        -4.327841758728027,
+        -3.805910348892212
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-vl",
+      "vertices": 639,
+      "minAu": [
+        -11.7294340133667,
+        20.881349563598633,
+        -0.261452853679657
+      ],
+      "maxAu": [
+        11.665843963623047,
+        29.878189086914062,
+        8.643343925476074
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-vpl",
+      "vertices": 633,
+      "minAu": [
+        -15.367999076843262,
+        20.816186904907227,
+        -4.505176544189453
+      ],
+      "maxAu": [
+        15.194550514221191,
+        28.158052444458008,
+        1.852479100227356
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-vpm",
+      "vertices": 643,
+      "minAu": [
+        -8.585125923156738,
+        20.64730453491211,
+        -7.857917308807373
+      ],
+      "maxAu": [
+        8.591165542602539,
+        28.373821258544922,
+        1.5283905267715454
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "nuc-zona-incerta",
+      "vertices": 662,
+      "minAu": [
+        -8.927945137023926,
+        22.63937759399414,
+        0.20917801558971405
+      ],
+      "maxAu": [
+        8.925802230834961,
+        24.3897705078125,
+        5.625102519989014
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "tel-lateral-ventricle-l",
+      "vertices": 3683,
+      "minAu": [
+        -0.03298342227935791,
+        5.632538318634033,
+        -53.15629196166992
+      ],
+      "maxAu": [
+        32.33769226074219,
+        59.34130859375,
+        37.48855972290039
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "tel-lateral-ventricle-r",
+      "vertices": 3670,
+      "minAu": [
+        -31.998428344726562,
+        5.668584823608398,
+        -53.154876708984375
+      ],
+      "maxAu": [
+        -0.41802021861076355,
+        59.31863784790039,
+        37.53081130981445
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "tel-white-matter-l",
+      "vertices": 6566,
+      "minAu": [
+        4.249994277954102,
+        -1.3001708984375,
+        -67.79843139648438
+      ],
+      "maxAu": [
+        50.64723205566406,
+        107.17706298828125,
+        66.11773681640625
+      ],
+      "publishedOutsideGridVertexFraction": 0.16859579652756626,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "tel-white-matter-r",
+      "vertices": 6607,
+      "minAu": [
+        -50.762813568115234,
+        -1.2121751308441162,
+        -67.63179016113281
+      ],
+      "maxAu": [
+        -4.814802646636963,
+        107.67335510253906,
+        65.86727905273438
+      ],
+      "publishedOutsideGridVertexFraction": 0.17542000908127744,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "tract-optic-nerve-l",
+      "vertices": 1104,
+      "minAu": [
+        0.7924118041992188,
+        -5.14375638961792,
+        16.70078468322754
+      ],
+      "maxAu": [
+        26.998117446899414,
+        16.192996978759766,
+        63.178321838378906
+      ],
+      "publishedOutsideGridVertexFraction": 0.11231884057971014,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "tract-optic-nerve-r",
+      "vertices": 1108,
+      "minAu": [
+        -26.938596725463867,
+        -5.138944625854492,
+        16.797780990600586
+      ],
+      "maxAu": [
+        -0.4384465515613556,
+        16.13075065612793,
+        63.1773567199707
+      ],
+      "publishedOutsideGridVertexFraction": 0.11913357400722022,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "tract-optic-tract-l",
+      "vertices": 1039,
+      "minAu": [
+        0.7464168667793274,
+        10.728721618652344,
+        -11.115683555603027
+      ],
+      "maxAu": [
+        21.037153244018555,
+        18.391902923583984,
+        20.034908294677734
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "tract-optic-tract-r",
+      "vertices": 1044,
+      "minAu": [
+        -20.951622009277344,
+        10.725258827209473,
+        -11.108681678771973
+      ],
+      "maxAu": [
+        -0.5347472429275513,
+        18.392101287841797,
+        20.009252548217773
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-anterior-cerebral-artery-l",
+      "vertices": 214,
+      "minAu": [
+        1.8254995346069336,
+        10.580120086669922,
+        22.48576545715332
+      ],
+      "maxAu": [
+        12.980838775634766,
+        23.064023971557617,
+        32.7619514465332
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-anterior-cerebral-artery-r",
+      "vertices": 212,
+      "minAu": [
+        -10.845403671264648,
+        10.606006622314453,
+        22.495527267456055
+      ],
+      "maxAu": [
+        -0.723178505897522,
+        23.075157165527344,
+        32.769832611083984
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-anterior-choroidal-artery-l",
+      "vertices": 243,
+      "minAu": [
+        10.582938194274902,
+        8.135716438293457,
+        -2.0547428131103516
+      ],
+      "maxAu": [
+        28.264497756958008,
+        15.33175277709961,
+        19.853466033935547
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-anterior-choroidal-artery-r",
+      "vertices": 238,
+      "minAu": [
+        -27.261215209960938,
+        8.135608673095703,
+        -2.050027370452881
+      ],
+      "maxAu": [
+        -8.899932861328125,
+        15.322534561157227,
+        19.854246139526367
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-anterior-communicating-artery",
+      "vertices": 40,
+      "minAu": [
+        -2.20627760887146,
+        11.931783676147461,
+        24.50674819946289
+      ],
+      "maxAu": [
+        2.2765562534332275,
+        12.351940155029297,
+        25.399860382080078
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-anterior-inferior-cerebellar-artery-l",
+      "vertices": 247,
+      "minAu": [
+        0.5539424419403076,
+        -22.601234436035156,
+        -5.881397724151611
+      ],
+      "maxAu": [
+        21.629831314086914,
+        -14.229486465454102,
+        14.203413009643555
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-anterior-inferior-cerebellar-artery-r",
+      "vertices": 271,
+      "minAu": [
+        -20.28640365600586,
+        -22.610681533813477,
+        -5.858546733856201
+      ],
+      "maxAu": [
+        0.6411874890327454,
+        -14.237326622009277,
+        13.852188110351562
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-basilar-artery",
+      "vertices": 295,
+      "minAu": [
+        -0.846794843673706,
+        -21.08917808532715,
+        11.28328800201416
+      ],
+      "maxAu": [
+        1.4079252481460571,
+        5.5854997634887695,
+        16.781448364257812
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-internal-carotid-artery-l",
+      "vertices": 879,
+      "minAu": [
+        9.420417785644531,
+        -46.0,
+        16.11797523498535
+      ],
+      "maxAu": [
+        25.568212509155273,
+        11.795539855957031,
+        39.786495208740234
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-internal-carotid-artery-r",
+      "vertices": 910,
+      "minAu": [
+        -24.616514205932617,
+        -46.0,
+        16.102432250976562
+      ],
+      "maxAu": [
+        -7.7811102867126465,
+        12.0021390914917,
+        39.78371047973633
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-middle-cerebral-artery-m1-l",
+      "vertices": 340,
+      "minAu": [
+        12.230745315551758,
+        9.352782249450684,
+        18.355485916137695
+      ],
+      "maxAu": [
+        36.502197265625,
+        24.4484806060791,
+        26.481271743774414
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-middle-cerebral-artery-m1-r",
+      "vertices": 348,
+      "minAu": [
+        -36.16428756713867,
+        9.354879379272461,
+        18.35819435119629
+      ],
+      "maxAu": [
+        -10.860208511352539,
+        24.45169448852539,
+        26.48502540588379
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-middle-cerebral-artery-m2-l",
+      "vertices": 224,
+      "minAu": [
+        31.955448150634766,
+        18.1834716796875,
+        19.871414184570312
+      ],
+      "maxAu": [
+        36.187557220458984,
+        33.275238037109375,
+        25.452150344848633
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-middle-cerebral-artery-m2-r",
+      "vertices": 240,
+      "minAu": [
+        -35.70551300048828,
+        17.775243759155273,
+        19.574708938598633
+      ],
+      "maxAu": [
+        -30.8721866607666,
+        33.1935920715332,
+        25.467845916748047
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-posterior-cerebral-artery-p1-l",
+      "vertices": 126,
+      "minAu": [
+        0.41714364290237427,
+        4.219849586486816,
+        9.925209045410156
+      ],
+      "maxAu": [
+        7.62750244140625,
+        8.82675838470459,
+        12.655698776245117
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-posterior-cerebral-artery-p1-r",
+      "vertices": 120,
+      "minAu": [
+        -5.36639928817749,
+        4.146297931671143,
+        9.930557250976562
+      ],
+      "maxAu": [
+        0.6012485027313232,
+        8.820365905761719,
+        12.599922180175781
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-posterior-cerebral-artery-p2-l",
+      "vertices": 387,
+      "minAu": [
+        6.763424396514893,
+        4.02591609954834,
+        -16.526527404785156
+      ],
+      "maxAu": [
+        15.120494842529297,
+        13.455785751342773,
+        12.434906959533691
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-posterior-cerebral-artery-p2-r",
+      "vertices": 393,
+      "minAu": [
+        -14.022411346435547,
+        3.7520065307617188,
+        -16.58437156677246
+      ],
+      "maxAu": [
+        -4.995546817779541,
+        13.506401062011719,
+        12.427799224853516
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-posterior-communicating-artery-l",
+      "vertices": 98,
+      "minAu": [
+        5.998147487640381,
+        5.365907669067383,
+        11.617486953735352
+      ],
+      "maxAu": [
+        10.758788108825684,
+        8.191486358642578,
+        22.298742294311523
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-posterior-communicating-artery-r",
+      "vertices": 103,
+      "minAu": [
+        -9.484720230102539,
+        5.3508453369140625,
+        11.581351280212402
+      ],
+      "maxAu": [
+        -4.042625904083252,
+        8.172263145446777,
+        22.301712036132812
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-posterior-inferior-cerebellar-artery-l",
+      "vertices": 314,
+      "minAu": [
+        6.394179344177246,
+        -32.327003479003906,
+        -28.00156021118164
+      ],
+      "maxAu": [
+        40.02534103393555,
+        -22.498245239257812,
+        2.1378142833709717
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-posterior-inferior-cerebellar-artery-r",
+      "vertices": 332,
+      "minAu": [
+        -35.174293518066406,
+        -33.00272750854492,
+        -26.597532272338867
+      ],
+      "maxAu": [
+        -5.758204936981201,
+        -25.901023864746094,
+        2.1611809730529785
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-superior-cerebellar-artery-l",
+      "vertices": 334,
+      "minAu": [
+        0.40957844257354736,
+        -4.112252712249756,
+        -2.100267171859741
+      ],
+      "maxAu": [
+        18.456756591796875,
+        1.776914358139038,
+        16.917322158813477
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-superior-cerebellar-artery-r",
+      "vertices": 329,
+      "minAu": [
+        -17.107769012451172,
+        -4.10654878616333,
+        -2.1077334880828857
+      ],
+      "maxAu": [
+        0.7835202217102051,
+        1.7694014310836792,
+        16.815061569213867
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-vertebral-artery-l",
+      "vertices": 762,
+      "minAu": [
+        0.5403417944908142,
+        -45.79999923706055,
+        -2.2939391136169434
+      ],
+      "maxAu": [
+        28.107696533203125,
+        -19.872282028198242,
+        13.601326942443848
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vasc-vertebral-artery-r",
+      "vertices": 775,
+      "minAu": [
+        -27.416837692260742,
+        -45.79999923706055,
+        -2.3044111728668213
+      ],
+      "maxAu": [
+        0.5353641510009766,
+        -19.851749420166016,
+        13.60612678527832
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vent-cerebral-aqueduct",
+      "vertices": 6171,
+      "minAu": [
+        -1.5696873664855957,
+        1.8856428861618042,
+        -9.274811744689941
+      ],
+      "maxAu": [
+        1.6382211446762085,
+        22.20074462890625,
+        -0.8326411247253418
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vent-fourth-ventricle",
+      "vertices": 14330,
+      "minAu": [
+        -11.579462051391602,
+        -31.579124450683594,
+        -19.708919525146484
+      ],
+      "maxAu": [
+        11.72905445098877,
+        4.481278419494629,
+        -0.7350605130195618
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    },
+    {
+      "slug": "vent-third-ventricle",
+      "vertices": 4933,
+      "minAu": [
+        -1.0570671558380127,
+        21.233760833740234,
+        -6.177448749542236
+      ],
+      "maxAu": [
+        1.0393154621124268,
+        37.04849624633789,
+        8.73600959777832
+      ],
+      "publishedOutsideGridVertexFraction": 0.0,
+      "candidateOutsideGridVertexFraction": 0.0,
+      "publishedMRIOutsideSourceFovVertexFraction": 0.0,
+      "candidateMRIOutsideSourceFovVertexFraction": 0.0
+    }
+  ],
+  "geometryChangedSlugs": [],
+  "mriRegionObservations": {
+    "brainstem": {
+      "observations": 4,
+      "meanBeforeAu": 1.9571067811865475,
+      "meanCandidateAu": 2.419431959151582,
+      "note": "Mixed component observations, not clinical target-registration error."
+    },
+    "callosum": {
+      "observations": 3,
+      "meanBeforeAu": 11.675621452073093,
+      "meanCandidateAu": 6.289492135808147,
+      "note": "Mixed component observations, not clinical target-registration error."
+    },
+    "cerebellum": {
+      "observations": 2,
+      "meanBeforeAu": 34.0,
+      "meanCandidateAu": 19.07646804966723,
+      "note": "Mixed component observations, not clinical target-registration error."
+    },
+    "cortex": {
+      "observations": 5,
+      "meanBeforeAu": 20.751139922000004,
+      "meanCandidateAu": 3.512368294794007,
+      "note": "Mixed component observations, not clinical target-registration error."
+    },
+    "ventricles": {
+      "observations": 3,
+      "meanBeforeAu": 8.871924368621302,
+      "meanCandidateAu": 4.726654558507362,
+      "note": "Mixed component observations, not clinical target-registration error."
+    }
+  },
+  "teachingLevelCoverage": [
+    {
+      "level": "lvl-spinal-medulla",
+      "yAu": -50,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-spinal-medulla",
+      "yAu": -50,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pyramid-decuss",
+      "yAu": -46,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pyramid-decuss",
+      "yAu": -46,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-sensory-decuss",
+      "yAu": -42,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-sensory-decuss",
+      "yAu": -42,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-olivary",
+      "yAu": -34,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-olivary",
+      "yAu": -34,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pontomedullary",
+      "yAu": -24,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pontomedullary",
+      "yAu": -24,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pons-caudal",
+      "yAu": -18,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pons-caudal",
+      "yAu": -18,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pons-middle",
+      "yAu": -8,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pons-middle",
+      "yAu": -8,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pons-rostral",
+      "yAu": 2,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-pons-rostral",
+      "yAu": 2,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-midbrain-ic",
+      "yAu": 8,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-midbrain-ic",
+      "yAu": 8,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-midbrain-sc",
+      "yAu": 14,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-midbrain-sc",
+      "yAu": 14,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-post-comm",
+      "yAu": 19,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-post-comm",
+      "yAu": 19,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-thalamus-mid",
+      "yAu": 28,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-thalamus-mid",
+      "yAu": 28,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-thalamus-rostral",
+      "yAu": 36,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-thalamus-rostral",
+      "yAu": 36,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-tel-thalamostriate",
+      "yAu": 48,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-tel-thalamostriate",
+      "yAu": 48,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-tel-basal-ganglia",
+      "yAu": 58,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-tel-basal-ganglia",
+      "yAu": 58,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-tel-centrum-semiovale",
+      "yAu": 68,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-tel-centrum-semiovale",
+      "yAu": 68,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-tel-convexity",
+      "yAu": 78,
+      "modality": "MRI",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    },
+    {
+      "level": "lvl-tel-convexity",
+      "yAu": 78,
+      "modality": "CT",
+      "gridCoverageFraction": 1.0,
+      "note": "Field coverage, not brain segmentation agreement."
+    }
+  ],
+  "figures": [
+    {
+      "file": "mri-sagittal.png",
+      "title": "MRI sagittal comparison (x=+3 au)"
+    },
+    {
+      "file": "mri-coronal.png",
+      "title": "MRI coronal comparison (z=0 au)"
+    },
+    {
+      "file": "mri-parasagittal.png",
+      "title": "MRI parasagittal comparison (x=+12 au)"
+    },
+    {
+      "file": "ct-sagittal.png",
+      "title": "Provisional CT correction (x=+3 au)"
+    },
+    {
+      "file": "teaching-levels-1.png",
+      "title": "Candidate MRI / provisional CT - teaching levels (1/3)"
+    },
+    {
+      "file": "teaching-levels-2.png",
+      "title": "Candidate MRI / provisional CT - teaching levels (2/3)"
+    },
+    {
+      "file": "teaching-levels-3.png",
+      "title": "Candidate MRI / provisional CT - teaching levels (3/3)"
+    },
+    {
+      "file": "upper-cortex-coverage.png",
+      "title": "Upper MRI coverage: old image ceiling removed"
+    }
+  ],
+  "limits": [
+    "Vertex fractions are not tissue-volume fractions.",
+    "Acquisition FOV is not segmented brain agreement.",
+    "Manual picks are approximate and not independent expert annotations.",
+    "MRI and CT are different subjects; no paired cross-modality validation is claimed.",
+    "Fine nuclei, tracts and cortical areal borders are not verified on this downsampled T1 or artifact-affected CT."
+  ]
+}

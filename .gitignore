@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# Optional Python audit tools
+__pycache__/
+*.pyc
+
 # Build output
 dist/
 

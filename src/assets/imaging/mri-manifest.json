@@ -1,29 +1,29 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "dims": [
-    81,
-    113,
-    107
+    97,
+    138,
+    122
   ],
   "originAu": [
-    -49.09090909090909,
+    -58.90909090909091,
     -55,
-    -75.87878787878788
+    -77.12121212121212
   ],
   "spacingAu": [
-    1.2273,
+    1.2272727272727273,
     1.25,
-    1.2424
+    1.2424242424242424
   ],
   "origin": [
-    -49.09090909090909,
+    -58.90909090909091,
     -55,
-    -75.87878787878788
+    -77.12121212121212
   ],
   "spacing": [
-    1.2273,
+    1.2272727272727273,
     1.25,
-    1.2424
+    1.2424242424242424
   ],
   "rowMajorAxisOrder": "xyz",
   "axisOrder": "xyz",
@@ -38,114 +38,230 @@
   },
   "patientLeft": "+x",
   "canonicalBox": {
-    "amendment": "B (telencephalon, v7)",
     "boxAu": {
       "x": [
-        -48,
-        48
+        -58,
+        58
       ],
       "y": [
         -55,
-        85
+        116
       ],
       "z": [
-        -75,
-        55
+        -76,
+        72
       ]
     },
     "boundsAu": {
       "x": [
-        -49.09090909090909,
-        49.09090909090909
+        -58.90909090909091,
+        58.90909090909091
       ],
       "y": [
         -55,
-        85
+        116.25
       ],
       "z": [
-        -75.87878787878788,
-        55.81818181818181
+        -77.12121212121212,
+        73.21212121212122
       ]
     },
-    "gridStepAu": [
-      1.227273,
-      1.25,
-      1.242424
+    "lattice": "Same station lattice as the previous bake, extended to current clipping bounds. Teaching levels between stations use interpolation."
+  },
+  "status": "available",
+  "modality": "MRI",
+  "source": "ds007313 doi:10.18112/openneuro.ds007313.v1.0.0",
+  "license": "CC0",
+  "attribution": "OpenNeuro ds007313 v1.0.0 (CC0). Dataset authors: Landelle, Kinany, St-Onge, Lungu, Van De Ville, Misic, Marchand-Pauvert, De Leener, Doyon. sub-A006/anat/sub-A006_T1w.nii.gz. A single participant; not an atlas segmentation.",
+  "sourceGeometry": {
+    "filename": "sub-A006_T1w.nii.gz",
+    "sha256": "209edd45ee17494a193268d89496147fb1fef5d87a256d82b5ff8548b4c3cfe9",
+    "dims": [
+      176,
+      280,
+      288
     ],
-    "gridStepMm": [
-      1.4727,
-      1.5,
-      1.4909
+    "affineSource": "sform",
+    "voxelToRASmm": [
+      1.3000000715255737,
+      0,
+      0,
+      -110.70683288574219,
+      0,
+      1.3020833730697632,
+      0,
+      -172.1941680908203,
+      0,
+      0,
+      1.3020833730697632,
+      -181.93946838378906,
+      0,
+      0,
+      0,
+      1
+    ]
+  },
+  "sourceField": {
+    "dims": [
+      176,
+      280,
+      288
     ],
-    "lattice": "AMENDMENT A lattice preserved: same originAu and same per-axis step as the v3 grid, station counts grown to cover the box. Every old grid station (45×81×67 box) is therefore still a station of this grid, and the 13 level anchors are at integer au on this lattice.",
-    "previousBoxAu": {
-      "x": [
-        -27,
-        27
+    "voxelFromAtlasAu": [
+      -0.8451117549728063,
+      0,
+      0,
+      87.59750173467935,
+      0,
+      0,
+      0.8179671276743511,
+      135.30385878587012,
+      0,
+      0.6551979754573899,
+      0,
+      204.01251819630193,
+      0,
+      0,
+      0,
+      1
+    ],
+    "boundsAu": [
+      [
+        -103.42123127625061,
+        103.6519740960153
       ],
-      "y": [
-        -55,
-        45
+      [
+        -311.37537940937926,
+        126.66016213765766
       ],
-      "z": [
-        -56,
-        26
+      [
+        -165.4147877196078,
+        175.67471399821116
       ]
-    },
-    "previousDims": [
-      45,
-      81,
-      67
-    ],
-    "addedCoverageAu": "y +45 → +85 (cortex vertex at +80.6), z −56 → −75 and +26 → +55 (occipital pole −72.6 … frontal pole +54.4), x ±27 → ±48 (context bound)"
+    ]
   },
   "coverage": {
-    "sourceFov": "NIfTI FOV (outside it the grid stays 0/background)",
-    "stationsInsideFov": 979371,
-    "totalStations": 979371,
+    "sourceFov": "Original NIfTI acquisition field. FOV coverage is not segmented brain agreement.",
+    "stationsInsideFov": 1633092,
+    "totalStations": 1633092,
     "fractionInsideFov": 1,
+    "outsideSourceDisplay": "Transparent; simulated contours may remain beyond coverage.",
     "levelRowsAu": [
       {
+        "level": "lvl-spinal-medulla",
+        "yTarget": -50,
+        "y": -50,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "level": "lvl-pyramid-decuss",
+        "yTarget": -46,
         "y": -46.25,
         "present": true,
         "pct": 100
       },
       {
+        "level": "lvl-sensory-decuss",
+        "yTarget": -42,
+        "y": -42.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "level": "lvl-olivary",
+        "yTarget": -34,
+        "y": -33.75,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "level": "lvl-pontomedullary",
+        "yTarget": -24,
         "y": -23.75,
         "present": true,
         "pct": 100
       },
       {
+        "level": "lvl-pons-caudal",
+        "yTarget": -18,
+        "y": -17.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "level": "lvl-pons-middle",
+        "yTarget": -8,
         "y": -7.5,
         "present": true,
         "pct": 100
       },
       {
+        "level": "lvl-pons-rostral",
+        "yTarget": 2,
+        "y": 2.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "level": "lvl-midbrain-ic",
+        "yTarget": 8,
+        "y": 7.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "level": "lvl-midbrain-sc",
+        "yTarget": 14,
         "y": 13.75,
         "present": true,
         "pct": 100
       },
       {
-        "y": 30,
+        "level": "lvl-post-comm",
+        "yTarget": 19,
+        "y": 18.75,
         "present": true,
         "pct": 100
       },
       {
+        "level": "lvl-thalamus-mid",
+        "yTarget": 28,
+        "y": 27.5,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "level": "lvl-thalamus-rostral",
+        "yTarget": 36,
+        "y": 36.25,
+        "present": true,
+        "pct": 100
+      },
+      {
+        "level": "lvl-tel-thalamostriate",
+        "yTarget": 48,
         "y": 47.5,
         "present": true,
         "pct": 100
       },
       {
+        "level": "lvl-tel-basal-ganglia",
+        "yTarget": 58,
         "y": 57.5,
         "present": true,
         "pct": 100
       },
       {
+        "level": "lvl-tel-centrum-semiovale",
+        "yTarget": 68,
         "y": 67.5,
         "present": true,
         "pct": 100
       },
       {
+        "level": "lvl-tel-convexity",
+        "yTarget": 78,
         "y": 77.5,
         "present": true,
         "pct": 100
@@ -154,13 +270,13 @@
   },
   "intensity": {
     "dtype": "uint8",
+    "windowRawValues": [
+      65.7762941529189,
+      559.0681509388298
+    ],
     "windowPercentiles": [
       1,
       99.5
-    ],
-    "windowRawValues": [
-      65.8,
-      559.1
     ],
     "backgroundValue": 0,
     "windowRegionAu": {
@@ -177,19 +293,15 @@
         26
       ]
     },
-    "windowRegionNote": "percentiles measured over the v3 core box (the canonical region the v3 bake used) so the extension does not re-map existing voxels; the same recipe over the whole AMENDMENT B box would give [9.3, 571.7] and would visibly change the pre-existing levels.",
-    "windowOverFullBoxAu": [
-      9.3,
-      571.7
-    ]
+    "windowRegionNote": "Measured on the baseline affine and original core lattice; intensity mapping is unchanged by field expansion or refit. Zero can be dark tissue or background; sourceField determines actual acquisition coverage."
   },
   "registration": {
-    "frame": "sform RAS+ patient mm → canonical au (x=+left, y=+sup, z=+ant); 1 au = 1.2 mm",
+    "frame": "NIfTI RAS+ → canonical L/S/A; 1 au = 1.2 mm",
     "constants": {
       "scale": [
-        1,
-        1.25,
-        1.6
+        1.09225421,
+        1.40659771,
+        1.12669561
       ],
       "rotDeg": {
         "x": 0,
@@ -197,612 +309,29 @@
         "z": 0
       },
       "translateAu": [
-        2.9,
-        -88.4,
-        -7.8
+        2.88530385,
+        -98.11234642,
+        -3.73944334
       ],
-      "composeOrder": "p' = T · Rx·Ry·Rz · S · p (canonical au)",
-      "gridStepMm": 1.5
+      "composeOrder": "p' = T · Rx·Ry·Rz · S · p (canonical au)"
     },
+    "appliedIn": "3D resampling, not a separate per-plane display warp",
+    "method": "Constrained diagonal affine from manual macroscopic observations; fixed zero rotation.",
+    "evidence": "docs/audit/2026-10-04-registration-candidate/mri-landmarks.json",
+    "limitations": [
+      "A constrained global affine improves macroscopic placement, not every contour.",
+      "The callosal splenium and inferior cerebellum have larger residuals than before.",
+      "Cortical folds, ventricular shape, fine nuclei and tracts are schematic, not subject-specific segmentation.",
+      "Manual observations and reserved checks are from one review, not independent clinical validation."
+    ],
+    "reviewStatus": "candidate-awaiting-owner-review",
     "gridContinuity": {
-      "affineUnchanged": true,
-      "note": "AMENDMENT B re-bake: the registration constants were NOT re-fitted; only the station counts grew, from the same origin and with the same per-axis step. The y lattice is identical to the v3 lattice, so the 13 existing level anchors (integer au) still fall exactly on stations, and their in-plane (x, z) samples are the v3 samples carried over unchanged.",
-      "previousGrid": {
-        "dims": [
-          45,
-          81,
-          67
-        ],
-        "originAu": [
-          -27,
-          -55,
-          -56
-        ],
-        "spacingAu": [
-          1.2273,
-          1.25,
-          1.2424
-        ]
-      },
-      "currentGrid": {
-        "dims": [
-          81,
-          113,
-          107
-        ],
-        "originAu": [
-          -49.09090909090909,
-          -55,
-          -75.87878787878788
-        ],
-        "spacingAu": [
-          1.2273,
-          1.25,
-          1.2424
-        ]
-      }
-    },
-    "residuals": {
-      "toleranceAu": 2,
-      "midlineMaxAbsAu": 0.75,
-      "midlineRowsAu": [
-        {
-          "y": -23.7,
-          "dx": -0.25
-        },
-        {
-          "y": -17.5,
-          "dx": -0.25
-        },
-        {
-          "y": -12.5,
-          "dx": -0.75
-        },
-        {
-          "y": -6.2,
-          "dx": -0.75
-        },
-        {
-          "y": 0,
-          "dx": -0.25
-        },
-        {
-          "y": 6.3,
-          "dx": -0.25
-        },
-        {
-          "y": 12.5,
-          "dx": -0.25
-        },
-        {
-          "y": 17.5,
-          "dx": -0.25
-        }
-      ],
-      "ponsSurface": {
-        "ventralMeanAbsDeltaAu": 1.13,
-        "ventralMaxAbsDeltaAu": 3.4,
-        "ventralDeltaAu": [
-          -3.4,
-          -1.8,
-          0.2,
-          0.2,
-          -0.2,
-          1.4,
-          1,
-          0.6,
-          -1,
-          -1.8,
-          -1.8,
-          -0.2
-        ],
-        "dorsalDeltaAu": [],
-        "rowsAu": [
-          {
-            "y": -22,
-            "glbVentral": 13.54,
-            "glbDorsal": -6.53,
-            "mriVentral": 10.14
-          },
-          {
-            "y": -20,
-            "glbVentral": 13.46,
-            "glbDorsal": -5.74,
-            "mriVentral": 11.66
-          },
-          {
-            "y": -18,
-            "glbVentral": 13.51,
-            "glbDorsal": -6.3,
-            "mriVentral": 13.71
-          },
-          {
-            "y": -16,
-            "glbVentral": 13.49,
-            "glbDorsal": -7.17,
-            "mriVentral": 13.69
-          },
-          {
-            "y": -14,
-            "glbVentral": 13.5,
-            "glbDorsal": -8.62,
-            "mriVentral": 13.3
-          },
-          {
-            "y": -12,
-            "glbVentral": 13.55,
-            "glbDorsal": -10.78,
-            "mriVentral": 14.95
-          },
-          {
-            "y": -10,
-            "glbVentral": 14.08,
-            "glbDorsal": -11.37,
-            "mriVentral": 15.08
-          },
-          {
-            "y": -8,
-            "glbVentral": 14.93,
-            "glbDorsal": -11.27,
-            "mriVentral": 15.53
-          },
-          {
-            "y": -6,
-            "glbVentral": 15.86,
-            "glbDorsal": -10.77,
-            "mriVentral": 14.86
-          },
-          {
-            "y": -4,
-            "glbVentral": 16.68,
-            "glbDorsal": -10.49,
-            "mriVentral": 14.88
-          },
-          {
-            "y": -2,
-            "glbVentral": 16.58,
-            "glbDorsal": -10.42,
-            "mriVentral": 14.78
-          },
-          {
-            "y": 0,
-            "glbVentral": 15.82,
-            "glbDorsal": -9.86,
-            "mriVentral": 15.62
-          },
-          {
-            "y": 2,
-            "glbVentral": 15.12,
-            "glbDorsal": -9.76
-          }
-        ],
-        "method": "max-descent of the smoothed x=0 intensity profile vs pons GLB ventral/dorsal z (|x|≤6 au band); dorsal rows unresolved where the ventricle boundary is gradual at the pons-top rows",
-        "note": "The atlas pons mesh is modelled deeper (AP) and taller (SI) than this subject's real pons (warped stylized atlas); the fixed affine (z-scale 1.6, y-scale 1.25) maps the real pontine column onto the atlas envelope so the ventral silhouette is within ±2 au except the single transitional PMJ-tip row; medulla/CM rows deviate more (atlas medulla is a compressed stylization) — see docs/SECTION_SYNC_PLAN.md §3 tolerance note."
-      }
-    },
-    "display": {
-      "applied": false,
-      "reason": "not applied: the fitted similarity does not clear the gate — mean ROI IoU would change by +0.18741 (gate ≥ +0.01), worst single plane +0.00000 ROI IoU (gate ≥ −0.005), mean centroid residual 9.40 → 17.75 au (gate ≤ +0.5 au of the before value), worst single-plane residual change +14.7943 au (gate ≤ +3 au). The committed placement is kept unchanged and this residual is reported rather than tuned away.",
-      "frame": "plane frame (u = AXIS_PAIR[axis][0], v = AXIS_PAIR[axis][1]); 1 au = 1.2 mm",
-      "method": "re-runnable fitter: node scripts/fit-imaging-affine.mjs --report (see src/assets/imaging/registration-fit.json for every plane, bound and residual)",
-      "objective": "minimise (1 − IoU(atlasBrainMask, imageMask ∘ T)) on a 512×512 uniform canonical grid in the plane frame (planeGeometry.planeTransform)",
-      "optimiser": "deterministic coarse-to-fine grid search, 3 stages, no RNG, no clock, no network",
-      "tieBreak": "lowest cost, then smallest |Δu|+|Δv|+|su−1|+|sv−1|, then lexicographic (su, sv, duAu, dvAu)",
-      "signConvention": "T maps a canonical position p to the position in the image’s own frame shown there: s = c + (p − c − Δ)/k, c = the centre of the grid’s own canonical rectangle (grids) / the plate’s placement centre (plates). k > 1 enlarges the image.",
-      "searchBounds": {
-        "scale": [
-          0.75,
-          1.25
-        ],
-        "translateAu": 48,
-        "uniformScale": true,
-        "stages": [
-          {
-            "scaleSteps": 9,
-            "translateSteps": 13
-          },
-          {
-            "scaleSteps": 5,
-            "translateSteps": 11
-          },
-          {
-            "scaleSteps": 5,
-            "translateSteps": 9
-          }
-        ]
-      },
-      "raster": {
-        "size": 512,
-        "marginFraction": 0.15
-      },
-      "applyGate": {
-        "minMeanRoiIouGain": 0.01,
-        "maxPlaneRoiIouLoss": 0.005,
-        "maxPlaneResidualLossAu": 3,
-        "minPlateIouGain": 0.02,
-        "maxPlateResidualLossAu": 0.5
-      },
-      "frameCenterAu": {
-        "note": "the centre of the grid’s own canonical rectangle, in the plane frame — the reference point the parameters are relative to; imageLayers.drawGridToView recomputes it from dims/originAu/spacingAu, so the parameters survive a lattice change"
-      },
-      "parameters": {
-        "su": 0.75,
-        "sv": 0.75,
-        "duAu": 8,
-        "dvAu": 40
-      },
-      "planes": [
-        {
-          "axis": "y",
-          "value": -46,
-          "atlasPartsCut": 1,
-          "atlasPixels": 920,
-          "before": {
-            "roiIou": 0.03899721448467967,
-            "centroidResidualAu": 0.6163032631672452,
-            "imageCentroidAu": [
-              -0.05203119314773185,
-              0.4038411234253523
-            ],
-            "atlasCentroidAu": [
-              -0.16943248532289312,
-              1.0088590147196488
-            ],
-            "extentRatioToAtlas": [
-              1.411764705882353,
-              1.484848484848485
-            ]
-          },
-          "afterPerPlaneWinner": {
-            "roiIou": 0.139186295503212,
-            "centroidResidualAu": 0.19106155403629832,
-            "imageCentroidAu": [
-              -0.254538612072854,
-              0.8377991871142612
-            ],
-            "extentRatioToAtlas": [
-              1.588235294117647,
-              1.5757575757575766
-            ]
-          },
-          "perPlaneWinner": {
-            "su": 0.75,
-            "sv": 0.75,
-            "duAu": 16,
-            "dvAu": 40
-          },
-          "boundsHit": true,
-          "applied": false,
-          "note": "measured for this reference plane only; the applied correction is the single one in `parameters` (or none, when `applied` is false). A per-plane best fit is NOT applied: moving each plane by its own optimum would shear the volume, which is not a rigid placement of one subject in one frame."
-        },
-        {
-          "axis": "y",
-          "value": -24,
-          "atlasPartsCut": 6,
-          "atlasPixels": 19946,
-          "before": {
-            "roiIou": 0.0638633813936095,
-            "centroidResidualAu": 2.908681183858289,
-            "imageCentroidAu": [
-              0.7405226411661731,
-              -18.262883373834857
-            ],
-            "atlasCentroidAu": [
-              0.06625756470062324,
-              -21.092334351673166
-            ],
-            "extentRatioToAtlas": [
-              1.2857142857142856,
-              1.5897435897435894
-            ]
-          },
-          "afterPerPlaneWinner": {
-            "roiIou": 0.16378440966645502,
-            "centroidResidualAu": 7.995061474097489,
-            "imageCentroidAu": [
-              0.5509057600432319,
-              -13.111975706765717
-            ],
-            "extentRatioToAtlas": [
-              1.2857142857142856,
-              1.6025641025641022
-            ]
-          },
-          "perPlaneWinner": {
-            "su": 0.75,
-            "sv": 0.75,
-            "duAu": 0,
-            "dvAu": 14.399999999999999
-          },
-          "boundsHit": true,
-          "applied": false,
-          "note": "measured for this reference plane only; the applied correction is the single one in `parameters` (or none, when `applied` is false). A per-plane best fit is NOT applied: moving each plane by its own optimum would shear the volume, which is not a rigid placement of one subject in one frame."
-        },
-        {
-          "axis": "y",
-          "value": -8,
-          "atlasPartsCut": 5,
-          "atlasPixels": 23051,
-          "before": {
-            "roiIou": 0.07045578354821137,
-            "centroidResidualAu": 4.378663947541106,
-            "imageCentroidAu": [
-              0.7440071844087621,
-              -17.94346323595677
-            ],
-            "atlasCentroidAu": [
-              0.4317992919809158,
-              -22.310982462863738
-            ],
-            "extentRatioToAtlas": [
-              1.154867256637168,
-              1.591954022988506
-            ]
-          },
-          "afterPerPlaneWinner": {
-            "roiIou": 0.164895850153399,
-            "centroidResidualAu": 0.2080344531994796,
-            "imageCentroidAu": [
-              0.5470190975196951,
-              -22.137769501080815
-            ],
-            "extentRatioToAtlas": [
-              1.154867256637168,
-              1.591954022988506
-            ]
-          },
-          "perPlaneWinner": {
-            "su": 0.75,
-            "sv": 0.75,
-            "duAu": 0,
-            "dvAu": -24
-          },
-          "boundsHit": true,
-          "applied": false,
-          "note": "measured for this reference plane only; the applied correction is the single one in `parameters` (or none, when `applied` is false). A per-plane best fit is NOT applied: moving each plane by its own optimum would shear the volume, which is not a rigid placement of one subject in one frame."
-        },
-        {
-          "axis": "y",
-          "value": 0,
-          "atlasPartsCut": 9,
-          "atlasPixels": 22517,
-          "before": {
-            "roiIou": 0.06737825216811208,
-            "centroidResidualAu": 6.077977901997065,
-            "imageCentroidAu": [
-              0.6912516790944264,
-              -11.00704878316977
-            ],
-            "atlasCentroidAu": [
-              0.05035661249030915,
-              -17.051142502725014
-            ],
-            "extentRatioToAtlas": [
-              1.1863636363636363,
-              1.3811475409836065
-            ]
-          },
-          "afterPerPlaneWinner": {
-            "roiIou": 0.15496765179357896,
-            "centroidResidualAu": 3.6517265242477137,
-            "imageCentroidAu": [
-              0.5207088116126631,
-              -13.429833980011843
-            ],
-            "extentRatioToAtlas": [
-              1.1863636363636363,
-              1.3811475409836065
-            ]
-          },
-          "perPlaneWinner": {
-            "su": 0.75,
-            "sv": 0.75,
-            "duAu": 0,
-            "dvAu": -7.200000000000001
-          },
-          "boundsHit": true,
-          "applied": false,
-          "note": "measured for this reference plane only; the applied correction is the single one in `parameters` (or none, when `applied` is false). A per-plane best fit is NOT applied: moving each plane by its own optimum would shear the volume, which is not a rigid placement of one subject in one frame."
-        },
-        {
-          "axis": "y",
-          "value": 14,
-          "atlasPartsCut": 22,
-          "atlasPixels": 26513,
-          "before": {
-            "roiIou": 0.06947310072983709,
-            "centroidResidualAu": 10.23347076787968,
-            "imageCentroidAu": [
-              0.6709566746761129,
-              -7.735371200673464
-            ],
-            "atlasCentroidAu": [
-              0.12875525450241004,
-              -17.954468106810012
-            ],
-            "extentRatioToAtlas": [
-              0.9490909090909093,
-              1.263537906137184
-            ]
-          },
-          "afterPerPlaneWinner": {
-            "roiIou": 0.14014412657130473,
-            "centroidResidualAu": 5.829311952485273,
-            "imageCentroidAu": [
-              3.782744531682317,
-              -13.412525768818266
-            ],
-            "extentRatioToAtlas": [
-              0.9490909090909093,
-              1.263537906137184
-            ]
-          },
-          "perPlaneWinner": {
-            "su": 0.75390625,
-            "sv": 0.75390625,
-            "duAu": 7.199999999999999,
-            "dvAu": -10.799999999999999
-          },
-          "boundsHit": false,
-          "applied": false,
-          "note": "measured for this reference plane only; the applied correction is the single one in `parameters` (or none, when `applied` is false). A per-plane best fit is NOT applied: moving each plane by its own optimum would shear the volume, which is not a rigid placement of one subject in one frame."
-        },
-        {
-          "axis": "y",
-          "value": 30,
-          "atlasPartsCut": 21,
-          "atlasPixels": 36649,
-          "before": {
-            "roiIou": 0.0782988108937476,
-            "centroidResidualAu": 2.9213112268716035,
-            "imageCentroidAu": [
-              0.6324475889889382,
-              -7.8787722335768935
-            ],
-            "atlasCentroidAu": [
-              -0.18693302449924404,
-              -10.682818362741997
-            ],
-            "extentRatioToAtlas": [
-              1.0357142857142858,
-              1.0144927536231885
-            ]
-          },
-          "afterPerPlaneWinner": {
-            "roiIou": 0.16452134612402242,
-            "centroidResidualAu": 4.3864024899407354,
-            "imageCentroidAu": [
-              3.564297531718259,
-              -12.956317014128974
-            ],
-            "extentRatioToAtlas": [
-              1.0357142857142858,
-              1.0144927536231885
-            ]
-          },
-          "perPlaneWinner": {
-            "su": 0.75,
-            "sv": 0.75,
-            "duAu": 6.399999999999999,
-            "dvAu": -9.6
-          },
-          "boundsHit": true,
-          "applied": false,
-          "note": "measured for this reference plane only; the applied correction is the single one in `parameters` (or none, when `applied` is false). A per-plane best fit is NOT applied: moving each plane by its own optimum would shear the volume, which is not a rigid placement of one subject in one frame."
-        },
-        {
-          "axis": "x",
-          "value": 6,
-          "atlasPartsCut": 15,
-          "atlasPixels": 51287,
-          "before": {
-            "roiIou": 0.06757112981740858,
-            "centroidResidualAu": 30.965908834804928,
-            "imageCentroidAu": [
-              -2.036532165935703,
-              9.887144950400156
-            ],
-            "atlasCentroidAu": [
-              -3.1953319386773114,
-              40.831364007473546
-            ],
-            "extentRatioToAtlas": [
-              0.937888198757764,
-              0.8702702702702704
-            ]
-          },
-          "afterPerPlaneWinner": {
-            "roiIou": 0.15492957746478872,
-            "centroidResidualAu": 15.209657743877395,
-            "imageCentroidAu": [
-              0.6017208961595385,
-              26.103292903104617
-            ],
-            "extentRatioToAtlas": [
-              0.937888198757764,
-              0.9594594594594597
-            ]
-          },
-          "perPlaneWinner": {
-            "su": 0.75,
-            "sv": 0.75,
-            "duAu": 8,
-            "dvAu": 32
-          },
-          "boundsHit": false,
-          "applied": false,
-          "note": "measured for this reference plane only; the applied correction is the single one in `parameters` (or none, when `applied` is false). A per-plane best fit is NOT applied: moving each plane by its own optimum would shear the volume, which is not a rigid placement of one subject in one frame."
-        },
-        {
-          "axis": "z",
-          "value": 0,
-          "atlasPartsCut": 28,
-          "atlasPixels": 29159,
-          "before": {
-            "roiIou": 0.08374587458745875,
-            "centroidResidualAu": 17.09527139397041,
-            "imageCentroidAu": [
-              0.08653195777679665,
-              17.365899097656985
-            ],
-            "atlasCentroidAu": [
-              -0.14211297072954698,
-              34.45964138921419
-            ],
-            "extentRatioToAtlas": [
-              0.9336099585062243,
-              0.8563829787234042
-            ]
-          },
-          "afterPerPlaneWinner": {
-            "roiIou": 0.16155054444769842,
-            "centroidResidualAu": 17.962041085143554,
-            "imageCentroidAu": [
-              -3.777479838846013,
-              16.86933077005268
-            ],
-            "extentRatioToAtlas": [
-              0.9336099585062243,
-              0.8563829787234042
-            ]
-          },
-          "perPlaneWinner": {
-            "su": 0.75,
-            "sv": 0.75,
-            "duAu": -8,
-            "dvAu": 0
-          },
-          "boundsHit": false,
-          "applied": false,
-          "note": "measured for this reference plane only; the applied correction is the single one in `parameters` (or none, when `applied` is false). A per-plane best fit is NOT applied: moving each plane by its own optimum would shear the volume, which is not a rigid placement of one subject in one frame."
-        }
-      ],
-      "residuals": {
-        "planesFitted": 8,
-        "improved": 8,
-        "worsened": 0,
-        "unchanged": 0,
-        "roi": "the atlas brain mask's own in-plane bounding box padded by 30% per side, in the plane frame (au)",
-        "roiIouBefore": 0.06747294345288307,
-        "roiIouAfterPerPlaneWinners": 0.1554974752155574,
-        "roiIouWithChosenCorrection": 0.25488082174969845,
-        "minRoiIouBefore": 0.03899721448467967,
-        "maxRoiIouBefore": 0.08374587458745875,
-        "meanCentroidResidualBeforeAu": 9.399698565011292,
-        "meanCentroidResidualAfterPerPlaneWinnersAu": 6.9291621596284925,
-        "meanCentroidResidualWithChosenCorrectionAu": 17.752440359950835,
-        "maxCentroidResidualBeforeAu": 30.965908834804928,
-        "maxCentroidResidualAfterPerPlaneWinnersAu": 17.962041085143554,
-        "meanAtlasCoverageBefore": 0.07984222727972817,
-        "meanAtlasCoverageAfter": 0.2083974905305685,
-        "toleranceIou": 1e-9,
-        "toleranceAu": 1e-9,
-        "note": "Both masks are measured, never assumed. ATLAS: the union of 34 committed GLB parts through the section pipeline's own clipping (readFileSync(src/assets/anatomy/<slug>.glb) → GLTFLoader().parse() → contours.partBounds/boundsMayCut/extractContours(positions, indices, {axis, value}) → even-odd rasterisation with contours.pointInLoops on planeGeometry.planeTransform(axis, value, {width:512, height:512})). IMAGE (MRI): mri-t1.bin uint8 ≥ 40, i.e. the head’s soft-tissue envelope as the acquisition renders it — there is no brain segmenter in this repo, so it CONTAINS the atlas brain and the GLOBAL IoU is small by construction: it is not a mis-registration percentage. The ROI IoU is measured inside the atlas' own in-plane bounding box padded 30%, where the two masks have comparable area; the residual that carries the units is the centroid offset in au (mean 9.40 au before, 6.93 au after the per-plane winners; max 30.97 → 17.96 au)."
-      }
+      "affineUnchanged": false,
+      "stationLatticeUnchanged": true,
+      "intensityWindowUnchanged": true,
+      "note": "Integer stations were added to the existing lattice. With the candidate affine, station positions are preserved but intensities intentionally change."
     }
   },
-  "source": "ds007313 doi:10.18112/openneuro.ds007313.v1.0.0",
-  "license": "CC0",
-  "attribution": "OpenNeuro ds007313 (CC0 — no attribution required; provenance only). Dataset authors: Landelle, Kinany, St-Onge, Lungu, Van De Ville, Misic, Marchand-Pauvert, De Leener, Doyon. Volume: sub-A006/anat/sub-A006_T1w.nii.gz (t1_mprage_sag_p2_brainSpine_FOV375_1.3iso, 3T Siemens Prisma_fit).",
+  "dataSha256": "7e5d78d41d8d957197b18da69d9b5c750151e53a5704fc9e2e362fd596e8f003",
   "generatedBy": "scripts/build-mri-grid.mjs"
 }

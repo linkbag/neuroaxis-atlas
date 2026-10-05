@@ -1,8 +1,9 @@
 /**
  * v7 QA — the checks the blocked `v7c-qa` task would have run.
  *
- *  1. SPACE INTEGRITY  nothing below y = +45 moved: compare the brainstem
- *     GLBs and the MRI/CT grids against their committed predecessors.
+ *  1. SPACE INTEGRITY compare brainstem GLBs with their predecessors.
+ *     Schema-v2 imaging deliberately refits the source volumes and uses the
+ *     physical geometry/hash/observation checks, rather than frozen pixels.
  *  2. RIBBON SANITY    is the derived cortical ribbon actually hemispheric,
  *     and are the subcortical parts where they belong?
  *  3. BUDGETS          tris / GLB bytes / imaging bytes.
@@ -109,6 +110,17 @@ for (const which of ['mri', 'ct']) {
   const binPath = which === 'mri' ? 'src/assets/imaging/mri-t1.bin' : 'src/assets/imaging/ct.bin'
   const oldGrid = gridStats(manifestPath, binPath, BASE_REV)
   const newGrid = gridStats(manifestPath, binPath, null)
+  if (newGrid?.manifest.schemaVersion >= 2) {
+    if (which === 'mri') {
+      try {
+        execFileSync(process.execPath, ['scripts/verify/imaging-fit.mjs'], { stdio: 'inherit' })
+        ok('schema-v2 imaging: physical geometry and candidate consistency checks passed; intended refit changes intensities')
+      } catch {
+        bad('schema-v2 registration checks failed')
+      }
+    }
+    continue
+  }
   if (!oldGrid || !newGrid) {
     bad(`${which}: could not read old/new grid for comparison`)
     continue
