@@ -2,16 +2,17 @@
 
 ## Scientific review snapshot — 2026-10-04
 
-The `audit/scientific-content-2026-10-04` branch contains an evidence-supported review of all 287 original structure/tract records and all 26 syndrome cards, 23 added cortical concepts, a separate arcuate fasciculus entry, and 19 functional pathway summaries. See [the audit report](docs/audit/2026-10-04/REPORT.md), [record-level before/after index](docs/audit/2026-10-04/review-index.json), and [verification](docs/audit/2026-10-04/VERIFICATION.md). This snapshot is held for owner review before deployment.
+The `audit/scientific-content-2026-10-04` branch contains an evidence-supported review of all 287 original structure/tract records and all 26 syndrome cards, 23 added cortical concepts, a separate arcuate fasciculus entry, and 19 functional pathway summaries. These changes are integrated into `master`. See [the audit report](docs/audit/2026-10-04/REPORT.md), [record-level before/after index](docs/audit/2026-10-04/review-index.json), and [verification](docs/audit/2026-10-04/VERIFICATION.md).
 
 Coordinates, shapes, functional boundaries and MRI alignment remain schematic and unvalidated. Eight misleading named spatial routes are withheld, and an internal-capsule mapping to the entire white-matter shell is removed. Clinical patterns are educational examples, not diagnostic rules. Historical implementation documents below do not establish current scientific accuracy or measured anatomical fidelity.
 
-The published site offers **MRI / Simulated only**. The local review candidate
-now offers **MRI / CT / Simulated only**, with CT's corrected physical sampling
-and provisional atlas alignment. CT uses its fixed brain window (−20 to 100 HU),
+**Release approved by the owner — 2026-10-04:** The public release offers
+**MRI / CT / Simulated only**, with CT's corrected physical sampling and
+provisional atlas alignment. CT uses its fixed brain window (−20 to 100 HU),
 not raw HU or a true bone window. Direct Plates entry defaults to **Live section
 / y transverse / MRI**; Snap is initially off. Photographs remain excluded.
-Publication is held for owner review. Use `npm run verify:scientific`,
+See the [registration methods, observations and limitations](docs/audit/2026-10-04-registration-candidate/README.md).
+Use `npm run verify:scientific`,
 `npm run verify:imaging-fit` and `npm run verify:public-imaging` for current
 integration checks; older CT/photo and fixed-count geometry gates describe
 archived features and do not establish scientific accuracy.
@@ -20,7 +21,7 @@ archived features and do not establish scientific accuracy.
 
 **Use the atlas online:** <https://linkbag.github.io/neuroaxis-atlas/>
 
-**Current public version:** Opening the Plates tab starts in Live section with the transverse axis and MRI selected. Plates → Live section offers MRI and Simulated only; CT, Photo, and Auto are not selectable. Selecting a level from the ruler still opens its authored plate. “Snap to levels” starts off in both the Plates live section and the 3D clipping controls. The earlier full-imagery version is preserved on the [`full-imagery-2026-10-03` branch](https://github.com/linkbag/neuroaxis-atlas/tree/full-imagery-2026-10-03). The source imagery remains in the repository for provenance and future work.
+**Current public version:** Opening the Plates tab starts in Live section with the transverse axis and MRI selected. Plates → Live section offers MRI, CT and Simulated only; Photo and Auto are not selectable. Selecting a level from the ruler still opens its authored plate. “Snap to levels” starts off in both the Plates live section and the 3D clipping controls. The earlier full-imagery version is preserved on the [`full-imagery-2026-10-03` branch](https://github.com/linkbag/neuroaxis-atlas/tree/full-imagery-2026-10-03). Historical feature notes below describe earlier versions; the current release choices and limitations above take precedence. The source imagery remains in the repository for provenance and future work.
 
 **An interactive, realistic web atlas of the diencephalon, mesencephalon (midbrain), and rhombencephalon (pons, medulla, cerebellum) — with the telencephalon (cerebral hemispheres, basal ganglia, limbic system, ventricles) layered on from v7, the cerebral vasculature (circle of Willis and the major cerebral arteries) plus the deep functional/projection content from v8, and the somatotopic map, the cortical-division section layer, the re-runnable imaging registration and the simulated-section panel from v9, and the v10 display round (full-box plane helpers, division-level visibility with solo, four-corner panel resize, cortical-division quality, and the dropped cortex label)** (with the twelve cranial nerves as records in v13 and as authored traveling courses in v14, and the **granular vasculature** of v17 — 53 vessel records over 40 authored courses, the lenticulostriate blobs replaced by real perforator courses) — selectable 3D nuclei and fiber tracts, labeled 2D cross-section plates bidirectionally synced with the 3D clipping planes, a clinical-syndrome browser, and per-structure neurophysiology, connections, blood supply, and references. Built with Vite, React 18, TypeScript, three.js (`@react-three/fiber`), and zustand. The interaction model is inspired by [ashemag/human-atlas](https://github.com/ashemag/human-atlas); **all anatomy content and plate artwork are original schematic works authored for this project, and since the v2 realism upgrade the envelope surfaces are derived from [BodyParts3D 4.0](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) (CC BY 4.0)** — see [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
 

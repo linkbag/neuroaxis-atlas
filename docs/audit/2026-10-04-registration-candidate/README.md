@@ -1,5 +1,11 @@
 # MRI and CT registration candidate — owner review before deployment
 
+**Release follow-up — 2026-10-04:** The owner reviewed the local MRI/CT app
+at candidate commit `c2f87cf780ef4aa1b76c6226e0781eb7cb355c92` and explicitly
+approved deployment. The review report below preserves its original candidate
+state. Approval permits publication; it does not establish clinical validation
+or remove the documented regional mismatches and provisional CT alignment.
+
 This branch implements the approved follow-up to the registration audit. It is
 a **candidate**, with the public site unchanged. Open `index.html` for figures
 and every recorded observation, including the cases that got worse.
@@ -138,4 +144,6 @@ rewrite assets; missing or changed raw sources fail before output is touched.
 - [ITK registration guide](https://itk.org/ITKSoftwareGuide/html/Book2/ITKSoftwareGuide-Book2ch3.html): registration operates on corresponding anatomy in physical space. The chosen manual observations, priors and reserved checks are this project's method, not an ITK clinical validation.
 - Haines (2012), printed pp. 130–131 and 176–177, and Blumenfeld (2010), printed p. 494: macroanatomic interpretations from the preceding audit. No copyrighted textbook images or private raw volumes are included here.
 
-**Deployment is on hold until the owner reviews the candidate app.**
+**Original review condition:** Deployment was held until the owner reviewed
+the candidate app. The owner subsequently approved release on 2026-10-04,
+as recorded above.
