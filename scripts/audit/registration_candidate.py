@@ -127,7 +127,7 @@ def save(fig,name,title,ct=False):
     height=fig.get_size_inches()[1]
     fig.suptitle(title,fontsize=15);fig.text(.5,.49/height,legend,ha='center',fontsize=8)
     credit='MRI: OpenNeuro ds007313 v1.0.0 (CC0). Teaching correspondence only; not clinical registration.'
-    if ct:credit+='\nCT: Courtesy of the U.S. National Library of Medicine. Provisional archive; not in the app.'
+    if ct:credit+='\nCT: Courtesy of the U.S. National Library of Medicine. Provisional teaching alignment; owner review pending.'
     fig.text(.5,.12/height,credit,ha='center',fontsize=8);fig.tight_layout(rect=(0,1/height,1,.94));fig.savefig(O/name,dpi=145);plt.close(fig);figures.append({'file':name,'title':title})
 for axis,value,name,title in [(0,3,'mri-sagittal.png','MRI sagittal comparison (x=+3 au)'),(2,0,'mri-coronal.png','MRI coronal comparison (z=0 au)'),(0,12,'mri-parasagittal.png','MRI parasagittal comparison (x=+12 au)')]:
     fig,axs=plt.subplots(1,3,figsize=(17,8))
@@ -135,7 +135,7 @@ for axis,value,name,title in [(0,3,'mri-sagittal.png','MRI sagittal comparison (
     save(fig,name,title)
 fig,axs=plt.subplots(1,2,figsize=(13,8))
 for ax,key,label in zip(axs,['oldCT','CT'],['Archived / AP reflection and old placement','Correct physical axes / provisional global fit']):panel(ax,key,0,3);ax.set_title(label,fontsize=11)
-save(fig,'ct-sagittal.png','Archived CT correction (x=+3 au)',True)
+save(fig,'ct-sagittal.png','Provisional CT correction (x=+3 au)',True)
 levels=js(R/'src/data/levels.json');teaching=[]
 for page,start in enumerate(range(0,len(levels),6),1):
     group=levels[start:start+6];fig,axs=plt.subplots(len(group),2,figsize=(12,len(group)*3.55),squeeze=False)
@@ -143,7 +143,7 @@ for page,start in enumerate(range(0,len(levels),6),1):
         for col,key in enumerate(['MRI','CT']):
             frac=panel(axs[row,col],key,1,level['y']);axs[row,col].set_title(f'{key} | {level["name"]} | y={level["y"]:+g}',fontsize=9)
             teaching.append({'level':level['id'],'yAu':level['y'],'modality':key,'gridCoverageFraction':frac,'note':'Field coverage, not brain segmentation agreement.'})
-    save(fig,f'teaching-levels-{page}.png',f'Candidate MRI / provisional archived CT - teaching levels ({page}/3)',True)
+    save(fig,f'teaching-levels-{page}.png',f'Candidate MRI / provisional CT - teaching levels ({page}/3)',True)
 fig,axs=plt.subplots(2,2,figsize=(12,10))
 for row,y in enumerate([100,110]):
     for col,key in enumerate(['published','MRI']):panel(axs[row,col],key,1,y);axs[row,col].set_title(f'{key} / upper cortex y={y}')

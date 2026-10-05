@@ -1,4 +1,4 @@
-/** MRI-only public build. Archived CT/photograph catalogs remain in Git history
+/** MRI/CT candidate build. Archived photograph catalogs remain in Git history
  * and the full-imagery branch; no photograph asset is imported by this module.
  * Types remain for compatibility with the generic section renderer.
  */

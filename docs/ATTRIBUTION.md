@@ -5,6 +5,16 @@ described in the historical v3/v4 notes below have been removed from the source
 tree, section-image manifest, and deployed bundle pending permission. Links to
 the source site remain. The notes below preserve the acquisition history.
 
+**Local CT review candidate (2026-10-04):** MRI, corrected NLM Visible Human
+head CT, and simulated sections are available on the candidate branch. The
+public deployment remains unchanged until owner approval. CT atlas alignment
+is provisional, and the downsampled CT supplies only its fixed brain window
+(−20 to 100 HU), not raw HU or a true bone window. Photographs remain excluded.
+Courtesy of the U.S. National Library of Medicine. This historical CT does not
+represent NLM's most current or most accurate dataset; NLM does not endorse
+NeuroAxis. [Source](https://www.nlm.nih.gov/research/visible/getting_data.html)
+and [NLM terms](https://www.nlm.nih.gov/databases/download/terms_and_conditions.html).
+
 NeuroAxis — 3D Brainstem Atlas. This document records every external work that
 informed the project and the licensing/citation policy applied to it.
 

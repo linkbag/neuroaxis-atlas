@@ -181,7 +181,22 @@ export default function ReferencesModal() {
               splenium, ventricular horns and the inferior cerebellum remain imperfectly matched.
               Fine nuclei and tracts cannot all be identified or validated on the downsampled T1.
               Image data is never extrapolated beyond the acquisition field; simulated anatomy
-              can remain visible there. CT and photographs are unavailable in the public app.
+              can remain visible there. Section photographs remain unavailable.
+            </p>
+          </section>
+          <section>
+            <h3>CT alignment and source</h3>
+            <p>
+              CT physical orientation and slice positions are corrected, but its alignment to
+              simulated anatomy remains provisional. Artifacts limit fine structure comparison.
+              MRI and CT are from different people. This CT is shown in a fixed brain window
+              (−20 to 100 HU); it does not supply a true bone window.
+            </p>
+            <p>
+              Courtesy of the U.S. National Library of Medicine. Historical NLM data; not NLM’s
+              most current or most accurate dataset. NLM does not endorse NeuroAxis.
+              {' '}<a href="https://www.nlm.nih.gov/research/visible/getting_data.html" target="_blank" rel="noreferrer">Source</a>
+              {' · '}<a href="https://www.nlm.nih.gov/databases/download/terms_and_conditions.html" target="_blank" rel="noreferrer">NLM terms</a>.
             </p>
           </section>
           <p className="hint">

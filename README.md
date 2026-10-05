@@ -6,7 +6,15 @@ The `audit/scientific-content-2026-10-04` branch contains an evidence-supported 
 
 Coordinates, shapes, functional boundaries and MRI alignment remain schematic and unvalidated. Eight misleading named spatial routes are withheld, and an internal-capsule mapping to the entire white-matter shell is removed. Clinical patterns are educational examples, not diagnostic rules. Historical implementation documents below do not establish current scientific accuracy or measured anatomical fidelity.
 
-Public build choices are **MRI / Simulated only**. Direct Plates entry defaults to **Live section / y transverse / MRI**; Snap is initially off. CT and photo assets remain historical source material but are excluded from the public build. Use `npm run verify:scientific` and `npm run verify:public-imaging` for current review/build integration checks; the older CT/photo and fixed-count geometry gates describe archived features and are not scientific validation.
+The published site offers **MRI / Simulated only**. The local review candidate
+now offers **MRI / CT / Simulated only**, with CT's corrected physical sampling
+and provisional atlas alignment. CT uses its fixed brain window (−20 to 100 HU),
+not raw HU or a true bone window. Direct Plates entry defaults to **Live section
+/ y transverse / MRI**; Snap is initially off. Photographs remain excluded.
+Publication is held for owner review. Use `npm run verify:scientific`,
+`npm run verify:imaging-fit` and `npm run verify:public-imaging` for current
+integration checks; older CT/photo and fixed-count geometry gates describe
+archived features and do not establish scientific accuracy.
 
 **English** | [简体中文](README.zh-CN.md)
 

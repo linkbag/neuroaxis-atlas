@@ -105,7 +105,7 @@ export type SectionAxis = 'x' | 'y' | 'z'
  *                `windowMin`/`windowMax` (uint8).
  *  - `'none'`  — explicit **"simulated only"**: no real imagery is ever drawn.
  *
- * The public interface offers only MRI and Simulated only. Historical values
+ * The candidate interface offers MRI, CT and Simulated only. Historical values
  * remain in this type for internal imaging QA; persisted values are migrated.
  */
 export type SectionUnderlayKind = 'auto' | 'mri' | 'ct' | 'stain' | 'none'
@@ -113,6 +113,7 @@ export type SectionUnderlayKind = 'auto' | 'mri' | 'ct' | 'stain' | 'none'
 /** Public live-section choices. Older modes remain in the type for historical QA. */
 export const SECTION_UNDERLAY_KINDS: readonly SectionUnderlayKind[] = [
   'mri',
+  'ct',
   'none',
 ]
 
@@ -157,7 +158,7 @@ export const SECTION_UNDERLAY_KIND_LABELS: Record<SectionUnderlayKind, string> =
 export const SECTION_UNDERLAY_KIND_DESCRIPTIONS: Record<SectionUnderlayKind, string> = {
   auto: 'Auto (real-first): draw the best real modality that covers this plane, else the simulated section',
   mri: 'MRI: draw the real T1w MRI slice at this plane',
-  ct: 'CT: draw the real CT slice at this plane (brain / bone window)',
+  ct: 'CT: draw the real CT slice at this plane (fixed brain window)',
   stain: 'Photo: draw the real photographed section at this plane',
   none: 'Simulated only (no imagery): draw the simulated section and nothing external',
 }
@@ -185,7 +186,7 @@ export const PIP_IMAGERY_WITHHELD_STATEMENT =
 export type CtWindowPreset = 'brain' | 'bone'
 
 /** Preset names the CT window selector offers, in display order. */
-export const CT_WINDOW_PRESETS: readonly CtWindowPreset[] = ['brain', 'bone']
+export const CT_WINDOW_PRESETS: readonly CtWindowPreset[] = ['brain']
 
 export const CT_WINDOW_PRESET_LABELS: Record<CtWindowPreset, string> = {
   brain: 'Brain (soft tissue)',
@@ -197,8 +198,8 @@ export const CT_WINDOW_PRESET_LABELS: Record<CtWindowPreset, string> = {
  * `kind` picks which modality draws; the registry layers (see
  * src/components/section/imageLayers.ts) own the actual painting.
  * windowMin/windowMax are the uint8 grayscale window of the MRI grid layer;
- * CT is windowed in HU through `ctWindowPreset` instead, because the CT grid
- * is baked in Hounsfield units.
+ * CT is already encoded in the fixed brain window in its manifest. It is not
+ * a raw-HU volume and cannot supply a true bone window.
  */
 export interface SectionUnderlay {
   kind: SectionUnderlayKind
@@ -322,13 +323,13 @@ const V3_DEFAULT_OPACITY = 0.6
 
 /**
  * Public defaults: continuous MRI is the default imagery, with the simulated
- * section available at every plane. Previous Auto / CT / Photo preferences
+ * section available at every plane. Previous Auto / Photo preferences
  * are mapped to MRI when read from storage.
  * The v4 opacity default remains:
  *  - `opacity: 1` — the image is now the section's BASE plate, not a subdued
  *    underlay beneath opaque contour fills, so it renders at full strength by
  *    default. (v3's 0.6 was calibrated for the underlay role.)
- * A supported persisted MRI / Simulated choice is read at boot; an explicit
+ * A supported persisted MRI / CT / Simulated choice is read at boot; an explicit
  * visit to the Plates tab starts its live section in MRI mode.
  */
 export const DEFAULT_SECTION_UNDERLAY: SectionUnderlay = {
@@ -354,13 +355,12 @@ function clampWindowValue(value: number): number {
 }
 
 function isUnderlayKind(value: unknown): value is SectionUnderlayKind {
-  // Migrate saved Auto / CT / Photo selections to the MRI default. They are
-  // unavailable in the public live section, including through store writes.
-  return value === 'mri' || value === 'none'
+  // Photograph and Auto modes remain retired. CT uses the audited source grid.
+  return value === 'mri' || value === 'ct' || value === 'none'
 }
 
 function isCtWindowPreset(value: unknown): value is CtWindowPreset {
-  return value === 'brain' || value === 'bone'
+  return value === 'brain'
 }
 
 function isFiniteNumber(value: unknown): value is number {
@@ -389,7 +389,7 @@ function initialSectionUnderlay(): SectionUnderlay {
           // A retired modality may carry opacity and window values calibrated
           // for a different image. Start MRI with its own defaults instead of
           // carrying those stale display settings into the public build.
-          if (record.kind === 'auto' || record.kind === 'ct' || record.kind === 'stain') return next
+          if (record.kind === 'auto' || record.kind === 'stain') return next
           const kind = isUnderlayKind(record.kind) ? record.kind : null
           const opacity = isFiniteNumber(record.opacity) ? record.opacity : null
           const isV3Payload = record.schemaVersion !== SECTION_UNDERLAY_SCHEMA_VERSION

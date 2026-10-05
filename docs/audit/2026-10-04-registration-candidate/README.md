@@ -1,4 +1,4 @@
-# MRI registration candidate — owner review before deployment
+# MRI and CT registration candidate — owner review before deployment
 
 This branch implements the approved follow-up to the registration audit. It is
 a **candidate**, with the public site unchanged. Open `index.html` for figures
@@ -22,8 +22,13 @@ and every recorded observation, including the cases that got worse.
   in References. Preserve Live/transverse/MRI, Snap off, Balanced rendering,
   plane helpers on, and the larger simulated 3D inset defaults.
 - Correct the archived CT's anterior/posterior sign and sample actual DICOM
-  slice positions. CT remains unavailable in the public app; its gross atlas
+  slice positions. CT is now available in the local candidate; its gross atlas
   placement is **provisional** because source artifacts limit interpretation.
+- Restore MRI / CT / Simulated only controls, CT loading/retry and NLM credits.
+  The CT grid already stores grayscale in a fixed **brain window (−20 to 100
+  HU)**. Display those values once, without a second HU window or blue tint.
+  A true bone window is not available from this clipped 8-bit grid. Missing CT
+  support is transparent; zero MRI intensity remains valid dark imagery.
 - Replace the old whole-head-mask IoU/frozen-pixel gate with physical geometry,
   source-field, hash, lattice and recorded-observation consistency checks.
 
@@ -87,7 +92,7 @@ compromise and explicitly exposes the remaining differences for owner review.
 - Engineering/type/build checks and the browser review are recorded in
   `verification.md`. Their passing does not certify clinical/anatomical accuracy.
 
-## Archived CT
+## Provisional CT candidate
 
 The conversion is now `(x_LPS, z_LPS, −y_LPS) / 1.2`, followed by the provisional
 atlas affine. The previous `+y_LPS` anterior component reflected AP. Actual
@@ -97,6 +102,10 @@ The source has a full head field; the old apparent missing upper head arose
 from the misplaced transform. Coarse manual CT observations have lower
 confidence, and cannot validate fine tissue identity in the artifact-affected
 regions. MRI and CT are different subjects, not paired acquisitions.
+The corrected CT voxel bytes and registration parameters are unchanged from
+the preceding audit. Restoring CT is an application/display change, not a new
+anatomical validation. CT source terms and provisional alignment are visible
+in Plates, Rights & credits and References. The production site is unchanged.
 
 ## Reproduce
 

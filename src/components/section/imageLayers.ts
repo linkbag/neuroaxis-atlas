@@ -80,12 +80,10 @@
  *
  *  - 'ct' — continuous CT over the SAME canonical box, from
  *    src/assets/imaging/ct.bin + ct-manifest.json (task `ct-grid`; NLM
- *    Visible Human "HARVARD 02" head CT). Identical sampling path as MRI, but
- *    the window comes from ct-manifest.json `windows` presets in HU
- *    (brain/bone) selected by `store.sectionUnderlay.ctWindowPreset`, NOT from
- *    the store's uint8 window (which is calibrated for the MRI percentiles) —
- *    see ctWindowForDraw()/setCtWindowPreset(). Registers disabled when the
- *    manifest status is not 'available'.
+ *    Visible Human Additional Head Images). Identical sampling path as MRI.
+ *    The uint8 bytes are already encoded in the fixed brain HU window, and
+ *    must be displayed as grayscale 0..255 without a second HU transform.
+ *    Neither MRI's display sliders nor a bone window applies to this grid.
  *
  * `renderSliceToCanvas(canvas, spec, requested, options)` is the documented
  * canvas→texture path for the PiP backdrop (IMAGING_V4_PLAN §4): it renders
@@ -157,6 +155,7 @@ import { useAtlasStore } from '../../state/store'
 import mriManifestJson from '../../assets/imaging/mri-manifest.json'
 import mriT1Url from '../../assets/imaging/mri-t1.bin?url'
 import ctManifestJson from '../../assets/imaging/ct-manifest.json'
+import ctGridUrl from '../../assets/imaging/ct.bin?url'
 import { readSourceField, sourceFieldContains } from './sourceField'
 import type { SourceField } from './sourceField'
 
@@ -197,6 +196,7 @@ const MRI_CREDIT = `${mriManifest.source ?? 'OpenNeuro ds007313'}, OpenNeuro ${m
  */
 interface CtManifest extends GridManifest {
   modality?: string
+  includedInApp?: boolean
   windows?: Record<string, number[]>
 }
 
@@ -229,6 +229,7 @@ const CT_MANIFEST_WINDOW: [number, number] = (() => {
 
 /** Static-import asset URLs for the two baked uint8 grids. */
 const MRI_BIN_URL = mriT1Url
+const CT_BIN_URL = ctGridUrl
 
 /** The measured display corrections, resolved ONCE at module load from the
  *  committed manifests (see gridDisplayCorrection). Identity unless the
@@ -429,11 +430,9 @@ export interface ImageLayerOptions {
   mriWindowFallback: { min: number; max: number }
   /** CT slice render resolution = grid in-plane resolution × this factor. */
   ctUpsample: number
-  /** CT window preset name, resolved against ct-manifest.json `windows` (the
-   *  CT grid is baked in HU, so the MRI store window [60,180] is meaningless
-   *  here — see setCtWindowPreset). */
+  /** Legacy preset/readout option. The current CT grid is fixed to brain. */
   ctWindowPreset: string
-  /** Caller-supplied window pair for CT; overrides ctWindowPreset when finite. */
+  /** Legacy option; ignored by the current prewindowed CT renderer. */
   ctWindow: { min: number; max: number } | null
 }
 
@@ -452,23 +451,13 @@ export const imageLayerOptions: ImageLayerOptions = {
 /** Live CT window (HU) — seeded from the manifest's default (brain) window. */
 let ctWindow: [number, number] = [CT_MANIFEST_WINDOW[0], CT_MANIFEST_WINDOW[1]]
 
-/** Preset names available on the CT manifest (brain / bone); exported for UI. */
+/** Supported preset names; the current clipped grid only supplies brain. */
 export function ctWindowPresets(): string[] {
   return Object.keys(ctManifest.windows ?? {})
 }
 
-/**
- * Select the CT display window by preset name from ct-manifest.json `windows`
- * (unknown name → the manifest's default `brain` window), or pass an explicit
- * HU pair. The MRI store window [windowMin, windowMax] is deliberately NOT
- * used for CT: the CT grid is baked in HU, where the store's default 60–180
- * uint8 window selects a meaningless band (see imageLayerOptions.ctWindow).
- * The chosen window is returned so a caller can show it as a readout.
- *
- * Since v4 the CT window the layers actually paint with comes from
- * `store.sectionUnderlay.ctWindowPreset`, resolved per draw through
- * ctWindowForDraw(); this setter keeps the module-level fallback (used when no
- * preset is passed) in sync for callers that only have the string.
+/** Legacy readout API. Unknown presets resolve to the fixed baked brain window.
+ * The current prewindowed CT renderer does not re-window these grayscale bytes.
  */
 export function setCtWindowPreset(preset: string): [number, number] {
   const window = windowForPreset(preset) ?? CT_MANIFEST_WINDOW
@@ -488,7 +477,9 @@ function windowForPreset(preset: string): [number, number] | null {
 export type CtLayerStatus = 'available' | 'unavailable'
 
 export function ctLayerStatus(): CtLayerStatus {
-  return 'unavailable' // Excluded from the public MRI/simulated build.
+  return ctManifest.includedInApp === true && ctManifest.status === 'available'
+    ? 'available'
+    : 'unavailable'
 }
 
 /* ------------------------------------------------- CT source coverage (v7) */
@@ -1052,6 +1043,7 @@ interface SliceGrid {
   origin: [number, number, number]
   spacing: [number, number, number]
   sourceField?: SourceField
+  noDataValue?: number
 }
 
 /** The manifest fields a grid loader needs (mri + ct manifests agree on these). */
@@ -1066,6 +1058,7 @@ interface GridManifest {
   credit?: string
   attribution?: string
   sourceField?: unknown
+  intensity?: { noDataValue?: number }
   /** v9: the measured display-registration block (see gridRegistrationDisplay). */
   registration?: { display?: ManifestFitDisplay }
 }
@@ -1147,11 +1140,10 @@ function nudgeRedraw(): void {
  * declaration — see the ordering note on loadGrid.
  */
 export function retryGridLoad(id: 'mri' | 'ct', onReady?: () => void): boolean {
-  if (id === 'ct') return false
   const entry = id === 'mri' ? mriEntry : ctEntry
   const manifest =
     id === 'mri' ? (mriManifest as unknown as GridManifest) : (ctManifest as unknown as GridManifest)
-  const url = MRI_BIN_URL
+  const url = id === 'mri' ? MRI_BIN_URL : CT_BIN_URL
   if (entry.status === 'loading' && !entry.timedOut) return false
   entry.controller?.abort()
   entry.controller = null
@@ -1232,6 +1224,10 @@ function loadGrid(
       if (buffer.byteLength !== expected) {
         throw new Error(`${id} is ${buffer.byteLength} B, manifest dims expect ${expected} B`)
       }
+      const noDataValue = manifest.intensity?.noDataValue
+      if (noDataValue !== undefined && (!Number.isInteger(noDataValue) || noDataValue < 0 || noDataValue > 255)) {
+        throw new Error(`${id} has an invalid no-data marker`)
+      }
       entry.grid = {
         id,
         data: new Uint8Array(buffer),
@@ -1239,6 +1235,7 @@ function loadGrid(
         origin: [origin[0], origin[1], origin[2]],
         spacing: [spacing[0], spacing[1], spacing[2]],
         sourceField: readSourceField(manifest.sourceField),
+        noDataValue,
       }
       entry.status = 'ready'
       entry.timedOut = false
@@ -1278,7 +1275,7 @@ function loadMriGrid(): void {
 
 /** CT: same pipeline against ct-manifest.json + ct.bin. */
 function loadCtGrid(onReady?: () => void): void {
-  void onReady // Archived compatibility API; no CT request is made.
+  void loadGrid(ctEntry, 'ct', ctManifest, CT_BIN_URL, onReady)
 }
 
 /* --------------------------------------------------------- grid sampling */
@@ -1366,7 +1363,11 @@ function sampleGrid(
       for (let ci = 0; ci < 2; ci++) {
         const wx = ci === 0 ? 1 - frac[0] : frac[0]
         const i = ci === 0 ? base[0] : ix1
-        sum += data[rowBase + i] * wx * wy * wz
+        const weight = wx * wy * wz
+        const sample = data[rowBase + i]
+        // CT reserves 0 for absent acquisition support. MRI black remains valid.
+        if (sample === grid.noDataValue && weight > 0) return -1
+        sum += sample * weight
       }
     }
   }
@@ -1598,43 +1599,6 @@ function drawGridToView(
   return true
 }
 
-/**
- * CT display mapping bound to one HU window (ct-manifest.json presets): the CT
- * grid is baked in HU, so the `brain` preset maps −20 HU → black and 100 HU →
- * white. The measured skull sits far above the window top, which is exactly
- * what makes the bone rim read as a bright outline on the soft-tissue slice
- * (the manifest's own huInsideFov p99 is 805 HU). A very slight blue reduction
- * keeps the CT backdrop visually distinct from the grayscale MRI without
- * inventing contrast: R = G = g, B = 0.94·g.
- *
- * The mapper is memoized on the window pair (QUALITY_PLAN §3 item 11: hoist
- * closures out of the draw path) — only two presets exist, so the closure is
- * built once per preset instead of once per CT draw. The window values are
- * read from module state at CALL time, so a window change still takes effect
- * immediately on the next slice sample.
- */
-let ctColorizeWindowKey = Number.NaN
-let ctColorizeWindowMax = Number.NaN
-let ctColorizeFn: ((sample: number, out: [number, number, number]) => void) | null = null
-
-function ctColorizeFromWindow(window: [number, number]) {
-  if (
-    ctColorizeFn === null ||
-    ctColorizeWindowKey !== window[0] ||
-    ctColorizeWindowMax !== window[1]
-  ) {
-    ctColorizeWindowKey = window[0]
-    ctColorizeWindowMax = window[1]
-    ctColorizeFn = (sample: number, out: [number, number, number]): void => {
-      const g = windowMap(sample, window[0], window[1])
-      out[0] = g
-      out[1] = g
-      out[2] = Math.round(g * 0.94)
-    }
-  }
-  return ctColorizeFn
-}
-
 const mriLayer: SectionImageLayer = {
   id: MRI_LAYER_ID,
   modality: LAYER_MODALITIES[MRI_LAYER_ID],
@@ -1688,15 +1652,12 @@ const mriLayer: SectionImageLayer = {
  * CT layer (tasks `ct-grid` + `pip-backdrop` + `modality-layers`): the same
  * continuous-grid contract as MRI, against ct.bin, selectable as its own
  * modality by the store's `sectionUnderlay.kind === 'ct'` (and picked by
- * 'auto' when the manifest offers the grid). Its window comes from the CT
- * manifest presets — NEVER from the store's uint8 window, which is calibrated
- * for the MRI percentiles (see ctWindowForDraw / setCtWindowPreset) — and the
- * preset name itself comes from `store.sectionUnderlay.ctWindowPreset`
- * (brain/bone). Registers disabled when the bake found no embeddable volume
- * (ct-manifest.json status ≠ 'available').
+ * 'auto' when the manifest offers the grid). Its bytes already encode the
+ * fixed brain window. The renderer uses grayscale 0..255 once, independently
+ * of MRI window sliders. Registers disabled when the manifest excludes CT.
  *
- * The 2D canvas and the PiP backdrop sampler (renderSliceToCanvas) both reach
- * this draw path, so both show the same window.
+ * The generic backdrop sampler uses the same mapping. The current 3D PiP
+ * intentionally remains simulated-only.
  */
 const ctLayer: SectionImageLayer = {
   id: CT_LAYER_ID,
@@ -1734,41 +1695,19 @@ const ctLayer: SectionImageLayer = {
     loadCtGrid()
     const grid = ctEntry.grid
     if (grid === null) return false
-    const window = ctWindowForDraw(layerCtx.ctWindowPreset)
     return drawGridToView(
       ctx,
       view,
       plane,
       grid,
-      window[0],
-      window[1],
+      0,
+      255,
       imageLayerOptions.ctUpsample,
       layerCtx.opacity,
-      ctColorizeFromWindow(window),
+      undefined,
       ctDisplayCorrection,
     )
   },
-}
-
-/**
- * The HU window the CT layer paints with, in precedence order:
- *  1. `imageLayerOptions.ctWindow` — an explicit pair set by integration;
- *  2. the requested preset name (`store.sectionUnderlay.ctWindowPreset` on the
- *     canvas path, the store value again on the sampler path) resolved against
- *     ct-manifest.json `windows`;
- *  3. `imageLayerOptions.ctWindowPreset`, then the module-level fallback kept
- *     by setCtWindowPreset() (seeded with the manifest's `brain` window).
- */
-function ctWindowForDraw(preset?: string): [number, number] {
-  const explicit = imageLayerOptions.ctWindow
-  if (explicit !== null) {
-    if (Array.isArray(explicit)) return [explicit[0], explicit[1]]
-    return [explicit.min, explicit.max]
-  }
-  const resolved =
-    windowForPreset(preset ?? imageLayerOptions.ctWindowPreset) ?? windowForPreset('brain')
-  if (resolved !== null) return resolved
-  return [ctWindow[0], ctWindow[1]]
 }
 
 /* -------------------------------------------------------------- link-outs */
@@ -2130,20 +2069,17 @@ export function renderSliceToCanvas(
     }
   } else if (resolution.modality === 'ct') {
     if (ctEntry.grid !== null) {
-      // Same window precedence as the 'ct' layer: the store's CT preset
-      // (brain/bone) resolved against ct-manifest.json, so the PiP backdrop and
-      // the live-section canvas show the identical windowing.
-      const window = ctWindowForDraw(useAtlasStore.getState().sectionUnderlay.ctWindowPreset)
+      // The same fixed, prewindowed grayscale mapping as the CT canvas layer.
       drew = drawGridToView(
         ctx,
         view,
         plane,
         ctEntry.grid,
-        window[0],
-        window[1],
+        0,
+        255,
         options.upsample ?? imageLayerOptions.ctUpsample,
         opacity,
-        ctColorizeFromWindow(window),
+        undefined,
         ctDisplayCorrection,
       )
       if (drew) {

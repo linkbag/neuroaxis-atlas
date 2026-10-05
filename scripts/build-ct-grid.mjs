@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-/** Archived CT only: correct LPS axes and actual physical slice interpolation.
+/** CT teaching grid: correct LPS axes and actual physical slice interpolation.
  * node scripts/build-ct-grid.mjs --source <directory of J.###.gz>
  * Raw source data stays outside Git. --probe / --no-write perform no writes.
- * Public build still excludes CT. The gross atlas affine remains provisional.
+ * Candidate app includes CT for owner review. The atlas affine is provisional.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
@@ -39,12 +39,12 @@ const meanStep=(ss.at(-1).projection-ss[0].projection)/(ss.length-1)
 const oldPositionError=Math.max(...ss.map((s,i)=>Math.abs(s.projection-ss[0].projection-i*meanStep)))
 const levels=JSON.parse(readFileSync(join(ROOT,'src/data/levels.json'),'utf8'))
 const manifest={
-  ...gridManifest(spec),status:'available',modality:'CT',publiclyAvailable:false,
+  ...gridManifest(spec),status:'available',modality:'CT',includedInApp:true,
   source:'NLM Visible Human Project — Additional Head Images CT',license:'NLM Terms and Conditions',
   sourceUrl:'https://data.lhncbc.nlm.nih.gov/public/Visible-Human/Additional-Head-Images/MR_CT_DICOM/CAT/',
   termsUrl:'https://www.nlm.nih.gov/databases/download/terms_and_conditions.html',
   credit:'Courtesy of the U.S. National Library of Medicine',
-  attribution:'Courtesy of the U.S. National Library of Medicine. Historical CT source for an archived teaching review; NLM does not endorse NeuroAxis.',
+  attribution:'Courtesy of the U.S. National Library of Medicine. Historical CT data; not NLM’s most current or most accurate dataset. NLM does not endorse NeuroAxis.',
   sourceGeometry:{aggregateGzipSha256:series.sourceSha256,sliceCount:ss.length,dims:[ss[0].cols,ss[0].rows,ss.length],
     imageOrientationPatient:ss[0].iop,pixelSpacingMm:ss[0].spacing,anatomicalOrientation:'BIPED (default when absent)',
     slicePositionsPatientMm:ss.map(s=>s.ipp),physicalProjectionMm:ss.map(s=>s.projection),
@@ -56,14 +56,14 @@ const manifest={
     patientLpsToAtlasAu:Array.from(patientToAtlas)},
   coverage:{sourceFov:'Acquisition support, not brain tissue segmentation or anatomical agreement.',stationsInsideFov:inside,totalStations:grid.length,fractionInsideFov:inside/grid.length,
     levelRowsAu:levels.map(l=>{const j=Math.round((l.y-spec.originAu[1])/spec.spacingAu[1]);return {level:l.id,yTarget:l.y,y:j>=0&&j<ny?spec.originAu[1]+j*spec.spacingAu[1]:null,pct:j>=0&&j<ny?100*rowInside[j]/(nx*nz):0}})},
-  intensity:{dtype:'uint8',window,backgroundValue:0,minimumInsideValue:1,note:'Low-HU air also maps to 1; nonzero does not establish brain tissue.'},windows:{brain:window,bone:[-500,1500]},
+  intensity:{dtype:'uint8',encoding:'prewindowed-grayscale',window,backgroundValue:0,noDataValue:0,minimumInsideValue:1,note:'Fixed brain window encoded as 8-bit grayscale, not raw HU. Low-HU air also maps to 1; nonzero does not establish brain tissue. A true bone window cannot be recovered.'},windows:{brain:window},
   registration:{frame:'DICOM LPS → canonical L/S/A = (+LPS x, +LPS z, -LPS y) / 1.2',constants:config.candidate,
-    appliedIn:'3D physical resampling; no per-plane display warp',reviewStatus:'provisional-archive-only',evidence:config.evidence,limitations:config.limitations,
-    residuals:{coverageNote:'CT remains excluded from the public app. Physical orientation and interpolation are corrected; gross placement is provisional, with source artifacts and unresolved fine structures.'}},
+    appliedIn:'3D physical resampling; no per-plane display warp',reviewStatus:'provisional-owner-review',evidence:config.evidence,limitations:config.limitations,
+    residuals:{coverageNote:'CT is available in the local candidate for owner review. Physical orientation and interpolation are corrected; gross placement is provisional, with source artifacts and unresolved fine structures.'}},
   dataSha256:sha256(grid),generatedBy:'scripts/build-ct-grid.mjs',
 }
 console.log(`[ct-grid] ${ss.length} physical slices; steps ${manifest.sourceGeometry.stepRangeMm.join('…')} mm; former uniform-step error ${oldPositionError.toFixed(6)} mm`)
-console.log(`[ct-grid] ${spec.dims.join('×')} / ${grid.length} B; source support ${(100*inside/grid.length).toFixed(2)}%. Provisional archive; CT is excluded from public views.`)
+console.log(`[ct-grid] ${spec.dims.join('×')} / ${grid.length} B; source support ${(100*inside/grid.length).toFixed(2)}%. Provisional CT candidate; owner review required before deployment.`)
 if (args.write) {
   const out=resolve(args.outDir ?? join(ROOT,'src/assets/imaging'))
   mkdirSync(out,{recursive:true});writeFileSync(join(out,'ct.bin'),grid);writeFileSync(join(out,'ct-manifest.json'),JSON.stringify(manifest,null,2)+'\n')

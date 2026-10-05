@@ -65,7 +65,7 @@
     },
     "evidence": "docs/audit/2026-10-04-registration-candidate/ct-landmarks.json",
     "limitations": [
-      "CT is excluded from the public app.",
+      "CT is included in the local candidate; owner review is required before deployment.",
       "Orientation and physical slice interpolation are corrected. Gross atlas placement is provisional.",
       "Artifacts and limited soft-tissue definition prevent reliable fine structure validation. No clinical accuracy claim."
     ],

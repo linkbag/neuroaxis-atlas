@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baselineRevision": "89e5f655043817a328915adfad0c8bd3a10485e1",
-  "candidateBaseRevision": "91f51975f1d094a8a07238dac9d993aa507797ef",
+  "candidateBaseRevision": "392fb8486d50366207ca3dfb6d5728b88342f816",
   "sourceHashes": {
     "MRI": "209edd45ee17494a193268d89496147fb1fef5d87a256d82b5ff8548b4c3cfe9",
     "CT": "1178448df50484bf493aabec1164a01f4351af363957ab460f9255fdd4191be0"
@@ -2803,19 +2803,19 @@
     },
     {
       "file": "ct-sagittal.png",
-      "title": "Archived CT correction (x=+3 au)"
+      "title": "Provisional CT correction (x=+3 au)"
     },
     {
       "file": "teaching-levels-1.png",
-      "title": "Candidate MRI / provisional archived CT - teaching levels (1/3)"
+      "title": "Candidate MRI / provisional CT - teaching levels (1/3)"
     },
     {
       "file": "teaching-levels-2.png",
-      "title": "Candidate MRI / provisional archived CT - teaching levels (2/3)"
+      "title": "Candidate MRI / provisional CT - teaching levels (2/3)"
     },
     {
       "file": "teaching-levels-3.png",
-      "title": "Candidate MRI / provisional archived CT - teaching levels (3/3)"
+      "title": "Candidate MRI / provisional CT - teaching levels (3/3)"
     },
     {
       "file": "upper-cortex-coverage.png",

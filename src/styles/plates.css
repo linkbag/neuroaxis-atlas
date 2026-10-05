@@ -422,7 +422,9 @@
 
 .section-live-stage {
   flex: 1;
-  min-height: 0;
+  /* Keep imagery usable when toolbars occupy most of a short screen. The
+     center pane scrolls instead of collapsing the slice to a few pixels. */
+  min-height: 320px;
   display: flex;
 }
 

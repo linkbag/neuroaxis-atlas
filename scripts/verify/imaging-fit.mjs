@@ -64,14 +64,17 @@ for (const modality of ['mri','ct']) {
     assert.throws(()=>readSourceField({...m.sourceField,voxelFromAtlasAu:new Array(16).fill(0)}))
     assert.equal(m.registration.gridContinuity.stationLatticeUnchanged,true)
   } else {
-    assert.equal(m.publiclyAvailable,false)
+    assert.equal(m.includedInApp,true)
+    assert.equal(m.intensity.encoding,'prewindowed-grayscale')
+    assert.deepEqual(m.windows,{brain:[-20,100]})
+    assert.equal(m.intensity.noDataValue,0)
     assert.equal(m.sourceGeometry.aggregateGzipSha256,config.ct.sourceSha256)
     assert.equal(m.sourceGeometry.uniformSliceAffineUsed,false);assert.equal(m.sourceGeometry.sliceCount,463)
     assert.deepEqual(m.sourceGeometry.stepRangeMm,[.5,1.5])
     close(m.sourceGeometry.legacyAveragedPositionMaxErrorMm,1.45779220779221)
     const pp=m.sourceGeometry.physicalProjectionMm
     for (let i=1;i<pp.length;i++) assert.ok(pp[i]>pp[i-1])
-    assert.equal(m.registration.reviewStatus,'provisional-archive-only')
+    assert.equal(m.registration.reviewStatus,'provisional-owner-review')
   }
 }
 const reserved=json(config.mri.evidence).observations.filter(r=>r.split==='holdout')
